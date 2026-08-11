@@ -1,0 +1,105 @@
+{
+  "entities": {
+    "User": {
+      "title": "User Profile",
+      "description": "User profile and progress data",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Firebase Auth UID" },
+        "email": { "type": "string", "description": "User email address" },
+        "displayName": { "type": "string", "description": "Display name or dancer alias" },
+        "role": { "type": "string", "description": "User role: student or instructor" },
+        "currentLevel": { "type": "number", "description": "Waacking level (1 or 2)" },
+        "completedLessons": { "type": "array", "description": "List of completed lesson IDs" },
+        "totalPracticeMinutes": { "type": "number", "description": "Total practice minutes accumulated" },
+        "updatedAt": { "type": "string", "description": "Last update timestamp" }
+      },
+      "required": ["uid", "email"]
+    },
+    "CommunityMessage": {
+      "title": "Community Message",
+      "description": "Message posted in community discussion",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "userName": { "type": "string font" },
+        "userAvatar": { "type": "string" },
+        "content": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["id", "userId", "content"]
+    },
+    "PracticeLog": {
+      "title": "Practice Log",
+      "description": "Logged practice session",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "minutes": { "type": "number" },
+        "activityType": { "type": "string" },
+        "description": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["id", "userId", "minutes", "activityType"]
+    },
+    "InstructorPlaylist": {
+      "title": "Instructor Playlist",
+      "description": "Cloud music playlist created by instructor for student classes",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "instructorId": { "type": "string" },
+        "instructorName": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "bpm": { "type": "number" },
+        "category": { "type": "string" },
+        "isSharedWithStudents": { "type": "boolean" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["id", "instructorId", "title"]
+    },
+    "Favorito": {
+      "title": "B&W Gallery Favorite Image",
+      "description": "Favorited black and white gallery image saved under user profile",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "category": { "type": "string" },
+        "url": { "type": "string" },
+        "caption": { "type": "string" },
+        "photographer": { "type": "string" },
+        "bpmStyle": { "type": "string" },
+        "isMonochromeNative": { "type": "boolean" },
+        "isUserUploaded": { "type": "boolean" },
+        "savedAt": { "type": "string" }
+      },
+      "required": ["id", "title", "url"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/User" },
+      "description": "User profile collection"
+    },
+    "/users/{userId}/favoritos/{imageId}": {
+      "schema": { "$ref": "#/entities/Favorito" },
+      "description": "Subcollection storing user's favorited B&W gallery images"
+    },
+    "/community_messages/{messageId}": {
+      "schema": { "$ref": "#/entities/CommunityMessage" },
+      "description": "Community discussion messages"
+    },
+    "/practice_logs/{logId}": {
+      "schema": { "$ref": "#/entities/PracticeLog" },
+      "description": "User practice session logs"
+    },
+    "/instructor_playlists/{playlistId}": {
+      "schema": { "$ref": "#/entities/InstructorPlaylist" },
+      "description": "Instructor cloud music playlists"
+    }
+  }
+}

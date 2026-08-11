@@ -1,0 +1,110 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isSignedIn() && request.auth.uid == 'OdXh2P0qGDaFFyNKalECKFq9ESk1';
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    match /users/{userId} {
+      allow read: if true;
+      allow write: if isAdmin() || isOwner(userId);
+
+      match /favoritos/{imageId} {
+        allow read: if true;
+        allow write: if isAdmin() || isOwner(userId);
+      }
+      match /practice_logs/{logId} {
+        allow read: if true;
+        allow write: if isAdmin() || isOwner(userId) || isSignedIn();
+      }
+    }
+
+    match /reels/{reelId} {
+      allow read: if true;
+      allow create: if isSignedIn();
+      allow update, delete: if isAdmin() || (isSignedIn() && (resource == null || resource.data.authorId == request.auth.uid));
+    }
+
+    match /community_messages/{messageId} {
+      allow read: if true;
+      allow create: if isSignedIn();
+      allow update, delete: if isAdmin() || (isSignedIn() && (resource == null || resource.data.userId == request.auth.uid));
+    }
+
+    match /chat_messages/{messageId} {
+      allow read: if true;
+      allow write: if isAdmin() || isSignedIn();
+    }
+
+    match /friendships/{friendshipId} {
+      allow read: if true;
+      allow write: if isAdmin() || isSignedIn();
+    }
+
+    match /battles/{battleId} {
+      allow read: if true;
+      allow write: if isAdmin() || isSignedIn();
+    }
+
+    match /user_playlists/{playlistId} {
+      allow read: if true;
+      allow write: if isAdmin() || (isSignedIn() && (resource == null || resource.data.userId == request.auth.uid));
+    }
+
+    match /instructor_playlists/{playlistId} {
+      allow read: if true;
+      allow write: if isAdmin() || isSignedIn();
+    }
+
+    match /instructor_tracks/{trackId} {
+      allow read: if true;
+      allow write: if isAdmin() || isSignedIn();
+    }
+
+    match /instructor_drive_tracks/{trackId} {
+      allow read: if true;
+      allow write: if isAdmin() || isSignedIn();
+    }
+
+    match /presentations/{presId} {
+      allow read: if true;
+      allow write: if isAdmin() || isSignedIn();
+    }
+
+    match /announcements/{annId} {
+      allow read: if true;
+      allow write: if isAdmin() || isSignedIn();
+    }
+
+    match /feedback_items/{feedbackId} {
+      allow read: if true;
+      allow write: if isAdmin() || isSignedIn();
+    }
+
+    match /notifications/{notifId} {
+      allow read: if true;
+      allow write: if isAdmin() || isSignedIn();
+    }
+
+    match /lessons/{lessonId} {
+      allow read: if true;
+      allow write: if isAdmin() || isSignedIn();
+    }
+
+    match /test/connection {
+      allow read, write: if true;
+    }
+  }
+}
+
+
+

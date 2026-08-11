@@ -1,0 +1,18 @@
+{
+  "name": "WAACK ON - Dance Academy & Technical Grid",
+  "short_name": "WAACK ON",
+  "description": "Plataforma oficial de formación técnica de Waacking, laboratorios de feedback somático, bitácoras de catedráticos y ranking global.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0c0c0e",
+  "theme_color": "#E9C349",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

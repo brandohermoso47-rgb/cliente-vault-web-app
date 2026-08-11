@@ -1,0 +1,11 @@
+{
+  "name": "Waack On",
+  "description": "Waack On Academy - Plataforma interactiva para la formación de bailarines de Waacking (Waack On), incluyendo programas formativos, zona interactiva de entrenamiento, comunidad y clases en vivo.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

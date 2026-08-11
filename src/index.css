@@ -1,0 +1,96 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Geist", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, monospace;
+  --font-display: "Syne", sans-serif;
+
+  --color-bg: #0c0c0e;
+  --color-surface: #141416;
+  --color-ink: #edeff4;
+  --color-accent: #E9C349;
+  --color-accent-dim: rgba(233, 195, 73, 0.15);
+
+  --color-brand-bg: #0c0c0e;
+  --color-brand-dark: #edeff4;
+  --color-brand-pink: #9A2B3C;
+  --color-brand-cyan: #E9C349;
+}
+
+:root {
+  --bg: #0c0c0e;
+  --surface: #141416;
+  --ink: #edeff4;
+  --accent: #E9C349;
+  --accent-dim: rgba(233, 195, 73, 0.15);
+  --border-light: 1px solid rgba(237, 239, 244, 0.15);
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--ink);
+  font-family: 'Geist', sans-serif;
+}
+
+.label-mono {
+  font-family: 'Geist Mono', monospace;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--accent);
+}
+
+.glass-panel {
+  background: var(--surface);
+  border: 1px solid rgba(237, 239, 244, 0.12);
+  border-radius: 20px;
+}
+
+.technical-input {
+  width: 100%;
+  background: #000;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--ink);
+  padding: 0.85rem 1.25rem;
+  border-radius: 12px;
+  font-family: 'Geist Mono', monospace;
+  outline: none;
+  transition: 0.2s;
+}
+
+.technical-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px var(--accent-dim);
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #0c0c0e;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+}
+
+@keyframes headerGlowBreathe {
+  0%, 100% {
+    box-shadow: 0 4px 15px rgba(233, 195, 73, 0.12);
+    border-bottom-color: rgba(233, 195, 73, 0.25);
+  }
+  50% {
+    box-shadow: 0 4px 28px rgba(233, 195, 73, 0.35);
+    border-bottom-color: rgba(233, 195, 73, 0.65);
+  }
+}
+
+.animate-header-glow {
+  animation: headerGlowBreathe 4s ease-in-out infinite;
+}
+
+
