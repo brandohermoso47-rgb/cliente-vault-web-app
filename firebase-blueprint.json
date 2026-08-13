@@ -102,6 +102,30 @@
         "createdAt": { "type": "string" }
       },
       "required": ["id", "userId", "title", "url", "provider"]
+    },
+    "DirectMessage": {
+      "title": "Direct Message",
+      "description": "1-on-1 private message between dancers or instructors",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "conversationId": { "type": "string" },
+        "senderId": { "type": "string" },
+        "senderName": { "type": "string" },
+        "senderAvatar": { "type": "string" },
+        "senderRole": { "type": "string" },
+        "receiverId": { "type": "string" },
+        "receiverName": { "type": "string" },
+        "receiverAvatar": { "type": "string" },
+        "receiverRole": { "type": "string" },
+        "text": { "type": "string" },
+        "type": { "type": "string" },
+        "audioDuration": { "type": "string" },
+        "attachmentUrl": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "status": { "type": "string" }
+      },
+      "required": ["id", "conversationId", "senderId", "receiverId", "text"]
     }
   },
   "firestore": {
@@ -116,6 +140,10 @@
     "/users/{userId}/favoritos/{imageId}": {
       "schema": { "$ref": "#/entities/Favorito" },
       "description": "Subcollection storing user's favorited B&W gallery images"
+    },
+    "/direct_messages/{messageId}": {
+      "schema": { "$ref": "#/entities/DirectMessage" },
+      "description": "Direct 1-on-1 messages between students, instructors and friends"
     },
     "/community_messages/{messageId}": {
       "schema": { "$ref": "#/entities/CommunityMessage" },

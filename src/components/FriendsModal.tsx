@@ -14,9 +14,11 @@ import {
   Circle,
   Instagram,
   ExternalLink,
-  Globe
+  Globe,
+  MessageSquare
 } from 'lucide-react';
 import { User, FriendshipDoc } from '../types';
+import { openDirectMessageWithUser } from './UnifiedFloatingMessenger';
 import { 
   searchUsersByQuery, 
   sendFriendRequest, 
@@ -294,15 +296,26 @@ export const FriendsSection: React.FC<FriendsSectionProps> = ({
                           </div>
                         </div>
 
-                        <button
-                          onClick={() => handleInviteBattle(friend)}
-                          disabled={invitingFriendId === friend.id}
-                          className="px-3 py-1.5 bg-[#E9C349]/20 hover:bg-[#E9C349] text-[#E9C349] hover:text-black border border-[#E9C349]/40 rounded-xl text-[10px] font-black uppercase transition-all flex items-center gap-1.5 shrink-0"
-                          title="Enviar invitación directa para Live Battle"
-                        >
-                          <Swords className="w-3.5 h-3.5" />
-                          {invitingFriendId === friend.id ? 'Invitando...' : 'Invitar'}
-                        </button>
+                        <div className="flex items-center gap-1.5 shrink-0">
+                          <button
+                            onClick={() => openDirectMessageWithUser(friend)}
+                            className="px-3 py-1.5 bg-[#252525] hover:bg-[#E9C349] text-gray-200 hover:text-black border border-white/10 hover:border-[#E9C349] rounded-xl text-[10px] font-black uppercase transition-all flex items-center gap-1.5 cursor-pointer shadow-sm"
+                            title="Enviar mensaje directo"
+                          >
+                            <MessageSquare className="w-3.5 h-3.5" />
+                            <span>Mensaje</span>
+                          </button>
+
+                          <button
+                            onClick={() => handleInviteBattle(friend)}
+                            disabled={invitingFriendId === friend.id}
+                            className="px-3 py-1.5 bg-[#E9C349]/20 hover:bg-[#E9C349] text-[#E9C349] hover:text-black border border-[#E9C349]/40 rounded-xl text-[10px] font-black uppercase transition-all flex items-center gap-1.5 cursor-pointer"
+                            title="Enviar invitación directa para Live Battle"
+                          >
+                            <Swords className="w-3.5 h-3.5" />
+                            {invitingFriendId === friend.id ? 'Invitando...' : 'Invitar'}
+                          </button>
+                        </div>
                       </div>
                     );
                   })}
@@ -361,9 +374,19 @@ export const FriendsSection: React.FC<FriendsSectionProps> = ({
                         </div>
 
                         {isAlreadyFriend ? (
-                          <span className="text-[10px] font-extrabold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-1 rounded-lg uppercase flex items-center gap-1">
-                            <UserCheck className="w-3 h-3" /> Amigo
-                          </span>
+                          <div className="flex items-center gap-1.5">
+                            <span className="text-[10px] font-extrabold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-1 rounded-lg uppercase flex items-center gap-1">
+                              <UserCheck className="w-3 h-3" /> Amigo
+                            </span>
+                            <button
+                              onClick={() => openDirectMessageWithUser(user)}
+                              className="px-2.5 py-1 bg-[#252525] hover:bg-[#E9C349] text-gray-200 hover:text-black border border-white/10 rounded-lg text-[10px] font-bold uppercase transition-all flex items-center gap-1 cursor-pointer"
+                              title="Enviar mensaje directo"
+                            >
+                              <MessageSquare className="w-3 h-3" />
+                              <span>Chat</span>
+                            </button>
+                          </div>
                         ) : isPendingSent ? (
                           <span className="text-[10px] font-extrabold text-amber-400 bg-amber-500/10 border border-amber-500/20 px-2.5 py-1 rounded-lg uppercase flex items-center gap-1">
                             <Clock className="w-3 h-3" /> Solicitud Enviada

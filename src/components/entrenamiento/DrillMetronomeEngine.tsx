@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Play, Square, Volume2, VolumeX, Mic, Radio, Sliders, Zap, Activity, Clock, ShieldCheck, Smartphone, Sparkles } from 'lucide-react';
+import { Play, Square, Volume2, VolumeX, Mic, Radio, Sliders, Zap, Activity, Clock, ShieldCheck, Sparkles } from 'lucide-react';
 import { Language } from '../../lib/translations';
-import { triggerBpm10HapticAndFlash, getBpmHapticPreference, setBpmHapticPreference } from '../../lib/bpmHaptics';
 
 export type CountingMode = 'accent' | 'voice' | 'mixed';
 
@@ -30,31 +29,9 @@ export const DrillMetronomeEngine: React.FC<DrillMetronomeEngineProps> = ({
   const [soundEnabled, setSoundEnabled] = useState<boolean>(true);
   const [totalBeatsPlayed, setTotalBeatsPlayed] = useState<number>(0);
 
-  const [isHapticEnabled, setIsHapticEnabled] = useState<boolean>(getBpmHapticPreference);
-  const [is10xFlashing, setIs10xFlashing] = useState<boolean>(false);
-
   useEffect(() => {
-    const handleSync = () => setIsHapticEnabled(getBpmHapticPreference());
-    window.addEventListener('bpm-haptic-preference-changed', handleSync);
-    return () => window.removeEventListener('bpm-haptic-preference-changed', handleSync);
-  }, []);
-
-  useEffect(() => {
-    if (isHapticEnabled && bpm % 10 === 0) {
-      triggerBpm10HapticAndFlash(bpm, isHapticEnabled, () => {
-        setIs10xFlashing(true);
-        const timer = setTimeout(() => setIs10xFlashing(false), 850);
-        return () => clearTimeout(timer);
-      });
-    }
     if (onBpmChange) onBpmChange(bpm);
-  }, [bpm, isHapticEnabled, onBpmChange]);
-
-  const toggleHapticPreference = () => {
-    const nextVal = !isHapticEnabled;
-    setIsHapticEnabled(nextVal);
-    setBpmHapticPreference(nextVal);
-  };
+  }, [bpm, onBpmChange]);
 
   const audioCtxRef = useRef<AudioContext | null>(null);
   const intervalRef = useRef<NodeJS.Timeout | number | null>(null);
@@ -237,36 +214,17 @@ export const DrillMetronomeEngine: React.FC<DrillMetronomeEngineProps> = ({
       <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center relative z-10">
         
         {/* Left Column: BPM Dial Control */}
-        <div className={`md:col-span-6 rounded-2xl p-5 flex flex-col items-center justify-center space-y-4 relative overflow-hidden shadow-inner border transition-all duration-300 ${
-          is10xFlashing
-            ? 'bg-amber-500/30 border-amber-400 shadow-[0_0_30px_rgba(233,195,73,0.6)] scale-[1.02]'
-            : bpm % 10 === 0 && isHapticEnabled
-              ? 'bg-black/60 border-tertiary/80 shadow-[0_0_15px_rgba(233,195,73,0.3)]'
-              : 'bg-black/40 border-white/10'
-        }`}>
+        <div className="md:col-span-6 rounded-2xl p-5 flex flex-col items-center justify-center space-y-4 relative overflow-hidden shadow-inner border bg-black/40 border-white/10">
           <div className="flex items-center justify-between w-full">
             <span className="text-xs font-mono font-bold uppercase text-slate-400 tracking-wider flex items-center gap-1.5">
               <Sliders className="w-3.5 h-3.5 text-tertiary" /> TEMPO DE DRILL (BPM)
             </span>
-            <button
-              type="button"
-              onClick={toggleHapticPreference}
-              className={`flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-[10px] font-mono font-bold transition-all border cursor-pointer ${
-                isHapticEnabled
-                  ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/40 shadow-sm'
-                  : 'bg-black/40 text-slate-400 border-slate-700 hover:text-white'
-              }`}
-              title={isHapticEnabled ? "Vibración y destello háptico en múltiplos de 10 ACTIVADO" : "Activar vibración y destello en múltiplos de 10 BPM"}
-            >
-              <Smartphone className={`w-3.5 h-3.5 ${isHapticEnabled ? 'animate-bounce text-emerald-400' : ''}`} />
-              <span>{isHapticEnabled ? '📳 10x ON' : '📳 10x OFF'}</span>
-            </button>
           </div>
 
           {/* Large Dial Display */}
           <div className="flex flex-col items-center select-none">
             {bpm % 10 === 0 && (
-              <span className="px-2.5 py-0.5 rounded-full text-[9px] font-mono font-black uppercase tracking-widest bg-tertiary text-black shadow animate-pulse flex items-center gap-1 mb-1">
+              <span className="px-2.5 py-0.5 rounded-full text-[9px] font-mono font-black uppercase tracking-widest bg-tertiary text-black shadow flex items-center gap-1 mb-1">
                 <Sparkles className="w-3 h-3" /> MÚLTIPLO 10x ALCANZADO
               </span>
             )}
@@ -287,13 +245,10 @@ export const DrillMetronomeEngine: React.FC<DrillMetronomeEngineProps> = ({
                 className={`px-2.5 py-1 rounded-xl text-[11px] font-mono font-bold transition-all border flex items-center gap-1 ${
                   bpm === preset
                     ? 'bg-tertiary text-black border-tertiary font-black shadow-md scale-105'
-                    : preset % 10 === 0 && isHapticEnabled
-                      ? 'bg-white/10 text-tertiary border-tertiary/30 hover:border-tertiary'
-                      : 'bg-white/5 text-slate-300 border-white/10 hover:border-tertiary/40'
+                    : 'bg-white/5 text-slate-300 border-white/10 hover:border-tertiary/40'
                 }`}
               >
                 <span>{preset}</span>
-                {preset % 10 === 0 && <span className="text-[9px] opacity-75">📳</span>}
               </button>
             ))}
           </div>

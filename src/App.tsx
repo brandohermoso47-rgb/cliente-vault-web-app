@@ -29,10 +29,8 @@ import {
   Minus,
   Disc,
   FileText,
-  Flame,
-  Smartphone
+  Flame
 } from 'lucide-react';
-import { triggerBpm10HapticAndFlash, getBpmHapticPreference, setBpmHapticPreference, testHapticVibration } from './lib/bpmHaptics';
 import BWImageGallery from './components/BWImageGallery';
 import { GmailWidget } from './components/GmailWidget';
 import { GooglePickerModal } from './components/GooglePickerModal';
@@ -50,6 +48,7 @@ import { subscribeUserTracksFromFirebase } from './lib/musicService';
 // Import Types
 import { 
   User, 
+  UserRole,
   Announcement, 
   Presentation, 
   ChatMessage, 
@@ -86,6 +85,7 @@ import {
 // Import Shell Components
 import Sidebar from './components/Sidebar';
 import DashboardView from './components/DashboardView';
+import WelcomeDashboard from './components/WelcomeDashboard';
 import OnboardingTour from './components/OnboardingTour';
 import LoginView from './components/LoginView';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -95,6 +95,7 @@ import { SubscriptionPlansModal } from './components/SubscriptionPlansModal';
 import { LessonCelebration } from './components/LessonCelebration';
 import FormationContentPreviewModal from './components/FormationContentPreviewModal';
 import SomaticPosingPrototypeModal from './components/SomaticPosingPrototypeModal';
+import UnifiedFloatingMessenger from './components/UnifiedFloatingMessenger';
 
 // Code Splitting (React.lazy) for Heavy Academic & Somatic Modules
 const ComunidadView = React.lazy(() => import('./components/ComunidadView'));
@@ -401,11 +402,15 @@ export default function App() {
   };
 
   // Helper for normalizing roles across backend and frontend
-  const normalizeUserRole = (rawRole: string): 'student' | 'instructor' | 'studio' => {
+  const normalizeUserRole = (rawRole?: string, subscribedInstructorIds?: string[]): UserRole | undefined => {
+    const hasInstructor = (subscribedInstructorIds && subscribedInstructorIds.length > 0);
     const lower = (rawRole || '').toLowerCase().trim();
     if (['instructor', 'docente', 'profesor'].includes(lower)) return 'instructor';
     if (['studio', 'academia', 'escuela'].includes(lower)) return 'studio';
-    return 'student';
+    // If subscribed to an instructor, assign student role
+    if (hasInstructor) return 'student';
+    // If NOT subscribed to an instructor, do not assign student or any role
+    return undefined;
   };
 
   // Real-time Firestore Listener for current user profile & webhook role changes
@@ -417,20 +422,22 @@ export default function App() {
     const unsub = onSnapshot(userDocRef, (snap) => {
       if (snap.exists()) {
         const data = snap.data();
-        if (data.role || data.billingStatus || data.subscription_status) {
-          const newRole = normalizeUserRole(data.role || currentUser.role);
-          const newStatus = data.billingStatus || data.subscription_status || 'active';
+        const instructorIds = data.subscribedInstructorIds || currentUser.subscribedInstructorIds || [];
+        const newRole = normalizeUserRole(data.role, instructorIds);
+        const newStatus = data.billingStatus || data.subscription_status || 'active';
 
-          setCurrentUser(prev => {
-            if (prev.role !== newRole || prev.billingStatus !== newStatus) {
-              const updated = {
-                ...prev,
-                role: newRole,
-                billingStatus: newStatus as any
-              };
-              localStorage.setItem('waacking_user', JSON.stringify(updated));
+        setCurrentUser(prev => {
+          if (prev.role !== newRole || prev.billingStatus !== newStatus) {
+            const updated = {
+              ...prev,
+              role: newRole,
+              billingStatus: newStatus as any,
+              subscribedInstructorIds: instructorIds
+            };
+            localStorage.setItem('waacking_user', JSON.stringify(updated));
 
-              // Automatic redirection to the appropriate role dashboard
+            // Automatic redirection to the appropriate role dashboard if assigned
+            if (newRole) {
               setActiveTab('dashboard');
               const dashPath = newRole === 'instructor' 
                 ? '/dashboard/instructor' 
@@ -449,12 +456,12 @@ export default function App() {
                   newRole === 'instructor' ? 'Instructor' : newRole === 'studio' ? 'Academia' : 'Estudiante'
                 }.`
               });
-
-              return updated;
             }
-            return prev;
-          });
-        }
+
+            return updated;
+          }
+          return prev;
+        });
       }
     }, (err) => {
       console.warn('[Real-time Role Snapshot Notice]:', err);
@@ -470,7 +477,7 @@ export default function App() {
 
     if (pathname.includes('/dashboard/estudiante') || pathname.includes('/dashboard/student')) {
       setActiveTab('dashboard');
-      if (currentUser.role !== 'student') {
+      if (currentUser.subscribedInstructorIds && currentUser.subscribedInstructorIds.length > 0 && currentUser.role !== 'student') {
         updateUserAndPersist(prev => ({ ...prev, role: 'student' }));
       }
     } else if (pathname.includes('/dashboard/instructor')) {
@@ -531,13 +538,17 @@ export default function App() {
           const docSnap = await getDoc(docRef);
           if (docSnap.exists()) {
             const data = docSnap.data();
+            const instructorIds = data.subscribedInstructorIds || [];
+            const userRole = normalizeUserRole(data.role, instructorIds);
+
             setCurrentUser({
               id: user.uid,
               name: data.name || user.displayName || 'Bailarín',
               firstName: data.firstName || (data.name ? data.name.split(' ')[0] : undefined),
               lastName: data.lastName || (data.name ? data.name.split(' ').slice(1).join(' ') : undefined),
               avatar: user.photoURL || data.avatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=120',
-              role: normalizeUserRole(data.role || 'student'),
+              role: userRole,
+              subscribedInstructorIds: instructorIds,
               completedLessons: data.completedLessons || [],
               points: data.points || 0,
               email: user.email || data.email || undefined,
@@ -550,7 +561,7 @@ export default function App() {
               billingStatus: data.billingStatus || 'cancelled'
             });
           } else {
-            // Document does not exist, create a clean profile in Firestore
+            // Document does not exist, create a clean profile in Firestore WITHOUT any role
             const nameParts = (user.displayName || '').trim().split(' ');
             const inferredFirstName = nameParts[0] || 'Bailarín';
             const inferredLastName = nameParts.slice(1).join(' ') || '';
@@ -563,7 +574,8 @@ export default function App() {
               firstName: inferredFirstName,
               lastName: inferredLastName,
               avatar: user.photoURL || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=120',
-              role: 'student',
+              role: undefined, // No role until subscribed to an instructor
+              subscribedInstructorIds: [],
               completedLessons: [],
               points: 0,
               email: user.email || undefined,
@@ -583,7 +595,8 @@ export default function App() {
             id: user.uid,
             name: user.displayName || 'Bailarín',
             avatar: user.photoURL || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=120',
-            role: 'student',
+            role: undefined,
+            subscribedInstructorIds: [],
             completedLessons: [],
             points: 0,
             email: user.email || undefined
@@ -1230,27 +1243,45 @@ export default function App() {
             />
           );
         }
+        // If user is subscribed to an instructor, render the student practice dashboard
+        const isSubscribedToInstructor = Array.isArray(currentUser.subscribedInstructorIds) && currentUser.subscribedInstructorIds.length > 0;
+        if (currentUser.role === 'student' || isSubscribedToInstructor) {
+          return (
+            <DashboardView
+              currentUser={currentUser}
+              lessons={lessons}
+              playlists={playlists}
+              feedbackItems={feedbackItems}
+              events={events}
+              chatMessages={chatMessages}
+              announcements={announcements}
+              onAddAnnouncement={handleAddAnnouncement}
+              onDeleteAnnouncement={handleDeleteAnnouncement}
+              setActiveTab={setActiveTab}
+              onMarkLessonComplete={handleMarkLessonComplete}
+              selectedCourseLevel={selectedCourseLevel}
+              setSelectedCourseLevel={setSelectedCourseLevel}
+              onAddChatMessage={handleAddChatMessage}
+              practiceLogs={practiceLogs}
+              onLogPractice={handleLogPractice}
+              onUserChange={updateUserAndPersist}
+              language={language}
+              theme={theme}
+              onOpenPlansModal={() => setIsPlansModalOpen(true)}
+            />
+          );
+        }
+        // Default User Dashboard (shown to all new registered users without an assigned role/instructor subscription)
         return (
-          <DashboardView
+          <WelcomeDashboard
             currentUser={currentUser}
-            lessons={lessons}
-            playlists={playlists}
-            feedbackItems={feedbackItems}
-            events={events}
-            chatMessages={chatMessages}
-            announcements={announcements}
-            onAddAnnouncement={handleAddAnnouncement}
-            onDeleteAnnouncement={handleDeleteAnnouncement}
-            setActiveTab={setActiveTab}
-            onMarkLessonComplete={handleMarkLessonComplete}
-            selectedCourseLevel={selectedCourseLevel}
-            setSelectedCourseLevel={setSelectedCourseLevel}
-            onAddChatMessage={handleAddChatMessage}
-            practiceLogs={practiceLogs}
-            onLogPractice={handleLogPractice}
             onUserChange={updateUserAndPersist}
             language={language}
-            theme={theme}
+            setActiveTab={setActiveTab}
+            onOpenPlansModal={() => setIsPlansModalOpen(true)}
+            onSwitchToPracticeDashboard={() => {
+              setActiveTab('cursos');
+            }}
           />
         );
       case 'cursos':
@@ -1277,6 +1308,8 @@ export default function App() {
             feedbackItems={feedbackItems}
             onAddFeedbackItem={handleAddFeedbackItem}
             onAddCorrection={handleAddCorrection}
+            onUserChange={updateUserAndPersist}
+            onOpenSpotifyPlayer={() => setIsSpotifyPlayerOpen(true)}
           />
         );
       case 'podcasts':
@@ -1442,6 +1475,23 @@ export default function App() {
           />
         );
       case 'instructor':
+      case 'instructor_dashboard':
+      case 'instructor_finances':
+      case 'instructor_publish':
+      case 'instructor_documents':
+      case 'instructor_students':
+      case 'instructor_classes':
+      case 'instructor_promotion':
+      case 'instructor_methodology': {
+        let initialSubTab = 'dashboard';
+        if (activeTab === 'instructor_finances') initialSubTab = 'finances';
+        else if (activeTab === 'instructor_publish') initialSubTab = 'publish';
+        else if (activeTab === 'instructor_documents') initialSubTab = 'documents';
+        else if (activeTab === 'instructor_students') initialSubTab = 'students';
+        else if (activeTab === 'instructor_classes') initialSubTab = 'classes';
+        else if (activeTab === 'instructor_promotion') initialSubTab = 'promotion';
+        else if (activeTab === 'instructor_methodology') initialSubTab = 'methodology';
+
         return (
           <InstructorView
             currentUser={currentUser}
@@ -1451,9 +1501,11 @@ export default function App() {
             language={language}
             setActiveTab={setActiveTab}
             lessons={lessons}
+            initialSubTab={initialSubTab}
             onOpenDocsModal={() => setShowDocsModal(true)}
           />
         );
+      }
       case 'studio':
         return (
           <StudioDashboardView
@@ -1554,43 +1606,7 @@ export default function App() {
 
   // Quick BPM Selector state for Training mode
   const [trainingBpm, setTrainingBpm] = useState<number>(120);
-  const [isBpmHapticEnabled, setIsBpmHapticEnabled] = useState<boolean>(getBpmHapticPreference);
-  const [isBpm10Flashing, setIsBpm10Flashing] = useState<boolean>(false);
-  const [hapticTestNotice, setHapticTestNotice] = useState<string | null>(null);
   const headerTapTimesRef = useRef<number[]>([]);
-
-  // Listen to haptic preference changes from anywhere in the app
-  useEffect(() => {
-    const handleHapticSync = () => {
-      setIsBpmHapticEnabled(getBpmHapticPreference());
-    };
-    window.addEventListener('bpm-haptic-preference-changed', handleHapticSync);
-    return () => window.removeEventListener('bpm-haptic-preference-changed', handleHapticSync);
-  }, []);
-
-  // Trigger mobile vibration & visual flash whenever trainingBpm hits a multiple of 10
-  useEffect(() => {
-    if (isBpmHapticEnabled && trainingBpm % 10 === 0) {
-      triggerBpm10HapticAndFlash(trainingBpm, isBpmHapticEnabled, () => {
-        setIsBpm10Flashing(true);
-        const timer = setTimeout(() => setIsBpm10Flashing(false), 850);
-        return () => clearTimeout(timer);
-      });
-    }
-  }, [trainingBpm, isBpmHapticEnabled]);
-
-  const toggleBpmHapticPreference = () => {
-    const nextVal = !isBpmHapticEnabled;
-    setIsBpmHapticEnabled(nextVal);
-    setBpmHapticPreference(nextVal);
-    if (nextVal) {
-      const vibrated = testHapticVibration();
-      setHapticTestNotice(vibrated ? '📳 Vibración Probada OK' : '📳 Vibración Háptica Activada (10x BPM)');
-    } else {
-      setHapticTestNotice('📳 Vibración Háptica Desactivada');
-    }
-    setTimeout(() => setHapticTestNotice(null), 2500);
-  };
 
   const handleHeaderTapTempo = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -1841,99 +1857,16 @@ export default function App() {
               <span className="hidden sm:inline">Vista Previa</span>
             </button>
 
-            {/* [Spotify] Spotify Player Quick Launch Button */}
-            <button
-              onClick={() => setIsSpotifyPlayerOpen(true)}
-              className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border transition-all cursor-pointer focus:outline-none ${
-                isSpotifyFloating || isSpotifyPlayerOpen
-                  ? 'bg-[#1DB954] text-black border-[#1DB954] font-bold shadow-[0_0_12px_rgba(29,185,84,0.4)]'
-                  : theme === 'light'
-                    ? 'bg-emerald-50 hover:bg-emerald-100 border-emerald-200 text-emerald-950 shadow-sm'
-                    : 'bg-[#141414] hover:bg-[#1a1a1a] border-[#1DB954]/40 text-white shadow-sm'
-              }`}
-              title="Abrir reproductor de música de Spotify"
-              aria-label="Abrir reproductor de música de Spotify"
-            >
-              <div className="w-4 h-4 rounded-full bg-[#1DB954] text-black flex items-center justify-center shrink-0">
-                <Disc className="w-3 h-3 animate-spin-slow" />
-              </div>
-              <span className="text-[11px] font-mono font-bold tracking-tight hidden sm:inline">[Spotify]</span>
-            </button>
-
-            {/* Visual Indicator & Quick Toggle for BPM Haptic Feedback Status */}
-            <div className="relative flex items-center">
-              <button
-                type="button"
-                onClick={toggleBpmHapticPreference}
-                className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border transition-all cursor-pointer select-none focus:outline-none text-xs font-mono font-bold shadow-sm active:scale-95 ${
-                  isBpmHapticEnabled
-                    ? theme === 'light'
-                      ? 'bg-emerald-50 hover:bg-emerald-100 border-emerald-400 text-emerald-900 shadow-[0_0_10px_rgba(16,185,129,0.25)]'
-                      : 'bg-emerald-950/70 hover:bg-emerald-900/90 border-emerald-500/70 text-emerald-300 shadow-[0_0_12px_rgba(16,185,129,0.35)]'
-                    : theme === 'light'
-                      ? 'bg-slate-100 hover:bg-slate-200 border-slate-300 text-slate-500'
-                      : 'bg-[#141414] hover:bg-[#202020] border-[#333333] text-slate-400'
-                }`}
-                title={
-                  isBpmHapticEnabled
-                    ? 'Estado actual: Vibración Háptica y Destello ACTIVADOS (múltiplos de 10 BPM). Clic para probar o desactivar antes de tu sesión.'
-                    : 'Estado actual: Vibración Háptica DESACTIVADA. Clic para activar antes de tu sesión.'
-                }
-                aria-label={`Estado de vibración háptica: ${isBpmHapticEnabled ? 'Activado' : 'Desactivado'}`}
-              >
-                <div className="relative flex items-center justify-center shrink-0">
-                  <Smartphone className={`w-3.5 h-3.5 ${isBpmHapticEnabled ? 'text-emerald-400 animate-pulse' : 'text-slate-400 opacity-60'}`} />
-                  {isBpmHapticEnabled && (
-                    <span className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
-                  )}
-                </div>
-
-                <div className="flex items-center gap-1">
-                  <span className="hidden md:inline font-mono uppercase tracking-tight text-[10px] text-slate-300 dark:text-slate-400">Háptico</span>
-                  <span className={`px-1.5 py-0.2 rounded text-[10px] font-black uppercase tracking-wider ${
-                    isBpmHapticEnabled 
-                      ? 'bg-emerald-500 text-black font-extrabold shadow-sm' 
-                      : 'bg-slate-700/50 text-slate-400'
-                  }`}>
-                    {isBpmHapticEnabled ? 'ON' : 'OFF'}
-                  </span>
-                </div>
-              </button>
-
-              {/* Toast Feedback popup on click */}
-              <AnimatePresence>
-                {hapticTestNotice && (
-                  <motion.div
-                    initial={{ opacity: 0, y: -8, scale: 0.9 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: -8, scale: 0.9 }}
-                    className="absolute top-10 left-1/2 -translate-x-1/2 z-50 whitespace-nowrap bg-black/95 text-amber-300 border border-amber-400/80 px-3 py-1 rounded-xl text-[10px] font-mono font-bold shadow-2xl pointer-events-none flex items-center gap-1.5"
-                  >
-                    <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-ping" />
-                    <span>{hapticTestNotice}</span>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-
             {/* Quick BPM Selector (Header - Visible only during Entrenamiento mode) */}
             {activeTab === 'entrenamiento' && (
               <motion.div 
                 initial={{ opacity: 0, scale: 0.9 }}
-                animate={
-                  isBpm10Flashing
-                    ? { scale: [1, 1.12, 0.96, 1.08, 1], boxShadow: ['0 0 0px rgba(233,195,73,0)', '0 0 25px rgba(233,195,73,0.9)', '0 0 5px rgba(233,195,73,0.2)'] }
-                    : { opacity: 1, scale: 1 }
-                }
-                transition={isBpm10Flashing ? { duration: 0.65 } : { duration: 0.2 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.2 }}
                 className={`relative flex items-center gap-1 sm:gap-1.5 px-2 py-1 rounded-xl border transition-all shadow-sm ${
-                  isBpm10Flashing
-                    ? 'bg-amber-500/30 border-amber-400 text-amber-100 ring-2 ring-amber-400/50 shadow-[0_0_20px_rgba(233,195,73,0.7)]'
-                    : trainingBpm % 10 === 0 && isBpmHapticEnabled
-                      ? 'bg-amber-500/15 border-amber-400/80 text-amber-200'
-                      : theme === 'light'
-                        ? 'bg-amber-500/10 border-amber-500/40 text-amber-950'
-                        : 'bg-[#141414] border-[#9A2B3C]/80 text-white'
+                  theme === 'light'
+                    ? 'bg-amber-500/10 border-amber-500/40 text-amber-950'
+                    : 'bg-[#141414] border-[#9A2B3C]/80 text-white'
                 }`}
               >
                 <div className="flex items-center gap-1.5 text-[#E9C349]">
@@ -1968,46 +1901,24 @@ export default function App() {
                   type="button"
                   onClick={handleHeaderTapTempo}
                   key={`bpm-badge-tempo-${trainingBpm}`}
-                  animate={
-                    isBpm10Flashing
-                      ? {}
-                      : {
-                          scale: [1, 1.05, 1],
-                          boxShadow: [
-                            "0 0 0px rgba(233,195,73,0)",
-                            "0 0 8px rgba(233,195,73,0.45)",
-                            "0 0 0px rgba(233,195,73,0)"
-                          ]
-                        }
-                  }
-                  transition={
-                    isBpm10Flashing
-                      ? {}
-                      : { repeat: Infinity, duration: 60 / Math.max(40, trainingBpm), ease: "easeInOut" }
-                  }
-                  className={`flex items-center gap-1 px-2 py-0.5 rounded border font-mono text-xs font-black transition-all cursor-pointer select-none active:scale-95 ${
+                  animate={{
+                    scale: [1, 1.05, 1],
+                    boxShadow: [
+                      "0 0 0px rgba(233,195,73,0)",
+                      "0 0 8px rgba(233,195,73,0.45)",
+                      "0 0 0px rgba(233,195,73,0)"
+                    ]
+                  }}
+                  transition={{ repeat: Infinity, duration: 60 / Math.max(40, trainingBpm), ease: "easeInOut" }}
+                  className={`px-2.5 py-0.5 rounded border font-mono text-xs font-black transition-all cursor-pointer select-none active:scale-95 ${
                     trainingBpm % 10 === 0
                       ? 'bg-[#E9C349] text-black border-[#E9C349] shadow-sm font-extrabold'
                       : 'bg-black/50 border-[#E9C349]/40 text-[#E9C349] hover:bg-black/70'
                   }`}
-                  title="Botón unificado: haz clic en el número para Tap Tempo (ritmo) o en el icono de teléfono para alternar la vibración en múltiplos de 10 BPM."
-                  aria-label="BPM Tap Tempo y Vibración Háptica"
+                  title="Haz clic para marcar el ritmo (Tap Tempo)"
+                  aria-label="BPM Tap Tempo"
                 >
-                  <span>{trainingBpm}</span>
-                  <span
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      toggleBpmHapticPreference();
-                    }}
-                    className={`p-0.5 rounded transition-all flex items-center justify-center ${
-                      isBpmHapticEnabled
-                        ? trainingBpm % 10 === 0 ? 'text-black' : 'text-emerald-400 hover:text-emerald-300'
-                        : 'opacity-30 hover:opacity-75 text-slate-400'
-                    }`}
-                    title={isBpmHapticEnabled ? 'Vibración y Destello 10x ACTIVADO (Clic para apagar)' : 'Vibración y Destello 10x DESACTIVADO (Clic para activar)'}
-                  >
-                    <Smartphone className={`w-3 h-3 ${isBpmHapticEnabled && trainingBpm % 10 === 0 ? 'animate-bounce' : ''}`} />
-                  </span>
+                  <span>{trainingBpm} BPM</span>
                 </motion.button>
 
                 <button
@@ -2419,6 +2330,20 @@ export default function App() {
       <SomaticPosingPrototypeModal
         isOpen={showSomaticPosingModal}
         onClose={() => setShowSomaticPosingModal(false)}
+      />
+
+      {/* Global Unified Floating Messenger (Hub de Mensajería Unificado) */}
+      <UnifiedFloatingMessenger
+        currentUser={currentUser}
+        onOpenLiveBattle={(friend) => {
+          setActiveTab('live');
+        }}
+        onOpenClassroomLesson={(lessonId) => {
+          setActiveTab('cursos');
+        }}
+        onOpenMultiSourceMusic={() => {
+          setIsSpotifyPlayerOpen(true);
+        }}
       />
     </div>
     </ProtectedRoute>

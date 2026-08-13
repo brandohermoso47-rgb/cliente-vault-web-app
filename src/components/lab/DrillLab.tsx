@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Clock, Volume2, VolumeX, Flame, Radio, Sliders, BarChart2, Smartphone, Sparkles } from 'lucide-react';
+import { Clock, Volume2, VolumeX, Flame, Radio, Sliders, BarChart2, Sparkles } from 'lucide-react';
 import { DrillMetronomeEngine } from '../entrenamiento/DrillMetronomeEngine';
 import MetronomeLabComponent from '../MetronomeLabComponent';
 import { AudioSpectrumVisualizer } from '../entrenamiento/AudioSpectrumVisualizer';
-import { triggerBpm10HapticAndFlash, getBpmHapticPreference, setBpmHapticPreference } from '../../lib/bpmHaptics';
 
 export interface DrillLabProps {
   flashBeat: boolean;
@@ -42,30 +41,6 @@ const DrillLabComponent: React.FC<DrillLabProps> = ({
   setMarkingMode
 }) => {
   const [activeTab, setActiveTab] = useState<'drill' | 'engine' | 'tone_metronome' | 'spectrum'>('drill');
-  const [isHapticEnabled, setIsHapticEnabled] = useState<boolean>(getBpmHapticPreference);
-  const [isFlashing, setIsFlashing] = useState<boolean>(false);
-
-  useEffect(() => {
-    const handleSync = () => setIsHapticEnabled(getBpmHapticPreference());
-    window.addEventListener('bpm-haptic-preference-changed', handleSync);
-    return () => window.removeEventListener('bpm-haptic-preference-changed', handleSync);
-  }, []);
-
-  useEffect(() => {
-    if (isHapticEnabled && drillBpm % 10 === 0) {
-      triggerBpm10HapticAndFlash(drillBpm, isHapticEnabled, () => {
-        setIsFlashing(true);
-        const timer = setTimeout(() => setIsFlashing(false), 850);
-        return () => clearTimeout(timer);
-      });
-    }
-  }, [drillBpm, isHapticEnabled]);
-
-  const toggleHapticPreference = () => {
-    const nextVal = !isHapticEnabled;
-    setIsHapticEnabled(nextVal);
-    setBpmHapticPreference(nextVal);
-  };
 
   return (
     <div className="w-full space-y-6 sm:space-y-8">
@@ -235,37 +210,18 @@ const DrillLabComponent: React.FC<DrillLabProps> = ({
                   CONFIGURA TU DRILL
                 </h4>
 
-                {/* BPM adjustment slider con destello y respuesta háptica a múltiplos de 10 */}
-                <div className={`p-3.5 rounded-2xl border transition-all duration-300 space-y-2 mb-5 relative overflow-hidden ${
-                  isFlashing
-                    ? 'bg-amber-500/25 border-amber-400 shadow-[0_0_25px_rgba(233,195,73,0.5)] scale-[1.02]'
-                    : drillBpm % 10 === 0 && isHapticEnabled
-                      ? 'bg-black/40 border-[#E9C349]/60 shadow-[0_0_12px_rgba(233,195,73,0.2)]'
-                      : 'bg-black/20 border-tertiary/10'
-                }`}>
+                {/* BPM adjustment slider */}
+                <div className="p-3.5 rounded-2xl border transition-all duration-300 space-y-2 mb-5 relative overflow-hidden bg-black/20 border-tertiary/10">
                   <div className="flex justify-between items-center text-xs font-mono font-bold">
                     <div className="flex items-center gap-2">
                       <span className="text-on-surface-variant">TEMPO DRILL:</span>
                       {drillBpm % 10 === 0 && (
-                        <span className="px-2 py-0.5 rounded text-[9px] font-mono font-black uppercase bg-[#E9C349] text-black shadow animate-pulse flex items-center gap-1">
+                        <span className="px-2 py-0.5 rounded text-[9px] font-mono font-black uppercase bg-[#E9C349] text-black shadow flex items-center gap-1">
                           <Sparkles className="w-3 h-3" /> 10x
                         </span>
                       )}
                     </div>
                     <div className="flex items-center gap-2">
-                      <button
-                        type="button"
-                        onClick={toggleHapticPreference}
-                        className={`flex items-center gap-1 px-2 py-0.5 rounded-lg text-[10px] font-mono transition-all border cursor-pointer ${
-                          isHapticEnabled
-                            ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/40 shadow-sm'
-                            : 'bg-black/40 text-slate-400 border-slate-700 hover:text-white'
-                        }`}
-                        title={isHapticEnabled ? "Vibración y destello háptico en múltiplos de 10 ACTIVADO" : "Activar vibración y destello en múltiplos de 10 BPM"}
-                      >
-                        <Smartphone className={`w-3 h-3 ${isHapticEnabled ? 'animate-bounce text-emerald-400' : ''}`} />
-                        <span>{isHapticEnabled ? '📳 10x ON' : '📳 10x OFF'}</span>
-                      </button>
                       <span className="text-tertiary font-bold text-sm border border-tertiary/20 bg-tertiary/5 px-2.5 py-0.5 rounded-lg shadow-inner">
                         {drillBpm} BPM
                       </span>
@@ -285,10 +241,10 @@ const DrillLabComponent: React.FC<DrillLabProps> = ({
 
                   <div className="flex justify-between text-[9px] text-on-surface-variant font-mono font-bold tracking-wide mt-1">
                     <span>90 BPM</span>
-                    <span>100 📳</span>
-                    <span>110 📳</span>
-                    <span>120 📳</span>
-                    <span>130 📳</span>
+                    <span>100 BPM</span>
+                    <span>110 BPM</span>
+                    <span>120 BPM</span>
+                    <span>130 BPM</span>
                     <span>140 BPM</span>
                   </div>
                 </div>

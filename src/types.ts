@@ -2,7 +2,7 @@
  * Types and interfaces for La Academia de Waacking
  */
 
-export type UserRole = 'student' | 'instructor' | 'studio' | 'academia' | 'academy' | 'estudiante' | 'guest';
+export type UserRole = 'student' | 'instructor' | 'studio' | 'academia' | 'academy' | 'estudiante' | 'guest' | 'unassigned' | 'none';
 
 export type StudentSubscriptionTier = 'free' | 'basic_practice' | 'instructor_pass';
 
@@ -35,7 +35,7 @@ export interface User {
   displayName?: string;
   photoURL?: string;
   avatar: string;
-  role: UserRole;
+  role?: UserRole;
   status?: 'online' | 'in_battle' | 'offline';
   isOnline?: boolean;
   completedLessons: string[]; // lesson ids
@@ -404,5 +404,48 @@ export interface Studio {
   documents: StudioDocument[];
   scheduledClassesThisWeek?: number;
   attendanceRatePercent?: number;
+}
+
+export interface DirectMessage {
+  id: string;
+  conversationId: string; // e.g. "dm_user1_user2"
+  senderId: string;
+  senderName: string;
+  senderAvatar: string;
+  senderRole: UserRole;
+  receiverId: string;
+  receiverName: string;
+  receiverAvatar: string;
+  receiverRole: UserRole;
+  text: string;
+  type?: 'text' | 'audio' | 'drill' | 'image' | 'battle_invite';
+  audioDuration?: string;
+  attachmentUrl?: string;
+  drillDetails?: {
+    title: string;
+    bpm: number;
+    category?: string;
+  };
+  createdAt: string;
+  timestamp: number;
+  status: 'sent' | 'delivered' | 'read';
+  isRead?: boolean;
+}
+
+export interface MessagingContact {
+  id: string;
+  name: string;
+  displayName?: string;
+  username?: string;
+  avatar: string;
+  role: UserRole;
+  status?: 'online' | 'in_battle' | 'offline';
+  category: 'instructor' | 'friend' | 'student';
+  specialty?: string;
+  level?: string;
+  country?: string;
+  lastMessage?: string;
+  lastMessageTime?: string;
+  unreadCount?: number;
 }
 

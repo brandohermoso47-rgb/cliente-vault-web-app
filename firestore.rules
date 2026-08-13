@@ -49,6 +49,11 @@ service cloud.firestore {
       allow write: if isAdmin() || isSignedIn();
     }
 
+    match /direct_messages/{messageId} {
+      allow read: if true;
+      allow write: if isAdmin() || isSignedIn();
+    }
+
     match /friendships/{friendshipId} {
       allow read: if true;
       allow write: if isAdmin() || isSignedIn();

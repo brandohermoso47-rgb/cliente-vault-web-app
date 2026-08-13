@@ -27,7 +27,12 @@ import {
   Headphones,
   Building2,
   Eye,
-  Cpu
+  Cpu,
+  Wallet,
+  PlusCircle,
+  FileText,
+  Calendar,
+  Settings
 } from 'lucide-react';
 import { User } from '../types';
 import { Language, translations } from '../lib/translations';
@@ -57,27 +62,41 @@ export default function Sidebar({ activeTab, setActiveTab, currentUser, onUserCh
     }
   }, [currentUser.billingStatus]);
 
+  const isInstructor = currentUser.role === 'instructor';
+
+  const principalItems = [
+    { 
+      id: 'dashboard', 
+      label: 'Dashboard', 
+      icon: LayoutDashboard, 
+      requiresSub: false, 
+      badge: currentUser.id === 'OdXh2P0qGDaFFyNKalECKFq9ESk1'
+        ? 'ADMIN'
+        : currentUser.role === 'studio' 
+          ? 'ACADEMIA' 
+          : isInstructor 
+            ? 'DOCENTE' 
+            : currentUser.role === 'student'
+              ? 'ESTUDIANTE'
+              : 'INICIO' 
+    },
+    ...(isInstructor ? [
+      { id: 'instructor_finances', label: language === 'es' ? 'Finanzas' : 'Finances', icon: Wallet, requiresSub: false, badge: '80/20' },
+      { id: 'instructor_publish', label: language === 'es' ? 'Cursos y Publicaciones' : 'Courses & Content', icon: PlusCircle, requiresSub: false },
+      { id: 'instructor_documents', label: language === 'es' ? 'Documentos' : 'Documents', icon: FileText, requiresSub: false },
+      { id: 'instructor_students', label: language === 'es' ? 'Alumnos' : 'Students', icon: Users, requiresSub: false },
+      { id: 'instructor_classes', label: language === 'es' ? 'Clases' : 'Classes', icon: Calendar, requiresSub: false },
+      { id: 'instructor_promotion', label: language === 'es' ? 'Ajustes' : 'Settings', icon: Settings, requiresSub: false },
+    ] : []),
+    { id: 'live', label: language === 'es' ? 'Lives / En Vivo' : 'Lives / Streaming', icon: Radio, requiresSub: false, badge: 'EN VIVO' },
+    { id: 'reels', label: 'Waack Reels', icon: Film, requiresSub: false, badge: 'HOT' }
+  ];
+
   const allSections = [
     {
       id: 'principal',
       title: '1. PRINCIPAL',
-      items: [
-        { 
-          id: 'dashboard', 
-          label: 'Dashboard', 
-          icon: LayoutDashboard, 
-          requiresSub: false, 
-          badge: currentUser.id === 'OdXh2P0qGDaFFyNKalECKFq9ESk1'
-            ? 'ADMIN'
-            : currentUser.role === 'studio' 
-              ? 'ACADEMIA' 
-              : currentUser.role === 'instructor' 
-                ? 'DOCENTE' 
-                : 'ESTUDIANTE' 
-        },
-        { id: 'live', label: 'Lives / En Vivo', icon: Radio, requiresSub: false, badge: 'EN VIVO' },
-        { id: 'reels', label: 'Waack Reels', icon: Film, requiresSub: false, badge: 'HOT' }
-      ]
+      items: principalItems
     },
     {
       id: 'formacion',

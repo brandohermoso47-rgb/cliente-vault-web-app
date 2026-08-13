@@ -28,7 +28,13 @@ import {
   UserPlus,
   Copy,
   Check,
-  Eye
+  Eye,
+  Target,
+  Edit3,
+  Save,
+  Music,
+  TrendingUp,
+  CheckCircle2
 } from 'lucide-react';
 import { User, Lesson, InstructorCatedra, IntensiveCourse, CatedraMaterial, FeedbackItem } from '../types';
 import { Language, translations } from '../lib/translations';
@@ -49,6 +55,8 @@ interface CursosViewProps {
   feedbackItems?: FeedbackItem[];
   onAddFeedbackItem?: (title: string, description: string, videoUrl: string) => void;
   onAddCorrection?: (itemId: string, time: string, text: string) => void;
+  onUserChange?: (updater: (prev: User) => User) => void;
+  onOpenSpotifyPlayer?: () => void;
 }
 
 const WORKBOOK_PAGES = [
@@ -80,12 +88,40 @@ export default function CursosView({
   language,
   feedbackItems,
   onAddFeedbackItem,
-  onAddCorrection
+  onAddCorrection,
+  onUserChange,
+  onOpenSpotifyPlayer
 }: CursosViewProps) {
   // Navigation / Filter States
-  const [currentTab, setCurrentTab] = useState<'catedras' | 'workbook' | 'feedback'>('catedras');
+  const [currentTab, setCurrentTab] = useState<'catedras' | 'workbook' | 'feedback' | 'metas'>('catedras');
   const [selectedInstructorFilter, setSelectedInstructorFilter] = useState<string>('all'); // 'all' or instructorId
   const [showPreviewModal, setShowPreviewModal] = useState(false);
+
+  // Goal Management State (Relocated from Dashboard)
+  const [isEditingGoal, setIsEditingGoal] = useState(false);
+  const [targetGoalMinutes, setTargetGoalMinutes] = useState<number>(currentUser.targetMinutes || 30);
+  const [targetWeeklyDays, setTargetWeeklyDays] = useState<number>(() => {
+    const saved = localStorage.getItem('waackon_target_weekly_days');
+    return saved ? parseInt(saved, 10) : 5;
+  });
+  const [goalSavedToast, setGoalSavedToast] = useState(false);
+
+  const handleSaveGoal = (minutes: number, days?: number) => {
+    setTargetGoalMinutes(minutes);
+    if (days !== undefined) {
+      setTargetWeeklyDays(days);
+      localStorage.setItem('waackon_target_weekly_days', String(days));
+    }
+    if (onUserChange) {
+      onUserChange(prev => ({
+        ...prev,
+        targetMinutes: minutes
+      }));
+    }
+    setIsEditingGoal(false);
+    setGoalSavedToast(true);
+    setTimeout(() => setGoalSavedToast(false), 3500);
+  };
 
   // Video Feedback Form & Correction States
   const [showFeedbackForm, setShowFeedbackForm] = useState(false);
@@ -243,6 +279,17 @@ export default function CursosView({
             <span>{materialToast}</span>
           </motion.div>
         )}
+        {goalSavedToast && (
+          <motion.div 
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="fixed top-6 right-6 z-50 bg-gradient-to-r from-[#E9C349] to-amber-400 text-black px-5 py-3.5 rounded-2xl shadow-2xl font-extrabold text-xs flex items-center gap-2.5 border border-black/20"
+          >
+            <CheckCircle2 className="w-5 h-5 shrink-0 text-black" />
+            <span>🎯 Meta de entrenamiento actualizada a {targetGoalMinutes} min/día ({targetWeeklyDays} días/semana).</span>
+          </motion.div>
+        )}
       </AnimatePresence>
 
       {/* HEADER SECTION */}
@@ -269,6 +316,18 @@ export default function CursosView({
 
         {/* Action / Mode Tabs */}
         <div className="flex items-center gap-2.5 flex-wrap self-start lg:self-auto">
+          {onOpenSpotifyPlayer && (
+            <button
+              type="button"
+              onClick={onOpenSpotifyPlayer}
+              className="px-3.5 py-2 text-xs font-black rounded-2xl bg-[#1DB954]/20 hover:bg-[#1DB954]/30 text-[#1DB954] border border-[#1DB954]/50 transition-all flex items-center gap-1.5 shadow-md active:scale-95 cursor-pointer uppercase tracking-wider"
+              title="Reproductor de Música y Playlists de Waacking en Spotify"
+            >
+              <Music className="w-4 h-4 text-[#1DB954]" />
+              <span>Música Spotify</span>
+            </button>
+          )}
+
           <button
             type="button"
             onClick={() => setShowPreviewModal(true)}
@@ -300,13 +359,22 @@ export default function CursosView({
               <span>Desglose por Cátedra</span>
             </button>
             <button
+              onClick={() => setCurrentTab('metas')}
+              className={`px-4 py-2 text-xs font-extrabold rounded-xl transition-all flex items-center gap-1.5 ${
+                currentTab === 'metas' ? 'bg-[#E9C349] text-black shadow-lg' : 'text-slate-300 hover:text-white'
+              }`}
+            >
+              <Target className="w-3.5 h-3.5" />
+              <span>Metas & 7 Días</span>
+            </button>
+            <button
               onClick={() => setCurrentTab('workbook')}
               className={`px-4 py-2 text-xs font-extrabold rounded-xl transition-all flex items-center gap-1.5 ${
                 currentTab === 'workbook' ? 'bg-[#E9C349] text-black shadow-lg' : 'text-slate-300 hover:text-white'
               }`}
             >
               <BookOpen className="w-3.5 h-3.5" />
-              <span>Bitácora Teórica Global</span>
+              <span>Bitácora Teórica</span>
             </button>
             <button
               onClick={() => setCurrentTab('feedback')}
@@ -315,7 +383,7 @@ export default function CursosView({
               }`}
             >
               <Video className="w-3.5 h-3.5" />
-              <span>Feedback de Videos & Freestyle</span>
+              <span>Feedback & Video</span>
             </button>
           </div>
         </div>
@@ -946,6 +1014,209 @@ export default function CursosView({
             setCorrectionText={setCorrectionText}
             handleAddCorrectionSubmit={handleAddCorrectionSubmit}
           />
+        </div>
+      )}
+
+      {/* METAS DE ENTRENAMIENTO & 7 DÍAS MODE */}
+      {currentTab === 'metas' && (
+        <div className="space-y-6">
+          {/* Header Banner */}
+          <div className="bg-gradient-to-r from-amber-900/30 via-purple-900/20 to-pink-900/20 border border-[#E9C349]/30 p-6 rounded-3xl backdrop-blur-xl shadow-2xl flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div className="flex items-start gap-4">
+              <div className="w-14 h-14 rounded-2xl bg-[#E9C349]/20 border border-[#E9C349]/50 flex items-center justify-center text-[#E9C349] shrink-0 shadow-lg">
+                <Target className="w-8 h-8 text-[#E9C349]" />
+              </div>
+              <div>
+                <span className="text-[10px] font-mono font-bold text-[#E9C349] bg-white/10 border border-[#E9C349]/30 px-2.5 py-0.5 rounded-full uppercase tracking-wider flex items-center gap-1 w-fit mb-1">
+                  <Sparkles className="w-3 h-3 text-[#E9C349]" /> GESTIÓN DE METAS DE APRENDIZAJE
+                </span>
+                <h2 className="text-xl sm:text-2xl font-black text-white uppercase tracking-tight">
+                  Meta Diaria & Planificación de 7 Días
+                </h2>
+                <p className="text-xs text-slate-300 mt-1 max-w-2xl leading-relaxed">
+                  Establece tu compromiso diario de minutos de práctica, ajusta tu ritmo semanal de 7 días y sincroniza tu avance con los programas y cátedras oficiales de Waack On.
+                </p>
+              </div>
+            </div>
+
+            {onOpenSpotifyPlayer && (
+              <button
+                type="button"
+                onClick={onOpenSpotifyPlayer}
+                className="px-4 py-2.5 bg-[#1DB954] hover:bg-[#1ed760] text-black font-extrabold text-xs uppercase rounded-xl transition-all shadow-xl flex items-center gap-2 shrink-0 self-start md:self-auto cursor-pointer"
+              >
+                <Music className="w-4 h-4 text-black" />
+                <span>Abrir Spotify Waack Tracks</span>
+              </button>
+            )}
+          </div>
+
+          {/* Quick Metrics Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="bg-[#12101f] border border-white/10 p-5 rounded-2xl shadow-xl flex items-center justify-between">
+              <div>
+                <span className="text-[10px] font-mono font-bold text-[#8A8A8A] uppercase block">Meta Diaria Actual</span>
+                <div className="flex items-baseline gap-1.5 mt-1">
+                  <span className="text-2xl font-black text-[#E9C349]">{currentUser.targetMinutes || targetGoalMinutes}</span>
+                  <span className="text-xs text-slate-400 font-mono">minutos/día</span>
+                </div>
+              </div>
+              <div className="w-10 h-10 rounded-xl bg-[#E9C349]/10 border border-[#E9C349]/30 flex items-center justify-center text-[#E9C349]">
+                <Clock className="w-5 h-5" />
+              </div>
+            </div>
+
+            <div className="bg-[#12101f] border border-white/10 p-5 rounded-2xl shadow-xl flex items-center justify-between">
+              <div>
+                <span className="text-[10px] font-mono font-bold text-[#8A8A8A] uppercase block">Objetivo Semanal (7 Días)</span>
+                <div className="flex items-baseline gap-1.5 mt-1">
+                  <span className="text-2xl font-black text-white">{targetWeeklyDays}</span>
+                  <span className="text-xs text-slate-400 font-mono">días / semana</span>
+                </div>
+              </div>
+              <div className="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/30 flex items-center justify-center text-purple-400">
+                <Flame className="w-5 h-5" />
+              </div>
+            </div>
+
+            <div className="bg-[#12101f] border border-white/10 p-5 rounded-2xl shadow-xl flex items-center justify-between">
+              <div>
+                <span className="text-[10px] font-mono font-bold text-[#8A8A8A] uppercase block">Horas Totales Estimadas</span>
+                <div className="flex items-baseline gap-1.5 mt-1">
+                  <span className="text-2xl font-black text-emerald-400">
+                    {Math.round(((currentUser.targetMinutes || targetGoalMinutes) * targetWeeklyDays * 4) / 60)}
+                  </span>
+                  <span className="text-xs text-slate-400 font-mono">horas/mes</span>
+                </div>
+              </div>
+              <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+                <TrendingUp className="w-5 h-5" />
+              </div>
+            </div>
+
+            <div className="bg-[#12101f] border border-white/10 p-5 rounded-2xl shadow-xl flex items-center justify-between">
+              <div>
+                <span className="text-[10px] font-mono font-bold text-[#8A8A8A] uppercase block">Lecciones Completadas</span>
+                <div className="flex items-baseline gap-1.5 mt-1">
+                  <span className="text-2xl font-black text-cyan-400">{completedCount}</span>
+                  <span className="text-xs text-slate-400 font-mono">/ {lessons.length}</span>
+                </div>
+              </div>
+              <div className="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
+                <GraduationCap className="w-5 h-5" />
+              </div>
+            </div>
+          </div>
+
+          {/* Interactive Goal Editor Card */}
+          <div className="bg-[#120f1d] border border-white/15 p-6 rounded-3xl shadow-2xl space-y-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-4">
+              <div>
+                <h3 className="text-lg font-black text-white uppercase tracking-tight flex items-center gap-2">
+                  <Target className="w-5 h-5 text-[#E9C349]" /> Personalizar Meta Diaria y Frecuencia de Entrenamiento
+                </h3>
+                <p className="text-xs text-slate-400 mt-1">
+                  Selecciona la duración recomendada según tu nivel técnico y disponibilidad de práctica.
+                </p>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-mono font-bold text-[#E9C349] bg-[#E9C349]/10 px-3 py-1 rounded-xl border border-[#E9C349]/30">
+                  Guardado Automático en Perfil
+                </span>
+              </div>
+            </div>
+
+            {/* Presets Grid */}
+            <div className="space-y-3">
+              <label className="text-xs font-mono font-bold text-slate-300 uppercase tracking-wider block">
+                1. Selecciona tus Minutos Diarios Objetivo:
+              </label>
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
+                {[15, 20, 30, 45, 60, 90].map((mins) => {
+                  const isSelected = (currentUser.targetMinutes || targetGoalMinutes) === mins;
+                  return (
+                    <button
+                      key={mins}
+                      type="button"
+                      onClick={() => handleSaveGoal(mins, targetWeeklyDays)}
+                      className={`p-4 rounded-2xl border text-center transition-all cursor-pointer flex flex-col items-center justify-center gap-1 ${
+                        isSelected
+                          ? 'bg-[#E9C349] text-black border-[#E9C349] font-black shadow-[0_0_20px_rgba(233,195,73,0.35)] scale-105'
+                          : 'bg-black/40 text-white border-white/10 hover:border-white/30 hover:bg-white/5'
+                      }`}
+                    >
+                      <span className="text-2xl font-black">{mins}</span>
+                      <span className="text-[10px] font-mono uppercase tracking-wider opacity-80">minutos</span>
+                      {mins === 30 && (
+                        <span className={`text-[8px] font-black uppercase px-1.5 py-0.5 rounded-full mt-1 ${isSelected ? 'bg-black text-[#E9C349]' : 'bg-[#E9C349]/20 text-[#E9C349]'}`}>
+                          Recomendado
+                        </span>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Weekly Days Commitment */}
+            <div className="space-y-3 pt-2">
+              <label className="text-xs font-mono font-bold text-slate-300 uppercase tracking-wider block">
+                2. Frecuencia Semanal (Días de Práctica en 7 Días):
+              </label>
+              <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
+                {[3, 4, 5, 6, 7].map((days) => {
+                  const isSelected = targetWeeklyDays === days;
+                  return (
+                    <button
+                      key={days}
+                      type="button"
+                      onClick={() => handleSaveGoal(currentUser.targetMinutes || targetGoalMinutes, days)}
+                      className={`p-3.5 rounded-2xl border text-center transition-all cursor-pointer flex flex-col items-center justify-center gap-0.5 ${
+                        isSelected
+                          ? 'bg-purple-600 text-white border-purple-400 font-black shadow-[0_0_20px_rgba(147,51,234,0.4)] scale-105'
+                          : 'bg-black/40 text-white border-white/10 hover:border-white/30 hover:bg-white/5'
+                      }`}
+                    >
+                      <span className="text-xl font-black">{days} Días</span>
+                      <span className="text-[10px] font-mono text-purple-200">
+                        {days === 7 ? 'Modo Intensivo' : days >= 5 ? 'Progreso Constante' : 'Mantenimiento'}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Action Recommendations & Direct Shortcuts */}
+            <div className="p-5 bg-black/50 border border-white/10 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div className="space-y-1">
+                <h4 className="text-xs font-mono font-bold text-white uppercase tracking-wider flex items-center gap-2">
+                  <Sparkles className="w-4 h-4 text-[#E9C349]" /> ¿Listo para comenzar tu sesión de hoy?
+                </h4>
+                <p className="text-[11px] text-slate-400">
+                  Completa lecciones de tus cátedras suscritas o entrena drills con música disco en el metrónomo.
+                </p>
+              </div>
+              <div className="flex items-center gap-2.5 shrink-0 flex-wrap">
+                <button
+                  type="button"
+                  onClick={() => setCurrentTab('catedras')}
+                  className="px-4 py-2 bg-[#E9C349] hover:bg-[#ffdf6b] text-black font-extrabold text-xs uppercase rounded-xl transition-all shadow-md cursor-pointer flex items-center gap-1.5"
+                >
+                  <BookOpen className="w-4 h-4 text-black" />
+                  <span>Ir a Clases</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('entrenamiento')}
+                  className="px-4 py-2 bg-purple-600/30 hover:bg-purple-600/40 text-purple-200 border border-purple-500/40 font-extrabold text-xs uppercase rounded-xl transition-all shadow-md cursor-pointer flex items-center gap-1.5"
+                >
+                  <Zap className="w-4 h-4 text-purple-300" />
+                  <span>Zona de Entrenamiento</span>
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       )}
 

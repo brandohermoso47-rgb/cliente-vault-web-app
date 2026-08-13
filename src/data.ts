@@ -2,18 +2,19 @@ import { Announcement, Presentation, ChatMessage, Lesson, PlaylistItem, Feedback
 
 export const INITIAL_USER: User = {
   id: 'u-1',
-  name: 'Zoe "Flow" Jackson',
-  nickname: 'Master of Rhythm',
-  avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=600',
-  role: 'instructor',
-  completedLessons: ['l-101', 'l-103', 'l-105'],
-  points: 950,
-  bio: 'Specializing in expressive, high-energy Waacking. A passionate performer focused on rhythm, technique, and soulful expression.',
-  level: 'advanced',
-  instagram: '@zoeflow_waack',
-  billingStatus: 'active',
-  subscriptionTier: 'instructor_pass',
-  targetMinutes: 45
+  name: 'Bailarín Waack On',
+  nickname: 'Waacker',
+  avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=600',
+  role: undefined, // Sin rol predeterminado hasta suscribirse a un instructor
+  subscribedInstructorIds: [],
+  completedLessons: [],
+  points: 0,
+  bio: 'Apasionado del arte del Waacking, la musicalidad disco y el entrenamiento técnico.',
+  level: 'beginner',
+  instagram: '@waackon_dancer',
+  billingStatus: 'cancelled',
+  subscriptionTier: 'free',
+  targetMinutes: 30
 };
 
 export const INITIAL_ANNOUNCEMENTS: Announcement[] = [

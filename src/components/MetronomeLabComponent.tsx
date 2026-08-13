@@ -1,34 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { Play, Square, Zap, Music, Smartphone, Sparkles } from 'lucide-react';
+import React, { useState } from 'react';
+import { Play, Square, Zap, Music, Sparkles } from 'lucide-react';
 import { useWaackMetronome, Subdivision } from '../hooks/useWaackMetronome';
-import { triggerBpm10HapticAndFlash, getBpmHapticPreference, setBpmHapticPreference } from '../lib/bpmHaptics';
 
 export default function MetronomeLabComponent() {
   const { isPlaying, bpm, setBpm, subdivision, setSubdivision, currentBeat, togglePlay } = useWaackMetronome(128);
-  const [isHapticEnabled, setIsHapticEnabled] = useState<boolean>(getBpmHapticPreference);
-  const [isFlashing, setIsFlashing] = useState<boolean>(false);
-
-  useEffect(() => {
-    const handleSync = () => setIsHapticEnabled(getBpmHapticPreference());
-    window.addEventListener('bpm-haptic-preference-changed', handleSync);
-    return () => window.removeEventListener('bpm-haptic-preference-changed', handleSync);
-  }, []);
-
-  useEffect(() => {
-    if (isHapticEnabled && bpm % 10 === 0) {
-      triggerBpm10HapticAndFlash(bpm, isHapticEnabled, () => {
-        setIsFlashing(true);
-        const timer = setTimeout(() => setIsFlashing(false), 850);
-        return () => clearTimeout(timer);
-      });
-    }
-  }, [bpm, isHapticEnabled]);
-
-  const toggleHapticPreference = () => {
-    const nextVal = !isHapticEnabled;
-    setIsHapticEnabled(nextVal);
-    setBpmHapticPreference(nextVal);
-  };
 
   return (
     <div className="bg-[#121212] border border-[#262626] p-6 rounded-3xl shadow-2xl space-y-6 text-[#EDEFF4]">
@@ -68,37 +43,18 @@ export default function MetronomeLabComponent() {
         })}
       </div>
 
-      {/* Control de BPM con opción de destello y vibración háptica en múltiplos de 10 */}
-      <div className={`p-4 rounded-2xl border transition-all duration-300 relative overflow-hidden ${
-        isFlashing
-          ? 'bg-amber-500/25 border-amber-400 shadow-[0_0_30px_rgba(233,195,73,0.6)] scale-[1.02]'
-          : bpm % 10 === 0 && isHapticEnabled
-            ? 'bg-[#1A1A1A] border-[#E9C349]/70 shadow-[0_0_12px_rgba(233,195,73,0.25)]'
-            : 'bg-[#161616] border-[#262626]'
-      }`}>
+      {/* Control de BPM */}
+      <div className="p-4 rounded-2xl border transition-all duration-300 relative overflow-hidden bg-[#161616] border-[#262626]">
         <div className="flex justify-between items-center text-xs font-mono mb-2">
           <div className="flex items-center gap-2">
             <span className="text-[#8A8A8A] font-bold">TEMPO (BPM):</span>
             {bpm % 10 === 0 && (
-              <span className="px-2 py-0.5 rounded-md text-[9px] font-black uppercase tracking-wider bg-[#E9C349] text-black shadow animate-pulse flex items-center gap-1">
+              <span className="px-2 py-0.5 rounded-md text-[9px] font-black uppercase tracking-wider bg-[#E9C349] text-black shadow flex items-center gap-1">
                 <Sparkles className="w-3 h-3" /> 10x RITMO
               </span>
             )}
           </div>
           <div className="flex items-center gap-3">
-            <button
-              type="button"
-              onClick={toggleHapticPreference}
-              className={`flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-[10px] font-mono font-bold transition-all border cursor-pointer ${
-                isHapticEnabled
-                  ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/40 shadow-sm'
-                  : 'bg-black/40 text-slate-400 border-slate-700 hover:text-white'
-              }`}
-              title={isHapticEnabled ? "Vibración y destello háptico en múltiplos de 10 ACTIVADO" : "Activar vibración y destello en múltiplos de 10 BPM"}
-            >
-              <Smartphone className={`w-3 h-3 ${isHapticEnabled ? 'animate-bounce text-emerald-400' : ''}`} />
-              <span>{isHapticEnabled ? '📳 Háptico 10x ON' : '📳 Háptico 10x OFF'}</span>
-            </button>
             <span className="text-xl font-black text-white">{bpm} <span className="text-xs text-[#E9C349]">BPM</span></span>
           </div>
         </div>
