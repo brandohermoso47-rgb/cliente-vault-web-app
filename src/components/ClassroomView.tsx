@@ -67,7 +67,17 @@ export default function ClassroomView({ currentUser, language, lessons }: Classr
   const [newWorkPoints, setNewWorkPoints] = useState(100);
 
   const [showCreateAnnouncementModal, setShowCreateAnnouncementModal] = useState(false);
-  const [newAnnouncementText, setNewAnnouncementText] = useState('');
+  const [newAnnouncementText, setNewAnnouncementText] = useState<string>(() => {
+    return localStorage.getItem('waackon_draft_classroom_announcement') || '';
+  });
+
+  useEffect(() => {
+    if (newAnnouncementText) {
+      localStorage.setItem('waackon_draft_classroom_announcement', newAnnouncementText);
+    } else {
+      localStorage.removeItem('waackon_draft_classroom_announcement');
+    }
+  }, [newAnnouncementText]);
 
   // Handle Google Classroom Login
   const handleLogin = async () => {
@@ -188,6 +198,7 @@ export default function ClassroomView({ currentUser, language, lessons }: Classr
       await createClassroomAnnouncement(selectedCourse.id, newAnnouncementText, token);
       setShowCreateAnnouncementModal(false);
       setNewAnnouncementText('');
+      localStorage.removeItem('waackon_draft_classroom_announcement');
       setSuccessMsg('¡Anuncio publicado correctamente en el tablón de Google Classroom!');
       await loadCourseDetails(selectedCourse.id);
     } catch (err: any) {
@@ -762,6 +773,24 @@ export default function ClassroomView({ currentUser, language, lessons }: Classr
             </div>
 
             <div className="space-y-3 text-xs">
+              {newAnnouncementText.trim() !== '' && (
+                <div className="flex items-center justify-between bg-emerald-950/70 border border-emerald-500/40 px-3 py-1.5 rounded-xl text-xs font-mono text-emerald-300">
+                  <span className="flex items-center gap-1.5 font-bold">
+                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+                    💾 Borrador guardado
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setNewAnnouncementText('');
+                      localStorage.removeItem('waackon_draft_classroom_announcement');
+                    }}
+                    className="text-slate-400 hover:text-rose-300 text-[10px] underline cursor-pointer"
+                  >
+                    Descartar
+                  </button>
+                </div>
+              )}
               <div>
                 <label className="block text-slate-300 font-bold mb-1">Mensaje del Anuncio:</label>
                 <textarea

@@ -38,7 +38,12 @@ import {
 } from 'lucide-react';
 import { User } from '../types';
 import { Language, translations } from '../lib/translations';
-import { getPushPermissionState, requestWebPushPermission } from '../lib/webPush';
+import { 
+  getPushPermissionState, 
+  requestWebPushPermission, 
+  getOrRegisterPushSubscription, 
+  saveStudentInstructorPushSubscription 
+} from '../lib/webPush';
 
 interface PrivacyViewProps {
   currentUser: User;
@@ -70,8 +75,20 @@ export default function PrivacyView({ currentUser, language }: PrivacyViewProps)
   const handleTogglePushNotifications = async () => {
     const granted = await requestWebPushPermission(currentUser.id);
     setPushStatus(getPushPermissionState());
+
     if (granted) {
-      setNotification("Notificaciones Push activadas. Recibirás alertas del navegador cuando un instructor evalúe tu video.");
+      try {
+        const sub = await getOrRegisterPushSubscription(currentUser.id);
+        await saveStudentInstructorPushSubscription({
+          userId: currentUser.id,
+          pushEnabled: true,
+          pushPermission: 'granted',
+          pushSubscription: sub
+        });
+        setNotification("Notificaciones Push activadas y Endpoint guardado en tu expediente de Firestore.");
+      } catch (e) {
+        setNotification("Notificaciones Push activadas en tu navegador.");
+      }
     } else {
       setNotification("Permiso de notificaciones del navegador no otorgado o bloqueado.");
     }

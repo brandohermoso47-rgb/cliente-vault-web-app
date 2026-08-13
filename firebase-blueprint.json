@@ -12,6 +12,12 @@
         "currentLevel": { "type": "number", "description": "Waacking level (1 or 2)" },
         "completedLessons": { "type": "array", "description": "List of completed lesson IDs" },
         "totalPracticeMinutes": { "type": "number", "description": "Total practice minutes accumulated" },
+        "pushEnabled": { "type": "boolean", "description": "Whether push notifications are active for student" },
+        "pushPermission": { "type": "string", "description": "Browser notification permission state" },
+        "pushEndpoint": { "type": "string", "description": "Web push subscription endpoint URL" },
+        "pushSubscription": { "type": "object", "description": "Web push keys and endpoint parameters" },
+        "instructorPushPreferences": { "type": "array", "description": "Subscriptions to specific instructor channels" },
+        "pushTopics": { "type": "object", "description": "Push topic category preferences" },
         "updatedAt": { "type": "string", "description": "Last update timestamp" }
       },
       "required": ["uid", "email"]
@@ -78,12 +84,34 @@
         "savedAt": { "type": "string" }
       },
       "required": ["id", "title", "url"]
+    },
+    "UserPlaylist": {
+      "title": "User Music Track & Playlist",
+      "description": "User uploaded or saved music track/playlist linked to their profile session",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "title": { "type": "string" },
+        "artist": { "type": "string" },
+        "provider": { "type": "string" },
+        "url": { "type": "string" },
+        "bpm": { "type": "number" },
+        "duration": { "type": "string" },
+        "category": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["id", "userId", "title", "url", "provider"]
     }
   },
   "firestore": {
     "/users/{userId}": {
       "schema": { "$ref": "#/entities/User" },
       "description": "User profile collection"
+    },
+    "/users/{userId}/playlists/{playlistId}": {
+      "schema": { "$ref": "#/entities/UserPlaylist" },
+      "description": "Subcollection storing user session music tracks and playlists"
     },
     "/users/{userId}/favoritos/{imageId}": {
       "schema": { "$ref": "#/entities/Favorito" },
@@ -96,6 +124,10 @@
     "/practice_logs/{logId}": {
       "schema": { "$ref": "#/entities/PracticeLog" },
       "description": "User practice session logs"
+    },
+    "/user_playlists/{playlistId}": {
+      "schema": { "$ref": "#/entities/UserPlaylist" },
+      "description": "User playlists collection"
     },
     "/instructor_playlists/{playlistId}": {
       "schema": { "$ref": "#/entities/InstructorPlaylist" },

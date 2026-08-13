@@ -23,7 +23,10 @@ import {
   Sparkles,
   Download,
   Clock,
-  ChevronRight
+  ChevronRight,
+  ArrowUpDown,
+  ArrowUp,
+  ArrowDown
 } from 'lucide-react';
 import { collection, onSnapshot, getDocs, query, where, orderBy } from 'firebase/firestore';
 import { db } from '../firebase';
@@ -40,6 +43,7 @@ interface AdminUserRecord {
   role: string;
   status?: string;
   createdAt?: string;
+  createdTimestamp?: number;
   joinedDate?: string;
   updatedAt?: string;
   billingStatus?: string;
@@ -73,11 +77,28 @@ interface AdminDashboardViewProps {
   language?: 'es' | 'en';
 }
 
+function getTimestampMillis(val: any): number {
+  if (!val) return 0;
+  if (typeof val === 'number') return val;
+  if (typeof val === 'object' && val.seconds !== undefined) {
+    return val.seconds * 1000;
+  }
+  if (typeof val === 'object' && typeof val.toDate === 'function') {
+    return val.toDate().getTime();
+  }
+  if (typeof val === 'string') {
+    const parsed = Date.parse(val);
+    if (!isNaN(parsed)) return parsed;
+  }
+  return 0;
+}
+
 export default function AdminDashboardView({ currentUser, language = 'es' }: AdminDashboardViewProps) {
   const [usersList, setUsersList] = useState<AdminUserRecord[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [selectedRoleFilter, setSelectedRoleFilter] = useState<string>('all');
+  const [sortBy, setSortBy] = useState<'date_desc' | 'date_asc' | 'name_asc' | 'name_desc' | 'files_desc'>('date_desc');
   const [selectedUserForFiles, setSelectedUserForFiles] = useState<AdminUserRecord | null>(null);
   const [userFilesList, setUserFilesList] = useState<UserUploadedFile[]>([]);
   const [loadingFiles, setLoadingFiles] = useState<boolean>(false);
@@ -121,10 +142,23 @@ export default function AdminDashboardView({ currentUser, language = 'es' }: Adm
 
             const totalUploadedFiles = reelsCount + practiceLogsCount + playlistsCount + instructorTracksCount + feedbackCount;
 
-            const formattedCreatedDate = data.createdAt 
-              || data.joinedDate 
-              || data.updatedAt 
-              || 'Registrado recientemente';
+            const rawDateVal = data.createdAt || data.joinedDate || data.updatedAt;
+            const createdTimestamp = getTimestampMillis(rawDateVal);
+
+            let formattedCreatedDate = 'Registrado recientemente';
+            if (rawDateVal) {
+              if (typeof rawDateVal === 'string' && rawDateVal.trim().length > 0 && !rawDateVal.includes('T')) {
+                formattedCreatedDate = rawDateVal;
+              } else if (createdTimestamp > 0) {
+                formattedCreatedDate = new Date(createdTimestamp).toLocaleDateString('es-ES', {
+                  year: 'numeric',
+                  month: 'short',
+                  day: 'numeric'
+                });
+              } else if (typeof rawDateVal === 'string') {
+                formattedCreatedDate = rawDateVal;
+              }
+            }
 
             return {
               id: userId,
@@ -134,6 +168,7 @@ export default function AdminDashboardView({ currentUser, language = 'es' }: Adm
               role: data.role || 'student',
               status: data.status || (data.isOnline ? 'online' : 'offline'),
               createdAt: formattedCreatedDate,
+              createdTimestamp,
               joinedDate: data.joinedDate || data.createdAt,
               updatedAt: data.updatedAt,
               billingStatus: data.billingStatus || 'active',
@@ -254,17 +289,38 @@ export default function AdminDashboardView({ currentUser, language = 'es' }: Adm
     }
   };
 
-  // Filter users by search term and role
-  const filteredUsers = usersList.filter(user => {
-    const matchesSearch = 
-      user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.id.toLowerCase().includes(searchTerm.toLowerCase());
+  // Filter & sort users by search term, role, and sorting preferences
+  const filteredUsers = usersList
+    .filter(user => {
+      const term = searchTerm.toLowerCase().trim();
+      const matchesSearch = 
+        !term ||
+        user.name.toLowerCase().includes(term) ||
+        user.email.toLowerCase().includes(term) ||
+        user.id.toLowerCase().includes(term);
 
-    const matchesRole = selectedRoleFilter === 'all' || user.role === selectedRoleFilter;
+      const matchesRole = selectedRoleFilter === 'all' || user.role === selectedRoleFilter;
 
-    return matchesSearch && matchesRole;
-  });
+      return matchesSearch && matchesRole;
+    })
+    .sort((a, b) => {
+      if (sortBy === 'date_desc') {
+        return (b.createdTimestamp || 0) - (a.createdTimestamp || 0);
+      }
+      if (sortBy === 'date_asc') {
+        return (a.createdTimestamp || 0) - (b.createdTimestamp || 0);
+      }
+      if (sortBy === 'name_asc') {
+        return a.name.localeCompare(b.name);
+      }
+      if (sortBy === 'name_desc') {
+        return b.name.localeCompare(a.name);
+      }
+      if (sortBy === 'files_desc') {
+        return b.uploadedFilesCount - a.uploadedFilesCount;
+      }
+      return 0;
+    });
 
   const totalFilesCount = usersList.reduce((acc, u) => acc + u.uploadedFilesCount, 0);
 
@@ -361,29 +417,49 @@ export default function AdminDashboardView({ currentUser, language = 'es' }: Adm
       </div>
 
       {/* ========================================================================= */}
-      {/* 2. SEARCH & ROLE FILTERS BAR */}
+      {/* 2. SEARCH, SORTING & ROLE FILTERS BAR */}
       {/* ========================================================================= */}
-      <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 bg-[#121218] p-4 rounded-2xl border border-white/10">
+      <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-4 bg-[#121218] p-4 rounded-2xl border border-white/10 shadow-lg">
+        {/* Search Bar */}
         <div className="relative flex-1">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-amber-400" />
           <input
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="Buscar por nombre, correo electrónico o ID..."
-            className="w-full pl-11 pr-4 py-2.5 rounded-xl bg-black/50 border border-white/10 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-[#E9C349] transition-all"
+            placeholder="Filtrar usuarios por nombre, correo electrónico o ID..."
+            className="w-full pl-11 pr-24 py-2.5 rounded-xl bg-black/60 border border-white/15 text-white placeholder-slate-400 text-sm focus:outline-none focus:border-[#E9C349] transition-all shadow-inner"
           />
           {searchTerm && (
             <button
+              type="button"
               onClick={() => setSearchTerm('')}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white text-xs"
+              className="absolute right-3 top-1/2 -translate-y-1/2 px-2 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white text-xs font-bold transition-all cursor-pointer"
             >
               Limpiar
             </button>
           )}
         </div>
 
-        <div className="flex items-center gap-2 overflow-x-auto pb-1 md:pb-0">
+        {/* Sorting Dropdown / Selector */}
+        <div className="flex items-center gap-2 shrink-0">
+          <ArrowUpDown className="w-4 h-4 text-[#E9C349] shrink-0" />
+          <span className="text-xs text-slate-300 font-bold whitespace-nowrap">Orden:</span>
+          <select
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value as any)}
+            className="bg-black/60 border border-white/15 rounded-xl text-xs text-white font-bold py-2 px-3 focus:outline-none focus:border-[#E9C349] transition-all cursor-pointer"
+          >
+            <option value="date_desc">📅 Registro: Más recientes primero</option>
+            <option value="date_asc">📅 Registro: Más antiguos primero</option>
+            <option value="name_asc">👤 Nombre: (A-Z)</option>
+            <option value="name_desc">👤 Nombre: (Z-A)</option>
+            <option value="files_desc">📁 Archivos: Mayor cantidad</option>
+          </select>
+        </div>
+
+        {/* Role Filters */}
+        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 lg:pb-0 shrink-0">
           <Filter className="w-4 h-4 text-[#E9C349] shrink-0 ml-1" />
           <span className="text-xs text-slate-400 font-medium whitespace-nowrap">Rol:</span>
           {[
@@ -411,14 +487,22 @@ export default function AdminDashboardView({ currentUser, language = 'es' }: Adm
       {/* 3. USERS LIST TABLE / CARDS */}
       {/* ========================================================================= */}
       <div className="bg-[#121218] rounded-3xl border border-white/10 overflow-hidden shadow-2xl">
-        <div className="p-5 border-b border-white/10 flex items-center justify-between">
+        <div className="p-5 border-b border-white/10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
           <div className="flex items-center gap-2">
             <Users className="w-5 h-5 text-[#E9C349]" />
             <h2 className="text-lg font-bold text-white">Directorio de Usuarios ({filteredUsers.length})</h2>
           </div>
-          <span className="text-xs font-mono text-slate-400">
-            Mostrando {filteredUsers.length} de {usersList.length} usuarios
-          </span>
+
+          <div className="flex items-center gap-3 text-xs font-mono text-slate-400">
+            {searchTerm && (
+              <span className="bg-amber-500/10 border border-amber-500/30 text-amber-300 px-2.5 py-0.5 rounded-full">
+                🔍 Búsqueda activa: "{searchTerm}"
+              </span>
+            )}
+            <span>
+              Mostrando {filteredUsers.length} de {usersList.length} usuarios
+            </span>
+          </div>
         </div>
 
         {loading ? (
@@ -430,17 +514,66 @@ export default function AdminDashboardView({ currentUser, language = 'es' }: Adm
           <div className="p-12 text-center space-y-3">
             <Users className="w-12 h-12 text-slate-600 mx-auto" />
             <p className="text-base text-slate-300 font-semibold">No se encontraron usuarios</p>
-            <p className="text-xs text-slate-500">Intenta cambiar los términos de búsqueda o filtros.</p>
+            <p className="text-xs text-slate-500">Intenta cambiar los términos de búsqueda o los filtros.</p>
+            {searchTerm && (
+              <button
+                type="button"
+                onClick={() => setSearchTerm('')}
+                className="mt-2 px-4 py-2 bg-[#E9C349] text-black font-bold text-xs rounded-xl shadow-md hover:bg-amber-400 transition-all cursor-pointer"
+              >
+                Limpiar Búsqueda
+              </button>
+            )}
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="bg-white/5 border-b border-white/10 text-[11px] font-mono text-slate-400 uppercase tracking-wider">
-                  <th className="p-4">Usuario</th>
+                <tr className="bg-white/5 border-b border-white/10 text-[11px] font-mono text-slate-400 uppercase tracking-wider select-none">
+                  <th 
+                    onClick={() => setSortBy(sortBy === 'name_asc' ? 'name_desc' : 'name_asc')}
+                    className="p-4 cursor-pointer hover:text-white transition-colors"
+                  >
+                    <div className="flex items-center gap-1.5">
+                      <span>Usuario</span>
+                      {sortBy === 'name_asc' ? (
+                        <ArrowUp className="w-3.5 h-3.5 text-[#E9C349]" />
+                      ) : sortBy === 'name_desc' ? (
+                        <ArrowDown className="w-3.5 h-3.5 text-[#E9C349]" />
+                      ) : (
+                        <ArrowUpDown className="w-3.5 h-3.5 text-slate-500 opacity-60" />
+                      )}
+                    </div>
+                  </th>
                   <th className="p-4">Correo Electrónico</th>
-                  <th className="p-4">Fecha de Registro</th>
-                  <th className="p-4 text-center">Archivos Subidos</th>
+                  <th 
+                    onClick={() => setSortBy(sortBy === 'date_desc' ? 'date_asc' : 'date_desc')}
+                    className="p-4 cursor-pointer hover:text-white transition-colors"
+                  >
+                    <div className="flex items-center gap-1.5">
+                      <span>Fecha de Registro</span>
+                      {sortBy === 'date_desc' ? (
+                        <ArrowDown className="w-3.5 h-3.5 text-[#E9C349]" />
+                      ) : sortBy === 'date_asc' ? (
+                        <ArrowUp className="w-3.5 h-3.5 text-[#E9C349]" />
+                      ) : (
+                        <ArrowUpDown className="w-3.5 h-3.5 text-slate-500 opacity-60" />
+                      )}
+                    </div>
+                  </th>
+                  <th 
+                    onClick={() => setSortBy('files_desc')}
+                    className="p-4 text-center cursor-pointer hover:text-white transition-colors"
+                  >
+                    <div className="flex items-center justify-center gap-1.5">
+                      <span>Archivos Subidos</span>
+                      {sortBy === 'files_desc' ? (
+                        <ArrowDown className="w-3.5 h-3.5 text-emerald-400" />
+                      ) : (
+                        <ArrowUpDown className="w-3.5 h-3.5 text-slate-500 opacity-60" />
+                      )}
+                    </div>
+                  </th>
                   <th className="p-4">Rol / Estado</th>
                   <th className="p-4 text-right">Acciones</th>
                 </tr>

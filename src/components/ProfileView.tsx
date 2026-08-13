@@ -54,6 +54,7 @@ import { doc, setDoc, getDoc, collection, addDoc, onSnapshot, query, orderBy, de
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { Language, translations } from '../lib/translations';
 import Logo from './Logo';
+import { InstructorPushSubscriptionSettings } from './InstructorPushSubscriptionSettings';
 
 interface ProfileViewProps {
   currentUser: User;
@@ -1158,6 +1159,14 @@ export default function ProfileView({
             </div>
 
           </div>
+        </section>
+
+        {/* Notificaciones Push de Instructores */}
+        <section className="pt-2">
+          <InstructorPushSubscriptionSettings 
+            currentUser={currentUser} 
+            onUserUpdate={(updated) => onUserChange({ ...currentUser, ...updated })} 
+          />
         </section>
 
         {/* ========================================================================= */}

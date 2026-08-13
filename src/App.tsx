@@ -45,6 +45,7 @@ import {
   postCommunityMessage, 
   updateProfileBackend 
 } from './lib/api';
+import { subscribeUserTracksFromFirebase } from './lib/musicService';
 
 // Import Types
 import { 
@@ -614,7 +615,16 @@ export default function App() {
     return INITIAL_LESSONS;
   });
 
-  const [playlists] = useState<PlaylistItem[]>(INITIAL_PLAYLISTS); // Static track definitions
+  const [playlists, setPlaylists] = useState<PlaylistItem[]>(INITIAL_PLAYLISTS);
+
+  // Subscribe to user session music from Firebase Firestore
+  useEffect(() => {
+    if (!currentUser?.id) return;
+    const unsub = subscribeUserTracksFromFirebase(currentUser.id, (userTracks) => {
+      setPlaylists(userTracks);
+    });
+    return () => unsub();
+  }, [currentUser?.id]);
 
   const [feedbackItems, setFeedbackItems] = useState<FeedbackItem[]>(INITIAL_FEEDBACK_ITEMS);
   const [notificationsList, setNotificationsList] = useState<NotificationItem[]>([]);

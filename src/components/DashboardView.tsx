@@ -86,6 +86,8 @@ import {
   Legend,
   ReferenceLine
 } from 'recharts';
+import { collection, onSnapshot, getDocs } from 'firebase/firestore';
+import { db } from '../firebase';
 
 interface DashboardViewProps {
   currentUser: User;
@@ -177,8 +179,39 @@ export default function DashboardView({
   // Instructor Announcements Section States
   const [selectedAnnCat, setSelectedAnnCat] = useState<'todos' | 'competencias' | 'sesiones' | 'clases' | 'comunicados'>('todos');
   const [showAnnModal, setShowAnnModal] = useState(false);
-  const [annTitle, setAnnTitle] = useState('');
-  const [annContent, setAnnContent] = useState('');
+  const [annTitle, setAnnTitle] = useState<string>(() => {
+    return localStorage.getItem('waackon_draft_dashboard_announcement_title') || '';
+  });
+  const [annContent, setAnnContent] = useState<string>(() => {
+    return localStorage.getItem('waackon_draft_dashboard_announcement_content') || '';
+  });
+  const [bentoChatInput, setBentoChatInput] = useState<string>(() => {
+    return localStorage.getItem('waackon_draft_bento_chat') || '';
+  });
+
+  useEffect(() => {
+    if (annTitle) {
+      localStorage.setItem('waackon_draft_dashboard_announcement_title', annTitle);
+    } else {
+      localStorage.removeItem('waackon_draft_dashboard_announcement_title');
+    }
+  }, [annTitle]);
+
+  useEffect(() => {
+    if (annContent) {
+      localStorage.setItem('waackon_draft_dashboard_announcement_content', annContent);
+    } else {
+      localStorage.removeItem('waackon_draft_dashboard_announcement_content');
+    }
+  }, [annContent]);
+
+  useEffect(() => {
+    if (bentoChatInput) {
+      localStorage.setItem('waackon_draft_bento_chat', bentoChatInput);
+    } else {
+      localStorage.removeItem('waackon_draft_bento_chat');
+    }
+  }, [bentoChatInput]);
   const [annCategory, setAnnCategory] = useState<'competencias' | 'sesiones' | 'clases' | 'comunicados'>('comunicados');
   const [annImportant, setAnnImportant] = useState(false);
   const [annActionUrl, setAnnActionUrl] = useState('');
@@ -317,11 +350,101 @@ export default function DashboardView({
     setAnnImage(null);
     setAnnImportant(false);
     setShowAnnModal(false);
+    localStorage.removeItem('waackon_draft_dashboard_announcement_title');
+    localStorage.removeItem('waackon_draft_dashboard_announcement_content');
   };
 
   // Time range and chart view mode state for Recharts visualization
   const [chartTimeRange, setChartTimeRange] = useState<7 | 14 | 30>(7);
   const [chartViewMode, setChartViewMode] = useState<'line' | 'stacked' | 'total'>('line');
+
+  // Hero Banner Default Video State
+  const [heroVideoMuted, setHeroVideoMuted] = useState(true);
+  const [heroVideoPlaying, setHeroVideoPlaying] = useState(true);
+  const [heroVideoFallbackIndex, setHeroVideoFallbackIndex] = useState(0);
+  const heroVideoRef = useRef<HTMLVideoElement | null>(null);
+
+  const heroVideoSources = [
+    '/videos/waack-on-intro.mp4',
+    'https://assets.mixkit.co/videos/preview/mixkit-party-lights-and-people-dancing-40348-large.mp4',
+    'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4'
+  ];
+
+  const currentHeroVideoSrc = heroVideoSources[heroVideoFallbackIndex % heroVideoSources.length];
+
+  const handleHeroVideoError = () => {
+    if (heroVideoFallbackIndex < heroVideoSources.length - 1) {
+      setHeroVideoFallbackIndex(prev => prev + 1);
+    }
+  };
+
+  const toggleHeroVideoPlay = () => {
+    if (heroVideoRef.current) {
+      if (heroVideoPlaying) {
+        heroVideoRef.current.pause();
+        setHeroVideoPlaying(false);
+      } else {
+        heroVideoRef.current.play().catch(() => {});
+        setHeroVideoPlaying(true);
+      }
+    }
+  };
+
+  const toggleHeroVideoMute = () => {
+    if (heroVideoRef.current) {
+      heroVideoRef.current.muted = !heroVideoMuted;
+      setHeroVideoMuted(!heroVideoMuted);
+    }
+  };
+
+  // Real-time Firestore Practice Logs from subcollection 'practice_logs'
+  const [firestoreLogs, setFirestoreLogs] = useState<PracticeLog[]>([]);
+
+  useEffect(() => {
+    if (!currentUser?.id) return;
+    const activeUid = currentUser.id;
+    const logsRef = collection(db, 'users', activeUid, 'practice_logs');
+    
+    const unsub = onSnapshot(
+      logsRef,
+      (snapshot) => {
+        if (!snapshot.empty) {
+          const fetchedLogs: PracticeLog[] = [];
+          snapshot.docs.forEach((docSnap) => {
+            const data = docSnap.data();
+            fetchedLogs.push({
+              id: docSnap.id,
+              date: data.date || new Date().toISOString().split('T')[0],
+              minutes: typeof data.minutes === 'number' ? data.minutes : 0,
+              activityType: data.activityType || 'drill',
+              description: data.description || 'Práctica realizada',
+              bpm: data.bpm,
+              category: data.category,
+              pointsEarned: data.pointsEarned
+            } as PracticeLog);
+          });
+          setFirestoreLogs(fetchedLogs);
+        }
+      },
+      (error) => {
+        console.warn("Firestore listener warning on practice_logs subcollection:", error);
+      }
+    );
+
+    return () => unsub();
+  }, [currentUser?.id]);
+
+  // Combine practiceLogs from props and direct firestoreLogs from subcollection 'practice_logs'
+  const effectiveLogs = React.useMemo(() => {
+    const logMap = new Map<string, PracticeLog>();
+    (practiceLogs || []).forEach(l => {
+      if (l && l.id) logMap.set(l.id, l);
+    });
+    firestoreLogs.forEach(l => {
+      if (l && l.id) logMap.set(l.id, l);
+    });
+    return Array.from(logMap.values());
+  }, [practiceLogs, firestoreLogs]);
 
   // JSON Export States
   const [downloadSuccessNotice, setDownloadSuccessNotice] = useState<string | null>(null);
@@ -340,14 +463,14 @@ export default function DashboardView({
       const dateStr = d.toISOString().split('T')[0]; // "YYYY-MM-DD"
       const dayName = dayLabels[d.getDay()];
 
-      // Filter and sum logs for this day categorized by activityType
-      const dayLogs = (practiceLogs || []).filter(log => log.date === dateStr);
-      const drill = dayLogs.filter(l => l.activityType === 'drill').reduce((sum, log) => sum + log.minutes, 0);
-      const battle = dayLogs.filter(l => l.activityType === 'battle').reduce((sum, log) => sum + log.minutes, 0);
-      const combo = dayLogs.filter(l => l.activityType === 'combo').reduce((sum, log) => sum + log.minutes, 0);
-      const playlist = dayLogs.filter(l => l.activityType === 'playlist').reduce((sum, log) => sum + log.minutes, 0);
-      const sensorial = dayLogs.filter(l => l.activityType === 'sensorial').reduce((sum, log) => sum + log.minutes, 0);
-      const totalMinutes = dayLogs.reduce((sum, log) => sum + log.minutes, 0);
+      // Filter and sum logs for this day categorized by activityType from Firestore subcollection 'practice_logs'
+      const dayLogs = effectiveLogs.filter(log => log.date === dateStr);
+      const drill = dayLogs.filter(l => l.activityType === 'drill').reduce((sum, log) => sum + (log.minutes || 0), 0);
+      const battle = dayLogs.filter(l => l.activityType === 'battle').reduce((sum, log) => sum + (log.minutes || 0), 0);
+      const combo = dayLogs.filter(l => l.activityType === 'combo').reduce((sum, log) => sum + (log.minutes || 0), 0);
+      const playlist = dayLogs.filter(l => l.activityType === 'playlist').reduce((sum, log) => sum + (log.minutes || 0), 0);
+      const sensorial = dayLogs.filter(l => l.activityType === 'sensorial').reduce((sum, log) => sum + (log.minutes || 0), 0);
+      const totalMinutes = dayLogs.reduce((sum, log) => sum + (log.minutes || 0), 0);
 
       data.push({
         id: `chart-day-${dateStr}`,
@@ -375,7 +498,7 @@ export default function DashboardView({
       const d = new Date();
       d.setDate(d.getDate() - i);
       const dateStr = d.toISOString().split('T')[0];
-      const hasPractice = (practiceLogs || []).some(log => log.date === dateStr);
+      const hasPractice = effectiveLogs.some(log => log.date === dateStr && log.minutes > 0);
       if (hasPractice) {
         streak++;
       } else {
@@ -394,7 +517,7 @@ export default function DashboardView({
     const cutoffDateStr = sevenDaysAgo.toISOString().split('T')[0];
     const todayStr = today.toISOString().split('T')[0];
 
-    const weeklyLogs = (practiceLogs || []).filter(log => log.date >= cutoffDateStr);
+    const weeklyLogs = effectiveLogs.filter(log => log.date >= cutoffDateStr);
     const totalMins = weeklyLogs.reduce((acc, l) => acc + (l.minutes || 0), 0);
 
     const exportPayload = {
@@ -458,7 +581,7 @@ export default function DashboardView({
     const cutoffDateStr = sevenDaysAgo.toISOString().split('T')[0];
     const todayStr = today.toISOString().split('T')[0];
 
-    const weeklyLogs = (practiceLogs || []).filter(log => log.date >= cutoffDateStr);
+    const weeklyLogs = effectiveLogs.filter(log => log.date >= cutoffDateStr);
     const totalMins = weeklyLogs.reduce((acc, l) => acc + (l.minutes || 0), 0);
 
     return JSON.stringify({
@@ -700,45 +823,71 @@ export default function DashboardView({
 
   return (
     <div className="flex-1 min-h-full w-full p-4 md:p-6 space-y-6 bg-[#0A0A0A] text-[#EDEFF4] scanline">
-      {/* Banner Hero con video */}
-      <div className="relative w-full h-52 sm:h-64 md:h-72 rounded-2xl overflow-hidden border border-white/10 shadow-2xl mb-2">
-        {/* Video de fondo */}
+      {/* Banner Hero con video por defecto */}
+      <div className="relative w-full h-56 sm:h-64 md:h-80 rounded-3xl overflow-hidden border border-white/15 shadow-2xl mb-4 group bg-black/80">
+        {/* Video de fondo por defecto */}
         <video
-          src="/videos/waack-on-intro.mp4"
+          ref={heroVideoRef}
+          src={currentHeroVideoSrc}
           autoPlay
-          muted
+          muted={heroVideoMuted}
           loop
           playsInline
-          className="absolute inset-0 w-full h-full object-cover"
+          onError={handleHeroVideoError}
+          className="absolute inset-0 w-full h-full object-cover opacity-85 transition-opacity duration-700 group-hover:opacity-100"
         />
 
-        {/* Capa oscura para que el texto se lea bien */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-transparent" />
+        {/* Capa gradiente oscura y resplandor estilo Waack On */}
+        <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/60 to-black/30 pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] via-transparent to-transparent pointer-events-none" />
 
-        {/* Contenido encima del video */}
-        <div className="relative z-10 h-full flex flex-col justify-center px-6 sm:px-8">
-          <div className="flex items-center gap-3 mb-2">
-            <img 
-              src="/logo-waack-on.png" 
-              alt="WAACK ON" 
-              className="w-12 h-12 object-contain"
-              onError={(e) => {
-                // Graceful fallback if custom image is not served directly
-                (e.target as HTMLElement).style.display = 'none';
-              }}
-            />
-            <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight uppercase">
-              WAACK ON
-            </h1>
+        {/* Contenido principal sobre el video */}
+        <div className="relative z-10 h-full flex flex-col justify-between p-6 sm:p-8">
+          <div className="flex items-center justify-between w-full">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 rounded-2xl bg-[#E9C349]/10 border border-[#E9C349]/30 flex items-center justify-center p-2 backdrop-blur-md shadow-lg">
+                <WaackOnLogo className="w-8 h-8 text-[#E9C349]" />
+              </div>
+              <div>
+                <h1 className="text-2xl sm:text-3xl font-black text-white tracking-wider uppercase font-sans flex items-center gap-2">
+                  WAACK ON <span className="text-xs px-2.5 py-0.5 rounded-full bg-[#E9C349] text-black font-extrabold tracking-normal">INTRO VIDEO</span>
+                </h1>
+                <p className="text-xs text-[#E9C349] font-mono font-semibold uppercase tracking-widest">
+                  Plataforma Oficial de Waacking & Cultura Disco
+                </p>
+              </div>
+            </div>
+
+            {/* Direct Video Control Buttons */}
+            <div className="flex items-center gap-2 bg-black/60 backdrop-blur-md p-1.5 rounded-2xl border border-white/10 shadow-lg">
+              <button
+                type="button"
+                onClick={toggleHeroVideoPlay}
+                title={heroVideoPlaying ? "Pausar video" : "Reproducir video"}
+                className="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-white transition-all cursor-pointer hover:scale-105"
+              >
+                {heroVideoPlaying ? <Pause className="w-4 h-4 text-[#E9C349]" /> : <Play className="w-4 h-4 text-white fill-white" />}
+              </button>
+
+              <button
+                type="button"
+                onClick={toggleHeroVideoMute}
+                title={heroVideoMuted ? "Activar audio" : "Silenciar audio"}
+                className="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-white transition-all cursor-pointer hover:scale-105"
+              >
+                {heroVideoMuted ? <VolumeX className="w-4 h-4 text-slate-400" /> : <Volume2 className="w-4 h-4 text-[#E9C349]" />}
+              </button>
+            </div>
           </div>
-          
-          <h2 className="text-lg sm:text-xl font-bold text-[#E9C349] uppercase tracking-wide">
-            Plataforma de Entrenamiento
-          </h2>
-          
-          <p className="text-sm text-slate-300 mt-2 max-w-md leading-relaxed">
-            Vista general de tu rendimiento de Waacking, estadísticas semanales y acceso rápido a clases en curso.
-          </p>
+
+          <div className="max-w-xl space-y-2 mt-4">
+            <h2 className="text-lg sm:text-2xl font-bold text-white tracking-tight leading-tight">
+              Aprende el arte de la resistencia, el ritmo y la autoexpresión 💃
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-sans">
+              Explora tutoriales en alta definición, drilings de aceleración BPM, ebooks teóricos y retroalimentación personalizada por instructores calificados.
+            </p>
+          </div>
         </div>
       </div>
 
@@ -3297,9 +3446,8 @@ export default function DashboardView({
                 <form 
                   onSubmit={(e) => {
                     e.preventDefault();
-                    const input = document.getElementById('bento-com-input') as HTMLInputElement;
-                    if (input && input.value.trim()) {
-                      const customVal = input.value.trim();
+                    if (bentoChatInput.trim()) {
+                      const customVal = bentoChatInput.trim();
                       if (onAddChatMessage) {
                         onAddChatMessage(customVal);
                       } else if (Array.isArray(chatMessages)) {
@@ -3312,24 +3460,44 @@ export default function DashboardView({
                           role: currentUser.role
                         });
                       }
-                      input.value = '';
+                      setBentoChatInput('');
+                      localStorage.removeItem('waackon_draft_bento_chat');
                       setNewLiveMessage(Date.now().toString()); // force update
                     }
                   }} 
-                  className="flex gap-1.5 mt-2"
+                  className="flex flex-col gap-1 mt-2"
                 >
-                  <input
-                    id="bento-com-input"
-                    type="text"
-                    placeholder="Escribe..."
-                    className="flex-1 text-[10px] bg-[#0A0A0A] border border-[#262626] rounded-lg px-2.5 py-1.5 focus:outline-none placeholder-gray-600 text-[#EDEFF4] font-medium"
-                  />
-                  <button
-                    type="submit"
-                    className="p-1.5 bg-[#9A2B3C] text-white rounded-lg hover:bg-[#81262c]"
-                  >
-                    <Send className="w-3.5 h-3.5" />
-                  </button>
+                  {bentoChatInput.trim() !== '' && (
+                    <div className="flex items-center justify-between text-[8px] font-mono text-emerald-400 bg-emerald-950/60 px-2 py-0.5 rounded">
+                      <span>💾 Borrador guardado</span>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setBentoChatInput('');
+                          localStorage.removeItem('waackon_draft_bento_chat');
+                        }}
+                        className="text-slate-400 hover:text-rose-300 underline"
+                      >
+                        Descartar
+                      </button>
+                    </div>
+                  )}
+                  <div className="flex gap-1.5">
+                    <input
+                      id="bento-com-input"
+                      type="text"
+                      placeholder="Escribe..."
+                      value={bentoChatInput}
+                      onChange={(e) => setBentoChatInput(e.target.value)}
+                      className="flex-1 text-[10px] bg-[#0A0A0A] border border-[#262626] rounded-lg px-2.5 py-1.5 focus:outline-none placeholder-gray-600 text-[#EDEFF4] font-medium"
+                    />
+                    <button
+                      type="submit"
+                      className="p-1.5 bg-[#9A2B3C] text-white rounded-lg hover:bg-[#81262c] cursor-pointer"
+                    >
+                      <Send className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
                 </form>
               </div>
 
@@ -3715,6 +3883,26 @@ export default function DashboardView({
               </div>
 
               <form onSubmit={handlePublishAnnouncement} className="space-y-4 text-xs">
+                {(annTitle.trim() !== '' || annContent.trim() !== '') && (
+                  <div className="flex items-center justify-between bg-emerald-950/70 border border-emerald-500/40 px-3 py-1.5 rounded-xl text-xs font-mono text-emerald-300">
+                    <span className="flex items-center gap-1.5 font-bold">
+                      <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+                      💾 Borrador de anuncio guardado localmente
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setAnnTitle('');
+                        setAnnContent('');
+                        localStorage.removeItem('waackon_draft_dashboard_announcement_title');
+                        localStorage.removeItem('waackon_draft_dashboard_announcement_content');
+                      }}
+                      className="text-slate-400 hover:text-rose-300 text-[10px] underline cursor-pointer"
+                    >
+                      Limpiar borrador
+                    </button>
+                  </div>
+                )}
                 {/* Categoría */}
                 <div className="space-y-1.5">
                   <label className="text-[10px] font-mono font-bold text-slate-300 uppercase">

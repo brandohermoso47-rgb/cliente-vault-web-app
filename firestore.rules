@@ -26,6 +26,10 @@ service cloud.firestore {
         allow read: if true;
         allow write: if isAdmin() || isOwner(userId) || isSignedIn();
       }
+      match /playlists/{playlistId} {
+        allow read: if true;
+        allow write: if isAdmin() || isOwner(userId) || isSignedIn();
+      }
     }
 
     match /reels/{reelId} {

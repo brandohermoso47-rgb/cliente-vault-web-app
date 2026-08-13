@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Music, Plus, Link2, Youtube, Disc, Sparkles, Check, Trash2, ExternalLink, RefreshCw, Save, Headphones, Flame } from 'lucide-react';
-import { User, UserPlaylist, MusicSource } from '../types';
+import { Music, Plus, Link2, Youtube, Disc, Sparkles, Check, Trash2, ExternalLink, RefreshCw, Save, Headphones, Flame, UploadCloud, FileAudio, Loader2 } from 'lucide-react';
+import { User, UserPlaylist, MusicSource, PlaylistItem } from '../types';
 import MultiSourcePlayer, { parseMusicSource } from './MultiSourcePlayer';
-import { doc, setDoc, collection, query, where, getDocs, addDoc, deleteDoc, onSnapshot } from 'firebase/firestore';
+import { doc, setDoc } from 'firebase/firestore';
 import { db } from '../lib/firebase';
+import { uploadAudioFileToFirebase, saveUserTrackToFirebase, deleteUserTrackFromFirebase, subscribeUserTracksFromFirebase } from '../lib/musicService';
 
 interface StudentTrainingLibraryProps {
   currentUser: User;
@@ -22,92 +23,48 @@ export default function StudentTrainingLibrary({ currentUser, onUserChange }: St
   const [isSavingProfile, setIsSavingProfile] = useState(false);
   const [savedSuccess, setSavedSuccess] = useState(false);
 
-  // Playlists
+  // Playlists & Tracks in Firebase Session
   const [playlists, setPlaylists] = useState<UserPlaylist[]>([]);
   const [activePlaylist, setActivePlaylist] = useState<UserPlaylist | null>(null);
-  const [isLoadingPlaylists, setIsLoadingPlaylists] = useState(true);
 
-  // Modal / Form state for adding playlist
+  // Modal / Form state for adding playlist or uploading audio file
   const [showAddModal, setShowAddModal] = useState(false);
+  const [modalMode, setModalMode] = useState<'url' | 'upload'>('url');
   const [newTitle, setNewTitle] = useState('');
   const [newUrl, setNewUrl] = useState('');
   const [newBpm, setNewBpm] = useState<number | ''>(128);
+  const [newCategory, setNewCategory] = useState('General');
+  const [newArtist, setNewArtist] = useState('');
   const [detectedProvider, setDetectedProvider] = useState<'soundcloud' | 'youtube' | 'spotify'>('soundcloud');
 
-  // Load playlists from Firestore
+  // File Upload State
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [uploadProgress, setUploadProgress] = useState<number>(0);
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Subscribe to user tracks from Firebase Firestore in real-time
   useEffect(() => {
     if (!currentUser?.id) return;
 
-    const playlistsRef = collection(db, 'user_playlists');
-    const q = query(playlistsRef, where('userId', '==', currentUser.id));
+    const unsub = subscribeUserTracksFromFirebase(currentUser.id, (tracks: PlaylistItem[]) => {
+      const userPls: UserPlaylist[] = tracks.map(t => ({
+        id: t.id,
+        userId: currentUser.id,
+        title: t.title,
+        provider: (t.provider as any) || 'custom',
+        url: t.audioUrl,
+        bpm: t.bpm,
+        createdAt: t.createdAt,
+        storagePath: t.storagePath,
+        artist: t.artist
+      }));
 
-    const unsub = onSnapshot(q, (snap) => {
-      const items: UserPlaylist[] = [];
-      snap.forEach((docSnap) => {
-        items.push({ id: docSnap.id, ...docSnap.data() } as UserPlaylist);
-      });
-
-      // Default curated initial playlists if empty
-      if (items.length === 0) {
-        const defaultItems: UserPlaylist[] = [
-          {
-            id: 'default-sc-1',
-            userId: currentUser.id,
-            title: 'Mis Violets Waacking - Disco Hits',
-            provider: 'soundcloud',
-            url: scProfileUrl || 'https://soundcloud.com/user-615971162',
-            bpm: 126
-          },
-          {
-            id: 'default-yt-1',
-            userId: currentUser.id,
-            title: 'Fast Arm Drills 132 BPM',
-            provider: 'youtube',
-            url: 'https://www.youtube.com/watch?v=5qap5aO4i9A',
-            bpm: 132
-          },
-          {
-            id: 'default-sp-1',
-            userId: currentUser.id,
-            title: 'Spotify Waacking & Disco Essentials',
-            provider: 'spotify',
-            url: 'https://open.spotify.com/playlist/37i9dQZF1DX6XNisNdE8g6',
-            bpm: 124
-          }
-        ];
-        setPlaylists(defaultItems);
-        setActivePlaylist(defaultItems[0]);
-      } else {
-        setPlaylists(items);
-        if (!activePlaylist && items.length > 0) {
-          setActivePlaylist(items[0]);
-        }
+      setPlaylists(userPls);
+      if (userPls.length > 0 && !activePlaylist) {
+        setActivePlaylist(userPls[0]);
       }
-      setIsLoadingPlaylists(false);
-    }, (err) => {
-      console.warn('[Playlists Firestore Listener Notice]:', err);
-      // Fallback local memory
-      const fallbackItems: UserPlaylist[] = [
-        {
-          id: 'fb-1',
-          userId: currentUser.id,
-          title: 'Mis Violets Waacking (SoundCloud)',
-          provider: 'soundcloud',
-          url: scProfileUrl || 'https://soundcloud.com/user-615971162',
-          bpm: 128
-        },
-        {
-          id: 'fb-2',
-          userId: currentUser.id,
-          title: 'YouTube Drill - Overheads 130 BPM',
-          provider: 'youtube',
-          url: 'https://www.youtube.com/watch?v=5qap5aO4i9A',
-          bpm: 130
-        }
-      ];
-      setPlaylists(fallbackItems);
-      if (!activePlaylist) setActivePlaylist(fallbackItems[0]);
-      setIsLoadingPlaylists(false);
     });
 
     return () => unsub();
@@ -148,53 +105,111 @@ export default function StudentTrainingLibrary({ currentUser, onUserChange }: St
     }
   };
 
-  // Add new playlist
+  // Add new playlist or upload audio file
   const handleAddPlaylist = async (e: React.FormEvent) => {
     e.preventDefault();
+    setUploadError(null);
+
+    if (modalMode === 'upload') {
+      if (!selectedFile) {
+        setUploadError('Por favor selecciona un archivo de audio (MP3, WAV, OGG, M4A).');
+        return;
+      }
+
+      setIsUploading(true);
+      try {
+        const uploadedTrack = await uploadAudioFileToFirebase(
+          currentUser.id,
+          selectedFile,
+          {
+            title: newTitle.trim() || selectedFile.name.replace(/\.[^/.]+$/, ''),
+            artist: newArtist.trim() || 'Artista Local',
+            bpm: typeof newBpm === 'number' ? newBpm : 120,
+            category: newCategory
+          },
+          (progress) => setUploadProgress(progress)
+        );
+
+        const newPlItem: UserPlaylist = {
+          id: uploadedTrack.id,
+          userId: currentUser.id,
+          title: uploadedTrack.title,
+          provider: 'upload',
+          url: uploadedTrack.audioUrl,
+          bpm: uploadedTrack.bpm,
+          createdAt: uploadedTrack.createdAt,
+          storagePath: uploadedTrack.storagePath,
+          artist: uploadedTrack.artist
+        };
+
+        setActivePlaylist(newPlItem);
+        setShowAddModal(false);
+        setNewTitle('');
+        setNewArtist('');
+        setSelectedFile(null);
+        setUploadProgress(0);
+      } catch (err: any) {
+        console.error('Error uploading audio file:', err);
+        setUploadError(err.message || 'Error al subir el archivo de audio a Firebase.');
+      } finally {
+        setIsUploading(false);
+      }
+      return;
+    }
+
+    // Modal mode: URL link
     if (!newTitle.trim() || !newUrl.trim()) return;
 
     const parsed = parseMusicSource(newUrl, newTitle, typeof newBpm === 'number' ? newBpm : 128);
 
-    const newObj: Omit<UserPlaylist, 'id'> = {
-      userId: currentUser.id,
+    const trackItem: PlaylistItem = {
+      id: `track_link_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
       title: newTitle.trim(),
-      provider: parsed.provider,
-      url: newUrl.trim(),
+      artist: newArtist.trim() || 'Pista Vinculada',
       bpm: typeof newBpm === 'number' ? newBpm : 128,
+      duration: '3:00',
+      type: (typeof newBpm === 'number' ? newBpm : 128) >= 120 ? 'fast' : 'slow',
+      audioUrl: newUrl.trim(),
+      provider: parsed.provider as any,
+      userId: currentUser.id,
+      category: newCategory,
       createdAt: new Date().toISOString()
     };
 
     try {
-      const docRef = await addDoc(collection(db, 'user_playlists'), newObj);
-      const created: UserPlaylist = { id: docRef.id, ...newObj };
-      setPlaylists(prev => [created, ...prev]);
-      setActivePlaylist(created);
+      await saveUserTrackToFirebase(currentUser.id, trackItem);
     } catch (err) {
-      console.warn('Firestore add playlist fallback:', err);
-      const created: UserPlaylist = { id: `local-${Date.now()}`, ...newObj };
-      setPlaylists(prev => [created, ...prev]);
-      setActivePlaylist(created);
+      console.warn('Firebase save track notice:', err);
     }
 
     setNewTitle('');
     setNewUrl('');
+    setNewArtist('');
     setNewBpm(128);
     setShowAddModal(false);
   };
 
   // Delete playlist
   const handleDeletePlaylist = async (id: string) => {
+    const trackToDelete = playlists.find(p => p.id === id);
     setPlaylists(prev => prev.filter(p => p.id !== id));
     if (activePlaylist?.id === id) {
       const remaining = playlists.filter(p => p.id !== id);
       setActivePlaylist(remaining[0] || null);
     }
-    try {
-      if (!id.startsWith('default') && !id.startsWith('fb') && !id.startsWith('local')) {
-        await deleteDoc(doc(db, 'user_playlists', id));
-      }
-    } catch (err) {
-      console.warn('Delete playlist firestore notice:', err);
+
+    if (trackToDelete && currentUser?.id) {
+      const itemAsPlaylistItem: PlaylistItem = {
+        id: trackToDelete.id,
+        title: trackToDelete.title,
+        artist: trackToDelete.artist || '',
+        bpm: trackToDelete.bpm || 120,
+        duration: '3:00',
+        type: 'fast',
+        audioUrl: trackToDelete.url,
+        storagePath: trackToDelete.storagePath
+      };
+      await deleteUserTrackFromFirebase(currentUser.id, itemAsPlaylistItem);
     }
   };
 
@@ -355,7 +370,7 @@ export default function StudentTrainingLibrary({ currentUser, onUserChange }: St
           </h4>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4">
           {playlists.map((pl) => {
             const isSelected = activePlaylist?.id === pl.id;
             return (
@@ -417,7 +432,7 @@ export default function StudentTrainingLibrary({ currentUser, onUserChange }: St
         </div>
       </div>
 
-      {/* Modal Add Playlist */}
+      {/* Modal Add Playlist or Upload Audio File */}
       <AnimatePresence>
         {showAddModal && (
           <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
@@ -430,7 +445,7 @@ export default function StudentTrainingLibrary({ currentUser, onUserChange }: St
               <div className="flex items-center justify-between border-b border-white/10 pb-3">
                 <h3 className="text-base font-bold text-white flex items-center gap-2">
                   <Plus className="w-5 h-5 text-purple-400" />
-                  <span>Añadir Pista o Playlist</span>
+                  <span>Añadir Música a Mi Sesión</span>
                 </h3>
                 <button
                   onClick={() => setShowAddModal(false)}
@@ -440,35 +455,130 @@ export default function StudentTrainingLibrary({ currentUser, onUserChange }: St
                 </button>
               </div>
 
+              {/* Modal Tabs */}
+              <div className="flex rounded-xl bg-white/5 p-1 border border-white/10">
+                <button
+                  type="button"
+                  onClick={() => setModalMode('url')}
+                  className={`flex-1 py-1.5 text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-1.5 ${
+                    modalMode === 'url' ? 'bg-purple-600 text-white shadow-md' : 'text-slate-400 hover:text-white'
+                  }`}
+                >
+                  <Link2 className="w-3.5 h-3.5" />
+                  <span>Enlace URL</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setModalMode('upload')}
+                  className={`flex-1 py-1.5 text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-1.5 ${
+                    modalMode === 'upload' ? 'bg-purple-600 text-white shadow-md' : 'text-slate-400 hover:text-white'
+                  }`}
+                >
+                  <UploadCloud className="w-3.5 h-3.5" />
+                  <span>Subir Audio (MP3/WAV)</span>
+                </button>
+              </div>
+
               <form onSubmit={handleAddPlaylist} className="space-y-4 text-left">
+                {uploadError && (
+                  <div className="p-3 bg-red-500/10 border border-red-500/30 rounded-xl text-xs text-red-300">
+                    {uploadError}
+                  </div>
+                )}
+
                 <div className="space-y-1">
                   <label className="text-xs font-mono font-bold text-slate-300">Título de la Pista / Drill:</label>
                   <input
                     type="text"
-                    required
+                    required={modalMode === 'url'}
                     value={newTitle}
                     onChange={(e) => setNewTitle(e.target.value)}
-                    placeholder="Ej: Solo Disco 128 BPM"
+                    placeholder="Ej: Waack Arm Drills 128 BPM"
                     className="w-full bg-white/5 border border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-slate-400 focus:outline-none focus:border-purple-500"
                   />
                 </div>
 
                 <div className="space-y-1">
-                  <label className="text-xs font-mono font-bold text-slate-300">URL (YouTube, Spotify, SoundCloud):</label>
+                  <label className="text-xs font-mono font-bold text-slate-300">Artista / Productor (opcional):</label>
                   <input
-                    type="url"
-                    required
-                    value={newUrl}
-                    onChange={(e) => setNewUrl(e.target.value)}
-                    placeholder="https://soundcloud.com/... o https://youtube.com/..."
+                    type="text"
+                    value={newArtist}
+                    onChange={(e) => setNewArtist(e.target.value)}
+                    placeholder="Ej: Disco Symphony"
                     className="w-full bg-white/5 border border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-slate-400 focus:outline-none focus:border-purple-500"
                   />
-                  {newUrl && (
-                    <p className="text-[10px] font-mono text-purple-300 flex items-center gap-1 pt-1">
-                      <Sparkles className="w-3 h-3" /> Plataforma detectada: <strong className="uppercase">{detectedProvider}</strong>
-                    </p>
-                  )}
                 </div>
+
+                {modalMode === 'url' ? (
+                  <div className="space-y-1">
+                    <label className="text-xs font-mono font-bold text-slate-300">URL (YouTube, Spotify, SoundCloud, Drive):</label>
+                    <input
+                      type="url"
+                      required
+                      value={newUrl}
+                      onChange={(e) => setNewUrl(e.target.value)}
+                      placeholder="https://soundcloud.com/... o https://youtube.com/..."
+                      className="w-full bg-white/5 border border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-slate-400 focus:outline-none focus:border-purple-500"
+                    />
+                    {newUrl && (
+                      <p className="text-[10px] font-mono text-purple-300 flex items-center gap-1 pt-1">
+                        <Sparkles className="w-3 h-3" /> Plataforma detectada: <strong className="uppercase">{detectedProvider}</strong>
+                      </p>
+                    )}
+                  </div>
+                ) : (
+                  <div className="space-y-2">
+                    <label className="text-xs font-mono font-bold text-slate-300">Selecciona Archivo de Audio:</label>
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept="audio/*,.mp3,.wav,.ogg,.m4a,.flac"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          setSelectedFile(file);
+                          if (!newTitle) {
+                            setNewTitle(file.name.replace(/\.[^/.]+$/, ''));
+                          }
+                        }
+                      }}
+                      className="hidden"
+                    />
+                    <div
+                      onClick={() => fileInputRef.current?.click()}
+                      className="border-2 border-dashed border-white/20 hover:border-purple-500/50 rounded-2xl p-4 text-center cursor-pointer bg-white/5 hover:bg-white/10 transition-all space-y-2"
+                    >
+                      {selectedFile ? (
+                        <div className="flex items-center justify-center gap-2 text-purple-300 text-xs font-bold">
+                          <FileAudio className="w-5 h-5 text-purple-400" />
+                          <span className="truncate max-w-[220px]">{selectedFile.name}</span>
+                          <span className="text-[10px] text-slate-400">({(selectedFile.size / (1024 * 1024)).toFixed(1)} MB)</span>
+                        </div>
+                      ) : (
+                        <div className="space-y-1">
+                          <UploadCloud className="w-7 h-7 text-purple-400 mx-auto" />
+                          <p className="text-xs font-bold text-white">Haz clic para seleccionar tu audio</p>
+                          <p className="text-[10px] text-slate-400">Archivos MP3, WAV, M4A u OGG</p>
+                        </div>
+                      )}
+                    </div>
+
+                    {isUploading && (
+                      <div className="space-y-1 pt-2">
+                        <div className="flex justify-between text-[11px] font-mono text-purple-300">
+                          <span>Subiendo a Firebase Storage...</span>
+                          <span>{uploadProgress}%</span>
+                        </div>
+                        <div className="w-full bg-white/10 h-2 rounded-full overflow-hidden">
+                          <div
+                            className="bg-gradient-to-r from-purple-500 to-pink-500 h-full transition-all duration-200"
+                            style={{ width: `${uploadProgress}%` }}
+                          />
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
 
                 <div className="space-y-1">
                   <label className="text-xs font-mono font-bold text-slate-300">BPM Objetivo (opcional):</label>
@@ -485,15 +595,24 @@ export default function StudentTrainingLibrary({ currentUser, onUserChange }: St
                   <button
                     type="button"
                     onClick={() => setShowAddModal(false)}
-                    className="px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-xs text-slate-300 font-bold"
+                    disabled={isUploading}
+                    className="px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-xs text-slate-300 font-bold disabled:opacity-50"
                   >
                     Cancelar
                   </button>
                   <button
                     type="submit"
-                    className="px-5 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-xs font-bold text-white shadow-lg"
+                    disabled={isUploading}
+                    className="px-5 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-xs font-bold text-white shadow-lg flex items-center gap-2 disabled:opacity-50"
                   >
-                    Guardar en Mi Biblioteca
+                    {isUploading ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        <span>Guardando...</span>
+                      </>
+                    ) : (
+                      <span>Guardar en Mi Sesión</span>
+                    )}
                   </button>
                 </div>
               </form>

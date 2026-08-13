@@ -6,6 +6,26 @@ export type UserRole = 'student' | 'instructor' | 'studio' | 'academia' | 'acade
 
 export type StudentSubscriptionTier = 'free' | 'basic_practice' | 'instructor_pass';
 
+export interface InstructorPushPreference {
+  instructorId: string;
+  instructorName: string;
+  enabled: boolean;
+  announcements?: boolean;
+  lessonAlerts?: boolean;
+  feedbackAlerts?: boolean;
+  liveSessionAlerts?: boolean;
+}
+
+export interface PushSubscriptionData {
+  endpoint: string;
+  keys?: {
+    p256dh: string;
+    auth: string;
+  };
+  userAgent?: string;
+  subscribedAt?: string;
+}
+
 export interface User {
   id: string;
   name: string;
@@ -30,6 +50,17 @@ export interface User {
   trainingPreferences?: {
     hydrationReminders?: boolean;
     lessonNotifications?: boolean;
+  };
+  pushEnabled?: boolean;
+  pushPermission?: 'granted' | 'denied' | 'default';
+  pushEndpoint?: string;
+  pushSubscription?: PushSubscriptionData;
+  instructorPushPreferences?: InstructorPushPreference[];
+  pushTopics?: {
+    announcements?: boolean;
+    feedback?: boolean;
+    lives?: boolean;
+    drills?: boolean;
   };
   points: number; // accumulated gamification points
   customAchievements?: CustomAchievement[];
@@ -69,10 +100,12 @@ export interface UserPlaylist {
   id: string;
   userId: string;
   title: string;
-  provider: 'soundcloud' | 'youtube' | 'spotify';
+  provider: 'soundcloud' | 'youtube' | 'spotify' | 'upload' | 'drive' | 'custom';
   url: string;
   bpm?: number;
   createdAt?: string;
+  storagePath?: string;
+  artist?: string;
 }
 
 export interface CustomAchievement {
@@ -199,7 +232,12 @@ export interface PlaylistItem {
   bpm: number;
   duration: string;
   type: 'slow' | 'fast';
-  audioUrl: string; // mock audio url
+  audioUrl: string; // audio url or streaming link
+  provider?: 'upload' | 'soundcloud' | 'spotify' | 'youtube' | 'drive' | 'custom';
+  userId?: string;
+  storagePath?: string;
+  category?: string;
+  createdAt?: string;
 }
 
 export interface Correction {

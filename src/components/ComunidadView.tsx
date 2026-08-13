@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
   Megaphone, 
@@ -66,9 +66,13 @@ export default function ComunidadView({
   // Translation cache state
   const [translatedMessages, setTranslatedMessages] = useState<Record<string, string>>({});
 
-  // Input states
-  const [newAnnTitle, setNewAnnTitle] = useState('');
-  const [newAnnContent, setNewAnnContent] = useState('');
+  // Input states with Draft System (local storage auto-save)
+  const [newAnnTitle, setNewAnnTitle] = useState<string>(() => {
+    return localStorage.getItem('waackon_draft_announcement_title') || '';
+  });
+  const [newAnnContent, setNewAnnContent] = useState<string>(() => {
+    return localStorage.getItem('waackon_draft_announcement_content') || '';
+  });
   const [newAnnImportant, setNewAnnImportant] = useState(false);
   const [newAnnImage, setNewAnnImage] = useState<string | null>(null);
   const [newAnnCategory, setNewAnnCategory] = useState<'competencias' | 'sesiones' | 'clases' | 'comunicados'>('comunicados');
@@ -80,7 +84,35 @@ export default function ComunidadView({
   const [newPresVideo, setNewPresVideo] = useState('');
   const [showPresForm, setShowPresForm] = useState(false);
 
-  const [newLobbyText, setNewLobbyText] = useState('');
+  const [newLobbyText, setNewLobbyText] = useState<string>(() => {
+    return localStorage.getItem('waackon_draft_community_chat') || '';
+  });
+
+  // Save Community Chat draft
+  useEffect(() => {
+    if (newLobbyText) {
+      localStorage.setItem('waackon_draft_community_chat', newLobbyText);
+    } else {
+      localStorage.removeItem('waackon_draft_community_chat');
+    }
+  }, [newLobbyText]);
+
+  // Save Announcement draft
+  useEffect(() => {
+    if (newAnnTitle) {
+      localStorage.setItem('waackon_draft_announcement_title', newAnnTitle);
+    } else {
+      localStorage.removeItem('waackon_draft_announcement_title');
+    }
+  }, [newAnnTitle]);
+
+  useEffect(() => {
+    if (newAnnContent) {
+      localStorage.setItem('waackon_draft_announcement_content', newAnnContent);
+    } else {
+      localStorage.removeItem('waackon_draft_announcement_content');
+    }
+  }, [newAnnContent]);
 
   // Comment input per presentation
   const [commentInputs, setCommentInputs] = useState<{ [key: string]: string }>({});
@@ -102,6 +134,8 @@ export default function ComunidadView({
     setNewAnnImage(null);
     setNewAnnActionUrl('');
     setShowAnnForm(false);
+    localStorage.removeItem('waackon_draft_announcement_title');
+    localStorage.removeItem('waackon_draft_announcement_content');
   };
 
   const handlePresSubmit = (e: React.FormEvent) => {
@@ -118,6 +152,7 @@ export default function ComunidadView({
     if (!newLobbyText.trim()) return;
     onAddChatMessage(newLobbyText);
     setNewLobbyText('');
+    localStorage.removeItem('waackon_draft_community_chat');
   };
 
   const handleCommentSubmit = (presId: string) => {
@@ -528,22 +563,42 @@ export default function ComunidadView({
             </div>
 
             {/* Chat input form */}
-            <form onSubmit={handleLobbySubmit} className="p-3.5 bg-surface-container/80 border-t border-tertiary/30 flex gap-2.5">
-              <input
-                id="chat-lobby-input"
-                type="text"
-                placeholder={translations[language].writeLobby}
-                value={newLobbyText}
-                onChange={(e) => setNewLobbyText(e.target.value)}
-                className="flex-1 bg-[#18171B] border-2 border-tertiary/40 rounded-xl px-4 py-3 text-xs text-on-surface placeholder-on-surface-variant/60 focus:outline-none focus:border-tertiary focus:ring-2 focus:ring-tertiary/20 leading-relaxed font-semibold shadow-inner transition-all"
-              />
-              <button
-                id="chat-lobby-submit"
-                type="submit"
-                className="bg-tertiary hover:bg-tertiary-container text-on-tertiary border border-tertiary p-3 rounded-xl shadow-lg hover:scale-105 active:scale-95 transition-all flex items-center justify-center font-bold"
-              >
-                <Send className="w-4 h-4" />
-              </button>
+            <form onSubmit={handleLobbySubmit} className="p-3.5 bg-surface-container/80 border-t border-tertiary/30 flex flex-col gap-2">
+              {newLobbyText.trim() !== '' && (
+                <div className="flex items-center justify-between text-[10px] font-mono text-emerald-400 bg-emerald-950/70 border border-emerald-500/40 px-3 py-1 rounded-xl">
+                  <span className="flex items-center gap-1.5 font-bold">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
+                    💾 Borrador guardado localmente
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setNewLobbyText('');
+                      localStorage.removeItem('waackon_draft_community_chat');
+                    }}
+                    className="text-slate-400 hover:text-rose-300 underline cursor-pointer"
+                  >
+                    Descartar borrador
+                  </button>
+                </div>
+              )}
+              <div className="flex gap-2.5">
+                <input
+                  id="chat-lobby-input"
+                  type="text"
+                  placeholder={translations[language].writeLobby}
+                  value={newLobbyText}
+                  onChange={(e) => setNewLobbyText(e.target.value)}
+                  className="flex-1 bg-[#18171B] border-2 border-tertiary/40 rounded-xl px-4 py-3 text-xs text-on-surface placeholder-on-surface-variant/60 focus:outline-none focus:border-tertiary focus:ring-2 focus:ring-tertiary/20 leading-relaxed font-semibold shadow-inner transition-all"
+                />
+                <button
+                  id="chat-lobby-submit"
+                  type="submit"
+                  className="bg-tertiary hover:bg-tertiary-container text-on-tertiary border border-tertiary p-3 rounded-xl shadow-lg hover:scale-105 active:scale-95 transition-all flex items-center justify-center font-bold cursor-pointer"
+                >
+                  <Send className="w-4 h-4" />
+                </button>
+              </div>
             </form>
           </div>
         )}
@@ -669,6 +724,27 @@ export default function ComunidadView({
                   </h4>
                   <span className="text-[10px] text-on-surface-variant font-mono">Panel de Instructor</span>
                 </div>
+
+                {(newAnnTitle.trim() !== '' || newAnnContent.trim() !== '') && (
+                  <div className="flex items-center justify-between bg-emerald-950/70 border border-emerald-500/40 px-3 py-1.5 rounded-xl text-xs font-mono text-emerald-300">
+                    <span className="flex items-center gap-1.5 font-bold">
+                      <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+                      💾 Borrador de anuncio guardado localmente
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setNewAnnTitle('');
+                        setNewAnnContent('');
+                        localStorage.removeItem('waackon_draft_announcement_title');
+                        localStorage.removeItem('waackon_draft_announcement_content');
+                      }}
+                      className="text-slate-400 hover:text-rose-300 text-[10px] underline cursor-pointer"
+                    >
+                      Limpiar borrador
+                    </button>
+                  </div>
+                )}
 
                 {/* Categoría */}
                 <div className="space-y-1.5">

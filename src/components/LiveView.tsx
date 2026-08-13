@@ -179,7 +179,17 @@ export default function LiveView({
     { id: '2', name: 'Pedro Punking', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=120', text: 'Brando, ¿podrías repetir la aceleración de muñecas a 128 BPM?', time: '19:29', badge: 'VIP' },
     { id: '3', name: 'Elena Pose', avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&q=80&w=120', text: '¡Qué buen track de calentamiento! La energía en la sala está brutal 🔥', time: '19:31', badge: 'INSTRUCTOR' }
   ]);
-  const [chatInput, setChatInput] = useState('');
+  const [chatInput, setChatInput] = useState<string>(() => {
+    return localStorage.getItem('waackon_draft_live_chat') || '';
+  });
+
+  useEffect(() => {
+    if (chatInput) {
+      localStorage.setItem('waackon_draft_live_chat', chatInput);
+    } else {
+      localStorage.removeItem('waackon_draft_live_chat');
+    }
+  }, [chatInput]);
 
   // Google Calendar Integration States
   const [syncedEvents, setSyncedEvents] = useState<string[]>(() => {
@@ -305,6 +315,7 @@ export default function LiveView({
     };
     setChatMessages((prev) => [...prev, newMsg]);
     setChatInput('');
+    localStorage.removeItem('waackon_draft_live_chat');
   };
 
   return (
@@ -733,21 +744,41 @@ export default function LiveView({
             </div>
 
             {/* Chat Input Bar */}
-            <form onSubmit={handleSendChat} className="p-3 bg-[#181818] border-t border-white/10 flex gap-2">
-              <input 
-                type="text"
-                placeholder="Escribe un mensaje en la transmisión..."
-                value={chatInput}
-                onChange={(e) => setChatInput(e.target.value)}
-                className="flex-1 bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#E9C349]"
-              />
-              <button 
-                type="submit"
-                disabled={!chatInput.trim()}
-                className="px-4 py-2 bg-[#E9C349] text-slate-950 font-black rounded-xl text-xs hover:bg-[#f3d362] disabled:opacity-40 transition-all shadow-md"
-              >
-                <Send className="w-3.5 h-3.5" />
-              </button>
+            <form onSubmit={handleSendChat} className="p-3 bg-[#181818] border-t border-white/10 flex flex-col gap-1.5">
+              {chatInput.trim() !== '' && (
+                <div className="flex items-center justify-between text-[9px] font-mono text-emerald-400 bg-emerald-950/70 border border-emerald-500/40 px-2.5 py-1 rounded-lg">
+                  <span className="flex items-center gap-1 font-bold">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
+                    💾 Borrador guardado
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setChatInput('');
+                      localStorage.removeItem('waackon_draft_live_chat');
+                    }}
+                    className="text-slate-400 hover:text-rose-300 underline cursor-pointer"
+                  >
+                    Descartar
+                  </button>
+                </div>
+              )}
+              <div className="flex gap-2">
+                <input 
+                  type="text"
+                  placeholder="Escribe un mensaje en la transmisión..."
+                  value={chatInput}
+                  onChange={(e) => setChatInput(e.target.value)}
+                  className="flex-1 bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#E9C349]"
+                />
+                <button 
+                  type="submit"
+                  disabled={!chatInput.trim()}
+                  className="px-4 py-2 bg-[#E9C349] text-slate-950 font-black rounded-xl text-xs hover:bg-[#f3d362] disabled:opacity-40 transition-all shadow-md cursor-pointer"
+                >
+                  <Send className="w-3.5 h-3.5" />
+                </button>
+              </div>
             </form>
 
           </div>

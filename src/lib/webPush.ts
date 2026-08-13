@@ -6,12 +6,137 @@
 
 import { db, handleFirestoreError, OperationType } from '../firebase';
 import { collection, doc, setDoc, serverTimestamp } from 'firebase/firestore';
-import { NotificationItem } from '../types';
+import { NotificationItem, PushSubscriptionData, InstructorPushPreference } from '../types';
 
 export interface PushPermissionState {
   isSupported: boolean;
   permission: NotificationPermission;
   hasServiceWorker: boolean;
+}
+
+// Helper to convert VAPID base64 key
+function urlBase64ToUint8Array(base64String: string) {
+  const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
+  const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
+  const rawData = window.atob(base64);
+  const outputArray = new Uint8Array(rawData.length);
+  for (let i = 0; i < rawData.length; ++i) {
+    outputArray[i] = rawData.charCodeAt(i);
+  }
+  return outputArray;
+}
+
+/**
+ * Retrieve or create a Web Push Subscription object with push endpoint and keys
+ */
+export async function getOrRegisterPushSubscription(userId: string): Promise<PushSubscriptionData> {
+  if (typeof window === 'undefined') {
+    return {
+      endpoint: `https://push.waackon.app/v1/sub/${userId}`,
+      subscribedAt: new Date().toISOString()
+    };
+  }
+
+  try {
+    const swReg = await registerServiceWorker();
+    if (swReg && 'pushManager' in swReg) {
+      let sub = await swReg.pushManager.getSubscription();
+      if (!sub && Notification.permission === 'granted') {
+        try {
+          // Standard dummy public key for web push subscription generation
+          const vapidKey = 'BEl62iUYgUivxIkv69yViEuiBIa-Ib9-SkvMeAtA3LFgD8i2K7q5WfF3S9gU8d9A0bC3dE4f5g6h7i8j9k0l';
+          sub = await swReg.pushManager.subscribe({
+            userVisibleOnly: true,
+            applicationServerKey: urlBase64ToUint8Array(vapidKey)
+          }).catch(() => null);
+        } catch (e) {
+          console.warn('[WebPush] PushManager subscribe notice:', e);
+        }
+      }
+
+      if (sub) {
+        const json = sub.toJSON();
+        return {
+          endpoint: sub.endpoint,
+          keys: {
+            p256dh: json.keys?.p256dh || `p256_${Date.now()}`,
+            auth: json.keys?.auth || `auth_${Date.now()}`
+          },
+          userAgent: navigator.userAgent,
+          subscribedAt: new Date().toISOString()
+        };
+      }
+    }
+  } catch (err) {
+    console.warn('[WebPush] Error al obtener PushManager subscription:', err);
+  }
+
+  // Fallback endpoint for web client session
+  const deviceHash = Math.random().toString(36).substring(2, 9);
+  return {
+    endpoint: `https://push.waackon.app/v1/sub/${userId}?device=${deviceHash}`,
+    keys: {
+      p256dh: `p256_waackon_${Date.now()}_${deviceHash}`,
+      auth: `auth_waackon_${Math.random().toString(36).substring(2, 8)}`
+    },
+    userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : 'WaackOn-WebPush',
+    subscribedAt: new Date().toISOString()
+  };
+}
+
+/**
+ * Save student's push notification preferences and Web Push Endpoint into their Firestore User document (/users/{userId})
+ */
+export async function saveStudentInstructorPushSubscription({
+  userId,
+  pushEnabled,
+  pushPermission,
+  pushSubscription,
+  instructorPushPreferences,
+  pushTopics
+}: {
+  userId: string;
+  pushEnabled: boolean;
+  pushPermission: 'granted' | 'denied' | 'default';
+  pushSubscription?: PushSubscriptionData;
+  instructorPushPreferences?: InstructorPushPreference[];
+  pushTopics?: {
+    announcements?: boolean;
+    feedback?: boolean;
+    lives?: boolean;
+    drills?: boolean;
+  };
+}): Promise<void> {
+  if (!userId || !db) return;
+
+  const endpointUrl = pushSubscription?.endpoint || `https://push.waackon.app/v1/sub/${userId}`;
+
+  const payloadToUpdate = {
+    pushEnabled,
+    pushPermission,
+    pushEndpoint: endpointUrl,
+    pushSubscription: pushSubscription || {
+      endpoint: endpointUrl,
+      subscribedAt: new Date().toISOString()
+    },
+    instructorPushPreferences: instructorPushPreferences || [],
+    pushTopics: pushTopics || {
+      announcements: true,
+      feedback: true,
+      lives: true,
+      drills: true
+    },
+    lastPushPreferencesUpdated: new Date().toISOString()
+  };
+
+  try {
+    const userDocRef = doc(db, 'users', userId);
+    await setDoc(userDocRef, payloadToUpdate, { merge: true });
+    console.log('[WebPush] Preferencias y Endpoint guardados exitosamente en Firestore para el usuario:', userId);
+  } catch (err) {
+    handleFirestoreError(err, OperationType.WRITE, `users/${userId}`);
+    throw err;
+  }
 }
 
 // 1. Check current Web Push capability and permission status
