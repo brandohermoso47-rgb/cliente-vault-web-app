@@ -29,7 +29,10 @@ import {
   Minus,
   Disc,
   FileText,
-  Flame
+  Flame,
+  Smartphone,
+  Download,
+  Crown
 } from 'lucide-react';
 import BWImageGallery from './components/BWImageGallery';
 import { GmailWidget } from './components/GmailWidget';
@@ -96,6 +99,8 @@ import { LessonCelebration } from './components/LessonCelebration';
 import FormationContentPreviewModal from './components/FormationContentPreviewModal';
 import SomaticPosingPrototypeModal from './components/SomaticPosingPrototypeModal';
 import UnifiedFloatingMessenger from './components/UnifiedFloatingMessenger';
+import NotificationCenterModal, { INITIAL_DEMO_NOTIFICATIONS } from './components/NotificationCenterModal';
+import AppInstallModal from './components/AppInstallModal';
 
 // Code Splitting (React.lazy) for Heavy Academic & Somatic Modules
 const ComunidadView = React.lazy(() => import('./components/ComunidadView'));
@@ -116,6 +121,7 @@ const GoogleSlidesView = React.lazy(() => import('./components/GoogleSlidesView'
 const AiStudioView = React.lazy(() => import('./components/AiStudioView'));
 const PlansView = React.lazy(() => import('./components/PlansView'));
 const PodcastsView = React.lazy(() => import('./components/PodcastsView'));
+const AIPoseLab = React.lazy(() => import('./components/AIPoseLab'));
 
 // Import Firebase
 import { auth, db, OperationType, handleFirestoreError } from './firebase';
@@ -293,6 +299,10 @@ export default function App() {
 
   // Somatic Posing Prototype Modal state
   const [showSomaticPosingModal, setShowSomaticPosingModal] = useState<boolean>(false);
+
+  // Notification Center & Application Installation Modals state
+  const [isNotificationCenterOpen, setIsNotificationCenterOpen] = useState<boolean>(false);
+  const [isAppInstallModalOpen, setIsAppInstallModalOpen] = useState<boolean>(false);
 
   // Lesson Celebration state
   const [celebratedLesson, setCelebratedLesson] = useState<Lesson | null>(null);
@@ -808,6 +818,51 @@ export default function App() {
     );
     return () => unsub();
   }, [currentUser.id, currentUser.name]);
+
+  const effectiveNotificationsList = notificationsList.length > 0 ? notificationsList : INITIAL_DEMO_NOTIFICATIONS;
+  const unreadNotificationsCount = effectiveNotificationsList.filter(n => !n.read).length;
+
+  const handleMarkNotificationAsRead = (notifId: string) => {
+    setNotificationsList(prev => {
+      const list = prev.length > 0 ? prev : INITIAL_DEMO_NOTIFICATIONS;
+      return list.map(n => n.id === notifId ? { ...n, read: true } : n);
+    });
+    if (db) {
+      setDoc(doc(db, 'notifications', notifId), { read: true }, { merge: true }).catch(() => {});
+    }
+  };
+
+  const handleMarkAllNotificationsAsRead = () => {
+    setNotificationsList(prev => {
+      const list = prev.length > 0 ? prev : INITIAL_DEMO_NOTIFICATIONS;
+      return list.map(n => ({ ...n, read: true }));
+    });
+    if (db && notificationsList.length > 0) {
+      notificationsList.forEach(n => {
+        if (!n.read) {
+          setDoc(doc(db, 'notifications', n.id), { read: true }, { merge: true }).catch(() => {});
+        }
+      });
+    }
+  };
+
+  const handleClearReadNotifications = () => {
+    setNotificationsList(prev => prev.filter(n => !n.read));
+  };
+
+  const handleSendCustomNotification = (notifData: Omit<NotificationItem, 'id' | 'createdAt'>) => {
+    const newNotif: NotificationItem = {
+      ...notifData,
+      id: `notif-custom-${Date.now()}`,
+      createdAt: new Date().toISOString()
+    };
+    setNotificationsList(prev => [newNotif, ...(prev.length > 0 ? prev : INITIAL_DEMO_NOTIFICATIONS)]);
+    if (db) {
+      setDoc(doc(db, 'notifications', newNotif.id), newNotif).catch(err => {
+        handleFirestoreError(err, OperationType.WRITE, `notifications/${newNotif.id}`);
+      });
+    }
+  };
 
   // Real-time Firestore Listener for Lessons (/lessons)
   useEffect(() => {
@@ -1363,6 +1418,17 @@ export default function App() {
             language={language}
           />
         );
+      case 'pose_lab':
+      case 'ai_pose_lab':
+        return (
+          <AIPoseLab
+            currentUser={currentUser}
+            onAddBonusPoints={handleAddBonusPoints}
+            onLogPractice={handleLogPractice}
+            language={language}
+            theme={theme}
+          />
+        );
       case 'entrenamiento':
         if (currentUser.billingStatus !== 'active' && !currentUser.subscriptionTier) {
           return (
@@ -1388,6 +1454,7 @@ export default function App() {
             trainingBpm={trainingBpm}
             onBpmChange={setTrainingBpm}
             theme={theme}
+            onOpenSpotifyPlayer={() => setIsSpotifyPlayerOpen(true)}
           />
         );
       case 'fisico':
@@ -1513,6 +1580,16 @@ export default function App() {
             onUserChange={updateUserAndPersist}
             language={language}
             onOpenDocsModal={() => setShowDocsModal(true)}
+          />
+        );
+      case 'planes':
+      case 'plans':
+        return (
+          <PlansView
+            currentUser={currentUser}
+            onUserChange={updateUserAndPersist}
+            language={language}
+            onOpenPlansModal={() => setIsPlansModalOpen(true)}
           />
         );
       case 'gmail':
@@ -1701,7 +1778,7 @@ export default function App() {
         />
       }
     >
-      <div id="app-container" className={`w-full max-w-7xl mx-auto overflow-x-hidden flex min-h-screen font-sans selection:bg-[#9A2B3C] selection:text-[#EDEFF4] flex-col lg:flex-row relative transition-all duration-300 ${
+      <div id="app-container" className={`w-full max-w-[1920px] mx-auto overflow-x-hidden flex min-h-screen lg:h-screen lg:max-h-screen font-sans selection:bg-[#9A2B3C] selection:text-[#EDEFF4] flex-col lg:flex-row relative transition-all duration-300 ${
         isGrayscaleGlobal ? 'grayscale contrast-125' : ''
       } ${theme === 'light' ? 'bg-[#f4f5f7] text-[#1a1a1a]' : 'bg-[#0A0A0A] text-[#EDEFF4]'}`}>
       {/* Mobile Sidebar Drawer (Sliding menu) */}
@@ -1741,6 +1818,15 @@ export default function App() {
                 onStartOnboarding={() => setShowOnboarding(true)}
                 onOpenFormationPreview={() => setShowFormationPreviewModal(true)}
                 onOpenSomaticPosingPrototype={() => setShowSomaticPosingModal(true)}
+                onOpenNotifications={() => {
+                  setIsMobileMenuOpen(false);
+                  setIsNotificationCenterOpen(true);
+                }}
+                onOpenAppInstall={() => {
+                  setIsMobileMenuOpen(false);
+                  setIsAppInstallModalOpen(true);
+                }}
+                unreadNotificationCount={unreadNotificationsCount}
               />
             </motion.div>
           </div>
@@ -1749,7 +1835,7 @@ export default function App() {
 
       {/* Desktop Sidebar (Permanent sidebar) */}
       {!isFocusMode && (
-        <div className="hidden lg:flex shrink-0 h-full">
+        <div className="hidden lg:flex shrink-0 h-full max-h-screen">
           <Sidebar 
             activeTab={activeTab} 
             setActiveTab={setActiveTab} 
@@ -1759,12 +1845,15 @@ export default function App() {
             onStartOnboarding={() => setShowOnboarding(true)}
             onOpenFormationPreview={() => setShowFormationPreviewModal(true)}
             onOpenSomaticPosingPrototype={() => setShowSomaticPosingModal(true)}
+            onOpenNotifications={() => setIsNotificationCenterOpen(true)}
+            onOpenAppInstall={() => setIsAppInstallModalOpen(true)}
+            unreadNotificationCount={unreadNotificationsCount}
           />
         </div>
       )}
 
       {/* Main Content Area */}
-      <div className={`flex-1 flex flex-col min-w-0 min-h-screen lg:min-h-0 lg:h-screen lg:overflow-hidden ${theme === 'light' ? 'bg-[#f8f9fa] text-[#1a1a1a]' : 'bg-[#0A0A0A] text-[#EDEFF4]'}`}>
+      <div className={`flex-1 flex flex-col min-w-0 min-h-screen lg:min-h-0 lg:h-full lg:max-h-screen lg:overflow-hidden ${theme === 'light' ? 'bg-[#f8f9fa] text-[#1a1a1a]' : 'bg-[#0A0A0A] text-[#EDEFF4]'}`}>
         
         {/* Top Header Navigation */}
         <header id="top-header" className={`h-16 border-b px-4 sm:px-6 flex items-center justify-between shrink-0 select-none relative z-20 ${theme === 'light' ? 'bg-white border-slate-300 text-slate-900 shadow-sm' : 'bg-[#0A0A0A] border-[#262626] animate-header-glow'}`}>
@@ -1847,15 +1936,45 @@ export default function App() {
               </span>
             )}
 
-            {/* [Vista Previa Formación y Contenido] */}
-            <button
-              onClick={() => setShowFormationPreviewModal(true)}
-              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-[#E9C349] hover:bg-[#ffdf6b] text-black font-mono font-black text-[11px] uppercase tracking-wider transition-all shadow-md active:scale-95 cursor-pointer"
-              title="Vista Previa de Formación y Contenido"
+            {/* [BOTÓN DE APLICACIÓN - PWA APP & DESKTOP - "Add an application"] */}
+            <motion.button
+              whileHover={{ scale: 1.04 }}
+              whileTap={{ scale: 0.96 }}
+              onClick={() => setIsAppInstallModalOpen(true)}
+              className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border text-[11px] font-mono font-black uppercase tracking-wider transition-all shadow-md active:scale-95 cursor-pointer ${
+                theme === 'light'
+                  ? 'bg-amber-500/10 hover:bg-amber-500/20 text-amber-950 border-amber-500/40'
+                  : 'bg-gradient-to-r from-[#171510] to-[#261f14] hover:from-[#221c12] hover:to-[#332816] text-[#E9C349] border-[#E9C349]/50 hover:border-[#E9C349]'
+              }`}
+              title="Instalar Aplicación Waack On (PWA, Soporte Offline y Notificaciones)"
+              aria-label="Instalar Aplicación"
             >
-              <Eye className="w-3.5 h-3.5 text-black" />
-              <span className="hidden sm:inline">Vista Previa</span>
-            </button>
+              <Smartphone className="w-3.5 h-3.5 text-[#E9C349]" />
+              <span className="hidden sm:inline">App PWA</span>
+            </motion.button>
+
+            {/* [CENTRO DE NOTIFICACIONES & WEB PUSH - "Add notifications / Add push notifications / Add all notifications"] */}
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => setIsNotificationCenterOpen(true)}
+              className={`relative p-2 rounded-xl transition-all border flex items-center justify-center cursor-pointer ${
+                unreadNotificationsCount > 0
+                  ? 'bg-[#1e1910] hover:bg-[#2a2214] border-[#E9C349] text-[#E9C349] shadow-[0_0_12px_rgba(233,195,73,0.35)]'
+                  : theme === 'light'
+                  ? 'bg-slate-100 hover:bg-slate-200 border-slate-300 text-slate-700'
+                  : 'bg-[#141414] hover:bg-[#202020] border-[#333333] text-white'
+              }`}
+              aria-label="Centro de Notificaciones y Push Alertas"
+              title={`Centro de Notificaciones (${unreadNotificationsCount} nuevas)`}
+            >
+              <Bell className="w-4 h-4" />
+              {unreadNotificationsCount > 0 && (
+                <span className="absolute -top-1 -right-1 px-1.5 py-0.2 bg-red-500 text-white font-mono text-[9px] font-black rounded-full border-2 border-[#0A0A0A] animate-pulse">
+                  {unreadNotificationsCount}
+                </span>
+              )}
+            </motion.button>
 
             {/* Quick BPM Selector (Header - Visible only during Entrenamiento mode) */}
             {activeTab === 'entrenamiento' && (
@@ -1932,89 +2051,7 @@ export default function App() {
               </motion.div>
             )}
 
-            {/* 4. ELIMINACIÓN DE ELEMENTOS ALUMNO: Only render practice goals for students, hidden for instructor & studio! */}
-            {!isFocusMode && currentUser.role !== 'instructor' && currentUser.role !== 'studio' && (
-              <motion.button
-                onClick={(e) => {
-                  setActiveTab('dashboard');
-                  if (dailyPracticeGoalPercent >= 100) {
-                    triggerHeaderGoalConfetti(e);
-                  }
-                }}
-                animate={isGoal100Flashing ? { scale: [1, 1.18, 0.95, 1.05, 1] } : { scale: 1 }}
-                transition={{ duration: 0.6 }}
-                className={`relative flex items-center gap-2 px-2.5 py-1.5 rounded-xl border transition-all cursor-pointer focus:outline-none overflow-visible ${
-                  theme === 'light'
-                    ? 'bg-slate-100 hover:bg-slate-200 border-slate-300 text-slate-900 shadow-sm'
-                    : 'bg-[#141414] hover:bg-[#1f1f1f] border-[#333333] text-white shadow-sm'
-                } ${
-                  dailyPracticeGoalPercent >= 100
-                    ? 'ring-2 ring-emerald-500/80 shadow-[0_0_15px_rgba(16,185,129,0.4)]'
-                    : ''
-                }`}
-                title={`Meta diaria de práctica: ${totalTodayPracticeMinutes} de ${targetPracticeMinutes} min (${dailyPracticeGoalPercent}%)${dailyPracticeGoalPercent >= 100 ? ' - ¡Haz clic para celebrar!' : ''}`}
-                aria-label={`Meta diaria de práctica: ${dailyPracticeGoalPercent}% completado`}
-              >
-                <AnimatePresence>
-                  {isGoal100Flashing && (
-                    <motion.div
-                      initial={{ opacity: 0.9, scale: 0.8 }}
-                      animate={{ opacity: 0, scale: 1.6 }}
-                      exit={{ opacity: 0 }}
-                      transition={{ duration: 0.8, ease: "easeOut" }}
-                      className="absolute inset-0 rounded-xl bg-gradient-to-r from-emerald-400 via-amber-300 to-emerald-400 pointer-events-none z-10"
-                    />
-                  )}
-                </AnimatePresence>
 
-                <div className="relative w-7 h-7 flex items-center justify-center shrink-0">
-                  <svg className="w-7 h-7 transform -rotate-90" viewBox="0 0 32 32">
-                    <circle
-                      cx="16"
-                      cy="16"
-                      r="12"
-                      fill="none"
-                      stroke={theme === 'light' ? '#cbd5e1' : '#262626'}
-                      strokeWidth="3"
-                    />
-                    <circle
-                      cx="16"
-                      cy="16"
-                      r="12"
-                      fill="none"
-                      stroke={dailyPracticeGoalPercent >= 100 ? '#10B981' : '#E9C349'}
-                      strokeWidth="3"
-                      strokeDasharray="75.4"
-                      strokeDashoffset={75.4 - (75.4 * dailyPracticeGoalPercent) / 100}
-                      strokeLinecap="round"
-                      className="transition-all duration-500 ease-out"
-                    />
-                  </svg>
-                  <span className={`absolute text-[8px] font-mono font-black ${
-                    dailyPracticeGoalPercent >= 100 ? 'text-emerald-400' : 'text-[#E9C349]'
-                  }`}>
-                    {dailyPracticeGoalPercent}%
-                  </span>
-                </div>
-
-                <div className="hidden sm:flex flex-col text-left leading-none space-y-1 min-w-[55px]">
-                  <div className="flex items-center justify-between gap-1 text-[9px] font-mono font-bold">
-                    <span className="text-slate-400 uppercase tracking-tight">META</span>
-                    <span className={dailyPracticeGoalPercent >= 100 ? 'text-emerald-400 font-black' : 'text-[#E9C349] font-black'}>
-                      {totalTodayPracticeMinutes}/{targetPracticeMinutes}m
-                    </span>
-                  </div>
-                  <div className="w-full bg-slate-200 dark:bg-black/60 h-1 rounded-full overflow-hidden">
-                    <div 
-                      className={`h-full transition-all duration-500 ${
-                        dailyPracticeGoalPercent >= 100 ? 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)]' : 'bg-[#E9C349]'
-                      }`}
-                      style={{ width: `${dailyPracticeGoalPercent}%` }}
-                    />
-                  </div>
-                </div>
-              </motion.button>
-            )}
 
             {/* 3. UNIFIED LANGUAGE SELECTOR: "IDIOMA: Español" */}
             {!isFocusMode && (
@@ -2040,23 +2077,31 @@ export default function App() {
               </div>
             )}
 
-            {/* Theme Toggle Button */}
-            <button
+            {/* [BOTÓN DE LUZ - LIGHT BUTTON - "Add a light button"] */}
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               onClick={() => setTheme(prev => prev === 'dark' ? 'light' : 'dark')}
-              className={`p-1.5 sm:p-2 rounded-xl transition-all border focus:outline-none flex items-center gap-1.5 ${
+              className={`px-2.5 py-1.5 rounded-xl transition-all border focus:outline-none flex items-center gap-1.5 cursor-pointer select-none font-mono text-xs font-black shadow-sm ${
                 theme === 'light'
-                  ? 'bg-slate-100 hover:bg-slate-200 border-slate-300 text-slate-900 font-bold'
-                  : 'bg-[#141414] hover:bg-[#202020] border-[#333333] text-white font-bold'
+                  ? 'bg-amber-100 hover:bg-amber-200 border-amber-400 text-amber-950 shadow-[0_0_12px_rgba(245,158,11,0.35)]'
+                  : 'bg-[#141414] hover:bg-[#202020] border-[#333333] hover:border-[#E9C349]/50 text-white'
               }`}
-              aria-label={theme === 'dark' ? 'Cambiar a Modo Claro' : 'Cambiar a Modo Oscuro'}
-              title={theme === 'dark' ? 'Cambiar a Modo Claro' : 'Cambiar a Modo Oscuro'}
+              aria-label={theme === 'dark' ? 'Botón de Luz / Modo Iluminado' : 'Botón de Luz / Modo Escenario'}
+              title={theme === 'dark' ? 'Encender Luz de Estudio (Modo Iluminado)' : 'Apagar Luz (Modo Escenario Oscuro)'}
             >
               {theme === 'dark' ? (
-                <Sun className="w-4 h-4 text-[#E9C349]" />
+                <>
+                  <Sun className="w-4 h-4 text-[#E9C349] animate-spin-slow" />
+                  <span className="hidden xl:inline text-[10px] text-[#E9C349] uppercase">Luz</span>
+                </>
               ) : (
-                <Moon className="w-4 h-4 text-amber-600" />
+                <>
+                  <Moon className="w-4 h-4 text-amber-700" />
+                  <span className="hidden xl:inline text-[10px] text-amber-950 uppercase">Escenario</span>
+                </>
               )}
-            </button>
+            </motion.button>
 
             {/* 5. CORRECT USER PROFILE: Zoe Jackson with "Zoe 'Flow' Jackson" & subtitle "Instructor Senior" */}
             <button 
@@ -2103,7 +2148,11 @@ export default function App() {
         </header>
 
         {/* Dynamic Inner Router view */}
-        <main className={`flex-1 flex flex-col overflow-y-auto min-h-0 relative w-full ${theme === 'light' ? 'bg-[#f4f5f7] text-[#1a1a1a]' : 'bg-[#0A0A0A] text-[#EDEFF4]'}`}>
+        <main 
+          id="main-scroll-view"
+          tabIndex={0}
+          className={`flex-1 flex flex-col overflow-y-auto overflow-x-hidden min-h-0 relative w-full h-full scroll-smooth focus:outline-none custom-scrollbar overscroll-contain ${theme === 'light' ? 'bg-[#f4f5f7] text-[#1a1a1a]' : 'bg-[#0A0A0A] text-[#EDEFF4]'}`}
+        >
           <AnimatePresence mode="wait">
             <motion.div
               key={activeTab}
@@ -2111,7 +2160,7 @@ export default function App() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -12, scale: 0.99 }}
               transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
-              className={`flex-1 flex flex-col min-h-full w-full ${isFocusMode ? '' : 'pb-24 lg:pb-12'}`}
+              className={`flex-1 flex flex-col min-h-full w-full max-w-7xl mx-auto px-3.5 py-4 sm:px-6 sm:py-6 md:px-8 md:py-8 lg:px-10 lg:py-8 gap-y-6 sm:gap-y-8 ${isFocusMode ? 'pb-20 sm:pb-24' : 'pb-44 sm:pb-40 lg:pb-32'}`}
             >
               <React.Suspense fallback={<ViewSkeleton title={activeTab} />}>
                 {renderContent()}
@@ -2122,11 +2171,11 @@ export default function App() {
 
         {/* Tactile Bottom Navigation for Mobile Devices */}
         {!isFocusMode && (
-          <div id="mobile-bottom-nav" className="lg:hidden fixed bottom-0 left-0 right-0 h-16 bg-white border-t-4 border-brand-dark flex items-center justify-around px-2 shrink-0 select-none z-40 pb-safe shadow-[0_-4px_10px_rgba(0,0,0,0.05)]">
+          <div id="mobile-bottom-nav" className="lg:hidden fixed bottom-0 left-0 right-0 h-16 bg-black border-t-2 border-[#E9C349] flex items-center justify-around px-2 shrink-0 select-none z-40 pb-safe shadow-[0_-4px_20px_rgba(0,0,0,0.9)]">
             <button
               onClick={() => setActiveTab('dashboard')}
               className={`flex flex-col items-center justify-center flex-1 h-full py-1 text-[9px] sm:text-[10px] font-black transition-all focus:outline-none ${
-                activeTab === 'dashboard' ? 'text-brand-pink' : 'text-gray-500 hover:text-brand-dark'
+                activeTab === 'dashboard' ? 'text-[#E9C349]' : 'text-slate-400 hover:text-[#E9C349]'
               }`}
             >
               <LayoutDashboard className="w-5 h-5 mb-0.5" />
@@ -2135,7 +2184,7 @@ export default function App() {
             <button
               onClick={() => setActiveTab('cursos')}
               className={`flex flex-col items-center justify-center flex-1 h-full py-1 text-[9px] sm:text-[10px] font-black transition-all focus:outline-none ${
-                activeTab === 'cursos' ? 'text-brand-pink' : 'text-gray-500 hover:text-brand-dark'
+                activeTab === 'cursos' ? 'text-[#E9C349]' : 'text-slate-400 hover:text-[#E9C349]'
               }`}
             >
               <GraduationCap className="w-5 h-5 mb-0.5" />
@@ -2144,7 +2193,7 @@ export default function App() {
             <button
               onClick={() => setActiveTab('ebooks')}
               className={`flex flex-col items-center justify-center flex-1 h-full py-1 text-[9px] sm:text-[10px] font-black transition-all focus:outline-none ${
-                activeTab === 'ebooks' ? 'text-[#9A2B3C]' : 'text-gray-500 hover:text-[#121212]'
+                activeTab === 'ebooks' ? 'text-[#E9C349]' : 'text-slate-400 hover:text-[#E9C349]'
               }`}
             >
               <BookOpen className="w-5 h-5 mb-0.5" />
@@ -2153,7 +2202,7 @@ export default function App() {
             <button
               onClick={() => setActiveTab('entrenamiento')}
               className={`flex flex-col items-center justify-center flex-1 h-full py-1 text-[9px] sm:text-[10px] font-black transition-all focus:outline-none ${
-                activeTab === 'entrenamiento' ? 'text-brand-pink' : 'text-gray-500 hover:text-brand-dark'
+                activeTab === 'entrenamiento' ? 'text-[#E9C349]' : 'text-slate-400 hover:text-[#E9C349]'
               }`}
             >
               <Sparkles className="w-5 h-5 mb-0.5" />
@@ -2162,14 +2211,14 @@ export default function App() {
             <button
               onClick={() => setActiveTab('profile')}
               className={`flex flex-col items-center justify-center flex-1 h-full py-1 text-[9px] sm:text-[10px] font-black transition-all focus:outline-none ${
-                activeTab === 'profile' ? 'text-brand-pink' : 'text-gray-500 hover:text-brand-dark'
+                activeTab === 'profile' ? 'text-[#E9C349]' : 'text-slate-400 hover:text-[#E9C349]'
               }`}
             >
               <img 
                 src={currentUser.avatar} 
                 alt={currentUser.name} 
                 className={`w-5 h-5 rounded-full object-cover border-2 shrink-0 ${
-                  activeTab === 'profile' ? 'border-brand-pink' : 'border-gray-400'
+                  activeTab === 'profile' ? 'border-[#E9C349] shadow-[0_0_8px_#E9C349]' : 'border-[#333333]'
                 }`}
                 referrerPolicy="no-referrer"
               />
@@ -2344,6 +2393,34 @@ export default function App() {
         onOpenMultiSourceMusic={() => {
           setIsSpotifyPlayerOpen(true);
         }}
+      />
+
+      {/* Global Notification Center & Web Push Modal */}
+      <NotificationCenterModal
+        isOpen={isNotificationCenterOpen}
+        onClose={() => setIsNotificationCenterOpen(false)}
+        notifications={effectiveNotificationsList}
+        currentUser={currentUser}
+        onMarkAsRead={handleMarkNotificationAsRead}
+        onMarkAllAsRead={handleMarkAllNotificationsAsRead}
+        onClearReadNotifications={handleClearReadNotifications}
+        onNavigateToTab={(tabId) => {
+          setActiveTab(tabId);
+          setIsNotificationCenterOpen(false);
+        }}
+        onSendCustomNotification={handleSendCustomNotification}
+        onOpenAppInstallModal={() => {
+          setIsNotificationCenterOpen(false);
+          setIsAppInstallModalOpen(true);
+        }}
+      />
+
+      {/* Global Application Installation & PWA Hub Modal */}
+      <AppInstallModal
+        isOpen={isAppInstallModalOpen}
+        onClose={() => setIsAppInstallModalOpen(false)}
+        userId={currentUser.id}
+        onOpenNotifications={() => setIsNotificationCenterOpen(true)}
       />
     </div>
     </ProtectedRoute>

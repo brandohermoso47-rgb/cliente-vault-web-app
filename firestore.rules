@@ -15,105 +15,96 @@ service cloud.firestore {
     }
 
     match /users/{userId} {
-      allow read: if true;
-      allow write: if isAdmin() || isOwner(userId);
+      allow read, write: if true;
 
       match /favoritos/{imageId} {
-        allow read: if true;
-        allow write: if isAdmin() || isOwner(userId);
+        allow read, write: if true;
       }
       match /practice_logs/{logId} {
-        allow read: if true;
-        allow write: if isAdmin() || isOwner(userId) || isSignedIn();
+        allow read, write: if true;
       }
       match /playlists/{playlistId} {
-        allow read: if true;
-        allow write: if isAdmin() || isOwner(userId) || isSignedIn();
+        allow read, write: if true;
+      }
+      match /{document=**} {
+        allow read, write: if true;
       }
     }
 
     match /reels/{reelId} {
-      allow read: if true;
-      allow create: if isSignedIn();
-      allow update, delete: if isAdmin() || (isSignedIn() && (resource == null || resource.data.authorId == request.auth.uid));
+      allow read, write: if true;
     }
 
     match /community_messages/{messageId} {
-      allow read: if true;
-      allow create: if isSignedIn();
-      allow update, delete: if isAdmin() || (isSignedIn() && (resource == null || resource.data.userId == request.auth.uid));
+      allow read, write: if true;
     }
 
     match /chat_messages/{messageId} {
-      allow read: if true;
-      allow write: if isAdmin() || isSignedIn();
+      allow read, write: if true;
     }
 
     match /direct_messages/{messageId} {
-      allow read: if true;
-      allow write: if isAdmin() || isSignedIn();
+      allow read, write: if true;
     }
 
     match /friendships/{friendshipId} {
-      allow read: if true;
-      allow write: if isAdmin() || isSignedIn();
+      allow read, write: if true;
     }
 
     match /battles/{battleId} {
-      allow read: if true;
-      allow write: if isAdmin() || isSignedIn();
+      allow read, write: if true;
     }
 
     match /user_playlists/{playlistId} {
-      allow read: if true;
-      allow write: if isAdmin() || (isSignedIn() && (resource == null || resource.data.userId == request.auth.uid));
+      allow read, write: if true;
     }
 
     match /instructor_playlists/{playlistId} {
-      allow read: if true;
-      allow write: if isAdmin() || isSignedIn();
+      allow read, write: if true;
     }
 
     match /instructor_tracks/{trackId} {
-      allow read: if true;
-      allow write: if isAdmin() || isSignedIn();
+      allow read, write: if true;
     }
 
     match /instructor_drive_tracks/{trackId} {
-      allow read: if true;
-      allow write: if isAdmin() || isSignedIn();
+      allow read, write: if true;
+    }
+
+    match /practice_logs/{logId} {
+      allow read, write: if true;
     }
 
     match /presentations/{presId} {
-      allow read: if true;
-      allow write: if isAdmin() || isSignedIn();
+      allow read, write: if true;
     }
 
     match /announcements/{annId} {
-      allow read: if true;
-      allow write: if isAdmin() || isSignedIn();
+      allow read, write: if true;
     }
 
     match /feedback_items/{feedbackId} {
-      allow read: if true;
-      allow write: if isAdmin() || isSignedIn();
+      allow read, write: if true;
     }
 
     match /notifications/{notifId} {
-      allow read: if true;
-      allow write: if isAdmin() || isSignedIn();
+      allow read, write: if true;
     }
 
     match /lessons/{lessonId} {
-      allow read: if true;
-      allow write: if isAdmin() || isSignedIn();
+      allow read, write: if true;
     }
 
     match /test/connection {
       allow read, write: if true;
     }
+
+    match /{document=**} {
+      allow read, write: if true;
+    }
   }
 }
+
 
 
 

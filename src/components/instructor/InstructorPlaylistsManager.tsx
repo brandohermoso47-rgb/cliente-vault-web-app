@@ -419,9 +419,9 @@ export default function InstructorPlaylistsManager({ currentUser, language = 'es
     }
   };
 
-  const currentPlaylist = playlists.find(p => p.id === activePlaylistId) || playlists[0];
+  const currentPlaylist = (playlists || []).find(p => p.id === activePlaylistId) || (playlists && playlists[0]) || null;
 
-  const totalTracksCount = playlists.reduce((acc, p) => acc + p.tracks.length, 0);
+  const totalTracksCount = (playlists || []).reduce((acc, p) => acc + (p?.tracks?.length || 0), 0);
 
   const formatTime = (secs: number) => {
     const m = Math.floor(secs / 60);
@@ -742,30 +742,32 @@ export default function InstructorPlaylistsManager({ currentUser, language = 'es
           {/* Tracks Table */}
           <div className="space-y-3">
             <h4 className="text-xs font-mono font-bold text-slate-400 uppercase tracking-wider flex items-center justify-between">
-              <span>Lista de Canciones en la Nube ({currentPlaylist.tracks.length})</span>
+              <span>Lista de Canciones en la Nube ({currentPlaylist?.tracks?.length || 0})</span>
               <span className="text-slate-500">FORMATO MP3 & AUDIONUBE</span>
             </h4>
 
-            {currentPlaylist.tracks.length === 0 ? (
+            {!currentPlaylist || (currentPlaylist.tracks || []).length === 0 ? (
               <div className="text-center py-10 bg-white/5 border border-dashed border-white/10 rounded-2xl space-y-3">
                 <FileAudio className="w-8 h-8 text-slate-500 mx-auto" />
                 <p className="text-sm text-slate-400 font-sans">
                   Esta lista no tiene canciones subidas aún.
                 </p>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setTargetPlaylistForUpload(currentPlaylist.id);
-                    setShowUploadModal(true);
-                  }}
-                  className="px-4 py-2 rounded-xl bg-[#E9C349] text-black font-mono font-bold text-xs uppercase cursor-pointer hover:bg-amber-400"
-                >
-                  Subir Primera Canción
-                </button>
+                {currentPlaylist && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setTargetPlaylistForUpload(currentPlaylist.id);
+                      setShowUploadModal(true);
+                    }}
+                    className="px-4 py-2 rounded-xl bg-[#E9C349] text-black font-mono font-bold text-xs uppercase cursor-pointer hover:bg-amber-400"
+                  >
+                    Subir Primera Canción
+                  </button>
+                )}
               </div>
             ) : (
               <div className="space-y-2">
-                {currentPlaylist.tracks.map((track, idx) => {
+                {(currentPlaylist.tracks || []).map((track, idx) => {
                   const isCurrent = activeTrack?.id === track.id;
                   return (
                     <div

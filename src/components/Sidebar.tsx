@@ -32,7 +32,10 @@ import {
   PlusCircle,
   FileText,
   Calendar,
-  Settings
+  Settings,
+  Bell,
+  Smartphone,
+  Activity
 } from 'lucide-react';
 import { User } from '../types';
 import { Language, translations } from '../lib/translations';
@@ -47,9 +50,24 @@ interface SidebarProps {
   onStartOnboarding?: () => void;
   onOpenFormationPreview?: () => void;
   onOpenSomaticPosingPrototype?: () => void;
+  onOpenNotifications?: () => void;
+  onOpenAppInstall?: () => void;
+  unreadNotificationCount?: number;
 }
 
-export default function Sidebar({ activeTab, setActiveTab, currentUser, onUserChange, language, onStartOnboarding, onOpenFormationPreview, onOpenSomaticPosingPrototype }: SidebarProps) {
+export default function Sidebar({ 
+  activeTab, 
+  setActiveTab, 
+  currentUser, 
+  onUserChange, 
+  language, 
+  onStartOnboarding, 
+  onOpenFormationPreview, 
+  onOpenSomaticPosingPrototype,
+  onOpenNotifications,
+  onOpenAppInstall,
+  unreadNotificationCount = 0
+}: SidebarProps) {
   // Check active instructor subscriptions from localStorage or user state
   const hasActiveSub = React.useMemo(() => {
     if (currentUser.billingStatus === 'active') return true;
@@ -104,6 +122,7 @@ export default function Sidebar({ activeTab, setActiveTab, currentUser, onUserCh
       items: [
         { id: 'cursos', label: 'Clases & Cursos', icon: GraduationCap, requiresSub: false, badge: 'VER' },
         ...(onOpenFormationPreview ? [{ id: 'vista_previa_formacion', label: 'Vista Previa Formación', icon: Eye, requiresSub: false, isAction: true, onClick: onOpenFormationPreview, badge: 'NUEVO' }] : []),
+        { id: 'pose_lab', label: language === 'es' ? 'Laboratorio de Poses IA' : 'AI Pose Lab', icon: Activity, requiresSub: false, badge: 'AI POSE' },
         ...(onOpenSomaticPosingPrototype ? [{ id: 'prototipo_somatico', label: 'Prototipo Somático Posing', icon: Cpu, requiresSub: false, isAction: true, onClick: onOpenSomaticPosingPrototype, badge: 'LAB v1.0' }] : []),
         { id: 'podcasts', label: 'Podcasts', icon: Headphones, requiresSub: false, badge: 'AUDIO' },
         { id: 'ebooks', label: 'Manuales & eBooks', icon: BookOpen, requiresSub: false },
@@ -123,6 +142,24 @@ export default function Sidebar({ activeTab, setActiveTab, currentUser, onUserCh
       id: 'micuenta',
       title: '4. MI CUENTA & SOPORTE',
       items: [
+        ...(onOpenNotifications ? [{ 
+          id: 'centro_notificaciones', 
+          label: language === 'es' ? 'Centro de Notificaciones' : 'Notification Center', 
+          icon: Bell, 
+          requiresSub: false, 
+          isAction: true, 
+          onClick: onOpenNotifications,
+          badge: unreadNotificationCount > 0 ? `${unreadNotificationCount} NUEVAS` : undefined 
+        }] : []),
+        ...(onOpenAppInstall ? [{ 
+          id: 'instalar_app', 
+          label: language === 'es' ? 'Instalar App PWA' : 'Install App PWA', 
+          icon: Smartphone, 
+          requiresSub: false, 
+          isAction: true, 
+          onClick: onOpenAppInstall,
+          badge: 'NATIVO' 
+        }] : []),
         { id: 'planes', label: 'Planes & Membresía', icon: Crown, requiresSub: false, badge: 'NUEVO' },
         ...(onStartOnboarding ? [{ id: 'tour', label: 'Tour Interactivo', icon: Sparkles, requiresSub: false, isAction: true, onClick: onStartOnboarding }] : []),
         { id: 'support', label: 'Ayuda & Soporte', icon: HelpCircle, requiresSub: false },

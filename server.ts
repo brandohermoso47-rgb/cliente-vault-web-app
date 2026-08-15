@@ -11,12 +11,22 @@ import {
   communityMessages as communityMessagesTable,
   instructorTasks as instructorTasksTable,
   profiles as profilesTable,
+  subscriptions as subscriptionsTable,
+  instructorSubscribers as instructorSubscribersTable,
   instructorTransactions as instructorTransactionsTable,
   instructorPayouts as instructorPayoutsTable,
   instructorBankAccounts as instructorBankAccountsTable
 } from './src/db/schema.ts';
 import { eq, count, desc } from 'drizzle-orm';
-import { requireRole, validateInput, getUserFromReq } from './src/server/rbac.ts';
+import { 
+  requireRole, 
+  requireVipAccess, 
+  requireAcademyAccess, 
+  requireVerifiedInstructor, 
+  requireInstructorSubscriber, 
+  validateInput, 
+  getUserFromReq 
+} from './src/server/rbac.ts';
 import { 
   announcementSchema, 
   communityMessageSchema, 
@@ -231,24 +241,41 @@ async function startServer() {
   });
 
   // Helper for dynamic user role assignment & database updates via webhook events
-  async function updateUserRoleAndSubscriptionInDB(userId?: string, userEmail?: string, planType?: string) {
-    let assignedRole: 'student' | 'instructor' | 'studio' = 'student';
+  async function updateUserRoleAndSubscriptionInDB(
+    userId?: string, 
+    userEmail?: string, 
+    planType?: string, 
+    stripeCustomer?: string,
+    isTrial?: boolean
+  ) {
+    let assignedRole: 'free_user' | 'vip_student' | 'academy' | 'instructor' = 'vip_student';
+    let canonicalPlanType: 'app_vip' | 'app_academy' | 'instructor_custom' = 'app_vip';
+    let subscriptionStatus: 'trialing' | 'active' | 'past_due' | 'canceled' = isTrial ? 'trialing' : 'active';
     let dashboardUrl = '/dashboard/estudiante';
 
     const normalizedPlan = (planType || '').toLowerCase().trim();
 
     if (['plan_instructor', 'membresia_instructor', 'instructor', 'docente'].includes(normalizedPlan)) {
       assignedRole = 'instructor';
+      canonicalPlanType = 'instructor_custom';
       dashboardUrl = '/dashboard/instructor';
-    } else if (['plan_academia', 'membresia_academia', 'studio', 'academia'].includes(normalizedPlan)) {
-      assignedRole = 'studio';
+    } else if (['plan_academia', 'membresia_academia', 'studio', 'academia', 'academy', 'app_academy'].includes(normalizedPlan)) {
+      assignedRole = 'academy';
+      canonicalPlanType = 'app_academy';
       dashboardUrl = '/dashboard/academia';
     } else {
-      assignedRole = 'student';
+      assignedRole = 'vip_student';
+      canonicalPlanType = 'app_vip';
       dashboardUrl = '/dashboard/estudiante';
     }
 
-    console.log(`[Payment Webhook Engine]: Assigning role '${assignedRole}' (Redirect Dashboard: ${dashboardUrl}) to user ID '${userId || 'N/A'}' / Email '${userEmail || 'N/A'}' for plan '${planType || 'clase_profesor'}'`);
+    const now = new Date();
+    // 4 days trial for VIP student trials, 30 days for active monthly payments
+    const periodDays = isTrial ? 4 : 30;
+    const currentPeriodEnd = new Date(now.getTime() + periodDays * 24 * 60 * 60 * 1000).toISOString();
+    const trialEnd = isTrial ? currentPeriodEnd : undefined;
+
+    console.log(`[Payment Webhook Engine]: Assigning canonical role '${assignedRole}', plan '${canonicalPlanType}', status '${subscriptionStatus}' to user '${userId || 'N/A'}' (Period End: ${currentPeriodEnd})`);
 
     let dbUpdated = false;
 
@@ -272,13 +299,17 @@ async function startServer() {
       if (targetUid) {
         await firestore.collection('users').doc(targetUid).set({
           role: assignedRole,
+          plan_type: canonicalPlanType,
+          subscription_status: subscriptionStatus,
+          current_period_end: currentPeriodEnd,
+          trial_end: trialEnd || null,
+          stripe_customer_id: stripeCustomer || `cus_${targetUid}`,
           billingStatus: 'active',
-          subscription_status: 'active',
           subscriptionTier: assignedRole === 'instructor' ? 'instructor_pass' : 'basic_practice',
           updatedAt: new Date().toISOString()
         }, { merge: true });
         dbUpdated = true;
-        console.log(`[Firestore Admin Webhook Success]: Set user '${targetUid}' role -> '${assignedRole}' & subscription_status -> 'active'`);
+        console.log(`[Firestore Admin Webhook Success]: Set user '${targetUid}' role -> '${assignedRole}', status -> '${subscriptionStatus}'`);
       }
     } catch (err: any) {
       console.warn('[Firestore Admin Webhook Warning]:', err?.message || err);
@@ -287,11 +318,16 @@ async function startServer() {
     // 2. Update PostgreSQL database if process.env.SQL_HOST is present
     if (process.env.SQL_HOST && userId) {
       try {
-        await drizzleDb.update(usersTable)
-          .set({ role: assignedRole })
-          .where(eq(usersTable.uid, userId));
+        await drizzleDb.update(profilesTable)
+          .set({ 
+            role: assignedRole,
+            planType: canonicalPlanType,
+            subscriptionStatus: subscriptionStatus,
+            stripeCustomerId: stripeCustomer || `cus_${userId}`,
+            currentPeriodEnd: new Date(currentPeriodEnd)
+          });
         dbUpdated = true;
-        console.log(`[PostgreSQL Webhook Success]: Updated SQL user '${userId}' to role '${assignedRole}'`);
+        console.log(`[PostgreSQL Webhook Success]: Updated SQL profile '${userId}' to role '${assignedRole}'`);
       } catch (err: any) {
         console.warn('[PostgreSQL Webhook Warning]:', err?.message || err);
       }
@@ -301,8 +337,11 @@ async function startServer() {
       userId,
       userEmail,
       assignedRole,
+      canonicalPlanType,
+      subscriptionStatus,
+      currentPeriodEnd,
+      trialEnd,
       dashboardUrl,
-      subscriptionStatus: 'active',
       dbUpdated
     };
   }
@@ -491,6 +530,101 @@ async function startServer() {
       console.error('[Simulate Payment Webhook Error]:', err);
       return res.status(500).json({ error: 'Error en la simulación de pago', details: err.message });
     }
+  });
+
+  // --- 1.2 HYBRID ARCHITECTURE ROUTES & MONETIZATION ENDPOINTS ---
+
+  // VIP Content Library & VIP Tools (Protected by requireVipAccess middleware)
+  app.get('/api/premium-library/lessons', requireVipAccess(), async (req, res) => {
+    const user = (req as any).user;
+    return res.json({
+      success: true,
+      message: 'Acceso autorizado a la Librería VIP de Waack ON',
+      user: {
+        id: user.id,
+        role: user.role,
+        status: user.subscription_status
+      },
+      lessons: [
+        { id: 'vip-les-1', title: 'Mastery of Whacking Speed (130 BPM)', duration: '45 min', instructor: 'Loreto Waack' },
+        { id: 'vip-les-2', title: 'Punking Theatricality & Drama Lines', duration: '60 min', instructor: 'Brando Hermoso' },
+        { id: 'vip-les-3', title: 'Somatic Posture & Shoulder Isolation', duration: '50 min', instructor: 'Elena Pose' }
+      ]
+    });
+  });
+
+  // VIP Tools & Somatic Lab Features (Protected by requireVipAccess middleware)
+  app.get('/api/vip-tools/features', requireVipAccess(), async (req, res) => {
+    return res.json({
+      success: true,
+      tools: [
+        { name: 'SomaticFeedbackLab', status: 'unlocked', capabilities: ['BlindMirror', 'SlowMotionMatrix', 'AngleCalibration'] },
+        { name: 'BattleLabPro', status: 'unlocked', capabilities: ['GhostDancerAI', 'LiveJudgeScoring'] },
+        { name: 'DramaLabStudio', status: 'unlocked', capabilities: ['MicroExpressionAnalysis', 'PosingFreezeFrame'] }
+      ]
+    });
+  });
+
+  // Academy Administration Dashboard (Protected by requireAcademyAccess middleware)
+  app.get('/api/academy-dashboard/stats', requireAcademyAccess(), async (req, res) => {
+    const user = (req as any).user;
+    return res.json({
+      success: true,
+      academyId: user.id,
+      metrics: {
+        enrolledStudents: 48,
+        activeInstructors: 4,
+        monthlyRevenueUSD: 1440.00,
+        retentionRate: '96.5%',
+        institutionTier: 'Pro Studio Enterprise'
+      }
+    });
+  });
+
+  // Instructor Monetization & Content Publishing (Protected by requireVerifiedInstructor middleware)
+  app.post('/api/instructor/publish-content', requireVerifiedInstructor(), async (req, res) => {
+    const user = (req as any).user;
+    const { title, description, priceUSD, videoUrl } = req.body;
+
+    return res.json({
+      success: true,
+      message: 'Cátedra / Masterclass publicada exitosamente con cobro directo vía Stripe Connect (75% creador / 25% plataforma)',
+      content: {
+        id: `inst-content-${Date.now()}`,
+        instructorId: user.id,
+        title: title || 'Nueva Masterclass',
+        description: description || '',
+        priceUSD: priceUSD || 15.00,
+        instructorShareUSD: (priceUSD || 15.00) * 0.75,
+        platformFeeUSD: (priceUSD || 15.00) * 0.25,
+        stripeAccountId: user.stripe_account_id,
+        isVerified: true
+      }
+    });
+  });
+
+  // Private Instructor Content (Protected by requireInstructorSubscriber middleware)
+  app.get('/api/instructor/:instructorId/private-lessons', requireInstructorSubscriber('instructorId'), async (req, res) => {
+    const { instructorId } = req.params;
+    return res.json({
+      success: true,
+      instructorId,
+      lessons: [
+        { id: `priv-${instructorId}-1`, title: 'Cátedra Exclusiva: Secretos de Posing y Proyección', length: '55 min' },
+        { id: `priv-${instructorId}-2`, title: 'Metodología Personal & Laboratorio de Improvisación', length: '40 min' }
+      ]
+    });
+  });
+
+  // Start 4-Day VIP Trial endpoint
+  app.post('/api/subscription/start-trial', async (req, res) => {
+    const { userId, userEmail } = req.body;
+    const result = await updateUserRoleAndSubscriptionInDB(userId, userEmail, 'app_vip', undefined, true);
+    return res.json({
+      success: true,
+      message: '¡Prueba VIP de 4 días activada exitosamente! Tienes acceso ilimitado a la librería y herramientas somáticas.',
+      result
+    });
   });
 
   // --- 2. GEMINI AI ENDPOINTS (Validated with Zod) ---

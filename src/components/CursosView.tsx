@@ -302,7 +302,7 @@ export default function CursosView({
                 <Sparkles className="w-3 h-3 text-[#E9C349]" /> CÁTEDRAS ACTIVAS
               </span>
               <span className="text-[10px] font-mono font-bold text-cyan-300 bg-cyan-500/10 border border-cyan-500/30 px-2.5 py-0.5 rounded-full uppercase">
-                {subscribedInstructors.length} PROFESORES SUSCRITOS
+                {(subscribedInstructors || []).length} PROFESORES SUSCRITOS
               </span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-white uppercase tracking-tight">
@@ -456,7 +456,7 @@ export default function CursosView({
                   AVANCE DE APRENDIZAZAJE UNIFICADO EN TUS CÁTEDRAS
                 </span>
                 <span className="text-xs font-mono font-extrabold text-white">
-                  {completedCount} de {lessons.length} Lecciones Completadas ({progressPercent}%)
+                  {completedCount} de {(lessons || []).length} Lecciones Completadas ({progressPercent}%)
                 </span>
               </div>
               <div className="w-full bg-black/60 h-3 rounded-full overflow-hidden border border-white/10">
@@ -468,7 +468,7 @@ export default function CursosView({
             </div>
             <div className="md:col-span-4 flex items-center justify-end gap-3 text-xs font-mono text-slate-300">
               <div className="bg-white/5 border border-white/10 px-3 py-2 rounded-xl text-center flex-1">
-                <span className="text-lg font-black text-white block">{subscribedInstructors.length}</span>
+                <span className="text-lg font-black text-white block">{(subscribedInstructors || []).length}</span>
                 <span className="text-[9px] text-slate-400 uppercase">Cátedras Activas</span>
               </div>
               <div className="bg-white/5 border border-white/10 px-3 py-2 rounded-xl text-center flex-1">
@@ -523,17 +523,17 @@ export default function CursosView({
                       <div className="flex items-center gap-3 bg-black/60 backdrop-blur-md p-3.5 rounded-2xl border border-white/15 shrink-0 self-start lg:self-center">
                         <div className="text-center px-2">
                           <p className="text-[9px] font-mono text-slate-400 uppercase">Programas</p>
-                          <p className="text-sm font-black text-white">{instructor.courses.length}</p>
+                          <p className="text-sm font-black text-white">{(instructor.courses || []).length}</p>
                         </div>
                         <div className="h-6 w-px bg-white/20" />
                         <div className="text-center px-2">
                           <p className="text-[9px] font-mono text-slate-400 uppercase">Video Clases</p>
-                          <p className="text-sm font-black text-[#E9C349]">{instLessons.length}</p>
+                          <p className="text-sm font-black text-[#E9C349]">{(instLessons || []).length}</p>
                         </div>
                         <div className="h-6 w-px bg-white/20" />
                         <div className="text-center px-2">
                           <p className="text-[9px] font-mono text-slate-400 uppercase">Materiales</p>
-                          <p className="text-sm font-black text-purple-300">{instructor.materials.length} PDFs</p>
+                          <p className="text-sm font-black text-purple-300">{(instructor.materials || []).length} PDFs</p>
                         </div>
                       </div>
                     </div>
@@ -1099,7 +1099,7 @@ export default function CursosView({
                 <span className="text-[10px] font-mono font-bold text-[#8A8A8A] uppercase block">Lecciones Completadas</span>
                 <div className="flex items-baseline gap-1.5 mt-1">
                   <span className="text-2xl font-black text-cyan-400">{completedCount}</span>
-                  <span className="text-xs text-slate-400 font-mono">/ {lessons.length}</span>
+                  <span className="text-xs text-slate-400 font-mono">/ {(lessons || []).length}</span>
                 </div>
               </div>
               <div className="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400">

@@ -649,7 +649,7 @@ export const InstagramFeed: React.FC<InstagramFeedProps> = ({
                 </div>
                 <div className="flex items-center gap-1.5 text-amber-300">
                   <MessageCircle className="w-5 h-5 fill-amber-400 text-amber-400" />
-                  <span>{post.comments.length}</span>
+                  <span>{(post.comments || []).length}</span>
                 </div>
               </div>
             </motion.div>

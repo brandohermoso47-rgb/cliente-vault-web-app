@@ -2,7 +2,36 @@
  * Types and interfaces for La Academia de Waacking
  */
 
-export type UserRole = 'student' | 'instructor' | 'studio' | 'academia' | 'academy' | 'estudiante' | 'guest' | 'unassigned' | 'none';
+export type UserRole = 
+  | 'free_user'
+  | 'vip_student'
+  | 'academy'
+  | 'instructor'
+  // Legacy aliases for backward compatibility
+  | 'student'
+  | 'studio'
+  | 'academia'
+  | 'estudiante'
+  | 'guest'
+  | 'unassigned'
+  | 'none';
+
+export type PlanType = 'app_vip' | 'app_academy' | 'instructor_custom';
+
+export type SubscriptionStatus = 'trialing' | 'active' | 'past_due' | 'canceled' | 'cancelled';
+
+export interface UserSubscription {
+  id: string;
+  userId: string;
+  planType: PlanType;
+  status: SubscriptionStatus;
+  currentPeriodEnd: string;
+  trialEnd?: string;
+  instructorId?: string; // For instructor_custom subscriptions (75/25 split)
+  stripeSubscriptionId?: string;
+  stripeCustomerId?: string;
+  createdAt?: string;
+}
 
 export type StudentSubscriptionTier = 'free' | 'basic_practice' | 'instructor_pass';
 
@@ -64,6 +93,14 @@ export interface User {
   };
   points: number; // accumulated gamification points
   customAchievements?: CustomAchievement[];
+  // Stripe & Hybrid Subscription Architecture fields
+  stripe_customer_id?: string;
+  stripe_account_id?: string; // Stripe Connect ID (instructors)
+  is_connect_verified?: boolean; // Stripe Connect verification status
+  subscription_status?: SubscriptionStatus;
+  plan_type?: PlanType;
+  current_period_end?: string;
+  trial_end?: string;
   billingStatus?: 'active' | 'cancelled';
   subscriptionTier?: StudentSubscriptionTier;
   subscribedInstructorIds?: string[];
@@ -267,8 +304,15 @@ export interface NotificationItem {
   studentName?: string;
   title: string;
   body: string;
-  type: 'feedback_reviewed' | 'battle_invite' | 'system';
+  type: 'feedback_reviewed' | 'battle_invite' | 'system' | 'live_stream' | 'new_course' | 'drill_reminder' | 'hydration_reminder' | 'announcement' | 'community';
+  category?: 'live' | 'feedback' | 'course' | 'drill' | 'announcement' | 'hydration' | 'community' | 'system';
   feedbackId?: string;
+  instructorName?: string;
+  instructorAvatar?: string;
+  actionTab?: string;
+  actionUrl?: string;
+  actionLabel?: string;
+  priority?: 'urgent' | 'high' | 'normal' | 'low';
   read: boolean;
   createdAt: string;
 }

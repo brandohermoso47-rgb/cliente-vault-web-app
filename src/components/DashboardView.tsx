@@ -47,7 +47,12 @@ import {
   Copy,
   FileText,
   Gauge,
-  GraduationCap
+  GraduationCap,
+  Bell,
+  Signal,
+  Eye,
+  ShieldCheck,
+  Cast
 } from 'lucide-react';
 import AnnouncementImagePicker from './AnnouncementImagePicker';
 import { WaackOnLogo } from './WaackOnLogo';
@@ -359,6 +364,118 @@ export default function DashboardView({
   const [chartTimeRange, setChartTimeRange] = useState<7 | 14 | 30>(7);
   const [chartViewMode, setChartViewMode] = useState<'line' | 'stacked' | 'total'>('line');
 
+  // Instructor Lives & Announcement Hub State
+  const [selectedLiveId, setSelectedLiveId] = useState<string>('live-brando');
+  const [liveFilterTab, setLiveFilterTab] = useState<'all' | 'live' | 'today' | 'upcoming'>('all');
+  const [liveReminders, setLiveReminders] = useState<Record<string, boolean>>({});
+  const [liveToastNotice, setLiveToastNotice] = useState<string | null>(null);
+
+  const INSTRUCTOR_LIVES = [
+    {
+      id: 'live-brando',
+      instructor: 'Brando Hermoso',
+      avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=120',
+      role: 'Master Instructor & Director',
+      country: 'España',
+      countryFlag: '🇪🇸',
+      title: 'Masterclass en Vivo: Aceleración de Rolls, Resistencia & Técnica Disco',
+      description: 'Sesión técnica en tiempo real desde la sala central. Corrección postural de rolls, fijación escapular y aceleración progresiva de 115 a 128 BPM con feedback en directo.',
+      status: 'live' as const,
+      statusLabel: 'EN DIRECTO AHORA',
+      viewers: 94,
+      scheduledTime: 'Transmitiendo en Directo Ahora',
+      bpm: 128,
+      category: 'Técnica & Rolls',
+      videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-party-lights-and-people-dancing-40348-large.mp4',
+      tag: 'MASTERCLASS EN VIVO',
+      roomName: 'Sala Central 01 - Live Room',
+      level: 'Intermedio / Avanzado',
+      topics: ['Biomecánica de Hombros', 'Rolls a 128 BPM', 'Feedback en Vivo'],
+      isOfficial: true
+    },
+    {
+      id: 'live-kumari',
+      instructor: 'Kumari "WaackQueen"',
+      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=120',
+      role: 'Elite Instructor • Los Ángeles',
+      country: 'Estados Unidos',
+      countryFlag: '🇺🇸',
+      title: 'Taller en Vivo: Expresión Dramática, Pasarela y Presencia Escénica',
+      description: 'Aprende los secretos del posing teatral, la proyección escénica de la mirada y cómo interpretar narrativamente pistas disco clásicas de los años 70.',
+      status: 'today' as const,
+      statusLabel: 'HOY 19:30 HRS',
+      viewers: 142,
+      scheduledTime: 'Hoy a las 19:30 hrs (En 45 min)',
+      bpm: 118,
+      category: 'Posing & Carácter',
+      videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
+      tag: 'TALLER HOY',
+      roomName: 'Sala Sunset LA - Live',
+      level: 'Todos los niveles',
+      topics: ['Teatralidad', 'Pasarela Disco', 'Expresión Facial'],
+      isOfficial: true
+    },
+    {
+      id: 'live-ibuki',
+      instructor: 'Ibuki Imata',
+      avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=120',
+      role: 'Master Instructor • Osaka',
+      country: 'Japón',
+      countryFlag: '🇯🇵',
+      title: 'Live Internacional: Speed Drills & Biomecánica de Codos a 135 BPM',
+      description: 'Velocidad ultra-limpia sin tensión cervical. Metodología de control excéntrico para clavar los golpes en el acento musical con fluidez extrema.',
+      status: 'upcoming' as const,
+      statusLabel: 'MAÑANA 11:00 HRS',
+      viewers: 210,
+      scheduledTime: 'Mañana a las 11:00 hrs (GMT+1)',
+      bpm: 135,
+      category: 'Velocidad BPM',
+      videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-party-lights-and-people-dancing-40348-large.mp4',
+      tag: 'LIVESTREAM GLOBAL',
+      roomName: 'Sala Tokyo Speed',
+      level: 'Avanzado',
+      topics: ['Velocidad 135 BPM', 'Codos & Aislamiento', 'Drills de Resistencia'],
+      isOfficial: true
+    },
+    {
+      id: 'live-yoonji',
+      instructor: 'YoonJi Kim',
+      avatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&q=80&w=120',
+      role: 'Elite Instructor • Seúl',
+      country: 'Corea del Sur',
+      countryFlag: '🇰🇷',
+      title: 'Batalla en Vivo & Q&A: Análisis de Musicalidad Funk & Síncopa 70s',
+      description: 'Sesión interactiva en directo de análisis de ritmos complejos y cómo crear variaciones inesperadas en rondas de batalla de alta tensión.',
+      status: 'upcoming' as const,
+      statusLabel: 'SÁBADO 18:00 HRS',
+      viewers: 180,
+      scheduledTime: 'Sábado a las 18:00 hrs',
+      bpm: 122,
+      category: 'Musicalidad & Batallas',
+      videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
+      tag: 'SESIÓN DE BATALLA',
+      roomName: 'Sala Seoul Groove',
+      level: 'Intermedio',
+      topics: ['Síncopa Rítmica', 'Estrategia de Batalla', 'Preguntas & Respuestas'],
+      isOfficial: true
+    }
+  ];
+
+  const activeSelectedLive = INSTRUCTOR_LIVES.find(l => l.id === selectedLiveId) || INSTRUCTOR_LIVES[0];
+
+  const handleToggleLiveReminder = (liveId: string, instructorName: string, time: string) => {
+    setLiveReminders(prev => {
+      const newState = !prev[liveId];
+      if (newState) {
+        setLiveToastNotice(`🔔 ¡Recordatorio activado! Te notificaremos antes de que inicie el Live de ${instructorName} (${time}).`);
+      } else {
+        setLiveToastNotice(`🔕 Recordatorio desactivado para el Live de ${instructorName}.`);
+      }
+      setTimeout(() => setLiveToastNotice(null), 4500);
+      return { ...prev, [liveId]: newState };
+    });
+  };
+
   // Hero Banner Default Video State
   const [heroVideoMuted, setHeroVideoMuted] = useState(true);
   const [heroVideoPlaying, setHeroVideoPlaying] = useState(true);
@@ -366,12 +483,12 @@ export default function DashboardView({
   const heroVideoRef = useRef<HTMLVideoElement | null>(null);
 
   const heroVideoSources = [
-    '/videos/waack-on-intro.mp4',
+    activeSelectedLive.videoUrl || '/videos/waack-on-intro.mp4',
     'https://assets.mixkit.co/videos/preview/mixkit-party-lights-and-people-dancing-40348-large.mp4',
     'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4'
   ];
 
-  const currentHeroVideoSrc = heroVideoSources[heroVideoFallbackIndex % heroVideoSources.length];
+  const currentHeroVideoSrc = activeSelectedLive.videoUrl || heroVideoSources[heroVideoFallbackIndex % heroVideoSources.length];
 
   const handleHeroVideoError = () => {
     if (heroVideoFallbackIndex < heroVideoSources.length - 1) {
@@ -823,73 +940,454 @@ export default function DashboardView({
   const t = translations[language] || translations['es'];
 
   return (
-    <div className="flex-1 min-h-full w-full p-4 md:p-6 space-y-6 bg-[#0A0A0A] text-[#EDEFF4] scanline">
-      {/* Banner Hero con video por defecto */}
-      <div className="relative w-full h-56 sm:h-64 md:h-80 rounded-3xl overflow-hidden border border-white/15 shadow-2xl mb-4 group bg-black/80">
-        {/* Video de fondo por defecto */}
-        <video
-          ref={heroVideoRef}
-          src={currentHeroVideoSrc}
-          autoPlay
-          muted={heroVideoMuted}
-          loop
-          playsInline
-          onError={handleHeroVideoError}
-          className="absolute inset-0 w-full h-full object-cover opacity-85 transition-opacity duration-700 group-hover:opacity-100"
-        />
+    <div className="flex-1 min-h-full w-full space-y-6 text-[#EDEFF4]">
+      {/* CENTRO DE ANUNCIOS & LIVES DE INSTRUCTORES */}
+      <div className="bg-[#121212] border border-[#262626] rounded-3xl p-4 sm:p-6 shadow-2xl relative overflow-hidden space-y-5">
+        {/* Glow ambient background effect */}
+        <div className="absolute top-0 right-0 w-96 h-96 bg-[#E9C349]/5 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-[#9A2B3C]/10 rounded-full blur-3xl pointer-events-none" />
 
-        {/* Capa gradiente oscura y resplandor estilo Waack On */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/60 to-black/30 pointer-events-none" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] via-transparent to-transparent pointer-events-none" />
-
-        {/* Contenido principal sobre el video */}
-        <div className="relative z-10 h-full flex flex-col justify-between p-6 sm:p-8">
-          <div className="flex items-center justify-between w-full">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-2xl bg-[#E9C349]/10 border border-[#E9C349]/30 flex items-center justify-center p-2 backdrop-blur-md shadow-lg">
-                <WaackOnLogo className="w-8 h-8 text-[#E9C349]" />
+        {/* Live notification toast popup */}
+        <AnimatePresence>
+          {liveToastNotice && (
+            <motion.div
+              initial={{ opacity: 0, y: -15, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -15, scale: 0.95 }}
+              className="p-3.5 bg-gradient-to-r from-[#1c1a12] via-[#241a15] to-[#1c1214] border border-[#E9C349]/60 text-white text-xs font-mono font-bold rounded-2xl flex items-center justify-between gap-3 shadow-2xl relative z-30"
+            >
+              <div className="flex items-center gap-2.5">
+                <span className="p-1.5 bg-[#E9C349] text-black rounded-lg">
+                  <Bell className="w-3.5 h-3.5 fill-black" />
+                </span>
+                <span className="text-[#EDEFF4]">{liveToastNotice}</span>
               </div>
-              <div>
-                <h1 className="text-2xl sm:text-3xl font-black text-white tracking-wider uppercase font-sans flex items-center gap-2">
-                  WAACK ON <span className="text-xs px-2.5 py-0.5 rounded-full bg-[#E9C349] text-black font-extrabold tracking-normal">INTRO VIDEO</span>
-                </h1>
-                <p className="text-xs text-[#E9C349] font-mono font-semibold uppercase tracking-widest">
-                  Plataforma Oficial de Waacking & Cultura Disco
-                </p>
-              </div>
-            </div>
-
-            {/* Direct Video Control Buttons */}
-            <div className="flex items-center gap-2 bg-black/60 backdrop-blur-md p-1.5 rounded-2xl border border-white/10 shadow-lg">
               <button
                 type="button"
-                onClick={toggleHeroVideoPlay}
-                title={heroVideoPlaying ? "Pausar video" : "Reproducir video"}
-                className="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-white transition-all cursor-pointer hover:scale-105"
+                onClick={() => setLiveToastNotice(null)}
+                className="p-1 text-slate-400 hover:text-white rounded-lg hover:bg-white/10"
               >
-                {heroVideoPlaying ? <Pause className="w-4 h-4 text-[#E9C349]" /> : <Play className="w-4 h-4 text-white fill-white" />}
+                <X className="w-4 h-4" />
               </button>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
-              <button
-                type="button"
-                onClick={toggleHeroVideoMute}
-                title={heroVideoMuted ? "Activar audio" : "Silenciar audio"}
-                className="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-white transition-all cursor-pointer hover:scale-105"
-              >
-                {heroVideoMuted ? <VolumeX className="w-4 h-4 text-slate-400" /> : <Volume2 className="w-4 h-4 text-[#E9C349]" />}
-              </button>
+        {/* Hub Header & Live Hub Actions */}
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-white/10 pb-4 relative z-10">
+          <div className="space-y-1">
+            <div className="flex flex-wrap items-center gap-2.5">
+              <span className="px-3 py-1 bg-[#9A2B3C]/25 text-[#E9C349] border border-[#9A2B3C]/60 rounded-full text-[10px] font-mono font-black uppercase tracking-wider flex items-center gap-1.5 shadow-sm">
+                <span className="w-2 h-2 rounded-full bg-red-500 animate-ping" />
+                <span>CENTRO DE ANUNCIOS & LIVES</span>
+              </span>
+              <span className="text-xs font-mono font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 px-2.5 py-0.5 rounded-full flex items-center gap-1">
+                <Signal className="w-3 h-3 text-emerald-400" />
+                <span>1 Transmisión Activa • 3 Masterclasses Agendadas</span>
+              </span>
             </div>
-          </div>
-
-          <div className="max-w-xl space-y-2 mt-4">
-            <h2 className="text-lg sm:text-2xl font-bold text-white tracking-tight leading-tight">
-              Aprende el arte de la resistencia, el ritmo y la autoexpresión 💃
+            <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight uppercase font-sans flex items-center gap-2">
+              <span>Transmisiones en Vivo de los Instructores</span>
+              <Sparkles className="w-5 h-5 text-[#E9C349]" />
             </h2>
-            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-sans">
-              Explora tutoriales en alta definición, drilings de aceleración BPM, ebooks teóricos y retroalimentación personalizada por instructores calificados.
+            <p className="text-xs sm:text-sm text-slate-300 max-w-3xl leading-relaxed">
+              Conéctate en tiempo real a las cátedras en directo, recibe correcciones técnicas de postura y rolls, y entrena con el staff docente internacional de Waack On.
             </p>
           </div>
+
+          <div className="flex flex-wrap items-center gap-2.5 shrink-0">
+            {currentUser.role === 'instructor' ? (
+              <>
+                <motion.button
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.97 }}
+                  type="button"
+                  onClick={() => setShowAnnModal(true)}
+                  className="px-3.5 py-2 bg-[#1c1a12] hover:bg-[#282415] text-[#E9C349] border border-[#E9C349]/40 text-xs font-mono font-bold rounded-xl transition-all flex items-center gap-1.5 shadow cursor-pointer uppercase"
+                >
+                  <Megaphone className="w-3.5 h-3.5 text-[#E9C349]" />
+                  <span>Publicar Anuncio de Live</span>
+                </motion.button>
+                <motion.button
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.97 }}
+                  type="button"
+                  onClick={() => setActiveTab('live')}
+                  className="px-4 py-2 bg-gradient-to-r from-[#9A2B3C] to-[#bd2c44] hover:from-[#b12b40] hover:to-[#d6324d] text-white text-xs font-mono font-black rounded-xl border border-white/20 transition-all flex items-center gap-2 shadow-lg cursor-pointer uppercase tracking-wider"
+                >
+                  <Radio className="w-4 h-4 text-white animate-pulse" />
+                  <span>Iniciar Mi Transmisión</span>
+                </motion.button>
+              </>
+            ) : (
+              <>
+                <motion.button
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.97 }}
+                  type="button"
+                  onClick={() => setActiveTab('calendario')}
+                  className="px-3.5 py-2 bg-[#181818] hover:bg-[#222222] text-slate-300 hover:text-white border border-white/10 text-xs font-mono font-bold rounded-xl transition-all flex items-center gap-1.5 shadow cursor-pointer"
+                >
+                  <Calendar className="w-3.5 h-3.5 text-[#E9C349]" />
+                  <span>Ver Calendario</span>
+                </motion.button>
+                <motion.button
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.97 }}
+                  type="button"
+                  onClick={() => setActiveTab('live')}
+                  className="px-4 py-2 bg-gradient-to-r from-[#E9C349] to-[#dfb430] hover:from-[#f5cf53] hover:to-[#e8bd3a] text-black text-xs font-mono font-black rounded-xl border border-[#E9C349] transition-all flex items-center gap-2 shadow-lg cursor-pointer uppercase tracking-wider"
+                >
+                  <Radio className="w-4 h-4 text-black animate-pulse" />
+                  <span>Entrar al Live Room</span>
+                </motion.button>
+              </>
+            )}
+          </div>
         </div>
+
+        {/* Live Broadcast Main Spotlight & Side Roster Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch relative z-10">
+          
+          {/* LEFT: Featured Live Stream Stage / Interactive Video Player (8 cols) */}
+          <div className="lg:col-span-8 flex flex-col justify-between bg-[#0A0A0A] border border-[#262626] rounded-2xl overflow-hidden shadow-2xl relative group min-h-[380px] md:min-h-[420px]">
+            
+            {/* Background Stream Video Element */}
+            <div className="relative w-full h-56 sm:h-64 md:h-72 bg-black overflow-hidden">
+              <video
+                ref={heroVideoRef}
+                key={activeSelectedLive.id}
+                src={activeSelectedLive.videoUrl || currentHeroVideoSrc}
+                autoPlay
+                muted={heroVideoMuted}
+                loop
+                playsInline
+                onError={handleHeroVideoError}
+                className="w-full h-full object-cover opacity-85 group-hover:opacity-95 transition-opacity duration-700"
+              />
+
+              {/* Gradient overlays for readability */}
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] via-black/40 to-black/70 pointer-events-none" />
+              <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-transparent to-black/60 pointer-events-none" />
+
+              {/* Top Stream Status Header */}
+              <div className="absolute top-3.5 left-3.5 right-3.5 flex items-center justify-between gap-2 z-20">
+                <div className="flex flex-wrap items-center gap-2">
+                  {activeSelectedLive.status === 'live' ? (
+                    <span className="px-3 py-1 bg-red-600/90 text-white font-mono text-[10px] font-black rounded-full border border-red-400 flex items-center gap-1.5 shadow-lg uppercase tracking-wider animate-pulse">
+                      <span className="w-2 h-2 rounded-full bg-white animate-ping" />
+                      <span>🔴 EN DIRECTO AHORA</span>
+                    </span>
+                  ) : activeSelectedLive.status === 'today' ? (
+                    <span className="px-3 py-1 bg-amber-500/90 text-black font-mono text-[10px] font-black rounded-full border border-amber-300 flex items-center gap-1.5 shadow-lg uppercase tracking-wider">
+                      <Clock className="w-3 h-3" />
+                      <span>⏰ {activeSelectedLive.tag}</span>
+                    </span>
+                  ) : (
+                    <span className="px-3 py-1 bg-blue-600/90 text-white font-mono text-[10px] font-black rounded-full border border-blue-400 flex items-center gap-1.5 shadow-lg uppercase tracking-wider">
+                      <Calendar className="w-3 h-3" />
+                      <span>📅 {activeSelectedLive.tag}</span>
+                    </span>
+                  )}
+
+                  <span className="px-2.5 py-1 bg-black/60 backdrop-blur-md text-[#E9C349] font-mono text-[10px] font-bold rounded-full border border-white/10 flex items-center gap-1">
+                    <Eye className="w-3 h-3 text-[#E9C349]" />
+                    <span>{activeSelectedLive.viewers || 84} bailarines</span>
+                  </span>
+
+                  <span className="px-2.5 py-1 bg-black/60 backdrop-blur-md text-slate-300 font-mono text-[10px] rounded-full border border-white/10 hidden sm:flex items-center gap-1">
+                    <Radio className="w-3 h-3 text-[#9A2B3C]" />
+                    <span>{activeSelectedLive.roomName}</span>
+                  </span>
+                </div>
+
+                {/* Video controls (Play/Pause & Mute) */}
+                <div className="flex items-center gap-1.5 bg-black/70 backdrop-blur-md p-1 rounded-xl border border-white/15 shadow-md">
+                  <button
+                    type="button"
+                    onClick={toggleHeroVideoPlay}
+                    title={heroVideoPlaying ? "Pausar stream preview" : "Reproducir stream"}
+                    className="p-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white transition-all cursor-pointer"
+                  >
+                    {heroVideoPlaying ? <Pause className="w-3.5 h-3.5 text-[#E9C349]" /> : <Play className="w-3.5 h-3.5 text-white fill-white" />}
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={toggleHeroVideoMute}
+                    title={heroVideoMuted ? "Activar audio" : "Silenciar audio"}
+                    className="p-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white transition-all cursor-pointer"
+                  >
+                    {heroVideoMuted ? <VolumeX className="w-3.5 h-3.5 text-slate-400" /> : <Volume2 className="w-3.5 h-3.5 text-[#E9C349]" />}
+                  </button>
+                </div>
+              </div>
+
+              {/* Bottom Stream Badges */}
+              <div className="absolute bottom-3 left-3.5 right-3.5 flex flex-wrap items-center justify-between gap-2 z-20">
+                <div className="flex items-center gap-2">
+                  <span className="px-2 py-0.5 bg-[#E9C349]/20 text-[#E9C349] border border-[#E9C349]/40 rounded-lg text-[10px] font-mono font-bold">
+                    🎵 {activeSelectedLive.bpm} BPM
+                  </span>
+                  <span className="px-2 py-0.5 bg-white/10 text-white border border-white/15 rounded-lg text-[10px] font-mono font-bold">
+                    🎯 {activeSelectedLive.level}
+                  </span>
+                  <span className="px-2 py-0.5 bg-[#9A2B3C]/30 text-[#EDEFF4] border border-[#9A2B3C]/50 rounded-lg text-[10px] font-mono font-bold hidden sm:inline-block">
+                    💎 {activeSelectedLive.category}
+                  </span>
+                </div>
+                <span className="text-[10px] font-mono text-emerald-400 font-bold bg-black/70 px-2 py-0.5 rounded-md border border-emerald-500/30">
+                  {activeSelectedLive.scheduledTime}
+                </span>
+              </div>
+            </div>
+
+            {/* Bottom Details Section of Featured Live */}
+            <div className="p-4 sm:p-5 space-y-4 bg-[#0e0e10] border-t border-white/10 flex-1 flex flex-col justify-between">
+              <div className="space-y-2">
+                <div className="flex items-center justify-between gap-3">
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div className="relative shrink-0">
+                      <img
+                        src={activeSelectedLive.avatar}
+                        alt={activeSelectedLive.instructor}
+                        className="w-11 h-11 rounded-2xl object-cover border-2 border-[#E9C349] shadow-md"
+                        referrerPolicy="no-referrer"
+                      />
+                      <span className="absolute -bottom-1 -right-1 text-xs">
+                        {activeSelectedLive.countryFlag}
+                      </span>
+                    </div>
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-2">
+                        <h4 className="text-sm font-bold text-white truncate leading-tight">
+                          {activeSelectedLive.instructor}
+                        </h4>
+                        <span className="text-[9px] font-mono text-[#E9C349] bg-[#E9C349]/10 border border-[#E9C349]/30 px-1.5 py-0.2 rounded font-bold uppercase shrink-0">
+                          DOCENTE OFICIAL
+                        </span>
+                      </div>
+                      <p className="text-[11px] text-[#8A8A8A] font-mono">
+                        {activeSelectedLive.role} • {activeSelectedLive.country}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2 shrink-0">
+                    <button
+                      type="button"
+                      onClick={() => handleToggleLiveReminder(activeSelectedLive.id, activeSelectedLive.instructor, activeSelectedLive.scheduledTime)}
+                      className={`px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all flex items-center gap-1.5 border cursor-pointer ${
+                        liveReminders[activeSelectedLive.id]
+                          ? 'bg-[#E9C349] text-black border-[#E9C349] shadow-md'
+                          : 'bg-[#181818] text-[#8A8A8A] hover:text-white border-white/10 hover:border-white/20'
+                      }`}
+                      title="Activar o desactivar recordatorio"
+                    >
+                      <Bell className={`w-3.5 h-3.5 ${liveReminders[activeSelectedLive.id] ? 'fill-black' : ''}`} />
+                      <span className="hidden sm:inline">
+                        {liveReminders[activeSelectedLive.id] ? 'Recordatorio Activo' : 'Añadir Recordatorio'}
+                      </span>
+                    </button>
+                  </div>
+                </div>
+
+                <h3 className="text-base sm:text-lg font-bold text-white leading-snug">
+                  {activeSelectedLive.title}
+                </h3>
+                <p className="text-xs text-slate-300 leading-relaxed font-sans">
+                  {activeSelectedLive.description}
+                </p>
+
+                {/* Key topics pills */}
+                <div className="flex flex-wrap items-center gap-1.5 pt-1">
+                  <span className="text-[10px] font-mono text-slate-400 font-bold uppercase">Temas:</span>
+                  {activeSelectedLive.topics.map((tpc, i) => (
+                    <span key={i} className="text-[10px] font-mono text-[#EDEFF4] bg-white/5 border border-white/10 px-2 py-0.5 rounded-md">
+                      • {tpc}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Main Action Bar for Selected Live */}
+              <div className="pt-3 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-3">
+                <div className="text-[11px] font-mono text-slate-400 flex items-center gap-1.5 w-full sm:w-auto">
+                  <ShieldCheck className="w-4 h-4 text-[#E9C349] shrink-0" />
+                  <span>Acceso incluido en tu plan o membresía de cátedra</span>
+                </div>
+
+                <div className="flex items-center gap-2.5 w-full sm:w-auto justify-end">
+                  <button
+                    type="button"
+                    onClick={() => setActiveTab('live')}
+                    className="flex-1 sm:flex-initial px-5 py-2.5 bg-gradient-to-r from-[#E9C349] to-[#dfb430] hover:from-[#f5cf53] hover:to-[#e8bd3a] text-black font-mono text-xs font-black rounded-xl shadow-lg transition-all flex items-center justify-center gap-2 uppercase tracking-wider cursor-pointer hover:scale-105"
+                  >
+                    <Radio className="w-4 h-4 text-black animate-pulse" />
+                    <span>
+                      {activeSelectedLive.status === 'live' ? '🔴 Entrar a la Transmisión' : 'Acceder al Live Room'}
+                    </span>
+                    <ArrowRight className="w-3.5 h-3.5 stroke-[3]" />
+                  </button>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+          {/* RIGHT: List / Roster of Instructor Lives & Announcements (4 cols) */}
+          <div className="lg:col-span-4 flex flex-col justify-between bg-[#0e0e10] border border-[#262626] rounded-2xl p-4 space-y-3.5 shadow-xl">
+            
+            <div className="space-y-3">
+              <div className="flex items-center justify-between border-b border-white/10 pb-2.5">
+                <div className="flex items-center gap-2">
+                  <Radio className="w-4 h-4 text-[#E9C349]" />
+                  <h3 className="text-xs font-mono font-bold tracking-wider text-white uppercase">
+                    Cartelera de Lives ({INSTRUCTOR_LIVES.length})
+                  </h3>
+                </div>
+                <span className="text-[9px] font-mono font-bold text-[#E9C349] bg-[#E9C349]/10 px-2 py-0.5 rounded-full border border-[#E9C349]/20">
+                  Esta Semana
+                </span>
+              </div>
+
+              {/* Filter Tabs for Roster */}
+              <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none">
+                {[
+                  { id: 'all', label: 'Todos' },
+                  { id: 'live', label: '🔴 En Vivo' },
+                  { id: 'today', label: '⏰ Hoy' },
+                  { id: 'upcoming', label: '📅 Próximos' },
+                ].map((tab) => (
+                  <button
+                    key={tab.id}
+                    type="button"
+                    onClick={() => setLiveFilterTab(tab.id as any)}
+                    className={`px-2.5 py-1 rounded-lg text-[10px] font-mono font-bold transition-all shrink-0 border ${
+                      liveFilterTab === tab.id
+                        ? 'bg-[#E9C349] text-black border-[#E9C349] shadow-sm'
+                        : 'bg-[#141414] text-[#8A8A8A] hover:text-white border-white/5'
+                    }`}
+                  >
+                    {tab.label}
+                  </button>
+                ))}
+              </div>
+
+              {/* Live Cards List */}
+              <div className="space-y-2.5 max-h-[340px] overflow-y-auto pr-1 custom-scrollbar">
+                {INSTRUCTOR_LIVES.filter(live => {
+                  if (liveFilterTab === 'all') return true;
+                  return live.status === liveFilterTab;
+                }).map((item) => {
+                  const isSelected = selectedLiveId === item.id;
+                  return (
+                    <motion.div
+                      key={item.id}
+                      whileHover={{ scale: 1.01 }}
+                      whileTap={{ scale: 0.99 }}
+                      onClick={() => setSelectedLiveId(item.id)}
+                      className={`p-3 rounded-xl border transition-all cursor-pointer relative overflow-hidden flex flex-col justify-between gap-2 ${
+                        isSelected
+                          ? 'bg-[#1c1a12] border-[#E9C349] shadow-[0_0_15px_rgba(233,195,73,0.15)]'
+                          : 'bg-[#141414] border-white/5 hover:border-white/20 hover:bg-[#181818]'
+                      }`}
+                    >
+                      <div className="flex items-start justify-between gap-2.5">
+                        <div className="flex items-center gap-2.5 min-w-0">
+                          <div className="relative shrink-0">
+                            <img
+                              src={item.avatar}
+                              alt={item.instructor}
+                              className={`w-9 h-9 rounded-xl object-cover border ${
+                                isSelected ? 'border-[#E9C349]' : 'border-white/20'
+                              }`}
+                              referrerPolicy="no-referrer"
+                            />
+                            <span className="absolute -bottom-1 -right-1 text-[10px]">
+                              {item.countryFlag}
+                            </span>
+                          </div>
+                          <div className="min-w-0">
+                            <h5 className={`text-xs font-bold truncate leading-tight ${isSelected ? 'text-[#E9C349]' : 'text-white'}`}>
+                              {item.instructor}
+                            </h5>
+                            <span className="text-[9px] font-mono text-slate-400 block truncate">
+                              {item.category} • {item.bpm} BPM
+                            </span>
+                          </div>
+                        </div>
+
+                        <span className={`text-[8px] font-mono font-black px-2 py-0.5 rounded-full border uppercase shrink-0 ${
+                          item.status === 'live'
+                            ? 'bg-red-500/20 text-red-400 border-red-500/40 animate-pulse'
+                            : item.status === 'today'
+                            ? 'bg-amber-500/20 text-amber-400 border-amber-500/40'
+                            : 'bg-blue-500/20 text-blue-400 border-blue-500/40'
+                        }`}>
+                          {item.tag}
+                        </span>
+                      </div>
+
+                      <p className="text-[11px] font-medium text-slate-300 line-clamp-2 leading-tight">
+                        {item.title}
+                      </p>
+
+                      <div className="flex items-center justify-between text-[9px] font-mono text-slate-400 pt-1 border-t border-white/5">
+                        <span className="flex items-center gap-1 text-[#E9C349]">
+                          <Clock className="w-2.5 h-2.5" />
+                          <span>{item.scheduledTime}</span>
+                        </span>
+
+                        <span className={`font-bold ${isSelected ? 'text-[#E9C349]' : 'text-slate-500'}`}>
+                          {isSelected ? '▶ En Pantalla' : 'Ver Detalle'}
+                        </span>
+                      </div>
+                    </motion.div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Quick Live Anuncio Ticker Banner */}
+            <div className="p-2.5 bg-[#141414] border border-white/10 rounded-xl space-y-1">
+              <div className="flex items-center gap-1.5 text-[9px] font-mono font-bold text-[#E9C349] uppercase">
+                <Megaphone className="w-3 h-3 text-[#E9C349]" />
+                <span>Aviso de Transmisión Oficial</span>
+              </div>
+              <p className="text-[10px] text-slate-300 leading-tight">
+                Las salas en vivo se abren 10 minutos antes para calentamiento y prueba de audio.
+              </p>
+            </div>
+
+          </div>
+
+        </div>
+
+        {/* Ticker Bottom Strip de Anuncios de Instructores */}
+        <div className="p-2.5 bg-[#0A0A0A] border border-white/5 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-3 text-xs font-mono text-slate-300">
+          <div className="flex items-center gap-2 overflow-hidden text-ellipsis whitespace-nowrap">
+            <span className="px-2 py-0.5 bg-[#E9C349] text-black font-bold text-[9px] rounded uppercase shrink-0">
+              NOVEDADES
+            </span>
+            <span className="truncate text-slate-300 text-[11px]">
+              📢 <strong className="text-white">Brando Hermoso:</strong> Abierta inscripción para corrección individual en el Live del viernes • 📢 <strong className="text-white">Kumari:</strong> Nuevo repertorio de música disco para la sesión de hoy.
+            </span>
+          </div>
+
+          <div className="flex items-center gap-3 shrink-0">
+            <button
+              type="button"
+              onClick={() => setActiveTab('comunidad')}
+              className="text-[#E9C349] hover:underline font-bold text-[10px] flex items-center gap-1"
+            >
+              <span>Ver Foro & Comunidad</span>
+              <ArrowRight className="w-3 h-3" />
+            </button>
+          </div>
+        </div>
+
       </div>
 
       {/* Switcher de Modo de Vista: Panel de Bienvenida vs Dashboard de Entrenamiento */}

@@ -231,8 +231,8 @@ export const SomaticPostureAnalyzer: React.FC<SomaticPostureAnalyzerProps> = ({
           }
         })
         .catch((err) => {
-          console.warn('Webcam access error:', err);
-          setWebcamError(isEs ? 'No se detectó cámara web disponible.' : 'Webcam not available.');
+          console.warn('Webcam notice:', err?.message || err);
+          setWebcamError(isEs ? 'Permiso de cámara no concedido o no disponible. Usando vista analítica de cuadrícula.' : 'Webcam not available or permission denied. Using grid view.');
           setBgType('grid');
           setWebcamActive(false);
         });

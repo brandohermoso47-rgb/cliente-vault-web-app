@@ -51,6 +51,7 @@ import { SmartMusicalityTrainer } from './entrenamiento/SmartMusicalityTrainer';
 import { PracticeDuelsModal } from './PracticeDuelsModal';
 import { TrainingSummaryModal, TrainingSessionSummary } from './TrainingSummaryModal';
 import { signInForGoogleDocs, createGoogleDoc, appendTextToGoogleDoc } from '../googleDocs';
+import AIPoseLab from './AIPoseLab';
 
 interface EntrenamientoViewProps {
   currentUser: User;
@@ -65,6 +66,7 @@ interface EntrenamientoViewProps {
   trainingBpm?: number;
   onBpmChange?: (bpm: number) => void;
   theme?: 'dark' | 'light';
+  onOpenSpotifyPlayer?: () => void;
 }
 
 const LOCALIZED_DRILL_INSTRUCTIONS: Record<Language, string[]> = {
@@ -579,8 +581,8 @@ const VISUAL_STIMULI = [
 
 const LAB_TRANSLATIONS: Record<Language, Record<string, string>> = {
   es: {
-    title: "ZONA INTERACTIVA Y ENTRENAMIENTO",
-    subtitle: "El laboratorio práctico. Aquí es donde te pones los tenis, das play y sudas la camiseta.",
+    title: "LABORATORIO DE FREESTYLE & ENTRENAMIENTO",
+    subtitle: "Tu espacio de experimentación biomecánica, ritmo y estilo propio. Entrena técnica, musicalidad a 3 tempos, poses IA y drama escénico.",
     drillTab: "⏱️ DRILL TRAINER",
     battleTab: "🎯 RETO DE OBJETIVOS",
     combosTab: "🔀 DRAFT DE COMBOS",
@@ -590,8 +592,8 @@ const LAB_TRANSLATIONS: Record<Language, Record<string, string>> = {
     feedbackTab: "🎬 FEEDBACK EN VIDEO",
   },
   en: {
-    title: "INTERACTIVE TRAINING ZONE",
-    subtitle: "The practical laboratory. This is where you put on your sneakers, press play, and work up a sweat.",
+    title: "FREESTYLE LAB & TRAINING",
+    subtitle: "Your space for biomechanics experimentation, rhythm, and signature style development. Train technique, 3-tempo musicality, AI poses, and stage drama.",
     drillTab: "⏱️ DRILL TRAINER",
     battleTab: "🎯 TARGET CHALLENGE",
     combosTab: "🔀 COMBO DRAFT",
@@ -601,8 +603,8 @@ const LAB_TRANSLATIONS: Record<Language, Record<string, string>> = {
     feedbackTab: "🎬 VIDEO FEEDBACK",
   },
   ko: {
-    title: "대화형 트레이닝 존",
-    subtitle: "실습 연구실입니다. 운동화를 신고 재생 버튼을 누르고 땀을 흘리는 곳입니다.",
+    title: "프리스타일 랩 & 트레이닝",
+    subtitle: "생체 역학 실험, 리듬 및 시그니처 스타일 개발을 위한 공간입니다. 테크닉, 3가지 템포 음악성, AI 포즈 및 무대 드라마를 훈련하세요.",
     drillTab: "⏱️ 드릴 트레이너",
     battleTab: "🎯 목표 챌린지",
     combosTab: "🔀 콤보 드래프트",
@@ -612,8 +614,8 @@ const LAB_TRANSLATIONS: Record<Language, Record<string, string>> = {
     feedbackTab: "🎬 비디오 피드백",
   },
   ja: {
-    title: "インタラクティブ・トレーニング・ゾーン",
-    subtitle: "実践ラボ。ここにスニーカーを履いて、プレイを押して、汗を流す場所です。",
+    title: "フリースタイル・ラボ＆トレーニング",
+    subtitle: "生体力学の実験、リズム、独自のスタイル開発のための空間です。テクニック、3テンポ音楽性、AIポーズ、ステージドラマをトレーニングします。",
     drillTab: "⏱️ ドリルトレーナー",
     battleTab: "🎯 目標チャレンジ",
     combosTab: "🔀 コンボドラフト",
@@ -623,8 +625,8 @@ const LAB_TRANSLATIONS: Record<Language, Record<string, string>> = {
     feedbackTab: "🎬 ビデオフィードバック",
   },
   pt: {
-    title: "ZONA INTERATIVA E TREINAMENTO",
-    subtitle: "O laboratório prático. Aqui é onde você calça os tênis, dá play e sua a camisa.",
+    title: "LABORATÓRIO DE FREESTYLE & TREINAMENTO",
+    subtitle: "Seu espaço de experimentação biomecânica, ritmo e desenvolvimento de estilo próprio. Treine técnica, musicalidade em 3 tempos, poses IA e drama cênico.",
     drillTab: "⏱️ DRILL TRAINER",
     battleTab: "🎯 DESAFIO DE OBJETIVOS",
     combosTab: "🔀 RASCUNHO DE COMBOS",
@@ -1089,9 +1091,10 @@ export default function EntrenamientoView({
   onUserChange,
   trainingBpm,
   onBpmChange,
-  theme
+  theme,
+  onOpenSpotifyPlayer
 }: EntrenamientoViewProps) {
-  const [subTab, setSubTab] = useState<'drill' | 'battle' | 'playlists' | 'combos' | 'sensorial' | 'feedback' | 'somatic' | 'drama' | 'rhythm' | 'spectrum' | 'musicality'>('musicality');
+  const [subTab, setSubTab] = useState<'drill' | 'battle' | 'playlists' | 'combos' | 'sensorial' | 'feedback' | 'somatic' | 'drama' | 'rhythm' | 'spectrum' | 'musicality' | 'pose_lab'>('musicality');
 
   // 9. DRAMA & EXPRESSION LAB STATE
   const [cameraActive, setCameraActive] = useState(false);
@@ -2668,7 +2671,11 @@ export default function EntrenamientoView({
               FREESTYLE LAB & ENTRENAMIENTO
             </span>
           </div>
-          <h2 className="text-2xl sm:text-3xl font-display-lg italic text-white tracking-tight uppercase">{lt.title}</h2>
+          <h2 className="text-2xl sm:text-3xl font-display-lg italic text-white tracking-tight uppercase">
+            <span className="bg-gradient-to-r from-white via-[#FFF8E7] to-[#E9C349] bg-clip-text text-transparent drop-shadow-sm">
+              {lt.title}
+            </span>
+          </h2>
           <p className="text-xs sm:text-sm text-slate-300 font-medium mt-1 max-w-3xl leading-relaxed">{lt.subtitle}</p>
         </div>
         <button
@@ -2682,6 +2689,18 @@ export default function EntrenamientoView({
 
       {/* Navigation Sub-Tabs */}
       <div className="flex overflow-x-auto gap-3 border-b border-white/10 pb-4 scrollbar-none shrink-0 -mx-6 px-6 sm:mx-0 sm:px-0">
+        <button
+          id="subtab-pose-lab"
+          onClick={() => setSubTab('pose_lab')}
+          className={`group h-11 min-w-[210px] px-4 py-2 text-xs font-mono font-bold tracking-wider transition-all flex items-center justify-center gap-2 border rounded-xl shrink-0 focus:outline-none ${
+            subTab === 'pose_lab' 
+              ? 'bg-[#E9C349] text-black border-[#E9C349] shadow-xl font-black' 
+              : 'bg-[#121212] text-[#E9C349] border-[#E9C349]/40 hover:bg-[#E9C349]/10'
+          }`}
+        >
+          <Camera className="w-4 h-4 shrink-0 transition-transform duration-300 group-hover:scale-125 animate-pulse text-[#E9C349] group-hover:text-black" />
+          ✨ LAB DE POSES IA (TRACKING)
+        </button>
         <button
           id="subtab-musicality"
           onClick={() => setSubTab('musicality')}
@@ -2816,10 +2835,33 @@ export default function EntrenamientoView({
           <BarChart2 className="w-4 h-4 text-[#E9C349] shrink-0 transition-transform duration-300 group-hover:scale-125 group-hover:-rotate-12 group-active:scale-90" />
           📊 ESPECTRO AUDIO
         </button>
+
+        {onOpenSpotifyPlayer && (
+          <button
+            id="open-spotify-training-btn"
+            onClick={onOpenSpotifyPlayer}
+            className="group h-11 px-4 py-2 text-xs font-mono font-black tracking-wider transition-all flex items-center justify-center gap-2 border rounded-xl shrink-0 focus:outline-none bg-[#1DB954]/15 border-[#1DB954]/40 text-[#1DB954] hover:bg-[#1DB954] hover:text-black shadow-md cursor-pointer ml-auto"
+            title="Abrir reproductor de Spotify para bailar"
+          >
+            <Music className="w-4 h-4 text-inherit shrink-0 transition-transform group-hover:scale-125" />
+            <span>Música Spotify</span>
+          </button>
+        )}
       </div>
 
       {/* SUB-TABS CONTENT */}
       <div className="flex-1 flex flex-col">
+
+        {/* TAB: AI POSE LAB */}
+        {subTab === 'pose_lab' && (
+          <AIPoseLab
+            currentUser={currentUser}
+            onAddBonusPoints={onAddBonusPoints}
+            onLogPractice={onLogPractice}
+            language={language}
+            theme={theme}
+          />
+        )}
 
         {/* TAB: DRAMA & FACIAL EXPRESSION LABORATORY */}
         {subTab === 'drama' && (

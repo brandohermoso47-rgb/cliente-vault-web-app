@@ -126,6 +126,105 @@
         "status": { "type": "string" }
       },
       "required": ["id", "conversationId", "senderId", "receiverId", "text"]
+    },
+    "Announcement": {
+      "title": "Announcement",
+      "description": "Official community announcement or event notice",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "content": { "type": "string" },
+        "date": { "type": "string" },
+        "author": { "type": "string" },
+        "authorAvatar": { "type": "string" },
+        "authorRole": { "type": "string" },
+        "category": { "type": "string" },
+        "important": { "type": "boolean" },
+        "actionUrl": { "type": "string" },
+        "imageUrl": { "type": "string" }
+      },
+      "required": ["id", "title", "content"]
+    },
+    "Lesson": {
+      "title": "Lesson",
+      "description": "Training lesson module in the curriculum",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "level": { "type": "number" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "duration": { "type": "string" },
+        "category": { "type": "string" },
+        "videoUrl": { "type": "string" },
+        "completed": { "type": "boolean" },
+        "instructorId": { "type": "string" },
+        "instructorName": { "type": "string" }
+      },
+      "required": ["id", "level", "title", "category"]
+    },
+    "Battle": {
+      "title": "Battle Invitation / Duel",
+      "description": "Real-time or asynchronous dance duel invitation",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "challengerId": { "type": "string" },
+        "opponentId": { "type": "string" },
+        "status": { "type": "string" },
+        "bpm": { "type": "number" },
+        "category": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["id", "challengerId", "opponentId", "status"]
+    },
+    "Friendship": {
+      "title": "Friendship Connection",
+      "description": "Friendship request and connection status",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "users": { "type": "array" },
+        "status": { "type": "string" },
+        "requestedBy": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["id", "users", "status", "requestedBy"]
+    },
+    "FeedbackItem": {
+      "title": "Video Feedback Item",
+      "description": "Instructor video correction and feedback review",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "studentId": { "type": "string" },
+        "studentName": { "type": "string" },
+        "studentAvatar": { "type": "string" },
+        "videoTitle": { "type": "string" },
+        "videoUrl": { "type": "string" },
+        "description": { "type": "string" },
+        "date": { "type": "string" },
+        "completed": { "type": "boolean" },
+        "corrections": { "type": "array" }
+      },
+      "required": ["id", "studentName", "videoTitle", "videoUrl"]
+    },
+    "Notification": {
+      "title": "Notification Item",
+      "description": "Push and in-app notifications for students and instructors",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "title": { "type": "string" },
+        "body": { "type": "string" },
+        "type": { "type": "string" },
+        "category": { "type": "string" },
+        "read": { "type": "boolean" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["id", "userId", "title", "body"]
     }
   },
   "firestore": {
@@ -160,6 +259,30 @@
     "/instructor_playlists/{playlistId}": {
       "schema": { "$ref": "#/entities/InstructorPlaylist" },
       "description": "Instructor cloud music playlists"
+    },
+    "/announcements/{annId}": {
+      "schema": { "$ref": "#/entities/Announcement" },
+      "description": "Community and academy announcements"
+    },
+    "/lessons/{lessonId}": {
+      "schema": { "$ref": "#/entities/Lesson" },
+      "description": "Academy dance lessons"
+    },
+    "/battles/{battleId}": {
+      "schema": { "$ref": "#/entities/Battle" },
+      "description": "Dance battles and invitations"
+    },
+    "/friendships/{friendshipId}": {
+      "schema": { "$ref": "#/entities/Friendship" },
+      "description": "Friendships and social connections"
+    },
+    "/feedback_items/{feedbackId}": {
+      "schema": { "$ref": "#/entities/FeedbackItem" },
+      "description": "Instructor feedback submissions"
+    },
+    "/notifications/{notifId}": {
+      "schema": { "$ref": "#/entities/Notification" },
+      "description": "Notification items"
     }
   }
 }

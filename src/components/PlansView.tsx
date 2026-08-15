@@ -33,7 +33,7 @@ interface PlansViewProps {
 
 export default function PlansView({ currentUser, onUserChange, language, onOpenPlansModal }: PlansViewProps) {
   const isEs = language === 'es';
-  const [activeTab, setActiveTab] = useState<'all' | 'alumnos' | 'instructores' | 'estudios'>('all');
+  const [filterCategory, setFilterCategory] = useState<'all' | 'alumnos' | 'instructores' | 'estudios'>('all');
   const [billingCycle, setBillingCycle] = useState<'monthly' | 'annual'>('monthly');
 
   const handleActivatePlan = (planKey: 'basic_practice' | 'instructor_pass' | 'instructor' | 'plan_academia') => {
@@ -110,9 +110,9 @@ export default function PlansView({ currentUser, onUserChange, language, onOpenP
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4 border-b border-[#262626] pb-5">
         <div className="flex items-center gap-2 bg-[#0A0A0A] p-1.5 rounded-2xl border border-[#262626] w-full sm:w-auto">
           <button
-            onClick={() => setActiveTab('all')}
+            onClick={() => setFilterCategory('all')}
             className={`px-4 py-2 text-xs font-mono font-bold uppercase rounded-xl transition-all flex items-center gap-2 ${
-              activeTab === 'all'
+              filterCategory === 'all'
                 ? 'bg-[#E9C349] text-black shadow-md'
                 : 'text-slate-400 hover:text-white'
             }`}
@@ -121,9 +121,9 @@ export default function PlansView({ currentUser, onUserChange, language, onOpenP
             <span>{isEs ? 'Todos los Planes' : 'All Plans'}</span>
           </button>
           <button
-            onClick={() => setActiveTab('alumnos')}
+            onClick={() => setFilterCategory('alumnos')}
             className={`px-4 py-2 text-xs font-mono font-bold uppercase rounded-xl transition-all flex items-center gap-2 ${
-              activeTab === 'alumnos'
+              filterCategory === 'alumnos'
                 ? 'bg-[#E9C349] text-black shadow-md'
                 : 'text-slate-400 hover:text-white'
             }`}
@@ -132,9 +132,9 @@ export default function PlansView({ currentUser, onUserChange, language, onOpenP
             <span>{isEs ? 'Para Alumnos' : 'For Students'}</span>
           </button>
           <button
-            onClick={() => setActiveTab('instructores')}
+            onClick={() => setFilterCategory('instructores')}
             className={`px-4 py-2 text-xs font-mono font-bold uppercase rounded-xl transition-all flex items-center gap-2 ${
-              activeTab === 'instructores'
+              filterCategory === 'instructores'
                 ? 'bg-[#E9C349] text-black shadow-md'
                 : 'text-slate-400 hover:text-white'
             }`}
@@ -143,9 +143,9 @@ export default function PlansView({ currentUser, onUserChange, language, onOpenP
             <span>{isEs ? 'Para Instructores' : 'For Instructors'}</span>
           </button>
           <button
-            onClick={() => setActiveTab('estudios')}
+            onClick={() => setFilterCategory('estudios')}
             className={`px-4 py-2 text-xs font-mono font-bold uppercase rounded-xl transition-all flex items-center gap-2 ${
-              activeTab === 'estudios'
+              filterCategory === 'estudios'
                 ? 'bg-[#E9C349] text-black shadow-md'
                 : 'text-slate-400 hover:text-white'
             }`}
@@ -165,7 +165,7 @@ export default function PlansView({ currentUser, onUserChange, language, onOpenP
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
 
         {/* PLAN 1: GRATUITO */}
-        {(activeTab === 'all' || activeTab === 'alumnos') && (
+        {(filterCategory === 'all' || filterCategory === 'alumnos') && (
           <div className="bg-[#0D0D12] border border-[#262626] rounded-3xl p-6 flex flex-col justify-between space-y-6 relative overflow-hidden hover:border-slate-500 transition-all">
             <div className="space-y-4">
               <div className="flex items-center justify-between">
@@ -226,7 +226,7 @@ export default function PlansView({ currentUser, onUserChange, language, onOpenP
         )}
 
         {/* PLAN 2: BÁSICO PRÁCTICA INDEPENDIENTE ($8 USD) */}
-        {(activeTab === 'all' || activeTab === 'alumnos') && (
+        {(filterCategory === 'all' || filterCategory === 'alumnos') && (
           <div className="bg-gradient-to-b from-[#141226] to-[#0D0B1A] border-2 border-cyan-500/50 rounded-3xl p-6 flex flex-col justify-between space-y-6 relative overflow-hidden shadow-[0_0_30px_rgba(6,182,212,0.15)] hover:border-cyan-400 transition-all">
             <div className="space-y-4">
               <div className="flex items-center justify-between">
@@ -288,7 +288,7 @@ export default function PlansView({ currentUser, onUserChange, language, onOpenP
         )}
 
         {/* PLAN 3: MEMBRESÍA DE INSTRUCTOR ($15 USD) */}
-        {(activeTab === 'all' || activeTab === 'alumnos') && (
+        {(filterCategory === 'all' || filterCategory === 'alumnos') && (
           <div className="bg-gradient-to-b from-[#1E172E] to-[#120E1E] border-2 border-[#E9C349] rounded-3xl p-6 flex flex-col justify-between space-y-6 relative overflow-hidden shadow-[0_0_35px_rgba(233,195,73,0.25)] hover:border-yellow-300 transition-all">
             <div className="absolute top-0 right-0 bg-[#E9C349] text-black text-[9px] font-mono font-black uppercase px-3 py-1 rounded-bl-2xl shadow-md">
               {isEs ? 'MÁS POPULAR ALUMNOS' : 'MOST POPULAR'}
@@ -355,7 +355,7 @@ export default function PlansView({ currentUser, onUserChange, language, onOpenP
         )}
 
         {/* PLAN 4: MEMBRESÍA PROFESORES ($15 USD FIJO) */}
-        {(activeTab === 'all' || activeTab === 'instructores') && (
+        {(filterCategory === 'all' || filterCategory === 'instructores') && (
           <div className="bg-gradient-to-b from-[#251327] to-[#120A13] border-2 border-purple-500/60 rounded-3xl p-6 flex flex-col justify-between space-y-6 relative overflow-hidden shadow-[0_0_35px_rgba(168,85,247,0.2)] hover:border-purple-400 transition-all">
             <div className="space-y-4">
               <div className="flex items-center justify-between">
@@ -417,7 +417,7 @@ export default function PlansView({ currentUser, onUserChange, language, onOpenP
         )}
 
         {/* PLAN 5: MEMBRESÍA ESTUDIOS Y ACADEMIAS ($30 USD) */}
-        {(activeTab === 'all' || activeTab === 'instructores' || activeTab === 'estudios') && (
+        {(filterCategory === 'all' || filterCategory === 'instructores' || filterCategory === 'estudios') && (
           <div className="bg-gradient-to-b from-[#182338] to-[#0D1322] border-2 border-amber-500/60 rounded-3xl p-6 flex flex-col justify-between space-y-6 relative overflow-hidden shadow-[0_0_35px_rgba(251,191,36,0.2)] hover:border-amber-400 transition-all">
             <div className="space-y-4">
               <div className="flex items-center justify-between">

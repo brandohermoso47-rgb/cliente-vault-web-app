@@ -355,7 +355,7 @@ export default function StudioDashboardView({
               <span className="text-[10px] font-mono font-bold uppercase tracking-wider">Total Alumnos</span>
               <Users className="w-4 h-4 text-emerald-400" />
             </div>
-            <p className="text-xl sm:text-2xl font-black text-white font-mono">{studio.students.length}</p>
+            <p className="text-xl sm:text-2xl font-black text-white font-mono">{(studio.students || []).length}</p>
             <span className="text-[9px] text-emerald-400 font-mono mt-0.5 block">100% inscritos en nómina</span>
           </div>
 
@@ -365,7 +365,7 @@ export default function StudioDashboardView({
               <UserCheck className="w-4 h-4 text-[#E9C349]" />
             </div>
             <p className="text-xl sm:text-2xl font-black text-white font-mono">
-              {studio.instructors.filter(i => i.status === 'active').length}
+              {(studio.instructors || []).filter(i => i.status === 'active').length}
             </p>
             <span className="text-[9px] text-[#E9C349] font-mono mt-0.5 block">Plantel docente vinculado</span>
           </div>
@@ -394,9 +394,9 @@ export default function StudioDashboardView({
       <div className="flex items-center gap-2 border-b border-white/10 pb-2 overflow-x-auto custom-scrollbar">
         {[
           { id: 'overview', label: 'Vista General & Métricas', icon: Building2 },
-          { id: 'instructors', label: `Instructores (${studio.instructors.length})`, icon: UserCheck },
-          { id: 'students', label: `Directorio Alumnas (${studio.students.length})`, icon: Users },
-          { id: 'documents', label: `Repositorio & Guías PDF (${studio.documents.length})`, icon: FileText },
+          { id: 'instructors', label: `Instructores (${(studio.instructors || []).length})`, icon: UserCheck },
+          { id: 'students', label: `Directorio Alumnas (${(studio.students || []).length})`, icon: Users },
+          { id: 'documents', label: `Repositorio & Guías PDF (${(studio.documents || []).length})`, icon: FileText },
           { id: 'settings', label: 'Datos del Estudio', icon: ShieldCheck }
         ].map(tab => {
           const Icon = tab.icon;
@@ -431,7 +431,7 @@ export default function StudioDashboardView({
             <div className="flex items-center justify-between border-b border-white/10 pb-3">
               <h3 className="text-xs font-mono font-bold text-white uppercase tracking-wider flex items-center gap-2">
                 <UserCheck className="w-4 h-4 text-[#E9C349]" />
-                Plantel Docente ({studio.instructors.length})
+                Plantel Docente ({(studio.instructors || []).length})
               </h3>
               <button
                 onClick={() => setActiveTab('instructors')}
@@ -442,7 +442,7 @@ export default function StudioDashboardView({
             </div>
 
             <div className="space-y-3">
-              {studio.instructors.slice(0, 3).map(inst => (
+              {(studio.instructors || []).slice(0, 3).map(inst => (
                 <div key={inst.id} className="p-3.5 rounded-2xl bg-[#090712] border border-white/5 flex items-center justify-between gap-3">
                   <div className="flex items-center gap-3 min-w-0">
                     <img src={inst.avatar} alt={inst.name} className="w-10 h-10 rounded-xl object-cover border border-[#E9C349]/40 shrink-0" />
@@ -464,7 +464,7 @@ export default function StudioDashboardView({
             <div className="flex items-center justify-between border-b border-white/10 pb-3">
               <h3 className="text-xs font-mono font-bold text-white uppercase tracking-wider flex items-center gap-2">
                 <FileText className="w-4 h-4 text-[#E9C349]" />
-                Documentos & Guías en PDF ({studio.documents.length})
+                Documentos & Guías en PDF ({(studio.documents || []).length})
               </h3>
               <button
                 onClick={() => setActiveTab('documents')}
@@ -1066,12 +1066,12 @@ export default function StudioDashboardView({
               <div className="flex items-center justify-between border-b border-white/10 pb-3">
                 <h3 className="text-xs font-mono font-bold text-white uppercase tracking-wider flex items-center gap-2">
                   <BookMarked className="w-4 h-4 text-[#E9C349]" />
-                  Documentos Publicados del Estudio ({studio.documents.length})
+                  Documentos Publicados del Estudio ({(studio.documents || []).length})
                 </h3>
               </div>
 
               <div className="grid grid-cols-1 gap-4">
-                {studio.documents.map(doc => (
+                {(studio.documents || []).map(doc => (
                   <div
                     key={doc.id}
                     className="bg-[#120f21] border border-white/10 hover:border-[#E9C349]/50 rounded-3xl p-5 space-y-3 transition-all relative overflow-hidden shadow-xl"

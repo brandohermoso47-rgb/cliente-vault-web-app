@@ -1077,7 +1077,7 @@ export default function EbooksView({ currentUser, language }: EbooksViewProps) {
                 {/* Reader Footer Control Bar */}
                 <div className="p-4 bg-[#0d0d11]/60 border-t border-tertiary/10 flex flex-col sm:flex-row items-center justify-between gap-3">
                   <div className="text-[10px] font-mono text-on-surface-variant font-bold">
-                    Capítulo {activeChapterIdx + 1} de {selectedBook.chapters.length} • Leyendo de Waack On
+                    Capítulo {activeChapterIdx + 1} de {(selectedBook.chapters || []).length} • Leyendo de Waack On
                   </div>
 
                   <div className="flex gap-2">
@@ -1089,7 +1089,7 @@ export default function EbooksView({ currentUser, language }: EbooksViewProps) {
                       Anterior
                     </button>
                     
-                    {activeChapterIdx + 1 < selectedBook.chapters.length ? (
+                    {activeChapterIdx + 1 < (selectedBook.chapters || []).length ? (
                       <button
                         onClick={() => setActiveChapterIdx(prev => prev + 1)}
                         className="px-3.5 py-1.5 bg-on-primary-fixed-variant hover:bg-on-primary-container text-primary-fixed border border-primary/25 rounded-xl text-xs font-bold transition-all focus:outline-none"

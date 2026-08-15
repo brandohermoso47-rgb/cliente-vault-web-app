@@ -16,7 +16,13 @@ export const profiles = pgTable('profiles', {
     .references(() => users.id)
     .notNull(),
   name: text('name').notNull(),
-  role: text('role').notNull().default('student'), // 'instructor' | 'student' | 'guest'
+  role: text('role').notNull().default('free_user'), // 'free_user' | 'vip_student' | 'academy' | 'instructor'
+  stripeCustomerId: text('stripe_customer_id'),
+  stripeAccountId: text('stripe_account_id'), // Stripe Connect ID for instructors
+  isConnectVerified: boolean('is_connect_verified').default(false),
+  subscriptionStatus: text('subscription_status').default('canceled'), // 'trialing' | 'active' | 'past_due' | 'canceled'
+  planType: text('plan_type').default('app_vip'), // 'app_vip' | 'app_academy' | 'instructor_custom'
+  currentPeriodEnd: timestamp('current_period_end'),
   bio: text('bio'),
   avatarUrl: text('avatar_url'),
   instagram: text('instagram'),
@@ -24,6 +30,37 @@ export const profiles = pgTable('profiles', {
   youtube: text('youtube'),
   points: integer('points').default(0),
   updatedAt: timestamp('updated_at').defaultNow(),
+});
+
+// Define 'subscriptions' table for tracking recurring billing states
+export const subscriptions = pgTable('subscriptions', {
+  id: serial('id').primaryKey(),
+  userId: integer('user_id')
+    .references(() => users.id)
+    .notNull(),
+  stripeSubscriptionId: text('stripe_subscription_id'),
+  stripeCustomerId: text('stripe_customer_id'),
+  planType: text('plan_type').notNull().default('app_vip'), // 'app_vip' | 'app_academy' | 'instructor_custom'
+  status: text('status').notNull().default('trialing'), // 'trialing' | 'active' | 'past_due' | 'canceled'
+  currentPeriodEnd: timestamp('current_period_end').notNull(),
+  trialEnd: timestamp('trial_end'),
+  instructorId: text('instructor_id'), // Optional for instructor_custom
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow(),
+});
+
+// Define 'instructorSubscribers' intermediate table (75/25 Creator marketplace)
+export const instructorSubscribers = pgTable('instructor_subscribers', {
+  id: serial('id').primaryKey(),
+  studentUid: text('student_uid').notNull(),
+  instructorUid: text('instructor_uid').notNull(),
+  status: text('status').notNull().default('active'), // 'active' | 'canceled' | 'past_due'
+  stripeSubscriptionId: text('stripe_subscription_id'),
+  currentPeriodEnd: timestamp('current_period_end').notNull(),
+  monthlyPriceUSD: integer('monthly_price_usd_cents').default(1500),
+  instructorRevenueUSD: integer('instructor_revenue_usd_cents').default(1125), // 75%
+  platformFeeUSD: integer('platform_fee_usd_cents').default(375), // 25%
+  createdAt: timestamp('created_at').defaultNow(),
 });
 
 // Define the 'entries' table (practice logs) with a foreign key to 'users'.

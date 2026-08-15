@@ -30,7 +30,8 @@ import {
   Flame,
   Radio,
   Film,
-  Crown
+  Crown,
+  Briefcase
 } from 'lucide-react';
 import { User, UserRole } from '../types';
 
@@ -465,7 +466,7 @@ export default function WelcomeDashboard({
   };
 
   return (
-    <div className="space-y-8 max-w-7xl mx-auto pb-12">
+    <div className="space-y-8 w-full max-w-full mx-auto">
       {/* Toast Notice */}
       <AnimatePresence>
         {subscribedNotice && (
@@ -551,11 +552,18 @@ export default function WelcomeDashboard({
                 <motion.button
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.97 }}
-                  onClick={() => onOpenPlansModal ? onOpenPlansModal() : setActiveTab('plans')}
+                  onClick={() => {
+                    const plansEl = document.getElementById('planes-suscripcion-seccion');
+                    if (plansEl) {
+                      plansEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    } else {
+                      setActiveTab('planes');
+                    }
+                  }}
                   className="px-5 py-3 bg-[#9A2B3C] hover:bg-[#81262c] text-white font-bold text-xs uppercase tracking-wider rounded-xl shadow transition-all flex items-center gap-2 cursor-pointer"
                 >
                   <Award className="w-4 h-4 text-[#E9C349]" />
-                  <span>Ver Planes & Membresías</span>
+                  <span>Ver Planes & Membresías (Abajo)</span>
                 </motion.button>
               </div>
             </div>
@@ -1278,108 +1286,174 @@ export default function WelcomeDashboard({
       </AnimatePresence>
 
       {/* 5. SELECCIÓN DE PLANES Y MEMBRESÍAS (Comprehensive Pricing & Action Cards) */}
-      <div className="space-y-4 pt-4">
-        <div className="text-center max-w-2xl mx-auto space-y-2">
-          <span className="text-[10px] font-mono font-bold text-[#E9C349] uppercase tracking-widest bg-[#E9C349]/10 border border-[#E9C349]/30 px-3 py-1 rounded-full">
-            MEMBRESÍAS Y PLANES
-          </span>
-          <h2 className="text-xl sm:text-2xl font-extrabold text-white tracking-tight">
-            Elige el plan ideal para tu evolución en la danza
+      <div id="planes-suscripcion-seccion" className="space-y-6 pt-6 scroll-mt-10">
+        <div className="text-center max-w-3xl mx-auto space-y-3">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#E9C349]/15 border border-[#E9C349]/40 text-[#E9C349] font-mono text-[11px] font-black uppercase tracking-widest">
+            <Crown className="w-3.5 h-3.5 text-[#E9C349]" />
+            <span>MEMBRESÍAS Y PLANES DE SUSCRIPCIÓN</span>
+          </div>
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight font-mono uppercase">
+            Planes de Suscripción Oficiales <span className="text-[#E9C349]">WAACK ON®</span>
           </h2>
-          <p className="text-xs text-slate-400">
-            Cancela en cualquier momento. Acceso instantáneo a toda la plataforma digital.
+          <p className="text-xs sm:text-sm text-slate-300 max-w-xl mx-auto leading-relaxed">
+            Estructura transparente y sin permanencias. Elige el plan ideal para evolucionar tu nivel como bailarín o profesionalizar tu cátedra docente.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
-          {/* Plan 1: Pase Explorador */}
-          <div className="bg-[#121212] border border-[#262626] rounded-3xl p-6 flex flex-col justify-between shadow-lg relative">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 pt-2">
+          {/* Plan 1: Plan Gratuito / Explorador */}
+          <div className="bg-[#0D0D12] border border-[#262626] rounded-3xl p-6 flex flex-col justify-between space-y-6 relative overflow-hidden hover:border-slate-500 transition-all shadow-xl">
             <div className="space-y-4">
-              <div className="space-y-1">
-                <span className="text-[10px] font-mono font-bold text-slate-400 uppercase">
-                  Acceso Gratuito
+              <div className="flex items-center justify-between">
+                <span className="px-3 py-1 bg-slate-800 text-slate-300 text-[10px] font-mono font-bold rounded-full uppercase tracking-wider">
+                  LIBRE ACCESO
                 </span>
-                <h3 className="text-xl font-bold text-white">Pase Explorador</h3>
-                <p className="text-xs text-slate-400 leading-relaxed">
-                  Para quienes desean conocer los primeros fundamentos antes de comprometerse.
+                <Users className="w-5 h-5 text-slate-400" />
+              </div>
+
+              <div>
+                <h3 className="text-lg font-black text-white font-mono uppercase">
+                  Pase Explorador
+                </h3>
+                <p className="text-xs text-slate-400 mt-1">
+                  Explora la plataforma, consulta la comunidad y sigue perfiles de maestros.
                 </p>
               </div>
 
-              <div className="py-2">
-                <span className="text-3xl font-black font-mono text-white">$0</span>
-                <span className="text-xs font-mono text-slate-400 ml-1">/ para siempre</span>
+              <div className="pt-2 border-t border-[#1F1F24]">
+                <div className="flex items-baseline gap-1">
+                  <span className="text-3xl font-black text-white font-mono">$0</span>
+                  <span className="text-xs font-mono text-slate-400">/ siempre</span>
+                </div>
+                <span className="text-[10px] font-mono text-emerald-400 block mt-1">
+                  ✓ Incluido por defecto
+                </span>
               </div>
 
-              <ul className="space-y-2.5 text-xs text-slate-300">
-                <li className="flex items-center gap-2">
-                  <Check className="w-4 h-4 text-emerald-400 shrink-0" />
-                  <span>Acceso a 3 clases introductorias de Nivel 1</span>
+              <ul className="space-y-2 text-xs text-slate-300">
+                <li className="flex items-start gap-2">
+                  <Check className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                  <span>Acceso al Mapa Global y eventos de Jams</span>
                 </li>
-                <li className="flex items-center gap-2">
-                  <Check className="w-4 h-4 text-emerald-400 shrink-0" />
-                  <span>Uso del Espejo Virtual y Retos de Freestyle</span>
+                <li className="flex items-start gap-2">
+                  <Check className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                  <span>Directorio internacional de profesores</span>
                 </li>
-                <li className="flex items-center gap-2">
-                  <Check className="w-4 h-4 text-emerald-400 shrink-0" />
-                  <span>Participación en el Lobby de Comunidad</span>
-                </li>
-                <li className="flex items-center gap-2 text-slate-500">
-                  <span className="text-sm leading-none">•</span>
-                  <span>Sin revisiones de video personalizadas</span>
+                <li className="flex items-start gap-2">
+                  <Check className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                  <span>Feed Social, Reels y Duelos de baile</span>
                 </li>
               </ul>
             </div>
 
             <button
               onClick={() => setActiveTab('cursos')}
-              className="w-full mt-6 py-3 bg-[#1c1b1b] hover:bg-[#262626] text-white font-bold text-xs uppercase tracking-wider rounded-xl border border-white/10 transition-all cursor-pointer"
+              className="w-full py-3 bg-[#1F1F24] hover:bg-[#2A2A32] text-slate-300 hover:text-white font-mono font-bold text-xs rounded-2xl uppercase transition-all cursor-pointer border border-white/5"
             >
-              Continuar Gratis
+              Comenzar Gratis
             </button>
           </div>
 
-          {/* Plan 2: Academia Pro (Destacado) */}
-          <div className="bg-gradient-to-b from-[#1e1b12] via-[#141414] to-[#121212] border-2 border-[#E9C349] rounded-3xl p-6 flex flex-col justify-between shadow-2xl relative">
-            <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#E9C349] text-black text-[9px] font-mono font-black uppercase px-4 py-0.5 rounded-full shadow-lg">
+          {/* Plan 2: Básico Práctica Independiente ($8 USD) */}
+          <div className="bg-gradient-to-b from-[#141226] to-[#0D0B1A] border-2 border-cyan-500/50 rounded-3xl p-6 flex flex-col justify-between space-y-6 relative overflow-hidden shadow-[0_0_30px_rgba(6,182,212,0.15)] hover:border-cyan-400 transition-all">
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <span className="px-3 py-1 bg-cyan-500/20 border border-cyan-500/40 text-cyan-300 text-[10px] font-mono font-black rounded-full uppercase tracking-wider">
+                  ALUMNOS AUTÓNOMOS
+                </span>
+                <Sparkles className="w-5 h-5 text-cyan-400" />
+              </div>
+
+              <div>
+                <h3 className="text-lg font-black text-white font-mono uppercase">
+                  Básico de Práctica
+                </h3>
+                <p className="text-xs text-slate-300 mt-1">
+                  Herramientas avanzadas de entrenamiento autónomo y laboratorio biomecánico.
+                </p>
+              </div>
+
+              <div className="pt-2 border-t border-cyan-500/20">
+                <div className="flex items-baseline gap-1">
+                  <span className="text-3xl font-black text-cyan-400 font-mono">$8.00</span>
+                  <span className="text-xs font-mono text-cyan-200">USD / mes</span>
+                </div>
+                <span className="text-[10px] font-mono text-slate-400 block mt-1">
+                  Sin permanencia • Cancela cuando quieras
+                </span>
+              </div>
+
+              <ul className="space-y-2 text-xs text-slate-300">
+                <li className="flex items-start gap-2">
+                  <Check className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" />
+                  <span><strong>Freestyle Lab Ilimitado</strong>: Metrónomo BPM</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <Check className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" />
+                  <span><strong>Pose Analyzer IA</strong>: Medición de ángulos</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <Check className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" />
+                  <span><strong>Salas de Batallas 1v1</strong> y Galería B&W</span>
+                </li>
+              </ul>
+            </div>
+
+            <button
+              onClick={() => onOpenPlansModal ? onOpenPlansModal() : setActiveTab('planes')}
+              className="w-full py-3 bg-cyan-500 hover:bg-cyan-400 text-black font-mono font-black text-xs rounded-2xl uppercase transition-all shadow-lg active:scale-95 flex items-center justify-center gap-2 cursor-pointer"
+            >
+              <span>Activar ($8 USD)</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          </div>
+
+          {/* Plan 3: Membresía Cátedra de Instructor ($15 USD) - DESTACADO */}
+          <div className="bg-gradient-to-b from-[#1E172E] to-[#120E1E] border-2 border-[#E9C349] rounded-3xl p-6 flex flex-col justify-between space-y-6 relative overflow-hidden shadow-[0_0_35px_rgba(233,195,73,0.25)] hover:border-yellow-300 transition-all">
+            <div className="absolute top-0 right-0 bg-[#E9C349] text-black text-[9px] font-mono font-black uppercase px-3 py-1 rounded-bl-2xl shadow-md">
               RECOMENDADO
             </div>
 
             <div className="space-y-4">
-              <div className="space-y-1">
-                <span className="text-[10px] font-mono font-bold text-[#E9C349] uppercase">
-                  Acceso Total
+              <div className="flex items-center justify-between">
+                <span className="px-3 py-1 bg-[#E9C349]/20 border border-[#E9C349]/40 text-[#E9C349] text-[10px] font-mono font-black rounded-full uppercase tracking-wider">
+                  PASE CÁTEDRA
                 </span>
-                <h3 className="text-xl font-bold text-white">Membresía Academia Pro</h3>
-                <p className="text-xs text-slate-300 leading-relaxed">
-                  Currículo completo, todas las lecciones de Nivel 1 al 6 y laboratorio de ritmo.
+                <GraduationCap className="w-5 h-5 text-[#E9C349]" />
+              </div>
+
+              <div>
+                <h3 className="text-lg font-black text-white font-mono uppercase">
+                  Pase Cátedra Instructor
+                </h3>
+                <p className="text-xs text-slate-300 mt-1">
+                  Formación guiada intensiva con tu maestro internacional preferido.
                 </p>
               </div>
 
-              <div className="py-2">
-                <span className="text-3xl font-black font-mono text-[#E9C349]">$29</span>
-                <span className="text-xs font-mono text-slate-300 ml-1">USD / mes</span>
+              <div className="pt-2 border-t border-[#E9C349]/30">
+                <div className="flex items-baseline gap-1">
+                  <span className="text-3xl font-black text-[#E9C349] font-mono">$15.00</span>
+                  <span className="text-xs font-mono text-slate-300">USD / mes</span>
+                </div>
+                <div className="mt-1 px-2 py-0.5 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-[9px] font-mono font-bold flex items-center gap-1">
+                  <ShieldCheck className="w-3 h-3" />
+                  <span>80% AL PROFESOR / 20% PLATAFORMA</span>
+                </div>
               </div>
 
-              <ul className="space-y-2.5 text-xs text-slate-200">
-                <li className="flex items-center gap-2 font-medium">
-                  <Check className="w-4 h-4 text-[#E9C349] shrink-0" />
-                  <span>Acceso ilimitado a todos los cursos y niveles</span>
+              <ul className="space-y-2 text-xs text-slate-300">
+                <li className="flex items-start gap-2">
+                  <Check className="w-4 h-4 text-[#E9C349] shrink-0 mt-0.5" />
+                  <span><strong>Acceso Total Cursos HD</strong>: Del maestro</span>
                 </li>
-                <li className="flex items-center gap-2">
-                  <Check className="w-4 h-4 text-[#E9C349] shrink-0" />
-                  <span>Laboratorio de Metrónomo háptico y BPMs</span>
+                <li className="flex items-start gap-2">
+                  <Check className="w-4 h-4 text-[#E9C349] shrink-0 mt-0.5" />
+                  <span><strong>Feedback Biomecánico 1v1</strong>: En video</span>
                 </li>
-                <li className="flex items-center gap-2">
-                  <Check className="w-4 h-4 text-[#E9C349] shrink-0" />
-                  <span>Cuaderno de práctica y exportación de métricas</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <Check className="w-4 h-4 text-[#E9C349] shrink-0" />
-                  <span>Participación en Duelos y Ránking Global</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <Check className="w-4 h-4 text-[#E9C349] shrink-0" />
-                  <span>Ebooks, guías somáticas y biblioteca de podcasts</span>
+                <li className="flex items-start gap-2">
+                  <Check className="w-4 h-4 text-[#E9C349] shrink-0 mt-0.5" />
+                  <span><strong>Google Meet & Classroom</strong>: Evaluaciones</span>
                 </li>
               </ul>
             </div>
@@ -1387,64 +1461,79 @@ export default function WelcomeDashboard({
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              onClick={() => onOpenPlansModal ? onOpenPlansModal() : setActiveTab('plans')}
-              className="w-full mt-6 py-3.5 bg-[#E9C349] hover:bg-[#d8b33c] text-black font-black text-xs uppercase tracking-wider rounded-xl shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer"
+              onClick={() => onOpenPlansModal ? onOpenPlansModal() : setActiveTab('planes')}
+              className="w-full py-3.5 bg-[#E9C349] hover:bg-yellow-300 text-black font-mono font-black text-xs rounded-2xl uppercase transition-all shadow-lg active:scale-95 flex items-center justify-center gap-2 cursor-pointer"
             >
-              <Sparkles className="w-4 h-4 fill-black" />
-              <span>Unirse a Academia Pro</span>
+              <Zap className="w-4 h-4 fill-black" />
+              <span>Suscribirse ($15 USD)</span>
             </motion.button>
           </div>
 
-          {/* Plan 3: Pase Cátedra de Instructor */}
-          <div className="bg-[#121212] border border-[#262626] hover:border-[#9A2B3C] rounded-3xl p-6 flex flex-col justify-between shadow-lg relative">
+          {/* Plan 4: Instructor Global & Estudios ($15 / $30 USD) */}
+          <div className="bg-gradient-to-b from-[#251327] to-[#120A13] border-2 border-purple-500/60 rounded-3xl p-6 flex flex-col justify-between space-y-6 relative overflow-hidden shadow-[0_0_35px_rgba(168,85,247,0.2)] hover:border-purple-400 transition-all">
             <div className="space-y-4">
-              <div className="space-y-1">
-                <span className="text-[10px] font-mono font-bold text-[#9A2B3C] uppercase">
-                  Mentoría Directa
+              <div className="flex items-center justify-between">
+                <span className="px-3 py-1 bg-purple-500/20 border border-purple-500/40 text-purple-300 text-[10px] font-mono font-black rounded-full uppercase tracking-wider">
+                  DOCENTES & ESTUDIOS
                 </span>
-                <h3 className="text-xl font-bold text-white">Pase Cátedra de Instructor</h3>
-                <p className="text-xs text-slate-400 leading-relaxed">
-                  Para bailarines que buscan perfeccionamiento con un maestro específico.
+                <Briefcase className="w-5 h-5 text-purple-400" />
+              </div>
+
+              <div>
+                <h3 className="text-lg font-black text-white font-mono uppercase">
+                  Instructor & Academia
+                </h3>
+                <p className="text-xs text-slate-300 mt-1">
+                  Monetiza tus conocimientos, imparte cátedras y gestiona tu nómina.
                 </p>
               </div>
 
-              <div className="py-2">
-                <span className="text-3xl font-black font-mono text-white">$35 - $48</span>
-                <span className="text-xs font-mono text-slate-400 ml-1">USD / mes</span>
+              <div className="pt-2 border-t border-purple-500/30">
+                <div className="flex items-baseline gap-1">
+                  <span className="text-3xl font-black text-purple-300 font-mono">$15 / $30</span>
+                  <span className="text-xs font-mono text-purple-200">USD / mes</span>
+                </div>
+                <span className="text-[10px] font-mono text-emerald-400 block mt-1">
+                  ✓ Recauda el 80% neto de cada alumno
+                </span>
               </div>
 
-              <ul className="space-y-2.5 text-xs text-slate-300">
-                <li className="flex items-center gap-2">
-                  <Check className="w-4 h-4 text-emerald-400 shrink-0" />
-                  <span>Todo lo incluido en Academia Pro</span>
+              <ul className="space-y-2 text-xs text-slate-300">
+                <li className="flex items-start gap-2">
+                  <Check className="w-4 h-4 text-purple-400 shrink-0 mt-0.5" />
+                  <span><strong>Panel Docente & Finanzas</strong>: Retiros a banco</span>
                 </li>
-                <li className="flex items-center gap-2 font-medium text-white">
-                  <Check className="w-4 h-4 text-[#9A2B3C] shrink-0" />
-                  <span>Feedback mensual de video personalizado (1v1)</span>
+                <li className="flex items-start gap-2">
+                  <Check className="w-4 h-4 text-purple-400 shrink-0 mt-0.5" />
+                  <span><strong>Publicación Cursos & Workbooks</strong>: En PDF</span>
                 </li>
-                <li className="flex items-center gap-2 font-medium text-white">
-                  <Check className="w-4 h-4 text-[#9A2B3C] shrink-0" />
-                  <span>Sesiones en vivo y Jams privados con tu maestro</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <Check className="w-4 h-4 text-emerald-400 shrink-0" />
-                  <span>Tareas y asignaciones técnicas directas</span>
+                <li className="flex items-start gap-2">
+                  <Check className="w-4 h-4 text-purple-400 shrink-0 mt-0.5" />
+                  <span><strong>Suite Google Workspace</strong>: Meet & Slides</span>
                 </li>
               </ul>
             </div>
 
             <button
-              onClick={() => {
-                const dirElement = document.getElementById('directorio-profesores-seccion');
-                if (dirElement) {
-                  dirElement.scrollIntoView({ behavior: 'smooth' });
-                }
-              }}
-              className="w-full mt-6 py-3 bg-[#9A2B3C] hover:bg-[#81262c] text-white font-bold text-xs uppercase tracking-wider rounded-xl transition-all cursor-pointer shadow"
+              onClick={() => onOpenPlansModal ? onOpenPlansModal() : setActiveTab('planes')}
+              className="w-full py-3 bg-purple-600 hover:bg-purple-500 text-white font-mono font-black text-xs rounded-2xl uppercase transition-all shadow-lg active:scale-95 flex items-center justify-center gap-2 cursor-pointer"
             >
-              Elegir Instructor Titular
+              <span>Activar Como Docente</span>
+              <ArrowRight className="w-4 h-4" />
             </button>
           </div>
+        </div>
+
+        {/* Footer Link to Full Comparison Table */}
+        <div className="flex justify-center pt-2">
+          <button
+            onClick={() => setActiveTab('planes')}
+            className="px-6 py-2.5 bg-[#121212] hover:bg-[#1C1C1C] text-[#E9C349] border border-[#E9C349]/40 rounded-2xl text-xs font-mono font-bold transition-all flex items-center gap-2 cursor-pointer shadow-md hover:border-[#E9C349]"
+          >
+            <ShieldCheck className="w-4 h-4 text-[#E9C349]" />
+            <span>Ver Tabla Comparativa Completa de Beneficios & Planes</span>
+            <ArrowRight className="w-4 h-4" />
+          </button>
         </div>
       </div>
 
