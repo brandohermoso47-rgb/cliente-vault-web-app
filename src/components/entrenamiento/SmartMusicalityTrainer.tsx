@@ -1305,13 +1305,30 @@ export function SmartMusicalityTrainer({
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
         
         {/* CANVAS STAGE (8 COLS) */}
-        <div className="lg:col-span-8 bg-[#03050B] border border-white/15 rounded-3xl p-3 sm:p-4 relative min-h-[380px] flex flex-col justify-between overflow-hidden group">
+        <div 
+          className={`lg:col-span-8 bg-[#03050B] border rounded-3xl p-3 sm:p-4 relative min-h-[380px] flex flex-col justify-between overflow-hidden group transition-all duration-300 ${
+            isPlaying 
+              ? 'animate-bpm-pulse border-[#E9C349]/80 shadow-[0_0_35px_rgba(233,195,73,0.3)]' 
+              : 'border-white/15'
+          }`}
+          style={{ '--bpm-pulse-duration': `${(60 / (selectedTrack.bpm || 124)).toFixed(3)}s` } as React.CSSProperties}
+        >
           
+          {/* SUBTLE RHYTHMIC BPM PULSE RING OVERLAY */}
+          {isPlaying && (
+            <div 
+              className="absolute inset-0 pointer-events-none rounded-3xl border-2 border-[#E9C349]/40 animate-bpm-ring z-10" 
+              style={{ '--bpm-pulse-duration': `${(60 / (selectedTrack.bpm || 124)).toFixed(3)}s` } as React.CSSProperties}
+            />
+          )}
+
           {/* WEBCAM FEED (OPTIONAL BACKGROUND) */}
           {useWebcam && (
             <video
               ref={videoRef}
-              className="absolute inset-0 w-full h-full object-cover rounded-3xl opacity-40 scale-x-[-1]"
+              className={`absolute inset-0 w-full h-full object-cover rounded-3xl scale-x-[-1] transition-opacity duration-300 ${
+                isPlaying ? 'opacity-55' : 'opacity-40'
+              }`}
               playsInline
               muted
             />
@@ -1359,6 +1376,12 @@ export function SmartMusicalityTrainer({
               <span className="text-xs font-mono font-bold uppercase text-white">
                 {isPlaying ? 'ANALIZANDO RITMO EN TIEMPO REAL' : 'PAUSADO'}
               </span>
+              {isPlaying && (
+                <span className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#E9C349]/15 border border-[#E9C349]/40 text-[10px] font-mono font-black text-[#E9C349] uppercase shadow-sm">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#E9C349] animate-ping" />
+                  <span>PULSO RÍTMICO ACTIVO</span>
+                </span>
+              )}
             </div>
 
             <div className="flex items-center gap-3">

@@ -122,11 +122,10 @@ export default function Sidebar({
       items: [
         { id: 'cursos', label: 'Clases & Cursos', icon: GraduationCap, requiresSub: false, badge: 'VER' },
         ...(onOpenFormationPreview ? [{ id: 'vista_previa_formacion', label: 'Vista Previa Formación', icon: Eye, requiresSub: false, isAction: true, onClick: onOpenFormationPreview, badge: 'NUEVO' }] : []),
-        { id: 'pose_lab', label: language === 'es' ? 'Laboratorio de Poses IA' : 'AI Pose Lab', icon: Activity, requiresSub: false, badge: 'AI POSE' },
+        { id: 'entrenamiento', label: language === 'es' ? 'Laboratorio de Freestyles' : 'Freestyle Laboratory', icon: Sparkles, requiresSub: false, badge: 'LAB' },
         ...(onOpenSomaticPosingPrototype ? [{ id: 'prototipo_somatico', label: 'Prototipo Somático Posing', icon: Cpu, requiresSub: false, isAction: true, onClick: onOpenSomaticPosingPrototype, badge: 'LAB v1.0' }] : []),
         { id: 'podcasts', label: 'Podcasts', icon: Headphones, requiresSub: false, badge: 'AUDIO' },
-        { id: 'ebooks', label: 'Manuales & eBooks', icon: BookOpen, requiresSub: false },
-        { id: 'entrenamiento', label: 'Freestyle Lab (Entrenamiento)', icon: Sparkles, requiresSub: false }
+        { id: 'ebooks', label: 'Manuales & eBooks', icon: BookOpen, requiresSub: false }
       ]
     },
     {

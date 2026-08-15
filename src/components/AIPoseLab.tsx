@@ -842,7 +842,21 @@ export const AIPoseLab: React.FC<AIPoseLabProps> = ({
           </div>
 
           {/* Interactive Screen Container */}
-          <div className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-black border-2 border-white/10 flex items-center justify-center group shadow-2xl">
+          <div 
+            className={`relative aspect-[4/3] rounded-2xl overflow-hidden bg-black flex items-center justify-center group shadow-2xl transition-all duration-300 ${
+              (isCameraActive || isSimulatorMode)
+                ? 'animate-bpm-pulse border-2 border-[#E9C349]/80 shadow-[0_0_30px_rgba(233,195,73,0.3)]'
+                : 'border-2 border-white/10'
+            }`}
+            style={{ '--bpm-pulse-duration': '0.5s' } as React.CSSProperties}
+          >
+            {/* Subtle Pulse Ring Overlay when practicing */}
+            {(isCameraActive || isSimulatorMode) && (
+              <div 
+                className="absolute inset-0 pointer-events-none rounded-2xl border-2 border-[#E9C349]/40 animate-bpm-ring z-20"
+                style={{ '--bpm-pulse-duration': '0.5s' } as React.CSSProperties}
+              />
+            )}
             
             {/* Live Video Element */}
             <video

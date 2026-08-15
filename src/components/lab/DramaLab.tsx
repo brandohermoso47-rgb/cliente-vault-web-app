@@ -14,6 +14,7 @@ export interface DramaLabProps {
   onAddBonusPoints?: (pts: number) => void;
   onLogPractice?: (cnt: number, type: string, note: string) => void;
   currentUser?: any;
+  bpm?: number;
 }
 
 const VISUAL_STIMULI = [
@@ -51,7 +52,8 @@ const DramaLabComponent: React.FC<DramaLabProps> = ({
   dramaPointsAwarded,
   setDramaPointsAwarded,
   onAddBonusPoints,
-  onLogPractice
+  onLogPractice,
+  bpm = 120
 }) => {
   const currentStimulus = VISUAL_STIMULI[activeStimulusIndex] || VISUAL_STIMULI[0];
 
@@ -124,8 +126,23 @@ const DramaLabComponent: React.FC<DramaLabProps> = ({
           </div>
 
           {/* Right - Practice Mirror / Camera */}
-          <div className="md:col-span-5 bg-[#0D0D11] border border-tertiary/10 rounded-2xl p-5 flex flex-col justify-between space-y-5 shadow-lg">
-            <div className="text-center space-y-3">
+          <div 
+            className={`md:col-span-5 bg-[#0D0D11] border rounded-2xl p-5 flex flex-col justify-between space-y-5 shadow-lg relative overflow-hidden transition-all duration-300 ${
+              isDramaPracticing 
+                ? 'animate-bpm-pulse border-purple-400/90 shadow-[0_0_35px_rgba(168,85,247,0.35)]' 
+                : 'border-tertiary/10'
+            }`}
+            style={{ '--bpm-pulse-duration': `${(60 / (bpm || 120)).toFixed(3)}s` } as React.CSSProperties}
+          >
+            {/* Subtle Pulse Ring Overlay */}
+            {isDramaPracticing && (
+              <div 
+                className="absolute inset-0 pointer-events-none rounded-2xl border-2 border-purple-400/40 animate-bpm-ring z-10"
+                style={{ '--bpm-pulse-duration': `${(60 / (bpm || 120)).toFixed(3)}s` } as React.CSSProperties}
+              />
+            )}
+
+            <div className="text-center space-y-3 relative z-20">
               <div className="w-16 h-16 rounded-full bg-purple-500/10 border border-purple-500/30 mx-auto flex items-center justify-center">
                 <Camera className="w-8 h-8 text-purple-400" />
               </div>
@@ -134,10 +151,14 @@ const DramaLabComponent: React.FC<DramaLabProps> = ({
             </div>
 
             {isDramaPracticing ? (
-              <div className="space-y-4 text-center bg-black/40 border border-purple-500/20 p-4 rounded-xl">
+              <div className="space-y-4 text-center bg-black/40 border border-purple-500/20 p-4 rounded-xl relative z-20">
+                <div className="flex items-center justify-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-purple-400 animate-ping" />
+                  <span className="text-[10px] font-mono font-bold text-purple-300">PULSO DE RITMO: {bpm || 120} BPM</span>
+                </div>
                 <div className="text-4xl font-mono font-bold text-purple-400 animate-pulse">{dramaTimer}s</div>
                 <p className="text-[10px] text-on-surface-variant uppercase font-mono font-bold">
-                  {language === 'es' ? '¡MANTÉN LA ACTITUD Y MIRADA EN CÁMARA!' : 'KEEP THE ATTITUDE & LOOK AT CAMERA!'}
+                  {language === 'es' ? '¡MANTÉN LA ACTITUD Y MIRADA EN CÁMARA AL RITMO!' : 'KEEP THE ATTITUDE & LOOK AT CAMERA TO THE BEAT!'}
                 </p>
                 {dramaPointsAwarded && (
                   <div className="bg-green-500/10 border border-green-500/20 text-green-400 p-2 rounded text-[10px] font-mono font-bold">
@@ -148,7 +169,7 @@ const DramaLabComponent: React.FC<DramaLabProps> = ({
             ) : (
               <button
                 onClick={handleStartDrama}
-                className="w-full bg-purple-600 hover:bg-purple-500 text-white font-display-lg font-bold py-3.5 rounded-xl transition-all uppercase tracking-widest text-xs flex items-center justify-center gap-2 active:scale-95 shadow-md"
+                className="w-full bg-purple-600 hover:bg-purple-500 text-white font-display-lg font-bold py-3.5 rounded-xl transition-all uppercase tracking-widest text-xs flex items-center justify-center gap-2 active:scale-95 shadow-md relative z-20 cursor-pointer"
               >
                 <Play className="w-4 h-4 fill-white" />
                 {language === 'es' ? 'INICIAR PRÁCTICA FACIAL (45s)' : 'START FACIAL PRACTICE (45s)'}

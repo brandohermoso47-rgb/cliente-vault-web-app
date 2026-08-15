@@ -581,8 +581,8 @@ const VISUAL_STIMULI = [
 
 const LAB_TRANSLATIONS: Record<Language, Record<string, string>> = {
   es: {
-    title: "LABORATORIO DE FREESTYLE & ENTRENAMIENTO",
-    subtitle: "Tu espacio de experimentación biomecánica, ritmo y estilo propio. Entrena técnica, musicalidad a 3 tempos, poses IA y drama escénico.",
+    title: "LABORATORIO DE FREESTYLES",
+    subtitle: "El laboratorio práctico de danza y experimentación. Entrena musicalidad a 3 tempos, drills, combos, freestyle a ciegas y expresión escénica.",
     drillTab: "⏱️ DRILL TRAINER",
     battleTab: "🎯 RETO DE OBJETIVOS",
     combosTab: "🔀 DRAFT DE COMBOS",
@@ -592,8 +592,8 @@ const LAB_TRANSLATIONS: Record<Language, Record<string, string>> = {
     feedbackTab: "🎬 FEEDBACK EN VIDEO",
   },
   en: {
-    title: "FREESTYLE LAB & TRAINING",
-    subtitle: "Your space for biomechanics experimentation, rhythm, and signature style development. Train technique, 3-tempo musicality, AI poses, and stage drama.",
+    title: "FREESTYLE LABORATORY",
+    subtitle: "The practical dance & experimentation lab. Train 3-tempo musicality, drills, combo drafts, blind freestyle, and stage expression.",
     drillTab: "⏱️ DRILL TRAINER",
     battleTab: "🎯 TARGET CHALLENGE",
     combosTab: "🔀 COMBO DRAFT",
@@ -603,8 +603,8 @@ const LAB_TRANSLATIONS: Record<Language, Record<string, string>> = {
     feedbackTab: "🎬 VIDEO FEEDBACK",
   },
   ko: {
-    title: "프리스타일 랩 & 트레이닝",
-    subtitle: "생체 역학 실험, 리듬 및 시그니처 스타일 개발을 위한 공간입니다. 테크닉, 3가지 템포 음악성, AI 포즈 및 무대 드라마를 훈련하세요.",
+    title: "프리스타일 연구소",
+    subtitle: "실습 댄스 및 실험 연구소입니다. 3가지 템포 음악성, 드릴, 콤보 드래프트, 블라인드 프리스타일 및 무대 표현을 훈련하세요.",
     drillTab: "⏱️ 드릴 트레이너",
     battleTab: "🎯 목표 챌린지",
     combosTab: "🔀 콤보 드래프트",
@@ -614,8 +614,8 @@ const LAB_TRANSLATIONS: Record<Language, Record<string, string>> = {
     feedbackTab: "🎬 비디오 피드백",
   },
   ja: {
-    title: "フリースタイル・ラボ＆トレーニング",
-    subtitle: "生体力学の実験、リズム、独自のスタイル開発のための空間です。テクニック、3テンポ音楽性、AIポーズ、ステージドラマをトレーニングします。",
+    title: "フリースタイル・ラボラトリー",
+    subtitle: "実践的なダンス＆実験ラボ。3テンポ音楽性、ドリル、コンボドラフト、ブラインドフリースタイル、ステージ表現をトレーニングします。",
     drillTab: "⏱️ ドリルトレーナー",
     battleTab: "🎯 目標チャレンジ",
     combosTab: "🔀 コンボドラフト",
@@ -625,8 +625,8 @@ const LAB_TRANSLATIONS: Record<Language, Record<string, string>> = {
     feedbackTab: "🎬 ビデオフィードバック",
   },
   pt: {
-    title: "LABORATÓRIO DE FREESTYLE & TREINAMENTO",
-    subtitle: "Seu espaço de experimentação biomecânica, ritmo e desenvolvimento de estilo próprio. Treine técnica, musicalidade em 3 tempos, poses IA e drama cênico.",
+    title: "LABORATÓRIO DE FREESTYLES",
+    subtitle: "O laboratório prático de dança e experimentação. Treine musicalidade em 3 tempos, drills, combos, freestyle às cegas e expressão cênica.",
     drillTab: "⏱️ DRILL TRAINER",
     battleTab: "🎯 DESAFIO DE OBJETIVOS",
     combosTab: "🔀 RASCUNHO DE COMBOS",
@@ -2668,7 +2668,7 @@ export default function EntrenamientoView({
         <div className="relative z-10">
           <div className="flex items-center gap-2 mb-2">
             <span className="text-[10px] font-mono font-black text-[#E9C349] bg-white/10 border border-[#E9C349]/40 px-3 py-1 rounded-full uppercase tracking-widest shadow-sm">
-              FREESTYLE LAB & ENTRENAMIENTO
+              LABORATORIO DE FREESTYLES
             </span>
           </div>
           <h2 className="text-2xl sm:text-3xl font-display-lg italic text-white tracking-tight uppercase">
@@ -2689,18 +2689,6 @@ export default function EntrenamientoView({
 
       {/* Navigation Sub-Tabs */}
       <div className="flex overflow-x-auto gap-3 border-b border-white/10 pb-4 scrollbar-none shrink-0 -mx-6 px-6 sm:mx-0 sm:px-0">
-        <button
-          id="subtab-pose-lab"
-          onClick={() => setSubTab('pose_lab')}
-          className={`group h-11 min-w-[210px] px-4 py-2 text-xs font-mono font-bold tracking-wider transition-all flex items-center justify-center gap-2 border rounded-xl shrink-0 focus:outline-none ${
-            subTab === 'pose_lab' 
-              ? 'bg-[#E9C349] text-black border-[#E9C349] shadow-xl font-black' 
-              : 'bg-[#121212] text-[#E9C349] border-[#E9C349]/40 hover:bg-[#E9C349]/10'
-          }`}
-        >
-          <Camera className="w-4 h-4 shrink-0 transition-transform duration-300 group-hover:scale-125 animate-pulse text-[#E9C349] group-hover:text-black" />
-          ✨ LAB DE POSES IA (TRACKING)
-        </button>
         <button
           id="subtab-musicality"
           onClick={() => setSubTab('musicality')}
@@ -2878,6 +2866,7 @@ export default function EntrenamientoView({
             onAddBonusPoints={onAddBonusPoints}
             onLogPractice={onLogPractice}
             currentUser={currentUser}
+            bpm={trainingBpm || scBpm || drillBpm || 120}
           />
         )}
 
@@ -3280,7 +3269,12 @@ Right Arm Extension: ${rightUserAngle.toFixed(1)}°
 
                     <div 
                       ref={containerRef}
-                      className="relative aspect-[4/3] w-full bg-[#08080a] border border-tertiary/10 rounded-2xl overflow-hidden shadow-2xl"
+                      className={`relative aspect-[4/3] w-full bg-[#08080a] border rounded-2xl overflow-hidden shadow-2xl transition-all duration-300 ${
+                        somaticCameraActive 
+                          ? 'animate-bpm-pulse border-[#E9C349]/60 shadow-[0_0_25px_rgba(233,195,73,0.2)]' 
+                          : 'border-tertiary/10'
+                      }`}
+                      style={{ '--bpm-pulse-duration': `${(60 / (trainingBpm || scBpm || drillBpm || 120)).toFixed(3)}s` } as React.CSSProperties}
                     >
                       {/* Grid background overlay */}
                       {gridVisible && (
@@ -3442,11 +3436,22 @@ Right Arm Extension: ${rightUserAngle.toFixed(1)}°
 
                     <div 
                       ref={userCameraContainerRef}
-                      className="relative aspect-[4/3] w-full bg-[#08080a] border border-tertiary/10 rounded-2xl overflow-hidden shadow-2xl flex items-center justify-center text-center"
+                      className={`relative aspect-[4/3] w-full bg-[#08080a] border rounded-2xl overflow-hidden shadow-2xl flex items-center justify-center text-center transition-all duration-300 ${
+                        somaticCameraActive 
+                          ? 'animate-bpm-pulse border-[#E9C349]/80 shadow-[0_0_30px_rgba(233,195,73,0.3)]' 
+                          : 'border-tertiary/10'
+                      }`}
+                      style={{ '--bpm-pulse-duration': `${(60 / (trainingBpm || scBpm || drillBpm || 120)).toFixed(3)}s` } as React.CSSProperties}
                     >
                       {/* Active Webcam Feed */}
                       {somaticCameraActive ? (
                         <>
+                          {/* Inner BPM Rhythm Ring */}
+                          <div 
+                            className="absolute inset-0 pointer-events-none rounded-2xl border-2 border-[#E9C349]/40 animate-bpm-ring z-15"
+                            style={{ '--bpm-pulse-duration': `${(60 / (trainingBpm || scBpm || drillBpm || 120)).toFixed(3)}s` } as React.CSSProperties}
+                          />
+
                           <video 
                             ref={somaticVideoRef}
                             autoPlay 
