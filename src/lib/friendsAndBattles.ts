@@ -161,7 +161,10 @@ export async function declineFriendRequest(friendshipId: string) {
  * Real-time listener for friendships associated with current user
  */
 export function listenToFriendships(userId: string, callback: (friendships: FriendshipDoc[]) => void) {
-  if (!userId) return () => {};
+  if (!userId || !auth.currentUser) {
+    callback([]);
+    return () => {};
+  }
   const path = 'friendships';
   const q = query(collection(db, 'friendships'), where('users', 'array-contains', userId));
   
@@ -180,7 +183,7 @@ export function listenToFriendships(userId: string, callback: (friendships: Frie
  * Real-time listener for user profiles by ID array
  */
 export function listenToUsersProfiles(userUids: string[], callback: (users: User[]) => void) {
-  if (!userUids || userUids.length === 0) {
+  if (!userUids || userUids.length === 0 || !auth.currentUser) {
     callback([]);
     return () => {};
   }
@@ -271,7 +274,10 @@ export async function createBattleInvitation(hostUser: User, guestUser: User): P
  * Real-time listener for incoming battle invitations for guest
  */
 export function listenToIncomingBattleInvitations(guestUserId: string, callback: (battles: BattleDoc[]) => void) {
-  if (!guestUserId) return () => {};
+  if (!guestUserId || !auth.currentUser) {
+    callback([]);
+    return () => {};
+  }
   const path = 'battles';
   const q = query(
     collection(db, 'battles'), 
@@ -294,7 +300,10 @@ export function listenToIncomingBattleInvitations(guestUserId: string, callback:
  * Real-time listener for a specific battle session
  */
 export function listenToBattleSession(battleId: string, callback: (battle: BattleDoc | null) => void) {
-  if (!battleId) return () => {};
+  if (!battleId || !auth.currentUser) {
+    callback(null);
+    return () => {};
+  }
   const path = `battles/${battleId}`;
   
   return onSnapshot(doc(db, 'battles', battleId), (docSnap) => {

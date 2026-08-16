@@ -22,12 +22,14 @@ import {
   Play,
   SlidersHorizontal,
   Check,
-  Globe
+  Globe,
+  Trophy
 } from 'lucide-react';
 import { User, Announcement, Presentation, ChatMessage } from '../types';
 import { Language, translations, getAITranslation } from '../lib/translations';
 import { Languages } from 'lucide-react';
 import AnnouncementImagePicker from './AnnouncementImagePicker';
+import WeeklyCommunityChallengeView from './WeeklyCommunityChallengeView';
 
 interface ComunidadViewProps {
   currentUser: User;
@@ -57,7 +59,7 @@ export default function ComunidadView({
   language
 }: ComunidadViewProps) {
   // Navigation inside Comunidad (sub-tabs)
-  const [subTab, setSubTab] = useState<'feed' | 'lobby' | 'presentate' | 'anuncios'>('feed');
+  const [subTab, setSubTab] = useState<'feed' | 'lobby' | 'presentate' | 'anuncios' | 'reto'>('feed');
 
   // Dynamic Filters State
   const [activeFilter, setActiveFilter] = useState<CommunityFilterType>('all');
@@ -336,6 +338,22 @@ export default function ComunidadView({
         </button>
 
         <button
+          id="subtab-reto"
+          onClick={() => setSubTab('reto')}
+          className={`group h-11 min-w-[190px] px-4 py-2.5 text-xs font-bold tracking-wider transition-all flex items-center justify-center gap-2 border rounded-xl shrink-0 focus:outline-none cursor-pointer ${
+            subTab === 'reto' 
+              ? 'bg-[#E9C349] text-black border-[#E9C349] shadow-lg scale-105 font-extrabold' 
+              : 'bg-[#1b1424]/70 text-[#E9C349] border-[#E9C349]/30 hover:border-[#E9C349] hover:bg-[#E9C349]/10'
+          }`}
+        >
+          <Trophy className={`w-4 h-4 shrink-0 transition-transform duration-300 group-hover:scale-125 ${subTab === 'reto' ? 'text-black' : 'text-[#E9C349]'}`} />
+          🏆 RETO SEMANAL
+          <span className={`text-[9px] px-1.5 py-0.2 rounded-full font-mono font-bold ${subTab === 'reto' ? 'bg-black/20 text-black' : 'bg-[#E9C349]/20 text-[#E9C349]'}`}>
+            NEW
+          </span>
+        </button>
+
+        <button
           id="subtab-anuncios"
           onClick={() => setSubTab('anuncios')}
           className={`group h-11 min-w-[170px] px-4 py-2.5 text-xs font-bold tracking-wider transition-all flex items-center justify-center gap-2 border rounded-xl shrink-0 focus:outline-none ${
@@ -350,7 +368,7 @@ export default function ComunidadView({
       </div>
 
       {/* DYNAMIC FILTERS BAR (For feed, presentate and anuncios) */}
-      {subTab !== 'lobby' && (
+      {subTab !== 'lobby' && subTab !== 'reto' && (
         <div className="mb-6 p-4 bg-surface-container/90 border border-tertiary/20 rounded-2xl shadow-xl space-y-3 z-10">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-tertiary/10 pb-3">
             <div className="flex items-center gap-2 text-xs font-mono font-bold text-tertiary uppercase">
@@ -603,8 +621,16 @@ export default function ComunidadView({
           </div>
         )}
 
-        {/* 2. MURO GENERAL, PRESENTATE OR ANUNCIOS TAB */}
-        {subTab !== 'lobby' && (
+        {/* 2. RETO SEMANAL TAB */}
+        {subTab === 'reto' && (
+          <WeeklyCommunityChallengeView 
+            currentUser={currentUser}
+            language={language}
+          />
+        )}
+
+        {/* 3. MURO GENERAL, PRESENTATE OR ANUNCIOS TAB */}
+        {subTab !== 'lobby' && subTab !== 'reto' && (
           <div className="space-y-6">
             {/* Context Header and Creator Toggles */}
             {subTab === 'presentate' && (
@@ -640,27 +666,57 @@ export default function ComunidadView({
             )}
 
             {subTab === 'feed' && (
-              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 bg-surface-container/60 border border-tertiary/15 p-4 rounded-2xl">
-                <div>
-                  <h3 className="text-xs font-mono font-bold text-tertiary uppercase tracking-wider flex items-center gap-2">
-                    <Sparkles className="w-4 h-4 text-[#E9C349]" />
-                    Muro Social Unificado
-                  </h3>
-                  <p className="text-[11px] text-on-surface-variant mt-0.5 font-semibold">
-                    Explora novedades de instructores y publicaciones de la comunidad en un solo lugar.
-                  </p>
-                </div>
+              <>
+                {/* Active Weekly Challenge Callout on Muro Feed */}
+                <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-[#21162B] via-[#15121c] to-[#0D0D11] border-2 border-tertiary/40 p-4 sm:p-5 shadow-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                  <div className="flex items-start sm:items-center gap-3.5">
+                    <div className="w-12 h-12 rounded-2xl bg-[#E9C349]/15 border border-[#E9C349]/40 flex items-center justify-center text-[#E9C349] shrink-0 shadow-md">
+                      <Trophy className="w-6 h-6 animate-bounce" />
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#E9C349] bg-[#E9C349]/15 px-2 py-0.5 rounded-full border border-[#E9C349]/30">
+                          🏆 Reto Semanal Destacado
+                        </span>
+                        <span className="text-[11px] font-mono text-emerald-400 font-semibold">• Votaciones Abiertas</span>
+                      </div>
+                      <h4 className="text-sm font-bold text-white mt-1">70s Soulful Posing & High-Speed Cross Rolls</h4>
+                      <p className="text-xs text-gray-300 mt-0.5 font-medium">Sube tu video respondiendo a la consigna temática, gana votos de la comunidad y compite en el Leaderboard.</p>
+                    </div>
+                  </div>
 
-                <div className="flex gap-2">
                   <button
-                    onClick={() => { setSubTab('presentate'); setShowPresForm(true); }}
-                    className="px-3 py-1.5 bg-tertiary/10 hover:bg-tertiary/20 text-tertiary border border-tertiary/30 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5"
+                    id="btn-feed-goto-challenge"
+                    onClick={() => setSubTab('reto')}
+                    className="shrink-0 bg-[#E9C349] hover:bg-[#d4af37] text-black font-extrabold text-xs px-4 py-2.5 rounded-xl shadow-lg flex items-center gap-1.5 transition-all hover:scale-105 active:scale-95 cursor-pointer font-mono uppercase tracking-wider"
                   >
-                    <Plus className="w-3.5 h-3.5" />
-                    <span>Publicar Video / Post</span>
+                    <Trophy className="w-3.5 h-3.5 text-black" />
+                    <span>Ver Reto & Leaderboard</span>
                   </button>
                 </div>
-              </div>
+
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 bg-surface-container/60 border border-tertiary/15 p-4 rounded-2xl">
+                  <div>
+                    <h3 className="text-xs font-mono font-bold text-tertiary uppercase tracking-wider flex items-center gap-2">
+                      <Sparkles className="w-4 h-4 text-[#E9C349]" />
+                      Muro Social Unificado
+                    </h3>
+                    <p className="text-[11px] text-on-surface-variant mt-0.5 font-semibold">
+                      Explora novedades de instructores y publicaciones de la comunidad en un solo lugar.
+                    </p>
+                  </div>
+
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => { setSubTab('presentate'); setShowPresForm(true); }}
+                      className="px-3 py-1.5 bg-tertiary/10 hover:bg-tertiary/20 text-tertiary border border-tertiary/30 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5"
+                    >
+                      <Plus className="w-3.5 h-3.5" />
+                      <span>Publicar Video / Post</span>
+                    </button>
+                  </div>
+                </div>
+              </>
             )}
 
             {/* Forms if active */}

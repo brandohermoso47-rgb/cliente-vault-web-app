@@ -56,7 +56,7 @@ import {
   FileType
 } from 'lucide-react';
 import { User, CalendarEvent, Lesson, PodcastShow, PodcastEpisode } from '../types';
-import { INITIAL_PODCASTS } from '../data';
+import { INITIAL_PODCAST_SHOWS } from '../data';
 import { Language } from '../lib/translations';
 import { generateGoogleMeetRoomUrl } from '../googleCalendar';
 import { fetchInstructorMetrics, createInstructorTask, generateOnboardingPlanBackend, updateInstructorPricingMethodologyBackend } from '../lib/api';
@@ -610,9 +610,14 @@ export default function InstructorView({
   const [instructorPodcasts, setInstructorPodcasts] = useState<PodcastShow[]>(() => {
     try {
       const saved = localStorage.getItem('waack_instructor_podcasts');
-      if (saved) return JSON.parse(saved);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0 && parsed[0]?.episodes !== undefined) {
+          return parsed;
+        }
+      }
     } catch (e) {}
-    return INITIAL_PODCASTS;
+    return INITIAL_PODCAST_SHOWS;
   });
 
   const [isPodcastModalOpen, setIsPodcastModalOpen] = useState(false);
@@ -3874,17 +3879,17 @@ Semana 3-4 (Progresión):
                     {/* Episodes Table / List */}
                     <div className="space-y-3">
                       <h5 className="text-xs font-mono font-bold uppercase text-gray-300 tracking-wider flex items-center justify-between">
-                        <span>Episodios Publicados ({pod.episodes.length})</span>
+                        <span>Episodios Publicados ({(pod.episodes || []).length})</span>
                         <span className="text-[10px] text-gray-500 font-normal">Acceso exclusivo para tus suscriptores</span>
                       </h5>
 
-                      {pod.episodes.length === 0 ? (
+                      {(pod.episodes || []).length === 0 ? (
                         <div className="p-6 text-center rounded-2xl bg-white/5 border border-dashed border-white/10 text-xs text-gray-400">
                           Aún no has subido episodios a este podcast. ¡Haz clic en "+ Agregar Episodio" para publicar tu primera cátedra!
                         </div>
                       ) : (
                         <div className="space-y-2">
-                          {pod.episodes.map(ep => (
+                          {(pod.episodes || []).map(ep => (
                             <div
                               key={ep.id}
                               className="p-3.5 rounded-2xl bg-white/5 border border-white/10 hover:border-white/20 transition-all flex items-center justify-between gap-4"

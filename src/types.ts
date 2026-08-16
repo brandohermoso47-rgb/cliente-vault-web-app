@@ -157,11 +157,17 @@ export interface CustomAchievement {
 export interface PracticeLog {
   id: string;
   date: string; // YYYY-MM-DD
-  minutes: number;
-  activityType: 'drill' | 'battle' | 'combo' | 'playlist' | 'sensorial';
-  description: string;
-  category?: Lesson['category'];
+  minutes?: number;
+  durationMinutes?: number;
+  activityType?: 'drill' | 'battle' | 'combo' | 'playlist' | 'sensorial' | string;
+  description?: string;
+  focusArea?: string;
+  category?: Lesson['category'] | string;
   bpm?: number;
+  bpmAverage?: number;
+  caloriesBurned?: number;
+  rpeScore?: number;
+  notes?: string;
 }
 
 export interface Announcement {
@@ -253,36 +259,47 @@ export interface Lesson {
   title: string;
   description: string;
   duration: string;
-  category: 'fundamentos' | 'brazos' | 'postura' | 'musicalidad' | 'improvisacion' | 'caracter' | 'velocidad';
+  category: 'fundamentos' | 'brazos' | 'postura' | 'musicalidad' | 'improvisacion' | 'caracter' | 'velocidad' | string;
   videoUrl: string; // youtube/vimeo placeholder embed
   completed: boolean;
   instructorId?: string;
   instructorName?: string;
   transcription?: string;
   musicSource?: MusicSource;
+  style?: 'classic' | 'punking' | 'fast_waack' | 'posing' | 'soul_freestyle' | string;
+  technique?: 'rolls' | 'poses_lines' | 'musicality' | 'posture' | 'drama' | 'speed' | 'footwork' | 'fundamentals' | string;
+  difficulty?: 'principiante' | 'intermedio' | 'avanzado' | string;
+  tags?: string[];
+  bpm?: number;
 }
 
 export interface PlaylistItem {
   id: string;
   title: string;
-  artist: string;
-  bpm: number;
-  duration: string;
-  type: 'slow' | 'fast';
-  audioUrl: string; // audio url or streaming link
-  provider?: 'upload' | 'soundcloud' | 'spotify' | 'youtube' | 'drive' | 'custom';
+  artist?: string;
+  bpm?: number;
+  duration?: string;
+  type?: 'slow' | 'fast' | string;
+  audioUrl?: string; // audio url or streaming link
+  provider?: 'upload' | 'soundcloud' | 'spotify' | 'youtube' | 'drive' | 'custom' | string;
   userId?: string;
   storagePath?: string;
   category?: string;
   createdAt?: string;
+  trackCount?: number;
+  coverUrl?: string;
+  platform?: string;
+  sourceUrl?: string;
 }
 
 export interface Correction {
-  id: string;
-  time: string; // e.g. "0:45"
-  text: string;
-  author: string;
-  role: UserRole;
+  id?: string;
+  time?: string; // e.g. "0:45"
+  timestamp?: string; // e.g. "00:12"
+  text?: string;
+  comment?: string;
+  author?: string;
+  role?: UserRole;
 }
 
 export interface FeedbackItem {
@@ -293,9 +310,13 @@ export interface FeedbackItem {
   videoTitle: string;
   videoUrl: string;
   description: string;
-  date: string;
-  corrections: Correction[];
-  completed: boolean;
+  date?: string;
+  submittedDate?: string;
+  corrections?: Correction[];
+  completed?: boolean;
+  status?: 'pending' | 'in_review' | 'completed' | string;
+  instructorName?: string;
+  score?: number;
 }
 
 export interface NotificationItem {
@@ -321,13 +342,182 @@ export interface CalendarEvent {
   id: string;
   title: string;
   date: string; // YYYY-MM-DD
-  time: string; // HH:MM
-  duration: string;
+  time?: string; // HH:MM
+  startTime?: string;
+  endTime?: string;
+  duration?: string;
+  category?: string;
   instructor: string;
+  location?: string;
   description: string;
-  rsvpCount: number;
+  rsvpCount?: number;
   rsvpByMe?: boolean;
+  isCompleted?: boolean;
   meetUrl?: string;
+}
+
+export interface LessonResource {
+  title: string;
+  type: 'pdf' | 'audio' | 'link' | string;
+  url: string;
+}
+
+export interface CourseLesson {
+  id: string;
+  title: string;
+  duration: string;
+  videoUrl: string;
+  type?: string;
+  isLocked: boolean;
+  isCompleted: boolean;
+  summary?: string;
+  resources?: LessonResource[];
+}
+
+export interface Course {
+  id: string;
+  title: string;
+  description: string;
+  instructor: string;
+  instructorRole: string;
+  instructorAvatar: string;
+  thumbnail: string;
+  category: string;
+  level: string;
+  totalDuration: string;
+  enrolledCount: number;
+  rating: number;
+  reviewsCount: number;
+  badge?: string;
+  progress: number;
+  lessonsCount: number;
+  isPopular?: boolean;
+  isNew?: boolean;
+  lessons: CourseLesson[];
+}
+
+export interface CommunityPost {
+  id: string;
+  author: string;
+  authorRole: string;
+  authorAvatar: string;
+  content: string;
+  timestamp: string;
+  likes: number;
+  commentsCount: number;
+  hasLiked: boolean;
+  tags: string[];
+}
+
+export interface RankingUser {
+  rank: number;
+  name: string;
+  avatar: string;
+  level: string;
+  score: number;
+  hoursTrained: number;
+  streakDays: number;
+  badges: string[];
+}
+
+export interface LiveClass {
+  id: string;
+  title: string;
+  instructor: string;
+  instructorRole: string;
+  instructorAvatar: string;
+  date: string;
+  time: string;
+  thumbnail: string;
+  status: 'upcoming' | 'live' | 'completed' | string;
+  attendeesCount: number;
+  meetUrl: string;
+  description: string;
+}
+
+export interface Podcast {
+  id: string;
+  title: string;
+  description: string;
+  duration: string;
+  audioUrl: string;
+  thumbnail: string;
+  host: string;
+  date: string;
+}
+
+export interface Ebook {
+  id: string;
+  title: string;
+  description: string;
+  pages: number;
+  downloadUrl: string;
+  thumbnail: string;
+  author: string;
+  badge?: string;
+}
+
+export interface Reel {
+  id: string;
+  title: string;
+  videoUrl: string;
+  author: string;
+  authorAvatar: string;
+  likes: number;
+  comments: number;
+  musicTitle: string;
+}
+
+export interface MuscleRecommendation {
+  id: string;
+  muscleGroup: string;
+  focusArea: string;
+  status: 'fatigado' | 'optimo' | 'moderado' | string;
+  recoveryScore: number;
+  suggestedExercise: string;
+  recommendedDuration: string;
+}
+
+export interface TaskItem {
+  id: string;
+  title: string;
+  category: string;
+  isCompleted: boolean;
+  dueDate: string;
+}
+
+export interface WaackPillar {
+  id: string;
+  name: string;
+  shortDescription: string;
+  iconName: string;
+  level: string;
+}
+
+export interface MembershipPlan {
+  id: string;
+  name: string;
+  price: number;
+  interval: string;
+  description: string;
+  features: string[];
+  isPopular?: boolean;
+}
+
+export interface DrillCombo {
+  id: string;
+  title: string;
+  difficulty: string;
+  defaultBpm: number;
+  targetBeats: number;
+  description: string;
+}
+
+export interface DramaPrompt {
+  id: string;
+  archetype: string;
+  scenario: string;
+  suggestedEmotion: string;
 }
 
 export interface SomaticDiaryEntry {
@@ -476,6 +666,100 @@ export interface DirectMessage {
   isRead?: boolean;
 }
 
+export interface WeeklyChallengeSubmission {
+  id: string;
+  challengeId: string;
+  userId?: string;
+  dancerName: string;
+  dancerAvatar: string;
+  dancerLevel: string;
+  videoUrl: string;
+  videoThumbnail?: string;
+  title: string;
+  notes?: string;
+  submittedAt: string;
+  votesCount: number;
+  reactions: {
+    fire: number;
+    queen: number;
+    precision: number;
+    drama: number;
+  };
+  votedByMe?: boolean;
+  myReaction?: 'fire' | 'queen' | 'precision' | 'drama';
+  score?: number;
+  instructorFeedback?: {
+    author: string;
+    avatar: string;
+    comment: string;
+    score: number;
+    badges: string[];
+  };
+  isWinner?: boolean;
+  rank?: number;
+}
+
+export interface WeeklyCommunityChallenge {
+  id: string;
+  weekNumber: number;
+  title: string;
+  subtitle: string;
+  theme: string;
+  category: string;
+  description: string;
+  coverImage: string;
+  recommendedTrack: {
+    title: string;
+    artist: string;
+    bpm: number;
+    audioUrl?: string;
+    spotifyUrl?: string;
+  };
+  criteria: Array<{
+    title: string;
+    weight: string;
+    description: string;
+  }>;
+  judge: {
+    name: string;
+    role: string;
+    avatar: string;
+  };
+  startDate: string;
+  endDate: string;
+  status: 'active' | 'voting' | 'completed';
+  rewardXp: number;
+  submissions: WeeklyChallengeSubmission[];
+  winners?: Array<{
+    rank: number;
+    submissionId: string;
+    dancerName: string;
+    dancerAvatar: string;
+    entryTitle: string;
+    score: number;
+    prizeTitle: string;
+    badge: string;
+    videoUrl: string;
+  }>;
+}
+
+export interface PastChallengeWinner {
+  id: string;
+  weekNumber: number;
+  title: string;
+  theme: string;
+  dateRange: string;
+  winnerName: string;
+  winnerAvatar: string;
+  winnerLevel: string;
+  entryTitle: string;
+  videoUrl: string;
+  score: number;
+  votesCount: number;
+  participantsCount: number;
+  prizeAwarded: string;
+}
+
 export interface MessagingContact {
   id: string;
   name: string;
@@ -492,4 +776,5 @@ export interface MessagingContact {
   lastMessageTime?: string;
   unreadCount?: number;
 }
+
 

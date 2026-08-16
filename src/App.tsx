@@ -642,12 +642,12 @@ export default function App() {
 
   // Subscribe to user session music from Firebase Firestore
   useEffect(() => {
-    if (!currentUser?.id) return;
-    const unsub = subscribeUserTracksFromFirebase(currentUser.id, (userTracks) => {
+    if (!firebaseUser?.uid) return;
+    const unsub = subscribeUserTracksFromFirebase(firebaseUser.uid, (userTracks) => {
       setPlaylists(userTracks);
     });
     return () => unsub();
-  }, [currentUser?.id]);
+  }, [firebaseUser?.uid]);
 
   const [feedbackItems, setFeedbackItems] = useState<FeedbackItem[]>(INITIAL_FEEDBACK_ITEMS);
   const [notificationsList, setNotificationsList] = useState<NotificationItem[]>([]);
@@ -677,6 +677,10 @@ export default function App() {
 
   // Real-time Firestore Listeners for Community & Academy Collections
   useEffect(() => {
+    if (!firebaseUser) {
+      setChatMessages(INITIAL_CHAT_MESSAGES);
+      return;
+    }
     const unsub = onSnapshot(
       collection(db, 'chat_messages'),
       (snapshot) => {
@@ -697,9 +701,13 @@ export default function App() {
       }
     );
     return () => unsub();
-  }, []);
+  }, [firebaseUser]);
 
   useEffect(() => {
+    if (!firebaseUser) {
+      setPresentations(INITIAL_PRESENTATIONS);
+      return;
+    }
     const unsub = onSnapshot(
       collection(db, 'presentations'),
       (snapshot) => {
@@ -720,9 +728,13 @@ export default function App() {
       }
     );
     return () => unsub();
-  }, []);
+  }, [firebaseUser]);
 
   useEffect(() => {
+    if (!firebaseUser) {
+      setAnnouncements(INITIAL_ANNOUNCEMENTS);
+      return;
+    }
     const unsub = onSnapshot(
       collection(db, 'announcements'),
       (snapshot) => {
@@ -743,9 +755,13 @@ export default function App() {
       }
     );
     return () => unsub();
-  }, []);
+  }, [firebaseUser]);
 
   useEffect(() => {
+    if (!firebaseUser) {
+      setFeedbackItems(INITIAL_FEEDBACK_ITEMS);
+      return;
+    }
     const unsub = onSnapshot(
       collection(db, 'feedback_items'),
       (snapshot) => {
@@ -766,7 +782,7 @@ export default function App() {
       }
     );
     return () => unsub();
-  }, []);
+  }, [firebaseUser]);
 
   // Register Service Worker and listen for notification click events
   useEffect(() => {
@@ -782,6 +798,10 @@ export default function App() {
 
   // Real-time Firestore Listener for Notifications (/notifications)
   useEffect(() => {
+    if (!firebaseUser) {
+      setNotificationsList(INITIAL_DEMO_NOTIFICATIONS);
+      return;
+    }
     const unsub = onSnapshot(
       collection(db, 'notifications'),
       (snapshot) => {
@@ -817,7 +837,7 @@ export default function App() {
       }
     );
     return () => unsub();
-  }, [currentUser.id, currentUser.name]);
+  }, [firebaseUser, currentUser.id, currentUser.name]);
 
   const effectiveNotificationsList = notificationsList.length > 0 ? notificationsList : INITIAL_DEMO_NOTIFICATIONS;
   const unreadNotificationsCount = effectiveNotificationsList.filter(n => !n.read).length;
@@ -866,6 +886,10 @@ export default function App() {
 
   // Real-time Firestore Listener for Lessons (/lessons)
   useEffect(() => {
+    if (!firebaseUser) {
+      setLessons(INITIAL_LESSONS);
+      return;
+    }
     const unsub = onSnapshot(
       collection(db, 'lessons'),
       (snapshot) => {
@@ -887,11 +911,11 @@ export default function App() {
       }
     );
     return () => unsub();
-  }, []);
+  }, [firebaseUser]);
 
   // Real-time Firestore Listener for User Practice Logs (/users/{uid}/practice_logs)
   useEffect(() => {
-    const activeUid = firebaseUser?.uid || currentUser.id;
+    const activeUid = firebaseUser?.uid;
     if (!activeUid) return;
 
     const unsub = onSnapshot(
@@ -915,7 +939,7 @@ export default function App() {
       }
     );
     return () => unsub();
-  }, [firebaseUser?.uid, currentUser.id]);
+  }, [firebaseUser?.uid]);
 
   // Save to LocalStorage when remaining non-Firestore states change
   useEffect(() => {

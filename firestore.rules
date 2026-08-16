@@ -1,45 +1,42 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-
-    function isSignedIn() {
-      return request.auth != null;
-    }
-
-    function isAdmin() {
-      return isSignedIn() && request.auth.uid == 'OdXh2P0qGDaFFyNKalECKFq9ESk1';
-    }
-
-    function isOwner(userId) {
-      return isSignedIn() && request.auth.uid == userId;
+    match /{document=**} {
+      allow read, write: if true;
     }
 
     match /users/{userId} {
       allow read, write: if true;
-
-      match /favoritos/{imageId} {
-        allow read, write: if true;
-      }
-      match /practice_logs/{logId} {
-        allow read, write: if true;
-      }
-      match /playlists/{playlistId} {
-        allow read, write: if true;
-      }
-      match /{document=**} {
+      match /{allSubcollections=**} {
         allow read, write: if true;
       }
     }
 
-    match /reels/{reelId} {
+    match /lessons/{lessonId} {
       allow read, write: if true;
     }
 
-    match /community_messages/{messageId} {
+    match /announcements/{annId} {
+      allow read, write: if true;
+    }
+
+    match /feedback_items/{feedbackId} {
+      allow read, write: if true;
+    }
+
+    match /notifications/{notifId} {
       allow read, write: if true;
     }
 
     match /chat_messages/{messageId} {
+      allow read, write: if true;
+    }
+
+    match /presentations/{presId} {
+      allow read, write: if true;
+    }
+
+    match /community_messages/{messageId} {
       allow read, write: if true;
     }
 
@@ -75,35 +72,17 @@ service cloud.firestore {
       allow read, write: if true;
     }
 
-    match /presentations/{presId} {
+    match /reels/{reelId} {
       allow read, write: if true;
     }
 
-    match /announcements/{annId} {
-      allow read, write: if true;
-    }
-
-    match /feedback_items/{feedbackId} {
-      allow read, write: if true;
-    }
-
-    match /notifications/{notifId} {
-      allow read, write: if true;
-    }
-
-    match /lessons/{lessonId} {
-      allow read, write: if true;
-    }
-
-    match /test/connection {
-      allow read, write: if true;
-    }
-
-    match /{document=**} {
+    match /test/{docId} {
       allow read, write: if true;
     }
   }
 }
+
+
 
 
 

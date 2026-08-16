@@ -1,6 +1,6 @@
 import { doc, setDoc, deleteDoc, collection, onSnapshot, query, where, getDocs } from 'firebase/firestore';
 import { ref, uploadBytesResumable, getDownloadURL, deleteObject } from 'firebase/storage';
-import { db, storage, handleFirestoreError, OperationType } from './firebase';
+import { db, auth, storage, handleFirestoreError, OperationType } from './firebase';
 import { PlaylistItem } from '../types';
 
 export const INITIAL_DEFAULT_TRACKS: PlaylistItem[] = [
@@ -78,7 +78,7 @@ export function subscribeUserTracksFromFirebase(
   userId: string,
   onTracksUpdate: (tracks: PlaylistItem[]) => void
 ): () => void {
-  if (!userId) {
+  if (!userId || !auth.currentUser) {
     onTracksUpdate(INITIAL_DEFAULT_TRACKS);
     return () => {};
   }

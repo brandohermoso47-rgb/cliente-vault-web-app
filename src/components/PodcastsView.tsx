@@ -22,7 +22,7 @@ import {
   BookOpen
 } from 'lucide-react';
 import { PodcastShow, PodcastEpisode, User, InstructorCatedra } from '../types';
-import { INITIAL_PODCASTS, INITIAL_INSTRUCTORS } from '../data';
+import { INITIAL_PODCAST_SHOWS, INITIAL_INSTRUCTORS } from '../data';
 import AudioPlayer from './AudioPlayer';
 import InstructorMembershipModal, { InstructorPlanInfo } from './InstructorMembershipModal';
 
@@ -37,7 +37,7 @@ interface PodcastsViewProps {
 export default function PodcastsView({
   currentUser,
   onUserChange,
-  podcastsList = INITIAL_PODCASTS,
+  podcastsList = INITIAL_PODCAST_SHOWS,
   instructors = INITIAL_INSTRUCTORS,
   onOpenInstructorMembership
 }: PodcastsViewProps) {

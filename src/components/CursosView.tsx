@@ -34,13 +34,19 @@ import {
   Save,
   Music,
   TrendingUp,
-  CheckCircle2
+  CheckCircle2,
+  LayoutGrid,
+  ListFilter,
+  Gauge,
+  SlidersHorizontal,
+  RotateCcw
 } from 'lucide-react';
 import { User, Lesson, InstructorCatedra, IntensiveCourse, CatedraMaterial, FeedbackItem } from '../types';
 import { Language, translations } from '../lib/translations';
 import { WaackingPillarsGallery } from './WaackingPillarsGallery';
 import { SomaticFeedbackLab } from './lab/SomaticFeedbackLab';
 import FormationContentPreviewModal from './FormationContentPreviewModal';
+import { CategoryFilterBar, FilterState, FilterDimensionTab, STYLE_OPTIONS, TECHNIQUE_OPTIONS, DIFFICULTY_OPTIONS } from './CategoryFilterBar';
 import Logo from './Logo';
 
 interface CursosViewProps {
@@ -158,6 +164,98 @@ export default function CursosView({
   const selectedLevel = selectedCourseLevel;
   const setSelectedLevel = setSelectedCourseLevel;
 
+  // Category, Style, Technique, Difficulty & Search Filter State
+  const [filters, setFilters] = useState<FilterState>({
+    style: 'all',
+    technique: 'all',
+    difficulty: 'all',
+    completion: 'all',
+    searchQuery: '',
+  });
+  const [activeDimensionTab, setActiveDimensionTab] = useState<FilterDimensionTab>('all');
+  const [viewLayout, setViewLayout] = useState<'catedras' | 'catalog'>('catedras');
+
+  const handleFilterChange = (newFilters: Partial<FilterState>) => {
+    setFilters(prev => ({ ...prev, ...newFilters }));
+  };
+
+  const handleResetFilters = () => {
+    setFilters({
+      style: 'all',
+      technique: 'all',
+      difficulty: 'all',
+      completion: 'all',
+      searchQuery: '',
+    });
+  };
+
+  // Helper filter matching function
+  const matchesLessonFilters = (lesson: Lesson, f: FilterState, instFilter: string) => {
+    if (instFilter !== 'all' && lesson.instructorId !== instFilter) return false;
+
+    // Style match
+    if (f.style !== 'all') {
+      const lessonStyle = lesson.style || (
+        lesson.category === 'caracter' ? 'punking' :
+        lesson.category === 'velocidad' ? 'fast_waack' :
+        lesson.category === 'postura' ? 'classic' :
+        lesson.category === 'improvisacion' ? 'soul_freestyle' :
+        lesson.category === 'fundamentos' ? 'posing' : 'classic'
+      );
+      if (lessonStyle !== f.style) return false;
+    }
+
+    // Technique match
+    if (f.technique !== 'all') {
+      const lessonTech = lesson.technique || (
+        lesson.category === 'brazos' ? 'rolls' :
+        lesson.category === 'postura' ? 'posture' :
+        lesson.category === 'musicalidad' ? 'musicality' :
+        lesson.category === 'caracter' ? 'drama' :
+        lesson.category === 'velocidad' ? 'speed' :
+        lesson.category === 'improvisacion' ? 'footwork' : 'fundamentals'
+      );
+      if (lessonTech !== f.technique) return false;
+    }
+
+    // Difficulty match
+    if (f.difficulty !== 'all') {
+      const lessonDiff = lesson.difficulty || (lesson.level === 1 ? 'principiante' : 'intermedio');
+      if (f.difficulty === 'principiante') {
+        if (lessonDiff !== 'principiante' && lesson.level !== 1) return false;
+      } else if (f.difficulty === 'intermedio') {
+        if (lessonDiff !== 'intermedio' && lesson.level !== 2) return false;
+      } else if (f.difficulty === 'avanzado') {
+        if (lessonDiff !== 'avanzado') return false;
+      }
+    }
+
+    // Completion status
+    if (f.completion === 'completed') {
+      if (!currentUser.completedLessons?.includes(lesson.id)) return false;
+    } else if (f.completion === 'pending') {
+      if (currentUser.completedLessons?.includes(lesson.id)) return false;
+    }
+
+    // Search query
+    if (f.searchQuery.trim()) {
+      const q = f.searchQuery.toLowerCase().trim();
+      const matchTitle = lesson.title.toLowerCase().includes(q);
+      const matchDesc = (lesson.description || '').toLowerCase().includes(q);
+      const matchInstructor = (lesson.instructorName || '').toLowerCase().includes(q);
+      const matchCategory = (lesson.category || '').toLowerCase().includes(q);
+      const matchTags = (lesson.tags || []).some(tag => tag.toLowerCase().includes(q));
+      if (!matchTitle && !matchDesc && !matchInstructor && !matchCategory && !matchTags) {
+        return false;
+      }
+    }
+
+    return true;
+  };
+
+  // Filtered lessons across all active criteria
+  const filteredLessons = (lessons || []).filter(l => matchesLessonFilters(l, filters, selectedInstructorFilter));
+
   // Selected Active Lesson in Video Player
   const [activeLesson, setActiveLesson] = useState<Lesson | undefined>(() => (lessons && lessons.length > 0) ? lessons[0] : undefined);
 
@@ -166,19 +264,12 @@ export default function CursosView({
 
   // Sync active lesson when filters change
   useEffect(() => {
-    let avail = lessons || [];
-    if (selectedInstructorFilter !== 'all') {
-      avail = avail.filter(l => l.instructorId === selectedInstructorFilter);
-    }
-    const levelFiltered = avail.filter(l => l.level === selectedLevel);
-    if (levelFiltered.length > 0) {
-      if (!levelFiltered.some(l => l.id === activeLesson?.id)) {
-        setActiveLesson(levelFiltered[0]);
+    if (filteredLessons.length > 0) {
+      if (!activeLesson || !filteredLessons.some(l => l.id === activeLesson.id)) {
+        setActiveLesson(filteredLessons[0]);
       }
-    } else if (avail.length > 0) {
-      setActiveLesson(avail[0]);
     }
-  }, [selectedInstructorFilter, selectedLevel, lessons]);
+  }, [filters, selectedInstructorFilter, lessons]);
 
   // Workbook page index
   const [workbookPage, setWorkbookPage] = useState(0);
@@ -444,8 +535,57 @@ export default function CursosView({
         </div>
       </div>
 
+      {/* CATEGORY & ATTRIBUTE FILTER BAR */}
+      <CategoryFilterBar
+        filters={filters}
+        onFilterChange={handleFilterChange}
+        onResetFilters={handleResetFilters}
+        totalLessonsCount={(lessons || []).length}
+        filteredLessonsCount={filteredLessons.length}
+        activeDimensionTab={activeDimensionTab}
+        setActiveDimensionTab={setActiveDimensionTab}
+      />
+
+      {/* VIEW LAYOUT TOGGLE */}
+      <div className="flex items-center justify-between gap-4 flex-wrap bg-[#100d1a] border border-white/10 p-3 rounded-2xl">
+        <div className="flex items-center gap-2">
+          <span className="text-xs font-mono text-slate-400 font-bold uppercase">Modo de Visualización:</span>
+          <span className="text-xs font-bold text-[#E9C349] bg-[#E9C349]/10 px-2 py-0.5 rounded-lg border border-[#E9C349]/30">
+            {filteredLessons.length} Lecciones Filtradas
+          </span>
+        </div>
+
+        <div className="flex items-center gap-1.5 bg-black/60 p-1 rounded-xl border border-white/10">
+          <button
+            type="button"
+            onClick={() => setViewLayout('catedras')}
+            className={`px-3.5 py-1.5 rounded-lg text-xs font-extrabold transition-all flex items-center gap-1.5 cursor-pointer ${
+              viewLayout === 'catedras'
+                ? 'bg-[#E9C349] text-black shadow-md'
+                : 'text-slate-400 hover:text-white'
+            }`}
+          >
+            <Users className="w-3.5 h-3.5" />
+            <span>Desglose por Cátedra</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setViewLayout('catalog')}
+            className={`px-3.5 py-1.5 rounded-lg text-xs font-extrabold transition-all flex items-center gap-1.5 cursor-pointer ${
+              viewLayout === 'catalog'
+                ? 'bg-[#E9C349] text-black shadow-md'
+                : 'text-slate-400 hover:text-white'
+            }`}
+          >
+            <LayoutGrid className="w-3.5 h-3.5" />
+            <span>Catálogo Unificado</span>
+          </button>
+        </div>
+      </div>
+
       {/* MAIN CATEDRAS BREAKDOWN VIEW */}
-      {currentTab === 'catedras' && (
+      {currentTab === 'catedras' && viewLayout === 'catedras' && (
         <div className="space-y-8">
 
           {/* GLOBAL PROGRESS SUMMARY */}
@@ -909,6 +1049,204 @@ export default function CursosView({
               );
             })}
 
+        </div>
+      )}
+
+      {/* UNIFIED DIRECT CATALOG VIEW */}
+      {currentTab === 'catedras' && viewLayout === 'catalog' && (
+        <div className="space-y-6">
+          {/* CATALOG HEADER WITH ACTIVE FILTER CHIPS */}
+          <div className="bg-[#12101f] border border-white/10 p-5 rounded-3xl flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-xl">
+            <div>
+              <h2 className="text-lg font-black text-white uppercase flex items-center gap-2">
+                <LayoutGrid className="w-5 h-5 text-[#E9C349]" />
+                Catálogo Unificado de Clases de Waacking
+              </h2>
+              <p className="text-xs text-slate-400 mt-0.5">
+                Mostrando {filteredLessons.length} lecciones filtradas por estilo, técnica y nivel de dificultad.
+              </p>
+            </div>
+
+            <div className="flex items-center gap-2 flex-wrap">
+              {filters.style !== 'all' && (
+                <span className="text-[10px] font-mono font-bold bg-purple-950/80 text-purple-300 border border-purple-500/40 px-2.5 py-1 rounded-lg flex items-center gap-1">
+                  Estilo: {STYLE_OPTIONS.find(s => s.id === filters.style)?.label}
+                  <button onClick={() => handleFilterChange({ style: 'all' })} className="hover:text-white font-black ml-1 cursor-pointer">×</button>
+                </span>
+              )}
+              {filters.technique !== 'all' && (
+                <span className="text-[10px] font-mono font-bold bg-blue-950/80 text-blue-300 border border-blue-500/40 px-2.5 py-1 rounded-lg flex items-center gap-1">
+                  Técnica: {TECHNIQUE_OPTIONS.find(t => t.id === filters.technique)?.label}
+                  <button onClick={() => handleFilterChange({ technique: 'all' })} className="hover:text-white font-black ml-1 cursor-pointer">×</button>
+                </span>
+              )}
+              {filters.difficulty !== 'all' && (
+                <span className="text-[10px] font-mono font-bold bg-amber-950/80 text-amber-300 border border-amber-500/40 px-2.5 py-1 rounded-lg flex items-center gap-1">
+                  Nivel: {DIFFICULTY_OPTIONS.find(d => d.id === filters.difficulty)?.label}
+                  <button onClick={() => handleFilterChange({ difficulty: 'all' })} className="hover:text-white font-black ml-1 cursor-pointer">×</button>
+                </span>
+              )}
+              {filters.completion !== 'all' && (
+                <span className="text-[10px] font-mono font-bold bg-emerald-950/80 text-emerald-300 border border-emerald-500/40 px-2.5 py-1 rounded-lg flex items-center gap-1">
+                  Estado: {filters.completion === 'completed' ? 'Completadas' : 'Pendientes'}
+                  <button onClick={() => handleFilterChange({ completion: 'all' })} className="hover:text-white font-black ml-1 cursor-pointer">×</button>
+                </span>
+              )}
+            </div>
+          </div>
+
+          {/* CATALOG GRID */}
+          {filteredLessons.length === 0 ? (
+            <div className="bg-[#12101f] border border-white/10 p-12 rounded-3xl text-center space-y-4 shadow-xl">
+              <ListFilter className="w-12 h-12 text-slate-500 mx-auto" />
+              <h3 className="text-base font-black text-white uppercase">No se encontraron lecciones</h3>
+              <p className="text-xs text-slate-400 max-w-md mx-auto">
+                No hay clases que cumplan simultáneamente con todos los criterios de estilo, técnica o nivel seleccionados.
+              </p>
+              <button
+                type="button"
+                onClick={handleResetFilters}
+                className="px-5 py-2.5 bg-[#E9C349] hover:bg-[#d4aa29] text-black font-extrabold text-xs uppercase rounded-xl transition-all shadow-lg flex items-center gap-2 mx-auto cursor-pointer"
+              >
+                <RotateCcw className="w-4 h-4" /> Restablecer Todos los Filtros
+              </button>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+              {filteredLessons.map((lesson) => {
+                const isComp = (currentUser.completedLessons || []).includes(lesson.id);
+                const isAct = activeLesson?.id === lesson.id;
+                const inst = instructors.find(i => i.id === lesson.instructorId);
+
+                return (
+                  <div
+                    key={lesson.id}
+                    className={`bg-[#120f1d] border rounded-2xl overflow-hidden flex flex-col justify-between transition-all group hover:border-[#E9C349]/50 shadow-xl ${
+                      isAct ? 'border-[#E9C349] ring-1 ring-[#E9C349]/40' : 'border-white/10'
+                    }`}
+                  >
+                    {/* Thumbnail & Badges */}
+                    <div className="relative aspect-video bg-black overflow-hidden">
+                      <img
+                        src={lesson.videoUrl || inst?.courses[0]?.coverImage}
+                        alt={lesson.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-85"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
+
+                      {/* Top Badges */}
+                      <div className="absolute top-2 left-2 flex flex-wrap gap-1">
+                        <span className="text-[9px] font-mono font-bold bg-black/80 text-[#E9C349] px-2 py-0.5 rounded-md border border-[#E9C349]/30 uppercase">
+                          {lesson.category}
+                        </span>
+                        {lesson.difficulty && (
+                          <span className={`text-[9px] font-mono font-bold px-2 py-0.5 rounded-md uppercase border ${
+                            lesson.difficulty === 'principiante' 
+                              ? 'bg-amber-950/80 text-amber-300 border-amber-500/30'
+                              : lesson.difficulty === 'intermedio'
+                              ? 'bg-purple-950/80 text-purple-300 border-purple-500/30'
+                              : 'bg-rose-950/80 text-rose-300 border-rose-500/30'
+                          }`}>
+                            {lesson.difficulty}
+                          </span>
+                        )}
+                      </div>
+
+                      {/* Bottom Info */}
+                      <div className="absolute bottom-2 left-2 right-2 flex items-center justify-between text-[10px] font-mono">
+                        <span className="bg-black/80 text-slate-300 px-2 py-0.5 rounded-md">
+                          ⏱ {lesson.duration}
+                        </span>
+                        {lesson.bpm && (
+                          <span className="bg-emerald-950/80 text-emerald-300 px-2 py-0.5 rounded-md border border-emerald-500/30">
+                            🎵 {lesson.bpm} BPM
+                          </span>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Content Body */}
+                    <div className="p-4 flex-1 flex flex-col justify-between space-y-3">
+                      <div className="space-y-2">
+                        {/* Instructor line */}
+                        <div className="flex items-center gap-2">
+                          <img
+                            src={inst?.avatar}
+                            alt={lesson.instructorName}
+                            className="w-5 h-5 rounded-full object-cover border border-white/20"
+                          />
+                          <span className="text-[10px] font-mono text-slate-300 truncate uppercase">
+                            {lesson.instructorName}
+                          </span>
+                        </div>
+
+                        {/* Title */}
+                        <h4 className="text-xs font-black text-white uppercase line-clamp-2">
+                          {lesson.title}
+                        </h4>
+
+                        {/* Style and Technique Badges */}
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                          {lesson.style && (
+                            <span className="text-[9px] font-mono text-purple-300 bg-purple-950/50 border border-purple-500/30 px-1.5 py-0.5 rounded">
+                              {STYLE_OPTIONS.find(s => s.id === lesson.style)?.label || lesson.style}
+                            </span>
+                          )}
+                          {lesson.technique && (
+                            <span className="text-[9px] font-mono text-blue-300 bg-blue-950/50 border border-blue-500/30 px-1.5 py-0.5 rounded">
+                              {TECHNIQUE_OPTIONS.find(t => t.id === lesson.technique)?.label || lesson.technique}
+                            </span>
+                          )}
+                        </div>
+
+                        {/* Description */}
+                        <p className="text-xs text-slate-400 line-clamp-2 leading-relaxed">
+                          {lesson.description}
+                        </p>
+                      </div>
+
+                      {/* Action buttons */}
+                      <div className="space-y-2 pt-2 border-t border-white/10">
+                        <div className="flex items-center gap-2">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setActiveLesson(lesson);
+                              setViewLayout('catedras');
+                            }}
+                            className="flex-1 py-1.5 bg-[#E9C349] hover:bg-[#d4aa29] text-black font-extrabold text-xs uppercase rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-md"
+                          >
+                            <Play className="w-3 h-3 fill-current" /> Ver en Video
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={() => handleToggleComplete(lesson.id)}
+                            className={`p-2 rounded-xl border transition-all cursor-pointer ${
+                              isComp
+                                ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
+                                : 'bg-black/40 text-slate-400 border-white/10 hover:text-white'
+                            }`}
+                            title={isComp ? 'Marcar como pendiente' : 'Marcar como completada'}
+                          >
+                            {isComp ? <CheckSquare className="w-4 h-4 text-emerald-400" /> : <Square className="w-4 h-4" />}
+                          </button>
+                        </div>
+
+                        <button
+                          type="button"
+                          onClick={() => setActiveTab('entrenamiento')}
+                          className="w-full py-1 bg-white/5 hover:bg-white/10 text-slate-300 text-[10px] font-mono font-bold uppercase rounded-lg border border-white/10 flex items-center justify-center gap-1 transition-all cursor-pointer"
+                        >
+                          <Zap className="w-3 h-3 text-[#E9C349]" /> Practicar en Drills
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </div>
       )}
 
