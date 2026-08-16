@@ -403,7 +403,7 @@ export default function InstructorPlaylistsManager({ currentUser, language = 'es
   const handleRemoveTrack = async (playlistId: string, trackId: string) => {
     const updated = playlists.map(p => {
       if (p.id === playlistId) {
-        return { ...p, tracks: p.tracks.filter(t => t.id !== trackId) };
+        return { ...p, tracks: (p.tracks || []).filter(t => t.id !== trackId) };
       }
       return p;
     });
@@ -604,7 +604,7 @@ export default function InstructorPlaylistsManager({ currentUser, language = 'es
                   <div className="pt-2 border-t border-white/10 flex items-center justify-between text-xs font-mono text-slate-400">
                     <span className="flex items-center gap-1 text-slate-300">
                       <Music className="w-3.5 h-3.5 text-[#E9C349]" />
-                      <strong>{pl.tracks.length}</strong> pistas
+                      <strong>{(pl.tracks || []).length}</strong> pistas
                     </span>
 
                     <span className="text-[11px] text-amber-400 font-bold">

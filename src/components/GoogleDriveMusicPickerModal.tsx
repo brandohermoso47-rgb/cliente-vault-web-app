@@ -102,11 +102,12 @@ export const GoogleDriveMusicPickerModal: React.FC<GoogleDriveMusicPickerModalPr
       } else if (res.error) {
         setErrorMessage(res.error);
       } else {
-        setDriveFiles(res.files);
-        if (res.files.length === 0 && !query) {
+        const files = Array.isArray(res.files) ? res.files : [];
+        setDriveFiles(files);
+        if (files.length === 0 && !query) {
           // Fallback search general files if no strict audio mimeType matches
           const fallback = await fetchDriveFiles(query);
-          setDriveFiles(fallback.files || []);
+          setDriveFiles(Array.isArray(fallback.files) ? fallback.files : []);
         }
       }
     } catch (err: any) {

@@ -118,7 +118,7 @@ export default function SpotifyPlaylistModal({
         }
       });
       const data = await res.json();
-      if (data.playlists) {
+      if (Array.isArray(data.playlists)) {
         setPlaylists(data.playlists);
         if (data.playlists.length > 0 && !selectedPreview) {
           setSelectedPreview(data.playlists[0]);

@@ -102,11 +102,12 @@ export default function ProfileView({
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [showDancerCardModal, setShowDancerCardModal] = useState(false);
   const [showSpotifyModal, setShowSpotifyModal] = useState(false);
+  const [showPushSettingsModal, setShowPushSettingsModal] = useState(false);
   const [selectedHighlight, setSelectedHighlight] = useState<any | null>(null);
   const [lightboxItem, setLightboxItem] = useState<ProfilePostItem | null>(null);
 
   // Settings Modal internal tab
-  const [settingsTab, setSettingsTab] = useState<'expediente' | 'google' | 'spotify' | 'suscripcion' | 'preferencias'>('expediente');
+  const [settingsTab, setSettingsTab] = useState<'expediente' | 'entrenamiento' | 'notificaciones' | 'google' | 'spotify' | 'suscripcion' | 'preferencias'>('expediente');
 
   // Grid filter tab
   const [activeGridTab, setActiveGridTab] = useState<'all' | 'reels' | 'saved'>('all');
@@ -771,6 +772,20 @@ export default function ProfileView({
             <span className="hidden sm:inline">{language === 'es' ? 'Perfil' : 'Profile Card'}</span>
           </button>
 
+          {/* BOTÓN DE NOTIFICACIONES PUSH (🔔) */}
+          <button
+            type="button"
+            onClick={() => setShowPushSettingsModal(true)}
+            className="p-2 sm:px-3 sm:py-2 rounded-xl bg-purple-600/20 hover:bg-purple-600/30 border border-purple-500/40 text-purple-300 font-mono font-bold text-xs uppercase tracking-wider transition-all flex items-center gap-1.5 cursor-pointer relative"
+            title="Ajustes de Notificaciones Push de Instructores"
+          >
+            <Bell className="w-4 h-4 text-purple-400" />
+            <span className="hidden sm:inline">Push</span>
+            {currentUser.pushEnabled && (
+              <span className="w-2 h-2 rounded-full bg-emerald-400 absolute -top-0.5 -right-0.5 shadow-[0_0_8px_rgba(52,211,153,0.8)]" />
+            )}
+          </button>
+
           {/* ICONO DE CONFIGURACIÓN (ENGRANAJE ⚙️) */}
           <button
             type="button"
@@ -1158,15 +1173,32 @@ export default function ProfileView({
               </button>
             </div>
 
-          </div>
-        </section>
+            {/* 4. Notificaciones Push de Instructores (Acceso Rápido al Diálogo Flotante) */}
+            <div className="md:col-span-2 bg-gradient-to-r from-purple-950/40 via-purple-900/20 to-transparent border border-purple-500/30 rounded-2xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 hover:border-purple-500/60 transition-colors">
+              <div className="space-y-1">
+                <div className="flex items-center gap-2 text-xs font-mono font-bold text-purple-300 uppercase">
+                  <Bell className="w-4 h-4 text-purple-400" />
+                  <span>Notificaciones Push de Instructores</span>
+                  <span className="text-[10px] bg-purple-500/20 text-purple-300 border border-purple-500/40 px-2 py-0.5 rounded-full font-mono font-bold">
+                    {currentUser.pushEnabled ? '🟢 Activas' : '🔴 Inactivas'}
+                  </span>
+                </div>
+                <p className="text-[11px] text-slate-300 max-w-xl">
+                  Configura alertas personalizadas por instructor, reviews de video y masterclasses en un diálogo flotante optimizado.
+                </p>
+              </div>
 
-        {/* Notificaciones Push de Instructores */}
-        <section className="pt-2">
-          <InstructorPushSubscriptionSettings 
-            currentUser={currentUser} 
-            onUserUpdate={(updated) => onUserChange({ ...currentUser, ...updated })} 
-          />
+              <button
+                type="button"
+                onClick={() => setShowPushSettingsModal(true)}
+                className="px-4 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-mono font-bold text-xs uppercase tracking-wider transition-all shadow-lg hover:shadow-purple-500/20 active:scale-95 flex items-center gap-2 shrink-0 cursor-pointer"
+              >
+                <Sliders className="w-4 h-4" />
+                <span>Configurar Push</span>
+              </button>
+            </div>
+
+          </div>
         </section>
 
         {/* ========================================================================= */}
@@ -1322,6 +1354,16 @@ export default function ProfileView({
                 >
                   <Target className="w-3.5 h-3.5" />
                   <span>Entrenamiento</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setSettingsTab('notificaciones')}
+                  className={`px-3 py-2 rounded-xl font-bold uppercase transition-all cursor-pointer flex items-center gap-1.5 ${
+                    settingsTab === 'notificaciones' ? 'bg-purple-600 text-white shadow-[0_0_12px_rgba(147,51,234,0.5)]' : 'bg-white/5 text-slate-300 hover:bg-white/10'
+                  }`}
+                >
+                  <Bell className="w-3.5 h-3.5 text-purple-300" />
+                  <span>Notificaciones</span>
                 </button>
                 <button
                   type="button"
@@ -1499,6 +1541,16 @@ export default function ProfileView({
                       </button>
                     </div>
                   </div>
+                </div>
+              )}
+
+              {/* TAB NOTIFICACIONES PUSH & INSTRUCTORES */}
+              {settingsTab === 'notificaciones' && (
+                <div className="space-y-4">
+                  <InstructorPushSubscriptionSettings
+                    currentUser={currentUser}
+                    onUserUpdate={(updated) => onUserChange({ ...currentUser, ...updated })}
+                  />
                 </div>
               )}
 
@@ -1915,6 +1967,28 @@ export default function ProfileView({
         isOpen={showSpotifyModal}
         onClose={() => setShowSpotifyModal(false)}
       />
+
+      {/* ========================================================================= */}
+      {/* MODAL 6: DIÁLOGO FLOTANTE DE NOTIFICACIONES PUSH DE INSTRUCTORES */}
+      {/* ========================================================================= */}
+      <AnimatePresence>
+        {showPushSettingsModal && (
+          <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="w-full max-w-3xl my-auto"
+            >
+              <InstructorPushSubscriptionSettings
+                currentUser={currentUser}
+                onUserUpdate={(updated) => onUserChange({ ...currentUser, ...updated })}
+                onClose={() => setShowPushSettingsModal(false)}
+              />
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
 
     </div>
   );

@@ -18,7 +18,8 @@ import {
   Megaphone,
   Video,
   Zap,
-  Music
+  Music,
+  X
 } from 'lucide-react';
 import { User, InstructorPushPreference, PushSubscriptionData } from '../types';
 import { 
@@ -33,6 +34,7 @@ import {
 interface InstructorPushSubscriptionSettingsProps {
   currentUser: User;
   onUserUpdate?: (updatedFields: Partial<User>) => void;
+  onClose?: () => void;
 }
 
 const DEFAULT_INSTRUCTORS = [
@@ -44,7 +46,8 @@ const DEFAULT_INSTRUCTORS = [
 
 export const InstructorPushSubscriptionSettings: React.FC<InstructorPushSubscriptionSettingsProps> = ({
   currentUser,
-  onUserUpdate
+  onUserUpdate,
+  onClose
 }) => {
   const [pushPermission, setPushPermission] = useState<NotificationPermission>(() => {
     return typeof window !== 'undefined' && 'Notification' in window ? Notification.permission : 'default';
@@ -220,23 +223,36 @@ export const InstructorPushSubscriptionSettings: React.FC<InstructorPushSubscrip
           </p>
         </div>
 
-        {/* Global Push Enable Toggle Switch */}
-        <div className="flex items-center gap-3 bg-white/5 border border-white/10 px-4 py-2.5 rounded-2xl shrink-0">
-          <div className="text-right">
-            <p className="text-xs font-mono font-bold text-white uppercase">Estado del Push</p>
-            <p className="text-[10px] text-slate-400 font-medium">
-              {pushEnabled ? '🟢 Suscripción Activa' : '🔴 Inactivo'}
-            </p>
+        {/* Global Push Enable Toggle Switch & Optional Close Button */}
+        <div className="flex items-center gap-3 shrink-0">
+          <div className="flex items-center gap-3 bg-white/5 border border-white/10 px-4 py-2.5 rounded-2xl">
+            <div className="text-right">
+              <p className="text-xs font-mono font-bold text-white uppercase">Estado del Push</p>
+              <p className="text-[10px] text-slate-400 font-medium">
+                {pushEnabled ? '🟢 Suscripción Activa' : '🔴 Inactivo'}
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => setPushEnabled(!pushEnabled)}
+              className={`w-12 h-6 rounded-full p-1 transition-colors duration-200 cursor-pointer ${
+                pushEnabled ? 'bg-purple-600 shadow-[0_0_12px_rgba(147,51,234,0.5)]' : 'bg-slate-700'
+              }`}
+            >
+              <div className={`w-4 h-4 rounded-full bg-white transition-transform ${pushEnabled ? 'translate-x-6' : 'translate-x-0'}`} />
+            </button>
           </div>
-          <button
-            type="button"
-            onClick={() => setPushEnabled(!pushEnabled)}
-            className={`w-12 h-6 rounded-full p-1 transition-colors duration-200 cursor-pointer ${
-              pushEnabled ? 'bg-purple-600 shadow-[0_0_12px_rgba(147,51,234,0.5)]' : 'bg-slate-700'
-            }`}
-          >
-            <div className={`w-4 h-4 rounded-full bg-white transition-transform ${pushEnabled ? 'translate-x-6' : 'translate-x-0'}`} />
-          </button>
+
+          {onClose && (
+            <button
+              type="button"
+              onClick={onClose}
+              className="p-2.5 rounded-2xl bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white transition-all cursor-pointer"
+              title="Cerrar ventana de notificaciones"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          )}
         </div>
       </div>
 

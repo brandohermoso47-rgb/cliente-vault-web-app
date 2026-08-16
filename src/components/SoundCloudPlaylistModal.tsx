@@ -121,7 +121,7 @@ export default function SoundCloudPlaylistModal({
         }
       });
       const data = await res.json();
-      if (data.playlists) {
+      if (Array.isArray(data.playlists)) {
         setPlaylists(data.playlists);
         if (data.playlists.length > 0 && !selectedPreview) {
           setSelectedPreview(data.playlists[0]);
@@ -143,7 +143,7 @@ export default function SoundCloudPlaylistModal({
     try {
       const res = await fetch(`/api/soundcloud/search?q=${encodeURIComponent(searchQuery)}`);
       const data = await res.json();
-      if (data.results) {
+      if (Array.isArray(data.results)) {
         setSearchResults(data.results);
         if (data.results.length > 0) {
           setSelectedPreview(data.results[0]);

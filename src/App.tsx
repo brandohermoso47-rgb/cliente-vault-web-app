@@ -784,9 +784,31 @@ export default function App() {
     return () => unsub();
   }, [firebaseUser]);
 
-  // Register Service Worker and listen for notification click events
+  // Register Service Worker, auto-request notification permissions on platform entry, and listen for notification events
   useEffect(() => {
     registerServiceWorker();
+
+    // Auto-request browser push notifications upon entering platform if in default state
+    if (typeof window !== 'undefined' && 'Notification' in window) {
+      if (Notification.permission === 'default') {
+        const timer = setTimeout(() => {
+          requestWebPushPermission(currentUser.id)
+            .then((granted) => {
+              if (granted) {
+                setCurrentUser((prev) => ({
+                  ...prev,
+                  pushEnabled: true,
+                  pushPermission: 'granted'
+                }));
+              }
+            })
+            .catch((err) => {
+              console.log('[AutoPush] Solicitud automática de notificación gestionada:', err);
+            });
+        }, 1200);
+        return () => clearTimeout(timer);
+      }
+    }
 
     const handleOpenFeedback = () => {
       setActiveTab('entrenamiento');
@@ -794,7 +816,7 @@ export default function App() {
     };
     window.addEventListener('OPEN_FEEDBACK_ITEM', handleOpenFeedback);
     return () => window.removeEventListener('OPEN_FEEDBACK_ITEM', handleOpenFeedback);
-  }, []);
+  }, [currentUser.id]);
 
   // Real-time Firestore Listener for Notifications (/notifications)
   useEffect(() => {

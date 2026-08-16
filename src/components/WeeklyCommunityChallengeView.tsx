@@ -447,7 +447,7 @@ export default function WeeklyCommunityChallengeView({
           >
             <span className="flex items-center gap-2">
               <Award className="w-4 h-4 text-[#E9C349]" />
-              Criterios de Evaluación Oficial ({challenge.criteria.length})
+              Criterios de Evaluación Oficial ({(challenge.criteria || []).length})
             </span>
             {showAllCriteria ? <ChevronDown className="w-4 h-4 text-[#E9C349]" /> : <ChevronRight className="w-4 h-4" />}
           </button>
@@ -460,7 +460,7 @@ export default function WeeklyCommunityChallengeView({
                 exit={{ opacity: 0, height: 0 }}
                 className="grid grid-cols-1 md:grid-cols-3 gap-3.5 mt-3.5"
               >
-                {challenge.criteria.map((crit, idx) => (
+                {(challenge.criteria || []).map((crit, idx) => (
                   <div
                     key={idx}
                     className="p-3.5 rounded-xl bg-white/[0.03] border border-white/10 hover:border-tertiary/30 transition-all"
@@ -519,7 +519,7 @@ export default function WeeklyCommunityChallengeView({
             <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${
               activeTab === 'gallery' ? 'bg-black/30 text-white' : 'bg-white/10 text-white'
             }`}>
-              {challenge.submissions.length}
+              {(challenge.submissions || []).length}
             </span>
           </button>
 
@@ -777,7 +777,7 @@ export default function WeeklyCommunityChallengeView({
                 Tabla Completa de Participantes & Puntuaciones
               </h4>
               <span className="text-xs font-mono text-gray-400">
-                {challenge.submissions.length} coreografías entregadas
+                {(challenge.submissions || []).length} coreografías entregadas
               </span>
             </div>
 
@@ -897,7 +897,7 @@ export default function WeeklyCommunityChallengeView({
             <div>
               <h3 className="text-base font-bold text-white flex items-center gap-2">
                 <Video className="w-4 h-4 text-purple-400" />
-                Galería de Videos del Reto ({challenge.submissions.length} entregas)
+                Galería de Videos del Reto ({(challenge.submissions || []).length} entregas)
               </h3>
               <p className="text-xs text-gray-400">
                 Mira las participaciones de tus compañeros, deja tus cheers y aprende de las correcciones de los jueces.
@@ -1399,7 +1399,7 @@ export default function WeeklyCommunityChallengeView({
 
                 {/* Quick Vote button inside modal */}
                 {(() => {
-                  const matchingSub = challenge.submissions.find(s => s.videoUrl === activeVideoItem.url || s.title === activeVideoItem.title);
+                  const matchingSub = (challenge.submissions || []).find(s => s.videoUrl === activeVideoItem.url || s.title === activeVideoItem.title);
                   if (!matchingSub) return null;
                   const isRecentlyVoted = recentlyVotedSubmissionId === matchingSub.id;
 

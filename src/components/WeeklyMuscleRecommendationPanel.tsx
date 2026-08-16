@@ -457,7 +457,7 @@ export default function WeeklyMuscleRecommendationPanel({
             </h3>
           </div>
           <p className={`text-[11px] font-semibold leading-relaxed ${isDark ? 'text-[#8A8A8A]' : 'text-slate-500'}`}>
-            Basado en tus {practiceLogs.length} sesiones registradas de la última semana ({muscleStats.totalMinutesWeek} min acumulados).
+            Basado en tus {(practiceLogs || []).length} sesiones registradas de la última semana ({muscleStats.totalMinutesWeek} min acumulados).
           </p>
         </div>
 
