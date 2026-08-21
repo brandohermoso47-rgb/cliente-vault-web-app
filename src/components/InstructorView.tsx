@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
   DollarSign, 
@@ -53,7 +53,28 @@ import {
   FileText,
   Download,
   Printer,
-  FileType
+  FileType,
+  Filter,
+  LayoutDashboard,
+  UserCheck,
+  Play,
+  Pause,
+  Timer,
+  Volume2,
+  ClipboardCheck,
+  Search,
+  Share2,
+  Copy,
+  BookOpenCheck,
+  Sliders,
+  RotateCcw,
+  MessageSquare,
+  Eye,
+  Clock,
+  Flame,
+  Activity,
+  CheckSquare,
+  Square
 } from 'lucide-react';
 import { User, CalendarEvent, Lesson, PodcastShow, PodcastEpisode } from '../types';
 import { INITIAL_PODCAST_SHOWS } from '../data';
@@ -702,6 +723,45 @@ export default function InstructorView({
     return saved ? JSON.parse(saved) : INITIAL_MOCK_STUDENTS;
   });
 
+  // Local state to maintain the selected/filtered student UID across dashboard tabs
+  const [selectedStudentUid, setSelectedStudentUid] = useState<string | null>(() => {
+    try {
+      return sessionStorage.getItem('waack_inst_selected_student_uid') || null;
+    } catch (e) {
+      return null;
+    }
+  });
+
+  useEffect(() => {
+    try {
+      if (selectedStudentUid) {
+        sessionStorage.setItem('waack_inst_selected_student_uid', selectedStudentUid);
+      } else {
+        sessionStorage.removeItem('waack_inst_selected_student_uid');
+      }
+    } catch (e) {}
+  }, [selectedStudentUid]);
+
+  const selectedStudent = useMemo(() => {
+    if (!selectedStudentUid) return null;
+    return (students || []).find(s => s.id === selectedStudentUid || (s as any).uid === selectedStudentUid) || null;
+  }, [students, selectedStudentUid]);
+
+  const handleSelectStudentForFilter = (studentId: string | null) => {
+    setSelectedStudentUid(studentId);
+    playChime('click');
+    if (studentId) {
+      const found = students.find(s => s.id === studentId);
+      if (found) {
+        setAlertText(`Filtro activo: ${found.name} (UID: ${found.id})`);
+        setTimeout(() => setAlertText(null), 3000);
+      }
+    } else {
+      setAlertText('Filtro de alumno desactivado (Mostrando todos).');
+      setTimeout(() => setAlertText(null), 2500);
+    }
+  };
+
   // State alerts
   const [alertText, setAlertText] = useState<string | null>(null);
 
@@ -722,13 +782,195 @@ export default function InstructorView({
   const [checkoutSuccess, setCheckoutSuccess] = useState(false);
 
   // Form State for scheduling a class event
+  const [classPanelSubTab, setClassPanelSubTab] = useState<'schedule' | 'curriculum' | 'live_control' | 'submissions'>('schedule');
   const [classTitle, setClassTitle] = useState('');
   const [classDate, setClassDate] = useState('');
   const [classTime, setClassTime] = useState('');
-  const [classDuration, setClassDuration] = useState('');
+  const [classDuration, setClassDuration] = useState('90 min');
   const [classMeet, setClassMeet] = useState('');
   const [classMusicUrl, setClassMusicUrl] = useState('');
   const [classBpm, setClassBpm] = useState<number | ''>(128);
+  const [classEventType, setClassEventType] = useState<'Masterclass Magistral' | 'Taller Intensivo de Técnica' | 'Sesión 1-a-1 de Corrección' | 'Laboratorio de Freestyle'>('Taller Intensivo de Técnica');
+  const [classTargetAudience, setClassTargetAudience] = useState<'all' | 'selected_only' | 'level_specific'>('all');
+  const [classTargetLevel, setClassTargetLevel] = useState<'all' | 'Principiante' | 'Intermedio' | 'Avanzado'>('all');
+  const [classNotes, setClassNotes] = useState('');
+
+  // Attendance Sheet Modal / State for scheduled classes
+  const [attendanceModalEvent, setAttendanceModalEvent] = useState<any | null>(null);
+  const [attendanceRecords, setAttendanceRecords] = useState<Record<string, Record<string, 'present' | 'absent' | 'late'>>>(() => {
+    try {
+      const saved = localStorage.getItem('waack_inst_attendance_records');
+      return saved ? JSON.parse(saved) : {};
+    } catch (e) {
+      return {};
+    }
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('waack_inst_attendance_records', JSON.stringify(attendanceRecords));
+    } catch (e) {}
+  }, [attendanceRecords]);
+
+  // Live Control Room & Metronome & Round Timer State
+  const [liveMetronomeActive, setLiveMetronomeActive] = useState(false);
+  const [liveMetronomeBpm, setLiveMetronomeBpm] = useState(124);
+  const [liveMetronomeBeat, setLiveMetronomeBeat] = useState(1);
+  const [liveRoundTimerSeconds, setLiveRoundTimerSeconds] = useState(60);
+  const [liveRoundInitialTime, setLiveRoundInitialTime] = useState(60);
+  const [liveRoundTimerRunning, setLiveRoundTimerRunning] = useState(false);
+  const [liveTeacherNotes, setLiveTeacherNotes] = useState(() => {
+    return localStorage.getItem('waack_inst_live_teacher_notes') || "Observaciones de la Cátedra:\n- Sofía: Mejorar la extensión de codo en compás 4.\n- Carlos: Excelente velocidad en roll; mantener la mirada erguida al público.\n- Yuki: Mantener ritmo a 128 BPM en posing sincopado.";
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('waack_inst_live_teacher_notes', liveTeacherNotes);
+    } catch (e) {}
+  }, [liveTeacherNotes]);
+
+  // Metronome beat interval
+  useEffect(() => {
+    if (!liveMetronomeActive) return;
+    const intervalMs = (60 / liveMetronomeBpm) * 1000;
+    const intervalId = setInterval(() => {
+      setLiveMetronomeBeat(prev => (prev % 8) + 1);
+      // Play audio click
+      try {
+        if (!audioCtxRef.current) {
+          audioCtxRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
+        }
+        const ctx = audioCtxRef.current;
+        if (ctx.state === 'suspended') ctx.resume();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        // Accent on beat 1 and beat 5
+        const isAccent = (liveMetronomeBeat === 1 || liveMetronomeBeat === 5);
+        osc.frequency.setValueAtTime(isAccent ? 880 : 440, ctx.currentTime);
+        gain.gain.setValueAtTime(isAccent ? 0.1 : 0.04, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.05);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.05);
+      } catch (e) {}
+    }, intervalMs);
+
+    return () => clearInterval(intervalId);
+  }, [liveMetronomeActive, liveMetronomeBpm, liveMetronomeBeat]);
+
+  // Live round timer interval
+  useEffect(() => {
+    if (!liveRoundTimerRunning) return;
+    const timerId = setInterval(() => {
+      setLiveRoundTimerSeconds(prev => {
+        if (prev <= 1) {
+          setLiveRoundTimerRunning(false);
+          playChime('cash');
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(timerId);
+  }, [liveRoundTimerRunning]);
+
+  // Curriculum Management State
+  const [curriculumSearchQuery, setCurriculumSearchQuery] = useState('');
+  const [curriculumLevelFilter, setCurriculumLevelFilter] = useState<'all' | 'Principiante' | 'Intermedio' | 'Avanzado'>('all');
+  const [curriculumAssignedMap, setCurriculumAssignedMap] = useState<Record<string, string[]>>(() => {
+    try {
+      const saved = localStorage.getItem('waack_inst_curriculum_assigned');
+      return saved ? JSON.parse(saved) : {
+        '1': ['st-101', 'st-102', 'st-103'],
+        '2': ['st-101', 'st-102'],
+        '3': ['st-101']
+      };
+    } catch (e) {
+      return {};
+    }
+  });
+
+  const [curriculumApprovedMap, setCurriculumApprovedMap] = useState<Record<string, string[]>>(() => {
+    try {
+      const saved = localStorage.getItem('waack_inst_curriculum_approved');
+      return saved ? JSON.parse(saved) : {
+        '1': ['st-101']
+      };
+    } catch (e) {
+      return {};
+    }
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('waack_inst_curriculum_assigned', JSON.stringify(curriculumAssignedMap));
+      localStorage.setItem('waack_inst_curriculum_approved', JSON.stringify(curriculumApprovedMap));
+    } catch (e) {}
+  }, [curriculumAssignedMap, curriculumApprovedMap]);
+
+  // Student Submissions & Technical Homework State
+  const [studentSubmissions, setStudentSubmissions] = useState<Array<{
+    id: string;
+    studentId: string;
+    studentName: string;
+    lessonTitle: string;
+    submittedAt: string;
+    videoUrl: string;
+    status: 'pending' | 'graded';
+    score?: number;
+    feedback?: string;
+  }>>(() => {
+    try {
+      const saved = localStorage.getItem('waack_inst_submissions');
+      return saved ? JSON.parse(saved) : [
+        {
+          id: 'sub-1',
+          studentId: 'st-101',
+          studentName: 'Ana "Waack Queen"',
+          lessonTitle: 'Fundamentos de Geometría Braquial & Rolls',
+          submittedAt: 'Hoy, 12:45',
+          videoUrl: 'https://images.unsplash.com/photo-1518834107812-67b0b7c58434?auto=format&fit=crop&q=80&w=600',
+          status: 'pending'
+        },
+        {
+          id: 'sub-2',
+          studentId: 'st-102',
+          studentName: 'Ji-Won Kim',
+          lessonTitle: 'Pose Diva & Líneas de Hombro 70s',
+          submittedAt: 'Ayer, 18:20',
+          videoUrl: 'https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&q=80&w=600',
+          status: 'pending'
+        }
+      ];
+    } catch (e) {
+      return [];
+    }
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('waack_inst_submissions', JSON.stringify(studentSubmissions));
+    } catch (e) {}
+  }, [studentSubmissions]);
+
+  // Feedback modal or editing submission
+  const [gradingSubmission, setGradingSubmission] = useState<{
+    submission: any;
+    score: number;
+    feedback: string;
+  } | null>(null);
+
+  // New Lesson Direct Creation Modal
+  const [showAddLessonModal, setShowAddLessonModal] = useState(false);
+  const [newLessonTitle, setNewLessonTitle] = useState('');
+  const [newLessonCategory, setNewLessonCategory] = useState('Arms & Hands Control');
+  const [newLessonLevel, setNewLessonLevel] = useState<'Principiante' | 'Intermedio' | 'Avanzado'>('Intermedio');
+  const [newLessonDuration, setNewLessonDuration] = useState('15 min');
+  const [newLessonBpm, setNewLessonBpm] = useState(128);
+  const [newLessonVideoUrl, setNewLessonVideoUrl] = useState('');
+  const [newLessonDescription, setNewLessonDescription] = useState('');
 
   // Expediente / Profile Dossier State (Left Panel)
   const [dossierRealName, setDossierRealName] = useState(() => localStorage.getItem('waack_inst_realname') || currentUser.name || "Jessica Soner");
@@ -1324,14 +1566,18 @@ Semana 3-4 (Progresión):
       ? parseMusicSource(classMusicUrl.trim(), classTitle, typeof classBpm === 'number' ? classBpm : 128)
       : undefined;
 
+    const fullTitle = `[${classEventType}] ${classTitle}${selectedStudent && classTargetAudience === 'selected_only' ? ` (Exclusivo: ${selectedStudent.name})` : ''}`;
+
     // Add to main App state via onAddEvent
     onAddEvent({
-      title: `[Taller] ${classTitle}`,
+      title: fullTitle,
       date: classDate,
       time: classTime,
-      duration: classDuration || '60 min',
+      duration: classDuration || '90 min',
       instructor: currentUser.name,
-      description: language === 'es' ? `Taller interactivo en directo impartido por ${currentUser.name}. Sala oficial de Google Meet disponible.` : `Live session taught by ${currentUser.name}. Official Google Meet room available.`,
+      description: classNotes.trim() 
+        ? `${classNotes.trim()} • Impartido por ${currentUser.name}. Sala oficial disponible.`
+        : (language === 'es' ? `Sesión interactiva impartida por ${currentUser.name}. Enlace oficial disponible.` : `Live session taught by ${currentUser.name}.`),
       meetUrl: finalMeetUrl,
       ...(musicSource ? { musicSource } : {})
     });
@@ -1339,13 +1585,116 @@ Semana 3-4 (Progresión):
     setClassTitle('');
     setClassDate('');
     setClassTime('');
-    setClassDuration('');
+    setClassDuration('90 min');
     setClassMeet('');
     setClassMusicUrl('');
     setClassBpm(128);
+    setClassNotes('');
 
-    setAlertText(language === 'es' ? "¡Clase programada con Google Meet y Música Multifuente!" : "Class scheduled with Google Meet & Multi-Source Music!");
+    setAlertText(language === 'es' ? "¡Clase programada e inyectada en la agenda del profesor!" : "Class scheduled and injected into instructor agenda!");
     setTimeout(() => setAlertText(null), 4000);
+  };
+
+  // Helper to toggle attendance status for a student in a class
+  const handleSetStudentAttendance = (eventId: string, studentId: string, status: 'present' | 'absent' | 'late') => {
+    playChime('click');
+    setAttendanceRecords(prev => {
+      const eventAttendance = prev[eventId] || {};
+      return {
+        ...prev,
+        [eventId]: {
+          ...eventAttendance,
+          [studentId]: status
+        }
+      };
+    });
+  };
+
+  // Copy class meeting link
+  const handleCopyClassLink = (meetUrl: string, title: string) => {
+    navigator.clipboard.writeText(meetUrl);
+    playChime('click');
+    setAlertText(`¡Enlace copiado al portapapeles para "${title}"!`);
+    setTimeout(() => setAlertText(null), 3000);
+  };
+
+  // Toggle assign lesson to student
+  const handleToggleAssignLesson = (lessonId: string, studentId: string) => {
+    playChime('click');
+    setCurriculumAssignedMap(prev => {
+      const currentList = prev[lessonId] || [];
+      const exists = currentList.includes(studentId);
+      const updated = exists ? currentList.filter(id => id !== studentId) : [...currentList, studentId];
+      return {
+        ...prev,
+        [lessonId]: updated
+      };
+    });
+    const studentObj = students.find(s => s.id === studentId);
+    setAlertText(`Asignación actualizada para ${studentObj ? studentObj.name : 'alumno'}.`);
+    setTimeout(() => setAlertText(null), 2500);
+  };
+
+  // Toggle approve lesson for student
+  const handleToggleApproveLesson = (lessonId: string, studentId: string) => {
+    playChime('success');
+    setCurriculumApprovedMap(prev => {
+      const currentList = prev[lessonId] || [];
+      const exists = currentList.includes(studentId);
+      const updated = exists ? currentList.filter(id => id !== studentId) : [...currentList, studentId];
+      return {
+        ...prev,
+        [lessonId]: updated
+      };
+    });
+    const studentObj = students.find(s => s.id === studentId);
+    setAlertText(`¡Validación pedagógica registrada para ${studentObj ? studentObj.name : 'alumno'}!`);
+    setTimeout(() => setAlertText(null), 2500);
+  };
+
+  // Assign lesson to all enrolled students
+  const handleAssignLessonToAll = (lessonId: string) => {
+    playChime('success');
+    const allIds = students.map(s => s.id);
+    setCurriculumAssignedMap(prev => ({
+      ...prev,
+      [lessonId]: allIds
+    }));
+    setAlertText(`¡Lección asignada a todos los ${students.length} alumnos de la cátedra!`);
+    setTimeout(() => setAlertText(null), 3000);
+  };
+
+  // Grade student submission
+  const handleGradeSubmission = (submissionId: string, score: number, feedback: string) => {
+    playChime('success');
+    setStudentSubmissions(prev => prev.map(sub => {
+      if (sub.id === submissionId) {
+        return {
+          ...sub,
+          status: 'graded',
+          score,
+          feedback
+        };
+      }
+      return sub;
+    }));
+    setGradingSubmission(null);
+    setAlertText(`¡Evaluación y corrección técnica guardadas exitosamente (${score}/100)!`);
+    setTimeout(() => setAlertText(null), 3500);
+  };
+
+  // Timer round helpers
+  const handleStartRoundTimer = (seconds: number) => {
+    playChime('click');
+    setLiveRoundInitialTime(seconds);
+    setLiveRoundTimerSeconds(seconds);
+    setLiveRoundTimerRunning(true);
+  };
+
+  const handleResetRoundTimer = () => {
+    playChime('click');
+    setLiveRoundTimerRunning(false);
+    setLiveRoundTimerSeconds(liveRoundInitialTime);
   };
 
   const handleDeleteItem = (id: string) => {
@@ -1509,6 +1858,132 @@ Semana 3-4 (Progresión):
           </div>
         </div>
 
+        {/* Navigation Sub-Tabs Bar */}
+        <div className="px-4 py-2.5 border-b border-white/10 bg-[#0a0815]/90 flex items-center gap-1.5 overflow-x-auto no-scrollbar scroll-smooth">
+          {[
+            { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
+            { id: 'students', label: 'Alumnos', icon: Users, badge: students.length },
+            { id: 'classes', label: 'Clases & Directos', icon: Calendar },
+            { id: 'finances', label: 'Finanzas', icon: DollarSign },
+            { id: 'documents', label: 'Documentos PDF', icon: BookMarked, badge: instructorDocuments.length },
+            { id: 'methodology', label: 'Metodología & Lab', icon: Award },
+            { id: 'publish', label: 'Publicar Cursos', icon: PlusCircle },
+            { id: 'podcasts', label: 'Podcasts', icon: Radio },
+            { id: 'overview', label: 'Ventas & Actividad', icon: ShoppingBag },
+            { id: 'promotion', label: 'Ajustes & Destacados', icon: Settings },
+          ].map(tab => {
+            const Icon = tab.icon;
+            const isCurrent = activeSubTab === tab.id;
+            return (
+              <button
+                key={tab.id}
+                onClick={() => {
+                  playChime('click');
+                  setActiveSubTab(tab.id as any);
+                }}
+                className={`px-3 py-1.5 rounded-xl font-bold text-xs flex items-center gap-1.5 shrink-0 transition-all border ${
+                  isCurrent
+                    ? 'bg-gradient-to-r from-pink-600 to-purple-600 border-pink-400 text-white shadow-md shadow-purple-600/30'
+                    : 'bg-white/5 hover:bg-white/10 border-white/5 text-slate-300 hover:text-white'
+                }`}
+              >
+                <Icon className="w-3.5 h-3.5" />
+                <span>{tab.label}</span>
+                {tab.badge !== undefined && (
+                  <span className={`px-1.5 py-0.2 rounded-md text-[9px] font-mono font-black ${
+                    isCurrent ? 'bg-white/20 text-white' : 'bg-white/10 text-slate-400'
+                  }`}>
+                    {tab.badge}
+                  </span>
+                )}
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Global Student Filter State Bar (Maintained across all instructor dashboard tabs) */}
+        <div className="px-4 py-2.5 border-b border-white/10 bg-[#140f26]/95 flex flex-wrap items-center justify-between gap-3 transition-all">
+          <div className="flex items-center gap-2 flex-wrap min-w-0">
+            <div className="flex items-center gap-1.5 text-[11px] font-mono font-bold text-slate-300">
+              <Filter className="w-3.5 h-3.5 text-[#E9C349]" />
+              <span className="uppercase text-[10px] tracking-wider text-[#E9C349]">Estudiante Filtrado:</span>
+            </div>
+
+            {/* Student Chips Selector */}
+            <div className="flex items-center gap-1.5 flex-wrap">
+              <button
+                onClick={() => handleSelectStudentForFilter(null)}
+                className={`px-2.5 py-1 rounded-lg text-[10px] font-mono font-bold border transition-all ${
+                  selectedStudentUid === null
+                    ? 'bg-[#E9C349] text-black border-[#E9C349] shadow-sm'
+                    : 'bg-white/5 hover:bg-white/10 border-white/10 text-slate-400 hover:text-slate-200'
+                }`}
+              >
+                Todos ({students.length})
+              </button>
+
+              {students.map(std => {
+                const isSelected = selectedStudentUid === std.id;
+                return (
+                  <button
+                    key={std.id}
+                    onClick={() => handleSelectStudentForFilter(isSelected ? null : std.id)}
+                    className={`px-2.5 py-1 rounded-lg text-[10px] font-mono font-bold border flex items-center gap-1.5 transition-all ${
+                      isSelected
+                        ? 'bg-gradient-to-r from-pink-500/25 to-purple-500/25 border-pink-400 text-pink-200 shadow-[0_0_12px_rgba(236,72,153,0.3)] ring-1 ring-pink-400/50'
+                        : 'bg-white/5 hover:bg-white/10 border-white/10 text-slate-400 hover:text-slate-200'
+                    }`}
+                  >
+                    <span className={`w-1.5 h-1.5 rounded-full ${isSelected ? 'bg-pink-400 animate-pulse' : 'bg-slate-500'}`} />
+                    <span>{std.name}</span>
+                    {isSelected && <Check className="w-3 h-3 text-pink-300" />}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {selectedStudent ? (
+            <div className="flex items-center gap-2 shrink-0 animate-fadeIn">
+              <div className="px-2.5 py-1 rounded-lg bg-pink-950/60 border border-pink-500/40 text-[10px] font-mono text-pink-200 flex items-center gap-1.5 shadow-sm">
+                <UserIcon className="w-3 h-3 text-pink-400" />
+                <span className="font-bold text-white truncate max-w-[140px]">{selectedStudent.name}</span>
+                <span className="text-pink-400/80 font-mono text-[9px]">({selectedStudent.id})</span>
+              </div>
+
+              <button
+                onClick={() => handleOpenStudentPlan(selectedStudent)}
+                className="px-2.5 py-1 rounded-lg bg-[#9A2B3C]/30 hover:bg-[#9A2B3C]/50 border border-[#9A2B3C]/50 text-[#E9C349] text-[10px] font-mono font-bold transition-all flex items-center gap-1"
+                title="Abrir Plan de Onboarding IA"
+              >
+                <Sparkles className="w-3 h-3 text-[#E9C349]" />
+                <span className="hidden sm:inline">Plan IA</span>
+              </button>
+
+              <button
+                onClick={() => handleAlertStudent(selectedStudent.name)}
+                className="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 text-[10px] font-bold transition-all flex items-center gap-1"
+                title="Enviar Notificación de Postura"
+              >
+                <BellRing className="w-3 h-3 text-yellow-400" />
+                <span className="hidden sm:inline">Alerta</span>
+              </button>
+
+              <button
+                onClick={() => handleSelectStudentForFilter(null)}
+                className="p-1 rounded-lg bg-white/5 hover:bg-rose-500/20 border border-white/10 hover:border-rose-500/40 text-slate-400 hover:text-rose-300 transition-all"
+                title="Limpiar filtro de estudiante"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          ) : (
+            <div className="text-[10px] font-mono text-slate-400 hidden lg:flex items-center gap-1">
+              <span>Selecciona un alumno arriba para mantener contexto entre pestañas</span>
+            </div>
+          )}
+        </div>
+
         {/* Main Workspace Area */}
         <div className="flex-1 overflow-y-auto">
 
@@ -1612,61 +2087,61 @@ Semana 3-4 (Progresión):
 
                 {/* 3. Student Management Panel - 4 Cols */}
                 <div className="lg:col-span-4 bg-[#17132a]/80 border border-white/10 rounded-2xl p-4 flex flex-col justify-between space-y-3">
-                  <h3 className="text-xs font-mono font-bold uppercase text-slate-300 tracking-wider">Student Management</h3>
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-xs font-mono font-bold uppercase text-slate-300 tracking-wider">
+                      Student Management ({students.length})
+                    </h3>
+                    <button
+                      onClick={() => setActiveSubTab('students')}
+                      className="text-[10px] font-mono font-bold text-[#E9C349] hover:underline flex items-center gap-1"
+                    >
+                      <span>Ver Todos</span>
+                      <ChevronRight className="w-3 h-3" />
+                    </button>
+                  </div>
                   
-                  <div className="space-y-3 flex-1 flex flex-col justify-around">
-                    
-                    {/* Student 1 */}
-                    <div className="space-y-1.5">
-                      <div className="flex items-center justify-between text-xs font-bold text-white">
-                        <div className="flex items-center gap-2">
-                          <div className="w-6 h-6 rounded-lg bg-pink-500/20 text-pink-400 flex items-center justify-center text-[10px]">
-                            <Users className="w-3.5 h-3.5" />
+                  <div className="space-y-2.5 flex-1 flex flex-col justify-around">
+                    {students.slice(0, 3).map((std, idx) => {
+                      const isSel = selectedStudentUid === std.id;
+                      const progressPct = idx === 0 ? 85 : idx === 1 ? 55 : 35;
+                      return (
+                        <div
+                          key={std.id}
+                          onClick={() => handleSelectStudentForFilter(isSel ? null : std.id)}
+                          className={`p-2.5 rounded-xl border transition-all cursor-pointer ${
+                            isSel
+                              ? 'bg-pink-500/20 border-pink-400 text-white shadow-[0_0_12px_rgba(236,72,153,0.25)] ring-1 ring-pink-400/60'
+                              : 'bg-white/5 border-white/5 hover:border-white/20 hover:bg-white/10 text-slate-200'
+                          }`}
+                        >
+                          <div className="flex items-center justify-between text-xs font-bold mb-1.5">
+                            <div className="flex items-center gap-2 min-w-0">
+                              <div className={`w-6 h-6 rounded-lg flex items-center justify-center text-[10px] font-mono font-bold ${
+                                isSel ? 'bg-pink-500 text-white' : 'bg-white/10 text-[#E9C349]'
+                              }`}>
+                                {std.name.substring(0, 2).toUpperCase()}
+                              </div>
+                              <span className="truncate">{std.name}</span>
+                            </div>
+                            <span className="font-mono text-[10px] text-slate-400 shrink-0">
+                              {std.level}
+                            </span>
                           </div>
-                          <span>Pranoisims</span>
-                        </div>
-                        <span className="font-mono text-[11px] text-slate-400">15 / 1</span>
-                      </div>
-                      <div className="w-full bg-slate-800 rounded-full h-2 overflow-hidden">
-                        <div className="bg-gradient-to-r from-pink-500 to-purple-500 h-2 rounded-full w-[50%]" />
-                      </div>
-                      <div className="text-[9px] font-mono text-slate-400">Miami late progress 50%</div>
-                    </div>
-
-                    {/* Student 2 */}
-                    <div className="space-y-1.5">
-                      <div className="flex items-center justify-between text-xs font-bold text-white">
-                        <div className="flex items-center gap-2">
-                          <div className="w-6 h-6 rounded-lg bg-blue-500/20 text-blue-400 flex items-center justify-center text-[10px]">
-                            <Users className="w-3.5 h-3.5" />
+                          <div className="w-full bg-slate-800 rounded-full h-1.5 overflow-hidden">
+                            <div
+                              className="bg-gradient-to-r from-pink-500 to-purple-500 h-1.5 rounded-full"
+                              style={{ width: `${progressPct}%` }}
+                            />
                           </div>
-                          <span>Electrics</span>
-                        </div>
-                        <span className="font-mono text-[11px] text-slate-400">11 / 1</span>
-                      </div>
-                      <div className="w-full bg-slate-800 rounded-full h-2 overflow-hidden">
-                        <div className="bg-gradient-to-r from-blue-500 to-indigo-500 h-2 rounded-full w-[50%]" />
-                      </div>
-                      <div className="text-[9px] font-mono text-slate-400">Instantiate progress 50%</div>
-                    </div>
-
-                    {/* Student 3 */}
-                    <div className="space-y-1.5">
-                      <div className="flex items-center justify-between text-xs font-bold text-white">
-                        <div className="flex items-center gap-2">
-                          <div className="w-6 h-6 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center text-[10px]">
-                            <TrendingUp className="w-3.5 h-3.5" />
+                          <div className="flex items-center justify-between text-[9px] font-mono text-slate-400 mt-1">
+                            <span>UID: {std.id}</span>
+                            <span className={isSel ? 'text-pink-300 font-bold flex items-center gap-1' : ''}>
+                              {isSel ? '✓ Estudiante Seleccionado' : `Progreso ${progressPct}%`}
+                            </span>
                           </div>
-                          <span>Progress</span>
                         </div>
-                        <span className="font-mono text-[11px] text-slate-400">8 / 5</span>
-                      </div>
-                      <div className="w-full bg-slate-800 rounded-full h-2 overflow-hidden">
-                        <div className="bg-gradient-to-r from-amber-500 to-orange-500 h-2 rounded-full w-[30%]" />
-                      </div>
-                      <div className="text-[9px] font-mono text-slate-400">Initiate progress 30%</div>
-                    </div>
-
+                      );
+                    })}
                   </div>
                 </div>
 
@@ -1678,7 +2153,10 @@ Semana 3-4 (Progresión):
                 {/* Communication Hub Panel (7 Cols) */}
                 <div className="lg:col-span-7 bg-[#17132a]/80 border border-white/10 rounded-2xl p-4 sm:p-5 space-y-4">
                   <div className="flex items-center justify-between">
-                    <h3 className="text-sm font-bold text-white">Communication Hub</h3>
+                    <div>
+                      <h3 className="text-sm font-bold text-white">Communication Hub</h3>
+                      <p className="text-[10px] font-mono text-slate-400">Haz clic en un alumno para seleccionarlo</p>
+                    </div>
                     <button
                       onClick={handleStartLiveClass}
                       className="px-4 py-2 rounded-xl bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 text-white font-black text-xs shadow-lg active:scale-95 transition-all"
@@ -1692,42 +2170,72 @@ Semana 3-4 (Progresión):
                     <table className="w-full text-left text-xs">
                       <thead>
                         <tr className="text-slate-400 font-mono text-[10px] border-b border-white/10 pb-2">
-                          <th className="pb-2">Name</th>
-                          <th className="pb-2">Status</th>
-                          <th className="pb-2">Status</th>
-                          <th className="pb-2">Last seen time</th>
-                          <th className="pb-2 text-right"></th>
+                          <th className="pb-2">Alumno</th>
+                          <th className="pb-2">Nivel</th>
+                          <th className="pb-2">Actividad</th>
+                          <th className="pb-2 text-right">Acción</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-white/5">
-                        {[
-                          { name: 'Jassy Soner', role: 'Jonny Instructor', sub: 'Asaph Math', status: 'Today', color: 'bg-pink-500', time: '2 hours ago' },
-                          { name: 'Jassy Soner', role: 'Jonny Instructor', sub: 'Asaph Math', status: 'Today', color: 'bg-blue-500', time: '3 hours ago' },
-                          { name: 'Jassy Soner', role: 'Jonny instructor', sub: 'Rsaph Math', status: 'Today', color: 'bg-amber-500', time: '3 hours ago' },
-                        ].map((row, idx) => (
-                          <tr key={idx} className="hover:bg-white/5 transition-all">
-                            <td className="py-2.5">
-                              <div className="flex items-center gap-2.5">
-                                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=100" className="w-7 h-7 rounded-full object-cover" />
-                                <div>
-                                  <div className="font-bold text-white text-xs">{row.name}</div>
-                                  <div className="text-[9px] text-slate-400">{row.role}</div>
+                        {students.map((std) => {
+                          const isSel = selectedStudentUid === std.id;
+                          return (
+                            <tr
+                              key={std.id}
+                              onClick={() => handleSelectStudentForFilter(isSel ? null : std.id)}
+                              className={`transition-all cursor-pointer ${
+                                isSel ? 'bg-pink-500/20 text-white' : 'hover:bg-white/5'
+                              }`}
+                            >
+                              <td className="py-2.5">
+                                <div className="flex items-center gap-2.5">
+                                  <div className="w-7 h-7 rounded-full bg-white/10 border border-white/20 flex items-center justify-center font-bold text-[#E9C349] text-[10px]">
+                                    {std.name.substring(0, 2).toUpperCase()}
+                                  </div>
+                                  <div>
+                                    <div className="font-bold text-white text-xs flex items-center gap-1.5">
+                                      <span>{std.name}</span>
+                                      {isSel && (
+                                        <span className="text-[9px] font-mono bg-pink-500 text-white px-1.5 py-0.2 rounded font-bold">
+                                          FILTRADO
+                                        </span>
+                                      )}
+                                    </div>
+                                    <div className="text-[9px] font-mono text-slate-400">{std.email}</div>
+                                  </div>
                                 </div>
-                              </div>
-                            </td>
-                            <td className="py-2.5 text-slate-300 font-medium">{row.sub}</td>
-                            <td className="py-2.5">
-                              <div className="flex items-center gap-1.5">
-                                <span className={`w-2 h-2 rounded-full ${row.color}`} />
-                                <span className="text-slate-300">{row.status}</span>
-                              </div>
-                            </td>
-                            <td className="py-2.5 text-slate-400 font-mono text-[11px]">{row.time}</td>
-                            <td className="py-2.5 text-right">
-                              <MoreVertical className="w-4 h-4 text-slate-400 inline cursor-pointer hover:text-white" />
-                            </td>
-                          </tr>
-                        ))}
+                              </td>
+                              <td className="py-2.5">
+                                <span className={`text-[10px] font-mono px-2 py-0.5 rounded font-bold ${
+                                  std.level === 'Avanzado' ? 'bg-red-500/20 text-red-300' :
+                                  std.level === 'Intermedio' ? 'bg-[#E9C349]/20 text-[#E9C349]' :
+                                  'bg-cyan-500/20 text-cyan-300'
+                                }`}>
+                                  {std.level}
+                                </span>
+                              </td>
+                              <td className="py-2.5 text-slate-400 font-mono text-[11px]">
+                                {std.lastActive}
+                              </td>
+                              <td className="py-2.5 text-right">
+                                <button
+                                  type="button"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleSelectStudentForFilter(isSel ? null : std.id);
+                                  }}
+                                  className={`px-2.5 py-1 rounded-lg text-[10px] font-mono font-bold transition-all border ${
+                                    isSel
+                                      ? 'bg-pink-600 border-pink-400 text-white'
+                                      : 'bg-white/5 hover:bg-white/10 border-white/10 text-slate-300'
+                                  }`}
+                                >
+                                  {isSel ? '✓ Activo' : 'Seleccionar'}
+                                </button>
+                              </td>
+                            </tr>
+                          );
+                        })}
                       </tbody>
                     </table>
                   </div>
@@ -2210,89 +2718,122 @@ Semana 3-4 (Progresión):
                   </button>
                 </div>
 
-                {/* RIGHT COLUMN: Instructor Hub & Plan Overlay Popup (6 Cols) */}
+                {/* RIGHT COLUMN: Instructor 4-Week Syllabus & Cátedra Curriculum Builder (6 Cols) */}
                 <div className="lg:col-span-6 space-y-4 relative">
                   
-                  {/* Top Header Tabs from screenshot */}
-                  <div className="bg-[#130f21] border border-white/10 rounded-2xl p-2.5 flex items-center gap-2 overflow-x-auto shadow-xl">
-                    <button className="px-4 py-2 rounded-xl bg-white/10 text-white font-black text-xs uppercase tracking-wider flex items-center gap-2 border border-white/10">
-                      <UserIcon className="w-3.5 h-3.5" /> DASHBOARD
-                    </button>
-                    <button className="px-4 py-2 rounded-xl text-slate-400 hover:text-white font-bold text-xs uppercase tracking-wider flex items-center gap-2">
-                      <CreditCard className="w-3.5 h-3.5" /> Mi Suscripción
-                    </button>
-                    <button className="px-4 py-2 rounded-xl text-slate-400 hover:text-white font-bold text-xs uppercase tracking-wider flex items-center gap-2 truncate">
-                      <Target className="w-3.5 h-3.5" /> Objetivos &...
+                  {/* Top Header Tabs */}
+                  <div className="bg-[#130f21] border border-white/10 rounded-2xl p-2.5 flex items-center justify-between gap-2 overflow-x-auto shadow-xl">
+                    <div className="flex items-center gap-2">
+                      <div className="px-3 py-1.5 rounded-xl bg-[#E9C349]/10 border border-[#E9C349]/30 text-[#E9C349] font-black text-xs uppercase tracking-wider flex items-center gap-2">
+                        <GraduationCap className="w-4 h-4 text-[#E9C349]" />
+                        <span>PLAN DE CÁTEDRA & SYLLABUS</span>
+                      </div>
+                      <span className="text-[10px] font-mono text-slate-400 font-bold hidden sm:inline">
+                        (4 Semanas de Formación)
+                      </span>
+                    </div>
+                    
+                    <button
+                      type="button"
+                      onClick={() => handleSaveDossier()}
+                      className="px-3 py-1.5 rounded-xl bg-[#E9C349] hover:bg-[#ffdf6b] text-black font-black text-[11px] uppercase tracking-wider transition-all flex items-center gap-1.5 shadow-md active:scale-95 cursor-pointer"
+                    >
+                      <Check className="w-3.5 h-3.5" />
+                      <span>Guardar Plan</span>
                     </button>
                   </div>
 
-                  {/* Grid of Instructors Cards */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="bg-[#130f21] border border-pink-500/30 rounded-3xl p-4 space-y-3 relative overflow-hidden shadow-xl group">
-                      <div className="flex flex-col items-center text-center">
-                        <div className="relative">
-                          <img 
-                            src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=200" 
-                            className="w-16 h-16 rounded-full object-cover border-2 border-pink-500 shadow-lg" 
-                          />
-                          <div className="absolute -bottom-1 -right-1 bg-[#9A1B42] text-white p-1 rounded-full text-[10px]">
-                            <Sparkles className="w-3 h-3" />
+                  {/* 4-Week Syllabus Editor for the Instructor */}
+                  <div className="bg-[#130f21] border border-white/10 rounded-3xl p-5 space-y-4 shadow-xl">
+                    <div className="flex items-center justify-between border-b border-white/10 pb-3">
+                      <div>
+                        <h4 className="text-sm font-extrabold text-white flex items-center gap-2">
+                          <Layers className="w-4 h-4 text-[#E9C349]" />
+                          Módulos Semanales de tu Cátedra
+                        </h4>
+                        <p className="text-[11px] text-slate-400 font-medium mt-0.5">
+                          Estructura el progreso técnico que tus alumnos cursarán durante el mes.
+                        </p>
+                      </div>
+                      <span className="text-[10px] font-mono font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded">
+                        4 Módulos Activos
+                      </span>
+                    </div>
+
+                    <div className="space-y-3">
+                      {trainingWeeks.map((wk, idx) => (
+                        <div key={idx} className="p-3.5 rounded-2xl bg-[#0e0a1b] border border-white/10 space-y-2 hover:border-[#E9C349]/40 transition-all">
+                          <div className="flex items-center justify-between gap-2">
+                            <span className="text-[10px] font-mono font-black text-[#E9C349] uppercase bg-[#E9C349]/10 px-2 py-0.5 rounded border border-[#E9C349]/20">
+                              Semana {wk.week}
+                            </span>
+                            <input
+                              type="text"
+                              value={wk.duration}
+                              onChange={e => {
+                                const updated = [...trainingWeeks];
+                                updated[idx].duration = e.target.value;
+                                setTrainingWeeks(updated);
+                              }}
+                              placeholder="Duración / Carga"
+                              className="text-[10px] font-mono font-bold text-slate-400 bg-white/5 border border-white/10 rounded-lg px-2 py-1 focus:outline-none focus:border-[#E9C349] w-28 text-right"
+                            />
+                          </div>
+
+                          <div className="space-y-1.5">
+                            <input
+                              type="text"
+                              value={wk.title}
+                              onChange={e => {
+                                const updated = [...trainingWeeks];
+                                updated[idx].title = e.target.value;
+                                setTrainingWeeks(updated);
+                              }}
+                              placeholder="Título del Módulo Semanal..."
+                              className="w-full bg-[#140e26] border border-white/10 rounded-xl px-3 py-1.5 text-white font-bold text-xs focus:outline-none focus:border-[#E9C349]"
+                            />
+
+                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                              <div className="sm:col-span-2">
+                                <input
+                                  type="text"
+                                  value={wk.desc}
+                                  onChange={e => {
+                                    const updated = [...trainingWeeks];
+                                    updated[idx].desc = e.target.value;
+                                    setTrainingWeeks(updated);
+                                  }}
+                                  placeholder="Descripción de los contenidos técnicos y ejercicios..."
+                                  className="w-full bg-[#140e26] border border-white/10 rounded-xl px-3 py-1.5 text-slate-300 text-[11px] focus:outline-none focus:border-[#E9C349]"
+                                />
+                              </div>
+                              <div>
+                                <input
+                                  type="text"
+                                  value={wk.focus}
+                                  onChange={e => {
+                                    const updated = [...trainingWeeks];
+                                    updated[idx].focus = e.target.value;
+                                    setTrainingWeeks(updated);
+                                  }}
+                                  placeholder="Enfoque clave"
+                                  className="w-full bg-[#140e26] border border-white/10 rounded-xl px-3 py-1.5 text-purple-300 font-mono text-[10px] focus:outline-none focus:border-purple-400"
+                                />
+                              </div>
+                            </div>
                           </div>
                         </div>
-                        <h4 className="text-sm font-extrabold text-white mt-2">Aka_Wackson</h4>
-                        <p className="text-[10px] text-slate-400 font-semibold mt-1 line-clamp-2">
-                          bio snippet | Bases para aprender ritmos disco y poses dramáticas.
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="bg-[#130f21] border border-white/10 rounded-3xl p-4 space-y-3 relative overflow-hidden shadow-xl">
-                      <div className="flex flex-col items-center text-center">
-                        <img 
-                          src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=200" 
-                          className="w-16 h-16 rounded-full object-cover border border-white/20 shadow-md grayscale opacity-70" 
-                        />
-                        <h4 className="text-sm font-extrabold text-white mt-2">Viktor Funk</h4>
-                        <p className="text-[10px] text-slate-400 font-semibold mt-1 line-clamp-2">
-                          Specialist in Disco Mechanics and stage projection.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* FLOATING POPUP OVERLAY FROM SCREENSHOT */}
-                  <div className="bg-[#1c182b]/95 border border-white/20 rounded-3xl p-5 shadow-2xl backdrop-blur-2xl space-y-4 absolute top-12 right-0 left-0 sm:left-auto sm:w-80 z-30 animate-in fade-in slide-in-from-bottom-4 duration-300">
-                    <div className="border-b border-white/10 pb-2">
-                      <h4 className="text-xs font-black text-white uppercase tracking-wider">
-                        PLAN DE ENTRENAMIENTO DE Aka_Wackson
-                      </h4>
-                    </div>
-
-                    <div className="space-y-2 text-xs font-bold text-slate-200">
-                      <div className="flex items-center gap-2 bg-white/5 p-2 rounded-xl border border-white/5">
-                        <span className="text-[#E9C349]">Week 1:</span> Rolls & Poses Bases
-                      </div>
-                      <div className="flex items-center gap-2 bg-white/5 p-2 rounded-xl border border-white/5">
-                        <span className="text-[#E9C349]">Week 2:</span> Transitions & Flow
-                      </div>
-                      <div className="flex items-center gap-2 bg-white/5 p-2 rounded-xl border border-white/5">
-                        <span className="text-[#E9C349]">Week 3:</span> Advanced Posing & Expression
-                      </div>
-                      <div className="flex items-center gap-2 bg-white/5 p-2 rounded-xl border border-white/5">
-                        <span className="text-[#E9C349]">Week 4:</span> Performance Lab & Freestyle
-                      </div>
+                      ))}
                     </div>
 
                     <button
-                      onClick={() => handleJoinTrainingPlan('Aka_Wackson')}
-                      className="w-full py-2.5 rounded-2xl bg-gradient-to-r from-[#201c12] via-[#2d2315] to-[#201c12] border border-[#E9C349] text-[#fbe18d] hover:text-white font-black text-[11px] uppercase tracking-wider shadow-lg active:scale-95 transition-all"
+                      type="button"
+                      onClick={(e) => handleSaveDossier(e)}
+                      className="w-full py-3 rounded-2xl bg-gradient-to-r from-purple-900/40 via-[#E9C349]/20 to-purple-900/40 border border-[#E9C349]/50 text-[#fbe18d] hover:text-white font-black text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer shadow-lg"
                     >
-                      INICIAR CLASE CON ESTE INSTRUCTOR
+                      <Sparkles className="w-4 h-4 text-[#E9C349]" />
+                      <span>Sincronizar Syllabus con Todos los Alumnos</span>
                     </button>
-                  </div>
-
-                  <div className="pt-2 text-right">
-                    <Sparkles className="w-8 h-8 text-[#E9C349]/30 inline animate-pulse" />
                   </div>
 
                   {/* Publisher Form & Published List */}
@@ -2972,12 +3513,51 @@ Semana 3-4 (Progresión):
                 </div>
               )}
 
+              {/* Active Filtered Student Alert Banner inside Students tab */}
+              {selectedStudent && (
+                <div className="p-4 rounded-2xl bg-pink-950/40 border border-pink-500/40 flex flex-wrap items-center justify-between gap-3 shadow-lg">
+                  <div className="flex items-center gap-3">
+                    <div className="w-9 h-9 rounded-xl bg-pink-500/20 border border-pink-400/40 text-pink-300 flex items-center justify-center font-bold text-xs">
+                      {selectedStudent.name.substring(0, 2).toUpperCase()}
+                    </div>
+                    <div>
+                      <div className="text-[10px] font-mono font-bold text-pink-300 uppercase tracking-wider flex items-center gap-1.5">
+                        <UserCheck className="w-3.5 h-3.5" />
+                        <span>ESTUDIANTE SELECCIONADO PARA ESTA SESIÓN</span>
+                      </div>
+                      <h4 className="text-sm font-bold text-white">
+                        {selectedStudent.name} <span className="text-slate-400 font-normal font-mono text-xs">({selectedStudent.email})</span>
+                      </h4>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => handleOpenStudentPlan(selectedStudent)}
+                      className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-pink-600 to-purple-600 hover:brightness-110 text-white font-mono text-xs font-bold transition-all flex items-center gap-1.5 shadow-md"
+                    >
+                      <Sparkles className="w-3.5 h-3.5 text-[#E9C349]" />
+                      <span>Ver Plan Onboarding IA</span>
+                    </button>
+                    <button
+                      onClick={() => handleSelectStudentForFilter(null)}
+                      className="px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 text-xs font-bold transition-all"
+                    >
+                      Ver Todos
+                    </button>
+                  </div>
+                </div>
+              )}
+
               {/* Table of Students */}
               <div className="bg-[#121212] border border-white/5 rounded-[24px] p-5 sm:p-6">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-sm font-mono tracking-wider text-[#8A8A8A] font-bold uppercase">
-                    {language === 'es' ? 'ALUMNOS VINCULADOS A TUS CÁTEDRAS' : 'STUDENTS LINKED TO YOUR CLASSES'}
-                  </h3>
+                  <div>
+                    <h3 className="text-sm font-mono tracking-wider text-[#8A8A8A] font-bold uppercase">
+                      {language === 'es' ? 'ALUMNOS VINCULADOS A TUS CÁTEDRAS' : 'STUDENTS LINKED TO YOUR CLASSES'}
+                    </h3>
+                    <p className="text-[11px] text-slate-400">Selecciona un alumno para mantener su seguimiento activo al cambiar de pestaña</p>
+                  </div>
                   <span className="text-xs text-[#E9C349] bg-[#E9C349]/10 px-2 py-0.5 rounded border border-[#E9C349]/20 font-bold">
                     {students.length} Alumnos
                   </span>
@@ -2987,6 +3567,7 @@ Semana 3-4 (Progresión):
                   <table className="w-full text-left text-xs border-collapse">
                     <thead>
                       <tr className="border-b border-white/5 pb-2 text-[#8A8A8A] font-black font-mono">
+                        <th className="pb-3 pr-2">ESTADO / SELECCIÓN</th>
                         <th className="pb-3 pr-2">{t.tableStudent}</th>
                         <th className="pb-3 px-2">{t.tableLevel}</th>
                         <th className="pb-3 px-2">EMAIL</th>
@@ -2996,48 +3577,77 @@ Semana 3-4 (Progresión):
                       </tr>
                     </thead>
                     <tbody>
-                      {(students || []).map(std => (
-                        <tr key={std.id} className="border-b border-white/5 hover:bg-white/5 transition-all">
-                          <td className="py-3 pr-2 font-bold text-white flex items-center gap-2">
-                            <div className="w-7 h-7 rounded-full bg-white/5 flex items-center justify-center font-bold border border-white/10 text-[#E9C349] text-[10px]">
-                              {(std.name || 'WA').substring(0, 2).toUpperCase()}
-                            </div>
-                            {std.name}
-                          </td>
-                          <td className="py-3 px-2 font-semibold">
-                            <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
-                              std.level === 'Avanzado' ? 'bg-[#9A2B3C]/10 text-red-400 border border-[#9A2B3C]/20' :
-                              std.level === 'Intermedio' ? 'bg-[#E9C349]/10 text-[#E9C349] border border-[#E9C349]/20' :
-                              'bg-cyan-500/10 text-cyan-400 border border-cyan-500/20'
-                            }`}>
-                              {std.level}
-                            </span>
-                          </td>
-                          <td className="py-3 px-2 font-mono text-[#8A8A8A]">
-                            {std.email}
-                          </td>
-                          <td className="py-3 px-2 text-[#C2C7D1]">
-                            {std.lastActive}
-                          </td>
-                          <td className="py-3 pl-2 text-right">
-                            <button
-                              onClick={() => handleOpenStudentPlan(std)}
-                              className="px-3 py-1 rounded-lg bg-[#9A2B3C]/20 hover:bg-[#9A2B3C]/40 border border-[#9A2B3C]/40 text-[#E9C349] text-[10px] font-mono font-bold transition-all flex items-center gap-1.5 ml-auto"
-                            >
-                              <Sparkles className="w-3 h-3 text-[#E9C349]" />
-                              <span>Plan Onboarding IA</span>
-                            </button>
-                          </td>
-                          <td className="py-3 pl-2 text-right">
-                            <button
-                              onClick={() => handleAlertStudent(std.name)}
-                              className="px-3 py-1 rounded-lg bg-white/5 hover:bg-[#E9C349]/20 border border-white/10 hover:border-[#E9C349]/30 text-[#EDEFF4] text-[10px] font-bold transition-all"
-                            >
-                              {t.alertStudent}
-                            </button>
-                          </td>
-                        </tr>
-                      ))}
+                      {(students || []).map(std => {
+                        const isSel = selectedStudentUid === std.id;
+                        return (
+                          <tr 
+                            key={std.id} 
+                            className={`border-b border-white/5 transition-all ${
+                              isSel ? 'bg-pink-500/15 border-pink-500/30' : 'hover:bg-white/5'
+                            }`}
+                          >
+                            <td className="py-3 pr-2">
+                              <button
+                                onClick={() => handleSelectStudentForFilter(isSel ? null : std.id)}
+                                className={`px-2 py-1 rounded-lg text-[10px] font-mono font-bold border transition-all flex items-center gap-1 ${
+                                  isSel
+                                    ? 'bg-pink-600 border-pink-400 text-white shadow-sm'
+                                    : 'bg-white/5 hover:bg-white/10 border-white/10 text-slate-400 hover:text-white'
+                                }`}
+                              >
+                                {isSel ? (
+                                  <>
+                                    <Check className="w-3 h-3 text-pink-200" />
+                                    <span>Filtrado</span>
+                                  </>
+                                ) : (
+                                  <span>Filtrar</span>
+                                )}
+                              </button>
+                            </td>
+                            <td className="py-3 pr-2 font-bold text-white flex items-center gap-2">
+                              <div className={`w-7 h-7 rounded-full flex items-center justify-center font-bold border text-[10px] ${
+                                isSel ? 'bg-pink-500 border-pink-400 text-white' : 'bg-white/5 border-white/10 text-[#E9C349]'
+                              }`}>
+                                {(std.name || 'WA').substring(0, 2).toUpperCase()}
+                              </div>
+                              <span className={isSel ? 'text-pink-200 font-extrabold' : ''}>{std.name}</span>
+                            </td>
+                            <td className="py-3 px-2 font-semibold">
+                              <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                                std.level === 'Avanzado' ? 'bg-[#9A2B3C]/10 text-red-400 border border-[#9A2B3C]/20' :
+                                std.level === 'Intermedio' ? 'bg-[#E9C349]/10 text-[#E9C349] border border-[#E9C349]/20' :
+                                'bg-cyan-500/10 text-cyan-400 border border-cyan-500/20'
+                              }`}>
+                                {std.level}
+                              </span>
+                            </td>
+                            <td className="py-3 px-2 font-mono text-[#8A8A8A]">
+                              {std.email}
+                            </td>
+                            <td className="py-3 px-2 text-[#C2C7D1]">
+                              {std.lastActive}
+                            </td>
+                            <td className="py-3 pl-2 text-right">
+                              <button
+                                onClick={() => handleOpenStudentPlan(std)}
+                                className="px-3 py-1 rounded-lg bg-[#9A2B3C]/20 hover:bg-[#9A2B3C]/40 border border-[#9A2B3C]/40 text-[#E9C349] text-[10px] font-mono font-bold transition-all flex items-center gap-1.5 ml-auto"
+                              >
+                                <Sparkles className="w-3 h-3 text-[#E9C349]" />
+                                <span>Plan Onboarding IA</span>
+                              </button>
+                            </td>
+                            <td className="py-3 pl-2 text-right">
+                              <button
+                                onClick={() => handleAlertStudent(std.name)}
+                                className="px-3 py-1 rounded-lg bg-white/5 hover:bg-[#E9C349]/20 border border-white/10 hover:border-[#E9C349]/30 text-[#EDEFF4] text-[10px] font-bold transition-all"
+                              >
+                                {t.alertStudent}
+                              </button>
+                            </td>
+                          </tr>
+                        );
+                      })}
                     </tbody>
                   </table>
                 </div>
@@ -3051,183 +3661,1251 @@ Semana 3-4 (Progresión):
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -15 }}
-              className="grid grid-cols-1 lg:grid-cols-3 gap-8"
+              className="space-y-6"
             >
-              {/* Add Class / Workshop Event form */}
-              <div className="lg:col-span-2 bg-[#121212] border border-white/5 rounded-[24px] p-6 space-y-4">
-                <h3 className="text-base font-black text-white flex items-center gap-2 pb-3 border-b border-white/5">
-                  <Calendar className="w-5 h-5 text-[#E9C349]" />
-                  {t.addClassEvent}
-                </h3>
-
-                <form onSubmit={handleScheduleClass} className="space-y-4">
+              {/* Instructor Class Panel Header & Sub-Tab Navigation */}
+              <div className="bg-[#121212] border border-white/10 rounded-[28px] p-5 sm:p-6 shadow-2xl relative overflow-hidden">
+                <div className="absolute right-0 top-0 w-64 h-64 bg-[#E9C349]/5 rounded-full blur-3xl pointer-events-none" />
+                
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-white/5 pb-5">
                   <div>
-                    <label className="block text-[10px] font-mono text-[#8A8A8A] font-bold uppercase mb-1.5">
-                      {language === 'es' ? 'Nombre de la Clase / Taller' : 'Class Title'}
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      value={classTitle}
-                      onChange={e => setClassTitle(e.target.value)}
-                      placeholder={language === 'es' ? "ej: Entrenamiento de Aceleración Waack" : "e.g., Extreme Arm speed live drill"}
-                      className="w-full px-4 py-3 rounded-xl bg-[#161616] border border-white/10 text-white font-bold text-xs focus:outline-none focus:border-[#E9C349] transition-all"
-                    />
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <div>
-                      <label className="block text-[10px] font-mono text-[#8A8A8A] font-bold uppercase mb-1.5">
-                        {t.classDate}
-                      </label>
-                      <input
-                        type="date"
-                        required
-                        value={classDate}
-                        onChange={e => setClassDate(e.target.value)}
-                        className="w-full px-4 py-3 rounded-xl bg-[#161616] border border-white/10 text-white font-mono text-xs focus:outline-none focus:border-[#E9C349] transition-all"
-                      />
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="px-2.5 py-0.5 rounded-full bg-[#E9C349]/10 border border-[#E9C349]/30 text-[#E9C349] text-[10px] font-mono font-black uppercase tracking-wider flex items-center gap-1.5">
+                        <GraduationCap className="w-3.5 h-3.5" />
+                        CENTRO DE CONTROL DOCENTE
+                      </span>
+                      {selectedStudent && (
+                        <span className="px-2.5 py-0.5 rounded-full bg-pink-500/20 border border-pink-500/40 text-pink-300 text-[10px] font-mono font-bold flex items-center gap-1">
+                          <UserCheck className="w-3 h-3" />
+                          Enfoque: {selectedStudent.name}
+                        </span>
+                      )}
                     </div>
-
-                    <div>
-                      <label className="block text-[10px] font-mono text-[#8A8A8A] font-bold uppercase mb-1.5">
-                        {t.classTime}
-                      </label>
-                      <input
-                        type="text"
-                        required
-                        value={classTime}
-                        onChange={e => setClassTime(e.target.value)}
-                        placeholder="19:30"
-                        className="w-full px-4 py-3 rounded-xl bg-[#161616] border border-white/10 text-white font-mono text-xs focus:outline-none focus:border-[#E9C349] transition-all"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-[10px] font-mono text-[#8A8A8A] font-bold uppercase mb-1.5">
-                        {t.classDuration}
-                      </label>
-                      <input
-                        type="text"
-                        required
-                        value={classDuration}
-                        onChange={e => setClassDuration(e.target.value)}
-                        placeholder="90 min"
-                        className="w-full px-4 py-3 rounded-xl bg-[#161616] border border-white/10 text-white font-mono text-xs focus:outline-none focus:border-[#E9C349] transition-all"
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <div className="flex justify-between items-center mb-1.5">
-                      <label className="block text-[10px] font-mono text-[#8A8A8A] font-bold uppercase">
-                        {t.classMeet}
-                      </label>
-                      <button
-                        type="button"
-                        onClick={() => setClassMeet(generateGoogleMeetRoomUrl(classTitle || 'live'))}
-                        className="text-[9px] font-mono font-bold text-blue-400 hover:text-blue-300 bg-blue-500/10 border border-blue-500/20 px-2 py-0.5 rounded transition-all flex items-center gap-1 active:scale-95"
-                      >
-                        <Video className="w-3 h-3 text-blue-400" />
-                        AUTO-GENERAR REUNIÓN GOOGLE MEET
-                      </button>
-                    </div>
-                    <input
-                      type="url"
-                      value={classMeet}
-                      onChange={e => setClassMeet(e.target.value)}
-                      placeholder="https://meet.google.com/abc-defg-hij"
-                      className="w-full px-4 py-3 rounded-xl bg-[#161616] border border-white/10 text-white font-mono text-xs focus:outline-none focus:border-[#E9C349] transition-all"
-                    />
-                    <p className="text-[10px] text-slate-400 font-medium mt-1">
-                      Si lo dejas en blanco, se creará automáticamente una sala de Google Meet oficial para la sesión.
+                    <h2 className="text-xl sm:text-2xl font-black text-white uppercase tracking-tight">
+                      {language === 'es' ? 'Gestión de Cátedras, Clases & Evaluaciones' : 'Instructor Class & Curriculum Control'}
+                    </h2>
+                    <p className="text-xs text-slate-400 font-medium mt-1">
+                      {language === 'es' 
+                        ? 'Herramientas pedagógicas exclusivas para programar sesiones en vivo, asignar currículo, dirigir prácticas con metrónomo y calificar tareas de alumnos.'
+                        : 'Exclusive instructor suite to schedule live workshops, manage curriculum assignments, conduct live metronome drills, and grade student submissions.'}
                     </p>
                   </div>
 
-                  {/* MULTI-SOURCE MUSIC / AUDIO ASSIGNMENT FOR LESSON/DRILL */}
-                  <div className="p-4 rounded-2xl bg-[#1a1528] border border-purple-500/30 space-y-3">
-                    <div className="flex items-center justify-between">
-                      <label className="block text-[10px] font-mono text-[#E9C349] font-bold uppercase flex items-center gap-1.5">
-                        <Radio className="w-3.5 h-3.5 text-[#E9C349]" />
-                        Música / Enlace Multifuente (YouTube, Spotify, SoundCloud)
-                      </label>
-                      <span className="text-[9px] font-mono text-purple-300 bg-purple-500/20 px-2 py-0.5 rounded border border-purple-500/30 font-semibold">
-                        Auto-Detección
+                  <div className="flex flex-wrap items-center gap-2">
+                    <button
+                      onClick={() => setClassPanelSubTab('schedule')}
+                      className={`px-3.5 py-2 rounded-xl text-xs font-mono font-bold uppercase transition-all flex items-center gap-1.5 ${
+                        classPanelSubTab === 'schedule'
+                          ? 'bg-[#E9C349] text-black shadow-lg font-black'
+                          : 'bg-white/5 hover:bg-white/10 text-slate-300 border border-white/10'
+                      }`}
+                    >
+                      <Calendar className="w-3.5 h-3.5" />
+                      <span>1. Sesiones en Vivo</span>
+                    </button>
+
+                    <button
+                      onClick={() => setClassPanelSubTab('curriculum')}
+                      className={`px-3.5 py-2 rounded-xl text-xs font-mono font-bold uppercase transition-all flex items-center gap-1.5 ${
+                        classPanelSubTab === 'curriculum'
+                          ? 'bg-[#E9C349] text-black shadow-lg font-black'
+                          : 'bg-white/5 hover:bg-white/10 text-slate-300 border border-white/10'
+                      }`}
+                    >
+                      <Layers className="w-3.5 h-3.5" />
+                      <span>2. Currículo & Asignaciones</span>
+                    </button>
+
+                    <button
+                      onClick={() => setClassPanelSubTab('live_control')}
+                      className={`px-3.5 py-2 rounded-xl text-xs font-mono font-bold uppercase transition-all flex items-center gap-1.5 ${
+                        classPanelSubTab === 'live_control'
+                          ? 'bg-[#E9C349] text-black shadow-lg font-black'
+                          : 'bg-white/5 hover:bg-white/10 text-slate-300 border border-white/10'
+                      }`}
+                    >
+                      <Sliders className="w-3.5 h-3.5" />
+                      <span>3. Pizarra & Metrónomo</span>
+                    </button>
+
+                    <button
+                      onClick={() => setClassPanelSubTab('submissions')}
+                      className={`px-3.5 py-2 rounded-xl text-xs font-mono font-bold uppercase transition-all flex items-center gap-1.5 relative ${
+                        classPanelSubTab === 'submissions'
+                          ? 'bg-[#E9C349] text-black shadow-lg font-black'
+                          : 'bg-white/5 hover:bg-white/10 text-slate-300 border border-white/10'
+                      }`}
+                    >
+                      <ClipboardCheck className="w-3.5 h-3.5" />
+                      <span>4. Tareas & Notas</span>
+                      {studentSubmissions.filter(s => s.status === 'pending').length > 0 && (
+                        <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse absolute -top-1 -right-1" />
+                      )}
+                    </button>
+                  </div>
+                </div>
+
+                {/* Quick Summary Stats Bar */}
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-4">
+                  <div className="p-3 rounded-2xl bg-white/5 border border-white/5 flex items-center gap-3">
+                    <div className="w-9 h-9 rounded-xl bg-[#E9C349]/10 text-[#E9C349] flex items-center justify-center font-bold">
+                      <Calendar className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <div className="text-[10px] font-mono text-slate-400 font-bold uppercase">Clases en Agenda</div>
+                      <div className="text-sm font-black text-white">
+                        {(events || []).filter(ev => ev && (ev.instructor === currentUser.name || (ev.title && ev.title.includes('[Taller]')))).length} Sesiones
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="p-3 rounded-2xl bg-white/5 border border-white/5 flex items-center gap-3">
+                    <div className="w-9 h-9 rounded-xl bg-purple-500/10 text-purple-300 flex items-center justify-center font-bold">
+                      <Users className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <div className="text-[10px] font-mono text-slate-400 font-bold uppercase">Alumnos en Cátedra</div>
+                      <div className="text-sm font-black text-white">{students.length} Inscritos</div>
+                    </div>
+                  </div>
+
+                  <div className="p-3 rounded-2xl bg-white/5 border border-white/5 flex items-center gap-3">
+                    <div className="w-9 h-9 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center font-bold">
+                      <BookOpen className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <div className="text-[10px] font-mono text-slate-400 font-bold uppercase">Lecciones Catálogo</div>
+                      <div className="text-sm font-black text-white">{(lessons || []).length || 12} Lecciones</div>
+                    </div>
+                  </div>
+
+                  <div className="p-3 rounded-2xl bg-white/5 border border-white/5 flex items-center gap-3">
+                    <div className="w-9 h-9 rounded-xl bg-pink-500/10 text-pink-300 flex items-center justify-center font-bold">
+                      <ClipboardCheck className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <div className="text-[10px] font-mono text-slate-400 font-bold uppercase">Revisiones Pendientes</div>
+                      <div className="text-sm font-black text-white">
+                        {studentSubmissions.filter(s => s.status === 'pending').length} Entregas
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* 1. SUB-TAB: SCHEDULE & LIVE SESSIONS */}
+              {classPanelSubTab === 'schedule' && (
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                  {/* Left: Schedule Form */}
+                  <div className="lg:col-span-2 bg-[#121212] border border-white/5 rounded-[24px] p-6 space-y-4">
+                    <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-white/5">
+                      <h3 className="text-base font-black text-white flex items-center gap-2">
+                        <Calendar className="w-5 h-5 text-[#E9C349]" />
+                        Programar Nueva Sesión en Directo / Taller Magistral
+                      </h3>
+                      {selectedStudent && (
+                        <div className="px-2.5 py-1 rounded-lg bg-pink-500/20 border border-pink-500/40 text-pink-200 text-[10px] font-mono font-bold flex items-center gap-1.5">
+                          <UserCheck className="w-3 h-3 text-pink-300" />
+                          <span>Alumno Enfocado: {selectedStudent.name}</span>
+                        </div>
+                      )}
+                    </div>
+
+                    <form onSubmit={handleScheduleClass} className="space-y-4">
+                      {/* Tipo de Clase / Taller */}
+                      <div>
+                        <label className="block text-[10px] font-mono text-[#8A8A8A] font-bold uppercase mb-1.5">
+                          Tipo de Sesión Pedagógica
+                        </label>
+                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                          {[
+                            'Taller Intensivo de Técnica',
+                            'Masterclass Magistral',
+                            'Sesión 1-a-1 de Corrección',
+                            'Laboratorio de Freestyle'
+                          ].map(tType => (
+                            <button
+                              type="button"
+                              key={tType}
+                              onClick={() => setClassEventType(tType as any)}
+                              className={`p-2.5 rounded-xl border text-[11px] font-bold transition-all text-left ${
+                                classEventType === tType
+                                  ? 'bg-[#E9C349]/15 border-[#E9C349] text-white shadow-sm'
+                                  : 'bg-[#161616] border-white/5 text-slate-400 hover:text-white'
+                              }`}
+                            >
+                              {tType}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Título de la Clase */}
+                      <div>
+                        <label className="block text-[10px] font-mono text-[#8A8A8A] font-bold uppercase mb-1.5">
+                          {language === 'es' ? 'Nombre o Tema Central de la Clase' : 'Class Title'}
+                        </label>
+                        <input
+                          type="text"
+                          required
+                          value={classTitle}
+                          onChange={e => setClassTitle(e.target.value)}
+                          placeholder={language === 'es' ? "ej: Aceleración de Rolls & Limpieza Angular en Posing" : "e.g., Extreme Arm speed live drill"}
+                          className="w-full px-4 py-3 rounded-xl bg-[#161616] border border-white/10 text-white font-bold text-xs focus:outline-none focus:border-[#E9C349] transition-all"
+                        />
+                      </div>
+
+                      {/* Fecha, Hora, Duración */}
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div>
+                          <label className="block text-[10px] font-mono text-[#8A8A8A] font-bold uppercase mb-1.5">
+                            {t.classDate}
+                          </label>
+                          <input
+                            type="date"
+                            required
+                            value={classDate}
+                            onChange={e => setClassDate(e.target.value)}
+                            className="w-full px-4 py-3 rounded-xl bg-[#161616] border border-white/10 text-white font-mono text-xs focus:outline-none focus:border-[#E9C349] transition-all"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-[10px] font-mono text-[#8A8A8A] font-bold uppercase mb-1.5">
+                            {t.classTime}
+                          </label>
+                          <input
+                            type="text"
+                            required
+                            value={classTime}
+                            onChange={e => setClassTime(e.target.value)}
+                            placeholder="19:30"
+                            className="w-full px-4 py-3 rounded-xl bg-[#161616] border border-white/10 text-white font-mono text-xs focus:outline-none focus:border-[#E9C349] transition-all"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-[10px] font-mono text-[#8A8A8A] font-bold uppercase mb-1.5">
+                            {t.classDuration}
+                          </label>
+                          <input
+                            type="text"
+                            required
+                            value={classDuration}
+                            onChange={e => setClassDuration(e.target.value)}
+                            placeholder="90 min"
+                            className="w-full px-4 py-3 rounded-xl bg-[#161616] border border-white/10 text-white font-mono text-xs focus:outline-none focus:border-[#E9C349] transition-all"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Audiencia / Destinatario */}
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-[10px] font-mono text-[#8A8A8A] font-bold uppercase mb-1.5">
+                            Destinatarios de la Clase
+                          </label>
+                          <select
+                            value={classTargetAudience}
+                            onChange={e => setClassTargetAudience(e.target.value as any)}
+                            className="w-full px-4 py-2.5 rounded-xl bg-[#161616] border border-white/10 text-white font-bold text-xs focus:outline-none focus:border-[#E9C349]"
+                          >
+                            <option value="all">Toda la Cátedra ({students.length} Alumnos)</option>
+                            {selectedStudent && (
+                              <option value="selected_only">Exclusivo para {selectedStudent.name} (1 a 1)</option>
+                            )}
+                            <option value="level_specific">Alumnos por Nivel Específico</option>
+                          </select>
+                        </div>
+
+                        {classTargetAudience === 'level_specific' && (
+                          <div>
+                            <label className="block text-[10px] font-mono text-[#8A8A8A] font-bold uppercase mb-1.5">
+                              Nivel Requerido
+                            </label>
+                            <select
+                              value={classTargetLevel}
+                              onChange={e => setClassTargetLevel(e.target.value as any)}
+                              className="w-full px-4 py-2.5 rounded-xl bg-[#161616] border border-white/10 text-white font-bold text-xs focus:outline-none focus:border-[#E9C349]"
+                            >
+                              <option value="all">Todos los Niveles</option>
+                              <option value="Principiante">Nivel Principiante</option>
+                              <option value="Intermedio">Nivel Intermedio</option>
+                              <option value="Avanzado">Nivel Avanzado</option>
+                            </select>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Sala de Google Meet */}
+                      <div>
+                        <div className="flex justify-between items-center mb-1.5">
+                          <label className="block text-[10px] font-mono text-[#8A8A8A] font-bold uppercase">
+                            Sala Oficial de Streaming / Google Meet
+                          </label>
+                          <button
+                            type="button"
+                            onClick={() => setClassMeet(generateGoogleMeetRoomUrl(classTitle || 'live'))}
+                            className="text-[9px] font-mono font-bold text-blue-400 hover:text-blue-300 bg-blue-500/10 border border-blue-500/20 px-2 py-0.5 rounded transition-all flex items-center gap-1 active:scale-95"
+                          >
+                            <Video className="w-3 h-3 text-blue-400" />
+                            AUTO-GENERAR GOOGLE MEET
+                          </button>
+                        </div>
+                        <input
+                          type="url"
+                          value={classMeet}
+                          onChange={e => setClassMeet(e.target.value)}
+                          placeholder="https://meet.google.com/abc-defg-hij"
+                          className="w-full px-4 py-3 rounded-xl bg-[#161616] border border-white/10 text-white font-mono text-xs focus:outline-none focus:border-[#E9C349] transition-all"
+                        />
+                      </div>
+
+                      {/* Música y BPM para la clase */}
+                      <div className="p-4 rounded-2xl bg-[#1a1528] border border-purple-500/30 space-y-3">
+                        <div className="flex items-center justify-between">
+                          <label className="block text-[10px] font-mono text-[#E9C349] font-bold uppercase flex items-center gap-1.5">
+                            <Radio className="w-3.5 h-3.5 text-[#E9C349]" />
+                            Pista Musical Multifuente (YouTube, Spotify, SoundCloud)
+                          </label>
+                          <span className="text-[9px] font-mono text-purple-300 bg-purple-500/20 px-2 py-0.5 rounded border border-purple-500/30 font-semibold">
+                            Auto-Sincronización
+                          </span>
+                        </div>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                          <div className="sm:col-span-2">
+                            <input
+                              type="url"
+                              value={classMusicUrl}
+                              onChange={e => setClassMusicUrl(e.target.value)}
+                              placeholder="Pega enlace de YouTube, Spotify o SoundCloud"
+                              className="w-full px-4 py-2.5 rounded-xl bg-[#120f1e] border border-white/10 text-white font-mono text-xs focus:outline-none focus:border-purple-400 transition-all"
+                            />
+                          </div>
+                          <div>
+                            <div className="relative flex items-center">
+                              <input
+                                type="number"
+                                value={classBpm}
+                                onChange={e => setClassBpm(e.target.value ? parseInt(e.target.value) : '')}
+                                placeholder="128"
+                                className="w-full px-4 py-2.5 rounded-xl bg-[#120f1e] border border-white/10 text-white font-mono text-xs focus:outline-none focus:border-purple-400 transition-all"
+                              />
+                              <span className="absolute right-3 text-[10px] font-mono font-bold text-purple-300">BPM</span>
+                            </div>
+                          </div>
+                        </div>
+
+                        {classMusicUrl.trim() && (
+                          <div className="mt-2 space-y-1">
+                            <p className="text-[10px] font-mono text-slate-300 uppercase font-bold">Vista Previa Reproductor Multifuente:</p>
+                            <MultiSourcePlayer 
+                              musicSource={parseMusicSource(classMusicUrl, classTitle || 'Track de Entrenamiento', typeof classBpm === 'number' ? classBpm : 128)}
+                              compact={true}
+                            />
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Notas e instrucciones previas para los alumnos */}
+                      <div>
+                        <label className="block text-[10px] font-mono text-[#8A8A8A] font-bold uppercase mb-1.5">
+                          Indicaciones y Material Requerido para el Alumno
+                        </label>
+                        <textarea
+                          rows={2}
+                          value={classNotes}
+                          onChange={e => setClassNotes(e.target.value)}
+                          placeholder="Requisitos: Calzado de suela plana, toalla, calentamiento previo de manguito rotador y espacio despejado..."
+                          className="w-full px-4 py-2.5 rounded-xl bg-[#161616] border border-white/10 text-slate-300 text-xs focus:outline-none focus:border-[#E9C349] resize-none"
+                        />
+                      </div>
+
+                      <button
+                        type="submit"
+                        className="w-full py-3.5 px-5 rounded-xl bg-[#E9C349] hover:bg-[#ffdf6b] text-black font-black text-xs uppercase tracking-wider transition-all shadow-md active:scale-95 flex items-center justify-center gap-2"
+                      >
+                        <Calendar className="w-4 h-4" />
+                        <span>{language === 'es' ? 'Programar e Inyectar en Agenda de Cátedra' : 'Inject Class to Calendar'}</span>
+                      </button>
+                    </form>
+                  </div>
+
+                  {/* Right: Scheduled Sessions List with Instructor Launch & Attendance Controls */}
+                  <div className="bg-[#121212] border border-white/5 rounded-[24px] p-6 space-y-4">
+                    <div className="flex items-center justify-between pb-3 border-b border-white/5">
+                      <h3 className="text-sm font-mono tracking-wider text-[#8A8A8A] font-bold uppercase">
+                        {language === 'es' ? 'Tus Clases en Agenda' : 'Your Scheduled Events'}
+                      </h3>
+                      <span className="text-[10px] font-mono text-[#E9C349] bg-[#E9C349]/10 px-2 py-0.5 rounded border border-[#E9C349]/20 font-bold">
+                        {(events || []).filter(ev => ev.instructor === currentUser.name || (ev.title && ev.title.includes('[Taller]'))).length} Clases
                       </span>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                      <div className="sm:col-span-2">
-                        <input
-                          type="url"
-                          value={classMusicUrl}
-                          onChange={e => setClassMusicUrl(e.target.value)}
-                          placeholder="Pega enlace de YouTube, Spotify o SoundCloud"
-                          className="w-full px-4 py-2.5 rounded-xl bg-[#120f1e] border border-white/10 text-white font-mono text-xs focus:outline-none focus:border-purple-400 transition-all"
-                        />
-                      </div>
-                      <div>
-                        <div className="relative flex items-center">
-                          <input
-                            type="number"
-                            value={classBpm}
-                            onChange={e => setClassBpm(e.target.value ? parseInt(e.target.value) : '')}
-                            placeholder="128"
-                            className="w-full px-4 py-2.5 rounded-xl bg-[#120f1e] border border-white/10 text-white font-mono text-xs focus:outline-none focus:border-purple-400 transition-all"
-                          />
-                          <span className="absolute right-3 text-[10px] font-mono font-bold text-purple-300">BPM</span>
+                    <div className="space-y-3 max-h-[600px] overflow-y-auto pr-1">
+                      {(events || []).filter(ev => ev.instructor === currentUser.name || (ev.title && ev.title.includes('[Taller]'))).map(ev => {
+                        const eventAttendance = attendanceRecords[ev.id] || {};
+                        const presentCount = Object.values(eventAttendance).filter(st => st === 'present').length;
+                        
+                        return (
+                          <div key={ev.id} className="p-4 bg-[#161616] border border-white/5 hover:border-white/15 rounded-2xl space-y-3 transition-all">
+                            <div className="flex items-center justify-between gap-2">
+                              <span className="text-[10px] font-mono text-[#E9C349] font-bold">{ev.date} @ {ev.time}</span>
+                              <span className="text-[9px] font-mono font-bold bg-emerald-500/15 text-emerald-400 px-2 py-0.5 rounded border border-emerald-500/20">
+                                {ev.rsvpCount || students.length} Alumnos
+                              </span>
+                            </div>
+
+                            <div>
+                              <h4 className="text-xs font-black text-white">{ev.title}</h4>
+                              <p className="text-[11px] text-[#8A8A8A] font-semibold mt-0.5">{ev.duration} • {ev.instructor}</p>
+                            </div>
+
+                            {ev.meetUrl && (
+                              <div className="p-2 rounded-xl bg-blue-950/30 border border-blue-500/20 text-[10px] font-mono text-blue-200 truncate flex items-center gap-1.5">
+                                <Video className="w-3 h-3 text-blue-400 shrink-0" />
+                                <span className="truncate">{ev.meetUrl}</span>
+                              </div>
+                            )}
+
+                            {/* Action Buttons for the Instructor */}
+                            <div className="grid grid-cols-2 gap-2 pt-1">
+                              {ev.meetUrl ? (
+                                <a
+                                  href={ev.meetUrl}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="py-2 px-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-mono text-[10px] font-black uppercase transition-all flex items-center justify-center gap-1.5 text-center shadow-md active:scale-95"
+                                >
+                                  <Play className="w-3 h-3" />
+                                  <span>Iniciar Sala</span>
+                                </a>
+                              ) : (
+                                <button
+                                  type="button"
+                                  onClick={() => handleCopyClassLink(generateGoogleMeetRoomUrl(ev.title), ev.title)}
+                                  className="py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-white font-mono text-[10px] font-bold uppercase transition-all"
+                                >
+                                  Generar Link
+                                </button>
+                              )}
+
+                              <button
+                                type="button"
+                                onClick={() => setAttendanceModalEvent(ev)}
+                                className="py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-[#E9C349] font-mono text-[10px] font-bold uppercase transition-all flex items-center justify-center gap-1"
+                              >
+                                <ClipboardCheck className="w-3 h-3" />
+                                <span>Lista ({presentCount} Pres.)</span>
+                              </button>
+                            </div>
+
+                            <div className="flex items-center justify-between pt-1 border-t border-white/5 text-[10px] text-slate-400">
+                              <button
+                                type="button"
+                                onClick={() => handleCopyClassLink(ev.meetUrl || generateGoogleMeetRoomUrl(ev.title), ev.title)}
+                                className="hover:text-white flex items-center gap-1 transition-colors"
+                              >
+                                <Copy className="w-3 h-3" />
+                                <span>Copiar Enlace</span>
+                              </button>
+
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  if (window.confirm('¿Cancelar y eliminar esta sesión de la agenda?')) {
+                                    playChime('click');
+                                    setAlertText('Sesión cancelada.');
+                                    setTimeout(() => setAlertText(null), 2500);
+                                  }
+                                }}
+                                className="hover:text-rose-400 flex items-center gap-1 transition-colors text-slate-500"
+                              >
+                                <Trash2 className="w-3 h-3" />
+                                <span>Cancelar</span>
+                              </button>
+                            </div>
+                          </div>
+                        );
+                      })}
+
+                      {(events || []).filter(ev => ev && (ev.instructor === currentUser.name || (ev.title && ev.title.includes('[Taller]')))).length === 0 && (
+                        <div className="py-12 text-center text-[#8A8A8A] text-xs font-mono">
+                          [NO HAY SESIONES ACTIVAS EN AGENDA]
                         </div>
-                      </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* 2. SUB-TAB: CURRICULUM & LESSON ASSIGNMENT */}
+              {classPanelSubTab === 'curriculum' && (
+                <div className="space-y-6">
+                  {/* Filter & Search Bar */}
+                  <div className="bg-[#121212] border border-white/5 rounded-2xl p-4 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+                    <div className="flex items-center gap-2 flex-1 max-w-md bg-[#161616] border border-white/10 rounded-xl px-3 py-2">
+                      <Search className="w-4 h-4 text-slate-400 shrink-0" />
+                      <input
+                        type="text"
+                        value={curriculumSearchQuery}
+                        onChange={e => setCurriculumSearchQuery(e.target.value)}
+                        placeholder="Buscar lecciones de técnica, rolls, musicalidad..."
+                        className="w-full bg-transparent text-white text-xs font-semibold focus:outline-none"
+                      />
                     </div>
 
-                    {classMusicUrl.trim() && (
-                      <div className="mt-2 space-y-1">
-                        <p className="text-[10px] font-mono text-slate-300 uppercase font-bold">Vista Previa Reproductor Multifuente:</p>
-                        <MultiSourcePlayer 
-                          musicSource={parseMusicSource(classMusicUrl, classTitle || 'Track de Entrenamiento', typeof classBpm === 'number' ? classBpm : 128)}
-                          compact={true}
-                        />
-                      </div>
-                    )}
+                    <div className="flex items-center gap-2 overflow-x-auto">
+                      {(['all', 'Principiante', 'Intermedio', 'Avanzado'] as const).map(lvl => (
+                        <button
+                          key={lvl}
+                          onClick={() => setCurriculumLevelFilter(lvl)}
+                          className={`px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all ${
+                            curriculumLevelFilter === lvl
+                              ? 'bg-[#E9C349] text-black font-black'
+                              : 'bg-white/5 text-slate-400 hover:text-white border border-white/5'
+                          }`}
+                        >
+                          {lvl === 'all' ? 'Todos los Niveles' : lvl}
+                        </button>
+                      ))}
+
+                      <button
+                        onClick={() => setShowAddLessonModal(true)}
+                        className="px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-mono text-xs font-black transition-all flex items-center gap-1.5 shrink-0"
+                      >
+                        <Plus className="w-3.5 h-3.5" />
+                        <span>Nueva Lección</span>
+                      </button>
+                    </div>
                   </div>
 
-                  <button
-                    type="submit"
-                    className="w-full py-3 px-5 rounded-xl bg-[#E9C349] hover:bg-[#ffdf6b] text-black font-black text-xs uppercase tracking-wider transition-all shadow-md active:scale-95"
-                  >
-                    {language === 'es' ? 'Programar e Inyectar en Agenda' : 'Inject Class to Calendar'}
-                  </button>
-                </form>
-              </div>
-
-              {/* Current calendar classes taught by this instructor */}
-              <div className="bg-[#121212] border border-white/5 rounded-[24px] p-6 space-y-4">
-                <h3 className="text-sm font-mono tracking-wider text-[#8A8A8A] font-bold uppercase pb-3 border-b border-white/5">
-                  {language === 'es' ? 'Tus Clases en Agenda' : 'Your Scheduled Events'}
-                </h3>
-
-                <div className="space-y-3 max-h-[400px] overflow-y-auto">
-                  {(events || []).filter(ev => ev.instructor === currentUser.name || (ev.title && ev.title.includes('[Taller]'))).map(ev => (
-                    <div key={ev.id} className="p-4 bg-[#161616] border border-white/5 rounded-xl space-y-2">
-                      <div className="flex items-center justify-between gap-2">
-                        <span className="text-[10px] font-mono text-[#E9C349] font-bold">{ev.date} @ {ev.time}</span>
-                        <span className="text-[9px] font-mono font-bold bg-emerald-500/15 text-emerald-400 px-2 py-0.5 rounded border border-emerald-500/20">
-                          {ev.rsvpCount} Alumnos RSVP
-                        </span>
+                  {/* Focused Student Banner in Curriculum */}
+                  {selectedStudent && (
+                    <div className="p-4 rounded-2xl bg-pink-950/40 border border-pink-500/40 flex flex-wrap items-center justify-between gap-3 shadow-lg">
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-xl bg-pink-500/20 text-pink-300 flex items-center justify-center font-bold text-xs">
+                          {selectedStudent.name.substring(0, 2).toUpperCase()}
+                        </div>
+                        <div>
+                          <span className="text-[10px] font-mono font-bold text-pink-300 uppercase">MODO ASIGNACIÓN INDIVIDUAL:</span>
+                          <h4 className="text-sm font-black text-white">{selectedStudent.name} ({selectedStudent.level})</h4>
+                        </div>
                       </div>
-                      <h4 className="text-xs font-black text-white">{ev.title}</h4>
-                      <p className="text-[11px] text-[#8A8A8A] font-semibold">{ev.duration} • {ev.instructor}</p>
-                    </div>
-                  ))}
-
-                  {(events || []).filter(ev => ev && (ev.instructor === currentUser.name || (ev.title && ev.title.includes('[Taller]')))).length === 0 && (
-                    <div className="py-12 text-center text-[#8A8A8A] text-xs font-mono">
-                      [NO ACTIVE SESSIONS FOUND]
+                      <p className="text-xs text-pink-200/80">
+                        Haz clic en <strong>"Asignar Lección"</strong> o <strong>"Validar Aprobación"</strong> para personalizar la ruta técnica de este alumno.
+                      </p>
                     </div>
                   )}
+
+                  {/* Lessons Grid */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {(lessons || []).filter(l => {
+                      const matchQuery = !curriculumSearchQuery.trim() || l.title.toLowerCase().includes(curriculumSearchQuery.toLowerCase()) || l.description.toLowerCase().includes(curriculumSearchQuery.toLowerCase());
+                      const matchLvl = curriculumLevelFilter === 'all' || 
+                        (curriculumLevelFilter === 'Principiante' && (l.level === 1 || l.difficulty === 'principiante')) ||
+                        (curriculumLevelFilter === 'Intermedio' && (l.level === 2 || l.difficulty === 'intermedio')) ||
+                        (curriculumLevelFilter === 'Avanzado' && (l.difficulty === 'avanzado'));
+                      return matchQuery && matchLvl;
+                    }).map(lesson => {
+                      const assignedStudents = curriculumAssignedMap[lesson.id] || [];
+                      const approvedStudents = curriculumApprovedMap[lesson.id] || [];
+                      const isAssignedToSelected = selectedStudent ? assignedStudents.includes(selectedStudent.id) : false;
+                      const isApprovedBySelected = selectedStudent ? approvedStudents.includes(selectedStudent.id) : false;
+                      const levelName = lesson.difficulty 
+                        ? (lesson.difficulty.charAt(0).toUpperCase() + lesson.difficulty.slice(1)) 
+                        : (lesson.level === 1 ? 'Principiante' : 'Intermedio');
+
+                      return (
+                        <div key={lesson.id} className="bg-[#121212] border border-white/5 hover:border-white/20 rounded-[24px] p-5 space-y-4 flex flex-col justify-between transition-all group">
+                          <div className="space-y-3">
+                            <div className="relative rounded-2xl overflow-hidden aspect-video bg-black/40 border border-white/10">
+                              <img 
+                                src={(lesson as any).thumbnailUrl || (lesson as any).thumbnail || "https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&q=80&w=600"} 
+                                alt={lesson.title} 
+                                className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                              />
+                              <div className="absolute top-2 left-2 px-2 py-0.5 rounded-md bg-black/70 backdrop-blur-md text-[10px] font-mono font-bold text-white border border-white/10">
+                                {lesson.duration}
+                              </div>
+                              {lesson.bpm && (
+                                <div className="absolute top-2 right-2 px-2 py-0.5 rounded-md bg-purple-900/80 backdrop-blur-md text-[10px] font-mono font-bold text-purple-200 border border-purple-500/30">
+                                  {lesson.bpm} BPM
+                                </div>
+                              )}
+                              <span className={`absolute bottom-2 left-2 px-2 py-0.5 rounded text-[10px] font-mono font-bold ${
+                                levelName === 'Avanzado' ? 'bg-red-500/80 text-white' :
+                                levelName === 'Intermedio' ? 'bg-[#E9C349]/90 text-black' :
+                                'bg-cyan-500/80 text-black'
+                              }`}>
+                                {levelName}
+                              </span>
+                            </div>
+
+                            <div>
+                              <span className="text-[10px] font-mono text-purple-300 font-bold uppercase">{lesson.category}</span>
+                              <h4 className="text-sm font-extrabold text-white mt-1 group-hover:text-[#E9C349] transition-colors">{lesson.title}</h4>
+                              <p className="text-xs text-slate-400 font-medium line-clamp-2 mt-1">{lesson.description}</p>
+                            </div>
+                          </div>
+
+                          <div className="space-y-3 pt-3 border-t border-white/5">
+                            <div className="flex items-center justify-between text-[10px] font-mono text-slate-400">
+                              <span>Asignados: <strong className="text-white">{assignedStudents.length} alumnos</strong></span>
+                              <span>Aprobados: <strong className="text-emerald-400">{approvedStudents.length}</strong></span>
+                            </div>
+
+                            {/* Action Buttons for Instructor */}
+                            {selectedStudent ? (
+                              <div className="grid grid-cols-2 gap-2">
+                                <button
+                                  type="button"
+                                  onClick={() => handleToggleAssignLesson(lesson.id, selectedStudent.id)}
+                                  className={`py-2 px-2.5 rounded-xl text-[10px] font-mono font-bold transition-all flex items-center justify-center gap-1 ${
+                                    isAssignedToSelected
+                                      ? 'bg-pink-600 text-white shadow-md'
+                                      : 'bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300'
+                                  }`}
+                                >
+                                  <UserCheck className="w-3 h-3" />
+                                  <span>{isAssignedToSelected ? 'Asignada' : 'Asignar'}</span>
+                                </button>
+
+                                <button
+                                  type="button"
+                                  onClick={() => handleToggleApproveLesson(lesson.id, selectedStudent.id)}
+                                  className={`py-2 px-2.5 rounded-xl text-[10px] font-mono font-bold transition-all flex items-center justify-center gap-1 ${
+                                    isApprovedBySelected
+                                      ? 'bg-emerald-600 text-white shadow-md'
+                                      : 'bg-white/5 hover:bg-white/10 border border-white/10 text-emerald-400'
+                                  }`}
+                                >
+                                  <Check className="w-3 h-3" />
+                                  <span>{isApprovedBySelected ? 'Aprobada' : 'Validar'}</span>
+                                </button>
+                              </div>
+                            ) : (
+                              <button
+                                type="button"
+                                onClick={() => handleAssignLessonToAll(lesson.id)}
+                                className="w-full py-2 px-3 rounded-xl bg-white/5 hover:bg-[#E9C349]/20 border border-white/10 hover:border-[#E9C349]/40 text-slate-200 hover:text-[#E9C349] font-mono text-[10px] font-bold uppercase transition-all flex items-center justify-center gap-1.5"
+                              >
+                                <Users className="w-3 h-3" />
+                                <span>Asignar a Toda la Cátedra</span>
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
                 </div>
-              </div>
+              )}
+
+              {/* 3. SUB-TAB: LIVE CONTROL ROOM & METRONOME */}
+              {classPanelSubTab === 'live_control' && (
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                  {/* Left (2 Cols): Live Metronome & Practice Timer */}
+                  <div className="lg:col-span-2 space-y-6">
+                    {/* High Precision Live Metronome */}
+                    <div className="bg-[#121212] border border-[#E9C349]/30 rounded-[28px] p-6 space-y-5 shadow-2xl relative overflow-hidden">
+                      <div className="flex items-center justify-between border-b border-white/5 pb-3">
+                        <div className="flex items-center gap-2">
+                          <Zap className="w-5 h-5 text-[#E9C349]" />
+                          <h3 className="text-base font-black text-white uppercase tracking-wider">
+                            Metrónomo en Vivo para Dirección de Clases
+                          </h3>
+                        </div>
+                        <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase ${
+                          liveMetronomeActive ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 animate-pulse' : 'bg-white/5 text-slate-400'
+                        }`}>
+                          {liveMetronomeActive ? 'Activo / Marcando Compás' : 'En Pausa'}
+                        </span>
+                      </div>
+
+                      {/* 8-Beat Visual Indicator Lights */}
+                      <div className="p-4 rounded-2xl bg-black/60 border border-white/10 space-y-2">
+                        <div className="flex items-center justify-between text-[10px] font-mono text-slate-400 uppercase">
+                          <span>Conteo Visual de Compás (8 Tiempos):</span>
+                          <span>Acentos en Tiempos 1 y 5</span>
+                        </div>
+                        <div className="grid grid-cols-8 gap-2">
+                          {[1, 2, 3, 4, 5, 6, 7, 8].map(beat => {
+                            const isCurrent = liveMetronomeActive && liveMetronomeBeat === beat;
+                            const isAccentBeat = beat === 1 || beat === 5;
+                            return (
+                              <div
+                                key={beat}
+                                className={`h-12 rounded-xl border flex flex-col items-center justify-center font-mono font-black text-xs transition-all ${
+                                  isCurrent
+                                    ? isAccentBeat
+                                      ? 'bg-[#E9C349] text-black border-[#E9C349] shadow-[0_0_20px_rgba(233,195,73,0.8)] scale-105'
+                                      : 'bg-purple-500 text-white border-purple-400 shadow-[0_0_15px_rgba(168,85,247,0.8)] scale-105'
+                                    : isAccentBeat
+                                      ? 'bg-white/10 border-[#E9C349]/30 text-[#E9C349]'
+                                      : 'bg-white/5 border-white/5 text-slate-400'
+                                }`}
+                              >
+                                <span>{beat}</span>
+                                {isAccentBeat && <span className="text-[7px] uppercase font-bold">ACC</span>}
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+
+                      {/* BPM Slider & Direct Speed Presets */}
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs font-mono text-slate-400 font-bold uppercase">Tempo de Práctica (BPM):</span>
+                          <span className="text-3xl font-mono font-black text-[#E9C349]">{liveMetronomeBpm} <span className="text-xs text-slate-400 font-normal">BPM</span></span>
+                        </div>
+
+                        <input
+                          type="range"
+                          min="90"
+                          max="150"
+                          step="1"
+                          value={liveMetronomeBpm}
+                          onChange={e => setLiveMetronomeBpm(parseInt(e.target.value))}
+                          className="w-full accent-[#E9C349] cursor-pointer h-2 bg-white/10 rounded-lg"
+                        />
+
+                        <div className="flex flex-wrap items-center gap-2">
+                          {[100, 110, 118, 124, 128, 132, 140].map(speed => (
+                            <button
+                              key={speed}
+                              type="button"
+                              onClick={() => {
+                                setLiveMetronomeBpm(speed);
+                                playChime('click');
+                              }}
+                              className={`px-3 py-1 rounded-xl text-xs font-mono font-bold transition-all ${
+                                liveMetronomeBpm === speed
+                                  ? 'bg-[#E9C349] text-black font-black'
+                                  : 'bg-white/5 hover:bg-white/10 text-slate-300 border border-white/5'
+                              }`}
+                            >
+                              {speed} BPM
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Start / Stop Metronome Button */}
+                      <button
+                        type="button"
+                        onClick={() => {
+                          playChime('click');
+                          setLiveMetronomeActive(!liveMetronomeActive);
+                        }}
+                        className={`w-full py-4 rounded-2xl font-black text-sm uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-xl active:scale-98 ${
+                          liveMetronomeActive
+                            ? 'bg-rose-600 hover:bg-rose-500 text-white'
+                            : 'bg-[#E9C349] hover:bg-[#ffdf6b] text-black'
+                        }`}
+                      >
+                        {liveMetronomeActive ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5" />}
+                        <span>{liveMetronomeActive ? 'Detener Metrónomo en Vivo' : 'Iniciar Metrónomo de Clase'}</span>
+                      </button>
+                    </div>
+
+                    {/* Drill & Freestyle Round Timer */}
+                    <div className="bg-[#121212] border border-white/5 rounded-[28px] p-6 space-y-4">
+                      <div className="flex items-center justify-between border-b border-white/5 pb-3">
+                        <div className="flex items-center gap-2">
+                          <Timer className="w-5 h-5 text-purple-400" />
+                          <h3 className="text-base font-black text-white uppercase tracking-wider">
+                            Cronómetro de Rondas de Drill & Freestyle
+                          </h3>
+                        </div>
+                        <span className="text-xs font-mono font-bold text-slate-400">
+                          {Math.floor(liveRoundTimerSeconds / 60)}:{(liveRoundTimerSeconds % 60).toString().padStart(2, '0')}
+                        </span>
+                      </div>
+
+                      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-5 rounded-2xl bg-black/40 border border-white/5">
+                        <div className="text-center sm:text-left">
+                          <div className="text-4xl sm:text-5xl font-mono font-black text-white">
+                            {Math.floor(liveRoundTimerSeconds / 60)}:{(liveRoundTimerSeconds % 60).toString().padStart(2, '0')}
+                          </div>
+                          <p className="text-[11px] text-slate-400 font-mono mt-1">Temporizador de intervención para alumnos en cámara</p>
+                        </div>
+
+                        <div className="flex flex-wrap items-center gap-2">
+                          {[30, 45, 60, 90, 120].map(secs => (
+                            <button
+                              key={secs}
+                              type="button"
+                              onClick={() => handleStartRoundTimer(secs)}
+                              className="px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-white font-mono text-xs font-bold transition-all"
+                            >
+                              {secs}s
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-3">
+                        <button
+                          type="button"
+                          onClick={() => setLiveRoundTimerRunning(!liveRoundTimerRunning)}
+                          className={`py-3 rounded-xl font-mono text-xs font-black uppercase transition-all flex items-center justify-center gap-2 ${
+                            liveRoundTimerRunning
+                              ? 'bg-amber-600 text-white'
+                              : 'bg-purple-600 hover:bg-purple-500 text-white'
+                          }`}
+                        >
+                          {liveRoundTimerRunning ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
+                          <span>{liveRoundTimerRunning ? 'Pausar Ronda' : 'Comenzar Ronda'}</span>
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={handleResetRoundTimer}
+                          className="py-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 font-mono text-xs font-bold uppercase transition-all flex items-center justify-center gap-2"
+                        >
+                          <RotateCcw className="w-4 h-4" />
+                          <span>Reiniciar</span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Right (1 Col): Live Teacher Quick Notes & Posture Remarks */}
+                  <div className="bg-[#121212] border border-white/5 rounded-[28px] p-6 space-y-4 flex flex-col justify-between">
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between border-b border-white/5 pb-3">
+                        <h4 className="text-sm font-black text-white flex items-center gap-2 uppercase tracking-wider">
+                          <Edit3 className="w-4 h-4 text-[#E9C349]" />
+                          Bitácora de Observaciones en Vivo
+                        </h4>
+                        <span className="text-[10px] font-mono text-slate-400">Auto-Guardado</span>
+                      </div>
+
+                      <p className="text-[11px] text-slate-400 font-medium">
+                        Anota correcciones técnicas, simetría braquial y postura de los alumnos durante la sesión en directo:
+                      </p>
+
+                      <textarea
+                        rows={14}
+                        value={liveTeacherNotes}
+                        onChange={e => setLiveTeacherNotes(e.target.value)}
+                        placeholder="Escribe tus observaciones técnicas aquí..."
+                        className="w-full p-3.5 rounded-2xl bg-[#161616] border border-white/10 text-slate-200 text-xs font-mono leading-relaxed focus:outline-none focus:border-[#E9C349] resize-none"
+                      />
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        navigator.clipboard.writeText(liveTeacherNotes);
+                        playChime('click');
+                        setAlertText('¡Observaciones de clase copiadas al portapapeles!');
+                        setTimeout(() => setAlertText(null), 3000);
+                      }}
+                      className="w-full py-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-slate-200 text-xs font-mono font-bold uppercase transition-all flex items-center justify-center gap-2"
+                    >
+                      <Copy className="w-4 h-4 text-[#E9C349]" />
+                      <span>Copiar Bitácora para WhatsApp / Email</span>
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* 4. SUB-TAB: SUBMISSIONS & HOMEWORK GRADING */}
+              {classPanelSubTab === 'submissions' && (
+                <div className="space-y-6">
+                  <div className="bg-[#121212] border border-white/5 rounded-2xl p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                    <div>
+                      <h3 className="text-base font-black text-white uppercase">
+                        Entregas Técnicas y Tareas de Alumnos
+                      </h3>
+                      <p className="text-xs text-slate-400 font-medium mt-0.5">
+                        Revisa los videos de práctica enviados por tus alumnos, asigna puntaje técnico y brinda feedback pedagógico.
+                      </p>
+                    </div>
+
+                    <span className="text-xs font-mono text-[#E9C349] bg-[#E9C349]/10 px-3 py-1 rounded-xl border border-[#E9C349]/20 font-bold">
+                      {studentSubmissions.length} Tareas Registradas
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {studentSubmissions.map(sub => (
+                      <div key={sub.id} className="bg-[#121212] border border-white/5 rounded-[24px] p-5 space-y-4 flex flex-col justify-between">
+                        <div className="space-y-3">
+                          <div className="flex items-center justify-between gap-2 border-b border-white/5 pb-3">
+                            <div className="flex items-center gap-2.5">
+                              <div className="w-8 h-8 rounded-full bg-[#E9C349]/10 text-[#E9C349] font-bold text-xs flex items-center justify-center border border-[#E9C349]/20">
+                                {sub.studentName.substring(0, 2).toUpperCase()}
+                              </div>
+                              <div>
+                                <h4 className="text-sm font-black text-white">{sub.studentName}</h4>
+                                <span className="text-[10px] font-mono text-slate-400">{sub.submittedAt}</span>
+                              </div>
+                            </div>
+
+                            <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase ${
+                              sub.status === 'graded' 
+                                ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
+                                : 'bg-amber-500/10 text-amber-300 border border-amber-500/20'
+                            }`}>
+                              {sub.status === 'graded' ? `Calificado (${sub.score}/100)` : 'Pendiente de Revisión'}
+                            </span>
+                          </div>
+
+                          <div>
+                            <span className="text-[10px] font-mono text-slate-400 font-bold uppercase">Lección Correspondiente:</span>
+                            <h5 className="text-xs font-black text-white mt-0.5">{sub.lessonTitle}</h5>
+                          </div>
+
+                          <div className="relative rounded-2xl overflow-hidden aspect-video bg-black/40 border border-white/10">
+                            <img src={sub.videoUrl} alt={sub.lessonTitle} className="w-full h-full object-cover" />
+                            <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+                              <div className="w-10 h-10 rounded-full bg-[#E9C349] text-black flex items-center justify-center shadow-lg font-bold">
+                                <Play className="w-5 h-5 ml-0.5" />
+                              </div>
+                            </div>
+                          </div>
+
+                          {sub.feedback && (
+                            <div className="p-3 rounded-xl bg-white/5 border border-white/5 space-y-1">
+                              <span className="text-[10px] font-mono text-emerald-400 font-bold uppercase">Tu Feedback Docente:</span>
+                              <p className="text-xs text-slate-300 italic font-medium">"{sub.feedback}"</p>
+                            </div>
+                          )}
+                        </div>
+
+                        <div className="pt-2">
+                          <button
+                            type="button"
+                            onClick={() => setGradingSubmission({
+                              submission: sub,
+                              score: sub.score || 85,
+                              feedback: sub.feedback || 'Excelente fluidez en el patrón. Recuerda mantener la extensión de codos en los compases acelerados.'
+                            })}
+                            className="w-full py-2.5 px-4 rounded-xl bg-[#E9C349] hover:bg-[#ffdf6b] text-black font-mono text-xs font-black uppercase transition-all flex items-center justify-center gap-1.5 shadow-md active:scale-95 cursor-pointer"
+                          >
+                            <ClipboardCheck className="w-4 h-4" />
+                            <span>{sub.status === 'graded' ? 'Editar Calificación & Feedback' : 'Calificar Entrega Técnica'}</span>
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </motion.div>
+          )}
+
+          {/* ATTENDANCE SHEET MODAL */}
+          {attendanceModalEvent && (
+            <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
+              <motion.div
+                initial={{ scale: 0.95, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                className="bg-[#141414] border border-[#E9C349]/40 rounded-[28px] p-6 max-w-xl w-full space-y-5 shadow-2xl relative"
+              >
+                <div className="flex items-center justify-between border-b border-white/10 pb-3">
+                  <div>
+                    <span className="text-[10px] font-mono font-bold text-[#E9C349] uppercase">CONTROL DE ASISTENCIA OFICIAL</span>
+                    <h3 className="text-base font-black text-white">{attendanceModalEvent.title}</h3>
+                    <p className="text-xs font-mono text-slate-400">{attendanceModalEvent.date} @ {attendanceModalEvent.time}</p>
+                  </div>
+                  <button
+                    onClick={() => setAttendanceModalEvent(null)}
+                    className="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
+
+                <div className="space-y-2 max-h-[350px] overflow-y-auto pr-1">
+                  {students.map(std => {
+                    const eventAttendance = attendanceRecords[attendanceModalEvent.id] || {};
+                    const currentStatus = eventAttendance[std.id] || 'absent';
+
+                    return (
+                      <div key={std.id} className="p-3 rounded-2xl bg-white/5 border border-white/5 flex items-center justify-between gap-3">
+                        <div className="flex items-center gap-2.5">
+                          <div className="w-7 h-7 rounded-full bg-white/10 flex items-center justify-center text-[10px] font-bold text-[#E9C349]">
+                            {std.name.substring(0, 2).toUpperCase()}
+                          </div>
+                          <div>
+                            <h4 className="text-xs font-bold text-white">{std.name}</h4>
+                            <span className="text-[10px] font-mono text-slate-400">{std.level}</span>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center gap-1.5">
+                          <button
+                            type="button"
+                            onClick={() => handleSetStudentAttendance(attendanceModalEvent.id, std.id, 'present')}
+                            className={`px-2.5 py-1 rounded-lg text-[10px] font-mono font-bold transition-all ${
+                              currentStatus === 'present'
+                                ? 'bg-emerald-600 text-white shadow-sm'
+                                : 'bg-white/5 text-slate-400 hover:text-white'
+                            }`}
+                          >
+                            Presente
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleSetStudentAttendance(attendanceModalEvent.id, std.id, 'late')}
+                            className={`px-2.5 py-1 rounded-lg text-[10px] font-mono font-bold transition-all ${
+                              currentStatus === 'late'
+                                ? 'bg-amber-600 text-white shadow-sm'
+                                : 'bg-white/5 text-slate-400 hover:text-white'
+                            }`}
+                          >
+                            Tarde
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleSetStudentAttendance(attendanceModalEvent.id, std.id, 'absent')}
+                            className={`px-2.5 py-1 rounded-lg text-[10px] font-mono font-bold transition-all ${
+                              currentStatus === 'absent'
+                                ? 'bg-rose-600 text-white shadow-sm'
+                                : 'bg-white/5 text-slate-400 hover:text-white'
+                            }`}
+                          >
+                            Ausente
+                          </button>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                <div className="flex items-center justify-between pt-2 border-t border-white/10">
+                  <span className="text-xs font-mono text-slate-400">
+                    Asistencia: <strong className="text-emerald-400">{Object.values(attendanceRecords[attendanceModalEvent.id] || {}).filter(st => st === 'present').length} de {students.length} presentes</strong>
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      playChime('success');
+                      setAlertText('¡Lista de asistencia guardada correctamente!');
+                      setAttendanceModalEvent(null);
+                      setTimeout(() => setAlertText(null), 3000);
+                    }}
+                    className="py-2 px-4 rounded-xl bg-[#E9C349] text-black font-mono text-xs font-black uppercase transition-all"
+                  >
+                    Guardar Asistencia
+                  </button>
+                </div>
+              </motion.div>
+            </div>
+          )}
+
+          {/* GRADING SUBMISSION MODAL */}
+          {gradingSubmission && (
+            <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
+              <motion.div
+                initial={{ scale: 0.95, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                className="bg-[#141414] border border-[#E9C349]/40 rounded-[28px] p-6 max-w-lg w-full space-y-4 shadow-2xl relative"
+              >
+                <div className="flex items-center justify-between border-b border-white/10 pb-3">
+                  <div>
+                    <span className="text-[10px] font-mono font-bold text-[#E9C349] uppercase">CALIFICAR ENTREGA TÉCNICA</span>
+                    <h3 className="text-sm font-black text-white">{gradingSubmission.submission.studentName}</h3>
+                    <p className="text-xs font-mono text-slate-400">{gradingSubmission.submission.lessonTitle}</p>
+                  </div>
+                  <button
+                    onClick={() => setGradingSubmission(null)}
+                    className="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
+
+                <div className="space-y-3">
+                  <div>
+                    <label className="block text-[10px] font-mono text-[#8A8A8A] font-bold uppercase mb-1">
+                      Puntaje de Rendimiento (1 - 100)
+                    </label>
+                    <div className="flex items-center gap-3">
+                      <input
+                        type="range"
+                        min="50"
+                        max="100"
+                        step="1"
+                        value={gradingSubmission.score}
+                        onChange={e => setGradingSubmission({
+                          ...gradingSubmission,
+                          score: parseInt(e.target.value)
+                        })}
+                        className="flex-1 accent-[#E9C349] cursor-pointer"
+                      />
+                      <span className="text-xl font-mono font-black text-[#E9C349] w-14 text-right">
+                        {gradingSubmission.score}/100
+                      </span>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-[10px] font-mono text-[#8A8A8A] font-bold uppercase mb-1">
+                      Correcciones y Feedback Técnico para el Alumno
+                    </label>
+                    <textarea
+                      rows={4}
+                      value={gradingSubmission.feedback}
+                      onChange={e => setGradingSubmission({
+                        ...gradingSubmission,
+                        feedback: e.target.value
+                      })}
+                      placeholder="Indica correcciones sobre la simetría de rolls, posición de hombros y musicalidad..."
+                      className="w-full p-3 rounded-xl bg-[#1a1a1a] border border-white/10 text-white text-xs font-medium focus:outline-none focus:border-[#E9C349] resize-none"
+                    />
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-end gap-2 pt-2 border-t border-white/10">
+                  <button
+                    type="button"
+                    onClick={() => setGradingSubmission(null)}
+                    className="py-2 px-3 rounded-xl bg-white/5 text-slate-400 text-xs font-bold"
+                  >
+                    Cancelar
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleGradeSubmission(
+                      gradingSubmission.submission.id,
+                      gradingSubmission.score,
+                      gradingSubmission.feedback
+                    )}
+                    className="py-2 px-4 rounded-xl bg-[#E9C349] hover:bg-[#ffdf6b] text-black font-mono text-xs font-black uppercase transition-all shadow-md"
+                  >
+                    Guardar & Emitir Nota
+                  </button>
+                </div>
+              </motion.div>
+            </div>
+          )}
+
+          {/* ADD NEW LESSON MODAL */}
+          {showAddLessonModal && (
+            <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
+              <motion.div
+                initial={{ scale: 0.95, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                className="bg-[#141414] border border-[#E9C349]/40 rounded-[28px] p-6 max-w-lg w-full space-y-4 shadow-2xl relative"
+              >
+                <div className="flex items-center justify-between border-b border-white/10 pb-3">
+                  <div className="flex items-center gap-2">
+                    <PlusCircle className="w-5 h-5 text-emerald-400" />
+                    <h3 className="text-base font-black text-white uppercase">Añadir Nueva Lección al Currículo</h3>
+                  </div>
+                  <button
+                    onClick={() => setShowAddLessonModal(false)}
+                    className="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
+
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    if (!newLessonTitle.trim()) return;
+                    playChime('success');
+                    setShowAddLessonModal(false);
+                    setAlertText(`¡Lección "${newLessonTitle}" añadida al currículo y disponible para asignaciones!`);
+                    setTimeout(() => setAlertText(null), 3500);
+                  }}
+                  className="space-y-3"
+                >
+                  <div>
+                    <label className="block text-[10px] font-mono text-[#8A8A8A] font-bold uppercase mb-1">Título de la Lección</label>
+                    <input
+                      type="text"
+                      required
+                      value={newLessonTitle}
+                      onChange={e => setNewLessonTitle(e.target.value)}
+                      placeholder="ej: Micro-Musicalidad & Sincopa a 130 BPM"
+                      className="w-full px-3 py-2 rounded-xl bg-[#1a1a1a] border border-white/10 text-white font-bold text-xs focus:outline-none focus:border-[#E9C349]"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-[10px] font-mono text-[#8A8A8A] font-bold uppercase mb-1">Categoría Técnica</label>
+                      <input
+                        type="text"
+                        value={newLessonCategory}
+                        onChange={e => setNewLessonCategory(e.target.value)}
+                        className="w-full px-3 py-2 rounded-xl bg-[#1a1a1a] border border-white/10 text-white text-xs focus:outline-none"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[10px] font-mono text-[#8A8A8A] font-bold uppercase mb-1">Nivel</label>
+                      <select
+                        value={newLessonLevel}
+                        onChange={e => setNewLessonLevel(e.target.value as any)}
+                        className="w-full px-3 py-2 rounded-xl bg-[#1a1a1a] border border-white/10 text-white font-bold text-xs focus:outline-none"
+                      >
+                        <option value="Principiante">Principiante</option>
+                        <option value="Intermedio">Intermedio</option>
+                        <option value="Avanzado">Avanzado</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-[10px] font-mono text-[#8A8A8A] font-bold uppercase mb-1">Duración</label>
+                      <input
+                        type="text"
+                        value={newLessonDuration}
+                        onChange={e => setNewLessonDuration(e.target.value)}
+                        placeholder="20 min"
+                        className="w-full px-3 py-2 rounded-xl bg-[#1a1a1a] border border-white/10 text-white text-xs font-mono focus:outline-none"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[10px] font-mono text-[#8A8A8A] font-bold uppercase mb-1">Tempo (BPM)</label>
+                      <input
+                        type="number"
+                        value={newLessonBpm}
+                        onChange={e => setNewLessonBpm(parseInt(e.target.value) || 128)}
+                        className="w-full px-3 py-2 rounded-xl bg-[#1a1a1a] border border-white/10 text-white text-xs font-mono focus:outline-none"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-[10px] font-mono text-[#8A8A8A] font-bold uppercase mb-1">Descripción Pedagógica</label>
+                    <textarea
+                      rows={2}
+                      value={newLessonDescription}
+                      onChange={e => setNewLessonDescription(e.target.value)}
+                      placeholder="Desglose del contenido técnico..."
+                      className="w-full px-3 py-2 rounded-xl bg-[#1a1a1a] border border-white/10 text-slate-300 text-xs focus:outline-none resize-none"
+                    />
+                  </div>
+
+                  <div className="flex items-center justify-end gap-2 pt-2 border-t border-white/10">
+                    <button
+                      type="button"
+                      onClick={() => setShowAddLessonModal(false)}
+                      className="py-2 px-3 rounded-xl bg-white/5 text-slate-400 text-xs font-bold"
+                    >
+                      Cancelar
+                    </button>
+                    <button
+                      type="submit"
+                      className="py-2 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-mono text-xs font-black uppercase transition-all shadow-md"
+                    >
+                      Guardar Lección
+                    </button>
+                  </div>
+                </form>
+              </motion.div>
+            </div>
           )}
 
           {activeSubTab === 'promotion' && (

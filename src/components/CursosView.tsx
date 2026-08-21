@@ -39,7 +39,8 @@ import {
   ListFilter,
   Gauge,
   SlidersHorizontal,
-  RotateCcw
+  RotateCcw,
+  Bookmark
 } from 'lucide-react';
 import { User, Lesson, InstructorCatedra, IntensiveCourse, CatedraMaterial, FeedbackItem } from '../types';
 import { Language, translations } from '../lib/translations';
@@ -47,6 +48,11 @@ import { WaackingPillarsGallery } from './WaackingPillarsGallery';
 import { SomaticFeedbackLab } from './lab/SomaticFeedbackLab';
 import FormationContentPreviewModal from './FormationContentPreviewModal';
 import { CategoryFilterBar, FilterState, FilterDimensionTab, STYLE_OPTIONS, TECHNIQUE_OPTIONS, DIFFICULTY_OPTIONS } from './CategoryFilterBar';
+import InstructorStudentClassFilterBanner, { 
+  EnrolledStudent, 
+  DEFAULT_ENROLLED_STUDENTS, 
+  StudentClassFilter 
+} from './instructor/InstructorStudentClassFilterBanner';
 import Logo from './Logo';
 
 interface CursosViewProps {
@@ -175,6 +181,111 @@ export default function CursosView({
   const [activeDimensionTab, setActiveDimensionTab] = useState<FilterDimensionTab>('all');
   const [viewLayout, setViewLayout] = useState<'catedras' | 'catalog'>('catedras');
 
+  // Instructor & Academy Role Check
+  const isInstructorOrAcademy = 
+    currentUser.role === 'instructor' || 
+    currentUser.role === 'academy' || 
+    currentUser.role === 'studio' || 
+    (currentUser as any).role === 'academia' ||
+    (currentUser as any).isInstructor === true;
+
+  // Enrolled Students Management State (persisted locally)
+  const [students, setStudents] = useState<EnrolledStudent[]>(() => {
+    try {
+      const saved = localStorage.getItem('waackon_enrolled_students');
+      return saved ? JSON.parse(saved) : DEFAULT_ENROLLED_STUDENTS;
+    } catch (e) {
+      return DEFAULT_ENROLLED_STUDENTS;
+    }
+  });
+
+  const persistStudents = (newStudents: EnrolledStudent[]) => {
+    setStudents(newStudents);
+    try {
+      localStorage.setItem('waackon_enrolled_students', JSON.stringify(newStudents));
+    } catch (e) {
+      console.error('Error saving enrolled students', e);
+    }
+  };
+
+  const [selectedStudentId, setSelectedStudentId] = useState<string>('all');
+  const [studentClassFilter, setStudentClassFilter] = useState<StudentClassFilter>('all');
+
+  const selectedStudent = React.useMemo(() => {
+    return students.find(s => s.id === selectedStudentId);
+  }, [students, selectedStudentId]);
+
+  // Student class assignment & completion management handlers
+  const handleToggleStudentAssignLesson = (studentId: string, lessonId: string) => {
+    const updated = students.map(s => {
+      if (s.id !== studentId) return s;
+      const isAssigned = s.assignedLessons.includes(lessonId);
+      const newAssigned = isAssigned
+        ? s.assignedLessons.filter(id => id !== lessonId)
+        : [...s.assignedLessons, lessonId];
+      return { ...s, assignedLessons: newAssigned };
+    });
+    persistStudents(updated);
+    const targetStudent = updated.find(s => s.id === studentId);
+    const isNowAssigned = targetStudent?.assignedLessons.includes(lessonId);
+    setMaterialToast(isNowAssigned ? `📌 Lección asignada al currículo de ${targetStudent?.name}` : `❌ Lección desasignada de ${targetStudent?.name}`);
+    setTimeout(() => setMaterialToast(null), 3000);
+  };
+
+  const handleToggleStudentLessonComplete = (studentId: string, lessonId: string) => {
+    const updated = students.map(s => {
+      if (s.id !== studentId) return s;
+      const isComp = s.completedLessons.includes(lessonId);
+      const newCompleted = isComp
+        ? s.completedLessons.filter(id => id !== lessonId)
+        : [...s.completedLessons, lessonId];
+      return { ...s, completedLessons: newCompleted };
+    });
+    persistStudents(updated);
+    const targetStudent = updated.find(s => s.id === studentId);
+    const isNowComp = targetStudent?.completedLessons.includes(lessonId);
+    setMaterialToast(isNowComp ? `✅ Lección aprobada/completada para ${targetStudent?.name}` : `⏳ Lección marcada como pendiente para ${targetStudent?.name}`);
+    setTimeout(() => setMaterialToast(null), 3000);
+  };
+
+  const handleBatchAssignLevel = (studentId: string, levelStr: string) => {
+    const levelNum = levelStr === 'Principiante' ? 1 : 2;
+    const levelLessonIds = (lessons || [])
+      .filter(l => l.level === levelNum || l.difficulty?.toLowerCase() === levelStr.toLowerCase())
+      .map(l => l.id);
+
+    const updated = students.map(s => {
+      if (s.id !== studentId) return s;
+      const merged = Array.from(new Set([...s.assignedLessons, ...levelLessonIds]));
+      return { ...s, assignedLessons: merged };
+    });
+    persistStudents(updated);
+    const targetStudent = updated.find(s => s.id === studentId);
+    setMaterialToast(`⚡ Asignadas ${levelLessonIds.length} clases de nivel ${levelStr} a ${targetStudent?.name}`);
+    setTimeout(() => setMaterialToast(null), 3500);
+  };
+
+  const handleAddStudent = (newStudentData: Omit<EnrolledStudent, 'id' | 'points' | 'lastActive'>) => {
+    const newSt: EnrolledStudent = {
+      ...newStudentData,
+      id: `st-${Date.now()}`,
+      points: 120,
+      lastActive: 'Recién añadido'
+    };
+    const updated = [newSt, ...students];
+    persistStudents(updated);
+    setSelectedStudentId(newSt.id);
+    setMaterialToast(`🎓 Alumno ${newSt.name} registrado e inscrito exitosamente`);
+    setTimeout(() => setMaterialToast(null), 3500);
+  };
+
+  const handleUpdateStudentNotes = (studentId: string, notes: string) => {
+    const updated = students.map(s => s.id === studentId ? { ...s, notes } : s);
+    persistStudents(updated);
+    setMaterialToast('📝 Ficha y observaciones del alumno actualizadas');
+    setTimeout(() => setMaterialToast(null), 3000);
+  };
+
   const handleFilterChange = (newFilters: Partial<FilterState>) => {
     setFilters(prev => ({ ...prev, ...newFilters }));
   };
@@ -189,9 +300,25 @@ export default function CursosView({
     });
   };
 
-  // Helper filter matching function
+  // Helper filter matching function with Student Mode Support
   const matchesLessonFilters = (lesson: Lesson, f: FilterState, instFilter: string) => {
     if (instFilter !== 'all' && lesson.instructorId !== instFilter) return false;
+
+    // Instructor / Academy Student Filtering Mode
+    if (isInstructorOrAcademy && selectedStudentId !== 'all' && selectedStudent) {
+      if (studentClassFilter === 'assigned') {
+        if (!selectedStudent.assignedLessons.includes(lesson.id)) return false;
+      } else if (studentClassFilter === 'completed') {
+        if (!selectedStudent.completedLessons.includes(lesson.id)) return false;
+      } else if (studentClassFilter === 'pending') {
+        if (!selectedStudent.assignedLessons.includes(lesson.id) || selectedStudent.completedLessons.includes(lesson.id)) return false;
+      } else if (studentClassFilter === 'recommended') {
+        const studentLevelNum = selectedStudent.level === 'Principiante' ? 1 : 2;
+        if (lesson.level !== studentLevelNum && lesson.difficulty?.toLowerCase() !== selectedStudent.level.toLowerCase()) {
+          return false;
+        }
+      }
+    }
 
     // Style match
     if (f.style !== 'all') {
@@ -383,157 +510,182 @@ export default function CursosView({
         )}
       </AnimatePresence>
 
-      {/* HEADER SECTION */}
-      <div className="bg-gradient-to-r from-purple-900/30 via-indigo-900/20 to-pink-900/20 border border-white/15 p-6 rounded-3xl backdrop-blur-xl shadow-2xl flex flex-col lg:flex-row lg:items-center justify-between gap-6 relative overflow-hidden">
-        <div className="flex flex-col sm:flex-row sm:items-center gap-5">
-          <Logo variant="full" className="w-36 h-auto shrink-0" />
-          <div>
-            <div className="flex items-center gap-2 mb-1 flex-wrap">
-              <span className="text-[10px] font-mono font-bold text-[#E9C349] bg-white/10 border border-[#E9C349]/30 px-2.5 py-0.5 rounded-full uppercase tracking-wider flex items-center gap-1">
-                <Sparkles className="w-3 h-3 text-[#E9C349]" /> CÁTEDRAS ACTIVAS
-              </span>
-              <span className="text-[10px] font-mono font-bold text-cyan-300 bg-cyan-500/10 border border-cyan-500/30 px-2.5 py-0.5 rounded-full uppercase">
-                {(subscribedInstructors || []).length} PROFESORES SUSCRITOS
-              </span>
+      {/* CONDITIONAL BANNER: INSTRUCTOR / ACADEMY STUDENT MANAGEMENT BANNER VS STANDARD BANNER */}
+      {isInstructorOrAcademy ? (
+        <InstructorStudentClassFilterBanner
+          currentUser={currentUser}
+          students={students}
+          selectedStudentId={selectedStudentId}
+          onSelectStudent={setSelectedStudentId}
+          studentClassFilter={studentClassFilter}
+          onStudentClassFilterChange={setStudentClassFilter}
+          lessons={lessons || []}
+          instructors={subscribedInstructors}
+          onBatchAssignLevel={handleBatchAssignLevel}
+          onAddStudent={handleAddStudent}
+          onUpdateStudentNotes={handleUpdateStudentNotes}
+          currentTab={currentTab}
+          setCurrentTab={setCurrentTab}
+          setActiveTab={setActiveTab}
+          onOpenSpotifyPlayer={onOpenSpotifyPlayer}
+          onOpenPreviewModal={() => setShowPreviewModal(true)}
+          subscribedInstructorsCount={(subscribedInstructors || []).length}
+        />
+      ) : (
+        <>
+          {/* HEADER SECTION FOR STUDENTS */}
+          <div className="bg-gradient-to-r from-purple-900/30 via-indigo-900/20 to-pink-900/20 border border-white/15 p-6 rounded-3xl backdrop-blur-xl shadow-2xl flex flex-col lg:flex-row lg:items-center justify-between gap-6 relative overflow-hidden">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-5">
+              <Logo variant="full" className="w-36 h-auto shrink-0" />
+              <div>
+                <div className="flex items-center gap-2 mb-1 flex-wrap">
+                  <span className="text-[10px] font-mono font-bold text-[#E9C349] bg-white/10 border border-[#E9C349]/30 px-2.5 py-0.5 rounded-full uppercase tracking-wider flex items-center gap-1">
+                    <Sparkles className="w-3 h-3 text-[#E9C349]" /> CÁTEDRAS ACTIVAS
+                  </span>
+                  <span className="text-[10px] font-mono font-bold text-cyan-300 bg-cyan-500/10 border border-cyan-500/30 px-2.5 py-0.5 rounded-full uppercase">
+                    {(subscribedInstructors || []).length} PROFESORES SUSCRITOS
+                  </span>
+                </div>
+                <h1 className="text-2xl sm:text-3xl font-black text-white uppercase tracking-tight">
+                  Clases, Cursos & Materiales por Instructor
+                </h1>
+                <p className="text-xs sm:text-sm text-slate-300 mt-1 max-w-3xl leading-relaxed">
+                  Accede al desglose exclusivo de lecciones en video, programas intensivos y guías teóricas organizados específicamente según tus catedráticos suscritos.
+                </p>
+              </div>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-black text-white uppercase tracking-tight">
-              Clases, Cursos & Materiales por Instructor
-            </h1>
-            <p className="text-xs sm:text-sm text-slate-300 mt-1 max-w-3xl leading-relaxed">
-              Accede al desglose exclusivo de lecciones en video, programas intensivos y guías teóricas organizados específicamente según tus catedráticos suscritos.
-            </p>
-          </div>
-        </div>
 
-        {/* Action / Mode Tabs */}
-        <div className="flex items-center gap-2.5 flex-wrap self-start lg:self-auto">
-          {onOpenSpotifyPlayer && (
-            <button
-              type="button"
-              onClick={onOpenSpotifyPlayer}
-              className="px-3.5 py-2 text-xs font-black rounded-2xl bg-[#1DB954]/20 hover:bg-[#1DB954]/30 text-[#1DB954] border border-[#1DB954]/50 transition-all flex items-center gap-1.5 shadow-md active:scale-95 cursor-pointer uppercase tracking-wider"
-              title="Reproductor de Música y Playlists de Waacking en Spotify"
-            >
-              <Music className="w-4 h-4 text-[#1DB954]" />
-              <span>Música Spotify</span>
-            </button>
-          )}
+            {/* Action / Mode Tabs */}
+            <div className="flex items-center gap-2.5 flex-wrap self-start lg:self-auto">
+              {onOpenSpotifyPlayer && (
+                <button
+                  type="button"
+                  onClick={onOpenSpotifyPlayer}
+                  className="px-3.5 py-2 text-xs font-black rounded-2xl bg-[#1DB954]/20 hover:bg-[#1DB954]/30 text-[#1DB954] border border-[#1DB954]/50 transition-all flex items-center gap-1.5 shadow-md active:scale-95 cursor-pointer uppercase tracking-wider"
+                  title="Reproductor de Música y Playlists de Waacking en Spotify"
+                >
+                  <Music className="w-4 h-4 text-[#1DB954]" />
+                  <span>Música Spotify</span>
+                </button>
+              )}
 
-          <button
-            type="button"
-            onClick={() => setShowPreviewModal(true)}
-            className="px-4 py-2 text-xs font-black rounded-2xl bg-[#E9C349] hover:bg-[#ffdf6b] text-black transition-all flex items-center gap-1.5 shadow-lg active:scale-95 cursor-pointer uppercase tracking-wider"
-            title="Abrir Vista Previa de Formación y Contenido"
-          >
-            <Eye className="w-4 h-4 text-black" />
-            <span>Vista Previa Formación</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setActiveTab('classroom')}
-            className="px-3.5 py-2 text-xs font-bold rounded-2xl bg-blue-600/20 hover:bg-blue-600/30 text-blue-300 border border-blue-500/30 transition-all flex items-center gap-1.5 shadow-md"
-            title="Sincronizar con Google Classroom"
-          >
-            <GraduationCap className="w-4 h-4 text-blue-400" />
-            <span>Google Classroom</span>
-          </button>
-
-          <div className="bg-black/60 border border-white/15 p-1 rounded-2xl flex gap-1 shadow-xl flex-wrap">
-            <button
-              onClick={() => setCurrentTab('catedras')}
-              className={`px-4 py-2 text-xs font-extrabold rounded-xl transition-all flex items-center gap-1.5 ${
-                currentTab === 'catedras' ? 'bg-[#E9C349] text-black shadow-lg' : 'text-slate-300 hover:text-white'
-              }`}
-            >
-              <Users className="w-3.5 h-3.5" />
-              <span>Desglose por Cátedra</span>
-            </button>
-            <button
-              onClick={() => setCurrentTab('metas')}
-              className={`px-4 py-2 text-xs font-extrabold rounded-xl transition-all flex items-center gap-1.5 ${
-                currentTab === 'metas' ? 'bg-[#E9C349] text-black shadow-lg' : 'text-slate-300 hover:text-white'
-              }`}
-            >
-              <Target className="w-3.5 h-3.5" />
-              <span>Metas & 7 Días</span>
-            </button>
-            <button
-              onClick={() => setCurrentTab('workbook')}
-              className={`px-4 py-2 text-xs font-extrabold rounded-xl transition-all flex items-center gap-1.5 ${
-                currentTab === 'workbook' ? 'bg-[#E9C349] text-black shadow-lg' : 'text-slate-300 hover:text-white'
-              }`}
-            >
-              <BookOpen className="w-3.5 h-3.5" />
-              <span>Bitácora Teórica</span>
-            </button>
-            <button
-              onClick={() => setCurrentTab('feedback')}
-              className={`px-4 py-2 text-xs font-extrabold rounded-xl transition-all flex items-center gap-1.5 ${
-                currentTab === 'feedback' ? 'bg-[#E9C349] text-black shadow-lg' : 'text-slate-300 hover:text-white'
-              }`}
-            >
-              <Video className="w-3.5 h-3.5" />
-              <span>Feedback & Video</span>
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* SUBSCRIBED INSTRUCTORS SELECTOR BAR */}
-      <div className="bg-gradient-to-r from-[#171322] via-[#211a30] to-[#12101b] border border-white/10 rounded-2xl p-4 shadow-2xl flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-[#E9C349]/15 border border-[#E9C349]/40 flex items-center justify-center text-[#E9C349] shrink-0">
-            <UserCheck className="w-5 h-5" />
-          </div>
-          <div>
-            <h3 className="text-xs font-mono font-bold text-slate-300 uppercase tracking-wider">
-              TUS PROFESORES ACTUALES EN CÁTEDRA:
-            </h3>
-            <p className="text-[11px] text-slate-400">
-              Selecciona un profesor para filtrar todo su contenido o mantén la vista unificada.
-            </p>
-          </div>
-        </div>
-
-        {/* Instructor Filter Pills */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-1 md:pb-0">
-          <button
-            type="button"
-            onClick={() => setSelectedInstructorFilter('all')}
-            className={`px-3.5 py-2 rounded-xl text-xs font-extrabold border transition-all shrink-0 flex items-center gap-2 ${
-              selectedInstructorFilter === 'all'
-                ? 'bg-white text-black border-white shadow-lg'
-                : 'bg-black/40 text-slate-300 border-white/10 hover:border-white/30'
-            }`}
-          >
-            <Layers className="w-3.5 h-3.5" />
-            <span>Ver Todas las Cátedras</span>
-          </button>
-
-          {(subscribedInstructors || []).map((inst) => {
-            const isSel = selectedInstructorFilter === inst.id;
-            return (
               <button
-                key={inst.id}
                 type="button"
-                onClick={() => setSelectedInstructorFilter(inst.id)}
-                className={`px-3.5 py-1.5 rounded-xl text-xs font-extrabold border transition-all shrink-0 flex items-center gap-2 ${
-                  isSel
-                    ? 'bg-[#E9C349] text-black border-[#E9C349] shadow-lg'
-                    : 'bg-black/40 text-slate-200 border-white/10 hover:border-white/30'
+                onClick={() => setShowPreviewModal(true)}
+                className="px-4 py-2 text-xs font-black rounded-2xl bg-[#E9C349] hover:bg-[#ffdf6b] text-black transition-all flex items-center gap-1.5 shadow-lg active:scale-95 cursor-pointer uppercase tracking-wider"
+                title="Abrir Vista Previa de Formación y Contenido"
+              >
+                <Eye className="w-4 h-4 text-black" />
+                <span>Vista Previa Formación</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setActiveTab('classroom')}
+                className="px-3.5 py-2 text-xs font-bold rounded-2xl bg-blue-600/20 hover:bg-blue-600/30 text-blue-300 border border-blue-500/30 transition-all flex items-center gap-1.5 shadow-md"
+                title="Sincronizar con Google Classroom"
+              >
+                <GraduationCap className="w-4 h-4 text-blue-400" />
+                <span>Google Classroom</span>
+              </button>
+
+              <div className="bg-black/60 border border-white/15 p-1 rounded-2xl flex gap-1 shadow-xl flex-wrap">
+                <button
+                  onClick={() => setCurrentTab('catedras')}
+                  className={`px-4 py-2 text-xs font-extrabold rounded-xl transition-all flex items-center gap-1.5 ${
+                    currentTab === 'catedras' ? 'bg-[#E9C349] text-black shadow-lg' : 'text-slate-300 hover:text-white'
+                  }`}
+                >
+                  <Users className="w-3.5 h-3.5" />
+                  <span>Desglose por Cátedra</span>
+                </button>
+                <button
+                  onClick={() => setCurrentTab('metas')}
+                  className={`px-4 py-2 text-xs font-extrabold rounded-xl transition-all flex items-center gap-1.5 ${
+                    currentTab === 'metas' ? 'bg-[#E9C349] text-black shadow-lg' : 'text-slate-300 hover:text-white'
+                  }`}
+                >
+                  <Target className="w-3.5 h-3.5" />
+                  <span>Metas & 7 Días</span>
+                </button>
+                <button
+                  onClick={() => setCurrentTab('workbook')}
+                  className={`px-4 py-2 text-xs font-extrabold rounded-xl transition-all flex items-center gap-1.5 ${
+                    currentTab === 'workbook' ? 'bg-[#E9C349] text-black shadow-lg' : 'text-slate-300 hover:text-white'
+                  }`}
+                >
+                  <BookOpen className="w-3.5 h-3.5" />
+                  <span>Bitácora Teórica</span>
+                </button>
+                <button
+                  onClick={() => setCurrentTab('feedback')}
+                  className={`px-4 py-2 text-xs font-extrabold rounded-xl transition-all flex items-center gap-1.5 ${
+                    currentTab === 'feedback' ? 'bg-[#E9C349] text-black shadow-lg' : 'text-slate-300 hover:text-white'
+                  }`}
+                >
+                  <Video className="w-3.5 h-3.5" />
+                  <span>Feedback & Video</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* SUBSCRIBED INSTRUCTORS SELECTOR BAR */}
+          <div className="bg-gradient-to-r from-[#171322] via-[#211a30] to-[#12101b] border border-white/10 rounded-2xl p-4 shadow-2xl flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-[#E9C349]/15 border border-[#E9C349]/40 flex items-center justify-center text-[#E9C349] shrink-0">
+                <UserCheck className="w-5 h-5" />
+              </div>
+              <div>
+                <h3 className="text-xs font-mono font-bold text-slate-300 uppercase tracking-wider">
+                  TUS PROFESORES ACTUALES EN CÁTEDRA:
+                </h3>
+                <p className="text-[11px] text-slate-400">
+                  Selecciona un profesor para filtrar todo su contenido o mantén la vista unificada.
+                </p>
+              </div>
+            </div>
+
+            {/* Instructor Filter Pills */}
+            <div className="flex items-center gap-2 overflow-x-auto pb-1 md:pb-0">
+              <button
+                type="button"
+                onClick={() => setSelectedInstructorFilter('all')}
+                className={`px-3.5 py-2 rounded-xl text-xs font-extrabold border transition-all shrink-0 flex items-center gap-2 ${
+                  selectedInstructorFilter === 'all'
+                    ? 'bg-white text-black border-white shadow-lg'
+                    : 'bg-black/40 text-slate-300 border-white/10 hover:border-white/30'
                 }`}
               >
-                <img src={inst.avatar} alt={inst.name} className="w-5 h-5 rounded-full object-cover border border-white/20" />
-                <span>{inst.name}</span>
-                <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-black/30 text-current">
-                  {inst.lessonsCount} Lecciones
-                </span>
+                <Layers className="w-3.5 h-3.5" />
+                <span>Ver Todas las Cátedras</span>
               </button>
-            );
-          })}
-        </div>
-      </div>
+
+              {(subscribedInstructors || []).map((inst) => {
+                const isSel = selectedInstructorFilter === inst.id;
+                return (
+                  <button
+                    key={inst.id}
+                    type="button"
+                    onClick={() => setSelectedInstructorFilter(inst.id)}
+                    className={`px-3.5 py-1.5 rounded-xl text-xs font-extrabold border transition-all shrink-0 flex items-center gap-2 ${
+                      isSel
+                        ? 'bg-[#E9C349] text-black border-[#E9C349] shadow-lg'
+                        : 'bg-black/40 text-slate-200 border-white/10 hover:border-white/30'
+                    }`}
+                  >
+                    <img src={inst.avatar} alt={inst.name} className="w-5 h-5 rounded-full object-cover border border-white/20" />
+                    <span>{inst.name}</span>
+                    <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-black/30 text-current">
+                      {inst.lessonsCount} Lecciones
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </>
+      )}
 
       {/* CATEGORY & ATTRIBUTE FILTER BAR */}
       <CategoryFilterBar
@@ -805,25 +957,59 @@ export default function CursosView({
                                 </div>
 
                                 <div className="p-4 space-y-3">
-                                  <div className="flex items-start justify-between gap-3">
+                                  <div className="flex items-start justify-between gap-3 flex-wrap">
                                     <div>
                                       <h4 className="text-base font-black text-white uppercase">{curL.title}</h4>
                                       <p className="text-[10px] text-[#E9C349] font-mono uppercase mt-0.5">
                                         {instructor.name} • DURACIÓN: {curL.duration}
                                       </p>
                                     </div>
-                                    <button
-                                      type="button"
-                                      onClick={() => handleToggleComplete(curL.id)}
-                                      className={`px-3 py-1.5 rounded-xl text-xs font-extrabold border transition-all flex items-center gap-1.5 ${
-                                        (currentUser.completedLessons || []).includes(curL.id)
-                                          ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
-                                          : 'bg-[#E9C349] text-black border-[#E9C349]'
-                                      }`}
-                                    >
-                                      <CheckCircle className="w-3.5 h-3.5" />
-                                      <span>{(currentUser.completedLessons || []).includes(curL.id) ? 'COMPLETADA' : 'MARCAR COMPLETADA'}</span>
-                                    </button>
+                                    <div className="flex items-center gap-2 flex-wrap">
+                                      {isInstructorOrAcademy && selectedStudent && (
+                                        <>
+                                          <button
+                                            type="button"
+                                            onClick={() => handleToggleStudentAssignLesson(selectedStudent.id, curL.id)}
+                                            className={`px-3 py-1.5 rounded-xl text-xs font-mono font-bold border transition-all flex items-center gap-1.5 cursor-pointer ${
+                                              selectedStudent.assignedLessons.includes(curL.id)
+                                                ? 'bg-[#E9C349]/20 text-[#E9C349] border-[#E9C349]/40 hover:bg-[#E9C349]/30'
+                                                : 'bg-white/5 text-slate-300 border-white/10 hover:bg-white/10'
+                                            }`}
+                                            title={`Asignar a ${selectedStudent.name}`}
+                                          >
+                                            <Bookmark className="w-3.5 h-3.5" />
+                                            <span>{selectedStudent.assignedLessons.includes(curL.id) ? 'Asignada a Alumno' : '+ Asignar a Alumno'}</span>
+                                          </button>
+
+                                          <button
+                                            type="button"
+                                            onClick={() => handleToggleStudentLessonComplete(selectedStudent.id, curL.id)}
+                                            className={`px-3 py-1.5 rounded-xl text-xs font-mono font-bold border transition-all flex items-center gap-1.5 cursor-pointer ${
+                                              selectedStudent.completedLessons.includes(curL.id)
+                                                ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40 hover:bg-emerald-500/30'
+                                                : 'bg-white/5 text-slate-300 border-white/10 hover:bg-white/10'
+                                            }`}
+                                            title={`Validar aprobación de ${selectedStudent.name}`}
+                                          >
+                                            <CheckCircle className="w-3.5 h-3.5" />
+                                            <span>{selectedStudent.completedLessons.includes(curL.id) ? 'Alumno: Aprobada' : 'Validar Alumno'}</span>
+                                          </button>
+                                        </>
+                                      )}
+
+                                      <button
+                                        type="button"
+                                        onClick={() => handleToggleComplete(curL.id)}
+                                        className={`px-3 py-1.5 rounded-xl text-xs font-extrabold border transition-all flex items-center gap-1.5 ${
+                                          (currentUser.completedLessons || []).includes(curL.id)
+                                            ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
+                                            : 'bg-[#E9C349] text-black border-[#E9C349]'
+                                        }`}
+                                      >
+                                        <CheckCircle className="w-3.5 h-3.5" />
+                                        <span>{(currentUser.completedLessons || []).includes(curL.id) ? 'COMPLETADA' : 'MARCAR COMPLETADA'}</span>
+                                      </button>
+                                    </div>
                                   </div>
                                   <p className="text-xs text-slate-300 leading-relaxed">{curL.description}</p>
                                   
@@ -1118,6 +1304,11 @@ export default function CursosView({
                 const isAct = activeLesson?.id === lesson.id;
                 const inst = instructors.find(i => i.id === lesson.instructorId);
 
+                // Student specific status if instructor/academy
+                const isStudentAssigned = selectedStudent?.assignedLessons.includes(lesson.id);
+                const isStudentCompleted = selectedStudent?.completedLessons.includes(lesson.id);
+                const studentsCompletedThisCount = students.filter(s => s.completedLessons.includes(lesson.id)).length;
+
                 return (
                   <div
                     key={lesson.id}
@@ -1151,6 +1342,32 @@ export default function CursosView({
                           </span>
                         )}
                       </div>
+
+                      {/* Top Right: Student Management Badges */}
+                      {isInstructorOrAcademy && (
+                        <div className="absolute top-2 right-2 flex flex-col items-end gap-1">
+                          {selectedStudent ? (
+                            <>
+                              <span className={`text-[8px] font-mono font-black px-2 py-0.5 rounded-md uppercase border shadow-md ${
+                                isStudentAssigned
+                                  ? 'bg-[#E9C349] text-black border-[#E9C349]'
+                                  : 'bg-black/80 text-slate-400 border-white/20'
+                              }`}>
+                                {isStudentAssigned ? '📌 Asignada a Alumno' : 'No asignada'}
+                              </span>
+                              {isStudentCompleted && (
+                                <span className="text-[8px] font-mono font-black px-2 py-0.5 rounded-md uppercase bg-emerald-500 text-black border border-emerald-400 shadow-md">
+                                  ✅ Aprobada por Alumno
+                                </span>
+                              )}
+                            </>
+                          ) : (
+                            <span className="text-[8px] font-mono font-bold px-2 py-0.5 rounded-md uppercase bg-black/80 text-cyan-300 border border-cyan-500/30">
+                              👥 {studentsCompletedThisCount}/{students.length} Alumnos
+                            </span>
+                          )}
+                        </div>
+                      )}
 
                       {/* Bottom Info */}
                       <div className="absolute bottom-2 left-2 right-2 flex items-center justify-between text-[10px] font-mono">
@@ -1207,6 +1424,7 @@ export default function CursosView({
 
                       {/* Action buttons */}
                       <div className="space-y-2 pt-2 border-t border-white/10">
+                        {/* Standard Player Button */}
                         <div className="flex items-center gap-2">
                           <button
                             type="button"
@@ -1232,6 +1450,37 @@ export default function CursosView({
                             {isComp ? <CheckSquare className="w-4 h-4 text-emerald-400" /> : <Square className="w-4 h-4" />}
                           </button>
                         </div>
+
+                        {/* Instructor / Academy Student Management Toolbar */}
+                        {isInstructorOrAcademy && selectedStudent && (
+                          <div className="pt-2 border-t border-white/10 flex items-center gap-1.5">
+                            <button
+                              type="button"
+                              onClick={() => handleToggleStudentAssignLesson(selectedStudent.id, lesson.id)}
+                              className={`flex-1 py-1 px-2 rounded-lg text-[10px] font-mono font-bold uppercase transition-all flex items-center justify-center gap-1 cursor-pointer border ${
+                                isStudentAssigned
+                                  ? 'bg-[#E9C349]/20 text-[#E9C349] border-[#E9C349]/40 hover:bg-[#E9C349]/30'
+                                  : 'bg-white/5 text-slate-300 border-white/10 hover:bg-white/10'
+                              }`}
+                              title={`Asignar o desasignar esta clase al currículo de ${selectedStudent.name}`}
+                            >
+                              <span>{isStudentAssigned ? '📌 Asignada' : '+ Asignar'}</span>
+                            </button>
+
+                            <button
+                              type="button"
+                              onClick={() => handleToggleStudentLessonComplete(selectedStudent.id, lesson.id)}
+                              className={`flex-1 py-1 px-2 rounded-lg text-[10px] font-mono font-bold uppercase transition-all flex items-center justify-center gap-1 cursor-pointer border ${
+                                isStudentCompleted
+                                  ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40 hover:bg-emerald-500/30'
+                                  : 'bg-white/5 text-slate-400 border-white/10 hover:bg-white/10'
+                              }`}
+                              title={`Validar aprobación técnica para ${selectedStudent.name}`}
+                            >
+                              <span>{isStudentCompleted ? '✅ Aprobada' : 'Validar'}</span>
+                            </button>
+                          </div>
+                        )}
 
                         <button
                           type="button"
