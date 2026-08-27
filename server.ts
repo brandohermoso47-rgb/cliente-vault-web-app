@@ -1,5 +1,6 @@
 import express from 'express';
 import path from 'path';
+import crypto from 'crypto';
 import { createServer as createViteServer } from 'vite';
 import Stripe from 'stripe';
 import { GoogleGenAI } from '@google/genai';
@@ -59,6 +60,31 @@ function getStripeClient(): Stripe | null {
     }
   }
   return stripeClient;
+}
+
+// Anti-CSRF `state` helper for the Spotify OAuth Authorization Code flow.
+// Stateless (no server-side session store needed): the nonce is signed with
+// an HMAC so the callback can verify it came from an auth-url we issued,
+// without relying on in-memory storage (which would break across instances).
+function getSpotifyStateSecret(): string {
+  return process.env.SPOTIFY_CLIENT_SECRET || process.env.SPOTIFY_CLIENT_ID || 'waackon_dev_spotify_state_secret';
+}
+
+function createSpotifyState(): string {
+  const nonce = crypto.randomBytes(16).toString('hex');
+  const signature = crypto.createHmac('sha256', getSpotifyStateSecret()).update(nonce).digest('hex');
+  return `${nonce}.${signature}`;
+}
+
+function verifySpotifyState(state: unknown): boolean {
+  if (!state || typeof state !== 'string' || !state.includes('.')) return false;
+  const [nonce, signature] = state.split('.');
+  if (!nonce || !signature) return false;
+  const expected = crypto.createHmac('sha256', getSpotifyStateSecret()).update(nonce).digest('hex');
+  const sigBuf = Buffer.from(signature, 'hex');
+  const expectedBuf = Buffer.from(expected, 'hex');
+  if (sigBuf.length !== expectedBuf.length) return false;
+  return crypto.timingSafeEqual(sigBuf, expectedBuf);
 }
 
 let aiClient: GoogleGenAI | null = null;
@@ -1688,12 +1714,22 @@ Semana 3-4 (Progresión): [Cómo escalar la dificultad en el Lab basándose en s
 
   // Spotify Auth URL Endpoint
   app.get('/api/spotify/auth-url', (req, res) => {
+    const clientId = process.env.SPOTIFY_CLIENT_ID;
+    const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
+
+    if (!clientId || !clientSecret) {
+      console.warn('[Spotify] SPOTIFY_CLIENT_ID / SPOTIFY_CLIENT_SECRET are not configured on the server.');
+      return res.status(503).json({
+        error: 'spotify_not_configured',
+        message: 'La integración con Spotify no está configurada en el servidor. Define SPOTIFY_CLIENT_ID y SPOTIFY_CLIENT_SECRET.'
+      });
+    }
+
     const host = req.headers.host || 'localhost:3000';
     const protocol = req.headers['x-forwarded-proto'] || 'http';
     const appUrl = process.env.APP_URL || `${protocol}://${host}`;
     const redirectUri = `${appUrl}/api/spotify/callback`;
 
-    const clientId = process.env.SPOTIFY_CLIENT_ID || 'demo_spotify_client_id';
     const scopes = [
       'playlist-read-private',
       'playlist-read-collaborative',
@@ -1706,6 +1742,7 @@ Semana 3-4 (Progresión): [Cómo escalar la dificultad en el Lab basándose en s
       response_type: 'code',
       redirect_uri: redirectUri,
       scope: scopes,
+      state: createSpotifyState(),
       show_dialog: 'true'
     });
 
@@ -1715,69 +1752,138 @@ Semana 3-4 (Progresión): [Cómo escalar la dificultad en el Lab basándose en s
 
   // Spotify Callback Handler
   app.get(['/api/spotify/callback', '/auth/callback', '/auth/callback/'], async (req, res) => {
-    const code = req.query.code as string;
+    const code = req.query.code as string | undefined;
+    const state = req.query.state as string | undefined;
+    const oauthError = req.query.error as string | undefined;
     const host = req.headers.host || 'localhost:3000';
     const protocol = req.headers['x-forwarded-proto'] || 'http';
     const appUrl = process.env.APP_URL || `${protocol}://${host}`;
     const redirectUri = `${appUrl}/api/spotify/callback`;
 
-    let accessToken = '';
+    const renderResult = (payload: Record<string, unknown>) => {
+      res.send(`
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <title>Spotify Authentication - Waack ON</title>
+            <style>
+              body { font-family: system-ui, -apple-system, sans-serif; background: #0A0A0E; color: #fff; text-align: center; padding: 40px; }
+              .spinner { border: 3px solid rgba(255,255,255,0.1); border-top: 3px solid #1DB954; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 20px auto; }
+              @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+            </style>
+          </head>
+          <body>
+            <div class="spinner"></div>
+            <h2 style="color: #1DB954; font-family: monospace;">Conectando con Spotify...</h2>
+            <p style="color: #A1A1AA; font-size: 14px;">Sincronizando tus playlists privadas con tu cuenta de Waack ON.</p>
+            <script>
+              (function () {
+                var targetOrigin = ${JSON.stringify(appUrl)};
+                var payload = ${JSON.stringify(payload)};
+                if (window.opener) {
+                  window.opener.postMessage(payload, targetOrigin);
+                  setTimeout(function () { window.close(); }, 600);
+                } else {
+                  window.location.href = '/?spotify_connected=' + (payload.type === 'SPOTIFY_AUTH_SUCCESS');
+                }
+              })();
+            </script>
+          </body>
+        </html>
+      `);
+    };
 
-    if (code && process.env.SPOTIFY_CLIENT_ID && process.env.SPOTIFY_CLIENT_SECRET) {
-      try {
-        const authHeader = Buffer.from(`${process.env.SPOTIFY_CLIENT_ID}:${process.env.SPOTIFY_CLIENT_SECRET}`).toString('base64');
-        const tokenRes = await fetch('https://accounts.spotify.com/api/token', {
-          method: 'POST',
-          headers: {
-            'Authorization': `Basic ${authHeader}`,
-            'Content-Type': 'application/x-www-form-urlencoded'
-          },
-          body: new URLSearchParams({
-            grant_type: 'authorization_code',
-            code: code,
-            redirect_uri: redirectUri
-          })
-        });
-        const tokenData = await tokenRes.json();
-        if (tokenData.access_token) {
-          accessToken = tokenData.access_token;
-        }
-      } catch (e) {
-        console.warn('Spotify token exchange error:', e);
+    // Reject requests without a valid, signed `state` (CSRF / authorization-code-injection protection).
+    if (!verifySpotifyState(state)) {
+      console.warn('[Spotify] Callback rejected: missing or invalid OAuth state parameter.');
+      return renderResult({ type: 'SPOTIFY_AUTH_ERROR', error: 'invalid_state' });
+    }
+
+    if (oauthError || !code) {
+      return renderResult({ type: 'SPOTIFY_AUTH_ERROR', error: oauthError || 'missing_code' });
+    }
+
+    if (!process.env.SPOTIFY_CLIENT_ID || !process.env.SPOTIFY_CLIENT_SECRET) {
+      return renderResult({ type: 'SPOTIFY_AUTH_ERROR', error: 'spotify_not_configured' });
+    }
+
+    try {
+      const authHeader = Buffer.from(`${process.env.SPOTIFY_CLIENT_ID}:${process.env.SPOTIFY_CLIENT_SECRET}`).toString('base64');
+      const tokenRes = await fetch('https://accounts.spotify.com/api/token', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Basic ${authHeader}`,
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: new URLSearchParams({
+          grant_type: 'authorization_code',
+          code: code,
+          redirect_uri: redirectUri
+        })
+      });
+      const tokenData = await tokenRes.json();
+
+      if (!tokenRes.ok || !tokenData.access_token) {
+        console.warn('Spotify token exchange failed:', tokenData);
+        return renderResult({ type: 'SPOTIFY_AUTH_ERROR', error: 'token_exchange_failed' });
       }
+
+      return renderResult({
+        type: 'SPOTIFY_AUTH_SUCCESS',
+        token: tokenData.access_token,
+        refreshToken: tokenData.refresh_token || null,
+        expiresIn: tokenData.expires_in || 3600
+      });
+    } catch (e) {
+      console.warn('Spotify token exchange error:', e);
+      return renderResult({ type: 'SPOTIFY_AUTH_ERROR', error: 'token_exchange_failed' });
+    }
+  });
+
+  // Spotify Refresh Token Endpoint — lets the client silently renew an expired
+  // access token (Spotify access tokens expire after ~1h) without forcing the
+  // user to repeat the OAuth popup flow every time.
+  app.post('/api/spotify/refresh-token', async (req, res) => {
+    const { refreshToken } = req.body || {};
+    if (!refreshToken || typeof refreshToken !== 'string') {
+      return res.status(400).json({ error: 'missing_refresh_token' });
     }
 
-    if (!accessToken) {
-      accessToken = `spotify_demo_token_${Date.now()}`;
+    if (!process.env.SPOTIFY_CLIENT_ID || !process.env.SPOTIFY_CLIENT_SECRET) {
+      return res.status(503).json({ error: 'spotify_not_configured' });
     }
 
-    res.send(`
-      <!DOCTYPE html>
-      <html>
-        <head>
-          <title>Spotify Authentication - Waack ON</title>
-          <style>
-            body { font-family: system-ui, -apple-system, sans-serif; background: #0A0A0E; color: #fff; text-align: center; padding: 40px; }
-            .spinner { border: 3px solid rgba(255,255,255,0.1); border-top: 3px solid #1DB954; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 20px auto; }
-            @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-          </style>
-        </head>
-        <body>
-          <div class="spinner"></div>
-          <h2 style="color: #1DB954; font-family: monospace;">Conectando con Spotify...</h2>
-          <p style="color: #A1A1AA; font-size: 14px;">Sincronizando tus playlists privadas con tu cuenta de Waack ON.</p>
-          <script>
-            const token = "${accessToken}";
-            if (window.opener) {
-              window.opener.postMessage({ type: 'SPOTIFY_AUTH_SUCCESS', token: token }, '*');
-              setTimeout(() => window.close(), 600);
-            } else {
-              window.location.href = '/?spotify_connected=true';
-            }
-          </script>
-        </body>
-      </html>
-    `);
+    try {
+      const authHeader = Buffer.from(`${process.env.SPOTIFY_CLIENT_ID}:${process.env.SPOTIFY_CLIENT_SECRET}`).toString('base64');
+      const tokenRes = await fetch('https://accounts.spotify.com/api/token', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Basic ${authHeader}`,
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: new URLSearchParams({
+          grant_type: 'refresh_token',
+          refresh_token: refreshToken
+        })
+      });
+      const tokenData = await tokenRes.json();
+
+      if (!tokenRes.ok || !tokenData.access_token) {
+        console.warn('Spotify token refresh failed:', tokenData);
+        return res.status(401).json({ error: 'invalid_refresh_token' });
+      }
+
+      return res.json({
+        success: true,
+        accessToken: tokenData.access_token,
+        // Spotify may rotate refresh tokens; keep the new one if issued, otherwise keep reusing the existing one.
+        refreshToken: tokenData.refresh_token || refreshToken,
+        expiresIn: tokenData.expires_in || 3600
+      });
+    } catch (e) {
+      console.warn('Spotify token refresh error:', e);
+      return res.status(500).json({ error: 'refresh_failed' });
+    }
   });
 
   // Spotify User Playlists Endpoint
@@ -1818,13 +1924,14 @@ Semana 3-4 (Progresión): [Cómo escalar la dificultad en el Lab basándose en s
       }
     ];
 
-    if (token && !token.startsWith('spotify_demo_token_')) {
+    if (token) {
       try {
         const spotifyRes = await fetch('https://api.spotify.com/v1/me/playlists?limit=20', {
           headers: {
             'Authorization': `Bearer ${token}`
           }
         });
+
         if (spotifyRes.ok) {
           const data = await spotifyRes.json();
           const userPlaylists = (data.items || []).map((item: any) => ({
@@ -1841,11 +1948,21 @@ Semana 3-4 (Progresión): [Cómo escalar la dificultad en el Lab basándose en s
           return res.json({
             success: true,
             mode: 'spotify_api',
-            playlists: userPlaylists.length > 0 ? userPlaylists : defaultPlaylists
+            playlists: userPlaylists.length > 0 ? userPlaylists : []
           });
         }
+
+        // An expired/revoked access token must NOT be masked as a successful
+        // "simulation" response — the client needs to know to refresh or reconnect.
+        if (spotifyRes.status === 401) {
+          return res.status(401).json({ success: false, mode: 'expired', error: 'spotify_token_expired' });
+        }
+
+        console.warn('Spotify API returned an unexpected status:', spotifyRes.status);
+        return res.status(502).json({ success: false, mode: 'error', error: 'spotify_api_error' });
       } catch (e) {
         console.warn('Spotify API fetch error:', e);
+        return res.status(502).json({ success: false, mode: 'error', error: 'spotify_api_unreachable' });
       }
     }
 
