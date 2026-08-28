@@ -26,6 +26,12 @@ import {
   Headphones,
   Link2
 } from 'lucide-react';
+import {
+  hasStoredSpotifyToken,
+  getValidSpotifyAccessToken,
+  storeSpotifyTokens,
+  clearSpotifyTokens
+} from '../lib/spotifyAuth';
 
 export interface SpotifyTrackOrPlaylist {
   id: string;
@@ -169,8 +175,7 @@ export default function SpotifyMusicPlayer({
   const [copiedLink, setCopiedLink] = useState(false);
 
   // Spotify Account Connection State
-  const [isConnected, setIsConnected] = useState<boolean>(() => !!localStorage.getItem('waackon_spotify_token'));
-  const [spotifyToken, setSpotifyToken] = useState<string | null>(() => localStorage.getItem('waackon_spotify_token'));
+  const [isConnected, setIsConnected] = useState<boolean>(() => hasStoredSpotifyToken());
   const [userPlaylists, setUserPlaylists] = useState<SpotifyTrackOrPlaylist[]>([]);
   const [isLoadingUserPlaylists, setIsLoadingUserPlaylists] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
@@ -187,26 +192,27 @@ export default function SpotifyMusicPlayer({
     }
   }, [activeSpotifyUrl]);
 
-  // Fetch user playlists on mount if token exists
+  // Fetch user playlists on mount if a linked account exists
   useEffect(() => {
-    const savedToken = localStorage.getItem('waackon_spotify_token');
-    if (savedToken) {
-      setSpotifyToken(savedToken);
+    if (hasStoredSpotifyToken()) {
       setIsConnected(true);
-      fetchUserPlaylists(savedToken);
+      fetchUserPlaylists();
     }
   }, []);
 
-  // Listen for OAuth popup postMessage
+  // Listen for OAuth popup postMessage (only from our own origin — never trust
+  // a message from an unrelated page/tab)
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
+      if (event.origin !== window.location.origin) return;
+
       if (event.data?.type === 'SPOTIFY_AUTH_SUCCESS' && event.data?.token) {
-        const token = event.data.token;
-        setSpotifyToken(token);
+        storeSpotifyTokens(event.data.token, event.data.refreshToken || null, event.data.expiresIn || 3600);
         setIsConnected(true);
-        localStorage.setItem('waackon_spotify_token', token);
         showToast(language === 'es' ? '¡Cuenta de Spotify enlazada con éxito!' : 'Spotify account linked successfully!');
-        fetchUserPlaylists(token);
+        fetchUserPlaylists();
+      } else if (event.data?.type === 'SPOTIFY_AUTH_ERROR') {
+        showToast(language === 'es' ? 'No se pudo enlazar tu cuenta de Spotify. Intenta de nuevo.' : 'Could not link your Spotify account. Please try again.');
       }
     };
 
@@ -214,15 +220,31 @@ export default function SpotifyMusicPlayer({
     return () => window.removeEventListener('message', handleMessage);
   }, [language]);
 
-  // Fetch playlists from API
-  const fetchUserPlaylists = async (token: string) => {
+  // Fetch playlists from API, transparently refreshing the access token first if needed
+  const fetchUserPlaylists = async () => {
     setIsLoadingUserPlaylists(true);
     try {
+      const token = await getValidSpotifyAccessToken();
+      if (!token) {
+        setIsConnected(false);
+        setUserPlaylists([]);
+        return;
+      }
+
       const res = await fetch('/api/spotify/user-playlists', {
         headers: {
           'Authorization': `Bearer ${token}`
         }
       });
+
+      if (res.status === 401) {
+        clearSpotifyTokens();
+        setIsConnected(false);
+        setUserPlaylists([]);
+        showToast(language === 'es' ? 'Tu sesión de Spotify expiró. Vuelve a enlazar tu cuenta.' : 'Your Spotify session expired. Please reconnect your account.');
+        return;
+      }
+
       const data = await res.json();
       if (data.playlists) {
         const formatted: SpotifyTrackOrPlaylist[] = data.playlists.map((pl: any) => ({
@@ -253,16 +275,19 @@ export default function SpotifyMusicPlayer({
       const res = await fetch('/api/spotify/auth-url');
       const data = await res.json();
 
-      if (data.url) {
-        const authWindow = window.open(
-          data.url,
-          'spotify_oauth',
-          'width=600,height=750,top=100,left=100'
-        );
+      if (!res.ok || !data.url) {
+        showToast(data.message || (language === 'es' ? 'La conexión con Spotify no está disponible ahora mismo.' : 'Spotify connection is not available right now.'));
+        return;
+      }
 
-        if (!authWindow) {
-          showToast(language === 'es' ? 'Por favor habilita las ventanas emergentes en tu navegador.' : 'Please enable popups.');
-        }
+      const authWindow = window.open(
+        data.url,
+        'spotify_oauth',
+        'width=600,height=750,top=100,left=100'
+      );
+
+      if (!authWindow) {
+        showToast(language === 'es' ? 'Por favor habilita las ventanas emergentes en tu navegador.' : 'Please enable popups.');
       }
     } catch (err) {
       console.error('Error initiating Spotify auth:', err);
@@ -273,8 +298,7 @@ export default function SpotifyMusicPlayer({
   };
 
   const handleDisconnectSpotify = () => {
-    localStorage.removeItem('waackon_spotify_token');
-    setSpotifyToken(null);
+    clearSpotifyTokens();
     setIsConnected(false);
     setUserPlaylists([]);
     showToast(language === 'es' ? 'Cuenta de Spotify desenlazada.' : 'Spotify account unlinked.');
@@ -546,7 +570,7 @@ export default function SpotifyMusicPlayer({
                   {isConnected ? (
                     <div className="flex items-center gap-2 shrink-0">
                       <button
-                        onClick={() => fetchUserPlaylists(spotifyToken || '')}
+                        onClick={() => fetchUserPlaylists()}
                         disabled={isLoadingUserPlaylists}
                         className="px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-mono text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer"
                         title="Refrescar mis playlists"
