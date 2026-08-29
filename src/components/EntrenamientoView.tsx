@@ -2663,7 +2663,7 @@ export default function EntrenamientoView({
   return (
     <div className="flex-1 min-h-full w-full p-4 sm:p-6 md:p-8 bg-transparent text-[#EDEFF4] flex flex-col space-y-6 sm:space-y-8">
       {/* Title Header with Glassmorphism Accent */}
-      <div className="bg-gradient-to-r from-[#171322]/90 via-[#211a30]/80 to-[#12101b]/90 border border-white/15 p-6 sm:p-8 rounded-3xl backdrop-blur-xl shadow-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-6 relative overflow-hidden shrink-0">
+      <div className="bg-gradient-to-r from-purple-50 via-white to-purple-50 dark:from-[#171322]/90 dark:via-[#211a30]/80 dark:to-[#12101b]/90 border border-slate-200 dark:border-white/15 p-6 sm:p-8 rounded-3xl backdrop-blur-xl shadow-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-6 relative overflow-hidden shrink-0">
         <div className="absolute -top-24 -right-24 w-72 h-72 bg-purple-600/15 rounded-full blur-3xl pointer-events-none" />
         <div className="relative z-10">
           <div className="flex items-center gap-2 mb-2">
@@ -2671,8 +2671,8 @@ export default function EntrenamientoView({
               LABORATORIO DE FREESTYLES
             </span>
           </div>
-          <h2 className="text-2xl sm:text-3xl font-display-lg italic text-white tracking-tight uppercase">
-            <span className="bg-gradient-to-r from-white via-[#FFF8E7] to-[#E9C349] bg-clip-text text-transparent drop-shadow-sm">
+          <h2 className="text-2xl sm:text-3xl font-display-lg italic text-slate-900 dark:text-white tracking-tight uppercase">
+            <span className="bg-gradient-to-r from-slate-900 via-slate-700 to-[#E9C349] dark:from-white dark:via-[#FFF8E7] dark:to-[#E9C349] bg-clip-text text-transparent drop-shadow-sm">
               {lt.title}
             </span>
           </h2>
@@ -2707,7 +2707,7 @@ export default function EntrenamientoView({
           className={`group h-11 min-w-[150px] px-4 py-2 text-xs font-mono font-bold tracking-wider transition-all flex items-center justify-center gap-2 border rounded-xl shrink-0 focus:outline-none ${
             subTab === 'drill' 
               ? 'bg-[#9A2B3C] text-white border-[#9A2B3C] shadow-lg' 
-              : 'bg-[#121212] text-[#8A8A8A] border-[#262626] hover:text-white hover:border-[#E9C349]/30'
+              : 'bg-[#121212] text-[#8A8A8A] border-[#262626] hover:text-slate-900 dark:hover:text-white hover:border-[#E9C349]/30'
           }`}
         >
           <Timer className="w-4 h-4 text-[#E9C349] shrink-0 transition-transform duration-300 group-hover:scale-125 group-hover:rotate-12 group-active:scale-90" />
@@ -2719,7 +2719,7 @@ export default function EntrenamientoView({
           className={`group h-11 min-w-[150px] px-4 py-2 text-xs font-mono font-bold tracking-wider transition-all flex items-center justify-center gap-2 border rounded-xl shrink-0 focus:outline-none ${
             subTab === 'battle' 
               ? 'bg-[#9A2B3C] text-white border-[#9A2B3C] shadow-lg' 
-              : 'bg-[#121212] text-[#8A8A8A] border-[#262626] hover:text-white hover:border-[#E9C349]/30'
+              : 'bg-[#121212] text-[#8A8A8A] border-[#262626] hover:text-slate-900 dark:hover:text-white hover:border-[#E9C349]/30'
           }`}
         >
           <Swords className="w-4 h-4 text-[#E9C349] shrink-0 transition-transform duration-300 group-hover:scale-125 group-hover:-rotate-12 group-active:scale-90" />
@@ -2731,7 +2731,7 @@ export default function EntrenamientoView({
           className={`group h-11 min-w-[150px] px-4 py-2 text-xs font-mono font-bold tracking-wider transition-all flex items-center justify-center gap-2 border rounded-xl shrink-0 focus:outline-none ${
             subTab === 'combos' 
               ? 'bg-[#9A2B3C] text-white border-[#9A2B3C] shadow-lg' 
-              : 'bg-[#121212] text-[#8A8A8A] border-[#262626] hover:text-white hover:border-[#E9C349]/30'
+              : 'bg-[#121212] text-[#8A8A8A] border-[#262626] hover:text-slate-900 dark:hover:text-white hover:border-[#E9C349]/30'
           }`}
         >
           <Shuffle className="w-4 h-4 text-[#E9C349] shrink-0 transition-transform duration-300 group-hover:scale-125 group-hover:rotate-180 group-active:scale-90" />
@@ -2743,7 +2743,7 @@ export default function EntrenamientoView({
           className={`group h-11 min-w-[150px] px-4 py-2 text-xs font-mono font-bold tracking-wider transition-all flex items-center justify-center gap-2 border rounded-xl shrink-0 focus:outline-none ${
             subTab === 'sensorial' 
               ? 'bg-[#9A2B3C] text-white border-[#9A2B3C] shadow-lg' 
-              : 'bg-[#121212] text-[#8A8A8A] border-[#262626] hover:text-white hover:border-[#E9C349]/30'
+              : 'bg-[#121212] text-[#8A8A8A] border-[#262626] hover:text-slate-900 dark:hover:text-white hover:border-[#E9C349]/30'
           }`}
         >
           <EyeOff className="w-4 h-4 text-[#E9C349] shrink-0 transition-transform duration-300 group-hover:scale-125 group-hover:rotate-12 group-active:scale-90" />
@@ -2755,7 +2755,7 @@ export default function EntrenamientoView({
           className={`group h-11 min-w-[150px] px-4 py-2 text-xs font-mono font-bold tracking-wider transition-all flex items-center justify-center gap-2 border rounded-xl shrink-0 focus:outline-none ${
             subTab === 'somatic' 
               ? 'bg-[#9A2B3C] text-white border-[#9A2B3C] shadow-lg' 
-              : 'bg-[#121212] text-[#8A8A8A] border-[#262626] hover:text-white hover:border-[#E9C349]/30'
+              : 'bg-[#121212] text-[#8A8A8A] border-[#262626] hover:text-slate-900 dark:hover:text-white hover:border-[#E9C349]/30'
           }`}
         >
           <Activity className="w-4 h-4 text-[#E9C349] shrink-0 transition-transform duration-300 group-hover:scale-125 group-hover:rotate-12 group-active:scale-90" />
@@ -2768,7 +2768,7 @@ export default function EntrenamientoView({
           className={`group h-11 min-w-[180px] px-4 py-2 text-xs font-mono font-bold tracking-wider transition-all flex items-center justify-center gap-2 border rounded-xl shrink-0 focus:outline-none ${
             subTab === 'drama' 
               ? 'bg-[#9A2B3C] text-white border-[#9A2B3C] shadow-lg' 
-              : 'bg-[#121212] text-[#8A8A8A] border-[#262626] hover:text-white hover:border-[#E9C349]/30'
+              : 'bg-[#121212] text-[#8A8A8A] border-[#262626] hover:text-slate-900 dark:hover:text-white hover:border-[#E9C349]/30'
           }`}
         >
           <Smile className="w-4 h-4 text-[#E9C349] shrink-0 transition-transform duration-300 group-hover:scale-125 group-hover:rotate-12 group-active:scale-90" />
@@ -2781,7 +2781,7 @@ export default function EntrenamientoView({
           className={`group h-11 min-w-[150px] px-4 py-2 text-xs font-mono font-bold tracking-wider transition-all flex items-center justify-center gap-2 border rounded-xl shrink-0 focus:outline-none ${
             subTab === 'playlists' 
               ? 'bg-[#9A2B3C] text-white border-[#9A2B3C] shadow-lg' 
-              : 'bg-[#121212] text-[#8A8A8A] border-[#262626] hover:text-white hover:border-[#E9C349]/30'
+              : 'bg-[#121212] text-[#8A8A8A] border-[#262626] hover:text-slate-900 dark:hover:text-white hover:border-[#E9C349]/30'
           }`}
         >
           <Music className="w-4 h-4 text-[#E9C349] shrink-0 transition-transform duration-300 group-hover:scale-125 group-hover:-rotate-12 group-active:scale-90" />
@@ -2793,7 +2793,7 @@ export default function EntrenamientoView({
           className={`group h-11 min-w-[150px] px-4 py-2 text-xs font-mono font-bold tracking-wider transition-all flex items-center justify-center gap-2 border rounded-xl shrink-0 focus:outline-none ${
             subTab === 'feedback' 
               ? 'bg-[#9A2B3C] text-white border-[#9A2B3C] shadow-lg' 
-              : 'bg-[#121212] text-[#8A8A8A] border-[#262626] hover:text-white hover:border-[#E9C349]/30'
+              : 'bg-[#121212] text-[#8A8A8A] border-[#262626] hover:text-slate-900 dark:hover:text-white hover:border-[#E9C349]/30'
           }`}
         >
           <MessageSquare className="w-4 h-4 text-[#E9C349] shrink-0 transition-transform duration-300 group-hover:scale-125 group-hover:rotate-12 group-active:scale-90" />
@@ -2805,7 +2805,7 @@ export default function EntrenamientoView({
           className={`group h-11 min-w-[170px] px-4 py-2 text-xs font-mono font-bold tracking-wider transition-all flex items-center justify-center gap-2 border rounded-xl shrink-0 focus:outline-none ${
             subTab === 'rhythm' 
               ? 'bg-[#9A2B3C] text-white border-[#9A2B3C] shadow-lg' 
-              : 'bg-[#121212] text-[#8A8A8A] border-[#262626] hover:text-white hover:border-[#E9C349]/30'
+              : 'bg-[#121212] text-[#8A8A8A] border-[#262626] hover:text-slate-900 dark:hover:text-white hover:border-[#E9C349]/30'
           }`}
         >
           <Zap className="w-4 h-4 text-[#E9C349] shrink-0 transition-transform duration-300 group-hover:scale-125 group-hover:rotate-12 group-active:scale-90 animate-pulse" />
@@ -2817,7 +2817,7 @@ export default function EntrenamientoView({
           className={`group h-11 min-w-[180px] px-4 py-2 text-xs font-mono font-bold tracking-wider transition-all flex items-center justify-center gap-2 border rounded-xl shrink-0 focus:outline-none ${
             subTab === 'spectrum' 
               ? 'bg-[#9A2B3C] text-white border-[#9A2B3C] shadow-lg' 
-              : 'bg-[#121212] text-[#8A8A8A] border-[#262626] hover:text-white hover:border-[#E9C349]/30'
+              : 'bg-[#121212] text-[#8A8A8A] border-[#262626] hover:text-slate-900 dark:hover:text-white hover:border-[#E9C349]/30'
           }`}
         >
           <BarChart2 className="w-4 h-4 text-[#E9C349] shrink-0 transition-transform duration-300 group-hover:scale-125 group-hover:-rotate-12 group-active:scale-90" />
@@ -3042,11 +3042,11 @@ export default function EntrenamientoView({
                   <div className="flex justify-between items-start">
                     <div className="flex items-center gap-2">
                       <span className="material-symbols-outlined text-tertiary text-xl">share</span>
-                      <h4 className="font-display-lg text-base text-white uppercase tracking-wider">COMPARTIR ESTADÍSTICAS SOMÁTICAS</h4>
+                      <h4 className="font-display-lg text-base text-slate-900 dark:text-white uppercase tracking-wider">COMPARTIR ESTADÍSTICAS SOMÁTICAS</h4>
                     </div>
-                    <button 
+                    <button
                       onClick={() => setShowShareModal(false)}
-                      className="text-on-surface-variant hover:text-white transition-colors"
+                      className="text-on-surface-variant hover:text-slate-900 dark:hover:text-white transition-colors"
                     >
                       <span className="material-symbols-outlined">close</span>
                     </button>
@@ -3056,7 +3056,7 @@ export default function EntrenamientoView({
                     Copia y comparte este resumen técnico de tu propiocepción y biomecánica en tus redes de Waacking:
                   </p>
 
-                  <div className="bg-[#08080a] border border-tertiary/10 rounded-xl p-4 font-mono text-[11px] text-tertiary space-y-2 select-all whitespace-pre-wrap">
+                  <div className="bg-slate-50 dark:bg-[#08080a] border border-tertiary/10 rounded-xl p-4 font-mono text-[11px] text-tertiary space-y-2 select-all whitespace-pre-wrap">
 {`🌟 WAACK ON SOMATIC REPORT
 ━━━━━━━━━━━━━━━━━━━
 Pose: ${currentClassification}
@@ -3091,7 +3091,7 @@ Right Arm Extension: ${rightUserAngle.toFixed(1)}°
             <div className="flex justify-between items-center border-b border-tertiary/10 pb-4 z-10">
               <div className="flex items-center gap-3">
                 <span className="material-symbols-outlined text-tertiary text-2xl">biotech</span>
-                <span className="font-display-lg text-lg md:text-xl uppercase tracking-wider text-white">
+                <span className="font-display-lg text-lg md:text-xl uppercase tracking-wider text-slate-900 dark:text-white">
                   Asistente de <span className="italic text-tertiary font-bold">Movimiento AI</span>
                 </span>
               </div>
@@ -3605,7 +3605,7 @@ Right Arm Extension: ${rightUserAngle.toFixed(1)}°
               <div className="lg:col-span-4 flex flex-col gap-5">
                 
                 {/* POSE CLASSIFICATION HEADER */}
-                <div className="bg-[#0e0c18] border border-tertiary/20 rounded-2xl p-4 space-y-2 shadow-lg">
+                <div className="bg-slate-50 dark:bg-[#0e0c18] border border-tertiary/20 rounded-2xl p-4 space-y-2 shadow-lg">
                   <span className="text-[9px] font-mono tracking-widest text-on-surface-variant font-black uppercase block">
                     CLASIFICACIÓN DE POSE (AI)
                   </span>
@@ -3615,7 +3615,7 @@ Right Arm Extension: ${rightUserAngle.toFixed(1)}°
                         <span className="material-symbols-outlined text-lg">accessibility_new</span>
                       </div>
                       <div>
-                        <h5 className="font-display-lg text-sm text-white font-bold tracking-tight">
+                        <h5 className="font-display-lg text-sm text-slate-900 dark:text-white font-bold tracking-tight">
                           {currentClassification}
                         </h5>
                         <p className="text-[10px] font-mono text-emerald-400 font-semibold">
@@ -3632,7 +3632,7 @@ Right Arm Extension: ${rightUserAngle.toFixed(1)}°
                     MÉTRICAS Y COINCIDENCIA DE POSTURA
                   </span>
                   
-                  <div className="bg-[#09090d] border border-tertiary/15 rounded-2xl p-4 flex flex-col items-center justify-center text-center shadow-lg relative overflow-hidden space-y-3">
+                  <div className="bg-slate-50 dark:bg-[#09090d] border border-tertiary/15 rounded-2xl p-4 flex flex-col items-center justify-center text-center shadow-lg relative overflow-hidden space-y-3">
                     <div className="absolute -top-12 -left-12 w-24 h-24 bg-tertiary/5 rounded-full blur-2xl" />
                     
                     <div className="relative z-10 space-y-1">
@@ -3672,12 +3672,12 @@ Right Arm Extension: ${rightUserAngle.toFixed(1)}°
                     </div>
 
                     {/* Dual Sub-Metrics: Symmetry & Fluidity */}
-                    <div className="grid grid-cols-2 gap-2 w-full pt-2 border-t border-white/5 font-mono text-left">
-                      <div className="p-2 rounded-xl bg-white/5 border border-white/5">
+                    <div className="grid grid-cols-2 gap-2 w-full pt-2 border-t border-slate-200 dark:border-white/5 font-mono text-left">
+                      <div className="p-2 rounded-xl bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/5">
                         <div className="text-[8px] text-on-surface-variant uppercase font-bold">SIMETRÍA</div>
                         <div className="text-sm font-bold text-tertiary">{symmetryVal}%</div>
                       </div>
-                      <div className="p-2 rounded-xl bg-white/5 border border-white/5">
+                      <div className="p-2 rounded-xl bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/5">
                         <div className="text-[8px] text-on-surface-variant uppercase font-bold">FLUIDEZ</div>
                         <div className="text-sm font-bold text-tertiary">{fluidityVal}%</div>
                       </div>
@@ -3697,7 +3697,7 @@ Right Arm Extension: ${rightUserAngle.toFixed(1)}°
                     <span>INTELIGENCIA DE COACHING EN TIEMPO REAL</span>
                   </span>
 
-                  <div className="space-y-2 bg-[#09090d] border border-tertiary/15 rounded-2xl p-3 shadow-lg">
+                  <div className="space-y-2 bg-slate-50 dark:bg-[#09090d] border border-tertiary/15 rounded-2xl p-3 shadow-lg">
                     {/* Maintain Elevation Card */}
                     <div className="p-3 bg-tertiary/5 border-l-2 border-l-tertiary border-tertiary/10 rounded-xl space-y-1">
                       <div className="flex items-center gap-2 text-tertiary text-xs font-bold font-mono uppercase">
@@ -3733,7 +3733,7 @@ Right Arm Extension: ${rightUserAngle.toFixed(1)}°
                     PAUTAS TÉCNICAS Y RECOMENDACIONES
                   </span>
                   
-                  <div className="space-y-2 bg-black/40 border border-tertiary/5 rounded-2xl p-3 shadow-inner max-h-[160px] overflow-y-auto custom-scrollbar">
+                  <div className="space-y-2 bg-slate-50 dark:bg-black/40 border border-tertiary/5 rounded-2xl p-3 shadow-inner max-h-[160px] overflow-y-auto custom-scrollbar">
                     {getBiomechanicalCues().map((cue, idx) => {
                       const isWarning = cue.startsWith('⚠️');
                       return (
@@ -3765,7 +3765,7 @@ Right Arm Extension: ${rightUserAngle.toFixed(1)}°
                     value={somaticFeltSense}
                     onChange={(e) => setSomaticFeltSense(e.target.value.slice(0, 280))}
                     rows={2}
-                    className="w-full bg-[#0d0d11]/80 border border-tertiary/15 rounded-xl p-2.5 text-xs text-on-surface placeholder-on-surface-variant/40 focus:outline-none focus:border-tertiary/40 leading-relaxed font-semibold resize-none"
+                    className="w-full bg-slate-50 dark:bg-[#0d0d11]/80 border border-tertiary/15 rounded-xl p-2.5 text-xs text-on-surface placeholder-on-surface-variant/40 focus:outline-none focus:border-tertiary/40 leading-relaxed font-semibold resize-none"
                     placeholder="Describe la propiocepción y sensación física interna..."
                   />
                   <p className="text-[9px] italic text-on-surface-variant leading-normal opacity-70">
@@ -3802,7 +3802,7 @@ Right Arm Extension: ${rightUserAngle.toFixed(1)}°
                 <button 
                   type="button"
                   onClick={handleExportFrame}
-                  className="flex items-center gap-1.5 bg-transparent hover:bg-white/5 text-on-surface text-[11px] font-bold px-3 py-2 rounded-xl border border-tertiary/20 hover:border-tertiary/40 transition-all uppercase tracking-wide"
+                  className="flex items-center gap-1.5 bg-transparent hover:bg-slate-100 dark:hover:bg-white/5 text-on-surface text-[11px] font-bold px-3 py-2 rounded-xl border border-tertiary/20 hover:border-tertiary/40 transition-all uppercase tracking-wide"
                 >
                   <span className="material-symbols-outlined text-base">download</span>
                   Export Frame
@@ -3810,7 +3810,7 @@ Right Arm Extension: ${rightUserAngle.toFixed(1)}°
                 <button 
                   type="button"
                   onClick={handleShareStats}
-                  className="flex items-center gap-1.5 bg-transparent hover:bg-white/5 text-on-surface text-[11px] font-bold px-3 py-2 rounded-xl border border-tertiary/20 hover:border-tertiary/40 transition-all uppercase tracking-wide"
+                  className="flex items-center gap-1.5 bg-transparent hover:bg-slate-100 dark:hover:bg-white/5 text-on-surface text-[11px] font-bold px-3 py-2 rounded-xl border border-tertiary/20 hover:border-tertiary/40 transition-all uppercase tracking-wide"
                 >
                   <span className="material-symbols-outlined text-base">share</span>
                   Share Stats
@@ -3821,7 +3821,7 @@ Right Arm Extension: ${rightUserAngle.toFixed(1)}°
                 <button 
                   type="button"
                   onClick={() => setSubTab('drill')}
-                  className="text-xs text-on-surface-variant hover:text-white font-semibold transition-colors uppercase tracking-wider"
+                  className="text-xs text-on-surface-variant hover:text-slate-900 dark:hover:text-white font-semibold transition-colors uppercase tracking-wider"
                 >
                   Resume Drill
                 </button>
@@ -3841,7 +3841,7 @@ Right Arm Extension: ${rightUserAngle.toFixed(1)}°
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2">
                   <span className="material-symbols-outlined text-tertiary text-lg">auto_stories</span>
-                  <h4 className="text-xs font-display-lg text-white font-medium uppercase tracking-wider">
+                  <h4 className="text-xs font-display-lg text-slate-900 dark:text-white font-medium uppercase tracking-wider">
                     Historial del Diario Somático
                   </h4>
                 </div>
@@ -3865,19 +3865,19 @@ Right Arm Extension: ${rightUserAngle.toFixed(1)}°
               </div>
 
               {(!somaticDiary || somaticDiary.length === 0) ? (
-                <div className="p-8 bg-[#0d0d11]/50 border border-dashed border-tertiary/10 rounded-2xl text-center text-xs text-on-surface-variant">
+                <div className="p-8 bg-slate-50 dark:bg-[#0d0d11]/50 border border-dashed border-tertiary/10 rounded-2xl text-center text-xs text-on-surface-variant">
                   Tu Diario Somático está vacío. ¡Anota y guarda tus poses de entrenamiento favoritas!
                 </div>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {(somaticDiary || []).map((entry: any) => (
-                    <div 
+                    <div
                       key={entry.id}
-                      className="bg-[#0d0d11]/80 border border-tertiary/10 rounded-2xl overflow-hidden p-4 flex flex-col justify-between gap-3 shadow-lg hover:border-tertiary/30 transition-all"
+                      className="bg-white dark:bg-[#0d0d11]/80 border border-tertiary/10 rounded-2xl overflow-hidden p-4 flex flex-col justify-between gap-3 shadow-lg hover:border-tertiary/30 transition-all"
                     >
                       <div className="flex justify-between items-start gap-2">
                         <div>
-                          <h5 className="font-bold text-white text-[11px] tracking-wide leading-snug">{entry.poseClassification}</h5>
+                          <h5 className="font-bold text-slate-900 dark:text-white text-[11px] tracking-wide leading-snug">{entry.poseClassification}</h5>
                           <p className="text-[9px] font-mono text-on-surface-variant mt-0.5">{entry.date}</p>
                         </div>
                         <span className="text-[8px] font-mono font-bold text-tertiary bg-tertiary/10 border border-tertiary/20 px-1.5 py-0.5 rounded">
@@ -3885,18 +3885,18 @@ Right Arm Extension: ${rightUserAngle.toFixed(1)}°
                         </span>
                       </div>
 
-                      <p className="text-[11px] text-on-surface-variant leading-relaxed line-clamp-3 bg-black/20 p-2 rounded border border-white/5 font-semibold">
+                      <p className="text-[11px] text-on-surface-variant leading-relaxed line-clamp-3 bg-slate-100 dark:bg-black/20 p-2 rounded border border-slate-200 dark:border-white/5 font-semibold">
                         "{entry.feltSense}"
                       </p>
 
                       <div className="grid grid-cols-4 gap-1 pt-2 border-t border-tertiary/5 text-center">
                         <div>
                           <div className="text-[7px] text-on-surface-variant font-black">ANGULO</div>
-                          <div className="text-[9px] font-mono text-white font-bold">{entry.elbowAngle?.toFixed(0) || 164}°</div>
+                          <div className="text-[9px] font-mono text-slate-900 dark:text-white font-bold">{entry.elbowAngle?.toFixed(0) || 164}°</div>
                         </div>
                         <div>
                           <div className="text-[7px] text-on-surface-variant font-black">TORQUE</div>
-                          <div className="text-[9px] font-mono text-white font-bold">{entry.torque || 12}Nm</div>
+                          <div className="text-[9px] font-mono text-slate-900 dark:text-white font-bold">{entry.torque || 12}Nm</div>
                         </div>
                         <div>
                           <div className="text-[7px] text-on-surface-variant font-black">SIMETRÍA</div>

@@ -849,9 +849,9 @@ export default function ProfileView({
                 )}
               </div>
 
-              <div className="flex flex-wrap items-center justify-center sm:justify-start gap-3 text-xs text-slate-300 font-mono">
-                <span className="font-extrabold text-white">{nickname}</span>
-                <span className="text-slate-500">•</span>
+              <div className="flex flex-wrap items-center justify-center sm:justify-start gap-3 text-xs text-slate-600 dark:text-slate-300 font-mono">
+                <span className="font-extrabold text-slate-900 dark:text-white">{nickname}</span>
+                <span className="text-slate-400 dark:text-slate-500">•</span>
                 <a 
                   href={`https://instagram.com/${instagram.replace('@', '')}`} 
                   target="_blank" 
@@ -864,34 +864,34 @@ export default function ProfileView({
               </div>
 
               {/* Biography */}
-              <p className="text-xs sm:text-sm text-slate-300 leading-relaxed pt-1 max-w-xl">
+              <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed pt-1 max-w-xl">
                 {bio}
               </p>
 
               {/* Progress Bar towards Next Level or Instructor Academy Status */}
               {currentUser.role === 'instructor' ? (
-                <div className="pt-2 p-3 bg-[#181822] border border-[#E9C349]/30 rounded-xl space-y-1 max-w-md shadow-lg">
+                <div className="pt-2 p-3 bg-amber-50 dark:bg-[#181822] border border-[#E9C349]/30 rounded-xl space-y-1 max-w-md shadow-lg">
                   <div className="flex items-center justify-between text-[10px] font-mono font-bold text-[#E9C349] uppercase">
                     <span className="flex items-center gap-1.5">
                       <Users className="w-3.5 h-3.5 text-[#E9C349]" />
                       <span>MODO DOCENTE & MÉTRICAS DE ACADEMIA</span>
                     </span>
-                    <span className="text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">DOCENTE ACTIVO</span>
+                    <span className="text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">DOCENTE ACTIVO</span>
                   </div>
-                  <p className="text-[11px] text-slate-300 font-mono">
+                  <p className="text-[11px] text-slate-600 dark:text-slate-300 font-mono">
                     Gestión de evaluaciones, catálogo de cursos y seguimiento personalizado.
                   </p>
                 </div>
               ) : (
                 <div className="pt-2 space-y-1.5 max-w-md">
-                  <div className="flex justify-between text-[10px] font-mono font-bold text-slate-300 uppercase">
+                  <div className="flex justify-between text-[10px] font-mono font-bold text-slate-600 dark:text-slate-300 uppercase">
                     <span className="flex items-center gap-1">
                       <Sparkles className="w-3 h-3 text-[#E9C349]" />
                       <span>Rango & Nivel {currentLevelNumber}</span>
                     </span>
                     <span className="text-[#E9C349] font-black">{progressPercent}% ({completedLessonsCount}/{targetLessonsForLevel} Clases)</span>
                   </div>
-                  <div className="h-3 w-full bg-black/60 rounded-full overflow-hidden p-0.5 border border-white/20 shadow-inner relative">
+                  <div className="h-3 w-full bg-slate-200 dark:bg-black/60 rounded-full overflow-hidden p-0.5 border border-slate-300 dark:border-white/20 shadow-inner relative">
                     <motion.div 
                       initial={{ width: '0%' }}
                       animate={{ width: `${progressPercent}%` }}
@@ -921,12 +921,12 @@ export default function ProfileView({
               </div>
 
               <div className="bg-white/5 hover:bg-white/10 p-2.5 sm:p-3 rounded-2xl border border-white/10 transition-all">
-                <p className="text-lg sm:text-2xl font-black text-white">385</p>
+                <p className="text-lg sm:text-2xl font-black text-slate-900 dark:text-white">385</p>
                 <p className="text-[9px] sm:text-[11px] text-slate-400 font-bold uppercase truncate">Evaluaciones</p>
               </div>
 
               <div className="bg-white/5 hover:bg-white/10 p-2.5 sm:p-3 rounded-2xl border border-white/10 transition-all">
-                <p className="text-lg sm:text-2xl font-black text-white">24</p>
+                <p className="text-lg sm:text-2xl font-black text-slate-900 dark:text-white">24</p>
                 <p className="text-[9px] sm:text-[11px] text-slate-400 font-bold uppercase truncate">Clases Publicadas</p>
               </div>
 
@@ -938,17 +938,17 @@ export default function ProfileView({
           ) : (
             <div className="grid grid-cols-4 gap-2 sm:gap-4 pt-4 border-t border-white/10 text-center font-mono">
               <div className="bg-white/5 hover:bg-white/10 p-2.5 sm:p-3 rounded-2xl border border-white/10 transition-all">
-                <p className="text-lg sm:text-2xl font-black text-white">{(postsFeed || []).length}</p>
+                <p className="text-lg sm:text-2xl font-black text-slate-900 dark:text-white">{(postsFeed || []).length}</p>
                 <p className="text-[9px] sm:text-[11px] text-slate-400 font-bold uppercase truncate">Publicaciones</p>
               </div>
 
               <div className="bg-white/5 hover:bg-white/10 p-2.5 sm:p-3 rounded-2xl border border-white/10 transition-all">
-                <p className="text-lg sm:text-2xl font-black text-white">24</p>
+                <p className="text-lg sm:text-2xl font-black text-slate-900 dark:text-white">24</p>
                 <p className="text-[9px] sm:text-[11px] text-slate-400 font-bold uppercase truncate">Amigos</p>
               </div>
 
               <div className="bg-white/5 hover:bg-white/10 p-2.5 sm:p-3 rounded-2xl border border-white/10 transition-all">
-                <p className="text-lg sm:text-2xl font-black text-white">
+                <p className="text-lg sm:text-2xl font-black text-slate-900 dark:text-white">
                   {(currentUser && Array.isArray(currentUser.completedLessons)) ? currentUser.completedLessons.length : 12}
                 </p>
                 <p className="text-[9px] sm:text-[11px] text-slate-400 font-bold uppercase truncate">Clases</p>
@@ -982,7 +982,7 @@ export default function ProfileView({
                       {hl.icon}
                     </div>
                   </div>
-                  <span className="text-[10px] font-mono font-bold text-slate-300 group-hover:text-white truncate max-w-[70px]">
+                  <span className="text-[10px] font-mono font-bold text-slate-600 dark:text-slate-300 group-hover:text-slate-900 dark:group-hover:text-white truncate max-w-[70px]">
                     {hl.title}
                   </span>
                 </button>
@@ -1005,13 +1005,13 @@ export default function ProfileView({
                 <Target className="w-6 h-6 stroke-[2.5]" />
               </div>
               <div>
-                <h3 className="text-base sm:text-lg font-black text-white uppercase font-mono tracking-wider flex items-center gap-2">
+                <h3 className="text-base sm:text-lg font-black text-slate-900 dark:text-white uppercase font-mono tracking-wider flex items-center gap-2">
                   <span>Configuración de Entrenamiento</span>
                   <span className="text-[10px] bg-[#E9C349]/20 text-[#E9C349] px-2 py-0.5 rounded-full border border-[#E9C349]/40 font-mono font-bold">
                     ACTIVO
                   </span>
                 </h3>
-                <p className="text-xs text-slate-300">
+                <p className="text-xs text-slate-600 dark:text-slate-300">
                   Ajusta tu meta diaria de minutos y activa/desactiva recordatorios de práctica y alertas.
                 </p>
               </div>
@@ -1034,11 +1034,11 @@ export default function ProfileView({
                     <Clock className="w-4 h-4 text-[#E9C349]" />
                     <span>Meta de Minutos Diarios</span>
                   </label>
-                  <span className="text-xs font-mono font-black text-white bg-black/50 px-2.5 py-0.5 rounded-lg border border-white/15">
+                  <span className="text-xs font-mono font-black text-slate-900 dark:text-white bg-slate-900/10 dark:bg-black/50 px-2.5 py-0.5 rounded-lg border border-white/15">
                     {targetMinutes} min/día
                   </span>
                 </div>
-                <p className="text-[11px] text-slate-300">
+                <p className="text-[11px] text-slate-600 dark:text-slate-300">
                   Define el objetivo numérico de minutos diarios para tu rutina de baile y seguimiento.
                 </p>
               </div>
@@ -1056,9 +1056,9 @@ export default function ProfileView({
                       const val = Math.max(5, Math.min(300, Number(e.target.value) || 5));
                       updateUserAndPersist(val, hydrationReminders, lessonNotifications);
                     }}
-                    className="w-full bg-black/60 border border-white/20 rounded-xl px-4 py-2 text-sm font-mono font-bold text-white outline-none focus:border-[#E9C349] transition-colors"
+                    className="w-full bg-white dark:bg-black/60 border border-white/20 rounded-xl px-4 py-2 text-sm font-mono font-bold text-slate-900 dark:text-white outline-none focus:border-[#E9C349] transition-colors"
                   />
-                  <span className="text-xs font-mono text-slate-400 font-bold">min</span>
+                  <span className="text-xs font-mono text-slate-500 dark:text-slate-400 font-bold">min</span>
                 </div>
 
                 {/* Quick Preset Pills */}
@@ -1071,7 +1071,7 @@ export default function ProfileView({
                       className={`px-2.5 py-1 rounded-lg text-[10px] font-mono font-bold transition-all cursor-pointer ${
                         targetMinutes === mins
                           ? 'bg-[#E9C349] text-black font-black shadow-md'
-                          : 'bg-white/10 text-slate-300 hover:bg-white/20 hover:text-white'
+                          : 'bg-white/10 text-slate-600 dark:text-slate-300 hover:bg-white/20 hover:text-slate-900 dark:hover:text-white'
                       }`}
                     >
                       {mins}m
@@ -1091,7 +1091,7 @@ export default function ProfileView({
                     <Droplet className="w-4 h-4 text-cyan-400 fill-cyan-400/20" />
                     <span>Recordatorios de Hidratación</span>
                   </div>
-                  <p className="text-[11px] text-slate-300">
+                  <p className="text-[11px] text-slate-600 dark:text-slate-300">
                     Avisos periódicos para beber agua durante tus sesiones intensas de baile.
                   </p>
                 </div>
@@ -1122,7 +1122,7 @@ export default function ProfileView({
                     <Bell className="w-4 h-4 text-pink-400 fill-pink-400/20" />
                     <span>Notificaciones de Nuevas Lecciones</span>
                   </div>
-                  <p className="text-[11px] text-slate-300">
+                  <p className="text-[11px] text-slate-600 dark:text-slate-300">
                     Alertas automáticas al publicarse nuevas lecciones o ejercicios de baile.
                   </p>
                 </div>
@@ -1154,11 +1154,11 @@ export default function ProfileView({
                 <div className="flex items-center gap-2 text-xs font-mono font-bold text-[#E9C349] uppercase">
                   <Download className="w-4 h-4 text-[#E9C349]" />
                   <span>Exportar Historial de Práctica (CSV)</span>
-                  <span className="text-[10px] bg-white/10 text-slate-200 px-2 py-0.5 rounded-full font-mono font-bold">
+                  <span className="text-[10px] bg-white/10 text-slate-700 dark:text-slate-200 px-2 py-0.5 rounded-full font-mono font-bold">
                     {practiceLogs.length} registros
                   </span>
                 </div>
-                <p className="text-[11px] text-slate-300 max-w-xl">
+                <p className="text-[11px] text-slate-600 dark:text-slate-300 max-w-xl">
                   Descarga un archivo CSV descargable con tus registros de práctica (minutos, tipo de actividad, lección, BPM y notas) para analizar tu progreso fuera de la plataforma.
                 </p>
               </div>
@@ -1174,16 +1174,16 @@ export default function ProfileView({
             </div>
 
             {/* 4. Notificaciones Push de Instructores (Acceso Rápido al Diálogo Flotante) */}
-            <div className="md:col-span-2 bg-gradient-to-r from-purple-950/40 via-purple-900/20 to-transparent border border-purple-500/30 rounded-2xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 hover:border-purple-500/60 transition-colors">
+            <div className="md:col-span-2 bg-gradient-to-r from-purple-100 via-purple-50 to-transparent dark:from-purple-950/40 dark:via-purple-900/20 dark:to-transparent border border-purple-500/30 rounded-2xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 hover:border-purple-500/60 transition-colors">
               <div className="space-y-1">
-                <div className="flex items-center gap-2 text-xs font-mono font-bold text-purple-300 uppercase">
-                  <Bell className="w-4 h-4 text-purple-400" />
+                <div className="flex items-center gap-2 text-xs font-mono font-bold text-purple-700 dark:text-purple-300 uppercase">
+                  <Bell className="w-4 h-4 text-purple-500 dark:text-purple-400" />
                   <span>Notificaciones Push de Instructores</span>
-                  <span className="text-[10px] bg-purple-500/20 text-purple-300 border border-purple-500/40 px-2 py-0.5 rounded-full font-mono font-bold">
+                  <span className="text-[10px] bg-purple-500/20 text-purple-700 dark:text-purple-300 border border-purple-500/40 px-2 py-0.5 rounded-full font-mono font-bold">
                     {currentUser.pushEnabled ? '🟢 Activas' : '🔴 Inactivas'}
                   </span>
                 </div>
-                <p className="text-[11px] text-slate-300 max-w-xl">
+                <p className="text-[11px] text-slate-600 dark:text-slate-300 max-w-xl">
                   Configura alertas personalizadas por instructor, reviews de video y masterclasses en un diálogo flotante optimizado.
                 </p>
               </div>
@@ -1207,7 +1207,7 @@ export default function ProfileView({
         <section className="space-y-4">
           
           {/* BARRA DIVISORIA DE CONTENIDO */}
-          <div className="flex items-center justify-around border-y border-white/10 py-3 bg-[#121218]/80 backdrop-blur-md rounded-2xl font-mono text-xs font-bold uppercase">
+          <div className="flex items-center justify-around border-y border-slate-200 dark:border-white/10 py-3 bg-white/80 dark:bg-[#121218]/80 backdrop-blur-md rounded-2xl font-mono text-xs font-bold uppercase">
             
             <button
               type="button"
@@ -1215,7 +1215,7 @@ export default function ProfileView({
               className={`flex items-center gap-2 px-4 py-2 rounded-xl transition-all cursor-pointer ${
                 activeGridTab === 'all'
                   ? 'bg-white/10 text-[#E9C349] border border-[#E9C349]/40 shadow-md'
-                  : 'text-slate-400 hover:text-white'
+                  : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
               <Grid className="w-4 h-4" />
@@ -1228,7 +1228,7 @@ export default function ProfileView({
               className={`flex items-center gap-2 px-4 py-2 rounded-xl transition-all cursor-pointer ${
                 activeGridTab === 'reels'
                   ? 'bg-white/10 text-[#FF2E63] border border-[#FF2E63]/40 shadow-md'
-                  : 'text-slate-400 hover:text-white'
+                  : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
               <Film className="w-4 h-4" />
@@ -1241,7 +1241,7 @@ export default function ProfileView({
               className={`flex items-center gap-2 px-4 py-2 rounded-xl transition-all cursor-pointer ${
                 activeGridTab === 'saved'
                   ? 'bg-white/10 text-cyan-400 border border-cyan-500/40 shadow-md'
-                  : 'text-slate-400 hover:text-white'
+                  : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
               <Bookmark className="w-4 h-4" />
@@ -1319,7 +1319,7 @@ export default function ProfileView({
                     <Settings className="w-5 h-5" />
                   </div>
                   <div>
-                    <h3 className="text-base font-black text-white font-mono uppercase">
+                    <h3 className="text-base font-black text-slate-900 dark:text-white font-mono uppercase">
                       Ajustes del Perfil de Bailarín
                     </h3>
                     <p className="text-xs text-slate-400">Gestiona tus datos, sincronización y membresía</p>
@@ -1328,7 +1328,7 @@ export default function ProfileView({
                 <button
                   type="button"
                   onClick={() => setShowSettingsModal(false)}
-                  className="p-2 rounded-xl bg-white/5 hover:bg-white/15 text-slate-400 hover:text-white transition-colors"
+                  className="p-2 rounded-xl bg-white/5 hover:bg-white/15 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -1492,7 +1492,7 @@ export default function ProfileView({
                             const val = Math.max(5, Math.min(300, Number(e.target.value) || 5));
                             updateUserAndPersist(val, hydrationReminders, lessonNotifications);
                           }}
-                          className="w-full bg-black/60 border border-white/20 rounded-xl px-4 py-2.5 text-xs text-slate-900 dark:text-white outline-none focus:border-[#E9C349]"
+                          className="w-full bg-white dark:bg-black/60 border border-white/20 rounded-xl px-4 py-2.5 text-xs text-slate-900 dark:text-white outline-none focus:border-[#E9C349]"
                         />
                         <span className="text-xs font-mono font-bold text-slate-400">min/día</span>
                       </div>
@@ -1561,7 +1561,7 @@ export default function ProfileView({
                     <div className="flex items-center gap-3">
                       <CloudLightning className={`w-5 h-5 ${syncStatus === 'cloud' ? 'text-green-400' : 'text-amber-400'}`} />
                       <div>
-                        <p className="text-xs font-bold text-white uppercase">Estado de Base de Datos</p>
+                        <p className="text-xs font-bold text-slate-900 dark:text-white uppercase">Estado de Base de Datos</p>
                         <p className="text-[10px] text-slate-400 font-mono">
                           {syncStatus === 'cloud' ? 'Sincronizado con Firestore Cloud' : 'Guardado Local en Dispositivo'}
                         </p>
@@ -1572,7 +1572,7 @@ export default function ProfileView({
 
                   {firebaseUser ? (
                     <div className="space-y-3">
-                      <p className="text-xs text-slate-300">Conectado como: <strong className="text-white">{firebaseUser.email}</strong></p>
+                      <p className="text-xs text-slate-600 dark:text-slate-300">Conectado como: <strong className="text-slate-900 dark:text-white">{firebaseUser.email}</strong></p>
                       <button
                         type="button"
                         onClick={handleSignOut}
@@ -1585,7 +1585,7 @@ export default function ProfileView({
                     <button
                       type="button"
                       onClick={handleGoogleSignIn}
-                      className="w-full py-3 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-mono font-bold text-xs rounded-xl transition-all uppercase flex items-center justify-center gap-2"
+                      className="w-full py-3 bg-white/10 hover:bg-white/20 border border-white/20 text-slate-900 dark:text-white font-mono font-bold text-xs rounded-xl transition-all uppercase flex items-center justify-center gap-2"
                     >
                       <Globe className="w-4 h-4 text-cyan-400" />
                       <span>Iniciar Sesión con Google</span>
@@ -1604,7 +1604,7 @@ export default function ProfileView({
                       </div>
                       <div>
                         <p className="text-xs font-mono font-bold text-[#1DB954] uppercase">Sincronización API de Spotify</p>
-                        <p className="text-xs text-white mt-0.5">Importa y reproduce tus playlists privadas directamente en Waack ON.</p>
+                        <p className="text-xs text-slate-900 dark:text-white mt-0.5">Importa y reproduce tus playlists privadas directamente en Waack ON.</p>
                       </div>
                     </div>
                     <button
@@ -1625,10 +1625,10 @@ export default function ProfileView({
               {/* TAB 4: SUSCRIPCIÓN & FACTURAS */}
               {settingsTab === 'suscripcion' && (
                 <div className="space-y-4">
-                  <div className="p-4 bg-cyan-950/30 border border-cyan-500/30 rounded-2xl flex items-center justify-between">
+                  <div className="p-4 bg-cyan-50 dark:bg-cyan-950/30 border border-cyan-500/30 rounded-2xl flex items-center justify-between">
                     <div>
-                      <p className="text-xs font-mono font-bold text-cyan-400 uppercase">Membresía Waack ON Pro</p>
-                      <p className="text-xs text-white font-bold mt-0.5">Acceso Ilimitado a Clases y Talleres</p>
+                      <p className="text-xs font-mono font-bold text-cyan-600 dark:text-cyan-400 uppercase">Membresía Waack ON Pro</p>
+                      <p className="text-xs text-slate-900 dark:text-white font-bold mt-0.5">Acceso Ilimitado a Clases y Talleres</p>
                     </div>
                     <span className="px-3 py-1 bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 text-[10px] font-mono font-bold rounded-full uppercase">
                       Activa
@@ -1639,12 +1639,12 @@ export default function ProfileView({
                     <p className="text-xs font-mono font-bold text-slate-300 uppercase">Facturas Recientes</p>
                     {['INV-2026-001', 'INV-2026-002'].map((inv) => (
                       <div key={inv} className="p-3 bg-white/5 border border-white/10 rounded-xl flex items-center justify-between">
-                        <span className="text-xs font-mono text-white font-bold">{inv} • $19.99 USD</span>
+                        <span className="text-xs font-mono text-slate-900 dark:text-white font-bold">{inv} • $19.99 USD</span>
                         <button
                           type="button"
                           onClick={() => handleDownloadInvoice(inv)}
                           disabled={invoiceDownloadingId === inv}
-                          className="px-3 py-1.5 bg-white/10 hover:bg-white/20 text-xs font-mono font-bold text-white rounded-lg flex items-center gap-1.5 transition-all"
+                          className="px-3 py-1.5 bg-white/10 hover:bg-white/20 text-xs font-mono font-bold text-slate-900 dark:text-white rounded-lg flex items-center gap-1.5 transition-all"
                         >
                           <Download className="w-3.5 h-3.5 text-[#E9C349]" />
                           <span>{invoiceDownloadingId === inv ? `${invoiceDownloadProgress}%` : 'PDF'}</span>
@@ -1678,7 +1678,7 @@ export default function ProfileView({
                     <UploadCloud className="w-5 h-5" />
                   </div>
                   <div>
-                    <h3 className="text-base font-black text-white font-mono uppercase">
+                    <h3 className="text-base font-black text-slate-900 dark:text-white font-mono uppercase">
                       Subir Contenido a Waack ON
                     </h3>
                     <p className="text-xs text-slate-400">Guardado en Firebase Storage y Firestore</p>
@@ -1687,7 +1687,7 @@ export default function ProfileView({
                 <button
                   type="button"
                   onClick={() => setShowUploadModal(false)}
-                  className="p-2 rounded-xl bg-white/5 hover:bg-white/15 text-slate-400 hover:text-white"
+                  className="p-2 rounded-xl bg-white/5 hover:bg-white/15 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -1715,7 +1715,7 @@ export default function ProfileView({
                   ) : (
                     <div className="space-y-2">
                       <Camera className="w-8 h-8 text-[#E9C349] mx-auto group-hover:scale-110 transition-transform" />
-                      <p className="text-xs font-mono font-bold text-white uppercase">
+                      <p className="text-xs font-mono font-bold text-slate-900 dark:text-white uppercase">
                         Selecciona o arrastra video/foto
                       </p>
                       <p className="text-[10px] text-slate-400">Soporta MP4, MOV, JPG, PNG desde tu celular o PC</p>
@@ -1760,7 +1760,7 @@ export default function ProfileView({
                   <select
                     value={uploadCategory}
                     onChange={(e) => setUploadCategory(e.target.value)}
-                    className="w-full bg-[#1A1A22] border border-white/20 rounded-xl px-4 py-2.5 text-xs text-slate-900 dark:text-white outline-none focus:border-[#E9C349]"
+                    className="w-full bg-white dark:bg-[#1A1A22] border border-white/20 rounded-xl px-4 py-2.5 text-xs text-slate-900 dark:text-white outline-none focus:border-[#E9C349]"
                   >
                     <option value="Práctica">Práctica & Técnica</option>
                     <option value="Reels">Reels & Freestyle</option>
@@ -1901,8 +1901,8 @@ export default function ProfileView({
                   <div className="flex items-center gap-2 text-xs text-[#E9C349] font-bold">
                     <span>{lightboxItem.category || 'Publicación'}</span>
                   </div>
-                  <h3 className="text-base font-black text-white">{lightboxItem.title}</h3>
-                  <p className="text-xs text-slate-300 font-sans leading-relaxed">{lightboxItem.caption}</p>
+                  <h3 className="text-base font-black text-slate-900 dark:text-white">{lightboxItem.title}</h3>
+                  <p className="text-xs text-slate-600 dark:text-slate-300 font-sans leading-relaxed">{lightboxItem.caption}</p>
                 </div>
 
                 <div className="space-y-3 pt-4 border-t border-white/10">
@@ -1949,14 +1949,14 @@ export default function ProfileView({
               <button
                 type="button"
                 onClick={() => setSelectedHighlight(null)}
-                className="absolute top-4 right-4 p-2 rounded-full bg-white/10 hover:bg-white/20 text-white"
+                className="absolute top-4 right-4 p-2 rounded-full bg-white/10 hover:bg-white/20 text-slate-900 dark:text-white"
               >
                 <X className="w-4 h-4" />
               </button>
 
               <div className="text-5xl py-2">{selectedHighlight.icon}</div>
-              <h3 className="text-lg font-black text-white font-mono uppercase">{selectedHighlight.title}</h3>
-              <p className="text-xs text-slate-300 leading-relaxed font-sans">{selectedHighlight.desc}</p>
+              <h3 className="text-lg font-black text-slate-900 dark:text-white font-mono uppercase">{selectedHighlight.title}</h3>
+              <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-sans">{selectedHighlight.desc}</p>
             </motion.div>
           </div>
         )}

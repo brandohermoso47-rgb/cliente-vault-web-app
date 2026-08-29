@@ -713,7 +713,7 @@ export const AIPoseLab: React.FC<AIPoseLabProps> = ({
                 PROCESAMIENTO LOCAL EN NAVEGADOR • 100% PRIVADO
               </span>
             </div>
-            <h2 className="text-xl sm:text-3xl font-black font-display tracking-tight text-white uppercase flex items-center gap-2">
+            <h2 className="text-xl sm:text-3xl font-black font-display tracking-tight text-slate-900 dark:text-white uppercase flex items-center gap-2">
               <span>{isEs ? 'Laboratorio de Poses IA' : 'AI Pose Laboratory'}</span>
               <Activity className="w-6 h-6 text-[#E9C349] animate-pulse" />
             </h2>
@@ -725,7 +725,7 @@ export const AIPoseLab: React.FC<AIPoseLabProps> = ({
           </div>
 
           {/* Gamification Stats */}
-          <div className="flex items-center gap-3 bg-black/50 border border-white/10 p-3 rounded-2xl shrink-0">
+          <div className="flex items-center gap-3 bg-slate-100 dark:bg-black/50 border border-white/10 p-3 rounded-2xl shrink-0">
             <div className="text-center px-3 border-r border-white/10">
               <span className="text-[10px] font-mono text-slate-400 uppercase block">Poses Clavadas</span>
               <span className="text-xl font-black text-emerald-400 font-mono">{validatedPosesCount}</span>
@@ -772,7 +772,7 @@ export const AIPoseLab: React.FC<AIPoseLabProps> = ({
               className={`px-3 py-1.5 rounded-xl text-xs font-mono font-bold uppercase transition-all shrink-0 border flex items-center gap-1.5 cursor-pointer ${
                 isSelected
                   ? 'bg-[#E9C349] text-black border-[#E9C349] shadow-md shadow-[#E9C349]/20 font-black'
-                  : 'bg-[#0E101D] text-slate-300 border-white/10 hover:border-white/30'
+                  : 'bg-white text-slate-600 border-slate-200 hover:border-slate-400 dark:bg-[#0E101D] dark:text-slate-300 dark:border-white/10 dark:hover:border-white/30'
               }`}
             >
               <span>{idx + 1}. {pose.name.split(' (')[0]}</span>
@@ -797,7 +797,7 @@ export const AIPoseLab: React.FC<AIPoseLabProps> = ({
                 {isSimulatorMode ? <MonitorPlay className="w-4 h-4" /> : <Camera className="w-4 h-4" />}
               </div>
               <div>
-                <h3 className="text-sm font-mono font-bold text-white uppercase flex items-center gap-2">
+                <h3 className="text-sm font-mono font-bold text-slate-900 dark:text-white uppercase flex items-center gap-2">
                   <span>{isSimulatorMode ? (isEs ? 'Simulador de Poses & Práctica' : 'Pose Simulator & Practice') : (isEs ? 'Módulo de Cámara en Vivo' : 'Live Camera Tracker')}</span>
                   <span className={`text-[9px] px-1.5 py-0.2 rounded font-mono font-bold ${isCameraActive ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40' : isSimulatorMode ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40' : 'bg-white/10 text-slate-400'}`}>
                     {isCameraActive ? 'EN VIVO' : isSimulatorMode ? 'SIMULADOR' : 'STANDBY'}
@@ -1075,7 +1075,7 @@ export const AIPoseLab: React.FC<AIPoseLabProps> = ({
                 <Target className="w-4 h-4" />
               </div>
               <div>
-                <h3 className="text-sm font-mono font-bold text-white uppercase">
+                <h3 className="text-sm font-mono font-bold text-slate-900 dark:text-white uppercase">
                   {isEs ? 'Pose Objetivo de Referencia' : 'Target Reference Pose'}
                 </h3>
                 <p className="text-[10px] font-mono text-slate-400">
@@ -1150,7 +1150,7 @@ export const AIPoseLab: React.FC<AIPoseLabProps> = ({
           </div>
 
           {/* Technical Validation Tips */}
-          <div className="p-3.5 rounded-2xl bg-black/40 border border-white/10 space-y-2">
+          <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-black/40 border border-white/10 space-y-2">
             <span className="text-[10px] font-mono font-bold text-[#E9C349] uppercase flex items-center gap-1.5">
               <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
               {isEs ? 'Recomendaciones Técnicas del Maestro:' : 'Master Technical Tips:'}

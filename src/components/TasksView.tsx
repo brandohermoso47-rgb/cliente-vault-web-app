@@ -733,49 +733,49 @@ export default function TasksView({ currentUser, language, lessons, onAddBonusPo
                 </div>
                 <div>
                   <h3 className="text-sm font-black uppercase">Confirmar Nueva Tarea</h3>
-                  <p className="text-[11px] text-slate-400">Se añadirá a tu lista de Google Tasks.</p>
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400">Se añadirá a tu lista de Google Tasks.</p>
                 </div>
               </div>
 
               <div className="space-y-3 text-xs">
                 <div>
-                  <label className="block text-slate-300 font-bold mb-1">Título de la Tarea:</label>
+                  <label className="block text-slate-600 dark:text-slate-300 font-bold mb-1">Título de la Tarea:</label>
                   <input
                     type="text"
                     value={newTaskTitle}
                     onChange={(e) => setNewTaskTitle(e.target.value)}
                     placeholder="Ej. Practicar Posing en 8 tiempos"
-                    className="w-full bg-black/50 border border-white/10 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#E9C349]"
+                    className="w-full bg-slate-100 dark:bg-black/50 border border-slate-200 dark:border-white/10 rounded-xl px-3 py-2 text-slate-900 dark:text-white focus:outline-none focus:border-[#E9C349]"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-slate-300 font-bold mb-1">Notas / Detalles:</label>
+                  <label className="block text-slate-600 dark:text-slate-300 font-bold mb-1">Notas / Detalles:</label>
                   <textarea
                     rows={3}
                     value={newTaskNotes}
                     onChange={(e) => setNewTaskNotes(e.target.value)}
                     placeholder="Detalles del ejercicio o recordatorio..."
-                    className="w-full bg-black/50 border border-white/10 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#E9C349]"
+                    className="w-full bg-slate-100 dark:bg-black/50 border border-slate-200 dark:border-white/10 rounded-xl px-3 py-2 text-slate-900 dark:text-white focus:outline-none focus:border-[#E9C349]"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-slate-300 font-bold mb-1">Fecha Límite (Opcional):</label>
+                  <label className="block text-slate-600 dark:text-slate-300 font-bold mb-1">Fecha Límite (Opcional):</label>
                   <input
                     type="date"
                     value={newTaskDueDate}
                     onChange={(e) => setNewTaskDueDate(e.target.value)}
-                    className="w-full bg-black/50 border border-white/10 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#E9C349]"
+                    className="w-full bg-slate-100 dark:bg-black/50 border border-slate-200 dark:border-white/10 rounded-xl px-3 py-2 text-slate-900 dark:text-white focus:outline-none focus:border-[#E9C349]"
                   />
                 </div>
               </div>
 
-              <div className="flex items-center justify-end gap-2 pt-2 border-t border-white/10">
+              <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-200 dark:border-white/10">
                 <button
                   type="button"
                   onClick={() => setShowCreateTaskModal(false)}
-                  className="px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 text-xs font-bold cursor-pointer"
+                  className="px-4 py-2 rounded-xl bg-slate-100 dark:bg-white/5 hover:bg-slate-200 dark:hover:bg-white/10 text-slate-600 dark:text-slate-300 text-xs font-bold cursor-pointer"
                 >
                   Cancelar
                 </button>
@@ -810,28 +810,28 @@ export default function TasksView({ currentUser, language, lessons, onAddBonusPo
                 </div>
                 <div>
                   <h3 className="text-sm font-black uppercase">Nueva Lista en Google Tasks</h3>
-                  <p className="text-[11px] text-slate-400">Organiza tus metas en un grupo independiente.</p>
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400">Organiza tus metas en un grupo independiente.</p>
                 </div>
               </div>
 
               <div className="space-y-3 text-xs">
                 <div>
-                  <label className="block text-slate-300 font-bold mb-1">Nombre de la Lista:</label>
+                  <label className="block text-slate-600 dark:text-slate-300 font-bold mb-1">Nombre de la Lista:</label>
                   <input
                     type="text"
                     value={newListTitle}
                     onChange={(e) => setNewListTitle(e.target.value)}
                     placeholder="Ej. Objetivos del Trimestre"
-                    className="w-full bg-black/50 border border-white/10 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#E9C349]"
+                    className="w-full bg-slate-100 dark:bg-black/50 border border-slate-200 dark:border-white/10 rounded-xl px-3 py-2 text-slate-900 dark:text-white focus:outline-none focus:border-[#E9C349]"
                   />
                 </div>
               </div>
 
-              <div className="flex items-center justify-end gap-2 pt-2 border-t border-white/10">
+              <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-200 dark:border-white/10">
                 <button
                   type="button"
                   onClick={() => setShowCreateListModal(false)}
-                  className="px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 text-xs font-bold cursor-pointer"
+                  className="px-4 py-2 rounded-xl bg-slate-100 dark:bg-white/5 hover:bg-slate-200 dark:hover:bg-white/10 text-slate-600 dark:text-slate-300 text-xs font-bold cursor-pointer"
                 >
                   Cancelar
                 </button>
@@ -858,7 +858,7 @@ export default function TasksView({ currentUser, language, lessons, onAddBonusPo
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 15 }}
               transition={{ duration: 0.2, ease: 'easeOut' }}
-              className="bg-[#121021] border border-rose-500/30 rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl text-white"
+              className="bg-white dark:bg-[#121021] border border-rose-500/30 rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl text-slate-900 dark:text-white"
             >
               <div className="flex items-center gap-3 border-b border-white/10 pb-3">
                 <div className="p-2 rounded-xl bg-rose-500/20 text-rose-400">
@@ -866,19 +866,19 @@ export default function TasksView({ currentUser, language, lessons, onAddBonusPo
                 </div>
                 <div>
                   <h3 className="text-sm font-black uppercase">Eliminar Tarea</h3>
-                  <p className="text-[11px] text-slate-400">¿Estás seguro de eliminar esta tarea de Google Tasks?</p>
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400">¿Estás seguro de eliminar esta tarea de Google Tasks?</p>
                 </div>
               </div>
 
-              <p className="text-xs text-white font-bold bg-black/40 p-3 rounded-xl border border-white/5">
+              <p className="text-xs text-slate-900 dark:text-white font-bold bg-slate-100 dark:bg-black/40 p-3 rounded-xl border border-slate-200 dark:border-white/5">
                 "{taskToDelete.title}"
               </p>
 
-              <div className="flex items-center justify-end gap-2 pt-2 border-t border-white/10">
+              <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-200 dark:border-white/10">
                 <button
                   type="button"
                   onClick={() => setTaskToDelete(null)}
-                  className="px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 text-xs font-bold cursor-pointer"
+                  className="px-4 py-2 rounded-xl bg-slate-100 dark:bg-white/5 hover:bg-slate-200 dark:hover:bg-white/10 text-slate-600 dark:text-slate-300 text-xs font-bold cursor-pointer"
                 >
                   Cancelar
                 </button>

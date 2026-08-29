@@ -1043,7 +1043,7 @@ export default function FisicoView({ currentUser, language, onAddBonusPoints }: 
       {/* Header Banner */}
       <div className="border-b border-tertiary/10 pb-4 mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4 z-10">
         <div>
-          <h2 className="text-2xl font-display-lg font-bold text-white tracking-tight uppercase">ACONDICIONAMIENTO Y RESISTENCIA</h2>
+          <h2 className="text-2xl font-display-lg font-bold text-slate-900 dark:text-white tracking-tight uppercase">ACONDICIONAMIENTO Y RESISTENCIA</h2>
           <p className="text-xs text-on-surface-variant font-medium mt-1">Fortalece tus deltoides, activa tu core y previene lesiones biomecánicas.</p>
         </div>
         
@@ -1080,7 +1080,7 @@ export default function FisicoView({ currentUser, language, onAddBonusPoints }: 
                   className={`py-2 px-3 border rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
                     selectedCategory === cat.id
                       ? 'bg-on-primary-fixed-variant text-primary-fixed border-primary/25 shadow-lg'
-                      : 'bg-[#0d0d11]/40 border-tertiary/10 hover:border-tertiary/30 text-on-surface-variant hover:text-white'
+                      : 'bg-slate-100 dark:bg-[#0d0d11]/40 border-tertiary/10 hover:border-tertiary/30 text-on-surface-variant hover:text-slate-900 dark:hover:text-white'
                   }`}
                 >
                   <span>{cat.icon}</span>
@@ -1118,11 +1118,11 @@ export default function FisicoView({ currentUser, language, onAddBonusPoints }: 
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: 'auto' }}
                   exit={{ opacity: 0, height: 0 }}
-                  className="overflow-hidden bg-[#0d0d11]/80 rounded-2xl border border-tertiary/15 p-4 mb-6 text-on-surface space-y-4 shadow-2xl"
+                  className="overflow-hidden bg-slate-50 dark:bg-[#0d0d11]/80 rounded-2xl border border-tertiary/15 p-4 mb-6 text-on-surface space-y-4 shadow-2xl"
                 >
                   <div className="flex items-center gap-2 border-b border-tertiary/10 pb-2">
                     <Dumbbell className="w-4 h-4 text-tertiary" />
-                    <h4 className="text-xs font-mono font-bold text-white uppercase">Registrar Nuevo Video de Acondicionamiento</h4>
+                    <h4 className="text-xs font-mono font-bold text-slate-900 dark:text-white uppercase">Registrar Nuevo Video de Acondicionamiento</h4>
                   </div>
                   
                   <form onSubmit={handleAddVideo} className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -1133,7 +1133,7 @@ export default function FisicoView({ currentUser, language, onAddBonusPoints }: 
                         placeholder="Ej. Sostén e Isometría de Deltoides"
                         value={newTitle}
                         onChange={(e) => setNewTitle(e.target.value)}
-                        className="w-full bg-[#0e0e0e] border border-tertiary/15 px-3 py-1.5 text-xs font-semibold rounded-xl text-white focus:outline-none focus:border-tertiary/30"
+                        className="w-full bg-slate-100 dark:bg-[#0e0e0e] border border-tertiary/15 px-3 py-1.5 text-xs font-semibold rounded-xl text-slate-900 dark:text-white focus:outline-none focus:border-tertiary/30"
                       />
                     </div>
 
@@ -1142,7 +1142,7 @@ export default function FisicoView({ currentUser, language, onAddBonusPoints }: 
                       <select
                         value={newCategory}
                         onChange={(e) => setNewCategory(e.target.value as any)}
-                        className="w-full bg-[#0e0e0e] border border-tertiary/15 px-2 py-1.5 text-xs font-bold rounded-xl text-white focus:outline-none focus:border-tertiary/30"
+                        className="w-full bg-slate-100 dark:bg-[#0e0e0e] border border-tertiary/15 px-2 py-1.5 text-xs font-bold rounded-xl text-slate-900 dark:text-white focus:outline-none focus:border-tertiary/30"
                       >
                         <option value="brazos">💪 Brazos y Hombros (Rotación y Estamina)</option>
                         <option value="core">🤸 Core y Oblicuos (Aislamiento y Balance)</option>
@@ -1159,7 +1159,7 @@ export default function FisicoView({ currentUser, language, onAddBonusPoints }: 
                         placeholder="Pega URL de imagen o YouTube (opcional)"
                         value={newUrl}
                         onChange={(e) => setNewUrl(e.target.value)}
-                        className="w-full bg-[#0e0e0e] border border-tertiary/15 px-3 py-1.5 text-xs font-semibold rounded-xl text-white focus:outline-none focus:border-tertiary/30"
+                        className="w-full bg-slate-100 dark:bg-[#0e0e0e] border border-tertiary/15 px-3 py-1.5 text-xs font-semibold rounded-xl text-slate-900 dark:text-white focus:outline-none focus:border-tertiary/30"
                       />
                     </div>
 
@@ -1171,7 +1171,7 @@ export default function FisicoView({ currentUser, language, onAddBonusPoints }: 
                           placeholder="Ej. 15 min"
                           value={newDuration}
                           onChange={(e) => setNewDuration(e.target.value)}
-                          className="w-full bg-[#0e0e0e] border border-tertiary/15 px-3 py-1.5 text-xs font-semibold rounded-xl text-white focus:outline-none focus:border-tertiary/30"
+                          className="w-full bg-slate-100 dark:bg-[#0e0e0e] border border-tertiary/15 px-3 py-1.5 text-xs font-semibold rounded-xl text-slate-900 dark:text-white focus:outline-none focus:border-tertiary/30"
                         />
                       </div>
                       <div className="space-y-1">
@@ -1179,7 +1179,7 @@ export default function FisicoView({ currentUser, language, onAddBonusPoints }: 
                         <select
                           value={newIntensity}
                           onChange={(e) => setNewIntensity(e.target.value as any)}
-                          className="w-full bg-[#0e0e0e] border border-tertiary/15 px-2 py-1.5 text-xs font-bold rounded-xl text-white focus:outline-none focus:border-tertiary/30"
+                          className="w-full bg-slate-100 dark:bg-[#0e0e0e] border border-tertiary/15 px-2 py-1.5 text-xs font-bold rounded-xl text-slate-900 dark:text-white focus:outline-none focus:border-tertiary/30"
                         >
                           <option value="Baja">🟢 Baja</option>
                           <option value="Media">🟡 Media</option>
@@ -1196,7 +1196,7 @@ export default function FisicoView({ currentUser, language, onAddBonusPoints }: 
                         placeholder="Explica detalladamente la ejecución biomecánica correcta del drill..."
                         value={newDescription}
                         onChange={(e) => setNewDescription(e.target.value)}
-                        className="w-full bg-[#0e0e0e] border border-tertiary/15 px-3 py-1.5 text-xs font-semibold rounded-xl text-white focus:outline-none focus:border-tertiary/30"
+                        className="w-full bg-slate-100 dark:bg-[#0e0e0e] border border-tertiary/15 px-3 py-1.5 text-xs font-semibold rounded-xl text-slate-900 dark:text-white focus:outline-none focus:border-tertiary/30"
                       />
                     </div>
 
@@ -1207,7 +1207,7 @@ export default function FisicoView({ currentUser, language, onAddBonusPoints }: 
                         placeholder="Ej. Estabilización rotacional profunda y protección del trapecio superior."
                         value={newBenefits}
                         onChange={(e) => setNewBenefits(e.target.value)}
-                        className="w-full bg-[#0e0e0e] border border-tertiary/15 px-3 py-1.5 text-xs font-semibold rounded-xl text-white focus:outline-none"
+                        className="w-full bg-slate-100 dark:bg-[#0e0e0e] border border-tertiary/15 px-3 py-1.5 text-xs font-semibold rounded-xl text-slate-900 dark:text-white focus:outline-none"
                       />
                     </div>
 
@@ -1215,7 +1215,7 @@ export default function FisicoView({ currentUser, language, onAddBonusPoints }: 
                       <button
                         type="button"
                         onClick={() => setShowAddForm(false)}
-                        className="px-4 py-2 border border-tertiary/15 text-xs font-bold hover:bg-black/40 text-on-surface-variant hover:text-white rounded-xl uppercase transition-all"
+                        className="px-4 py-2 border border-tertiary/15 text-xs font-bold hover:bg-slate-200 dark:hover:bg-black/40 text-on-surface-variant hover:text-slate-900 dark:hover:text-white rounded-xl uppercase transition-all"
                       >
                         Cancelar
                       </button>
@@ -1245,8 +1245,8 @@ export default function FisicoView({ currentUser, language, onAddBonusPoints }: 
                     }}
                     className={`border rounded-2xl p-3.5 cursor-pointer transition-all flex flex-col justify-between ${
                       isActive 
-                        ? 'bg-[#0d0d11]/80 border-primary/45 shadow-xl' 
-                        : 'bg-[#121212]/55 border-tertiary/10 hover:border-tertiary/20'
+                        ? 'bg-amber-50 dark:bg-[#0d0d11]/80 border-primary/45 shadow-xl'
+                        : 'bg-slate-50 dark:bg-[#121212]/55 border-tertiary/10 hover:border-tertiary/20'
                     }`}
                   >
                     <div>
@@ -1283,7 +1283,7 @@ export default function FisicoView({ currentUser, language, onAddBonusPoints }: 
                         </div>
                       </div>
 
-                      <h4 className="text-xs font-bold text-white uppercase leading-tight line-clamp-1">{vid.title}</h4>
+                      <h4 className="text-xs font-bold text-slate-900 dark:text-white uppercase leading-tight line-clamp-1">{vid.title}</h4>
                       <p className="text-[10px] text-on-surface-variant font-medium mt-1 line-clamp-2 leading-relaxed">{vid.description}</p>
                     </div>
 
@@ -1303,7 +1303,7 @@ export default function FisicoView({ currentUser, language, onAddBonusPoints }: 
                             e.stopPropagation();
                             handleOpenDemoModal(vid);
                           }}
-                          className="px-1.5 py-0.5 bg-[#171526] hover:bg-[#25223c] border border-tertiary/25 text-tertiary hover:text-white rounded transition-all text-[9px] font-mono font-bold flex items-center gap-1"
+                          className="px-1.5 py-0.5 bg-indigo-50 hover:bg-indigo-100 dark:bg-[#171526] dark:hover:bg-[#25223c] border border-tertiary/25 text-tertiary hover:text-slate-900 dark:hover:text-white rounded transition-all text-[9px] font-mono font-bold flex items-center gap-1"
                           title="Vincular o subir video de demostración para esta rutina"
                         >
                           <Upload className="w-2.5 h-2.5 text-tertiary" />
@@ -1314,13 +1314,13 @@ export default function FisicoView({ currentUser, language, onAddBonusPoints }: 
                           <button
                             type="button"
                             onClick={(e) => handleDeleteVideo(vid.id, e)}
-                            className="p-1 hover:bg-black/40 border border-primary/20 text-primary hover:text-primary-fixed rounded transition-all text-[9px] font-bold"
+                            className="p-1 hover:bg-slate-200 dark:hover:bg-black/40 border border-primary/20 text-primary hover:text-primary-fixed rounded transition-all text-[9px] font-bold"
                             title="Eliminar rutina"
                           >
                             🗑️
                           </button>
                         )}
-                        <span className="text-[9px] bg-[#0d0d11]/80 border border-tertiary/15 text-white font-mono font-bold px-1.5 py-0.5 rounded hover:border-tertiary transition-all">
+                        <span className="text-[9px] bg-slate-100 dark:bg-[#0d0d11]/80 border border-tertiary/15 text-slate-900 dark:text-white font-mono font-bold px-1.5 py-0.5 rounded hover:border-tertiary transition-all">
                           VER DETALLES
                         </span>
                       </div>
@@ -1341,7 +1341,7 @@ export default function FisicoView({ currentUser, language, onAddBonusPoints }: 
                     <h3 className="text-xs font-mono font-bold text-tertiary uppercase flex items-center gap-1">
                       <Cpu className="w-3 h-3 text-primary animate-pulse" /> RUTINA BIOMECÁNICA ACTIVA
                     </h3>
-                    <h4 className="text-sm font-bold text-white uppercase leading-tight mt-0.5">{activeVideo.title}</h4>
+                    <h4 className="text-sm font-bold text-slate-900 dark:text-white uppercase leading-tight mt-0.5">{activeVideo.title}</h4>
                   </div>
                 </div>
 
@@ -1350,7 +1350,7 @@ export default function FisicoView({ currentUser, language, onAddBonusPoints }: 
                   <button
                     type="button"
                     onClick={() => handleOpenDemoModal(activeVideo)}
-                    className="px-3 py-1 bg-[#1a1829] hover:bg-[#25223a] border border-tertiary/35 text-tertiary hover:text-white rounded-xl text-[9px] font-mono font-bold uppercase flex items-center gap-1.5 transition-all shadow-md hover:scale-105 active:scale-95"
+                    className="px-3 py-1 bg-indigo-50 hover:bg-indigo-100 dark:bg-[#1a1829] dark:hover:bg-[#25223a] border border-tertiary/35 text-tertiary hover:text-slate-900 dark:hover:text-white rounded-xl text-[9px] font-mono font-bold uppercase flex items-center gap-1.5 transition-all shadow-md hover:scale-105 active:scale-95"
                     title="Cargar o vincular video de demostración para esta rutina"
                   >
                     <Upload className="w-3 h-3 text-tertiary" />
@@ -1358,14 +1358,14 @@ export default function FisicoView({ currentUser, language, onAddBonusPoints }: 
                   </button>
 
                   {/* AI Visualizer toggle */}
-                  <div className="flex items-center gap-2 bg-[#0e0e11] border border-tertiary/15 p-1 rounded-xl shrink-0">
+                  <div className="flex items-center gap-2 bg-slate-100 dark:bg-[#0e0e11] border border-tertiary/15 p-1 rounded-xl shrink-0">
                     <button
                       type="button"
                       onClick={() => setUseAIVisualizer(false)}
                       className={`px-3 py-1 rounded-lg text-[9px] font-mono font-bold uppercase transition-all ${
-                        !useAIVisualizer 
-                          ? 'bg-primary-container text-primary border border-primary/20' 
-                          : 'text-on-surface-variant hover:text-white'
+                        !useAIVisualizer
+                          ? 'bg-primary-container text-primary border border-primary/20'
+                          : 'text-on-surface-variant hover:text-slate-900 dark:hover:text-white'
                       }`}
                     >
                       Video Demo
@@ -1374,9 +1374,9 @@ export default function FisicoView({ currentUser, language, onAddBonusPoints }: 
                       type="button"
                       onClick={() => setUseAIVisualizer(true)}
                       className={`px-3 py-1 rounded-lg text-[9px] font-mono font-bold uppercase flex items-center gap-1 transition-all ${
-                        useAIVisualizer 
-                          ? 'bg-tertiary/15 text-tertiary border border-tertiary/35 shadow-lg' 
-                          : 'text-on-surface-variant hover:text-white'
+                        useAIVisualizer
+                          ? 'bg-tertiary/15 text-tertiary border border-tertiary/35 shadow-lg'
+                          : 'text-on-surface-variant hover:text-slate-900 dark:hover:text-white'
                       }`}
                     >
                       <Sparkles className="w-2.5 h-2.5 animate-pulse" /> Filtro IA Biomecánico
@@ -1510,7 +1510,7 @@ export default function FisicoView({ currentUser, language, onAddBonusPoints }: 
                 <div className="lg:col-span-4 flex flex-col justify-between gap-3.5">
                   
                   {/* Controls configuration pane */}
-                  <div className="bg-[#0b0b0e] border border-tertiary/10 p-3 rounded-2xl space-y-3">
+                  <div className="bg-white dark:bg-[#0b0b0e] border border-tertiary/10 p-3 rounded-2xl space-y-3">
                     <h5 className="text-[9px] font-mono font-bold text-tertiary uppercase tracking-wider border-b border-tertiary/10 pb-1.5 flex items-center gap-1">
                       <Gauge className="w-3 h-3" /> AJUSTES DEL RENDER DE IA
                     </h5>
@@ -1529,8 +1529,8 @@ export default function FisicoView({ currentUser, language, onAddBonusPoints }: 
                             onClick={() => setVisualizerSpeed(val)}
                             className={`flex-1 py-1 rounded border text-[9px] font-mono font-bold uppercase transition-all ${
                               visualizerSpeed === val 
-                                ? 'bg-[#15151a] text-tertiary border-tertiary/40' 
-                                : 'bg-[#060609] text-on-surface-variant border-tertiary/10 hover:border-tertiary/20'
+                                ? 'bg-amber-50 dark:bg-[#15151a] text-tertiary border-tertiary/40'
+                                : 'bg-slate-50 dark:bg-[#060609] text-on-surface-variant border-tertiary/10 hover:border-tertiary/20'
                             }`}
                           >
                             {val === 0.5 ? 'Lento' : val === 1.0 ? 'Normal' : 'Rápido'}
@@ -1545,8 +1545,8 @@ export default function FisicoView({ currentUser, language, onAddBonusPoints }: 
                       onClick={() => setShowGrid(!showGrid)}
                       className={`w-full py-1.5 px-2.5 rounded border text-[9px] font-mono font-bold uppercase flex items-center justify-between transition-all ${
                         showGrid 
-                          ? 'bg-[#15151a] text-white border-tertiary/25' 
-                          : 'bg-[#060609] text-on-surface-variant border-tertiary/10'
+                          ? 'bg-amber-50 dark:bg-[#15151a] text-slate-900 dark:text-white border-tertiary/25'
+                          : 'bg-slate-50 dark:bg-[#060609] text-on-surface-variant border-tertiary/10'
                       }`}
                     >
                       <span className="flex items-center gap-1.5">
@@ -1564,8 +1564,8 @@ export default function FisicoView({ currentUser, language, onAddBonusPoints }: 
                       onClick={() => setShowSkeletalTracker(!showSkeletalTracker)}
                       className={`w-full py-1.5 px-2.5 rounded border text-[9px] font-mono font-bold uppercase flex items-center justify-between transition-all ${
                         showSkeletalTracker 
-                          ? 'bg-[#15151a] text-white border-primary/25' 
-                          : 'bg-[#060609] text-on-surface-variant border-tertiary/10'
+                          ? 'bg-amber-50 dark:bg-[#15151a] text-slate-900 dark:text-white border-primary/25'
+                          : 'bg-slate-50 dark:bg-[#060609] text-on-surface-variant border-tertiary/10'
                       }`}
                     >
                       <span className="flex items-center gap-1.5">
@@ -1579,7 +1579,7 @@ export default function FisicoView({ currentUser, language, onAddBonusPoints }: 
                   </div>
 
                   {/* Terminal de observaciones IA */}
-                  <div className="bg-black/90 border border-[#81262c]/20 p-3 rounded-2xl flex-1 flex flex-col justify-between min-h-[140px] max-h-[180px] lg:max-h-none overflow-hidden relative">
+                  <div className="bg-white dark:bg-black/90 border border-[#81262c]/20 p-3 rounded-2xl flex-1 flex flex-col justify-between min-h-[140px] max-h-[180px] lg:max-h-none overflow-hidden relative">
                     <div className="absolute top-2 right-2 flex items-center gap-1 pointer-events-none">
                       <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
                       <span className="text-[7px] font-mono text-[#81262c] font-bold uppercase">SEC_LOG_OK</span>
@@ -1620,7 +1620,7 @@ export default function FisicoView({ currentUser, language, onAddBonusPoints }: 
 
               {/* Informative Grid Benefits */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="bg-[#0d0d11]/80 border border-tertiary/15 p-4 rounded-2xl shadow-xl">
+                <div className="bg-slate-50 dark:bg-[#0d0d11]/80 border border-tertiary/15 p-4 rounded-2xl shadow-xl">
                   <h5 className="text-[10px] font-mono font-bold text-tertiary uppercase flex items-center gap-1.5">
                     <Target className="w-3.5 h-3.5" /> FOCO BIOMECÁNICO ESPECÍFICO:
                   </h5>
@@ -1633,7 +1633,7 @@ export default function FisicoView({ currentUser, language, onAddBonusPoints }: 
                   </p>
                 </div>
 
-                <div className="bg-[#0d0d11]/80 border border-primary/15 p-4 rounded-2xl shadow-xl">
+                <div className="bg-slate-50 dark:bg-[#0d0d11]/80 border border-primary/15 p-4 rounded-2xl shadow-xl">
                   <h5 className="text-[10px] font-mono font-bold text-primary uppercase flex items-center gap-1.5">
                     <Sparkles className="w-3.5 h-3.5" /> PREVENCIÓN Y DESEMPEÑO:
                   </h5>
@@ -1669,7 +1669,7 @@ export default function FisicoView({ currentUser, language, onAddBonusPoints }: 
               <button
                 type="button"
                 onClick={() => setIsMuted(!isMuted)}
-                className="p-1 border border-tertiary/10 rounded-lg hover:bg-black/30 transition-all text-on-surface"
+                className="p-1 border border-tertiary/10 rounded-lg hover:bg-slate-100 dark:hover:bg-black/30 transition-all text-on-surface"
                 title={isMuted ? 'Activar sonido' : 'Silenciar'}
               >
                 {isMuted ? <VolumeX className="w-3.5 h-3.5 text-on-surface-variant" /> : <Volume2 className="w-3.5 h-3.5 text-primary" />}
@@ -1682,22 +1682,22 @@ export default function FisicoView({ currentUser, language, onAddBonusPoints }: 
                   Configura tus intervalos de esfuerzo para rondas continuas de acondicionamiento de hombros y rolls.
                 </p>
 
-                <div className="space-y-3 bg-[#0d0d11]/60 border border-tertiary/10 p-3.5 rounded-xl shadow-inner">
+                <div className="space-y-3 bg-slate-50 dark:bg-[#0d0d11]/60 border border-tertiary/10 p-3.5 rounded-xl shadow-inner">
                   <div className="flex items-center justify-between">
                     <span className="text-[10px] font-mono font-bold text-on-surface-variant">⚙️ ESFUERZO (TRABAJO):</span>
                     <div className="flex items-center gap-1">
                       <button 
                         type="button"
                         onClick={() => setWorkTime(t => Math.max(10, t - 5))}
-                        className="w-5 h-5 bg-[#121212] border border-tertiary/15 text-white hover:text-tertiary rounded text-xs font-bold flex items-center justify-center transition-all"
+                        className="w-5 h-5 bg-slate-100 dark:bg-[#121212] border border-tertiary/15 text-slate-900 dark:text-white hover:text-tertiary rounded text-xs font-bold flex items-center justify-center transition-all"
                       >
                         -
                       </button>
-                      <span className="text-xs font-mono font-bold text-white px-2">{workTime}s</span>
+                      <span className="text-xs font-mono font-bold text-slate-900 dark:text-white px-2">{workTime}s</span>
                       <button 
                         type="button"
                         onClick={() => setWorkTime(t => Math.min(180, t + 5))}
-                        className="w-5 h-5 bg-[#121212] border border-tertiary/15 text-white hover:text-tertiary rounded text-xs font-bold flex items-center justify-center transition-all"
+                        className="w-5 h-5 bg-slate-100 dark:bg-[#121212] border border-tertiary/15 text-slate-900 dark:text-white hover:text-tertiary rounded text-xs font-bold flex items-center justify-center transition-all"
                       >
                         +
                       </button>
@@ -1710,15 +1710,15 @@ export default function FisicoView({ currentUser, language, onAddBonusPoints }: 
                       <button 
                         type="button"
                         onClick={() => setRestTime(t => Math.max(5, t - 5))}
-                        className="w-5 h-5 bg-[#121212] border border-tertiary/15 text-white hover:text-tertiary rounded text-xs font-bold flex items-center justify-center transition-all"
+                        className="w-5 h-5 bg-slate-100 dark:bg-[#121212] border border-tertiary/15 text-slate-900 dark:text-white hover:text-tertiary rounded text-xs font-bold flex items-center justify-center transition-all"
                       >
                         -
                       </button>
-                      <span className="text-xs font-mono font-bold text-white px-2">{restTime}s</span>
+                      <span className="text-xs font-mono font-bold text-slate-900 dark:text-white px-2">{restTime}s</span>
                       <button 
                         type="button"
                         onClick={() => setRestTime(t => Math.min(120, t + 5))}
-                        className="w-5 h-5 bg-[#121212] border border-tertiary/15 text-white hover:text-tertiary rounded text-xs font-bold flex items-center justify-center transition-all"
+                        className="w-5 h-5 bg-slate-100 dark:bg-[#121212] border border-tertiary/15 text-slate-900 dark:text-white hover:text-tertiary rounded text-xs font-bold flex items-center justify-center transition-all"
                       >
                         +
                       </button>
@@ -1731,7 +1731,7 @@ export default function FisicoView({ currentUser, language, onAddBonusPoints }: 
                       <button 
                         type="button"
                         onClick={() => setTotalRounds(r => Math.max(1, r - 1))}
-                        className="w-5 h-5 bg-[#121212] border border-tertiary/15 text-white hover:text-tertiary rounded text-xs font-bold flex items-center justify-center transition-all"
+                        className="w-5 h-5 bg-slate-100 dark:bg-[#121212] border border-tertiary/15 text-slate-900 dark:text-white hover:text-tertiary rounded text-xs font-bold flex items-center justify-center transition-all"
                       >
                         -
                       </button>
@@ -1739,7 +1739,7 @@ export default function FisicoView({ currentUser, language, onAddBonusPoints }: 
                       <button 
                         type="button"
                         onClick={() => setTotalRounds(r => Math.min(20, r + 1))}
-                        className="w-5 h-5 bg-[#121212] border border-tertiary/15 text-white hover:text-tertiary rounded text-xs font-bold flex items-center justify-center transition-all"
+                        className="w-5 h-5 bg-slate-100 dark:bg-[#121212] border border-tertiary/15 text-slate-900 dark:text-white hover:text-tertiary rounded text-xs font-bold flex items-center justify-center transition-all"
                       >
                         +
                       </button>
@@ -1791,7 +1791,7 @@ export default function FisicoView({ currentUser, language, onAddBonusPoints }: 
                     <button
                       type="button"
                       onClick={() => setTimerMode('paused')}
-                      className="px-3.5 py-2 border border-tertiary/15 hover:border-tertiary/30 text-white bg-[#0e0e0e] rounded-xl text-[10px] font-bold uppercase flex items-center gap-1.5 shadow-lg active:scale-95 transition-all"
+                      className="px-3.5 py-2 border border-tertiary/15 hover:border-tertiary/30 text-white bg-slate-100 dark:bg-[#0e0e0e] rounded-xl text-[10px] font-bold uppercase flex items-center gap-1.5 shadow-lg active:scale-95 transition-all"
                     >
                       <Pause className="w-3.5 h-3.5" />
                       <span>Pausar</span>
@@ -1827,7 +1827,7 @@ export default function FisicoView({ currentUser, language, onAddBonusPoints }: 
             )}
 
             {/* Recommendations checklist during tabata */}
-            <div className="bg-[#0e0e0e]/60 border border-tertiary/10 rounded-xl p-3 mt-4">
+            <div className="bg-slate-100 dark:bg-[#0e0e0e]/60 border border-tertiary/10 rounded-xl p-3 mt-4">
               <h5 className="text-[8px] font-mono font-bold text-tertiary uppercase tracking-wider mb-2">EJERCICIOS RECOMENDADOS:</h5>
               <div className="space-y-1.5 text-[10px] font-semibold text-on-surface-variant leading-relaxed">
                 <p className="flex items-center gap-1.5">💪 <strong className="text-white">Pushups lentas:</strong> Fuerza isométrica del pectoral.</p>
@@ -1861,7 +1861,7 @@ export default function FisicoView({ currentUser, language, onAddBonusPoints }: 
             </div>
 
             {/* Progress bar */}
-            <div className="space-y-1.5 bg-[#0e0e0e]/40 p-3 rounded-xl border border-tertiary/10">
+            <div className="space-y-1.5 bg-slate-100 dark:bg-[#0e0e0e]/40 p-3 rounded-xl border border-tertiary/10">
               <div className="flex justify-between items-center text-[9px] font-mono font-bold text-on-surface-variant">
                 <span>Activación de hoy:</span>
                 <span className="text-white">{completedCount} / {checklist.length} ({progressPercent}%)</span>

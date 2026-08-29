@@ -928,7 +928,7 @@ export default function WelcomeDashboard({
                 Currículo progresivo desde Fundamentos de Muñecas (Nivel 1) hasta Combos Rápidos y Simetría Escénica (Nivel 5-6).
               </p>
             </div>
-            <div className="mt-4 pt-3 border-t border-white/5 flex items-center justify-between text-xs font-mono text-[#E9C349]">
+            <div className="mt-4 pt-3 border-t border-slate-200 dark:border-white/5 flex items-center justify-between text-xs font-mono text-[#E9C349]">
               <span>Comenzar a aprender</span>
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </div>
@@ -957,7 +957,7 @@ export default function WelcomeDashboard({
                 Generador de retos aleatorios de freestyle, metrónomo sincronizado, espejo virtual reflectivo y biblioteca musical clasificada.
               </p>
             </div>
-            <div className="mt-4 pt-3 border-t border-white/5 flex items-center justify-between text-xs font-mono text-[#E9C349]">
+            <div className="mt-4 pt-3 border-t border-slate-200 dark:border-white/5 flex items-center justify-between text-xs font-mono text-[#E9C349]">
               <span>Entrenar ahora</span>
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </div>
@@ -986,7 +986,7 @@ export default function WelcomeDashboard({
                 Interactúa en el lobby de alumnos, crea salas de práctica grupales, reta a amigos a batallas amistosas y comparte avances.
               </p>
             </div>
-            <div className="mt-4 pt-3 border-t border-white/5 flex items-center justify-between text-xs font-mono text-[#E9C349]">
+            <div className="mt-4 pt-3 border-t border-slate-200 dark:border-white/5 flex items-center justify-between text-xs font-mono text-[#E9C349]">
               <span>Entrar a la comunidad</span>
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </div>
@@ -1057,10 +1057,10 @@ export default function WelcomeDashboard({
                 key={inst.id}
                 className={`bg-[#121212] rounded-3xl p-6 border transition-all flex flex-col justify-between relative group shadow-xl ${
                   isAssigned
-                    ? 'border-emerald-500/80 bg-gradient-to-b from-[#111f18] via-[#121212] to-[#121212]'
-                    : inst.featured 
-                    ? 'border-[#E9C349]/60 bg-gradient-to-b from-[#1a1710] to-[#121212]' 
-                    : 'border-[#262626] hover:border-white/30'
+                    ? 'border-emerald-500/80 bg-gradient-to-b from-emerald-50 via-white to-white dark:from-[#111f18] dark:via-[#121212] dark:to-[#121212]'
+                    : inst.featured
+                    ? 'border-[#E9C349]/60 bg-gradient-to-b from-amber-50 to-white dark:from-[#1a1710] dark:to-[#121212]'
+                    : 'border-[#262626] hover:border-slate-300 dark:hover:border-white/30'
                 }`}
               >
                 {/* Header Badge */}
@@ -1127,7 +1127,7 @@ export default function WelcomeDashboard({
                   </div>
 
                   {/* Plan Highlights */}
-                  <div className="bg-[#0A0A0A] p-3 rounded-xl border border-white/5 space-y-1.5">
+                  <div className="bg-slate-50 dark:bg-[#0A0A0A] p-3 rounded-xl border border-slate-200 dark:border-white/5 space-y-1.5">
                     <span className="text-[9px] font-mono font-bold text-[#E9C349] uppercase block">
                       Beneficios de su Cátedra:
                     </span>
@@ -1165,7 +1165,7 @@ export default function WelcomeDashboard({
                       className={`py-2 text-xs font-mono font-bold rounded-xl border transition-all cursor-pointer flex items-center justify-center gap-1 ${
                         isAssigned
                           ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/50'
-                          : 'bg-[#1c1b1b] hover:bg-[#262626] text-white border-white/10'
+                          : 'bg-white dark:bg-[#1c1b1b] hover:bg-slate-100 dark:hover:bg-[#262626] text-slate-900 dark:text-white border-slate-200 dark:border-white/10'
                       }`}
                     >
                       <UserCheck className="w-3.5 h-3.5 text-[#E9C349]" />
@@ -1244,7 +1244,7 @@ export default function WelcomeDashboard({
                       <p className="text-xs text-slate-300 leading-relaxed">{wk.description}</p>
                       <div className="flex flex-wrap gap-1.5 pt-1">
                         {wk.focus.map((f, fi) => (
-                          <span key={fi} className="text-[10px] font-mono bg-[#141414] text-slate-300 px-2 py-0.5 rounded border border-white/5">
+                          <span key={fi} className="text-[10px] font-mono bg-slate-100 dark:bg-[#141414] text-slate-600 dark:text-slate-300 px-2 py-0.5 rounded border border-slate-200 dark:border-white/5">
                             • {f}
                           </span>
                         ))}
@@ -1556,7 +1556,7 @@ export default function WelcomeDashboard({
             onClick={() => handleChooseRole('student')}
             className={`p-4 rounded-xl border cursor-pointer transition-all ${
               currentUser.role === 'student'
-                ? 'bg-[#E9C349]/10 border-[#E9C349] text-white'
+                ? 'bg-[#E9C349]/10 border-[#E9C349] text-slate-900 dark:text-white'
                 : 'bg-[#0A0A0A] border-[#262626] text-slate-300 hover:border-white/20'
             }`}
           >
@@ -1573,7 +1573,7 @@ export default function WelcomeDashboard({
             onClick={() => handleChooseRole('instructor')}
             className={`p-4 rounded-xl border cursor-pointer transition-all ${
               currentUser.role === 'instructor'
-                ? 'bg-[#E9C349]/10 border-[#E9C349] text-white'
+                ? 'bg-[#E9C349]/10 border-[#E9C349] text-slate-900 dark:text-white'
                 : 'bg-[#0A0A0A] border-[#262626] text-slate-300 hover:border-white/20'
             }`}
           >
@@ -1590,7 +1590,7 @@ export default function WelcomeDashboard({
             onClick={() => handleChooseRole('studio')}
             className={`p-4 rounded-xl border cursor-pointer transition-all ${
               currentUser.role === 'studio'
-                ? 'bg-[#E9C349]/10 border-[#E9C349] text-white'
+                ? 'bg-[#E9C349]/10 border-[#E9C349] text-slate-900 dark:text-white'
                 : 'bg-[#0A0A0A] border-[#262626] text-slate-300 hover:border-white/20'
             }`}
           >

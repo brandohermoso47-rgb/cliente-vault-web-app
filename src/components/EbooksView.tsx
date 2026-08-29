@@ -756,7 +756,7 @@ export default function EbooksView({ currentUser, language }: EbooksViewProps) {
       {/* HEADER BANNER */}
       <div className="border-b border-tertiary/10 pb-4 mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4 z-10">
         <div className="text-left">
-          <h2 className="text-2xl font-display-lg font-bold text-white tracking-tight uppercase">{t.ebooksTitle || 'RECURSOS Y LITERATURA'}</h2>
+          <h2 className="text-2xl font-display-lg font-bold text-slate-900 dark:text-white tracking-tight uppercase">{t.ebooksTitle || 'RECURSOS Y LITERATURA'}</h2>
           <p className="text-xs text-on-surface-variant font-medium mt-1">{t.ebooksSubtitle || 'Explora la historia viva, la era disco de los 70s y las raíces expresivas del Punking. Toma notas y ponte a prueba.'}</p>
         </div>
         
@@ -778,7 +778,7 @@ export default function EbooksView({ currentUser, language }: EbooksViewProps) {
             className={`px-4 py-1.5 text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-1.5 border ${
               subTab === 'books' 
                 ? 'bg-[#81262c] text-[#ffdad9] border-[#ffb3b2]/25 shadow-md font-bold' 
-                : 'text-on-surface-variant border-transparent hover:text-white'
+                : 'text-on-surface-variant border-transparent hover:text-slate-900 dark:hover:text-white'
             }`}
           >
             <BookOpen className="w-3.5 h-3.5" />
@@ -789,7 +789,7 @@ export default function EbooksView({ currentUser, language }: EbooksViewProps) {
             className={`px-4 py-1.5 text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-1.5 border ${
               subTab === 'tienda' 
                 ? 'bg-[#81262c] text-[#ffdad9] border-[#ffb3b2]/25 shadow-md font-bold' 
-                : 'text-on-surface-variant border-transparent hover:text-white'
+                : 'text-on-surface-variant border-transparent hover:text-slate-900 dark:hover:text-white'
             }`}
           >
             <Sparkles className="w-3.5 h-3.5" />
@@ -825,7 +825,7 @@ export default function EbooksView({ currentUser, language }: EbooksViewProps) {
                         placeholder="Buscar e-book o categoría..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-full text-xs font-bold bg-[#0d0d11]/80 border border-tertiary/15 rounded-xl pl-9 pr-3 py-2.5 text-white placeholder-on-surface-variant/40 focus:outline-none focus:border-tertiary/30 transition-all"
+                        className="w-full text-xs font-bold bg-slate-100 dark:bg-[#0d0d11]/80 border border-tertiary/15 rounded-xl pl-9 pr-3 py-2.5 text-slate-900 dark:text-white placeholder-on-surface-variant/40 focus:outline-none focus:border-tertiary/30 transition-all"
                       />
                     </div>
 
@@ -855,7 +855,7 @@ export default function EbooksView({ currentUser, language }: EbooksViewProps) {
                               </span>
                             </div>
 
-                            <h3 className="text-lg font-display-lg font-bold text-white uppercase tracking-tight leading-tight">
+                            <h3 className="text-lg font-display-lg font-bold text-slate-900 dark:text-white uppercase tracking-tight leading-tight">
                               {book.title}
                             </h3>
                             <p className="text-xs text-on-surface-variant font-medium leading-relaxed">
@@ -901,7 +901,7 @@ export default function EbooksView({ currentUser, language }: EbooksViewProps) {
                       </div>
                       <div>
                         <h4 className="text-xs font-mono font-bold text-[#E9C349] uppercase leading-none">BIBLIOTECA EN EXPANSIÓN</h4>
-                        <h3 className="text-sm font-display-lg font-bold text-white uppercase mt-1">MANUSCRITOS, HISTORIALES Y REVISTAS DE ÉPOCA</h3>
+                        <h3 className="text-sm font-display-lg font-bold text-slate-900 dark:text-white uppercase mt-1">MANUSCRITOS, HISTORIALES Y REVISTAS DE ÉPOCA</h3>
                         <p className="text-xs text-on-surface-variant font-medium mt-1 leading-relaxed">
                           El equipo de Waack On está traduciendo fanzines originales de los 70s y recortes de prensa de Soul Train. Muy pronto estarán disponibles gratis para todos.
                         </p>
@@ -927,7 +927,7 @@ export default function EbooksView({ currentUser, language }: EbooksViewProps) {
                       <span className="text-[9px] font-mono font-bold text-primary bg-primary-container/30 border border-primary/20 px-2.5 py-0.5 rounded-full uppercase tracking-wider">
                         CATÁLOGO EXCLUSIVO
                       </span>
-                      <h4 className="text-md font-bold text-white uppercase mt-2">INFORMES, MÉTODOS Y AUDIO GUÍAS PREMIUM</h4>
+                      <h4 className="text-md font-bold text-slate-900 dark:text-white uppercase mt-2">INFORMES, MÉTODOS Y AUDIO GUÍAS PREMIUM</h4>
                       <p className="text-xs text-on-surface-variant font-medium mt-1 max-w-xl leading-relaxed">
                         Complementa tu formación con guías detalladas, cuadernos imprimibles y masterclasses en video de alta calidad para llevar tu freestyle al siguiente nivel.
                       </p>
@@ -958,7 +958,7 @@ export default function EbooksView({ currentUser, language }: EbooksViewProps) {
 
                           <div className="p-5 flex-1 flex flex-col justify-between space-y-4 text-left">
                             <div className="space-y-1.5">
-                              <h3 className="text-md font-bold text-white uppercase leading-tight">{prod.title}</h3>
+                              <h3 className="text-md font-bold text-slate-900 dark:text-white uppercase leading-tight">{prod.title}</h3>
                               <p className="text-xs text-on-surface-variant font-medium leading-relaxed">{prod.description}</p>
                             </div>
 
@@ -966,7 +966,7 @@ export default function EbooksView({ currentUser, language }: EbooksViewProps) {
                               {/* Tags */}
                               <div className="flex flex-wrap gap-1.5">
                                 {(prod.tags || []).map((tag) => (
-                                  <span key={tag} className="text-[8px] font-mono font-bold bg-[#0d0d11]/80 border border-tertiary/10 text-on-surface-variant px-2 py-0.5 rounded">
+                                  <span key={tag} className="text-[8px] font-mono font-bold bg-slate-100 dark:bg-[#0d0d11]/80 border border-tertiary/10 text-on-surface-variant px-2 py-0.5 rounded">
                                     #{(tag || '').toUpperCase()}
                                   </span>
                                 ))}
@@ -974,12 +974,12 @@ export default function EbooksView({ currentUser, language }: EbooksViewProps) {
 
                               {/* Progress for download */}
                               {isDownloading && (
-                                <div className="space-y-1 bg-[#0d0d11]/80 p-2.5 rounded-xl border border-tertiary/10">
+                                <div className="space-y-1 bg-slate-100 dark:bg-[#0d0d11]/80 p-2.5 rounded-xl border border-tertiary/10">
                                   <div className="flex justify-between items-center text-[9px] font-mono font-bold text-primary">
                                     <span>DESCARGANDO...</span>
                                     <span>{downloadProgress}%</span>
                                   </div>
-                                  <div className="w-full bg-[#1c1b1b] border border-[#564241] h-2 rounded-full overflow-hidden">
+                                  <div className="w-full bg-slate-300 dark:bg-[#1c1b1b] border border-slate-300 dark:border-[#564241] h-2 rounded-full overflow-hidden">
                                     <div className="bg-[#81262c] h-full transition-all duration-150" style={{ width: `${downloadProgress}%` }} />
                                   </div>
                                 </div>
@@ -1031,7 +1031,7 @@ export default function EbooksView({ currentUser, language }: EbooksViewProps) {
                 className="bg-surface-container border border-tertiary/10 rounded-2xl shadow-2xl overflow-hidden"
               >
                 {/* Reader Header Nav */}
-                <div className="p-4 bg-[#0d0d11]/60 border-b border-tertiary/10 flex flex-col md:flex-row items-center justify-between gap-4">
+                <div className="p-4 bg-slate-50 dark:bg-[#0d0d11]/60 border-b border-tertiary/10 flex flex-col md:flex-row items-center justify-between gap-4">
                   <div className="flex items-center gap-3 w-full md:w-auto">
                     <button
                       onClick={() => setSelectedBook(null)}
@@ -1041,7 +1041,7 @@ export default function EbooksView({ currentUser, language }: EbooksViewProps) {
                     </button>
                     <div className="min-w-0 text-left">
                       <p className="text-[8px] font-mono font-bold text-primary uppercase leading-none">{selectedBook.category}</p>
-                      <h3 className="text-sm font-bold text-white uppercase mt-1 truncate">{selectedBook.title}</h3>
+                      <h3 className="text-sm font-bold text-slate-900 dark:text-white uppercase mt-1 truncate">{selectedBook.title}</h3>
                     </div>
                   </div>
 
@@ -1054,7 +1054,7 @@ export default function EbooksView({ currentUser, language }: EbooksViewProps) {
                         className={`px-3.5 py-2 text-[11px] font-mono font-bold rounded-lg border transition-all focus:outline-none ${
                           activeChapterIdx === idx 
                             ? 'bg-on-primary-fixed-variant text-primary border-primary/30 shadow-md font-bold' 
-                            : 'bg-[#121212]/40 text-on-surface-variant border-tertiary/10 hover:border-tertiary/20 hover:text-white'
+                            : 'bg-slate-100 dark:bg-[#121212]/40 text-on-surface-variant border-tertiary/10 hover:border-tertiary/20 hover:text-slate-900 dark:hover:text-white'
                         }`}
                       >
                         Cap. {idx + 1}
@@ -1064,7 +1064,7 @@ export default function EbooksView({ currentUser, language }: EbooksViewProps) {
                 </div>
 
                 {/* Reader Content Body */}
-                <div className="p-6 md:p-8 space-y-6 text-left max-h-[500px] overflow-y-auto bg-black/40">
+                <div className="p-6 md:p-8 space-y-6 text-left max-h-[500px] overflow-y-auto bg-slate-50 dark:bg-black/40">
                   <h2 className="text-lg md:text-xl font-bold text-primary uppercase tracking-tight pb-3 border-b border-dashed border-tertiary/10">
                     {getTranslatedEbookText(selectedBook.chapters[activeChapterIdx].title, language)}
                   </h2>
@@ -1075,7 +1075,7 @@ export default function EbooksView({ currentUser, language }: EbooksViewProps) {
                 </div>
 
                 {/* Reader Footer Control Bar */}
-                <div className="p-4 bg-[#0d0d11]/60 border-t border-tertiary/10 flex flex-col sm:flex-row items-center justify-between gap-3">
+                <div className="p-4 bg-slate-50 dark:bg-[#0d0d11]/60 border-t border-tertiary/10 flex flex-col sm:flex-row items-center justify-between gap-3">
                   <div className="text-[10px] font-mono text-on-surface-variant font-bold">
                     Capítulo {activeChapterIdx + 1} de {(selectedBook.chapters || []).length} • Leyendo de Waack On
                   </div>
@@ -1084,7 +1084,7 @@ export default function EbooksView({ currentUser, language }: EbooksViewProps) {
                     <button
                       disabled={activeChapterIdx === 0}
                       onClick={() => setActiveChapterIdx(prev => prev - 1)}
-                      className="px-3.5 py-1.5 bg-[#121212]/40 hover:bg-[#121212] border border-tertiary/10 text-on-surface text-xs font-bold rounded-xl disabled:opacity-40 disabled:pointer-events-none transition-all focus:outline-none"
+                      className="px-3.5 py-1.5 bg-slate-100 dark:bg-[#121212]/40 hover:bg-slate-200 dark:hover:bg-[#121212] border border-tertiary/10 text-on-surface text-xs font-bold rounded-xl disabled:opacity-40 disabled:pointer-events-none transition-all focus:outline-none"
                     >
                       Anterior
                     </button>
@@ -1117,7 +1117,7 @@ export default function EbooksView({ currentUser, language }: EbooksViewProps) {
               <div className="border-b border-tertiary/10 pb-3 flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <NotebookIcon className="w-5 h-5 text-primary" />
-                  <h3 className="text-xs font-mono font-bold text-white uppercase tracking-wider">
+                  <h3 className="text-xs font-mono font-bold text-slate-900 dark:text-white uppercase tracking-wider">
                     MIS APUNTES DE ESTUDIO: {(selectedBook?.title || '').toUpperCase()}
                   </h3>
                 </div>
@@ -1142,7 +1142,7 @@ export default function EbooksView({ currentUser, language }: EbooksViewProps) {
                   value={notebookNotes[selectedBook.id] || ''}
                   onChange={(e) => setNotebookNotes({ ...notebookNotes, [selectedBook.id]: e.target.value })}
                   placeholder="Redacta tus reflexiones, preguntas, notas sobre fundadores o ideas de personajes teatrales para tus próximas coreografías..."
-                  className="w-full text-xs font-bold bg-[#0d0d11]/80 border border-tertiary/15 rounded-xl px-3 py-2.5 text-white placeholder-on-surface-variant/40 focus:outline-none focus:border-tertiary/30 leading-relaxed text-left"
+                  className="w-full text-xs font-bold bg-slate-100 dark:bg-[#0d0d11]/80 border border-tertiary/15 rounded-xl px-3 py-2.5 text-slate-900 dark:text-white placeholder-on-surface-variant/40 focus:outline-none focus:border-tertiary/30 leading-relaxed text-left"
                 />
 
                 <div className="flex flex-col sm:flex-row gap-3 justify-between items-center">
@@ -1174,7 +1174,7 @@ export default function EbooksView({ currentUser, language }: EbooksViewProps) {
               <span className="text-[9px] font-mono font-bold text-primary bg-primary-container/20 border border-primary/20 px-2 py-0.5 rounded uppercase">
                 PONTE A PRUEBA
               </span>
-              <h3 className="text-sm font-bold text-white uppercase mt-1">RETO DE CONOCIMIENTO</h3>
+              <h3 className="text-sm font-bold text-slate-900 dark:text-white uppercase mt-1">RETO DE CONOCIMIENTO</h3>
             </div>
 
             <AnimatePresence mode="wait">
@@ -1190,7 +1190,7 @@ export default function EbooksView({ currentUser, language }: EbooksViewProps) {
                   <div className="w-16 h-16 bg-primary-container/10 border border-primary/20 rounded-full flex items-center justify-center mx-auto text-primary text-2xl shadow-xl">
                     <BrainCircuit className="w-8 h-8 animate-pulse text-primary" />
                   </div>
-                  <h4 className="text-xs font-bold uppercase text-white mt-2">¿Cuánto sabes sobre Waacking?</h4>
+                  <h4 className="text-xs font-bold uppercase text-slate-900 dark:text-white mt-2">¿Cuánto sabes sobre Waacking?</h4>
                   <p className="text-[10px] text-on-surface-variant font-medium leading-relaxed">
                     Responde estas {QUIZ_QUESTIONS.length} preguntas interactivas basadas en la historia subterránea de Los Ángeles y demuestra que dominas el plano cultural de tu danza.
                   </p>
@@ -1218,7 +1218,7 @@ export default function EbooksView({ currentUser, language }: EbooksViewProps) {
                     <Award className="w-7 h-7 text-primary" />
                   </div>
                   <div>
-                    <h4 className="text-sm font-bold uppercase text-white mt-2">Test Completado</h4>
+                    <h4 className="text-sm font-bold uppercase text-slate-900 dark:text-white mt-2">Test Completado</h4>
                     <p className="text-xs font-mono font-bold text-primary mt-1 uppercase">PUNTUACIÓN: {score} de {QUIZ_QUESTIONS.length} aciertos</p>
                   </div>
                   
@@ -1233,7 +1233,7 @@ export default function EbooksView({ currentUser, language }: EbooksViewProps) {
                   <div className="flex gap-2">
                     <button
                       onClick={handleRestartQuiz}
-                      className="flex-1 py-2 bg-[#121212]/40 hover:bg-[#121212] border border-tertiary/10 text-on-surface text-xs font-bold rounded-xl transition-all uppercase focus:outline-none"
+                      className="flex-1 py-2 bg-slate-100 dark:bg-[#121212]/40 hover:bg-slate-200 dark:hover:bg-[#121212] border border-tertiary/10 text-on-surface text-xs font-bold rounded-xl transition-all uppercase focus:outline-none"
                     >
                       Reintentar
                     </button>
@@ -1261,8 +1261,8 @@ export default function EbooksView({ currentUser, language }: EbooksViewProps) {
                   </div>
 
                   {/* Question Box */}
-                  <div className="p-3 bg-[#0d0d11]/80 border border-tertiary/15 rounded-xl text-left">
-                    <p className="text-xs font-bold text-white leading-relaxed uppercase">
+                  <div className="p-3 bg-slate-100 dark:bg-[#0d0d11]/80 border border-tertiary/15 rounded-xl text-left">
+                    <p className="text-xs font-bold text-slate-900 dark:text-white leading-relaxed uppercase">
                       {QUIZ_QUESTIONS[currentQuestionIdx].question}
                     </p>
                   </div>
@@ -1272,7 +1272,7 @@ export default function EbooksView({ currentUser, language }: EbooksViewProps) {
                     {QUIZ_QUESTIONS[currentQuestionIdx].options.map((option, idx) => {
                       const isSelected = selectedOption === option;
                       const isCorrect = option === QUIZ_QUESTIONS[currentQuestionIdx].answer;
-                      let optionStyle = "bg-[#121212]/40 border-tertiary/10 text-on-surface-variant hover:border-tertiary/25 hover:text-white";
+                      let optionStyle = "bg-slate-100 dark:bg-[#121212]/40 border-tertiary/10 text-on-surface-variant hover:border-tertiary/25 hover:text-slate-900 dark:hover:text-white";
 
                       if (showExplanation) {
                         if (isCorrect) {
@@ -1280,7 +1280,7 @@ export default function EbooksView({ currentUser, language }: EbooksViewProps) {
                         } else if (isSelected) {
                           optionStyle = "bg-red-950/40 border-red-500/40 text-red-300";
                         } else {
-                          optionStyle = "bg-[#121212]/10 border-tertiary/5 text-on-surface-variant/40";
+                          optionStyle = "bg-slate-100/60 dark:bg-[#121212]/10 border-tertiary/5 text-on-surface-variant/40";
                         }
                       } else if (isSelected) {
                         optionStyle = "bg-on-primary-fixed-variant/40 border-primary text-primary shadow-lg";
@@ -1346,7 +1346,7 @@ export default function EbooksView({ currentUser, language }: EbooksViewProps) {
               <span className="text-[9px] font-mono font-bold text-[#E9C349] bg-[#E9C349]/10 border border-[#E9C349]/20 px-2 py-0.5 rounded uppercase">
                 RUTINA DE ESTUDIO
               </span>
-              <h3 className="text-sm font-bold text-white uppercase mt-1">METODOLOGÍA WAACK ON</h3>
+              <h3 className="text-sm font-bold text-slate-900 dark:text-white uppercase mt-1">METODOLOGÍA WAACK ON</h3>
             </div>
             
             <div className="mt-4 space-y-3">
@@ -1356,8 +1356,8 @@ export default function EbooksView({ currentUser, language }: EbooksViewProps) {
                 { title: 'Anotar un personaje teatral en el bloc', checked: false },
                 { title: 'Hacer el test con 100% de aciertos', checked: false }
               ].map((item, idx) => (
-                <div key={idx} className="flex items-center gap-2.5 p-2 bg-[#0d0d11]/80 border border-tertiary/10 rounded-xl">
-                  <div className={`w-5 h-5 rounded border flex items-center justify-center shrink-0 ${item.checked ? 'bg-[#E9C349]/20 border-[#E9C349] text-[#E9C349]' : 'bg-[#0d0d11] border-tertiary/20'}`}>
+                <div key={idx} className="flex items-center gap-2.5 p-2 bg-slate-100 dark:bg-[#0d0d11]/80 border border-tertiary/10 rounded-xl">
+                  <div className={`w-5 h-5 rounded border flex items-center justify-center shrink-0 ${item.checked ? 'bg-[#E9C349]/20 border-[#E9C349] text-[#E9C349]' : 'bg-slate-200 dark:bg-[#0d0d11] border-tertiary/20'}`}>
                     {item.checked && <Check className="w-3.5 h-3.5 stroke-[3px]" />}
                   </div>
                   <span className="text-[10px] font-bold text-on-surface-variant leading-tight uppercase text-left">{item.title}</span>
@@ -1382,11 +1382,11 @@ export default function EbooksView({ currentUser, language }: EbooksViewProps) {
           <div className="flex justify-between items-start border-b border-tertiary/10 pb-3">
             <div className="text-left">
               <span className="text-[8px] font-mono font-bold text-primary bg-primary-container/20 border border-primary/20 px-2 py-0.5 rounded uppercase">MÉTODO DE PAGO SEGURO</span>
-              <h3 className="text-md font-bold text-white uppercase mt-1">CHECKOUT WAACK ON</h3>
+              <h3 className="text-md font-bold text-slate-900 dark:text-white uppercase mt-1">CHECKOUT WAACK ON</h3>
             </div>
-            <button 
-              onClick={() => setPurchasingProduct(null)} 
-              className="text-on-surface-variant hover:text-white font-bold text-sm"
+            <button
+              onClick={() => setPurchasingProduct(null)}
+              className="text-on-surface-variant hover:text-slate-900 dark:hover:text-white font-bold text-sm"
             >
               ✕
             </button>
@@ -1394,7 +1394,7 @@ export default function EbooksView({ currentUser, language }: EbooksViewProps) {
 
           {checkoutStep === 'entering' && (
             <div className="space-y-4">
-              <div className="bg-[#0d0d11]/80 p-3 rounded-xl border border-tertiary/10 text-[11px] leading-relaxed text-left">
+              <div className="bg-slate-100 dark:bg-[#0d0d11]/80 p-3 rounded-xl border border-tertiary/10 text-[11px] leading-relaxed text-left">
                 <p className="font-bold uppercase text-[9px] text-on-surface-variant/70">PRODUCTO A ADQUIRIR:</p>
                 <p className="text-primary font-bold uppercase text-xs mt-1">{purchasingProduct.title} ({purchasingProduct.price})</p>
               </div>
@@ -1474,7 +1474,7 @@ export default function EbooksView({ currentUser, language }: EbooksViewProps) {
               </div>
               <div>
                 <h4 className="text-sm font-bold text-green-400 uppercase">¡PRODUCTO DESBLOQUEADO!</h4>
-                <p className="text-[11px] text-on-surface-variant font-medium mt-1">Tu pago por <strong className="text-white font-black">{purchasingProduct.price}</strong> se completó con éxito.</p>
+                <p className="text-[11px] text-on-surface-variant font-medium mt-1">Tu pago por <strong className="text-slate-900 dark:text-white font-black">{purchasingProduct.price}</strong> se completó con éxito.</p>
                 <p className="text-[10px] text-primary font-mono font-bold mt-2 bg-primary-container/20 p-1.5 rounded border border-primary/20 uppercase">Ya puedes descargar tu archivo desde tu biblioteca virtual.</p>
               </div>
               <button
