@@ -474,7 +474,7 @@ export default function WelcomeDashboard({
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="fixed top-6 right-6 z-50 bg-[#121212] border-2 border-[#E9C349] text-white px-5 py-3 rounded-2xl shadow-2xl flex items-center gap-3"
+            className="fixed top-6 right-6 z-50 bg-white dark:bg-[#121212] border-2 border-[#E9C349] text-slate-900 dark:text-white px-5 py-3 rounded-2xl shadow-2xl flex items-center gap-3"
           >
             <Sparkles className="w-5 h-5 text-[#E9C349] animate-spin" />
             <span className="text-xs font-bold font-mono">{subscribedNotice}</span>
@@ -483,20 +483,20 @@ export default function WelcomeDashboard({
       </AnimatePresence>
 
       {/* 1. HERO BANNER DE BIENVENIDA (Clean, Motivating, High-Impact) */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#1c1a12] via-[#121212] to-[#0A0A0A] border border-[#E9C349]/40 p-6 sm:p-8 md:p-10 shadow-2xl">
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-amber-50 via-white to-white dark:from-[#1c1a12] dark:via-[#121212] dark:to-[#0A0A0A] border border-[#E9C349]/40 p-6 sm:p-8 md:p-10 shadow-2xl">
         {/* Background Ambient Glows */}
         <div className="absolute top-0 right-0 w-96 h-96 bg-[#E9C349]/10 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute bottom-0 left-1/3 w-64 h-64 bg-[#9A2B3C]/15 rounded-full blur-3xl pointer-events-none" />
 
         <div className="relative z-10 space-y-6">
           {/* Header Tag and Role Badge */}
-          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-4">
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 dark:border-white/10 pb-4">
             <div className="flex items-center gap-2">
               <span className="px-3 py-1 bg-[#E9C349] text-black text-[11px] font-mono font-black uppercase rounded-full shadow-md flex items-center gap-1.5">
                 <Sparkles className="w-3.5 h-3.5 fill-black" />
                 <span>BIENVENIDO A WAACK ON</span>
               </span>
-              <span className="text-xs font-mono font-bold text-[#8A8A8A] bg-[#1a1a1a] px-3 py-1 rounded-full border border-white/5">
+              <span className="text-xs font-mono font-bold text-slate-600 dark:text-[#8A8A8A] bg-slate-100 dark:bg-[#1a1a1a] px-3 py-1 rounded-full border border-slate-200 dark:border-white/5">
                 ✨ Academia Global de Waacking
               </span>
             </div>
@@ -504,7 +504,7 @@ export default function WelcomeDashboard({
             {onSwitchToPracticeDashboard && (
               <button
                 onClick={onSwitchToPracticeDashboard}
-                className="px-4 py-1.5 bg-[#1a1a1a] hover:bg-[#262626] text-[#E9C349] hover:text-white border border-[#E9C349]/40 rounded-xl text-xs font-mono font-bold transition-all flex items-center gap-2 cursor-pointer shadow"
+                className="px-4 py-1.5 bg-slate-100 dark:bg-[#1a1a1a] hover:bg-slate-200 dark:hover:bg-[#262626] text-[#E9C349] hover:text-slate-900 dark:hover:text-white border border-[#E9C349]/40 rounded-xl text-xs font-mono font-bold transition-all flex items-center gap-2 cursor-pointer shadow"
               >
                 <span>Ir al Dashboard de Entrenamiento</span>
                 <ArrowRight className="w-3.5 h-3.5" />
@@ -515,10 +515,10 @@ export default function WelcomeDashboard({
           {/* Main Title & Value Proposition */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
             <div className="lg:col-span-8 space-y-3">
-              <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white tracking-tight leading-tight">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-tight">
                 ¡Hola, <span className="text-[#E9C349]">{currentUser.name || 'Bailarín'}</span>! Comienza tu viaje en el arte del <span className="underline decoration-[#9A2B3C] decoration-4">Waacking</span>.
               </h1>
-              <p className="text-sm sm:text-base text-slate-300 max-w-2xl leading-relaxed">
+              <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 max-w-2xl leading-relaxed">
                 Has ingresado a la academia digital líder a nivel mundial en técnica biomecánica, entrenamiento rítmico a contratiempo, historia disco de los 70s y cátedras internacionales con maestros certificados.
               </p>
 
@@ -543,7 +543,7 @@ export default function WelcomeDashboard({
                       dirElement.scrollIntoView({ behavior: 'smooth' });
                     }
                   }}
-                  className="px-5 py-3 bg-[#1c1b1b] hover:bg-[#262626] text-white border border-white/20 font-bold text-xs uppercase tracking-wider rounded-xl shadow transition-all flex items-center gap-2 cursor-pointer"
+                  className="px-5 py-3 bg-white dark:bg-[#1c1b1b] hover:bg-slate-100 dark:hover:bg-[#262626] text-slate-900 dark:text-white border border-slate-200 dark:border-white/20 font-bold text-xs uppercase tracking-wider rounded-xl shadow transition-all flex items-center gap-2 cursor-pointer"
                 >
                   <Globe className="w-4 h-4 text-[#E9C349]" />
                   <span>Explorar Profesores Globales</span>
@@ -569,8 +569,8 @@ export default function WelcomeDashboard({
             </div>
 
             {/* Quick Status / Quick Stats Snapshot */}
-            <div className="lg:col-span-4 bg-[#0A0A0A]/80 border border-[#262626] rounded-2xl p-5 space-y-4 shadow-xl">
-              <div className="flex items-center justify-between border-b border-white/10 pb-2">
+            <div className="lg:col-span-4 bg-white/80 dark:bg-[#0A0A0A]/80 border border-slate-200 dark:border-[#262626] rounded-2xl p-5 space-y-4 shadow-xl">
+              <div className="flex items-center justify-between border-b border-slate-200 dark:border-white/10 pb-2">
                 <span className="text-[10px] font-mono font-bold text-[#E9C349] uppercase tracking-wider">
                   Tu Perfil de Inicio
                 </span>
@@ -592,7 +592,7 @@ export default function WelcomeDashboard({
                 </div>
                 <div className="flex justify-between items-center text-slate-300">
                   <span className="text-slate-400 font-mono">Mentor Asignado:</span>
-                  <span className="font-bold text-white truncate max-w-[150px]">
+                  <span className="font-bold text-slate-900 dark:text-white truncate max-w-[150px]">
                     {assignedInstructorName ? `⭐ ${assignedInstructorName}` : 'Sin asignar aún'}
                   </span>
                 </div>
@@ -608,8 +608,8 @@ export default function WelcomeDashboard({
                   <span>Estás asignado a la cátedra de <strong>{assignedInstructorName}</strong>.</span>
                 </div>
               ) : (
-                <div className="pt-2 border-t border-white/10">
-                  <p className="text-[11px] text-[#8A8A8A] italic">
+                <div className="pt-2 border-t border-slate-200 dark:border-white/10">
+                  <p className="text-[11px] text-slate-500 dark:text-[#8A8A8A] italic">
                     💡 Tip: Explora el Directorio de Profesores abajo y asigna tu maestro titular para recibir acompañamiento personalizado.
                   </p>
                 </div>
@@ -620,16 +620,16 @@ export default function WelcomeDashboard({
       </div>
 
       {/* GUÍA DE PRIMEROS PASOS PARA NUEVOS USUARIOS (Interactive Onboarding Roadmap) */}
-      <div className="bg-gradient-to-r from-[#141414] via-[#161410] to-[#141414] border border-[#E9C349]/30 rounded-3xl p-6 sm:p-7 shadow-2xl space-y-5">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/10 pb-4">
+      <div className="bg-gradient-to-r from-amber-50 via-white to-amber-50 dark:from-[#141414] dark:via-[#161410] dark:to-[#141414] border border-[#E9C349]/30 rounded-3xl p-6 sm:p-7 shadow-2xl space-y-5">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 dark:border-white/10 pb-4">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
               <span className="text-[#E9C349] text-xl">🚀</span>
-              <h2 className="text-base sm:text-lg font-mono font-bold tracking-wider text-white uppercase">
+              <h2 className="text-base sm:text-lg font-mono font-bold tracking-wider text-slate-900 dark:text-white uppercase">
                 GUÍA DE PRIMEROS PASOS DEL USUARIO
               </h2>
             </div>
-            <p className="text-xs text-slate-300">
+            <p className="text-xs text-slate-600 dark:text-slate-300">
               Completa estos 4 pasos recomendados para aprovechar al máximo tu experiencia en Waack On Academy.
             </p>
           </div>
@@ -639,7 +639,7 @@ export default function WelcomeDashboard({
             const completedCount = Object.values(completedSteps).filter(Boolean).length;
             const percentage = Math.round((completedCount / 4) * 100);
             return (
-              <div className="flex items-center gap-3 bg-[#0A0A0A] px-4 py-2 rounded-2xl border border-white/10 self-start sm:self-auto">
+              <div className="flex items-center gap-3 bg-white dark:bg-[#0A0A0A] px-4 py-2 rounded-2xl border border-slate-200 dark:border-white/10 self-start sm:self-auto">
                 <div className="text-right">
                   <span className="text-[10px] font-mono text-slate-400 block uppercase">Progreso Inicial</span>
                   <span className="text-xs font-mono font-bold text-[#E9C349]">{completedCount} de 4 completados ({percentage}%)</span>
@@ -674,7 +674,7 @@ export default function WelcomeDashboard({
                   {completedSteps.explore && <Check className="w-3.5 h-3.5 stroke-[3]" />}
                 </div>
               </div>
-              <h3 className="text-xs font-bold text-white">Explorar Cátedras & Maestros</h3>
+              <h3 className="text-xs font-bold text-slate-900 dark:text-white">Explorar Cátedras & Maestros</h3>
               <p className="text-[11px] text-slate-400 leading-relaxed">
                 Revisa el directorio internacional y asigna un mentor para tu formación.
               </p>
@@ -713,7 +713,7 @@ export default function WelcomeDashboard({
                   {completedSteps.drill && <Check className="w-3.5 h-3.5 stroke-[3]" />}
                 </div>
               </div>
-              <h3 className="text-xs font-bold text-white">Probar el Metrónomo & Ritmos</h3>
+              <h3 className="text-xs font-bold text-slate-900 dark:text-white">Probar el Metrónomo & Ritmos</h3>
               <p className="text-[11px] text-slate-400 leading-relaxed">
                 Entrena tus wrist rolls con el metrónomo interactivo a 110-128 BPM.
               </p>
@@ -751,7 +751,7 @@ export default function WelcomeDashboard({
                   {completedSteps.goals && <Check className="w-3.5 h-3.5 stroke-[3]" />}
                 </div>
               </div>
-              <h3 className="text-xs font-bold text-white">Configurar Metas de Danza</h3>
+              <h3 className="text-xs font-bold text-slate-900 dark:text-white">Configurar Metas de Danza</h3>
               <p className="text-[11px] text-slate-400 leading-relaxed">
                 Define tu meta de 7 días y minutos de práctica en Clases & Recursos.
               </p>
@@ -789,7 +789,7 @@ export default function WelcomeDashboard({
                   {completedSteps.community && <Check className="w-3.5 h-3.5 stroke-[3]" />}
                 </div>
               </div>
-              <h3 className="text-xs font-bold text-white">Conectar con la Comunidad</h3>
+              <h3 className="text-xs font-bold text-slate-900 dark:text-white">Conectar con la Comunidad</h3>
               <p className="text-[11px] text-slate-400 leading-relaxed">
                 Preséntate en el lobby global y descubre los Reels y Duelos de baile.
               </p>
@@ -815,11 +815,11 @@ export default function WelcomeDashboard({
           <div>
             <div className="flex items-center gap-2">
               <span className="text-[#E9C349] text-xl">🏛️</span>
-              <h2 className="text-lg font-mono font-bold tracking-wider text-white uppercase">
+              <h2 className="text-lg font-mono font-bold tracking-wider text-slate-900 dark:text-white uppercase">
                 ACERCA DE LA ACADEMIA WAACK ON
               </h2>
             </div>
-            <p className="text-xs text-[#8A8A8A] mt-0.5">
+            <p className="text-xs text-slate-500 dark:text-[#8A8A8A] mt-0.5">
               Un ecosistema integral diseñado para transformar tu danza a través del rigor técnico y la libertad expresiva.
             </p>
           </div>
@@ -834,7 +834,7 @@ export default function WelcomeDashboard({
             <div className="w-10 h-10 rounded-xl bg-[#E9C349]/10 border border-[#E9C349]/20 flex items-center justify-center text-[#E9C349]">
               <Layers className="w-5 h-5" />
             </div>
-            <h3 className="text-sm font-bold text-white group-hover:text-[#E9C349] transition-colors">
+            <h3 className="text-sm font-bold text-slate-900 dark:text-white group-hover:text-[#E9C349] transition-colors">
               1. Biomecánica & Rolls
             </h3>
             <p className="text-xs text-slate-400 leading-relaxed">
@@ -849,7 +849,7 @@ export default function WelcomeDashboard({
             <div className="w-10 h-10 rounded-xl bg-[#9A2B3C]/20 border border-[#9A2B3C]/40 flex items-center justify-center text-[#E9C349]">
               <Music className="w-5 h-5" />
             </div>
-            <h3 className="text-sm font-bold text-white group-hover:text-[#E9C349] transition-colors">
+            <h3 className="text-sm font-bold text-slate-900 dark:text-white group-hover:text-[#E9C349] transition-colors">
               2. Ritmo & Síncopas
             </h3>
             <p className="text-xs text-slate-400 leading-relaxed">
@@ -864,7 +864,7 @@ export default function WelcomeDashboard({
             <div className="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/30 flex items-center justify-center text-purple-300">
               <Sparkles className="w-5 h-5" />
             </div>
-            <h3 className="text-sm font-bold text-white group-hover:text-[#E9C349] transition-colors">
+            <h3 className="text-sm font-bold text-slate-900 dark:text-white group-hover:text-[#E9C349] transition-colors">
               3. Posing & Teatro 70s
             </h3>
             <p className="text-xs text-slate-400 leading-relaxed">
@@ -879,7 +879,7 @@ export default function WelcomeDashboard({
             <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
               <Users className="w-5 h-5" />
             </div>
-            <h3 className="text-sm font-bold text-white group-hover:text-[#E9C349] transition-colors">
+            <h3 className="text-sm font-bold text-slate-900 dark:text-white group-hover:text-[#E9C349] transition-colors">
               4. Comunidad Global
             </h3>
             <p className="text-xs text-slate-400 leading-relaxed">
@@ -897,11 +897,11 @@ export default function WelcomeDashboard({
         <div className="flex items-center justify-between pl-1">
           <div className="flex items-center gap-2">
             <span className="text-[#E9C349] text-xl">🧭</span>
-            <h2 className="text-lg font-mono font-bold tracking-wider text-white uppercase">
+            <h2 className="text-lg font-mono font-bold tracking-wider text-slate-900 dark:text-white uppercase">
               EXPLORA LOS MÓDULOS DE LA PLATAFORMA
             </h2>
           </div>
-          <span className="text-xs text-[#8A8A8A]">Haz clic en cualquier módulo para acceder directamente</span>
+          <span className="text-xs text-slate-500 dark:text-[#8A8A8A]">Haz clic en cualquier módulo para acceder directamente</span>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -921,7 +921,7 @@ export default function WelcomeDashboard({
                   6 Niveles Disponibles
                 </span>
               </div>
-              <h3 className="text-base font-bold text-white group-hover:text-[#E9C349] transition-colors">
+              <h3 className="text-base font-bold text-slate-900 dark:text-white group-hover:text-[#E9C349] transition-colors">
                 Cursos & Clases Estructuradas
               </h3>
               <p className="text-xs text-slate-400 leading-relaxed">
@@ -950,7 +950,7 @@ export default function WelcomeDashboard({
                   Audio + Metrónomo Lab
                 </span>
               </div>
-              <h3 className="text-base font-bold text-white group-hover:text-[#E9C349] transition-colors">
+              <h3 className="text-base font-bold text-slate-900 dark:text-white group-hover:text-[#E9C349] transition-colors">
                 Laboratorio de Entrenamiento
               </h3>
               <p className="text-xs text-slate-400 leading-relaxed">
@@ -979,7 +979,7 @@ export default function WelcomeDashboard({
                   Chat & Duelos 1v1
                 </span>
               </div>
-              <h3 className="text-base font-bold text-white group-hover:text-[#E9C349] transition-colors">
+              <h3 className="text-base font-bold text-slate-900 dark:text-white group-hover:text-[#E9C349] transition-colors">
                 Comunidad Global & Duelos
               </h3>
               <p className="text-xs text-slate-400 leading-relaxed">
@@ -1000,7 +1000,7 @@ export default function WelcomeDashboard({
           <div className="space-y-1">
             <div className="flex items-center gap-2">
               <span className="text-xl">🌟</span>
-              <h2 className="text-lg font-mono font-bold tracking-wider text-white uppercase">
+              <h2 className="text-lg font-mono font-bold tracking-wider text-slate-900 dark:text-white uppercase">
                 DIRECTORIO DE PROFESORES GLOBALES
               </h2>
             </div>
@@ -1016,7 +1016,7 @@ export default function WelcomeDashboard({
               placeholder="Buscar profesor o estilo..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full md:w-64 bg-[#0A0A0A] border border-[#262626] rounded-xl pl-9 pr-3 py-2 text-xs text-white placeholder-slate-500 focus:border-[#E9C349] outline-none"
+              className="w-full md:w-64 bg-[#0A0A0A] border border-[#262626] rounded-xl pl-9 pr-3 py-2 text-xs text-slate-900 dark:text-white placeholder-slate-500 focus:border-[#E9C349] outline-none"
             />
             <Search className="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
           </div>
@@ -1039,7 +1039,7 @@ export default function WelcomeDashboard({
               className={`px-3 py-1.5 text-xs font-mono font-bold rounded-xl transition-all cursor-pointer ${
                 selectedSpecialty === filter.id
                   ? 'bg-[#E9C349] text-black shadow-md'
-                  : 'bg-[#141414] text-[#8A8A8A] hover:text-white border border-white/5'
+                  : 'bg-white dark:bg-[#141414] text-slate-500 dark:text-[#8A8A8A] hover:text-slate-900 dark:hover:text-white border border-slate-200 dark:border-white/5'
               }`}
             >
               {filter.label}
@@ -1093,7 +1093,7 @@ export default function WelcomeDashboard({
                     </div>
 
                     <div className="min-w-0">
-                      <h3 className="text-base font-bold text-white group-hover:text-[#E9C349] transition-colors truncate">
+                      <h3 className="text-base font-bold text-slate-900 dark:text-white group-hover:text-[#E9C349] transition-colors truncate">
                         {inst.name}
                       </h3>
                       <p className="text-[11px] font-mono text-[#E9C349] font-bold truncate">
@@ -1152,7 +1152,7 @@ export default function WelcomeDashboard({
 
                     <button
                       onClick={() => setPreviewInstructor(inst)}
-                      className="text-xs font-mono text-slate-400 hover:text-white underline cursor-pointer flex items-center gap-1"
+                      className="text-xs font-mono text-slate-400 hover:text-slate-900 dark:hover:text-white underline cursor-pointer flex items-center gap-1"
                     >
                       <BookOpen className="w-3.5 h-3.5 text-[#E9C349]" />
                       <span>Ver Programa 4 Semanas</span>
@@ -1201,7 +1201,7 @@ export default function WelcomeDashboard({
             >
               <button
                 onClick={() => setPreviewInstructor(null)}
-                className="absolute top-5 right-5 p-2 rounded-full bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white transition-all cursor-pointer"
+                className="absolute top-5 right-5 p-2 rounded-full bg-slate-100 dark:bg-white/5 hover:bg-slate-200 dark:hover:bg-white/10 text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -1214,7 +1214,7 @@ export default function WelcomeDashboard({
                 />
                 <div>
                   <div className="flex items-center gap-2">
-                    <h3 className="text-xl font-extrabold text-white">{previewInstructor.name}</h3>
+                    <h3 className="text-xl font-extrabold text-slate-900 dark:text-white">{previewInstructor.name}</h3>
                     <span className="text-xs">{previewInstructor.country}</span>
                   </div>
                   <p className="text-xs font-mono font-bold text-[#E9C349]">{previewInstructor.role}</p>
@@ -1223,7 +1223,7 @@ export default function WelcomeDashboard({
               </div>
 
               <div className="space-y-4">
-                <div className="flex items-center gap-2 text-white">
+                <div className="flex items-center gap-2 text-slate-900 dark:text-white">
                   <Calendar className="w-5 h-5 text-[#E9C349]" />
                   <h4 className="text-sm font-mono font-bold uppercase tracking-wider">
                     Plan de Estudios & Programa (4 Semanas)
@@ -1263,7 +1263,7 @@ export default function WelcomeDashboard({
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => handleAssignInstructor(previewInstructor)}
-                    className="px-4 py-2.5 bg-[#1c1b1b] hover:bg-[#262626] text-white border border-white/10 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer flex items-center gap-1.5"
+                    className="px-4 py-2.5 bg-white dark:bg-[#1c1b1b] hover:bg-slate-100 dark:hover:bg-[#262626] text-slate-900 dark:text-white border border-slate-200 dark:border-white/10 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer flex items-center gap-1.5"
                   >
                     <UserCheck className="w-4 h-4 text-[#E9C349]" />
                     <span>Asignar como Mentor</span>
@@ -1292,7 +1292,7 @@ export default function WelcomeDashboard({
             <Crown className="w-3.5 h-3.5 text-[#E9C349]" />
             <span>MEMBRESÍAS Y PLANES DE SUSCRIPCIÓN</span>
           </div>
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight font-mono uppercase">
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight font-mono uppercase">
             Planes de Suscripción Oficiales <span className="text-[#E9C349]">WAACK ON®</span>
           </h2>
           <p className="text-xs sm:text-sm text-slate-300 max-w-xl mx-auto leading-relaxed">
@@ -1302,17 +1302,17 @@ export default function WelcomeDashboard({
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 pt-2">
           {/* Plan 1: Plan Gratuito / Explorador */}
-          <div className="bg-[#0D0D12] border border-[#262626] rounded-3xl p-6 flex flex-col justify-between space-y-6 relative overflow-hidden hover:border-slate-500 transition-all shadow-xl">
+          <div className="bg-white dark:bg-[#0D0D12] border border-slate-200 dark:border-[#262626] rounded-3xl p-6 flex flex-col justify-between space-y-6 relative overflow-hidden hover:border-slate-400 dark:hover:border-slate-500 transition-all shadow-xl">
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <span className="px-3 py-1 bg-slate-800 text-slate-300 text-[10px] font-mono font-bold rounded-full uppercase tracking-wider">
+                <span className="px-3 py-1 bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-[10px] font-mono font-bold rounded-full uppercase tracking-wider">
                   LIBRE ACCESO
                 </span>
                 <Users className="w-5 h-5 text-slate-400" />
               </div>
 
               <div>
-                <h3 className="text-lg font-black text-white font-mono uppercase">
+                <h3 className="text-lg font-black text-slate-900 dark:text-white font-mono uppercase">
                   Pase Explorador
                 </h3>
                 <p className="text-xs text-slate-400 mt-1">
@@ -1320,9 +1320,9 @@ export default function WelcomeDashboard({
                 </p>
               </div>
 
-              <div className="pt-2 border-t border-[#1F1F24]">
+              <div className="pt-2 border-t border-slate-200 dark:border-[#1F1F24]">
                 <div className="flex items-baseline gap-1">
-                  <span className="text-3xl font-black text-white font-mono">$0</span>
+                  <span className="text-3xl font-black text-slate-900 dark:text-white font-mono">$0</span>
                   <span className="text-xs font-mono text-slate-400">/ siempre</span>
                 </div>
                 <span className="text-[10px] font-mono text-emerald-400 block mt-1">
@@ -1348,14 +1348,14 @@ export default function WelcomeDashboard({
 
             <button
               onClick={() => setActiveTab('cursos')}
-              className="w-full py-3 bg-[#1F1F24] hover:bg-[#2A2A32] text-slate-300 hover:text-white font-mono font-bold text-xs rounded-2xl uppercase transition-all cursor-pointer border border-white/5"
+              className="w-full py-3 bg-slate-100 dark:bg-[#1F1F24] hover:bg-slate-200 dark:hover:bg-[#2A2A32] text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white font-mono font-bold text-xs rounded-2xl uppercase transition-all cursor-pointer border border-slate-200 dark:border-white/5"
             >
               Comenzar Gratis
             </button>
           </div>
 
           {/* Plan 2: Básico Práctica Independiente ($8 USD) */}
-          <div className="bg-gradient-to-b from-[#141226] to-[#0D0B1A] border-2 border-cyan-500/50 rounded-3xl p-6 flex flex-col justify-between space-y-6 relative overflow-hidden shadow-[0_0_30px_rgba(6,182,212,0.15)] hover:border-cyan-400 transition-all">
+          <div className="bg-gradient-to-b from-cyan-50 to-white dark:from-[#141226] dark:to-[#0D0B1A] border-2 border-cyan-500/50 rounded-3xl p-6 flex flex-col justify-between space-y-6 relative overflow-hidden shadow-[0_0_30px_rgba(6,182,212,0.15)] hover:border-cyan-400 transition-all">
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <span className="px-3 py-1 bg-cyan-500/20 border border-cyan-500/40 text-cyan-300 text-[10px] font-mono font-black rounded-full uppercase tracking-wider">
@@ -1365,7 +1365,7 @@ export default function WelcomeDashboard({
               </div>
 
               <div>
-                <h3 className="text-lg font-black text-white font-mono uppercase">
+                <h3 className="text-lg font-black text-slate-900 dark:text-white font-mono uppercase">
                   Básico de Práctica
                 </h3>
                 <p className="text-xs text-slate-300 mt-1">
@@ -1409,7 +1409,7 @@ export default function WelcomeDashboard({
           </div>
 
           {/* Plan 3: Membresía Cátedra de Instructor ($15 USD) - DESTACADO */}
-          <div className="bg-gradient-to-b from-[#1E172E] to-[#120E1E] border-2 border-[#E9C349] rounded-3xl p-6 flex flex-col justify-between space-y-6 relative overflow-hidden shadow-[0_0_35px_rgba(233,195,73,0.25)] hover:border-yellow-300 transition-all">
+          <div className="bg-gradient-to-b from-amber-50 to-white dark:from-[#1E172E] dark:to-[#120E1E] border-2 border-[#E9C349] rounded-3xl p-6 flex flex-col justify-between space-y-6 relative overflow-hidden shadow-[0_0_35px_rgba(233,195,73,0.25)] hover:border-yellow-300 transition-all">
             <div className="absolute top-0 right-0 bg-[#E9C349] text-black text-[9px] font-mono font-black uppercase px-3 py-1 rounded-bl-2xl shadow-md">
               RECOMENDADO
             </div>
@@ -1423,7 +1423,7 @@ export default function WelcomeDashboard({
               </div>
 
               <div>
-                <h3 className="text-lg font-black text-white font-mono uppercase">
+                <h3 className="text-lg font-black text-slate-900 dark:text-white font-mono uppercase">
                   Pase Cátedra Instructor
                 </h3>
                 <p className="text-xs text-slate-300 mt-1">
@@ -1470,7 +1470,7 @@ export default function WelcomeDashboard({
           </div>
 
           {/* Plan 4: Instructor Global & Estudios ($15 / $30 USD) */}
-          <div className="bg-gradient-to-b from-[#251327] to-[#120A13] border-2 border-purple-500/60 rounded-3xl p-6 flex flex-col justify-between space-y-6 relative overflow-hidden shadow-[0_0_35px_rgba(168,85,247,0.2)] hover:border-purple-400 transition-all">
+          <div className="bg-gradient-to-b from-purple-50 to-white dark:from-[#251327] dark:to-[#120A13] border-2 border-purple-500/60 rounded-3xl p-6 flex flex-col justify-between space-y-6 relative overflow-hidden shadow-[0_0_35px_rgba(168,85,247,0.2)] hover:border-purple-400 transition-all">
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <span className="px-3 py-1 bg-purple-500/20 border border-purple-500/40 text-purple-300 text-[10px] font-mono font-black rounded-full uppercase tracking-wider">
@@ -1480,7 +1480,7 @@ export default function WelcomeDashboard({
               </div>
 
               <div>
-                <h3 className="text-lg font-black text-white font-mono uppercase">
+                <h3 className="text-lg font-black text-slate-900 dark:text-white font-mono uppercase">
                   Instructor & Academia
                 </h3>
                 <p className="text-xs text-slate-300 mt-1">
@@ -1528,7 +1528,7 @@ export default function WelcomeDashboard({
         <div className="flex justify-center pt-2">
           <button
             onClick={() => setActiveTab('planes')}
-            className="px-6 py-2.5 bg-[#121212] hover:bg-[#1C1C1C] text-[#E9C349] border border-[#E9C349]/40 rounded-2xl text-xs font-mono font-bold transition-all flex items-center gap-2 cursor-pointer shadow-md hover:border-[#E9C349]"
+            className="px-6 py-2.5 bg-white dark:bg-[#121212] hover:bg-slate-100 dark:hover:bg-[#1C1C1C] text-[#E9C349] border border-[#E9C349]/40 rounded-2xl text-xs font-mono font-bold transition-all flex items-center gap-2 cursor-pointer shadow-md hover:border-[#E9C349]"
           >
             <ShieldCheck className="w-4 h-4 text-[#E9C349]" />
             <span>Ver Tabla Comparativa Completa de Beneficios & Planes</span>
@@ -1542,11 +1542,11 @@ export default function WelcomeDashboard({
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 border-b border-white/10 pb-3">
           <div className="flex items-center gap-2">
             <Sliders className="w-5 h-5 text-[#E9C349]" />
-            <h3 className="text-sm font-mono font-bold text-white uppercase tracking-wider">
+            <h3 className="text-sm font-mono font-bold text-slate-900 dark:text-white uppercase tracking-wider">
               ¿Cuál es tu propósito principal en Waack On?
             </h3>
           </div>
-          <span className="text-[10px] font-mono text-[#8A8A8A]">
+          <span className="text-[10px] font-mono text-slate-500 dark:text-[#8A8A8A]">
             Puedes modificar tu rol en cualquier momento desde tu perfil
           </span>
         </div>

@@ -268,7 +268,12 @@ export default function App() {
   }, [language]);
 
   const [theme, setTheme] = useState<'dark' | 'light'>(() => {
-    return (localStorage.getItem('waacking_theme') as 'dark' | 'light') || 'dark';
+    const stored = localStorage.getItem('waacking_theme');
+    if (stored === 'dark' || stored === 'light') return stored;
+    if (typeof window !== 'undefined' && window.matchMedia?.('(prefers-color-scheme: light)').matches) {
+      return 'light';
+    }
+    return 'dark';
   });
 
   useEffect(() => {
@@ -1821,6 +1826,8 @@ export default function App() {
           }}
           language={language}
           onLanguageChange={setLanguage}
+          theme={theme}
+          onToggleTheme={() => setTheme(prev => prev === 'dark' ? 'light' : 'dark')}
         />
       }
     >
@@ -1837,7 +1844,7 @@ export default function App() {
               animate={{ opacity: 0.5 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsMobileMenuOpen(false)}
-              className="absolute inset-0 bg-[#0A0A0A]/80 backdrop-blur-sm"
+              className="absolute inset-0 bg-black/50 dark:bg-[#0A0A0A]/80 backdrop-blur-sm"
             />
             {/* Drawer Content */}
             <motion.div
@@ -1850,7 +1857,7 @@ export default function App() {
               {/* Close Button overlay inside the sliding drawer */}
               <button
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="absolute top-4 right-4 p-2 rounded-lg bg-[#121212] border border-[#262626] text-[#EDEFF4] hover:bg-[#9A2B3C] transition-all z-20 focus:outline-none"
+                className="absolute top-4 right-4 p-2 rounded-lg bg-white dark:bg-[#121212] border border-slate-300 dark:border-[#262626] text-slate-900 dark:text-[#EDEFF4] hover:bg-[#9A2B3C] hover:text-white transition-all z-20 focus:outline-none"
                 title="Cerrar menú"
               >
                 <X className="w-4 h-4" />
@@ -1953,7 +1960,7 @@ export default function App() {
                 </div>
               ) : (
                 <div className="flex items-center gap-2 truncate">
-                  <h1 className="text-xs sm:text-sm font-display-lg font-black tracking-wider uppercase text-white truncate flex items-center gap-2">
+                  <h1 className={`text-xs sm:text-sm font-display-lg font-black tracking-wider uppercase truncate flex items-center gap-2 ${theme === 'light' ? 'text-slate-900' : 'text-white'}`}>
                     {(currentUser.id === ADMIN_USER_ID || auth.currentUser?.uid === ADMIN_USER_ID || firebaseUser?.uid === ADMIN_USER_ID)
                       ? '🛡️ PANEL DE ADMINISTRADOR GENERAL'
                       : currentUser.role === 'studio'
@@ -2111,14 +2118,14 @@ export default function App() {
                   id="language-selector"
                   value={language}
                   onChange={(e) => setLanguage(e.target.value as Language)}
-                  className="bg-transparent font-mono font-bold text-xs border-none outline-none cursor-pointer focus:ring-0 py-0 pr-4 pl-0 text-white"
+                  className={`bg-transparent font-mono font-bold text-xs border-none outline-none cursor-pointer focus:ring-0 py-0 pr-4 pl-0 ${theme === 'light' ? 'text-slate-900' : 'text-white'}`}
                   aria-label="Seleccionar idioma de la plataforma"
                   title="Seleccionar idioma de la plataforma"
                 >
-                  <option value="es" className="bg-[#141414] text-white">Español</option>
-                  <option value="en" className="bg-[#141414] text-white">English</option>
-                  <option value="ja" className="bg-[#141414] text-white">日本語</option>
-                  <option value="ko" className="bg-[#141414] text-white">한국어</option>
+                  <option value="es" className={theme === 'light' ? 'bg-white text-slate-900' : 'bg-[#141414] text-white'}>Español</option>
+                  <option value="en" className={theme === 'light' ? 'bg-white text-slate-900' : 'bg-[#141414] text-white'}>English</option>
+                  <option value="ja" className={theme === 'light' ? 'bg-white text-slate-900' : 'bg-[#141414] text-white'}>日本語</option>
+                  <option value="ko" className={theme === 'light' ? 'bg-white text-slate-900' : 'bg-[#141414] text-white'}>한국어</option>
                 </select>
               </div>
             )}
@@ -2169,7 +2176,7 @@ export default function App() {
                 referrerPolicy="no-referrer"
               />
               <div className="hidden sm:flex flex-col text-left leading-tight">
-                <span className="text-xs font-black uppercase tracking-wide text-white">
+                <span className={`text-xs font-black uppercase tracking-wide ${theme === 'light' ? 'text-slate-900' : 'text-white'}`}>
                   {currentUser.name}
                 </span>
                 {currentUser.role === 'studio' ? (
@@ -2217,7 +2224,7 @@ export default function App() {
 
         {/* Tactile Bottom Navigation for Mobile Devices */}
         {!isFocusMode && (
-          <div id="mobile-bottom-nav" className="lg:hidden fixed bottom-0 left-0 right-0 h-16 bg-black border-t-2 border-[#E9C349] flex items-center justify-around px-2 shrink-0 select-none z-40 pb-safe shadow-[0_-4px_20px_rgba(0,0,0,0.9)]">
+          <div id="mobile-bottom-nav" className={`lg:hidden fixed bottom-0 left-0 right-0 h-16 border-t-2 border-[#E9C349] flex items-center justify-around px-2 shrink-0 select-none z-40 pb-safe shadow-[0_-4px_20px_rgba(0,0,0,0.15)] dark:shadow-[0_-4px_20px_rgba(0,0,0,0.9)] ${theme === 'light' ? 'bg-white' : 'bg-black'}`}>
             <button
               onClick={() => setActiveTab('dashboard')}
               className={`flex flex-col items-center justify-center flex-1 h-full py-1 text-[9px] sm:text-[10px] font-black transition-all focus:outline-none ${

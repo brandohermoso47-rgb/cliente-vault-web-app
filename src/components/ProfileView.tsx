@@ -715,7 +715,7 @@ export default function ProfileView({
   });
 
   return (
-    <div className="flex-1 min-h-full w-full bg-[#0A0A0E] text-white flex flex-col font-body-md pb-16 scroll-smooth">
+    <div className="flex-1 min-h-full w-full bg-[#0A0A0E] text-slate-900 dark:text-white flex flex-col font-body-md pb-16 scroll-smooth">
       
       {/* Toast Notification */}
       <AnimatePresence>
@@ -735,11 +735,11 @@ export default function ProfileView({
       {/* ========================================================================= */}
       {/* 1. BARRA PRINCIPAL SUPERIOR (TOP ACTION BAR) */}
       {/* ========================================================================= */}
-      <header className="sticky top-0 z-30 bg-[#0A0A0E]/90 backdrop-blur-xl border-b border-white/10 px-4 sm:px-6 py-3.5 flex items-center justify-between">
+      <header className="sticky top-0 z-30 bg-white/90 dark:bg-[#0A0A0E]/90 backdrop-blur-xl border-b border-slate-200 dark:border-white/10 px-4 sm:px-6 py-3.5 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <Logo variant="compact" className="w-8 h-8 shrink-0" />
           <div className="flex items-center gap-2">
-            <h1 className="text-sm sm:text-base font-black tracking-wider uppercase font-mono text-white truncate max-w-[160px] sm:max-w-none">
+            <h1 className="text-sm sm:text-base font-black tracking-wider uppercase font-mono text-slate-900 dark:text-white truncate max-w-[160px] sm:max-w-none">
               {nickname || `@${currentUser.name.toLowerCase().replace(/\s+/g, '')}`}
             </h1>
             <span className="w-2 h-2 rounded-full bg-[#E9C349] animate-pulse" title="Bailarín Verificado" />
@@ -765,7 +765,7 @@ export default function ProfileView({
           <button
             type="button"
             onClick={() => setShowDancerCardModal(true)}
-            className="px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/15 text-white font-mono font-bold text-xs uppercase tracking-wider transition-all flex items-center gap-1.5 cursor-pointer"
+            className="px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/15 text-slate-900 dark:text-white font-mono font-bold text-xs uppercase tracking-wider transition-all flex items-center gap-1.5 cursor-pointer"
             title="Vista previa de Tarjeta Oficial de Bailarín"
           >
             <QrCode className="w-4 h-4 text-[#E9C349]" />
@@ -790,10 +790,10 @@ export default function ProfileView({
           <button
             type="button"
             onClick={() => setShowSettingsModal(true)}
-            className="p-2 sm:p-2.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/15 text-white transition-all cursor-pointer hover:rotate-45"
+            className="p-2 sm:p-2.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/15 text-slate-900 dark:text-white transition-all cursor-pointer hover:rotate-45"
             title="Ajustes de cuenta, expediente y suscripción"
           >
-            <Settings className="w-4 h-4 sm:w-5 sm:h-5 text-slate-200" />
+            <Settings className="w-4 h-4 sm:w-5 sm:h-5 text-slate-600 dark:text-slate-200" />
           </button>
 
         </div>
@@ -805,7 +805,7 @@ export default function ProfileView({
         {/* ========================================================================= */}
         {/* 2. CABECERA DE PERFIL E IDENTIDAD */}
         {/* ========================================================================= */}
-        <section className="bg-[#121218] border border-white/10 rounded-3xl p-5 sm:p-7 shadow-2xl space-y-6 relative overflow-hidden">
+        <section className="bg-[#121218] border border-slate-200 dark:border-white/10 rounded-3xl p-5 sm:p-7 shadow-2xl space-y-6 relative overflow-hidden">
           <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-[#FF2E63]/10 via-[#E9C349]/5 to-transparent rounded-full blur-3xl pointer-events-none" />
 
           {/* Profile Row: Avatar + Info */}
@@ -834,7 +834,7 @@ export default function ProfileView({
             <div className="space-y-2 flex-1 min-w-0">
               
               <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
-                <h2 className="text-2xl sm:text-3xl font-black text-white tracking-wide font-mono">
+                <h2 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-wide font-mono">
                   {currentUser.name}
                 </h2>
                 {currentUser.role === 'instructor' ? (
@@ -1407,7 +1407,7 @@ export default function ProfileView({
                         type="text"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
-                        className="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-2.5 text-xs text-white outline-none focus:border-[#E9C349]"
+                        className="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-2.5 text-xs text-slate-900 dark:text-white outline-none focus:border-[#E9C349]"
                         required
                       />
                     </div>
@@ -1420,7 +1420,7 @@ export default function ProfileView({
                         type="text"
                         value={nickname}
                         onChange={(e) => setNickname(e.target.value)}
-                        className="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-2.5 text-xs text-white outline-none focus:border-[#E9C349]"
+                        className="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-2.5 text-xs text-slate-900 dark:text-white outline-none focus:border-[#E9C349]"
                       />
                     </div>
                   </div>
@@ -1433,7 +1433,7 @@ export default function ProfileView({
                       rows={3}
                       value={bio}
                       onChange={(e) => setBio(e.target.value)}
-                      className="w-full bg-white/10 border border-white/20 rounded-xl p-3 text-xs text-white outline-none focus:border-[#E9C349]"
+                      className="w-full bg-white/10 border border-white/20 rounded-xl p-3 text-xs text-slate-900 dark:text-white outline-none focus:border-[#E9C349]"
                     />
                   </div>
 
@@ -1446,7 +1446,7 @@ export default function ProfileView({
                         type="text"
                         value={instagram}
                         onChange={(e) => setInstagram(e.target.value)}
-                        className="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-2.5 text-xs text-white outline-none focus:border-[#E9C349]"
+                        className="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-2.5 text-xs text-slate-900 dark:text-white outline-none focus:border-[#E9C349]"
                       />
                     </div>
 
@@ -1458,7 +1458,7 @@ export default function ProfileView({
                         type="number"
                         value={targetMinutes}
                         onChange={(e) => setTargetMinutes(Number(e.target.value))}
-                        className="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-2.5 text-xs text-white outline-none focus:border-[#E9C349]"
+                        className="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-2.5 text-xs text-slate-900 dark:text-white outline-none focus:border-[#E9C349]"
                       />
                     </div>
                   </div>
@@ -1492,7 +1492,7 @@ export default function ProfileView({
                             const val = Math.max(5, Math.min(300, Number(e.target.value) || 5));
                             updateUserAndPersist(val, hydrationReminders, lessonNotifications);
                           }}
-                          className="w-full bg-black/60 border border-white/20 rounded-xl px-4 py-2.5 text-xs text-white outline-none focus:border-[#E9C349]"
+                          className="w-full bg-black/60 border border-white/20 rounded-xl px-4 py-2.5 text-xs text-slate-900 dark:text-white outline-none focus:border-[#E9C349]"
                         />
                         <span className="text-xs font-mono font-bold text-slate-400">min/día</span>
                       </div>
@@ -1733,7 +1733,7 @@ export default function ProfileView({
                     value={uploadTitle}
                     onChange={(e) => setUploadTitle(e.target.value)}
                     placeholder="Ej. Práctica de Rolls 128 BPM"
-                    className="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-2.5 text-xs text-white outline-none focus:border-[#E9C349]"
+                    className="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-2.5 text-xs text-slate-900 dark:text-white outline-none focus:border-[#E9C349]"
                     required
                   />
                 </div>
@@ -1748,7 +1748,7 @@ export default function ProfileView({
                     value={uploadCaption}
                     onChange={(e) => setUploadCaption(e.target.value)}
                     placeholder="Agrega notas de tu entrenamiento o hashtags #WaackON"
-                    className="w-full bg-white/10 border border-white/20 rounded-xl p-3 text-xs text-white outline-none focus:border-[#E9C349]"
+                    className="w-full bg-white/10 border border-white/20 rounded-xl p-3 text-xs text-slate-900 dark:text-white outline-none focus:border-[#E9C349]"
                   />
                 </div>
 
@@ -1760,7 +1760,7 @@ export default function ProfileView({
                   <select
                     value={uploadCategory}
                     onChange={(e) => setUploadCategory(e.target.value)}
-                    className="w-full bg-[#1A1A22] border border-white/20 rounded-xl px-4 py-2.5 text-xs text-white outline-none focus:border-[#E9C349]"
+                    className="w-full bg-[#1A1A22] border border-white/20 rounded-xl px-4 py-2.5 text-xs text-slate-900 dark:text-white outline-none focus:border-[#E9C349]"
                   >
                     <option value="Práctica">Práctica & Técnica</option>
                     <option value="Reels">Reels & Freestyle</option>

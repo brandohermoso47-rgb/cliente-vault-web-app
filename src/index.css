@@ -1,33 +1,80 @@
 @import "tailwindcss";
 
+/* Class-based dark mode: toggled on <html> by the theme system in App.tsx (persisted to
+   localStorage under 'waacking_theme'). Light mode is the default (no .dark class). */
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --font-sans: "Geist", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "Geist Mono", ui-monospace, monospace;
   --font-display: "Syne", sans-serif;
 
-  --color-bg: #0A0A0C;
-  --color-surface: #141418;
-  --color-ink: #F0F2F7;
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
   --color-accent: #E9C349;
-  --color-accent-dim: rgba(233, 195, 73, 0.15);
+  --color-accent-dim: var(--accent-dim);
 
-  --color-brand-bg: #0A0A0C;
-  --color-brand-dark: #F0F2F7;
+  --color-brand-bg: var(--bg);
+  --color-brand-dark: var(--ink);
   --color-brand-pink: #9A2B3C;
   --color-brand-cyan: #E9C349;
+
+  /* Material-style semantic surface tokens referenced across several views
+     (bg-surface-container*, text-on-surface, border-tertiary) */
+  --color-surface-container: var(--surface-container);
+  --color-surface-container-high: var(--surface-container-high);
+  --color-surface-container-low: var(--surface-container-low);
+  --color-on-surface: var(--on-surface);
+  --color-tertiary: #9A2B3C;
 }
 
+/* ---- Light theme (default) ---- */
 :root {
+  --bg: #F5F5F7;
+  --surface: #FFFFFF;
+  --ink: #16171C;
+  --ink-secondary: #52565E;
+  --accent: #E9C349;
+  --accent-dim: rgba(233, 195, 73, 0.15);
+  --border-light: 1px solid rgba(20, 21, 26, 0.12);
+
+  --surface-container: #EEEFF2;
+  --surface-container-high: #E4E5EA;
+  --surface-container-low: #F7F7F9;
+  --on-surface: #16171C;
+
+  /* Waack On logo metallic gradient — dark graphite reads on light surfaces */
+  --logo-metal-fill: url(#waack-metal-light);
+}
+
+/* ---- Dark theme ---- */
+:root.dark {
   --bg: #0A0A0C;
   --surface: #141418;
   --ink: #F0F2F7;
+  --ink-secondary: #B0B7C3;
   --accent: #E9C349;
   --accent-dim: rgba(233, 195, 73, 0.15);
   --border-light: 1px solid rgba(240, 242, 247, 0.16);
+
+  --surface-container: #1C1C22;
+  --surface-container-high: #242430;
+  --surface-container-low: #16161B;
+  --on-surface: #F0F2F7;
+
+  /* Waack On logo metallic gradient — silver/chrome reads on dark surfaces */
+  --logo-metal-fill: url(#waack-metal-dark);
 }
 
 html {
   scroll-behavior: smooth;
+  background-color: var(--bg);
+  color-scheme: light;
+}
+
+html.dark {
+  color-scheme: dark;
 }
 
 body {
@@ -35,10 +82,11 @@ body {
   color: var(--ink);
   font-family: 'Geist', sans-serif;
   overflow-x: hidden;
+  transition: background-color 0.25s ease, color 0.25s ease;
 }
 
 /* Enhanced subtle border and depth for dark containers */
-.bg-\[\#0A0A0A\], [class*="bg-[#0A0A0A]"] {
+.dark .bg-\[\#0A0A0A\], .dark [class*="bg-[#0A0A0A]"] {
   box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.07);
 }
 
@@ -57,17 +105,155 @@ body {
   color: #9AA2B2 !important;
 }
 
+/* Light-mode readability pass for the same secondary-text utilities, and for the
+   literal near-black hex tokens used pervasively across the app as page/card
+   surfaces, borders and primary/secondary text. These hex values are the actual
+   dark-theme design tokens (see --bg/--surface/--ink above) used as Tailwind
+   arbitrary values instead of the semantic classes, so remapping them here gives
+   consistent, low-risk light-mode coverage across components that haven't been
+   individually converted to `dark:` variants yet. */
+:root:not(.dark) {
+  --text-primary-override: #16171C;
+  --text-secondary-override: #4B4F58;
+}
+
+:root:not(.dark) .text-zinc-400,
+:root:not(.dark) .text-gray-400,
+:root:not(.dark) .text-slate-400,
+:root:not(.dark) .text-neutral-400,
+:root:not(.dark) .text-zinc-300,
+:root:not(.dark) .text-gray-300,
+:root:not(.dark) .text-slate-300,
+:root:not(.dark) .text-neutral-300,
+:root:not(.dark) .text-\[\#8A8A8A\],
+:root:not(.dark) .text-\[\#A0A5B1\],
+:root:not(.dark) .text-\[\#C2C7D1\] {
+  color: var(--text-secondary-override) !important;
+}
+
+:root:not(.dark) .text-zinc-500,
+:root:not(.dark) .text-gray-500,
+:root:not(.dark) .text-slate-500,
+:root:not(.dark) .text-neutral-500 {
+  color: #6B6F78 !important;
+}
+
+:root:not(.dark) .text-\[\#EDEFF4\] {
+  color: var(--text-primary-override);
+}
+
+/* Known page/card background surfaces (near-black neutrals only — brand accent
+   colors like gold, pink, spotify-green etc. are left untouched since they read
+   fine on both themes). */
+:root:not(.dark) .bg-\[\#0A0A0A\],
+:root:not(.dark) .bg-\[\#0a0a0a\],
+:root:not(.dark) .bg-\[\#0A0A0C\],
+:root:not(.dark) .bg-\[\#0a0a0c\],
+:root:not(.dark) .bg-\[\#0A0A0E\],
+:root:not(.dark) .bg-\[\#0c0c0e\],
+:root:not(.dark) .bg-\[\#090a14\],
+:root:not(.dark) .bg-\[\#0c0d1e\],
+:root:not(.dark) .bg-\[\#0d0d11\],
+:root:not(.dark) .bg-\[\#0D0D11\],
+:root:not(.dark) .bg-\[\#0e0e0e\],
+:root:not(.dark) .bg-\[\#0E0E0E\],
+:root:not(.dark) .bg-\[\#08080A\],
+:root:not(.dark) .bg-\[\#101010\],
+:root:not(.dark) .bg-\[\#121212\],
+:root:not(.dark) .bg-\[\#141414\],
+:root:not(.dark) .bg-\[\#141418\],
+:root:not(.dark) .bg-\[\#141419\],
+:root:not(.dark) .bg-\[\#161616\],
+:root:not(.dark) .bg-\[\#181818\],
+:root:not(.dark) .bg-\[\#1a1a1a\],
+:root:not(.dark) .bg-\[\#1A1A1A\],
+:root:not(.dark) .bg-\[\#1A1818\],
+:root:not(.dark) .bg-\[\#1A1919\],
+:root:not(.dark) .bg-\[\#1c1b1b\],
+:root:not(.dark) .bg-\[\#1C1B1B\],
+:root:not(.dark) .bg-\[\#1C1C1C\],
+:root:not(.dark) .bg-\[\#1D1D1D\],
+:root:not(.dark) .bg-\[\#1e1e1e\],
+:root:not(.dark) .bg-\[\#1E1E1E\],
+:root:not(.dark) .bg-\[\#1F1F1F\],
+:root:not(.dark) .bg-\[\#202020\],
+:root:not(.dark) .bg-\[\#222222\],
+:root:not(.dark) .bg-\[\#242424\],
+:root:not(.dark) .bg-\[\#252525\],
+:root:not(.dark) .bg-\[\#262626\],
+:root:not(.dark) .bg-\[\#090a0c\],
+:root:not(.dark) .bg-\[\#060609\] {
+  background-color: #FFFFFF;
+}
+
+/* Purple/navy-tinted dark surfaces (instructor & lab panels) — map to a soft
+   neutral light card instead of pure white so their intentional accent tint
+   still reads as a distinct section in light mode. */
+:root:not(.dark) .bg-\[\#0A0814\],
+:root:not(.dark) .bg-\[\#121426\],
+:root:not(.dark) .bg-\[\#120F20\],
+:root:not(.dark) .bg-\[\#121218\],
+:root:not(.dark) .bg-\[\#121021\],
+:root:not(.dark) .bg-\[\#12101F\],
+:root:not(.dark) .bg-\[\#120F21\],
+:root:not(.dark) .bg-\[\#14182E\],
+:root:not(.dark) .bg-\[\#0D0F1D\],
+:root:not(.dark) .bg-\[\#1D1728\],
+:root:not(.dark) .bg-\[\#18142A\],
+:root:not(.dark) .bg-\[\#17132A\],
+:root:not(.dark) .bg-\[\#2B213B\],
+:root:not(.dark) .bg-\[\#121118\],
+:root:not(.dark) .bg-\[\#0C0E1A\],
+:root:not(.dark) .bg-\[\#130F21\],
+:root:not(.dark) .bg-\[\#121826\],
+:root:not(.dark) .bg-\[\#1c1a12\],
+:root:not(.dark) .bg-\[\#1C1A12\] {
+  background-color: #F1EEF9;
+}
+
+:root:not(.dark) .border-\[\#262626\],
+:root:not(.dark) .border-\[\#282828\],
+:root:not(.dark) .border-\[\#2B2B2B\],
+:root:not(.dark) .border-\[\#242424\],
+:root:not(.dark) .border-\[\#2E2E2E\],
+:root:not(.dark) .border-\[\#333\],
+:root:not(.dark) .border-\[\#333333\],
+:root:not(.dark) .border-\[\#222\],
+:root:not(.dark) .border-\[\#222222\] {
+  border-color: rgba(20, 21, 26, 0.14);
+}
+
+/* Translucent white overlays/dividers (hover states, subtle panel tints,
+   dividers) read as near-invisible white-on-white in light mode — remap them
+   to an equivalent dark-tinted translucency so hover/active states and
+   dividers stay visible on both themes. */
+:root:not(.dark) .bg-white\/5 { background-color: rgba(20, 21, 26, 0.04); }
+:root:not(.dark) .bg-white\/10 { background-color: rgba(20, 21, 26, 0.06); }
+:root:not(.dark) .bg-white\/15 { background-color: rgba(20, 21, 26, 0.08); }
+:root:not(.dark) .bg-white\/20 { background-color: rgba(20, 21, 26, 0.1); }
+:root:not(.dark) .bg-white\/30 { background-color: rgba(20, 21, 26, 0.14); }
+:root:not(.dark) .bg-white\/40 { background-color: rgba(20, 21, 26, 0.18); }
+:root:not(.dark) .hover\:bg-white\/5:hover { background-color: rgba(20, 21, 26, 0.04); }
+:root:not(.dark) .hover\:bg-white\/10:hover { background-color: rgba(20, 21, 26, 0.06); }
+:root:not(.dark) .hover\:bg-white\/20:hover { background-color: rgba(20, 21, 26, 0.1); }
+:root:not(.dark) .border-white\/10 { border-color: rgba(20, 21, 26, 0.12); }
+:root:not(.dark) .border-white\/15 { border-color: rgba(20, 21, 26, 0.14); }
+:root:not(.dark) .border-white\/20 { border-color: rgba(20, 21, 26, 0.16); }
+
 /* Custom & Global Scrollbars */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: #0A0A0C;
+  background: var(--bg);
 }
 ::-webkit-scrollbar-thumb {
   background: rgba(233, 195, 73, 0.35);
   border-radius: 4px;
+  border: 1px solid rgba(20, 21, 26, 0.08);
+}
+.dark ::-webkit-scrollbar-thumb {
   border: 1px solid rgba(255, 255, 255, 0.08);
 }
 ::-webkit-scrollbar-thumb:hover {
@@ -76,7 +262,7 @@ body {
 
 .custom-scrollbar {
   scrollbar-width: thin;
-  scrollbar-color: rgba(233, 195, 73, 0.4) #0A0A0C;
+  scrollbar-color: rgba(233, 195, 73, 0.4) var(--bg);
 }
 
 @keyframes headerGlowBreathe {

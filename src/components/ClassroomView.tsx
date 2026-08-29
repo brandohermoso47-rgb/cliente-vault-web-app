@@ -222,7 +222,7 @@ export default function ClassroomView({ currentUser, language, lessons }: Classr
   return (
     <div className="space-y-6 pb-12">
       {/* Header Banner */}
-      <div className="bg-gradient-to-r from-[#17142b] via-[#1f1a3a] to-[#120f24] p-6 sm:p-8 rounded-3xl border border-blue-500/30 shadow-2xl relative overflow-hidden">
+      <div className="bg-gradient-to-r from-blue-50 via-indigo-50 to-white dark:from-[#17142b] dark:via-[#1f1a3a] dark:to-[#120f24] p-6 sm:p-8 rounded-3xl border border-blue-500/30 shadow-2xl relative overflow-hidden">
         <div className="absolute -right-10 -bottom-10 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
           <div>
@@ -238,11 +238,11 @@ export default function ClassroomView({ currentUser, language, lessons }: Classr
                 </span>
               )}
             </div>
-            <h1 className="text-2xl sm:text-3xl font-black text-white uppercase tracking-tight flex items-center gap-3">
+            <h1 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white uppercase tracking-tight flex items-center gap-3">
               <GraduationCap className="w-8 h-8 text-blue-400 shrink-0" />
               Google Classroom Sincronizado
             </h1>
-            <p className="text-sm text-slate-300 mt-1 max-w-2xl font-medium">
+            <p className="text-sm text-slate-600 dark:text-slate-300 mt-1 max-w-2xl font-medium">
               Conecta tus clases, tareas, anuncios y calificaciones directamente con Google Classroom. Sincroniza los módulos de Waack On con tus alumnos en un clic.
             </p>
           </div>
@@ -273,7 +273,7 @@ export default function ClassroomView({ currentUser, language, lessons }: Classr
                 type="button"
                 onClick={() => fetchCourses()}
                 disabled={loading}
-                className="px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white border border-white/10 text-xs font-bold transition-all flex items-center gap-2 shadow-lg"
+                className="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-white/5 dark:hover:bg-white/10 text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white border border-slate-200 dark:border-white/10 text-xs font-bold transition-all flex items-center gap-2 shadow-lg"
               >
                 <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
                 Actualizar
@@ -320,15 +320,15 @@ export default function ClassroomView({ currentUser, language, lessons }: Classr
           {/* Courses Sidebar */}
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <h2 className="text-sm font-black text-white uppercase tracking-wider flex items-center gap-2">
+              <h2 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
                 <BookOpen className="w-4 h-4 text-blue-400" />
                 Mis Clases en Google Classroom ({courses.length})
               </h2>
             </div>
 
             {courses.length === 0 ? (
-              <div className="p-6 bg-[#131124] border border-white/10 rounded-2xl text-center space-y-3">
-                <p className="text-xs text-slate-400">No se encontraron clases activas en tu cuenta de Google Classroom.</p>
+              <div className="p-6 bg-white dark:bg-[#131124] border border-slate-200 dark:border-white/10 rounded-2xl text-center space-y-3">
+                <p className="text-xs text-slate-500 dark:text-slate-400">No se encontraron clases activas en tu cuenta de Google Classroom.</p>
                 {currentUser.role === 'instructor' && (
                   <button
                     onClick={() => setShowCreateCourseModal(true)}
@@ -347,9 +347,9 @@ export default function ClassroomView({ currentUser, language, lessons }: Classr
                       key={course.id}
                       onClick={() => setSelectedCourse(course)}
                       className={`p-4 rounded-2xl border transition-all cursor-pointer relative overflow-hidden ${
-                        isSelected 
-                          ? 'bg-[#1e1a38] border-blue-500/50 text-white shadow-xl' 
-                          : 'bg-[#121021] border-white/10 text-slate-300 hover:border-white/20 hover:bg-[#18152e]'
+                        isSelected
+                          ? 'bg-blue-50 dark:bg-[#1e1a38] border-blue-300 dark:border-blue-500/50 text-slate-900 dark:text-white shadow-xl'
+                          : 'bg-white dark:bg-[#121021] border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-300 hover:border-slate-300 dark:hover:border-white/20 hover:bg-slate-50 dark:hover:bg-[#18152e]'
                       }`}
                     >
                       <div className="flex items-start justify-between gap-3">
@@ -357,8 +357,8 @@ export default function ClassroomView({ currentUser, language, lessons }: Classr
                           <span className="text-[9px] font-mono font-bold text-blue-400 uppercase bg-blue-500/10 px-2 py-0.5 rounded border border-blue-500/20">
                             {course.section || 'Clase Activa'}
                           </span>
-                          <h3 className="text-sm font-black text-white mt-1 uppercase">{course.name}</h3>
-                          <p className="text-xs text-slate-400 line-clamp-1 mt-0.5">{course.descriptionHeading || course.description}</p>
+                          <h3 className="text-sm font-black text-slate-900 dark:text-white mt-1 uppercase">{course.name}</h3>
+                          <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-1 mt-0.5">{course.descriptionHeading || course.description}</p>
                         </div>
                         {course.alternateLink && (
                           <a
@@ -366,7 +366,7 @@ export default function ClassroomView({ currentUser, language, lessons }: Classr
                             target="_blank"
                             rel="noopener noreferrer"
                             onClick={(e) => e.stopPropagation()}
-                            className="p-2 rounded-lg bg-white/5 hover:bg-blue-500/20 text-slate-400 hover:text-blue-300 transition-all border border-white/10 shrink-0"
+                            className="p-2 rounded-lg bg-slate-100 hover:bg-blue-100 dark:bg-white/5 dark:hover:bg-blue-500/20 text-slate-500 hover:text-blue-600 dark:text-slate-400 dark:hover:text-blue-300 transition-all border border-slate-200 dark:border-white/10 shrink-0"
                             title="Abrir directamente en Google Classroom"
                           >
                             <ExternalLink className="w-3.5 h-3.5" />
@@ -380,18 +380,18 @@ export default function ClassroomView({ currentUser, language, lessons }: Classr
             )}
 
             {/* Waack On Quick Sync Module Panel */}
-            <div className="p-5 bg-[#121021] border border-blue-500/20 rounded-2xl space-y-3">
+            <div className="p-5 bg-white dark:bg-[#121021] border border-blue-200 dark:border-blue-500/20 rounded-2xl space-y-3">
               <div className="flex items-center gap-2">
                 <Layers className="w-4 h-4 text-[#E9C349]" />
-                <h3 className="text-xs font-black text-white uppercase">Sincronización Rápida Waack On</h3>
+                <h3 className="text-xs font-black text-slate-900 dark:text-white uppercase">Sincronización Rápida Waack On</h3>
               </div>
-              <p className="text-[11px] text-slate-400 leading-relaxed">
+              <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">
                 Exporta ejercicios prácticos y lecciones de Waack On a la clase seleccionada de Google Classroom con un clic:
               </p>
               <div className="space-y-2 max-h-56 overflow-y-auto custom-scrollbar">
                 {(lessons || []).slice(0, 4).map((l) => (
-                  <div key={l.id} className="p-2.5 bg-black/40 border border-white/5 rounded-xl flex items-center justify-between text-xs">
-                    <span className="font-bold text-white truncate max-w-[170px]">{l.title}</span>
+                  <div key={l.id} className="p-2.5 bg-slate-50 dark:bg-black/40 border border-slate-200 dark:border-white/5 rounded-xl flex items-center justify-between text-xs">
+                    <span className="font-bold text-slate-900 dark:text-white truncate max-w-[170px]">{l.title}</span>
                     <button
                       type="button"
                       onClick={() => handleSyncLessonToClassroom(l)}
@@ -408,7 +408,7 @@ export default function ClassroomView({ currentUser, language, lessons }: Classr
           {/* Selected Course Content Panel */}
           <div className="lg:col-span-2 space-y-4">
             {selectedCourse ? (
-              <div className="bg-[#121021] border border-white/10 rounded-3xl p-6 space-y-6 shadow-2xl">
+              <div className="bg-white dark:bg-[#121021] border border-slate-200 dark:border-white/10 rounded-3xl p-6 space-y-6 shadow-2xl">
                 {/* Course Header */}
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-4">
                   <div>
@@ -590,7 +590,7 @@ export default function ClassroomView({ currentUser, language, lessons }: Classr
                 )}
               </div>
             ) : (
-              <div className="bg-[#121021] border border-white/10 rounded-3xl p-12 text-center space-y-3">
+              <div className="bg-white dark:bg-[#121021] border border-slate-200 dark:border-white/10 rounded-3xl p-12 text-center space-y-3">
                 <GraduationCap className="w-12 h-12 text-slate-500 mx-auto" />
                 <p className="text-sm font-bold text-slate-300">Selecciona una clase de Google Classroom en el menú lateral para ver detalles.</p>
               </div>
@@ -599,7 +599,7 @@ export default function ClassroomView({ currentUser, language, lessons }: Classr
         </div>
       ) : (
         /* Not logged in landing explanation */
-        <div className="bg-[#121021] border border-white/10 rounded-3xl p-8 sm:p-12 text-center max-w-3xl mx-auto space-y-6">
+        <div className="bg-white dark:bg-[#121021] border border-slate-200 dark:border-white/10 rounded-3xl p-8 sm:p-12 text-center max-w-3xl mx-auto space-y-6">
           <div className="w-16 h-16 rounded-3xl bg-blue-600/20 border border-blue-400/30 flex items-center justify-center mx-auto text-blue-400">
             <GraduationCap className="w-8 h-8" />
           </div>

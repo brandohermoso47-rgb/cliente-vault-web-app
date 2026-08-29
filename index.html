@@ -4,6 +4,20 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#E9C349" />
+    <script>
+      // Apply the stored theme preference before first paint to avoid a flash
+      // of the wrong theme. Kept in sync with the theme state in src/App.tsx.
+      (function () {
+        try {
+          var stored = localStorage.getItem('waacking_theme');
+          if (stored === 'light') {
+            document.documentElement.classList.remove('dark');
+          } else {
+            document.documentElement.classList.add('dark');
+          }
+        } catch (e) {}
+      })();
+    </script>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/favicon.svg" />
     <link rel="manifest" href="/manifest.json" />
@@ -22,7 +36,7 @@
       gtag('config', 'G-BW1BKR5N54');
     </script>
   </head>
-  <body class="bg-[#0c0c0e] text-[#edeff4] selection:bg-[#E9C349] selection:text-black">
+  <body class="selection:bg-[#E9C349] selection:text-black">
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
