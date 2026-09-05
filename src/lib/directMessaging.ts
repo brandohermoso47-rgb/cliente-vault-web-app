@@ -10,7 +10,7 @@ import {
   limit, 
   serverTimestamp 
 } from 'firebase/firestore';
-import { db, auth, handleFirestoreError, OperationType } from './firebase';
+import { db, auth, handleFirestoreError, OperationType, sanitizeFirestoreData } from './firebase';
 import { User, DirectMessage, MessagingContact, UserRole } from '../types';
 import { INITIAL_INSTRUCTORS } from '../data';
 
@@ -304,10 +304,10 @@ export async function sendDirectMessage(
   if (auth.currentUser) {
     try {
       const path = 'direct_messages';
-      await setDoc(doc(db, path, newMessage.id), {
+      await setDoc(doc(db, path, newMessage.id), sanitizeFirestoreData({
         ...newMessage,
         serverTimestamp: serverTimestamp()
-      });
+      }));
     } catch (err) {
       console.warn('Notice: Offline/Firestore DM save fallback active:', err);
     }

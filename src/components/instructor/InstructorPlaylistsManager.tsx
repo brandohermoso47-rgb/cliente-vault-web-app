@@ -31,7 +31,7 @@ import {
 } from 'lucide-react';
 import { User } from '../../types';
 import { Language } from '../../lib/translations';
-import { db, storage } from '../../lib/firebase';
+import { db, storage, sanitizeFirestoreData } from '../../lib/firebase';
 import { collection, onSnapshot, doc, setDoc, deleteDoc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
@@ -321,7 +321,7 @@ export default function InstructorPlaylistsManager({ currentUser, language = 'es
 
       // Persist to Firestore
       try {
-        await setDoc(doc(db, 'instructor_playlists', updatedPlaylists[targetPlIndex].id), updatedPlaylists[targetPlIndex]);
+        await setDoc(doc(db, 'instructor_playlists', updatedPlaylists[targetPlIndex].id), sanitizeFirestoreData(updatedPlaylists[targetPlIndex]));
       } catch (err) {
         console.warn("Firestore save error:", err);
       }
@@ -369,7 +369,7 @@ export default function InstructorPlaylistsManager({ currentUser, language = 'es
     setActivePlaylistId(newPl.id);
 
     try {
-      await setDoc(doc(db, 'instructor_playlists', newPl.id), newPl);
+      await setDoc(doc(db, 'instructor_playlists', newPl.id), sanitizeFirestoreData(newPl));
     } catch (err) {
       console.warn("Firestore save playlist error:", err);
     }
@@ -392,7 +392,7 @@ export default function InstructorPlaylistsManager({ currentUser, language = 'es
     const target = updated.find(p => p.id === playlistId);
     if (target) {
       try {
-        await setDoc(doc(db, 'instructor_playlists', target.id), target);
+        await setDoc(doc(db, 'instructor_playlists', target.id), sanitizeFirestoreData(target));
       } catch (err) {
         console.warn(err);
       }
@@ -412,7 +412,7 @@ export default function InstructorPlaylistsManager({ currentUser, language = 'es
     const target = updated.find(p => p.id === playlistId);
     if (target) {
       try {
-        await setDoc(doc(db, 'instructor_playlists', target.id), target);
+        await setDoc(doc(db, 'instructor_playlists', target.id), sanitizeFirestoreData(target));
       } catch (err) {
         console.warn(err);
       }

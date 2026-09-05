@@ -13,6 +13,7 @@ export {
   appCheck,
   OperationType, 
   handleFirestoreError,
+  sanitizeFirestoreData,
   testFirestoreConnection 
 } from './lib/firebase';
 export type { FirestoreErrorInfo } from './lib/firebase';

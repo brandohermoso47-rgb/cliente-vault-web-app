@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Play, Square, Trophy, Zap, RefreshCw, Volume2, VolumeX, Sparkles, Flame, CheckCircle2, Music, Keyboard } from 'lucide-react';
 import { User } from '../../types';
-import { db, handleFirestoreError, OperationType } from '../../firebase';
+import { db, auth, sanitizeFirestoreData, handleFirestoreError, OperationType } from '../../firebase';
 import { doc, setDoc } from 'firebase/firestore';
 
 interface WaackingRhythmGameProps {
@@ -485,14 +485,15 @@ export const WaackingRhythmGame: React.FC<WaackingRhythmGameProps> = ({
       });
     }
 
-    // Sync to Firestore if user ID exists
-    if (db && currentUser.id) {
-      setDoc(doc(db, 'users', currentUser.id), {
+    // Sync to Firestore if user is authenticated with Firebase Auth
+    const activeAuthUid = auth?.currentUser?.uid;
+    if (db && activeAuthUid) {
+      setDoc(doc(db, 'users', activeAuthUid), sanitizeFirestoreData({
         points: (currentUser.points || 0) + bonusPointsEarned,
         lastRhythmGameScore: score,
         lastRhythmGameDate: new Date().toISOString()
-      }, { merge: true }).catch(err => {
-        handleFirestoreError(err, OperationType.WRITE, `users/${currentUser.id}`);
+      }), { merge: true }).catch(err => {
+        handleFirestoreError(err, OperationType.WRITE, `users/${activeAuthUid}`);
       });
     }
 

@@ -4,7 +4,7 @@ import { Music, Plus, Link2, Youtube, Disc, Sparkles, Check, Trash2, ExternalLin
 import { User, UserPlaylist, MusicSource, PlaylistItem } from '../types';
 import MultiSourcePlayer, { parseMusicSource } from './MultiSourcePlayer';
 import { doc, setDoc } from 'firebase/firestore';
-import { db } from '../lib/firebase';
+import { db, auth, sanitizeFirestoreData } from '../lib/firebase';
 import { uploadAudioFileToFirebase, saveUserTrackToFirebase, deleteUserTrackFromFirebase, subscribeUserTracksFromFirebase } from '../lib/musicService';
 
 interface StudentTrainingLibraryProps {
@@ -81,12 +81,15 @@ export default function StudentTrainingLibrary({ currentUser, onUserChange }: St
   const handleSaveConnection = async () => {
     setIsSavingProfile(true);
     try {
-      const userRef = doc(db, 'users', currentUser.id);
-      await setDoc(userRef, {
-        soundcloudProfileUrl: scProfileUrl,
-        connectedMusicSources: sources,
-        updatedAt: new Date().toISOString()
-      }, { merge: true });
+      const activeUid = auth?.currentUser?.uid || (currentUser.id && currentUser.id !== 'u-1' ? currentUser.id : null);
+      if (activeUid && db && auth.currentUser) {
+        const userRef = doc(db, 'users', activeUid);
+        await setDoc(userRef, sanitizeFirestoreData({
+          soundcloudProfileUrl: scProfileUrl,
+          connectedMusicSources: sources,
+          updatedAt: new Date().toISOString()
+        }), { merge: true });
+      }
 
       if (onUserChange) {
         onUserChange({

@@ -194,15 +194,16 @@ export default function BWImageGallery({ isGrayscaleGlobal = false, onToggleGray
 
   // Real-time listener for user favorites in Firestore
   useEffect(() => {
-    if (!activeUserId || activeUserId === 'guest') {
-      const localFavs = localStorage.getItem('waackon_bw_favs_guest');
+    const authedUid = auth.currentUser?.uid;
+    if (!authedUid) {
+      const localFavs = localStorage.getItem(`waackon_bw_favs_${activeUserId || 'guest'}`);
       if (localFavs) {
         try { setFavoriteIds(JSON.parse(localFavs)); } catch (e) { console.error(e); }
       }
       return;
     }
 
-    const favoritosRef = collection(db, 'users', activeUserId, 'favoritos');
+    const favoritosRef = collection(db, 'users', authedUid, 'favoritos');
     const unsubscribe = onSnapshot(
       favoritosRef,
       (snapshot) => {
@@ -255,9 +256,10 @@ export default function BWImageGallery({ isGrayscaleGlobal = false, onToggleGray
     const storageUid = activeUserId || 'guest';
     localStorage.setItem(`waackon_bw_favs_${storageUid}`, JSON.stringify(newFavIds));
 
-    if (activeUserId && activeUserId !== 'guest') {
+    const authedUid = auth.currentUser?.uid;
+    if (authedUid) {
       try {
-        const favDocRef = doc(db, 'users', activeUserId, 'favoritos', item.id);
+        const favDocRef = doc(db, 'users', authedUid, 'favoritos', item.id);
         if (isFav) {
           await deleteDoc(favDocRef);
           setToastMessage('Eliminado de tus favoritos en Firestore');
