@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion'; // Using standard framer-motion as pre-configured in project
+import { motion } from 'motion/react';
 import { Crown, CheckCircle2, ShieldCheck, Sparkles, GraduationCap, BookOpen, Camera, Brain, Lock } from 'lucide-react';
 import { Language } from '../lib/translations';
 

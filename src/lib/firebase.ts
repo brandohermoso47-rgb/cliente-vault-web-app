@@ -66,6 +66,26 @@ export interface FirestoreErrorInfo {
   };
 }
 
+export function sanitizeFirestoreData<T>(data: T): T {
+  if (data === null || data === undefined) {
+    return data;
+  }
+  if (Array.isArray(data)) {
+    return data.map(item => sanitizeFirestoreData(item)) as unknown as T;
+  }
+  if (typeof data === 'object') {
+    if (data instanceof Date) return data;
+    const result: any = {};
+    for (const [key, value] of Object.entries(data)) {
+      if (value !== undefined) {
+        result[key] = sanitizeFirestoreData(value);
+      }
+    }
+    return result;
+  }
+  return data;
+}
+
 export function handleFirestoreError(error: unknown, operationType: OperationType, path: string | null) {
   const errInfo: FirestoreErrorInfo = {
     error: error instanceof Error ? error.message : String(error),
@@ -97,3 +117,6 @@ export async function testFirestoreConnection() {
     }
   }
 }
+
+// Automatically validate connection on boot
+testFirestoreConnection();

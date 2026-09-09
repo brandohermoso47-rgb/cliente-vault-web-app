@@ -45,6 +45,7 @@ import { CombosLab } from './lab/CombosLab';
 import { PlaylistsLab } from './lab/PlaylistsLab';
 import { SomaticFeedbackLab } from './lab/SomaticFeedbackLab';
 import { SomaticPostureAnalyzer } from './entrenamiento/SomaticPostureAnalyzer';
+import MovementTrailStudio from './entrenamiento/movementTrail/MovementTrailStudio';
 import { WaackingRhythmGame } from './entrenamiento/WaackingRhythmGame';
 import { AudioSpectrumVisualizer } from './entrenamiento/AudioSpectrumVisualizer';
 import { SmartMusicalityTrainer } from './entrenamiento/SmartMusicalityTrainer';
@@ -1094,7 +1095,7 @@ export default function EntrenamientoView({
   theme,
   onOpenSpotifyPlayer
 }: EntrenamientoViewProps) {
-  const [subTab, setSubTab] = useState<'drill' | 'battle' | 'playlists' | 'combos' | 'sensorial' | 'feedback' | 'somatic' | 'drama' | 'rhythm' | 'spectrum' | 'musicality' | 'pose_lab'>('musicality');
+  const [subTab, setSubTab] = useState<'drill' | 'battle' | 'playlists' | 'combos' | 'sensorial' | 'feedback' | 'somatic' | 'drama' | 'rhythm' | 'spectrum' | 'musicality' | 'pose_lab' | 'trazos'>('musicality');
 
   // 9. DRAMA & EXPRESSION LAB STATE
   const [cameraActive, setCameraActive] = useState(false);
@@ -2763,6 +2764,19 @@ export default function EntrenamientoView({
           {currentUser.billingStatus !== 'active' && <Lock className="w-3.5 h-3.5 text-primary ml-1 shrink-0 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12" />}
         </button>
         <button
+          id="subtab-trazos"
+          onClick={() => setSubTab('trazos')}
+          className={`group h-11 min-w-[180px] px-4 py-2 text-xs font-mono font-bold tracking-wider transition-all flex items-center justify-center gap-2 border rounded-xl shrink-0 focus:outline-none ${
+            subTab === 'trazos'
+              ? 'bg-[#9A2B3C] text-white border-[#9A2B3C] shadow-lg'
+              : 'bg-[#121212] text-[#8A8A8A] border-[#262626] hover:text-white hover:border-[#E9C349]/30'
+          }`}
+        >
+          <Camera className="w-4 h-4 text-[#E9C349] shrink-0 transition-transform duration-300 group-hover:scale-125 group-hover:rotate-12 group-active:scale-90" />
+          {language === 'es' ? 'TRAZOS DE MOVIMIENTO' : 'MOVEMENT TRAILS'}
+          {currentUser.billingStatus !== 'active' && <Lock className="w-3.5 h-3.5 text-primary ml-1 shrink-0 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12" />}
+        </button>
+        <button
           id="subtab-drama"
           onClick={() => setSubTab('drama')}
           className={`group h-11 min-w-[180px] px-4 py-2 text-xs font-mono font-bold tracking-wider transition-all flex items-center justify-center gap-2 border rounded-xl shrink-0 focus:outline-none ${
@@ -3913,6 +3927,21 @@ Right Arm Extension: ${rightUserAngle.toFixed(1)}°
               )}
             </div>
           </div>
+          )
+        )}
+        {subTab === 'trazos' && (
+          currentUser.billingStatus !== 'active' ? (
+            <PremiumGate
+              language={language}
+              sectionName="diary"
+              onSubscribe={() => onUserChange && onUserChange({ ...currentUser, billingStatus: 'active' })}
+            />
+          ) : (
+            <MovementTrailStudio
+              language={language}
+              onAddBonusPoints={onAddBonusPoints}
+              onLogPractice={onLogPractice}
+            />
           )
         )}
         {subTab === 'feedback' && (

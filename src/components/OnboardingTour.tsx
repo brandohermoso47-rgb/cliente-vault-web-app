@@ -14,7 +14,7 @@ import {
 } from 'lucide-react';
 import { Language } from '../lib/translations';
 import { User } from '../types';
-import { db } from '../firebase';
+import { db, auth, sanitizeFirestoreData } from '../firebase';
 import { doc, setDoc } from 'firebase/firestore';
 
 interface OnboardingTourProps {
@@ -349,8 +349,9 @@ export default function OnboardingTour({
         }
       };
       onUpdateUser(prev => ({ ...prev, ...updatedData }));
-      if (currentUser?.id) {
-        setDoc(doc(db, 'users', currentUser.id), updatedData, { merge: true }).catch(err => {
+      const authedUid = auth?.currentUser?.uid;
+      if (authedUid && db) {
+        setDoc(doc(db, 'users', authedUid), sanitizeFirestoreData(updatedData), { merge: true }).catch(err => {
           console.error("Error saving weak areas to Firestore:", err);
         });
       }

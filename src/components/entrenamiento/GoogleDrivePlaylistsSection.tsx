@@ -23,7 +23,7 @@ import {
 } from 'lucide-react';
 import { User } from '../../types';
 import { Language } from '../../lib/translations';
-import { db } from '../../lib/firebase';
+import { db, sanitizeFirestoreData } from '../../lib/firebase';
 import { collection, onSnapshot, doc, setDoc, deleteDoc, query, orderBy } from 'firebase/firestore';
 import GoogleDriveMusicPickerModal, { ImportedDriveTrack } from '../GoogleDriveMusicPickerModal';
 
@@ -115,7 +115,7 @@ export const GoogleDrivePlaylistsSection: React.FC<GoogleDrivePlaylistsSectionPr
     try {
       // Save to Firestore
       const docRef = doc(db, 'instructor_drive_tracks', newTrack.id);
-      await setDoc(docRef, newTrack);
+      await setDoc(docRef, sanitizeFirestoreData(newTrack));
       setTracks((prev) => [newTrack, ...prev.filter((t) => t.id !== newTrack.id)]);
     } catch (err) {
       console.error('Error saving imported track to Firestore:', err);
@@ -144,7 +144,7 @@ export const GoogleDrivePlaylistsSection: React.FC<GoogleDrivePlaylistsSectionPr
   const handleToggleShare = async (track: ImportedDriveTrack) => {
     const updated = { ...track, isSharedWithStudents: !track.isSharedWithStudents };
     try {
-      await setDoc(doc(db, 'instructor_drive_tracks', track.id), updated, { merge: true });
+      await setDoc(doc(db, 'instructor_drive_tracks', track.id), sanitizeFirestoreData(updated), { merge: true });
       setTracks((prev) => prev.map((t) => (t.id === track.id ? updated : t)));
     } catch (err) {
       console.error('Error toggling share state:', err);

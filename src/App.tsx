@@ -30,7 +30,6 @@ import {
   Disc,
   FileText,
   Flame,
-  Smartphone,
   Download,
   Crown
 } from 'lucide-react';
@@ -40,6 +39,9 @@ import { GooglePickerModal } from './components/GooglePickerModal';
 import { GoogleDocsModal } from './components/GoogleDocsModal';
 import SpotifyMusicPlayer, { SpotifyFloatingMiniPlayer } from './components/SpotifyMusicPlayer';
 import AdminDashboardView, { ADMIN_USER_ID } from './components/AdminDashboardView';
+import { InstructorQuickActions } from './components/instructor/InstructorQuickActions';
+import { useCircadianTheme } from './hooks/useCircadianTheme';
+import { CircadianHeaderControl } from './components/CircadianHeaderControl';
 import { Language, translations, languageNames } from './lib/translations';
 import { 
   createBackendAnnouncement, 
@@ -124,7 +126,7 @@ const PodcastsView = React.lazy(() => import('./components/PodcastsView'));
 const AIPoseLab = React.lazy(() => import('./components/AIPoseLab'));
 
 // Import Firebase
-import { auth, db, OperationType, handleFirestoreError } from './firebase';
+import { auth, db, OperationType, handleFirestoreError, sanitizeFirestoreData } from './firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 import { collection, doc, onSnapshot, setDoc, deleteDoc, query, orderBy, limit, getDoc } from 'firebase/firestore';
 
@@ -271,6 +273,9 @@ export default function App() {
     return (localStorage.getItem('waacking_theme') as 'dark' | 'light') || 'dark';
   });
 
+  // Circadian Time-of-Day Adaptive Color Scheme for #top-header (Anti-fatiga visual del instructor)
+  const circadian = useCircadianTheme(theme, language);
+
   useEffect(() => {
     localStorage.setItem('waacking_theme', theme);
     if (theme === 'dark') {
@@ -382,7 +387,7 @@ export default function App() {
       // Persist to Firestore if logged in
       if (auth.currentUser) {
         const docRef = doc(db, 'users', auth.currentUser.uid);
-        setDoc(docRef, {
+        setDoc(docRef, sanitizeFirestoreData({
           id: updated.id,
           name: updated.name,
           avatar: updated.avatar,
@@ -403,7 +408,7 @@ export default function App() {
           },
           customAchievements: updated.customAchievements || [],
           billingStatus: updated.billingStatus || 'cancelled'
-        }).catch(err => {
+        })).catch(err => {
           console.error("Error saving updated profile to Firestore:", err);
         });
       }
@@ -425,7 +430,7 @@ export default function App() {
 
   // Real-time Firestore Listener for current user profile & webhook role changes
   useEffect(() => {
-    const activeUid = firebaseUser?.uid || currentUser.id;
+    const activeUid = firebaseUser?.uid;
     if (!activeUid) return;
 
     const userDocRef = doc(db, 'users', activeUid);
@@ -478,7 +483,7 @@ export default function App() {
     });
 
     return () => unsub();
-  }, [firebaseUser?.uid, currentUser.id]);
+  }, [firebaseUser?.uid]);
 
   // Handle URL path routing & payment redirect query parameters
   useEffect(() => {
@@ -592,7 +597,7 @@ export default function App() {
               nickname: defaultNickname,
               billingStatus: 'cancelled'
             };
-            await setDoc(docRef, newUserProfile, { merge: true });
+            await setDoc(docRef, sanitizeFirestoreData(newUserProfile), { merge: true });
             setCurrentUser(newUserProfile);
           }
         } catch (error) {
@@ -689,7 +694,7 @@ export default function App() {
           setChatMessages(msgs);
         } else {
           INITIAL_CHAT_MESSAGES.forEach(msg => {
-            setDoc(doc(db, 'chat_messages', msg.id), msg).catch(err =>
+            setDoc(doc(db, 'chat_messages', msg.id), sanitizeFirestoreData(msg)).catch(err =>
               handleFirestoreError(err, OperationType.WRITE, `chat_messages/${msg.id}`)
             );
           });
@@ -716,7 +721,7 @@ export default function App() {
           setPresentations(items);
         } else {
           INITIAL_PRESENTATIONS.forEach(p => {
-            setDoc(doc(db, 'presentations', p.id), p).catch(err =>
+            setDoc(doc(db, 'presentations', p.id), sanitizeFirestoreData(p)).catch(err =>
               handleFirestoreError(err, OperationType.WRITE, `presentations/${p.id}`)
             );
           });
@@ -743,7 +748,7 @@ export default function App() {
           setAnnouncements(items);
         } else {
           INITIAL_ANNOUNCEMENTS.forEach(a => {
-            setDoc(doc(db, 'announcements', a.id), a).catch(err =>
+            setDoc(doc(db, 'announcements', a.id), sanitizeFirestoreData(a)).catch(err =>
               handleFirestoreError(err, OperationType.WRITE, `announcements/${a.id}`)
             );
           });
@@ -770,7 +775,7 @@ export default function App() {
           setFeedbackItems(items);
         } else {
           INITIAL_FEEDBACK_ITEMS.forEach(f => {
-            setDoc(doc(db, 'feedback_items', f.id), f).catch(err =>
+            setDoc(doc(db, 'feedback_items', f.id), sanitizeFirestoreData(f)).catch(err =>
               handleFirestoreError(err, OperationType.WRITE, `feedback_items/${f.id}`)
             );
           });
@@ -870,7 +875,7 @@ export default function App() {
       return list.map(n => n.id === notifId ? { ...n, read: true } : n);
     });
     if (db) {
-      setDoc(doc(db, 'notifications', notifId), { read: true }, { merge: true }).catch(() => {});
+      setDoc(doc(db, 'notifications', notifId), sanitizeFirestoreData({ read: true }), { merge: true }).catch(() => {});
     }
   };
 
@@ -882,7 +887,7 @@ export default function App() {
     if (db && notificationsList.length > 0) {
       notificationsList.forEach(n => {
         if (!n.read) {
-          setDoc(doc(db, 'notifications', n.id), { read: true }, { merge: true }).catch(() => {});
+          setDoc(doc(db, 'notifications', n.id), sanitizeFirestoreData({ read: true }), { merge: true }).catch(() => {});
         }
       });
     }
@@ -900,7 +905,7 @@ export default function App() {
     };
     setNotificationsList(prev => [newNotif, ...(prev.length > 0 ? prev : INITIAL_DEMO_NOTIFICATIONS)]);
     if (db) {
-      setDoc(doc(db, 'notifications', newNotif.id), newNotif).catch(err => {
+      setDoc(doc(db, 'notifications', newNotif.id), sanitizeFirestoreData(newNotif)).catch(err => {
         handleFirestoreError(err, OperationType.WRITE, `notifications/${newNotif.id}`);
       });
     }
@@ -921,7 +926,7 @@ export default function App() {
           setLessons(items);
         } else {
           INITIAL_LESSONS.forEach(l => {
-            setDoc(doc(db, 'lessons', l.id), l).catch(err =>
+            setDoc(doc(db, 'lessons', l.id), sanitizeFirestoreData(l)).catch(err =>
               handleFirestoreError(err, OperationType.WRITE, `lessons/${l.id}`)
             );
           });
@@ -949,7 +954,7 @@ export default function App() {
           setPracticeLogs(logs);
         } else {
           INITIAL_PRACTICE_LOGS.forEach(log => {
-            setDoc(doc(db, 'users', activeUid, 'practice_logs', log.id), log).catch(err =>
+            setDoc(doc(db, 'users', activeUid, 'practice_logs', log.id), sanitizeFirestoreData(log)).catch(err =>
               handleFirestoreError(err, OperationType.WRITE, `users/${activeUid}/practice_logs/${log.id}`)
             );
           });
@@ -1016,7 +1021,7 @@ export default function App() {
 
     if (lesson) {
       const updatedLesson = { ...lesson, completed };
-      setDoc(doc(db, 'lessons', lessonId), updatedLesson, { merge: true }).catch(err => {
+      setDoc(doc(db, 'lessons', lessonId), sanitizeFirestoreData(updatedLesson), { merge: true }).catch(err => {
         handleFirestoreError(err, OperationType.WRITE, `lessons/${lessonId}`);
       });
     }
@@ -1058,7 +1063,7 @@ export default function App() {
         actionUrl,
         imageUrl
       };
-      setDoc(doc(db, 'announcements', newAnn.id), newAnn).catch(err => {
+      setDoc(doc(db, 'announcements', newAnn.id), sanitizeFirestoreData(newAnn)).catch(err => {
         handleFirestoreError(err, OperationType.WRITE, `announcements/${newAnn.id}`);
       });
     } catch (err: any) {
@@ -1085,7 +1090,7 @@ export default function App() {
       likes: 0,
       comments: []
     };
-    setDoc(doc(db, 'presentations', newPres.id), newPres).catch(err => {
+    setDoc(doc(db, 'presentations', newPres.id), sanitizeFirestoreData(newPres)).catch(err => {
       handleFirestoreError(err, OperationType.WRITE, `presentations/${newPres.id}`);
     });
   };
@@ -1100,7 +1105,7 @@ export default function App() {
       likes: isLiked ? Math.max(0, p.likes - 1) : p.likes + 1,
       isLikedByMe: !isLiked
     };
-    setDoc(doc(db, 'presentations', id), updated).catch(err => {
+    setDoc(doc(db, 'presentations', id), sanitizeFirestoreData(updated)).catch(err => {
       handleFirestoreError(err, OperationType.WRITE, `presentations/${id}`);
     });
   };
@@ -1122,7 +1127,7 @@ export default function App() {
         }
       ]
     };
-    setDoc(doc(db, 'presentations', presId), updated).catch(err => {
+    setDoc(doc(db, 'presentations', presId), sanitizeFirestoreData(updated)).catch(err => {
       handleFirestoreError(err, OperationType.WRITE, `presentations/${presId}`);
     });
   };
@@ -1143,7 +1148,7 @@ export default function App() {
         time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
         role: currentUser.role
       };
-      setDoc(doc(db, 'chat_messages', newMsg.id), newMsg).catch(err => {
+      setDoc(doc(db, 'chat_messages', newMsg.id), sanitizeFirestoreData(newMsg)).catch(err => {
         handleFirestoreError(err, OperationType.WRITE, `chat_messages/${newMsg.id}`);
       });
       
@@ -1171,7 +1176,7 @@ export default function App() {
       corrections: [],
       completed: false
     };
-    setDoc(doc(db, 'feedback_items', newFeedback.id), newFeedback).catch(err => {
+    setDoc(doc(db, 'feedback_items', newFeedback.id), sanitizeFirestoreData(newFeedback)).catch(err => {
       handleFirestoreError(err, OperationType.WRITE, `feedback_items/${newFeedback.id}`);
     });
 
@@ -1203,12 +1208,12 @@ export default function App() {
       minutes,
       activityType,
       description,
-      category: extra?.category,
-      bpm: extra?.bpm
+      ...(extra?.category ? { category: extra.category } : {}),
+      ...(extra?.bpm ? { bpm: extra.bpm } : {})
     };
 
     if (activeUid) {
-      setDoc(doc(db, 'users', activeUid, 'practice_logs', newLog.id), newLog).catch(err => {
+      setDoc(doc(db, 'users', activeUid, 'practice_logs', newLog.id), sanitizeFirestoreData(newLog)).catch(err => {
         handleFirestoreError(err, OperationType.WRITE, `users/${activeUid}/practice_logs/${newLog.id}`);
       });
     }
@@ -1243,7 +1248,7 @@ export default function App() {
         }
       ]
     };
-    setDoc(doc(db, 'feedback_items', itemId), updated).catch(err => {
+    setDoc(doc(db, 'feedback_items', itemId), sanitizeFirestoreData(updated)).catch(err => {
       handleFirestoreError(err, OperationType.WRITE, `feedback_items/${itemId}`);
     });
 
@@ -1902,7 +1907,7 @@ export default function App() {
       <div className={`flex-1 flex flex-col min-w-0 min-h-screen lg:min-h-0 lg:h-full lg:max-h-screen lg:overflow-hidden ${theme === 'light' ? 'bg-[#f8f9fa] text-[#1a1a1a]' : 'bg-[#0A0A0A] text-[#EDEFF4]'}`}>
         
         {/* Top Header Navigation */}
-        <header id="top-header" className={`h-16 border-b px-4 sm:px-6 flex items-center justify-between shrink-0 select-none relative z-20 ${theme === 'light' ? 'bg-white border-slate-300 text-slate-900 shadow-sm' : 'bg-[#0A0A0A] border-[#262626] animate-header-glow'}`}>
+        <header id="top-header" className={`h-16 border-b px-4 sm:px-6 flex items-center justify-between shrink-0 select-none relative z-20 ${circadian.headerClasses}`}>
           <div className="flex items-center gap-3 min-w-0">
             {/* Hamburger button for mobile menu */}
             {!isFocusMode && (
@@ -1974,6 +1979,21 @@ export default function App() {
           </div>
 
           <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+            {/* [INSTRUCTOR QUICK ACTIONS HUB - Persistent Top Header Menu] */}
+            {(currentUser.role === 'instructor' || currentUser.role === 'studio' || currentUser.id === ADMIN_USER_ID || auth.currentUser?.uid === ADMIN_USER_ID) && (
+              <InstructorQuickActions
+                currentUser={currentUser}
+                theme={theme}
+                language={language}
+                activeTab={activeTab}
+                setActiveTab={setActiveTab}
+                onOpenDocsModal={() => setShowDocsModal(true)}
+                onOpenFormationPreview={() => setShowFormationPreviewModal(true)}
+                onOpenSomaticPosingPrototype={() => setShowSomaticPosingModal(true)}
+                onQuickBpmSelect={(bpm) => setTrainingBpm(bpm)}
+              />
+            )}
+
             {/* [ADMIN BADGE INDICATOR] */}
             {(currentUser.id === ADMIN_USER_ID || auth.currentUser?.uid === ADMIN_USER_ID || firebaseUser?.uid === ADMIN_USER_ID) && (
               <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-[#E9C349] to-amber-500 text-black font-extrabold text-[11px] font-mono uppercase tracking-wider shadow-[0_0_15px_rgba(233,195,73,0.5)] border border-amber-300">
@@ -1981,23 +2001,6 @@ export default function App() {
                 <span>ADMIN</span>
               </span>
             )}
-
-            {/* [BOTÓN DE APLICACIÓN - PWA APP & DESKTOP - "Add an application"] */}
-            <motion.button
-              whileHover={{ scale: 1.04 }}
-              whileTap={{ scale: 0.96 }}
-              onClick={() => setIsAppInstallModalOpen(true)}
-              className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border text-[11px] font-mono font-black uppercase tracking-wider transition-all shadow-md active:scale-95 cursor-pointer ${
-                theme === 'light'
-                  ? 'bg-amber-500/10 hover:bg-amber-500/20 text-amber-950 border-amber-500/40'
-                  : 'bg-gradient-to-r from-[#171510] to-[#261f14] hover:from-[#221c12] hover:to-[#332816] text-[#E9C349] border-[#E9C349]/50 hover:border-[#E9C349]'
-              }`}
-              title="Instalar Aplicación Waack On (PWA, Soporte Offline y Notificaciones)"
-              aria-label="Instalar Aplicación"
-            >
-              <Smartphone className="w-3.5 h-3.5 text-[#E9C349]" />
-              <span className="hidden sm:inline">App PWA</span>
-            </motion.button>
 
             {/* [CENTRO DE NOTIFICACIONES & WEB PUSH - "Add notifications / Add push notifications / Add all notifications"] */}
             <motion.button
@@ -2122,6 +2125,13 @@ export default function App() {
                 </select>
               </div>
             )}
+
+            {/* [MODO CIRCADIANO ANTI-FATIGA VISUAL DEL INSTRUCTOR] */}
+            <CircadianHeaderControl
+              circadian={circadian}
+              theme={theme}
+              language={language}
+            />
 
             {/* [BOTÓN DE LUZ - LIGHT BUTTON - "Add a light button"] */}
             <motion.button

@@ -19,7 +19,7 @@ import {
   Check
 } from 'lucide-react';
 import { doc, setDoc } from 'firebase/firestore';
-import { db, auth, OperationType, handleFirestoreError } from '../firebase';
+import { db, auth, OperationType, handleFirestoreError, sanitizeFirestoreData } from '../firebase';
 
 export interface TrainingSessionSummary {
   durationSeconds: number;
@@ -115,7 +115,7 @@ export const TrainingSummaryModal: React.FC<TrainingSummaryModalProps> = ({
       };
 
       if (activeUid) {
-        await setDoc(doc(db, 'users', activeUid, 'practice_logs', logId), logData).catch(err => {
+        await setDoc(doc(db, 'users', activeUid, 'practice_logs', logId), sanitizeFirestoreData(logData)).catch(err => {
           handleFirestoreError(err, OperationType.WRITE, `users/${activeUid}/practice_logs/${logId}`);
         });
       }
