@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { z } from 'zod';
+import { adminAuth } from '../lib/firebase-admin.ts';
 
 export type AppRole = 'free_user' | 'vip_student' | 'academy' | 'instructor';
 export type PlanType = 'app_vip' | 'app_academy' | 'instructor_custom';
@@ -39,64 +40,91 @@ export function normalizeCanonicalRole(rawRole?: string, status?: string): AppRo
 }
 
 /**
- * Extracts user role, status and Stripe Connect identity from request headers or body.
+ * SEGURIDAD (arreglo urgente): esta función solía leer el rol/estado de
+ * suscripción/identidad de Stripe directamente de headers (`x-user-role`,
+ * `x-user-id`, `x-subscription-status`, `x-plan-type`, `x-stripe-*`) o del
+ * body — es decir, del propio cliente. Cualquiera podía declararse
+ * "instructor" con suscripción activa y Stripe Connect verificado solo
+ * mandando esos headers, sin ninguna verificación real. Todos los guards de
+ * abajo (requireRole, requireVipAccess, requireAcademyAccess,
+ * requireVerifiedInstructor, requireInstructorSubscriber) confiaban en esto.
+ *
+ * Ahora la única fuente de verdad es un ID token de Firebase real, verificado
+ * contra el Admin SDK, y los custom claims que el propio backend escribe
+ * después de un pago confirmado por webhook de Stripe (ver
+ * updateUserRoleAndSubscriptionInDB en server.ts) — nunca algo que el cliente
+ * pueda declarar por su cuenta.
  */
-export function getUserFromReq(req: Request): AuthenticatedUser {
-  const roleHeader = (req.headers['x-user-role'] as string) || 
-                     (req.body?.currentUserRole as string) || 
-                     (req.body?.currentUser?.role) || 
-                     (req.body?.authorRole) ||
-                     (req.body?.role) ||
-                     'free_user';
+export async function verifyRequestUser(req: Request): Promise<AuthenticatedUser | null> {
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith('Bearer ')) return null;
 
-  const idHeader = (req.headers['x-user-id'] as string) || 
-                   (req.body?.currentUserId as string) || 
-                   (req.body?.currentUser?.id) || 
-                   (req.body?.uid) ||
-                   'anonymous';
+  const token = authHeader.slice('Bearer '.length).trim();
+  if (!token) return null;
 
-  const statusHeader = (req.headers['x-subscription-status'] as string) ||
-                       (req.body?.subscription_status as string) ||
-                       (req.body?.currentUser?.subscription_status) ||
-                       (req.body?.billingStatus === 'active' ? 'active' : 'canceled');
+  try {
+    const decoded = await adminAuth.verifyIdToken(token);
+    const claims = decoded as unknown as Record<string, unknown>;
 
-  const planTypeHeader = (req.headers['x-plan-type'] as string) ||
-                         (req.body?.plan_type as string) ||
-                         (req.body?.currentUser?.plan_type) ||
-                         'app_vip';
+    const rawRole = typeof claims.role === 'string' ? claims.role : undefined;
+    const rawStatus = typeof claims.subscription_status === 'string' ? claims.subscription_status : undefined;
+    const role = normalizeCanonicalRole(rawRole, rawStatus);
+    const subscriptionStatus = (['trialing', 'active', 'past_due', 'canceled'].includes(rawStatus || '')
+      ? rawStatus
+      : 'canceled') as SubscriptionStatus;
 
-  const stripeCustomer = (req.headers['x-stripe-customer-id'] as string) ||
-                         (req.body?.stripe_customer_id) ||
-                         (req.body?.currentUser?.stripe_customer_id);
+    return {
+      id: decoded.uid,
+      role,
+      subscription_status: subscriptionStatus,
+      plan_type: (typeof claims.plan_type === 'string' ? claims.plan_type : 'app_vip') as PlanType,
+      stripe_customer_id: typeof claims.stripe_customer_id === 'string' ? claims.stripe_customer_id : undefined,
+      stripe_account_id: typeof claims.stripe_account_id === 'string' ? claims.stripe_account_id : undefined,
+      is_connect_verified: claims.is_connect_verified === true,
+      subscribed_instructor_ids: Array.isArray(claims.subscribed_instructor_ids)
+        ? (claims.subscribed_instructor_ids as string[])
+        : []
+    };
+  } catch (err: any) {
+    console.warn('[RBAC] Failed to verify Firebase ID token:', err?.message || err);
+    return null;
+  }
+}
 
-  const stripeAccount = (req.headers['x-stripe-account-id'] as string) ||
-                        (req.body?.stripe_account_id) ||
-                        (req.body?.currentUser?.stripe_account_id);
+/**
+ * Best-effort, NON-AUTHORITATIVE identity extraction used ONLY for request
+ * logging/telemetry. Values here are attacker-controlled and MUST NEVER be
+ * used to make an authorization decision — use verifyRequestUser / the
+ * require* guards below for anything that matters.
+ */
+export function getUnverifiedClientAssertedIdentity(req: Request): { id: string; role: string } {
+  const roleHeader = (req.headers['x-user-role'] as string) || (req.body?.role) || 'free_user';
+  const idHeader = (req.headers['x-user-id'] as string) || (req.body?.uid) || 'anonymous';
+  return { id: idHeader, role: (roleHeader || '').toString().toLowerCase().trim() };
+}
 
-  const isConnectVerified = req.headers['x-is-connect-verified'] === 'true' ||
-                            req.body?.is_connect_verified === true ||
-                            req.body?.currentUser?.is_connect_verified === true;
-
-  const subscribedInstructors = req.body?.subscribed_instructor_ids ||
-                                req.body?.subscribedInstructorIds ||
-                                req.body?.currentUser?.subscribedInstructorIds ||
-                                [];
-
-  const canonicalRole = normalizeCanonicalRole(roleHeader, statusHeader);
-  const normalizedStatus = (['trialing', 'active', 'past_due', 'canceled'].includes(statusHeader)
-    ? statusHeader
-    : 'canceled') as SubscriptionStatus;
-
-  return {
-    id: idHeader,
-    role: canonicalRole,
-    subscription_status: normalizedStatus,
-    plan_type: planTypeHeader as PlanType,
-    stripe_customer_id: stripeCustomer,
-    stripe_account_id: stripeAccount,
-    is_connect_verified: isConnectVerified,
-    subscribed_instructor_ids: Array.isArray(subscribedInstructors) ? subscribedInstructors : []
-  };
+/**
+ * Requires a valid, verified Firebase ID token, with no specific role
+ * requirement. Populates `req.user` with the verified uid + server-resolved
+ * role. Use this on any route that needs a trustworthy caller identity (e.g.
+ * "attribute this message to me" / "only I can delete my own message") even
+ * when it doesn't need a specific role.
+ */
+export function requireVerifiedUser(req: Request, res: Response, next: NextFunction) {
+  verifyRequestUser(req).then((user) => {
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        error: 'No autorizado: token de Firebase inválido o ausente',
+        code: 'UNAUTHENTICATED'
+      });
+    }
+    (req as any).user = user;
+    next();
+  }).catch((err) => {
+    console.error('[RBAC] Unexpected error verifying user:', err);
+    return res.status(401).json({ success: false, error: 'No autorizado', code: 'UNAUTHENTICATED' });
+  });
 }
 
 /**
@@ -104,27 +132,38 @@ export function getUserFromReq(req: Request): AuthenticatedUser {
  */
 export function requireRole(allowedRoles: Array<AppRole | 'student' | 'guest'>) {
   return (req: Request, res: Response, next: NextFunction) => {
-    const user = getUserFromReq(req);
+    verifyRequestUser(req).then((user) => {
+      if (!user) {
+        return res.status(401).json({
+          success: false,
+          error: 'No autorizado: token de Firebase inválido o ausente',
+          code: 'UNAUTHENTICATED'
+        });
+      }
 
-    // Map legacy role aliases
-    const effectiveRoles = allowedRoles.map(r => {
-      if (r === 'student') return 'vip_student';
-      if (r === 'guest') return 'free_user';
-      return r;
-    });
-
-    if (!effectiveRoles.includes(user.role) && !allowedRoles.includes(user.role as any)) {
-      console.warn(`[RBAC Guard]: Denied access to ${req.method} ${req.path} for user '${user.id}' with role '${user.role}'`);
-      return res.status(403).json({
-        success: false,
-        error: 'Acceso denegado por el servidor (Control de Acceso Basado en Roles - RBAC)',
-        details: `Se requieren permisos de [${allowedRoles.join(', ')}] para esta operación. Tu rol verificado en el servidor es '${user.role}'.`,
-        code: 'FORBIDDEN_ROLE_ACCESS'
+      // Map legacy role aliases
+      const effectiveRoles = allowedRoles.map(r => {
+        if (r === 'student') return 'vip_student';
+        if (r === 'guest') return 'free_user';
+        return r;
       });
-    }
 
-    (req as any).user = user;
-    next();
+      if (!effectiveRoles.includes(user.role) && !allowedRoles.includes(user.role as any)) {
+        console.warn(`[RBAC Guard]: Denied access to ${req.method} ${req.path} for user '${user.id}' with server-verified role '${user.role}'`);
+        return res.status(403).json({
+          success: false,
+          error: 'Acceso denegado por el servidor (Control de Acceso Basado en Roles - RBAC)',
+          details: `Se requieren permisos de [${allowedRoles.join(', ')}] para esta operación. Tu rol verificado en el servidor es '${user.role}'.`,
+          code: 'FORBIDDEN_ROLE_ACCESS'
+        });
+      }
+
+      (req as any).user = user;
+      next();
+    }).catch((err) => {
+      console.error('[RBAC] Unexpected error in requireRole:', err);
+      return res.status(401).json({ success: false, error: 'No autorizado', code: 'UNAUTHENTICATED' });
+    });
   };
 }
 
@@ -134,30 +173,37 @@ export function requireRole(allowedRoles: Array<AppRole | 'student' | 'guest'>) 
  */
 export function requireVipAccess() {
   return (req: Request, res: Response, next: NextFunction) => {
-    const user = getUserFromReq(req);
+    verifyRequestUser(req).then((user) => {
+      if (!user) {
+        return res.status(401).json({ success: false, error: 'No autorizado', code: 'UNAUTHENTICATED' });
+      }
 
-    // Instructors have platform super-access to VIP content
-    if (user.role === 'instructor') {
+      // Instructors have platform super-access to VIP content
+      if (user.role === 'instructor') {
+        (req as any).user = user;
+        return next();
+      }
+
+      const hasEligibleRole = user.role === 'vip_student' || user.role === 'academy';
+      const hasValidPaymentStatus = user.subscription_status === 'active' || user.subscription_status === 'trialing';
+
+      if (!hasEligibleRole || !hasValidPaymentStatus) {
+        return res.status(403).json({
+          success: false,
+          error: 'Acceso VIP Requerido',
+          details: 'Esta herramienta o librería requiere una suscripción VIP activa o periodo de prueba de 4 días.',
+          code: 'VIP_SUBSCRIPTION_REQUIRED',
+          currentStatus: user.subscription_status,
+          currentRole: user.role
+        });
+      }
+
       (req as any).user = user;
-      return next();
-    }
-
-    const hasEligibleRole = user.role === 'vip_student' || user.role === 'academy';
-    const hasValidPaymentStatus = user.subscription_status === 'active' || user.subscription_status === 'trialing';
-
-    if (!hasEligibleRole || !hasValidPaymentStatus) {
-      return res.status(403).json({
-        success: false,
-        error: 'Acceso VIP Requerido',
-        details: 'Esta herramienta o librería requiere una suscripción VIP activa o periodo de prueba de 4 días.',
-        code: 'VIP_SUBSCRIPTION_REQUIRED',
-        currentStatus: user.subscription_status,
-        currentRole: user.role
-      });
-    }
-
-    (req as any).user = user;
-    next();
+      next();
+    }).catch((err) => {
+      console.error('[RBAC] Unexpected error in requireVipAccess:', err);
+      return res.status(401).json({ success: false, error: 'No autorizado', code: 'UNAUTHENTICATED' });
+    });
   };
 }
 
@@ -167,89 +213,71 @@ export function requireVipAccess() {
  */
 export function requireAcademyAccess() {
   return (req: Request, res: Response, next: NextFunction) => {
-    const user = getUserFromReq(req);
-    const isAcademy = user.role === 'academy';
-    const hasValidPaymentStatus = user.subscription_status === 'active' || user.subscription_status === 'trialing';
+    verifyRequestUser(req).then((user) => {
+      if (!user) {
+        return res.status(401).json({ success: false, error: 'No autorizado', code: 'UNAUTHENTICATED' });
+      }
 
-    if (!isAcademy || !hasValidPaymentStatus) {
-      return res.status(403).json({
-        success: false,
-        error: 'Panel de Administración de Academia Protegido',
-        details: 'Se requiere una membresía institucional de Academia activa o en prueba.',
-        code: 'ACADEMY_SUBSCRIPTION_REQUIRED',
-        currentStatus: user.subscription_status,
-        currentRole: user.role
-      });
-    }
+      const isAcademy = user.role === 'academy';
+      const hasValidPaymentStatus = user.subscription_status === 'active' || user.subscription_status === 'trialing';
 
-    (req as any).user = user;
-    next();
+      if (!isAcademy || !hasValidPaymentStatus) {
+        return res.status(403).json({
+          success: false,
+          error: 'Panel de Administración de Academia Protegido',
+          details: 'Se requiere una membresía institucional de Academia activa o en prueba.',
+          code: 'ACADEMY_SUBSCRIPTION_REQUIRED',
+          currentStatus: user.subscription_status,
+          currentRole: user.role
+        });
+      }
+
+      (req as any).user = user;
+      next();
+    }).catch((err) => {
+      console.error('[RBAC] Unexpected error in requireAcademyAccess:', err);
+      return res.status(401).json({ success: false, error: 'No autorizado', code: 'UNAUTHENTICATED' });
+    });
   };
 }
 
 /**
- * 4. Instructor Creator & Payouts Guard:
- * Regla: role === 'instructor' AND is_connect_verified === true
+ * 4. Instructor Creator & Payouts Guard.
+ *
+ * SEGURIDAD: el backend real todavía no implementa la verificación de Stripe
+ * Connect (no existe ningún endpoint que confirme `is_connect_verified` u
+ * `stripe_account_id` contra la API de Stripe — antes ese dato venía sin
+ * validar del propio cliente). Hasta que exista esa integración real, este
+ * guard falla cerrado en vez de confiar en un campo que nadie verifica.
  */
 export function requireVerifiedInstructor() {
   return (req: Request, res: Response, next: NextFunction) => {
-    const user = getUserFromReq(req);
-
-    if (user.role !== 'instructor') {
-      return res.status(403).json({
-        success: false,
-        error: 'Acceso Exclusivo para Instructores',
-        details: 'Debes tener rol de instructor para publicar cátedras o monetizar contenido.',
-        code: 'INSTRUCTOR_ROLE_REQUIRED'
-      });
-    }
-
-    // Check Stripe Connect verification (bypassed only if simulated or verified)
-    if (!user.is_connect_verified) {
-      return res.status(403).json({
-        success: false,
-        error: 'Verificación de Stripe Connect Pendiente',
-        details: 'Para publicar contenido de pago y recibir el 75% de las ventas, completa la verificación de cuenta bancaria e identidad en Stripe Connect.',
-        code: 'STRIPE_CONNECT_VERIFICATION_REQUIRED',
-        stripe_account_id: user.stripe_account_id
-      });
-    }
-
-    (req as any).user = user;
-    next();
+    return res.status(501).json({
+      success: false,
+      error: 'Verificación de Stripe Connect no implementada todavía',
+      details: 'Este endpoint requiere una integración real de Stripe Connect en el servidor (confirmar is_connect_verified contra la API de Stripe, nunca contra un dato enviado por el cliente). Permanece deshabilitado hasta implementarla.',
+      code: 'STRIPE_CONNECT_NOT_IMPLEMENTED'
+    });
   };
 }
 
 /**
- * 5. Private Instructor Content Access Guard:
- * Regla: Verifica si el user_id del alumno tiene suscripción activa asociada al instructor_id dueño del contenido
+ * 5. Private Instructor Content Access Guard.
+ *
+ * SEGURIDAD: mismo problema — no existe ningún registro real (Firestore o
+ * Postgres) de qué alumno está suscrito a qué instructor; `subscribed_instructor_ids`
+ * venía del propio cliente sin validar. Falla cerrado hasta que se implemente
+ * un registro real de suscripciones (p. ej. una colección/tabla poblada por
+ * el webhook de Stripe, no por el cliente).
  */
-export function requireInstructorSubscriber(instructorIdParamKey: string = 'instructorId') {
+export function requireInstructorSubscriber(_instructorIdParamKey: string = 'instructorId') {
   return (req: Request, res: Response, next: NextFunction) => {
-    const user = getUserFromReq(req);
-    const targetInstructorId = req.params[instructorIdParamKey] || req.body[instructorIdParamKey] || req.query[instructorIdParamKey];
-
-    // The instructor owner has instant access to their own content
-    if (user.role === 'instructor' && (user.id === targetInstructorId || !targetInstructorId)) {
-      (req as any).user = user;
-      return next();
-    }
-
-    const isSubscribed = user.subscribed_instructor_ids?.includes(targetInstructorId as string);
-    const hasActiveSub = user.subscription_status === 'active' || user.subscription_status === 'trialing';
-
-    if (!isSubscribed || !hasActiveSub) {
-      return res.status(403).json({
-        success: false,
-        error: 'Cátedra Privada de Instructor',
-        details: `Se requiere un pase mensual activo para acceder a las clases privadas de este instructor.`,
-        code: 'INSTRUCTOR_SUBSCRIPTION_REQUIRED',
-        targetInstructorId
-      });
-    }
-
-    (req as any).user = user;
-    next();
+    return res.status(501).json({
+      success: false,
+      error: 'Verificación de suscripción a instructor no implementada todavía',
+      details: 'Este endpoint requiere un registro real de suscripciones (poblado por el webhook de Stripe verificado, nunca por el cliente). Permanece deshabilitado hasta implementarlo.',
+      code: 'INSTRUCTOR_SUBSCRIBER_CHECK_NOT_IMPLEMENTED'
+    });
   };
 }
 
