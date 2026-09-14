@@ -79,7 +79,7 @@ export default function ComboBuilder({ language, onPractice }: ComboBuilderProps
           type="text"
           value={draft.name}
           onChange={(e) => setDraft({ ...draft, name: e.target.value })}
-          className="rounded-xl border border-[#262626] bg-[#121212] px-4 py-2 text-white outline-none focus:border-[#E9C349]"
+          className="rounded-xl border border-[#262626] bg-[#121212] px-4 py-2 text-white outline-none focus:border-[#D9A9FF]"
           placeholder={isEs ? 'Nombre del combo' : 'Combo name'}
         />
         <div className="grid grid-cols-2 gap-4">
@@ -191,7 +191,7 @@ export default function ComboBuilder({ language, onPractice }: ComboBuilderProps
             type="button"
             onClick={saveDraft}
             disabled={draft.figureIds.length === 0}
-            className="flex flex-1 items-center justify-center gap-2 rounded-2xl bg-[#9A2B3C] px-4 py-3 font-mono text-xs uppercase tracking-wider text-white hover:bg-[#9A2B3C]/80 disabled:opacity-40"
+            className="flex flex-1 items-center justify-center gap-2 rounded-2xl bg-[#C23E9E] px-4 py-3 font-mono text-xs uppercase tracking-wider text-white hover:bg-[#C23E9E]/80 disabled:opacity-40"
           >
             <Check className="h-4 w-4" /> {isEs ? 'Guardar combo' : 'Save combo'}
           </button>
@@ -205,7 +205,7 @@ export default function ComboBuilder({ language, onPractice }: ComboBuilderProps
       <button
         type="button"
         onClick={() => setDraft(emptyCombo())}
-        className="flex items-center justify-center gap-2 rounded-2xl bg-[#9A2B3C] px-4 py-3 font-mono text-xs uppercase tracking-wider text-white hover:bg-[#9A2B3C]/80"
+        className="flex items-center justify-center gap-2 rounded-2xl bg-[#C23E9E] px-4 py-3 font-mono text-xs uppercase tracking-wider text-white hover:bg-[#C23E9E]/80"
       >
         <Plus className="h-4 w-4" /> {isEs ? 'Nuevo combo' : 'New combo'}
       </button>

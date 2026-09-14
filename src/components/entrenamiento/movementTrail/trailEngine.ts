@@ -143,7 +143,7 @@ export function drawGhostReveal(
 ) {
   const visible = points.filter((p) => p.t <= elapsedMs);
   drawTrail(ctx, visible, width, height, {
-    color: opts.color ?? '#e9c349',
+    color: opts.color ?? '#d9a9ff',
     strokeWidth: opts.strokeWidth ?? 3,
     dashed: true,
     globalAlpha: 0.55,

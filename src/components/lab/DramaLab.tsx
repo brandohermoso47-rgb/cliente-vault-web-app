@@ -71,7 +71,7 @@ const DramaLabComponent: React.FC<DramaLabProps> = ({
         {/* HEADER */}
         <div className="flex flex-col md:flex-row md:items-center justify-between border-b border-tertiary/10 pb-6 mb-6 gap-4 relative z-10">
           <div>
-            <span className="font-label-sm text-[#E9C349] bg-[#E9C349]/10 border border-[#E9C349]/20 px-3 py-1 rounded-xl uppercase tracking-wider">
+            <span className="font-label-sm text-[#D9A9FF] bg-[#D9A9FF]/10 border border-[#D9A9FF]/20 px-3 py-1 rounded-xl uppercase tracking-wider">
               {language === 'es' ? 'TEATRALIDAD, EXPRESIÓN Y CONTROL FACIAL' : 'THEATRICALITY, EXPRESSION & FACIAL CONTROL'}
             </span>
             <h3 className="text-2xl font-display-lg italic tracking-tight uppercase mt-3 text-[#EDEFF4]">

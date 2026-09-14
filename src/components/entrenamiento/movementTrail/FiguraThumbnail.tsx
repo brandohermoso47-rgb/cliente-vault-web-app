@@ -22,7 +22,7 @@ export default function FiguraThumbnail({ figure, className }: FiguraThumbnailPr
     });
     if (figure.mirrored) {
       drawTrail(ctx, mirrorPoints(figure.points, figure.mirrorAxisX), canvas.width, canvas.height, {
-        color: '#e9c349',
+        color: '#d9a9ff',
         strokeWidth: Math.max(2, figure.strokeWidth - 1),
         globalAlpha: 0.85,
       });

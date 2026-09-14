@@ -107,13 +107,13 @@ export const CategoryFilterBar: React.FC<CategoryFilterBarProps> = ({
         {/* Title & Dimension Selector Tabs */}
         <div className="space-y-2">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-xl bg-[#E9C349]/20 border border-[#E9C349]/40 flex items-center justify-center text-[#E9C349] shrink-0">
+            <div className="w-8 h-8 rounded-xl bg-[#D9A9FF]/20 border border-[#D9A9FF]/40 flex items-center justify-center text-[#D9A9FF] shrink-0">
               <Filter className="w-4 h-4" />
             </div>
             <div>
               <h3 className="text-xs sm:text-sm font-black text-white uppercase tracking-wider flex items-center gap-2">
                 Selector de Categorías de Waacking
-                <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-white/10 text-[#E9C349] border border-white/10">
+                <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-white/10 text-[#D9A9FF] border border-white/10">
                   {filteredLessonsCount} de {totalLessonsCount} lecciones
                 </span>
               </h3>
@@ -199,7 +199,7 @@ export const CategoryFilterBar: React.FC<CategoryFilterBarProps> = ({
               placeholder="Buscar clase, drill, BPM..."
               value={filters.searchQuery}
               onChange={(e) => onFilterChange({ searchQuery: e.target.value })}
-              className="w-full pl-9 pr-8 py-2 bg-black/60 border border-white/10 focus:border-[#E9C349] rounded-xl text-xs text-white placeholder-slate-500 outline-none transition-all"
+              className="w-full pl-9 pr-8 py-2 bg-black/60 border border-white/10 focus:border-[#D9A9FF] rounded-xl text-xs text-white placeholder-slate-500 outline-none transition-all"
             />
             {filters.searchQuery && (
               <button
@@ -219,7 +219,7 @@ export const CategoryFilterBar: React.FC<CategoryFilterBarProps> = ({
               onClick={() => setViewMode('catedras')}
               className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
                 viewMode === 'catedras'
-                  ? 'bg-[#E9C349] text-black shadow-md font-black'
+                  ? 'bg-[#D9A9FF] text-black shadow-md font-black'
                   : 'text-slate-400 hover:text-white'
               }`}
               title="Ver agrupado por Cátedras de Profesores"
@@ -232,7 +232,7 @@ export const CategoryFilterBar: React.FC<CategoryFilterBarProps> = ({
               onClick={() => setViewMode('catalog')}
               className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
                 viewMode === 'catalog'
-                  ? 'bg-[#E9C349] text-black shadow-md font-black'
+                  ? 'bg-[#D9A9FF] text-black shadow-md font-black'
                   : 'text-slate-400 hover:text-white'
               }`}
               title="Ver Catálogo Unificado de Lecciones"

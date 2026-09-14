@@ -41,7 +41,7 @@ export default function FiguraEditor({ figure, language, title, onSave, onCancel
     drawTrail(ctx, previewPoints, canvas.width, canvas.height, { color, strokeWidth });
     if (mirrored) {
       drawTrail(ctx, mirrorPoints(previewPoints, mirrorAxisX), canvas.width, canvas.height, {
-        color: '#e9c349',
+        color: '#d9a9ff',
         strokeWidth,
         globalAlpha: 0.85,
       });
@@ -79,7 +79,7 @@ export default function FiguraEditor({ figure, language, title, onSave, onCancel
         value={name}
         onChange={(e) => setName(e.target.value)}
         placeholder={isEs ? 'Nombre de la figura' : 'Figure name'}
-        className="max-w-md rounded-xl border border-[#262626] bg-[#121212] px-4 py-2 text-white placeholder-white/30 outline-none focus:border-[#E9C349]"
+        className="max-w-md rounded-xl border border-[#262626] bg-[#121212] px-4 py-2 text-white placeholder-white/30 outline-none focus:border-[#D9A9FF]"
       />
 
       <div className="grid max-w-2xl grid-cols-1 gap-4 rounded-2xl border border-[#262626] bg-[#121212] p-4 sm:grid-cols-2">
@@ -94,7 +94,7 @@ export default function FiguraEditor({ figure, language, title, onSave, onCancel
             step={0.01}
             value={trimStart}
             onChange={(e) => setTrimStart(Number(e.target.value))}
-            className="w-full accent-[#E9C349]"
+            className="w-full accent-[#D9A9FF]"
           />
         </div>
         <div>
@@ -108,7 +108,7 @@ export default function FiguraEditor({ figure, language, title, onSave, onCancel
             step={0.01}
             value={trimEnd}
             onChange={(e) => setTrimEnd(Number(e.target.value))}
-            className="w-full accent-[#E9C349]"
+            className="w-full accent-[#D9A9FF]"
           />
         </div>
 
@@ -194,7 +194,7 @@ export default function FiguraEditor({ figure, language, title, onSave, onCancel
         <button
           type="button"
           onClick={handleSave}
-          className="flex flex-1 items-center justify-center gap-2 rounded-2xl bg-[#9A2B3C] px-4 py-3 font-mono text-xs uppercase tracking-wider text-white hover:bg-[#9A2B3C]/80"
+          className="flex flex-1 items-center justify-center gap-2 rounded-2xl bg-[#C23E9E] px-4 py-3 font-mono text-xs uppercase tracking-wider text-white hover:bg-[#C23E9E]/80"
         >
           <Check className="h-4 w-4" /> {isEs ? 'Guardar' : 'Save'}
         </button>

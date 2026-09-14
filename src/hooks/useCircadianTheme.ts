@@ -100,14 +100,14 @@ export function useCircadianTheme(theme: 'light' | 'dark', language: Language = 
       case 'day':
         return {
           icon: Sun,
-          indicatorColor: '#E9C349', // Gold
+          indicatorColor: '#D9A9FF', // Gold
           label: language === 'es' ? 'Día • Claridad' : language === 'ja' ? '昼 • 明瞭' : language === 'ko' ? '낮 • 선명함' : 'Daylight Clarity',
           desc: language === 'es' 
             ? 'Contraste óptimo adaptado a luz ambiental de mediodía.' 
             : 'Optimal studio contrast adapted to ambient daylight.',
           headerDark: 'bg-gradient-to-r from-[#0C0C0C] via-[#10100E] to-[#0D0D0D] border-[#2A2A26] text-[#EDEFF4] animate-header-glow',
           headerLight: 'bg-gradient-to-r from-[#FAFAFA] via-white to-[#F5F5F7] border-slate-300 text-slate-900 shadow-sm',
-          badge: 'bg-[#E9C349]/15 border-[#E9C349]/30 text-[#E9C349]'
+          badge: 'bg-[#D9A9FF]/15 border-[#D9A9FF]/30 text-[#D9A9FF]'
         };
       case 'sunset':
         return {
@@ -130,7 +130,7 @@ export function useCircadianTheme(theme: 'light' | 'dark', language: Language = 
           desc: language === 'es' 
             ? 'Bajo contraste y negros profundos para proteger la retina en sesiones tardías.' 
             : 'Low-contrast deep tones protecting your retinas during nocturnal work.',
-          headerDark: 'bg-gradient-to-r from-[#080705] via-[#0B0805] to-[#070604] border-[#2B1D0E] text-[#ECE3D2] shadow-[0_4px_35px_rgba(233,195,73,0.06)]',
+          headerDark: 'bg-gradient-to-r from-[#080705] via-[#0B0805] to-[#070604] border-[#2B1D0E] text-[#ECE3D2] shadow-[0_4px_35px_rgba(217, 169, 255,0.06)]',
           headerLight: 'bg-gradient-to-r from-[#FBF5E8] via-[#FFFDF7] to-[#F5ECE0] border-[#E5D5BC] text-[#2C2417] shadow-inner',
           badge: 'bg-purple-500/15 border-purple-500/30 text-purple-300'
         };
@@ -143,7 +143,7 @@ export function useCircadianTheme(theme: 'light' | 'dark', language: Language = 
     const eyeCareTint = isEyeCareBoost 
       ? theme === 'light' 
         ? 'ring-1 ring-amber-400/40' 
-        : 'ring-1 ring-amber-500/30 shadow-[inset_0_1px_0_rgba(233,195,73,0.2)]' 
+        : 'ring-1 ring-amber-500/30 shadow-[inset_0_1px_0_rgba(217, 169, 255,0.2)]' 
       : '';
     return `${baseClasses} ${eyeCareTint} transition-colors duration-700`;
   }, [theme, periodData, isEyeCareBoost]);

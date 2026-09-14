@@ -147,7 +147,7 @@ export default function MultiSourcePlayer({
             href={activeSource.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="self-start sm:self-center text-xs font-mono text-slate-300 hover:text-[#E9C349] flex items-center gap-1.5 transition-colors bg-white/5 hover:bg-white/10 px-3 py-1.5 rounded-lg border border-white/10"
+            className="self-start sm:self-center text-xs font-mono text-slate-300 hover:text-[#D9A9FF] flex items-center gap-1.5 transition-colors bg-white/5 hover:bg-white/10 px-3 py-1.5 rounded-lg border border-white/10"
           >
             <span>Abrir en {pConfig.name}</span>
             <ExternalLink className="w-3.5 h-3.5" />

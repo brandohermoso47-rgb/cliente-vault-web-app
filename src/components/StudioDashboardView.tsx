@@ -302,7 +302,7 @@ export default function StudioDashboardView({
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="fixed top-20 right-6 z-50 px-5 py-3 rounded-2xl bg-[#E9C349] text-black font-extrabold text-xs uppercase shadow-2xl flex items-center gap-2 border border-black/20"
+            className="fixed top-20 right-6 z-50 px-5 py-3 rounded-2xl bg-[#D9A9FF] text-black font-extrabold text-xs uppercase shadow-2xl flex items-center gap-2 border border-black/20"
           >
             <Sparkles className="w-4 h-4 text-black animate-spin-slow" />
             <span>{alertText}</span>
@@ -311,17 +311,17 @@ export default function StudioDashboardView({
       </AnimatePresence>
 
       {/* HEADER BANNER - PANORÁMICO INSTITUCIONAL */}
-      <div className="relative rounded-3xl bg-gradient-to-r from-[#140b24] via-[#0f091a] to-[#080411] border border-[#E9C349]/40 p-6 sm:p-8 overflow-hidden shadow-2xl">
-        <div className="absolute -right-10 -bottom-10 w-96 h-96 bg-[#E9C349]/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="relative rounded-3xl bg-gradient-to-r from-[#140b24] via-[#0f091a] to-[#080411] border border-[#D9A9FF]/40 p-6 sm:p-8 overflow-hidden shadow-2xl">
+        <div className="absolute -right-10 -bottom-10 w-96 h-96 bg-[#D9A9FF]/10 rounded-full blur-3xl pointer-events-none" />
         
         <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
           <div className="space-y-2">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-2xl bg-[#E9C349]/15 border border-[#E9C349]/50 flex items-center justify-center text-[#E9C349] shadow-lg shrink-0">
+              <div className="w-12 h-12 rounded-2xl bg-[#D9A9FF]/15 border border-[#D9A9FF]/50 flex items-center justify-center text-[#D9A9FF] shadow-lg shrink-0">
                 <Building2 className="w-7 h-7" />
               </div>
               <div>
-                <span className="text-[10px] font-mono font-black text-[#E9C349] uppercase tracking-[0.2em] bg-[#E9C349]/10 px-2.5 py-0.5 rounded border border-[#E9C349]/30">
+                <span className="text-[10px] font-mono font-black text-[#D9A9FF] uppercase tracking-[0.2em] bg-[#D9A9FF]/10 px-2.5 py-0.5 rounded border border-[#D9A9FF]/30">
                   ENTIDAD EDUCATIVA / ESTUDIO DE BAILE
                 </span>
                 <h1 className="text-xl sm:text-3xl font-black text-white tracking-wider uppercase font-display-lg mt-1">
@@ -335,8 +335,8 @@ export default function StudioDashboardView({
           </div>
 
           <div className="flex flex-wrap items-center gap-3 shrink-0">
-            <span className="px-4 py-2 rounded-2xl bg-[#1b122b] border border-[#E9C349]/30 text-xs font-mono font-bold text-[#E9C349] flex items-center gap-2">
-              <Award className="w-4 h-4 text-[#E9C349]" />
+            <span className="px-4 py-2 rounded-2xl bg-[#1b122b] border border-[#D9A9FF]/30 text-xs font-mono font-bold text-[#D9A9FF] flex items-center gap-2">
+              <Award className="w-4 h-4 text-[#D9A9FF]" />
               Plan: {studio.subscriptionPlan}
             </span>
             <button
@@ -350,7 +350,7 @@ export default function StudioDashboardView({
 
         {/* METRICAS RAPIDAS (SUMMARY CARDS) */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 mt-8 pt-6 border-t border-white/10">
-          <div className="p-4 rounded-2xl bg-[#0d0918]/80 border border-white/10 hover:border-[#E9C349]/40 transition-all">
+          <div className="p-4 rounded-2xl bg-[#0d0918]/80 border border-white/10 hover:border-[#D9A9FF]/40 transition-all">
             <div className="flex items-center justify-between text-slate-400 mb-1">
               <span className="text-[10px] font-mono font-bold uppercase tracking-wider">Total Alumnos</span>
               <Users className="w-4 h-4 text-emerald-400" />
@@ -359,18 +359,18 @@ export default function StudioDashboardView({
             <span className="text-[9px] text-emerald-400 font-mono mt-0.5 block">100% inscritos en nómina</span>
           </div>
 
-          <div className="p-4 rounded-2xl bg-[#0d0918]/80 border border-white/10 hover:border-[#E9C349]/40 transition-all">
+          <div className="p-4 rounded-2xl bg-[#0d0918]/80 border border-white/10 hover:border-[#D9A9FF]/40 transition-all">
             <div className="flex items-center justify-between text-slate-400 mb-1">
               <span className="text-[10px] font-mono font-bold uppercase tracking-wider">Instructores Activos</span>
-              <UserCheck className="w-4 h-4 text-[#E9C349]" />
+              <UserCheck className="w-4 h-4 text-[#D9A9FF]" />
             </div>
             <p className="text-xl sm:text-2xl font-black text-white font-mono">
               {(studio.instructors || []).filter(i => i.status === 'active').length}
             </p>
-            <span className="text-[9px] text-[#E9C349] font-mono mt-0.5 block">Plantel docente vinculado</span>
+            <span className="text-[9px] text-[#D9A9FF] font-mono mt-0.5 block">Plantel docente vinculado</span>
           </div>
 
-          <div className="p-4 rounded-2xl bg-[#0d0918]/80 border border-white/10 hover:border-[#E9C349]/40 transition-all">
+          <div className="p-4 rounded-2xl bg-[#0d0918]/80 border border-white/10 hover:border-[#D9A9FF]/40 transition-all">
             <div className="flex items-center justify-between text-slate-400 mb-1">
               <span className="text-[10px] font-mono font-bold uppercase tracking-wider">Clases Semanales</span>
               <Calendar className="w-4 h-4 text-purple-400" />
@@ -379,7 +379,7 @@ export default function StudioDashboardView({
             <span className="text-[9px] text-purple-300 font-mono mt-0.5 block">Horarios en grilla oficial</span>
           </div>
 
-          <div className="p-4 rounded-2xl bg-[#0d0918]/80 border border-white/10 hover:border-[#E9C349]/40 transition-all">
+          <div className="p-4 rounded-2xl bg-[#0d0918]/80 border border-white/10 hover:border-[#D9A9FF]/40 transition-all">
             <div className="flex items-center justify-between text-slate-400 mb-1">
               <span className="text-[10px] font-mono font-bold uppercase tracking-wider">Asistencia Promedio</span>
               <TrendingUp className="w-4 h-4 text-amber-400" />
@@ -410,7 +410,7 @@ export default function StudioDashboardView({
               }}
               className={`px-4 py-2.5 rounded-2xl font-mono text-xs font-bold uppercase transition-all flex items-center gap-2 whitespace-nowrap cursor-pointer ${
                 isActive 
-                  ? 'bg-[#E9C349] text-black shadow-lg font-black' 
+                  ? 'bg-[#D9A9FF] text-black shadow-lg font-black' 
                   : 'bg-[#120f21] text-slate-400 hover:text-white border border-white/5'
               }`}
             >
@@ -430,12 +430,12 @@ export default function StudioDashboardView({
           <div className="lg:col-span-6 bg-[#110e1d] border border-white/10 rounded-3xl p-6 space-y-4 shadow-xl">
             <div className="flex items-center justify-between border-b border-white/10 pb-3">
               <h3 className="text-xs font-mono font-bold text-white uppercase tracking-wider flex items-center gap-2">
-                <UserCheck className="w-4 h-4 text-[#E9C349]" />
+                <UserCheck className="w-4 h-4 text-[#D9A9FF]" />
                 Plantel Docente ({(studio.instructors || []).length})
               </h3>
               <button
                 onClick={() => setActiveTab('instructors')}
-                className="text-[10px] font-mono font-bold text-[#E9C349] hover:underline flex items-center gap-1"
+                className="text-[10px] font-mono font-bold text-[#D9A9FF] hover:underline flex items-center gap-1"
               >
                 Ver todos <ChevronRight className="w-3 h-3" />
               </button>
@@ -445,10 +445,10 @@ export default function StudioDashboardView({
               {(studio.instructors || []).slice(0, 3).map(inst => (
                 <div key={inst.id} className="p-3.5 rounded-2xl bg-[#090712] border border-white/5 flex items-center justify-between gap-3">
                   <div className="flex items-center gap-3 min-w-0">
-                    <img src={inst.avatar} alt={inst.name} className="w-10 h-10 rounded-xl object-cover border border-[#E9C349]/40 shrink-0" />
+                    <img src={inst.avatar} alt={inst.name} className="w-10 h-10 rounded-xl object-cover border border-[#D9A9FF]/40 shrink-0" />
                     <div className="min-w-0">
                       <p className="text-xs font-extrabold text-white truncate">{inst.name}</p>
-                      <p className="text-[10px] text-[#E9C349] font-mono truncate">{inst.specialty}</p>
+                      <p className="text-[10px] text-[#D9A9FF] font-mono truncate">{inst.specialty}</p>
                     </div>
                   </div>
                   <span className="text-[10px] font-mono text-slate-300 bg-white/5 px-2.5 py-1 rounded-lg border border-white/10 shrink-0">
@@ -463,12 +463,12 @@ export default function StudioDashboardView({
           <div className="lg:col-span-6 bg-[#110e1d] border border-white/10 rounded-3xl p-6 space-y-4 shadow-xl">
             <div className="flex items-center justify-between border-b border-white/10 pb-3">
               <h3 className="text-xs font-mono font-bold text-white uppercase tracking-wider flex items-center gap-2">
-                <FileText className="w-4 h-4 text-[#E9C349]" />
+                <FileText className="w-4 h-4 text-[#D9A9FF]" />
                 Documentos & Guías en PDF ({(studio.documents || []).length})
               </h3>
               <button
                 onClick={() => setActiveTab('documents')}
-                className="text-[10px] font-mono font-bold text-[#E9C349] hover:underline flex items-center gap-1"
+                className="text-[10px] font-mono font-bold text-[#D9A9FF] hover:underline flex items-center gap-1"
               >
                 Ir al Repositorio <ChevronRight className="w-3 h-3" />
               </button>
@@ -478,7 +478,7 @@ export default function StudioDashboardView({
               {studio.documents.map(doc => (
                 <div key={doc.id} className="p-3.5 rounded-2xl bg-[#090712] border border-white/5 flex items-center justify-between gap-3">
                   <div className="min-w-0 space-y-0.5">
-                    <span className="text-[8px] font-mono font-bold text-[#E9C349] bg-[#E9C349]/10 px-2 py-0.5 rounded border border-[#E9C349]/20 uppercase">
+                    <span className="text-[8px] font-mono font-bold text-[#D9A9FF] bg-[#D9A9FF]/10 px-2 py-0.5 rounded border border-[#D9A9FF]/20 uppercase">
                       {doc.categoryLabel}
                     </span>
                     <p className="text-xs font-extrabold text-white truncate mt-1">{doc.title}</p>
@@ -488,7 +488,7 @@ export default function StudioDashboardView({
                     href={doc.fileUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="p-2 rounded-xl bg-[#E9C349] text-black font-bold hover:bg-[#d8b33c] shrink-0"
+                    className="p-2 rounded-xl bg-[#D9A9FF] text-black font-bold hover:bg-[#B87CFF] shrink-0"
                     title="Descargar PDF"
                   >
                     <Download className="w-4 h-4" />
@@ -506,7 +506,7 @@ export default function StudioDashboardView({
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-[#120f21] p-5 rounded-3xl border border-white/10">
             <div>
               <h2 className="text-base font-extrabold text-white uppercase tracking-wider font-mono flex items-center gap-2">
-                <UserCheck className="w-5 h-5 text-[#E9C349]" />
+                <UserCheck className="w-5 h-5 text-[#D9A9FF]" />
                 Plantel de Instructores Vinculados
               </h2>
               <p className="text-xs text-slate-400 mt-0.5">
@@ -516,7 +516,7 @@ export default function StudioDashboardView({
 
             <button
               onClick={() => setIsAddInstructorOpen(true)}
-              className="px-4 py-2.5 rounded-2xl bg-[#E9C349] hover:bg-[#d8b33c] text-black font-black text-xs uppercase flex items-center gap-2 shadow-lg transition-all cursor-pointer"
+              className="px-4 py-2.5 rounded-2xl bg-[#D9A9FF] hover:bg-[#B87CFF] text-black font-black text-xs uppercase flex items-center gap-2 shadow-lg transition-all cursor-pointer"
             >
               <UserPlus className="w-4 h-4" />
               <span>[+ Agregar Instructor]</span>
@@ -531,10 +531,10 @@ export default function StudioDashboardView({
                 animate={{ opacity: 1, height: 'auto' }}
                 exit={{ opacity: 0, height: 0 }}
                 onSubmit={handleAddInstructor}
-                className="bg-[#161227] border border-[#E9C349]/40 rounded-3xl p-6 space-y-4 shadow-2xl overflow-hidden"
+                className="bg-[#161227] border border-[#D9A9FF]/40 rounded-3xl p-6 space-y-4 shadow-2xl overflow-hidden"
               >
                 <div className="flex items-center justify-between border-b border-white/10 pb-3">
-                  <h3 className="text-xs font-mono font-black text-[#E9C349] uppercase tracking-wider flex items-center gap-2">
+                  <h3 className="text-xs font-mono font-black text-[#D9A9FF] uppercase tracking-wider flex items-center gap-2">
                     <UserPlus className="w-4 h-4" />
                     Vincular Nuevo Profesor / Docente a la Academia
                   </h3>
@@ -558,7 +558,7 @@ export default function StudioDashboardView({
                       value={instName}
                       onChange={e => setInstName(e.target.value)}
                       placeholder="ej: Viktor 'WaackGod' S."
-                      className="w-full px-3.5 py-2 rounded-xl bg-[#0a0814] border border-white/20 text-white font-bold text-xs focus:outline-none focus:border-[#E9C349]"
+                      className="w-full px-3.5 py-2 rounded-xl bg-[#0a0814] border border-white/20 text-white font-bold text-xs focus:outline-none focus:border-[#D9A9FF]"
                     />
                   </div>
 
@@ -572,7 +572,7 @@ export default function StudioDashboardView({
                       value={instEmail}
                       onChange={e => setInstEmail(e.target.value)}
                       placeholder="viktor@waackon.app"
-                      className="w-full px-3.5 py-2 rounded-xl bg-[#0a0814] border border-white/20 text-white text-xs focus:outline-none focus:border-[#E9C349]"
+                      className="w-full px-3.5 py-2 rounded-xl bg-[#0a0814] border border-white/20 text-white text-xs focus:outline-none focus:border-[#D9A9FF]"
                     />
                   </div>
 
@@ -585,7 +585,7 @@ export default function StudioDashboardView({
                       value={instSpecialty}
                       onChange={e => setInstSpecialty(e.target.value)}
                       placeholder="ej: Fast Rolls & Musicality"
-                      className="w-full px-3.5 py-2 rounded-xl bg-[#0a0814] border border-white/20 text-white text-xs focus:outline-none focus:border-[#E9C349]"
+                      className="w-full px-3.5 py-2 rounded-xl bg-[#0a0814] border border-white/20 text-white text-xs focus:outline-none focus:border-[#D9A9FF]"
                     />
                   </div>
 
@@ -599,7 +599,7 @@ export default function StudioDashboardView({
                       max={20}
                       value={instClassesCount}
                       onChange={e => setInstClassesCount(Number(e.target.value))}
-                      className="w-full px-3.5 py-2 rounded-xl bg-[#0a0814] border border-white/20 text-white font-bold text-xs focus:outline-none focus:border-[#E9C349]"
+                      className="w-full px-3.5 py-2 rounded-xl bg-[#0a0814] border border-white/20 text-white font-bold text-xs focus:outline-none focus:border-[#D9A9FF]"
                     />
                   </div>
                 </div>
@@ -614,7 +614,7 @@ export default function StudioDashboardView({
                   </button>
                   <button
                     type="submit"
-                    className="px-5 py-2 rounded-xl bg-[#E9C349] text-black font-black text-xs uppercase shadow cursor-pointer"
+                    className="px-5 py-2 rounded-xl bg-[#D9A9FF] text-black font-black text-xs uppercase shadow cursor-pointer"
                   >
                     Guardar Profesor
                   </button>
@@ -631,7 +631,7 @@ export default function StudioDashboardView({
               value={instructorSearch}
               onChange={e => setInstructorSearch(e.target.value)}
               placeholder="Buscar profesor por nombre, especialidad técnica o email..."
-              className="w-full pl-10 pr-10 py-2.5 rounded-2xl bg-[#120f21] border border-white/10 text-white text-xs font-bold focus:outline-none focus:border-[#E9C349] transition-all"
+              className="w-full pl-10 pr-10 py-2.5 rounded-2xl bg-[#120f21] border border-white/10 text-white text-xs font-bold focus:outline-none focus:border-[#D9A9FF] transition-all"
             />
             {instructorSearch && (
               <button
@@ -654,14 +654,14 @@ export default function StudioDashboardView({
               filteredInstructors.map(inst => (
               <div
                 key={inst.id}
-                className="bg-[#120f21] border border-white/10 hover:border-[#E9C349]/40 rounded-3xl p-5 space-y-4 transition-all shadow-xl relative overflow-hidden"
+                className="bg-[#120f21] border border-white/10 hover:border-[#D9A9FF]/40 rounded-3xl p-5 space-y-4 transition-all shadow-xl relative overflow-hidden"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex items-center gap-3">
                     <img
                       src={inst.avatar}
                       alt={inst.name}
-                      className="w-12 h-12 rounded-2xl object-cover border-2 border-[#E9C349]/50 shadow-md"
+                      className="w-12 h-12 rounded-2xl object-cover border-2 border-[#D9A9FF]/50 shadow-md"
                     />
                     <div>
                       <h3 className="text-sm font-extrabold text-white leading-snug">{inst.name}</h3>
@@ -681,7 +681,7 @@ export default function StudioDashboardView({
                 <div className="space-y-2 text-xs font-mono pt-2 border-t border-white/10">
                   <div className="flex items-center justify-between text-slate-300">
                     <span className="text-slate-500">Especialidad:</span>
-                    <span className="font-bold text-[#E9C349]">{inst.specialty}</span>
+                    <span className="font-bold text-[#D9A9FF]">{inst.specialty}</span>
                   </div>
                   <div className="flex items-center justify-between text-slate-300">
                     <span className="text-slate-500">Clases Asignadas:</span>
@@ -714,7 +714,7 @@ export default function StudioDashboardView({
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 bg-[#120f21] p-5 rounded-3xl border border-white/10">
             <div>
               <h2 className="text-base font-extrabold text-white uppercase tracking-wider font-mono flex items-center gap-2">
-                <Users className="w-5 h-5 text-[#E9C349]" />
+                <Users className="w-5 h-5 text-[#D9A9FF]" />
                 Directorio de Estudiantes ({filteredStudents.length})
               </h2>
               <p className="text-xs text-slate-400 mt-0.5">
@@ -724,7 +724,7 @@ export default function StudioDashboardView({
 
             <button
               onClick={() => setIsAddStudentOpen(true)}
-              className="px-4 py-2.5 rounded-2xl bg-[#E9C349] hover:bg-[#d8b33c] text-black font-black text-xs uppercase flex items-center gap-2 shadow-lg transition-all cursor-pointer"
+              className="px-4 py-2.5 rounded-2xl bg-[#D9A9FF] hover:bg-[#B87CFF] text-black font-black text-xs uppercase flex items-center gap-2 shadow-lg transition-all cursor-pointer"
             >
               <UserPlus className="w-4 h-4" />
               <span>[+ Registrar Alumna/o]</span>
@@ -739,10 +739,10 @@ export default function StudioDashboardView({
                 animate={{ opacity: 1, height: 'auto' }}
                 exit={{ opacity: 0, height: 0 }}
                 onSubmit={handleAddStudent}
-                className="bg-[#161227] border border-[#E9C349]/40 rounded-3xl p-6 space-y-4 shadow-2xl overflow-hidden"
+                className="bg-[#161227] border border-[#D9A9FF]/40 rounded-3xl p-6 space-y-4 shadow-2xl overflow-hidden"
               >
                 <div className="flex items-center justify-between border-b border-white/10 pb-3">
-                  <h3 className="text-xs font-mono font-black text-[#E9C349] uppercase tracking-wider flex items-center gap-2">
+                  <h3 className="text-xs font-mono font-black text-[#D9A9FF] uppercase tracking-wider flex items-center gap-2">
                     <UserPlus className="w-4 h-4" />
                     Inscribir Nueva Alumna en la Nómina
                   </h3>
@@ -766,7 +766,7 @@ export default function StudioDashboardView({
                       value={studName}
                       onChange={e => setStudName(e.target.value)}
                       placeholder="ej: Martina Silva"
-                      className="w-full px-3.5 py-2 rounded-xl bg-[#0a0814] border border-white/20 text-white font-bold text-xs focus:outline-none focus:border-[#E9C349]"
+                      className="w-full px-3.5 py-2 rounded-xl bg-[#0a0814] border border-white/20 text-white font-bold text-xs focus:outline-none focus:border-[#D9A9FF]"
                     />
                   </div>
 
@@ -780,7 +780,7 @@ export default function StudioDashboardView({
                       value={studEmail}
                       onChange={e => setStudEmail(e.target.value)}
                       placeholder="martina@gmail.com"
-                      className="w-full px-3.5 py-2 rounded-xl bg-[#0a0814] border border-white/20 text-white text-xs focus:outline-none focus:border-[#E9C349]"
+                      className="w-full px-3.5 py-2 rounded-xl bg-[#0a0814] border border-white/20 text-white text-xs focus:outline-none focus:border-[#D9A9FF]"
                     />
                   </div>
 
@@ -791,7 +791,7 @@ export default function StudioDashboardView({
                     <select
                       value={studLevel}
                       onChange={e => setStudLevel(e.target.value as any)}
-                      className="w-full px-3.5 py-2 rounded-xl bg-[#0a0814] border border-white/20 text-white font-bold text-xs focus:outline-none focus:border-[#E9C349]"
+                      className="w-full px-3.5 py-2 rounded-xl bg-[#0a0814] border border-white/20 text-white font-bold text-xs focus:outline-none focus:border-[#D9A9FF]"
                     >
                       <option value="Nivel 1">Nivel 1 (Fundamentos)</option>
                       <option value="Nivel 2">Nivel 2 (Intermedio)</option>
@@ -810,7 +810,7 @@ export default function StudioDashboardView({
                   </button>
                   <button
                     type="submit"
-                    className="px-5 py-2 rounded-xl bg-[#E9C349] text-black font-black text-xs uppercase shadow cursor-pointer"
+                    className="px-5 py-2 rounded-xl bg-[#D9A9FF] text-black font-black text-xs uppercase shadow cursor-pointer"
                   >
                     Inscribir Alumna
                   </button>
@@ -828,13 +828,13 @@ export default function StudioDashboardView({
                 value={studentSearch}
                 onChange={e => setStudentSearch(e.target.value)}
                 placeholder="Buscar alumna por nombre o email..."
-                className="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-[#120f21] border border-white/10 text-white text-xs font-bold focus:outline-none focus:border-[#E9C349]"
+                className="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-[#120f21] border border-white/10 text-white text-xs font-bold focus:outline-none focus:border-[#D9A9FF]"
               />
             </div>
 
             <div className="md:col-span-6 flex items-center gap-2 overflow-x-auto">
               <span className="text-[10px] font-mono text-slate-400 uppercase font-bold shrink-0 flex items-center gap-1">
-                <Filter className="w-3 h-3 text-[#E9C349]" /> Nivel:
+                <Filter className="w-3 h-3 text-[#D9A9FF]" /> Nivel:
               </span>
               {(['Todos', 'Nivel 1', 'Nivel 2', 'Avanzado'] as const).map(lvl => (
                 <button
@@ -842,7 +842,7 @@ export default function StudioDashboardView({
                   onClick={() => setLevelFilter(lvl)}
                   className={`px-3 py-1.5 rounded-xl text-[11px] font-mono font-bold transition-all shrink-0 cursor-pointer ${
                     levelFilter === lvl
-                      ? 'bg-[#E9C349] text-black font-black'
+                      ? 'bg-[#D9A9FF] text-black font-black'
                       : 'bg-[#120f21] text-slate-400 hover:text-white border border-white/10'
                   }`}
                 >
@@ -857,7 +857,7 @@ export default function StudioDashboardView({
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse">
                 <thead>
-                  <tr className="border-b border-white/10 bg-[#0a0814] text-[10px] font-mono font-black text-[#E9C349] uppercase tracking-wider">
+                  <tr className="border-b border-white/10 bg-[#0a0814] text-[10px] font-mono font-black text-[#D9A9FF] uppercase tracking-wider">
                     <th className="p-4">Estudiante / Alumna</th>
                     <th className="p-4">Nivel Actual</th>
                     <th className="p-4">Racha Práctica</th>
@@ -878,7 +878,7 @@ export default function StudioDashboardView({
                       <tr key={stud.id} className="hover:bg-white/5 transition-colors">
                         <td className="p-4">
                           <div className="flex items-center gap-3">
-                            <img src={stud.avatar} alt={stud.name} className="w-9 h-9 rounded-xl object-cover border border-[#E9C349]/40 shrink-0" />
+                            <img src={stud.avatar} alt={stud.name} className="w-9 h-9 rounded-xl object-cover border border-[#D9A9FF]/40 shrink-0" />
                             <div>
                               <p className="font-extrabold text-white">{stud.name}</p>
                               <p className="text-[10px] font-mono text-slate-400">{stud.email}</p>
@@ -941,10 +941,10 @@ export default function StudioDashboardView({
       {/* 4. ACADEMIC REPOSITORY & PDF DOCUMENTS TAB */}
       {activeTab === 'documents' && (
         <div className="space-y-6">
-          <div className="p-6 rounded-3xl bg-gradient-to-r from-[#18112b] via-[#120a21] to-[#0d0718] border border-[#E9C349]/30 shadow-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="p-6 rounded-3xl bg-gradient-to-r from-[#18112b] via-[#120a21] to-[#0d0718] border border-[#D9A9FF]/30 shadow-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div className="space-y-1">
               <div className="flex items-center gap-2.5">
-                <div className="w-9 h-9 rounded-2xl bg-[#E9C349]/10 border border-[#E9C349]/40 flex items-center justify-center text-[#E9C349]">
+                <div className="w-9 h-9 rounded-2xl bg-[#D9A9FF]/10 border border-[#D9A9FF]/40 flex items-center justify-center text-[#D9A9FF]">
                   <FileText className="w-5 h-5" />
                 </div>
                 <h2 className="text-lg sm:text-2xl font-black tracking-wider text-white uppercase font-mono">
@@ -952,7 +952,7 @@ export default function StudioDashboardView({
                 </h2>
               </div>
               <p className="text-xs text-slate-300 font-sans leading-relaxed max-w-2xl">
-                Sube y administra archivos PDF (<strong className="text-[#E9C349]">guías biomecánicas</strong>, <strong className="text-[#E9C349]">planificaciones semanales BPM</strong> y <strong className="text-[#E9C349]">manuales de técnica</strong>) que se compartirán con los instructores y alumnos del estudio.
+                Sube y administra archivos PDF (<strong className="text-[#D9A9FF]">guías biomecánicas</strong>, <strong className="text-[#D9A9FF]">planificaciones semanales BPM</strong> y <strong className="text-[#D9A9FF]">manuales de técnica</strong>) que se compartirán con los instructores y alumnos del estudio.
               </p>
             </div>
 
@@ -969,9 +969,9 @@ export default function StudioDashboardView({
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
             {/* UPLOAD FORM (5 cols) */}
-            <div className="lg:col-span-5 bg-[#120f21] border border-[#E9C349]/30 rounded-3xl p-5 sm:p-6 space-y-5 shadow-2xl">
+            <div className="lg:col-span-5 bg-[#120f21] border border-[#D9A9FF]/30 rounded-3xl p-5 sm:p-6 space-y-5 shadow-2xl">
               <div className="flex items-center gap-2 border-b border-white/10 pb-3">
-                <Upload className="w-4 h-4 text-[#E9C349]" />
+                <Upload className="w-4 h-4 text-[#D9A9FF]" />
                 <h3 className="text-xs font-mono font-bold text-white uppercase tracking-wider">
                   Subir / Publicar Nuevo Documento PDF
                 </h3>
@@ -985,7 +985,7 @@ export default function StudioDashboardView({
                   <select
                     value={docCategory}
                     onChange={e => setDocCategory(e.target.value as any)}
-                    className="w-full px-3.5 py-2.5 rounded-2xl bg-[#0a0814] border border-white/20 text-white font-bold text-xs focus:outline-none focus:border-[#E9C349]"
+                    className="w-full px-3.5 py-2.5 rounded-2xl bg-[#0a0814] border border-white/20 text-white font-bold text-xs focus:outline-none focus:border-[#D9A9FF]"
                   >
                     <option value="guia_pdf">Guía Biomecánica & Prevención de Lesiones (PDF)</option>
                     <option value="planificacion_bpm">Planificación Semanal de Rutinas BPM (Plantilla)</option>
@@ -1003,7 +1003,7 @@ export default function StudioDashboardView({
                     value={docTitle}
                     onChange={e => setDocTitle(e.target.value)}
                     placeholder="ej: Cuaderno de Práctica Biomecánica para prevención de lesiones"
-                    className="w-full px-3.5 py-2.5 rounded-2xl bg-[#0a0814] border border-white/20 text-white font-bold text-xs focus:outline-none focus:border-[#E9C349]"
+                    className="w-full px-3.5 py-2.5 rounded-2xl bg-[#0a0814] border border-white/20 text-white font-bold text-xs focus:outline-none focus:border-[#D9A9FF]"
                   />
                 </div>
 
@@ -1016,7 +1016,7 @@ export default function StudioDashboardView({
                     value={docFormat}
                     onChange={e => setDocFormat(e.target.value)}
                     placeholder="ej: PDF - 18 Páginas"
-                    className="w-full px-3.5 py-2.5 rounded-2xl bg-[#0a0814] border border-white/20 text-white text-xs focus:outline-none focus:border-[#E9C349]"
+                    className="w-full px-3.5 py-2.5 rounded-2xl bg-[#0a0814] border border-white/20 text-white text-xs focus:outline-none focus:border-[#D9A9FF]"
                   />
                 </div>
 
@@ -1029,7 +1029,7 @@ export default function StudioDashboardView({
                     value={docDescription}
                     onChange={e => setDocDescription(e.target.value)}
                     placeholder="Describe el propósito del documento..."
-                    className="w-full px-3.5 py-2.5 rounded-2xl bg-[#0a0814] border border-white/20 text-slate-200 text-xs focus:outline-none focus:border-[#E9C349] resize-none"
+                    className="w-full px-3.5 py-2.5 rounded-2xl bg-[#0a0814] border border-white/20 text-slate-200 text-xs focus:outline-none focus:border-[#D9A9FF] resize-none"
                   />
                 </div>
 
@@ -1037,8 +1037,8 @@ export default function StudioDashboardView({
                   <label className="text-[10px] font-mono font-bold text-slate-300 uppercase block mb-1">
                     Archivo PDF (.pdf)
                   </label>
-                  <label className="w-full p-3 rounded-2xl bg-[#0a0814] border border-dashed border-white/30 hover:border-[#E9C349] text-center cursor-pointer transition-all flex items-center justify-center gap-2">
-                    <Upload className="w-4 h-4 text-[#E9C349]" />
+                  <label className="w-full p-3 rounded-2xl bg-[#0a0814] border border-dashed border-white/30 hover:border-[#D9A9FF] text-center cursor-pointer transition-all flex items-center justify-center gap-2">
+                    <Upload className="w-4 h-4 text-[#D9A9FF]" />
                     <span className="text-xs font-bold text-slate-300 truncate">
                       {docFileName ? docFileName : 'Subir archivo PDF'}
                     </span>
@@ -1054,7 +1054,7 @@ export default function StudioDashboardView({
                 <button
                   type="submit"
                   disabled={isUploadingDoc}
-                  className="w-full py-3 rounded-2xl bg-[#E9C349] hover:bg-[#d8b33c] text-black font-black text-xs uppercase tracking-wider transition-all shadow-lg cursor-pointer"
+                  className="w-full py-3 rounded-2xl bg-[#D9A9FF] hover:bg-[#B87CFF] text-black font-black text-xs uppercase tracking-wider transition-all shadow-lg cursor-pointer"
                 >
                   {isUploadingDoc ? 'Procesando PDF...' : 'Publicar Documento Institucional'}
                 </button>
@@ -1065,7 +1065,7 @@ export default function StudioDashboardView({
             <div className="lg:col-span-7 space-y-4">
               <div className="flex items-center justify-between border-b border-white/10 pb-3">
                 <h3 className="text-xs font-mono font-bold text-white uppercase tracking-wider flex items-center gap-2">
-                  <BookMarked className="w-4 h-4 text-[#E9C349]" />
+                  <BookMarked className="w-4 h-4 text-[#D9A9FF]" />
                   Documentos Publicados del Estudio ({(studio.documents || []).length})
                 </h3>
               </div>
@@ -1074,15 +1074,15 @@ export default function StudioDashboardView({
                 {(studio.documents || []).map(doc => (
                   <div
                     key={doc.id}
-                    className="bg-[#120f21] border border-white/10 hover:border-[#E9C349]/50 rounded-3xl p-5 space-y-3 transition-all relative overflow-hidden shadow-xl"
+                    className="bg-[#120f21] border border-white/10 hover:border-[#D9A9FF]/50 rounded-3xl p-5 space-y-3 transition-all relative overflow-hidden shadow-xl"
                   >
                     <div className="flex items-start justify-between gap-3">
                       <div className="flex items-start gap-3 min-w-0">
-                        <div className="w-10 h-10 rounded-2xl bg-[#E9C349]/10 border border-[#E9C349]/40 flex items-center justify-center text-[#E9C349] shrink-0">
+                        <div className="w-10 h-10 rounded-2xl bg-[#D9A9FF]/10 border border-[#D9A9FF]/40 flex items-center justify-center text-[#D9A9FF] shrink-0">
                           <FileText className="w-5 h-5" />
                         </div>
                         <div className="min-w-0">
-                          <span className="text-[9px] font-mono font-bold uppercase px-2 py-0.5 rounded border bg-[#E9C349]/10 text-[#E9C349] border-[#E9C349]/30">
+                          <span className="text-[9px] font-mono font-bold uppercase px-2 py-0.5 rounded border bg-[#D9A9FF]/10 text-[#D9A9FF] border-[#D9A9FF]/30">
                             {doc.categoryLabel}
                           </span>
                           <h4 className="text-sm font-extrabold text-white mt-1 leading-snug">{doc.title}</h4>
@@ -1105,7 +1105,7 @@ export default function StudioDashboardView({
                         href={doc.fileUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="px-3 py-1.5 rounded-xl bg-[#E9C349] text-black font-black uppercase hover:bg-[#d8b33c] transition-all flex items-center gap-1.5"
+                        className="px-3 py-1.5 rounded-xl bg-[#D9A9FF] text-black font-black uppercase hover:bg-[#B87CFF] transition-all flex items-center gap-1.5"
                       >
                         <Download className="w-3.5 h-3.5" />
                         <span>Descargar PDF</span>
@@ -1122,7 +1122,7 @@ export default function StudioDashboardView({
       {/* 5. SETTINGS TAB */}
       {activeTab === 'settings' && (
         <div className="max-w-2xl bg-[#120f21] border border-white/10 rounded-3xl p-6 space-y-5">
-          <h2 className="text-sm font-black font-mono uppercase tracking-wider text-[#E9C349] flex items-center gap-2">
+          <h2 className="text-sm font-black font-mono uppercase tracking-wider text-[#D9A9FF] flex items-center gap-2">
             <ShieldCheck className="w-5 h-5" /> Ajustes Institucionales de la Academia
           </h2>
 
@@ -1159,7 +1159,7 @@ export default function StudioDashboardView({
 
             <button
               onClick={() => showAlert('Configuración de la academia guardada.')}
-              className="px-5 py-2.5 rounded-2xl bg-[#E9C349] text-black font-black uppercase text-xs cursor-pointer"
+              className="px-5 py-2.5 rounded-2xl bg-[#D9A9FF] text-black font-black uppercase text-xs cursor-pointer"
             >
               Guardar Cambios
             </button>

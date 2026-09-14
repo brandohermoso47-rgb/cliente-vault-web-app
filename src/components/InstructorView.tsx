@@ -1720,11 +1720,11 @@ Semana 3-4 (Progresión):
           transition={{ duration: 0.5 }}
           className="max-w-xl w-full bg-[#121212]/90 border border-white/10 rounded-[28px] p-6 sm:p-10 shadow-2xl relative overflow-hidden text-center"
         >
-          <div className="absolute -top-10 -right-10 w-40 h-40 bg-[#E9C349]/10 rounded-full blur-3xl" />
-          <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-[#9A2B3C]/10 rounded-full blur-3xl" />
+          <div className="absolute -top-10 -right-10 w-40 h-40 bg-[#D9A9FF]/10 rounded-full blur-3xl" />
+          <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-[#C23E9E]/10 rounded-full blur-3xl" />
 
-          <div className="w-20 h-20 bg-white/5 border border-[#E9C349]/40 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-[0_0_30px_rgba(233,195,73,0.1)]">
-            <Award className="w-10 h-10 text-[#E9C349] animate-pulse" />
+          <div className="w-20 h-20 bg-white/5 border border-[#D9A9FF]/40 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-[0_0_30px_rgba(217, 169, 255,0.1)]">
+            <Award className="w-10 h-10 text-[#D9A9FF] animate-pulse" />
           </div>
 
           <h3 className="text-2xl sm:text-3xl font-serif-elegant font-black tracking-tight text-[#EDEFF4] mb-4">
@@ -1739,7 +1739,7 @@ Semana 3-4 (Progresión):
             <button
               id="enable-instructor-btn"
               onClick={handleBecomeInstructor}
-              className="w-full sm:w-auto px-8 py-3.5 rounded-2xl bg-[#E9C349] hover:bg-[#ffdf6b] text-black font-black text-sm tracking-wide transition-all shadow-lg shadow-[#E9C349]/10 active:scale-95"
+              className="w-full sm:w-auto px-8 py-3.5 rounded-2xl bg-[#D9A9FF] hover:bg-[#F2CFFF] text-black font-black text-sm tracking-wide transition-all shadow-lg shadow-[#D9A9FF]/10 active:scale-95"
             >
               {t.becomeBtn}
             </button>
@@ -1839,7 +1839,7 @@ Semana 3-4 (Progresión):
               onClick={() => setActiveSubTab('promotion')}
               className={`px-3 py-2 rounded-xl border text-xs font-bold transition-all flex items-center gap-1.5 ${
                 activeSubTab === 'promotion'
-                  ? 'bg-[#E9C349] border-[#E9C349] text-black shadow-lg shadow-yellow-500/20'
+                  ? 'bg-[#D9A9FF] border-[#D9A9FF] text-black shadow-lg shadow-yellow-500/20'
                   : 'bg-white/5 hover:bg-white/10 border-white/10 text-slate-300'
               }`}
               title="Ajustes & Destacados"
@@ -1852,7 +1852,7 @@ Semana 3-4 (Progresión):
               className="py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 font-bold text-xs flex items-center gap-1.5 border border-white/10 transition-all ml-1"
               title="Volver a modo estudiante"
             >
-              <ArrowRightLeft className="w-3.5 h-3.5 text-[#E9C349]" />
+              <ArrowRightLeft className="w-3.5 h-3.5 text-[#D9A9FF]" />
               <span className="hidden md:inline">{t.backBtn}</span>
             </button>
           </div>
@@ -1905,8 +1905,8 @@ Semana 3-4 (Progresión):
         <div className="px-4 py-2.5 border-b border-white/10 bg-[#140f26]/95 flex flex-wrap items-center justify-between gap-3 transition-all">
           <div className="flex items-center gap-2 flex-wrap min-w-0">
             <div className="flex items-center gap-1.5 text-[11px] font-mono font-bold text-slate-300">
-              <Filter className="w-3.5 h-3.5 text-[#E9C349]" />
-              <span className="uppercase text-[10px] tracking-wider text-[#E9C349]">Estudiante Filtrado:</span>
+              <Filter className="w-3.5 h-3.5 text-[#D9A9FF]" />
+              <span className="uppercase text-[10px] tracking-wider text-[#D9A9FF]">Estudiante Filtrado:</span>
             </div>
 
             {/* Student Chips Selector */}
@@ -1915,7 +1915,7 @@ Semana 3-4 (Progresión):
                 onClick={() => handleSelectStudentForFilter(null)}
                 className={`px-2.5 py-1 rounded-lg text-[10px] font-mono font-bold border transition-all ${
                   selectedStudentUid === null
-                    ? 'bg-[#E9C349] text-black border-[#E9C349] shadow-sm'
+                    ? 'bg-[#D9A9FF] text-black border-[#D9A9FF] shadow-sm'
                     : 'bg-white/5 hover:bg-white/10 border-white/10 text-slate-400 hover:text-slate-200'
                 }`}
               >
@@ -1953,10 +1953,10 @@ Semana 3-4 (Progresión):
 
               <button
                 onClick={() => handleOpenStudentPlan(selectedStudent)}
-                className="px-2.5 py-1 rounded-lg bg-[#9A2B3C]/30 hover:bg-[#9A2B3C]/50 border border-[#9A2B3C]/50 text-[#E9C349] text-[10px] font-mono font-bold transition-all flex items-center gap-1"
+                className="px-2.5 py-1 rounded-lg bg-[#C23E9E]/30 hover:bg-[#C23E9E]/50 border border-[#C23E9E]/50 text-[#D9A9FF] text-[10px] font-mono font-bold transition-all flex items-center gap-1"
                 title="Abrir Plan de Onboarding IA"
               >
-                <Sparkles className="w-3 h-3 text-[#E9C349]" />
+                <Sparkles className="w-3 h-3 text-[#D9A9FF]" />
                 <span className="hidden sm:inline">Plan IA</span>
               </button>
 
@@ -1994,9 +1994,9 @@ Semana 3-4 (Progresión):
             initial={{ opacity: 0, y: -20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -20, scale: 0.95 }}
-            className="fixed top-20 right-4 sm:right-8 z-50 max-w-md p-4 bg-[#121212] border-2 border-[#E9C349]/50 shadow-[0_4px_30px_rgba(233,195,73,0.15)] rounded-2xl flex items-center gap-3"
+            className="fixed top-20 right-4 sm:right-8 z-50 max-w-md p-4 bg-[#121212] border-2 border-[#D9A9FF]/50 shadow-[0_4px_30px_rgba(217, 169, 255,0.15)] rounded-2xl flex items-center gap-3"
           >
-            <BellRing className="w-5 h-5 text-[#E9C349] shrink-0" />
+            <BellRing className="w-5 h-5 text-[#D9A9FF] shrink-0" />
             <p className="text-xs font-bold text-[#EDEFF4]">{alertText}</p>
           </motion.div>
         )}
@@ -2093,7 +2093,7 @@ Semana 3-4 (Progresión):
                     </h3>
                     <button
                       onClick={() => setActiveSubTab('students')}
-                      className="text-[10px] font-mono font-bold text-[#E9C349] hover:underline flex items-center gap-1"
+                      className="text-[10px] font-mono font-bold text-[#D9A9FF] hover:underline flex items-center gap-1"
                     >
                       <span>Ver Todos</span>
                       <ChevronRight className="w-3 h-3" />
@@ -2117,7 +2117,7 @@ Semana 3-4 (Progresión):
                           <div className="flex items-center justify-between text-xs font-bold mb-1.5">
                             <div className="flex items-center gap-2 min-w-0">
                               <div className={`w-6 h-6 rounded-lg flex items-center justify-center text-[10px] font-mono font-bold ${
-                                isSel ? 'bg-pink-500 text-white' : 'bg-white/10 text-[#E9C349]'
+                                isSel ? 'bg-pink-500 text-white' : 'bg-white/10 text-[#D9A9FF]'
                               }`}>
                                 {std.name.substring(0, 2).toUpperCase()}
                               </div>
@@ -2189,7 +2189,7 @@ Semana 3-4 (Progresión):
                             >
                               <td className="py-2.5">
                                 <div className="flex items-center gap-2.5">
-                                  <div className="w-7 h-7 rounded-full bg-white/10 border border-white/20 flex items-center justify-center font-bold text-[#E9C349] text-[10px]">
+                                  <div className="w-7 h-7 rounded-full bg-white/10 border border-white/20 flex items-center justify-center font-bold text-[#D9A9FF] text-[10px]">
                                     {std.name.substring(0, 2).toUpperCase()}
                                   </div>
                                   <div>
@@ -2208,7 +2208,7 @@ Semana 3-4 (Progresión):
                               <td className="py-2.5">
                                 <span className={`text-[10px] font-mono px-2 py-0.5 rounded font-bold ${
                                   std.level === 'Avanzado' ? 'bg-red-500/20 text-red-300' :
-                                  std.level === 'Intermedio' ? 'bg-[#E9C349]/20 text-[#E9C349]' :
+                                  std.level === 'Intermedio' ? 'bg-[#D9A9FF]/20 text-[#D9A9FF]' :
                                   'bg-cyan-500/20 text-cyan-300'
                                 }`}>
                                   {std.level}
@@ -2384,7 +2384,7 @@ Semana 3-4 (Progresión):
                 <div className="bg-[#121212] border border-white/5 p-4 sm:p-5 rounded-2xl shadow-sm relative overflow-hidden">
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-[10px] font-mono tracking-widest text-[#8A8A8A] font-bold uppercase">{t.grossRevenue}</span>
-                    <DollarSign className="w-4 h-4 text-[#E9C349]" />
+                    <DollarSign className="w-4 h-4 text-[#D9A9FF]" />
                   </div>
                   <h4 className="text-xl sm:text-2xl font-serif-elegant font-black text-white">
                     ${totalGross.toFixed(2)} <span className="text-[10px] text-[#8A8A8A] font-mono font-bold">{t.currency}</span>
@@ -2394,16 +2394,16 @@ Semana 3-4 (Progresión):
                 <div className="bg-[#121212] border border-white/5 p-4 sm:p-5 rounded-2xl shadow-sm relative overflow-hidden">
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-[10px] font-mono tracking-widest text-[#8A8A8A] font-bold uppercase">{t.platformFee}</span>
-                    <Percent className="w-4 h-4 text-[#9A2B3C]" />
+                    <Percent className="w-4 h-4 text-[#C23E9E]" />
                   </div>
                   <h4 className="text-xl sm:text-2xl font-serif-elegant font-black text-red-400">
                     -${totalPlatformCut.toFixed(2)} <span className="text-[10px] text-[#8A8A8A] font-mono font-bold">{t.currency}</span>
                   </h4>
                 </div>
 
-                <div className="bg-[#121212] border border-[#E9C349]/10 p-4 sm:p-5 rounded-2xl shadow-sm relative overflow-hidden bg-gradient-to-br from-[#E9C349]/5 to-transparent">
+                <div className="bg-[#121212] border border-[#D9A9FF]/10 p-4 sm:p-5 rounded-2xl shadow-sm relative overflow-hidden bg-gradient-to-br from-[#D9A9FF]/5 to-transparent">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-[10px] font-mono tracking-widest text-[#E9C349] font-black uppercase">{t.netRevenue}</span>
+                    <span className="text-[10px] font-mono tracking-widest text-[#D9A9FF] font-black uppercase">{t.netRevenue}</span>
                     <TrendingUp className="w-4 h-4 text-emerald-400" />
                   </div>
                   <h4 className="text-xl sm:text-2xl font-serif-elegant font-black text-emerald-400">
@@ -2424,10 +2424,10 @@ Semana 3-4 (Progresión):
 
               {/* Purchase Simulation Feature */}
               <div className="bg-[#121212] border border-white/5 p-5 rounded-[24px] flex flex-col md:flex-row md:items-center justify-between gap-5 relative overflow-hidden shadow-inner">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-[#E9C349]/5 rounded-full blur-2xl" />
+                <div className="absolute top-0 right-0 w-32 h-32 bg-[#D9A9FF]/5 rounded-full blur-2xl" />
                 <div className="relative z-10">
                   <h4 className="text-base font-black text-[#EDEFF4] flex items-center gap-2">
-                    <Sparkles className="w-4 h-4 text-[#E9C349]" />
+                    <Sparkles className="w-4 h-4 text-[#D9A9FF]" />
                     {t.simulateSale}
                   </h4>
                   <p className="text-xs text-[#8A8A8A] max-w-xl font-semibold mt-1">
@@ -2437,7 +2437,7 @@ Semana 3-4 (Progresión):
                 <button
                   id="simulate-purchase-btn"
                   onClick={handleSimulateSale}
-                  className="px-5 py-3 rounded-xl bg-white/5 hover:bg-[#E9C349] text-white hover:text-black font-black text-xs border border-white/10 hover:border-[#E9C349] transition-all whitespace-nowrap self-start md:self-center"
+                  className="px-5 py-3 rounded-xl bg-white/5 hover:bg-[#D9A9FF] text-white hover:text-black font-black text-xs border border-white/10 hover:border-[#D9A9FF] transition-all whitespace-nowrap self-start md:self-center"
                 >
                   {language === 'es' ? 'Simular Pago de Alumno' : 'Simulate Payment'}
                 </button>
@@ -2469,7 +2469,7 @@ Semana 3-4 (Progresión):
                         {transactions.map(tx => (
                           <tr key={tx.id} className="border-b border-white/5 hover:bg-white/5 transition-all">
                             <td className="py-3 pr-2 font-bold text-white">
-                              <span className="text-[9px] font-mono font-black text-black bg-[#E9C349]/90 px-1.5 py-0.5 rounded uppercase mr-2 tracking-wide">
+                              <span className="text-[9px] font-mono font-black text-black bg-[#D9A9FF]/90 px-1.5 py-0.5 rounded uppercase mr-2 tracking-wide">
                                 {tx.itemType}
                               </span>
                               {tx.itemTitle}
@@ -2550,7 +2550,7 @@ Semana 3-4 (Progresión):
                           required
                           value={dossierRealName}
                           onChange={e => setDossierRealName(e.target.value)}
-                          className="w-full px-3.5 py-2.5 rounded-2xl bg-[#0a0814] border border-white/20 text-white font-extrabold text-xs focus:outline-none focus:border-[#E9C349] transition-all shadow-inner"
+                          className="w-full px-3.5 py-2.5 rounded-2xl bg-[#0a0814] border border-white/20 text-white font-extrabold text-xs focus:outline-none focus:border-[#D9A9FF] transition-all shadow-inner"
                         />
                       </div>
                       <div>
@@ -2562,7 +2562,7 @@ Semana 3-4 (Progresión):
                           required
                           value={dossierAkaName}
                           onChange={e => setDossierAkaName(e.target.value)}
-                          className="w-full px-3.5 py-2.5 rounded-2xl bg-[#0a0814] border border-white/20 text-white font-extrabold text-xs focus:outline-none focus:border-[#E9C349] transition-all shadow-inner"
+                          className="w-full px-3.5 py-2.5 rounded-2xl bg-[#0a0814] border border-white/20 text-white font-extrabold text-xs focus:outline-none focus:border-[#D9A9FF] transition-all shadow-inner"
                         />
                       </div>
                     </div>
@@ -2578,7 +2578,7 @@ Semana 3-4 (Progresión):
                       value={dossierBio}
                       onChange={e => setDossierBio(e.target.value)}
                       placeholder="Waacking historia even fearcourred bio anineva traraoenium: la waacking history and cwadenifica y la historia de la técnica..."
-                      className="w-full px-3.5 py-2.5 rounded-2xl bg-[#0a0814] border border-white/20 text-slate-200 font-semibold text-xs focus:outline-none focus:border-[#E9C349] resize-none leading-relaxed shadow-inner"
+                      className="w-full px-3.5 py-2.5 rounded-2xl bg-[#0a0814] border border-white/20 text-slate-200 font-semibold text-xs focus:outline-none focus:border-[#D9A9FF] resize-none leading-relaxed shadow-inner"
                     />
                   </div>
 
@@ -2639,7 +2639,7 @@ Semana 3-4 (Progresión):
                       value={dossierMilestones.join(', ')}
                       onChange={e => setDossierMilestones(e.target.value.split(', '))}
                       placeholder="Entrensa milestones obentaaciones, historias claves, prilendos, premiros y atrada lemilemlos..."
-                      className="w-full px-3.5 py-2.5 rounded-2xl bg-[#0a0814] border border-white/20 text-slate-200 font-semibold text-xs focus:outline-none focus:border-[#E9C349] resize-none leading-relaxed shadow-inner"
+                      className="w-full px-3.5 py-2.5 rounded-2xl bg-[#0a0814] border border-white/20 text-slate-200 font-semibold text-xs focus:outline-none focus:border-[#D9A9FF] resize-none leading-relaxed shadow-inner"
                     />
                   </div>
 
@@ -2649,7 +2649,7 @@ Semana 3-4 (Progresión):
                       <p className="text-[10px] font-mono font-black text-slate-300 tracking-widest uppercase">
                         MIS IMÁGENES & PORTAFOLIO ({dossierPortfolio.length})
                       </p>
-                      <label className="text-[9px] font-mono font-bold text-[#E9C349] bg-[#E9C349]/10 border border-[#E9C349]/30 hover:bg-[#E9C349] hover:text-black px-2.5 py-1 rounded-lg cursor-pointer transition-all flex items-center gap-1">
+                      <label className="text-[9px] font-mono font-bold text-[#D9A9FF] bg-[#D9A9FF]/10 border border-[#D9A9FF]/30 hover:bg-[#D9A9FF] hover:text-black px-2.5 py-1 rounded-lg cursor-pointer transition-all flex items-center gap-1">
                         <Upload className="w-3 h-3" />
                         <span>Subir desde archivo</span>
                         <input
@@ -2678,7 +2678,7 @@ Semana 3-4 (Progresión):
                             <button
                               type="button"
                               onClick={() => handleSetPortfolioAsInstructorAvatar(url)}
-                              className="px-1.5 py-0.5 bg-[#E9C349] text-black text-[7px] font-mono font-black uppercase rounded"
+                              className="px-1.5 py-0.5 bg-[#D9A9FF] text-black text-[7px] font-mono font-black uppercase rounded"
                               title="Usar como foto de perfil"
                             >
                               Avatar
@@ -2695,7 +2695,7 @@ Semana 3-4 (Progresión):
                         </div>
                       ))}
 
-                      <label className="w-20 h-24 rounded-2xl border-2 border-dashed border-white/30 hover:border-[#E9C349] flex flex-col items-center justify-center text-slate-400 hover:text-[#E9C349] transition-all shrink-0 bg-white/5 cursor-pointer group">
+                      <label className="w-20 h-24 rounded-2xl border-2 border-dashed border-white/30 hover:border-[#D9A9FF] flex flex-col items-center justify-center text-slate-400 hover:text-[#D9A9FF] transition-all shrink-0 bg-white/5 cursor-pointer group">
                         <Plus className="w-5 h-5 group-hover:scale-110 transition-transform" />
                         <span className="text-[8px] font-mono font-bold uppercase mt-1">Agregar</span>
                         <input
@@ -2712,7 +2712,7 @@ Semana 3-4 (Progresión):
                   {/* CTA BUTTON FROM SCREENSHOT */}
                   <button
                     onClick={(e) => handleSaveDossier(e)}
-                    className="w-full py-3.5 rounded-2xl border border-[#E9C349] bg-gradient-to-r from-[#1c182a] via-[#2c2212] to-[#1c182a] hover:from-[#2a2238] hover:to-[#2a2238] text-[#fce295] font-black text-xs uppercase tracking-widest shadow-xl shadow-[#E9C349]/10 active:scale-98 transition-all cursor-pointer"
+                    className="w-full py-3.5 rounded-2xl border border-[#D9A9FF] bg-gradient-to-r from-[#1c182a] via-[#2c2212] to-[#1c182a] hover:from-[#2a2238] hover:to-[#2a2238] text-[#fce295] font-black text-xs uppercase tracking-widest shadow-xl shadow-[#D9A9FF]/10 active:scale-98 transition-all cursor-pointer"
                   >
                     GUARDAR Y SINCRONIZAR EXPEDIENTE DE INSTRUCTOR
                   </button>
@@ -2724,8 +2724,8 @@ Semana 3-4 (Progresión):
                   {/* Top Header Tabs */}
                   <div className="bg-[#130f21] border border-white/10 rounded-2xl p-2.5 flex items-center justify-between gap-2 overflow-x-auto shadow-xl">
                     <div className="flex items-center gap-2">
-                      <div className="px-3 py-1.5 rounded-xl bg-[#E9C349]/10 border border-[#E9C349]/30 text-[#E9C349] font-black text-xs uppercase tracking-wider flex items-center gap-2">
-                        <GraduationCap className="w-4 h-4 text-[#E9C349]" />
+                      <div className="px-3 py-1.5 rounded-xl bg-[#D9A9FF]/10 border border-[#D9A9FF]/30 text-[#D9A9FF] font-black text-xs uppercase tracking-wider flex items-center gap-2">
+                        <GraduationCap className="w-4 h-4 text-[#D9A9FF]" />
                         <span>PLAN DE CÁTEDRA & SYLLABUS</span>
                       </div>
                       <span className="text-[10px] font-mono text-slate-400 font-bold hidden sm:inline">
@@ -2736,7 +2736,7 @@ Semana 3-4 (Progresión):
                     <button
                       type="button"
                       onClick={() => handleSaveDossier()}
-                      className="px-3 py-1.5 rounded-xl bg-[#E9C349] hover:bg-[#ffdf6b] text-black font-black text-[11px] uppercase tracking-wider transition-all flex items-center gap-1.5 shadow-md active:scale-95 cursor-pointer"
+                      className="px-3 py-1.5 rounded-xl bg-[#D9A9FF] hover:bg-[#F2CFFF] text-black font-black text-[11px] uppercase tracking-wider transition-all flex items-center gap-1.5 shadow-md active:scale-95 cursor-pointer"
                     >
                       <Check className="w-3.5 h-3.5" />
                       <span>Guardar Plan</span>
@@ -2748,7 +2748,7 @@ Semana 3-4 (Progresión):
                     <div className="flex items-center justify-between border-b border-white/10 pb-3">
                       <div>
                         <h4 className="text-sm font-extrabold text-white flex items-center gap-2">
-                          <Layers className="w-4 h-4 text-[#E9C349]" />
+                          <Layers className="w-4 h-4 text-[#D9A9FF]" />
                           Módulos Semanales de tu Cátedra
                         </h4>
                         <p className="text-[11px] text-slate-400 font-medium mt-0.5">
@@ -2762,9 +2762,9 @@ Semana 3-4 (Progresión):
 
                     <div className="space-y-3">
                       {trainingWeeks.map((wk, idx) => (
-                        <div key={idx} className="p-3.5 rounded-2xl bg-[#0e0a1b] border border-white/10 space-y-2 hover:border-[#E9C349]/40 transition-all">
+                        <div key={idx} className="p-3.5 rounded-2xl bg-[#0e0a1b] border border-white/10 space-y-2 hover:border-[#D9A9FF]/40 transition-all">
                           <div className="flex items-center justify-between gap-2">
-                            <span className="text-[10px] font-mono font-black text-[#E9C349] uppercase bg-[#E9C349]/10 px-2 py-0.5 rounded border border-[#E9C349]/20">
+                            <span className="text-[10px] font-mono font-black text-[#D9A9FF] uppercase bg-[#D9A9FF]/10 px-2 py-0.5 rounded border border-[#D9A9FF]/20">
                               Semana {wk.week}
                             </span>
                             <input
@@ -2776,7 +2776,7 @@ Semana 3-4 (Progresión):
                                 setTrainingWeeks(updated);
                               }}
                               placeholder="Duración / Carga"
-                              className="text-[10px] font-mono font-bold text-slate-400 bg-white/5 border border-white/10 rounded-lg px-2 py-1 focus:outline-none focus:border-[#E9C349] w-28 text-right"
+                              className="text-[10px] font-mono font-bold text-slate-400 bg-white/5 border border-white/10 rounded-lg px-2 py-1 focus:outline-none focus:border-[#D9A9FF] w-28 text-right"
                             />
                           </div>
 
@@ -2790,7 +2790,7 @@ Semana 3-4 (Progresión):
                                 setTrainingWeeks(updated);
                               }}
                               placeholder="Título del Módulo Semanal..."
-                              className="w-full bg-[#140e26] border border-white/10 rounded-xl px-3 py-1.5 text-white font-bold text-xs focus:outline-none focus:border-[#E9C349]"
+                              className="w-full bg-[#140e26] border border-white/10 rounded-xl px-3 py-1.5 text-white font-bold text-xs focus:outline-none focus:border-[#D9A9FF]"
                             />
 
                             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
@@ -2804,7 +2804,7 @@ Semana 3-4 (Progresión):
                                     setTrainingWeeks(updated);
                                   }}
                                   placeholder="Descripción de los contenidos técnicos y ejercicios..."
-                                  className="w-full bg-[#140e26] border border-white/10 rounded-xl px-3 py-1.5 text-slate-300 text-[11px] focus:outline-none focus:border-[#E9C349]"
+                                  className="w-full bg-[#140e26] border border-white/10 rounded-xl px-3 py-1.5 text-slate-300 text-[11px] focus:outline-none focus:border-[#D9A9FF]"
                                 />
                               </div>
                               <div>
@@ -2829,9 +2829,9 @@ Semana 3-4 (Progresión):
                     <button
                       type="button"
                       onClick={(e) => handleSaveDossier(e)}
-                      className="w-full py-3 rounded-2xl bg-gradient-to-r from-purple-900/40 via-[#E9C349]/20 to-purple-900/40 border border-[#E9C349]/50 text-[#fbe18d] hover:text-white font-black text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer shadow-lg"
+                      className="w-full py-3 rounded-2xl bg-gradient-to-r from-purple-900/40 via-[#D9A9FF]/20 to-purple-900/40 border border-[#D9A9FF]/50 text-[#fbe18d] hover:text-white font-black text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer shadow-lg"
                     >
-                      <Sparkles className="w-4 h-4 text-[#E9C349]" />
+                      <Sparkles className="w-4 h-4 text-[#D9A9FF]" />
                       <span>Sincronizar Syllabus con Todos los Alumnos</span>
                     </button>
                   </div>
@@ -2931,14 +2931,14 @@ Semana 3-4 (Progresión):
                 {/* HERRAMIENTAS PEDAGÓGICAS DE AUDIO Y RITMO */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                   <div>
-                    <h4 className="text-xs font-mono font-bold text-[#E9C349] uppercase tracking-wider mb-3 flex items-center gap-2">
-                      <Zap className="w-4 h-4 text-[#9A2B3C]" /> Metrónomo de Alta Precisión del Profesor
+                    <h4 className="text-xs font-mono font-bold text-[#D9A9FF] uppercase tracking-wider mb-3 flex items-center gap-2">
+                      <Zap className="w-4 h-4 text-[#C23E9E]" /> Metrónomo de Alta Precisión del Profesor
                     </h4>
                     <MetronomeLabComponent />
                   </div>
                   <div>
-                    <h4 className="text-xs font-mono font-bold text-[#E9C349] uppercase tracking-wider mb-3 flex items-center gap-2">
-                      <Music className="w-4 h-4 text-[#9A2B3C]" /> Reproductor de SoundCloud de Cátedra
+                    <h4 className="text-xs font-mono font-bold text-[#D9A9FF] uppercase tracking-wider mb-3 flex items-center gap-2">
+                      <Music className="w-4 h-4 text-[#C23E9E]" /> Reproductor de SoundCloud de Cátedra
                     </h4>
                     <SoundCloudPlayer playlistUrl="https://soundcloud.com/user-615971162" title="SoundCloud Sync - Perfil del Profesor" />
                   </div>
@@ -2947,14 +2947,14 @@ Semana 3-4 (Progresión):
 
               {/* UBICACIÓN CENTRALIZADA DEL DIRECTORIO DE PROFESORES */}
               <div className="mt-10 pt-8 border-t border-white/10 space-y-6">
-                <div className="bg-[#121212] border border-[#E9C349]/30 rounded-3xl p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between gap-6 shadow-2xl relative overflow-hidden">
+                <div className="bg-[#121212] border border-[#D9A9FF]/30 rounded-3xl p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between gap-6 shadow-2xl relative overflow-hidden">
                   <div className="space-y-2 max-w-xl">
-                    <span className="text-[10px] font-mono font-bold text-[#E9C349] bg-[#E9C349]/10 px-3 py-1 rounded-full border border-[#E9C349]/20 uppercase inline-flex items-center gap-1">
+                    <span className="text-[10px] font-mono font-bold text-[#D9A9FF] bg-[#D9A9FF]/10 px-3 py-1 rounded-full border border-[#D9A9FF]/20 uppercase inline-flex items-center gap-1">
                       <Sparkles className="w-3.5 h-3.5" />
                       {language === 'es' ? 'UBICACIÓN CENTRALIZADA' : 'CENTRAL LOCATION'}
                     </span>
                     <h3 className="text-xl sm:text-2xl font-black text-white uppercase tracking-wider flex items-center gap-2">
-                      <Globe className="w-5 h-5 text-[#E9C349]" /> 
+                      <Globe className="w-5 h-5 text-[#D9A9FF]" /> 
                       {language === 'es' ? 'Directorio Global de Profesores en el Tablero Principal' : 'Global Instructors Directory on Main Dashboard'}
                     </h3>
                     <p className="text-xs text-[#8A8A8A] font-semibold leading-relaxed">
@@ -2971,7 +2971,7 @@ Semana 3-4 (Progresión):
                         playChime('click');
                         setActiveTab('dashboard');
                       }}
-                      className="px-6 py-3.5 bg-[#E9C349] hover:bg-[#d8b33c] text-black text-xs font-black rounded-xl uppercase tracking-wider transition-all shadow-xl shrink-0 flex items-center gap-2 active:scale-95"
+                      className="px-6 py-3.5 bg-[#D9A9FF] hover:bg-[#B87CFF] text-black text-xs font-black rounded-xl uppercase tracking-wider transition-all shadow-xl shrink-0 flex items-center gap-2 active:scale-95"
                     >
                       <span>{language === 'es' ? 'Ir al Directorio del Tablero' : 'Go to Dashboard Directory'}</span>
                       <ChevronRight className="w-4 h-4" />
@@ -2981,13 +2981,13 @@ Semana 3-4 (Progresión):
               </div>
 
               {/* SECCIÓN/APARTADO: ¿CUÁNTO VALE LA SUSCRIPCIÓN? */}
-              <div className="mt-10 bg-gradient-to-r from-[#171128] via-[#1c1633] to-[#171128] border border-[#E9C349]/40 rounded-[32px] p-6 sm:p-8 space-y-6 shadow-2xl relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-64 h-64 bg-[#E9C349]/5 rounded-full blur-3xl pointer-events-none" />
+              <div className="mt-10 bg-gradient-to-r from-[#171128] via-[#1c1633] to-[#171128] border border-[#D9A9FF]/40 rounded-[32px] p-6 sm:p-8 space-y-6 shadow-2xl relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-[#D9A9FF]/5 rounded-full blur-3xl pointer-events-none" />
                 <div className="absolute bottom-0 left-0 w-64 h-64 bg-pink-500/5 rounded-full blur-3xl pointer-events-none" />
 
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-white/10 pb-6 relative z-10">
                   <div className="space-y-2 max-w-xl">
-                    <span className="px-3 py-1 rounded-full text-[10px] font-mono font-black uppercase bg-[#E9C349]/20 text-[#E9C349] border border-[#E9C349]/30 tracking-widest inline-flex items-center gap-1.5">
+                    <span className="px-3 py-1 rounded-full text-[10px] font-mono font-black uppercase bg-[#D9A9FF]/20 text-[#D9A9FF] border border-[#D9A9FF]/30 tracking-widest inline-flex items-center gap-1.5">
                       <Sparkles className="w-3.5 h-3.5" /> PLAN DE MEMBRESÍA MENSUAL
                     </span>
                     <h3 className="text-2xl sm:text-3xl font-black text-white uppercase tracking-wider">
@@ -2999,7 +2999,7 @@ Semana 3-4 (Progresión):
                   </div>
 
                   {/* Dynamic Editable Price Tag Highlight */}
-                  <div className="bg-[#0a0814] border-2 border-[#E9C349] rounded-2xl p-5 min-w-[280px] sm:min-w-[320px] shadow-2xl relative space-y-3">
+                  <div className="bg-[#0a0814] border-2 border-[#D9A9FF] rounded-2xl p-5 min-w-[280px] sm:min-w-[320px] shadow-2xl relative space-y-3">
                     <div className="flex items-center justify-between">
                       <span className="text-[10px] font-mono text-slate-300 font-extrabold uppercase tracking-widest block">
                         TARIFA MENSUAL EDITABLE
@@ -3011,7 +3011,7 @@ Semana 3-4 (Progresión):
 
                     <div className="space-y-2">
                       <div className="relative flex items-center">
-                        <span className="absolute left-3 text.base font-mono font-bold text-[#E9C349]">$</span>
+                        <span className="absolute left-3 text.base font-mono font-bold text-[#D9A9FF]">$</span>
                         <input
                           type="number"
                           step="0.50"
@@ -3022,7 +3022,7 @@ Semana 3-4 (Progresión):
                             setPriceNumberInput(e.target.value);
                           }}
                           placeholder="15.00"
-                          className="w-full bg-[#161224] border border-[#E9C349]/50 rounded-xl pl-8 pr-16 py-2.5 text-base font-mono font-black text-white focus:border-[#E9C349] focus:ring-1 focus:ring-[#E9C349] outline-none transition-all"
+                          className="w-full bg-[#161224] border border-[#D9A9FF]/50 rounded-xl pl-8 pr-16 py-2.5 text-base font-mono font-black text-white focus:border-[#D9A9FF] focus:ring-1 focus:ring-[#D9A9FF] outline-none transition-all"
                         />
                         <span className="absolute right-3 text-xs font-mono font-bold text-slate-400">USD/mes</span>
                       </div>
@@ -3038,16 +3038,16 @@ Semana 3-4 (Progresión):
                         type="button"
                         disabled={isUpdatingPrice}
                         onClick={() => handleUpdatePricing(priceNumberInput)}
-                        className="w-full py-2.5 px-4 bg-gradient-to-r from-[#9A2B3C] via-[#B8344B] to-[#E9C349] hover:brightness-110 active:scale-95 text-white text-xs font-mono font-black uppercase tracking-wider rounded-xl transition-all shadow-lg flex items-center justify-center gap-2"
+                        className="w-full py-2.5 px-4 bg-gradient-to-r from-[#C23E9E] via-[#C23FA0] to-[#D9A9FF] hover:brightness-110 active:scale-95 text-white text-xs font-mono font-black uppercase tracking-wider rounded-xl transition-all shadow-lg flex items-center justify-center gap-2"
                       >
                         {isUpdatingPrice ? (
                           <>
-                            <Loader2 className="w-4 h-4 animate-spin text-[#E9C349]" />
+                            <Loader2 className="w-4 h-4 animate-spin text-[#D9A9FF]" />
                             <span>Validando Backend...</span>
                           </>
                         ) : (
                           <>
-                            <CheckCircle2 className="w-4 h-4 text-[#E9C349]" />
+                            <CheckCircle2 className="w-4 h-4 text-[#D9A9FF]" />
                             <span>Actualizar Tarifa</span>
                           </>
                         )}
@@ -3055,7 +3055,7 @@ Semana 3-4 (Progresión):
                     </div>
 
                     <div className="text-[10px] font-mono text-slate-400 text-center pt-1 border-t border-white/5">
-                      Tarifa actual publicada: <strong className="text-[#E9C349]">{currentUser.monthlyPrice || '$15.00 USD/mes'}</strong>
+                      Tarifa actual publicada: <strong className="text-[#D9A9FF]">{currentUser.monthlyPrice || '$15.00 USD/mes'}</strong>
                     </div>
                   </div>
                 </div>
@@ -3073,7 +3073,7 @@ Semana 3-4 (Progresión):
                       title: "Evaluación & Feedback Personal",
                       desc: "Envía tus videos de práctica a través del Somatic Diary para recibir correcciones personalizadas del profesor.",
                       icon: Target,
-                      color: "text-[#E9C349]"
+                      color: "text-[#D9A9FF]"
                     },
                     {
                       title: "Material & Recursos Exclusivos",
@@ -3116,16 +3116,16 @@ Semana 3-4 (Progresión):
                 </div>
 
                 {/* FEATURED SUBSCRIPTION EXAMPLE FOR BRANDON HERMOSO */}
-                <div className="bg-[#0b0816] border border-[#E9C349]/50 rounded-2xl p-5 sm:p-6 flex flex-col md:flex-row items-center justify-between gap-5 relative z-10 shadow-xl">
+                <div className="bg-[#0b0816] border border-[#D9A9FF]/50 rounded-2xl p-5 sm:p-6 flex flex-col md:flex-row items-center justify-between gap-5 relative z-10 shadow-xl">
                   <div className="flex items-center gap-4">
                     <img
                       src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=200"
                       alt="Brandon Hermoso"
-                      className="w-14 h-14 rounded-2xl object-cover border-2 border-[#E9C349] shadow-lg shrink-0"
+                      className="w-14 h-14 rounded-2xl object-cover border-2 border-[#D9A9FF] shadow-lg shrink-0"
                     />
                     <div>
                       <div className="flex items-center gap-2">
-                        <span className="text-[9px] font-mono font-black uppercase text-[#E9C349] bg-[#E9C349]/10 px-2 py-0.5 rounded border border-[#E9C349]/20">
+                        <span className="text-[9px] font-mono font-black uppercase text-[#D9A9FF] bg-[#D9A9FF]/10 px-2 py-0.5 rounded border border-[#D9A9FF]/20">
                           EJEMPLO PRÁCTICO
                         </span>
                         <span className="text-[10px] font-mono text-emerald-400 font-bold">$15 USD / MES</span>
@@ -3142,7 +3142,7 @@ Semana 3-4 (Progresión):
                     className={`px-6 py-3.5 rounded-2xl font-black text-xs uppercase tracking-wider transition-all shadow-xl shrink-0 flex items-center gap-2 active:scale-95 ${
                       subscribedInstructors.includes('Brandon Hermoso')
                         ? 'bg-gradient-to-r from-emerald-500 to-teal-600 text-white border border-emerald-400 shadow-emerald-500/20'
-                        : 'bg-gradient-to-r from-[#2c2212] via-[#E9C349] to-[#2c2212] hover:opacity-95 text-black border border-[#E9C349] shadow-[#E9C349]/20'
+                        : 'bg-gradient-to-r from-[#2c2212] via-[#D9A9FF] to-[#2c2212] hover:opacity-95 text-black border border-[#D9A9FF] shadow-[#D9A9FF]/20'
                     }`}
                   >
                     {subscribedInstructors.includes('Brandon Hermoso') ? (
@@ -3171,10 +3171,10 @@ Semana 3-4 (Progresión):
               className="space-y-6"
             >
               {/* Header Banner */}
-              <div className="p-6 rounded-3xl bg-gradient-to-r from-[#18112b] via-[#120a21] to-[#0d0718] border border-[#E9C349]/30 shadow-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div className="p-6 rounded-3xl bg-gradient-to-r from-[#18112b] via-[#120a21] to-[#0d0718] border border-[#D9A9FF]/30 shadow-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div className="space-y-1">
                   <div className="flex items-center gap-2.5">
-                    <div className="w-9 h-9 rounded-2xl bg-[#E9C349]/10 border border-[#E9C349]/40 flex items-center justify-center text-[#E9C349]">
+                    <div className="w-9 h-9 rounded-2xl bg-[#D9A9FF]/10 border border-[#D9A9FF]/40 flex items-center justify-center text-[#D9A9FF]">
                       <FileText className="w-5 h-5" />
                     </div>
                     <h2 className="text-lg sm:text-2xl font-black tracking-wider text-white uppercase font-mono">
@@ -3182,7 +3182,7 @@ Semana 3-4 (Progresión):
                     </h2>
                   </div>
                   <p className="text-xs text-slate-300 font-sans leading-relaxed max-w-2xl">
-                    Sube y distribuye <strong className="text-[#E9C349]">Guías y manuales de técnica en PDF</strong> (ej: Cuaderno de Práctica Biomecánica para prevención de lesiones de hombro y codo) y <strong className="text-[#E9C349]">Planificaciones de entrenamiento</strong> (plantillas imprimibles o interactivas para registro semanal de BPM).
+                    Sube y distribuye <strong className="text-[#D9A9FF]">Guías y manuales de técnica en PDF</strong> (ej: Cuaderno de Práctica Biomecánica para prevención de lesiones de hombro y codo) y <strong className="text-[#D9A9FF]">Planificaciones de entrenamiento</strong> (plantillas imprimibles o interactivas para registro semanal de BPM).
                   </p>
                 </div>
 
@@ -3201,9 +3201,9 @@ Semana 3-4 (Progresión):
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
                 
                 {/* LEFT COLUMN: Upload / Create Document Form (5 cols) */}
-                <div className="lg:col-span-5 bg-[#130f21] border border-[#E9C349]/30 rounded-3xl p-5 sm:p-6 space-y-5 shadow-2xl">
+                <div className="lg:col-span-5 bg-[#130f21] border border-[#D9A9FF]/30 rounded-3xl p-5 sm:p-6 space-y-5 shadow-2xl">
                   <div className="flex items-center gap-2 border-b border-white/10 pb-3">
-                    <Upload className="w-4 h-4 text-[#E9C349]" />
+                    <Upload className="w-4 h-4 text-[#D9A9FF]" />
                     <h3 className="text-xs font-mono font-bold text-white uppercase tracking-wider">
                       Publicar Nuevo Documento o PDF
                     </h3>
@@ -3224,12 +3224,12 @@ Semana 3-4 (Progresión):
                           }}
                           className={`p-3 rounded-2xl border text-left flex flex-col gap-1 transition-all cursor-pointer ${
                             docCategory === 'guia_pdf'
-                              ? 'bg-[#E9C349]/20 border-[#E9C349] text-white shadow-md'
+                              ? 'bg-[#D9A9FF]/20 border-[#D9A9FF] text-white shadow-md'
                               : 'bg-[#0a0814] border-white/10 text-slate-400 hover:text-slate-200'
                           }`}
                         >
                           <div className="flex items-center gap-1.5">
-                            <FileText className="w-4 h-4 text-[#E9C349]" />
+                            <FileText className="w-4 h-4 text-[#D9A9FF]" />
                             <span className="text-[10px] font-black uppercase">Guías & Manuales PDF</span>
                           </div>
                           <span className="text-[8px] text-slate-400 leading-tight">Biomecánica, anatomía y prevención.</span>
@@ -3267,7 +3267,7 @@ Semana 3-4 (Progresión):
                         value={docTitle}
                         onChange={e => setDocTitle(e.target.value)}
                         placeholder={docCategory === 'guia_pdf' ? 'ej: Cuaderno de Práctica Biomecánica para prevención de lesiones de hombro y codo' : 'ej: Planificación Semanal de Rutinas BPM e Incrementos de Tempo'}
-                        className="w-full px-3.5 py-2.5 rounded-2xl bg-[#0a0814] border border-white/20 text-white font-bold text-xs focus:outline-none focus:border-[#E9C349]"
+                        className="w-full px-3.5 py-2.5 rounded-2xl bg-[#0a0814] border border-white/20 text-white font-bold text-xs focus:outline-none focus:border-[#D9A9FF]"
                       />
                     </div>
 
@@ -3281,7 +3281,7 @@ Semana 3-4 (Progresión):
                         value={docFormat}
                         onChange={e => setDocFormat(e.target.value)}
                         placeholder="ej: PDF - 18 Páginas (Biomecánica) o Plantilla Imprimible"
-                        className="w-full px-3.5 py-2.5 rounded-2xl bg-[#0a0814] border border-white/20 text-white text-xs focus:outline-none focus:border-[#E9C349]"
+                        className="w-full px-3.5 py-2.5 rounded-2xl bg-[#0a0814] border border-white/20 text-white text-xs focus:outline-none focus:border-[#D9A9FF]"
                       />
                     </div>
 
@@ -3295,7 +3295,7 @@ Semana 3-4 (Progresión):
                         value={docDescription}
                         onChange={e => setDocDescription(e.target.value)}
                         placeholder="Explica qué aprenderán tus alumnas con este documento y cómo deben registrar sus rutinas de BPM..."
-                        className="w-full px-3.5 py-2.5 rounded-2xl bg-[#0a0814] border border-white/20 text-slate-200 text-xs focus:outline-none focus:border-[#E9C349] resize-none leading-relaxed"
+                        className="w-full px-3.5 py-2.5 rounded-2xl bg-[#0a0814] border border-white/20 text-slate-200 text-xs focus:outline-none focus:border-[#D9A9FF] resize-none leading-relaxed"
                       />
                     </div>
 
@@ -3305,8 +3305,8 @@ Semana 3-4 (Progresión):
                         Archivo PDF (.pdf) o Material Adjunto
                       </label>
                       <div className="flex items-center gap-3">
-                        <label className="flex-1 px-3.5 py-3 rounded-2xl bg-[#0a0814] border border-dashed border-white/30 hover:border-[#E9C349] text-center cursor-pointer transition-all flex items-center justify-center gap-2">
-                          <Upload className="w-4 h-4 text-[#E9C349]" />
+                        <label className="flex-1 px-3.5 py-3 rounded-2xl bg-[#0a0814] border border-dashed border-white/30 hover:border-[#D9A9FF] text-center cursor-pointer transition-all flex items-center justify-center gap-2">
+                          <Upload className="w-4 h-4 text-[#D9A9FF]" />
                           <span className="text-xs font-bold text-slate-300 truncate">
                             {docFileName ? docFileName : 'Subir PDF desde este dispositivo'}
                           </span>
@@ -3328,7 +3328,7 @@ Semana 3-4 (Progresión):
                     <button
                       type="submit"
                       disabled={isUploadingDoc}
-                      className="w-full py-3 rounded-2xl bg-[#E9C349] hover:bg-[#d8b33c] text-black font-black text-xs uppercase tracking-wider transition-all shadow-lg cursor-pointer active:scale-98"
+                      className="w-full py-3 rounded-2xl bg-[#D9A9FF] hover:bg-[#B87CFF] text-black font-black text-xs uppercase tracking-wider transition-all shadow-lg cursor-pointer active:scale-98"
                     >
                       {isUploadingDoc ? 'Procesando PDF...' : 'Publicar Documento para Alumnas'}
                     </button>
@@ -3339,7 +3339,7 @@ Semana 3-4 (Progresión):
                 <div className="lg:col-span-7 space-y-4">
                   <div className="flex items-center justify-between border-b border-white/10 pb-3">
                     <h3 className="text-xs font-mono font-bold text-white uppercase tracking-wider flex items-center gap-2">
-                      <BookMarked className="w-4 h-4 text-[#E9C349]" />
+                      <BookMarked className="w-4 h-4 text-[#D9A9FF]" />
                       Documentos Publicados en la Academia ({instructorDocuments.length})
                     </h3>
                     <span className="text-[9px] font-mono font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/30">
@@ -3358,13 +3358,13 @@ Semana 3-4 (Progresión):
                       {instructorDocuments.map(doc => (
                         <div
                           key={doc.id}
-                          className="bg-[#130f21] border border-white/10 hover:border-[#E9C349]/50 rounded-3xl p-5 space-y-3 transition-all relative overflow-hidden shadow-xl group"
+                          className="bg-[#130f21] border border-white/10 hover:border-[#D9A9FF]/50 rounded-3xl p-5 space-y-3 transition-all relative overflow-hidden shadow-xl group"
                         >
                           <div className="flex items-start justify-between gap-3">
                             <div className="flex items-start gap-3 min-w-0">
                               <div className={`w-10 h-10 rounded-2xl flex items-center justify-center shrink-0 border ${
                                 doc.category === 'guia_pdf'
-                                  ? 'bg-[#E9C349]/10 border-[#E9C349]/40 text-[#E9C349]'
+                                  ? 'bg-[#D9A9FF]/10 border-[#D9A9FF]/40 text-[#D9A9FF]'
                                   : 'bg-purple-500/10 border-purple-400/40 text-purple-400'
                               }`}>
                                 {doc.category === 'guia_pdf' ? <FileText className="w-5 h-5" /> : <Printer className="w-5 h-5" />}
@@ -3373,7 +3373,7 @@ Semana 3-4 (Progresión):
                                 <div className="flex flex-wrap items-center gap-2">
                                   <span className={`text-[9px] font-mono font-bold uppercase px-2 py-0.5 rounded border ${
                                     doc.category === 'guia_pdf'
-                                      ? 'bg-[#E9C349]/10 text-[#E9C349] border-[#E9C349]/30'
+                                      ? 'bg-[#D9A9FF]/10 text-[#D9A9FF] border-[#D9A9FF]/30'
                                       : 'bg-purple-500/10 text-purple-300 border-purple-500/30'
                                   }`}>
                                     {doc.categoryLabel}
@@ -3382,7 +3382,7 @@ Semana 3-4 (Progresión):
                                     {doc.format}
                                   </span>
                                 </div>
-                                <h4 className="text-sm font-extrabold text-white mt-1 group-hover:text-[#E9C349] transition-colors leading-snug">
+                                <h4 className="text-sm font-extrabold text-white mt-1 group-hover:text-[#D9A9FF] transition-colors leading-snug">
                                   {doc.title}
                                 </h4>
                               </div>
@@ -3414,7 +3414,7 @@ Semana 3-4 (Progresión):
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 download={doc.fileName || true}
-                                className="px-3.5 py-1.5 rounded-xl bg-[#E9C349] text-black font-black uppercase text-[10px] hover:bg-[#d8b33c] transition-all flex items-center gap-1.5 shadow active:scale-95 cursor-pointer"
+                                className="px-3.5 py-1.5 rounded-xl bg-[#D9A9FF] text-black font-black uppercase text-[10px] hover:bg-[#B87CFF] transition-all flex items-center gap-1.5 shadow active:scale-95 cursor-pointer"
                               >
                                 <Download className="w-3.5 h-3.5" />
                                 <span>Descargar PDF</span>
@@ -3453,11 +3453,11 @@ Semana 3-4 (Progresión):
               {/* Top AI Onboarding Engine Banner */}
               <div className="p-5 rounded-3xl bg-gradient-to-r from-[#1E0D1B] via-[#140813] to-[#0D0914] border border-[#3A223B] shadow-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div className="flex items-center gap-3.5">
-                  <div className="p-3 rounded-2xl bg-[#9A2B3C]/20 border border-[#9A2B3C]/40 text-[#E9C349] shrink-0">
+                  <div className="p-3 rounded-2xl bg-[#C23E9E]/20 border border-[#C23E9E]/40 text-[#D9A9FF] shrink-0">
                     <Sparkles className="w-6 h-6 animate-pulse" />
                   </div>
                   <div>
-                    <div className="text-[10px] font-mono font-bold text-[#E9C349] uppercase tracking-widest flex items-center gap-1.5">
+                    <div className="text-[10px] font-mono font-bold text-[#D9A9FF] uppercase tracking-widest flex items-center gap-1.5">
                       <span>MOTOR IA PEDAGÓGICO DE ONBOARDING</span>
                       <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
                     </div>
@@ -3472,9 +3472,9 @@ Semana 3-4 (Progresión):
 
                 <button
                   onClick={() => setShowQuestionnaireModal(true)}
-                  className="px-4 py-2.5 rounded-2xl bg-gradient-to-r from-[#9A2B3C] via-[#B8344B] to-[#E9C349] text-white text-xs font-mono font-bold uppercase tracking-wider shadow-lg hover:brightness-110 active:scale-95 transition-all flex items-center gap-2 shrink-0 self-start sm:self-auto"
+                  className="px-4 py-2.5 rounded-2xl bg-gradient-to-r from-[#C23E9E] via-[#C23FA0] to-[#D9A9FF] text-white text-xs font-mono font-bold uppercase tracking-wider shadow-lg hover:brightness-110 active:scale-95 transition-all flex items-center gap-2 shrink-0 self-start sm:self-auto"
                 >
-                  <PlusCircle className="w-4 h-4 text-[#E9C349]" />
+                  <PlusCircle className="w-4 h-4 text-[#D9A9FF]" />
                   <span>Nuevo Diagnóstico IA</span>
                 </button>
               </div>
@@ -3484,11 +3484,11 @@ Semana 3-4 (Progresión):
                 <div className="relative p-6 rounded-3xl bg-[#0E0B12] border border-[#3D2948] shadow-2xl space-y-4">
                   <div className="flex items-center justify-between border-b border-[#2B1B33] pb-4">
                     <div className="flex items-center gap-2.5">
-                      <div className="p-2 rounded-xl bg-[#9A2B3C]/20 text-[#E9C349]">
+                      <div className="p-2 rounded-xl bg-[#C23E9E]/20 text-[#D9A9FF]">
                         <UserIcon className="w-5 h-5" />
                       </div>
                       <div>
-                        <span className="text-[10px] font-mono text-[#E9C349] font-bold uppercase tracking-widest">
+                        <span className="text-[10px] font-mono text-[#D9A9FF] font-bold uppercase tracking-widest">
                           CÁTEDRA DEL INSTRUCTOR • EXPEDIENTE
                         </span>
                         <h4 className="text-base font-bold text-white">
@@ -3536,7 +3536,7 @@ Semana 3-4 (Progresión):
                       onClick={() => handleOpenStudentPlan(selectedStudent)}
                       className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-pink-600 to-purple-600 hover:brightness-110 text-white font-mono text-xs font-bold transition-all flex items-center gap-1.5 shadow-md"
                     >
-                      <Sparkles className="w-3.5 h-3.5 text-[#E9C349]" />
+                      <Sparkles className="w-3.5 h-3.5 text-[#D9A9FF]" />
                       <span>Ver Plan Onboarding IA</span>
                     </button>
                     <button
@@ -3558,7 +3558,7 @@ Semana 3-4 (Progresión):
                     </h3>
                     <p className="text-[11px] text-slate-400">Selecciona un alumno para mantener su seguimiento activo al cambiar de pestaña</p>
                   </div>
-                  <span className="text-xs text-[#E9C349] bg-[#E9C349]/10 px-2 py-0.5 rounded border border-[#E9C349]/20 font-bold">
+                  <span className="text-xs text-[#D9A9FF] bg-[#D9A9FF]/10 px-2 py-0.5 rounded border border-[#D9A9FF]/20 font-bold">
                     {students.length} Alumnos
                   </span>
                 </div>
@@ -3607,7 +3607,7 @@ Semana 3-4 (Progresión):
                             </td>
                             <td className="py-3 pr-2 font-bold text-white flex items-center gap-2">
                               <div className={`w-7 h-7 rounded-full flex items-center justify-center font-bold border text-[10px] ${
-                                isSel ? 'bg-pink-500 border-pink-400 text-white' : 'bg-white/5 border-white/10 text-[#E9C349]'
+                                isSel ? 'bg-pink-500 border-pink-400 text-white' : 'bg-white/5 border-white/10 text-[#D9A9FF]'
                               }`}>
                                 {(std.name || 'WA').substring(0, 2).toUpperCase()}
                               </div>
@@ -3615,8 +3615,8 @@ Semana 3-4 (Progresión):
                             </td>
                             <td className="py-3 px-2 font-semibold">
                               <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
-                                std.level === 'Avanzado' ? 'bg-[#9A2B3C]/10 text-red-400 border border-[#9A2B3C]/20' :
-                                std.level === 'Intermedio' ? 'bg-[#E9C349]/10 text-[#E9C349] border border-[#E9C349]/20' :
+                                std.level === 'Avanzado' ? 'bg-[#C23E9E]/10 text-red-400 border border-[#C23E9E]/20' :
+                                std.level === 'Intermedio' ? 'bg-[#D9A9FF]/10 text-[#D9A9FF] border border-[#D9A9FF]/20' :
                                 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/20'
                               }`}>
                                 {std.level}
@@ -3631,16 +3631,16 @@ Semana 3-4 (Progresión):
                             <td className="py-3 pl-2 text-right">
                               <button
                                 onClick={() => handleOpenStudentPlan(std)}
-                                className="px-3 py-1 rounded-lg bg-[#9A2B3C]/20 hover:bg-[#9A2B3C]/40 border border-[#9A2B3C]/40 text-[#E9C349] text-[10px] font-mono font-bold transition-all flex items-center gap-1.5 ml-auto"
+                                className="px-3 py-1 rounded-lg bg-[#C23E9E]/20 hover:bg-[#C23E9E]/40 border border-[#C23E9E]/40 text-[#D9A9FF] text-[10px] font-mono font-bold transition-all flex items-center gap-1.5 ml-auto"
                               >
-                                <Sparkles className="w-3 h-3 text-[#E9C349]" />
+                                <Sparkles className="w-3 h-3 text-[#D9A9FF]" />
                                 <span>Plan Onboarding IA</span>
                               </button>
                             </td>
                             <td className="py-3 pl-2 text-right">
                               <button
                                 onClick={() => handleAlertStudent(std.name)}
-                                className="px-3 py-1 rounded-lg bg-white/5 hover:bg-[#E9C349]/20 border border-white/10 hover:border-[#E9C349]/30 text-[#EDEFF4] text-[10px] font-bold transition-all"
+                                className="px-3 py-1 rounded-lg bg-white/5 hover:bg-[#D9A9FF]/20 border border-white/10 hover:border-[#D9A9FF]/30 text-[#EDEFF4] text-[10px] font-bold transition-all"
                               >
                                 {t.alertStudent}
                               </button>
@@ -3665,12 +3665,12 @@ Semana 3-4 (Progresión):
             >
               {/* Instructor Class Panel Header & Sub-Tab Navigation */}
               <div className="bg-[#121212] border border-white/10 rounded-[28px] p-5 sm:p-6 shadow-2xl relative overflow-hidden">
-                <div className="absolute right-0 top-0 w-64 h-64 bg-[#E9C349]/5 rounded-full blur-3xl pointer-events-none" />
+                <div className="absolute right-0 top-0 w-64 h-64 bg-[#D9A9FF]/5 rounded-full blur-3xl pointer-events-none" />
                 
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-white/5 pb-5">
                   <div>
                     <div className="flex items-center gap-2 mb-1">
-                      <span className="px-2.5 py-0.5 rounded-full bg-[#E9C349]/10 border border-[#E9C349]/30 text-[#E9C349] text-[10px] font-mono font-black uppercase tracking-wider flex items-center gap-1.5">
+                      <span className="px-2.5 py-0.5 rounded-full bg-[#D9A9FF]/10 border border-[#D9A9FF]/30 text-[#D9A9FF] text-[10px] font-mono font-black uppercase tracking-wider flex items-center gap-1.5">
                         <GraduationCap className="w-3.5 h-3.5" />
                         CENTRO DE CONTROL DOCENTE
                       </span>
@@ -3696,7 +3696,7 @@ Semana 3-4 (Progresión):
                       onClick={() => setClassPanelSubTab('schedule')}
                       className={`px-3.5 py-2 rounded-xl text-xs font-mono font-bold uppercase transition-all flex items-center gap-1.5 ${
                         classPanelSubTab === 'schedule'
-                          ? 'bg-[#E9C349] text-black shadow-lg font-black'
+                          ? 'bg-[#D9A9FF] text-black shadow-lg font-black'
                           : 'bg-white/5 hover:bg-white/10 text-slate-300 border border-white/10'
                       }`}
                     >
@@ -3708,7 +3708,7 @@ Semana 3-4 (Progresión):
                       onClick={() => setClassPanelSubTab('curriculum')}
                       className={`px-3.5 py-2 rounded-xl text-xs font-mono font-bold uppercase transition-all flex items-center gap-1.5 ${
                         classPanelSubTab === 'curriculum'
-                          ? 'bg-[#E9C349] text-black shadow-lg font-black'
+                          ? 'bg-[#D9A9FF] text-black shadow-lg font-black'
                           : 'bg-white/5 hover:bg-white/10 text-slate-300 border border-white/10'
                       }`}
                     >
@@ -3720,7 +3720,7 @@ Semana 3-4 (Progresión):
                       onClick={() => setClassPanelSubTab('live_control')}
                       className={`px-3.5 py-2 rounded-xl text-xs font-mono font-bold uppercase transition-all flex items-center gap-1.5 ${
                         classPanelSubTab === 'live_control'
-                          ? 'bg-[#E9C349] text-black shadow-lg font-black'
+                          ? 'bg-[#D9A9FF] text-black shadow-lg font-black'
                           : 'bg-white/5 hover:bg-white/10 text-slate-300 border border-white/10'
                       }`}
                     >
@@ -3732,7 +3732,7 @@ Semana 3-4 (Progresión):
                       onClick={() => setClassPanelSubTab('submissions')}
                       className={`px-3.5 py-2 rounded-xl text-xs font-mono font-bold uppercase transition-all flex items-center gap-1.5 relative ${
                         classPanelSubTab === 'submissions'
-                          ? 'bg-[#E9C349] text-black shadow-lg font-black'
+                          ? 'bg-[#D9A9FF] text-black shadow-lg font-black'
                           : 'bg-white/5 hover:bg-white/10 text-slate-300 border border-white/10'
                       }`}
                     >
@@ -3748,7 +3748,7 @@ Semana 3-4 (Progresión):
                 {/* Quick Summary Stats Bar */}
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-4">
                   <div className="p-3 rounded-2xl bg-white/5 border border-white/5 flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-xl bg-[#E9C349]/10 text-[#E9C349] flex items-center justify-center font-bold">
+                    <div className="w-9 h-9 rounded-xl bg-[#D9A9FF]/10 text-[#D9A9FF] flex items-center justify-center font-bold">
                       <Calendar className="w-4 h-4" />
                     </div>
                     <div>
@@ -3800,7 +3800,7 @@ Semana 3-4 (Progresión):
                   <div className="lg:col-span-2 bg-[#121212] border border-white/5 rounded-[24px] p-6 space-y-4">
                     <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-white/5">
                       <h3 className="text-base font-black text-white flex items-center gap-2">
-                        <Calendar className="w-5 h-5 text-[#E9C349]" />
+                        <Calendar className="w-5 h-5 text-[#D9A9FF]" />
                         Programar Nueva Sesión en Directo / Taller Magistral
                       </h3>
                       {selectedStudent && (
@@ -3830,7 +3830,7 @@ Semana 3-4 (Progresión):
                               onClick={() => setClassEventType(tType as any)}
                               className={`p-2.5 rounded-xl border text-[11px] font-bold transition-all text-left ${
                                 classEventType === tType
-                                  ? 'bg-[#E9C349]/15 border-[#E9C349] text-white shadow-sm'
+                                  ? 'bg-[#D9A9FF]/15 border-[#D9A9FF] text-white shadow-sm'
                                   : 'bg-[#161616] border-white/5 text-slate-400 hover:text-white'
                               }`}
                             >
@@ -3851,7 +3851,7 @@ Semana 3-4 (Progresión):
                           value={classTitle}
                           onChange={e => setClassTitle(e.target.value)}
                           placeholder={language === 'es' ? "ej: Aceleración de Rolls & Limpieza Angular en Posing" : "e.g., Extreme Arm speed live drill"}
-                          className="w-full px-4 py-3 rounded-xl bg-[#161616] border border-white/10 text-white font-bold text-xs focus:outline-none focus:border-[#E9C349] transition-all"
+                          className="w-full px-4 py-3 rounded-xl bg-[#161616] border border-white/10 text-white font-bold text-xs focus:outline-none focus:border-[#D9A9FF] transition-all"
                         />
                       </div>
 
@@ -3866,7 +3866,7 @@ Semana 3-4 (Progresión):
                             required
                             value={classDate}
                             onChange={e => setClassDate(e.target.value)}
-                            className="w-full px-4 py-3 rounded-xl bg-[#161616] border border-white/10 text-white font-mono text-xs focus:outline-none focus:border-[#E9C349] transition-all"
+                            className="w-full px-4 py-3 rounded-xl bg-[#161616] border border-white/10 text-white font-mono text-xs focus:outline-none focus:border-[#D9A9FF] transition-all"
                           />
                         </div>
 
@@ -3880,7 +3880,7 @@ Semana 3-4 (Progresión):
                             value={classTime}
                             onChange={e => setClassTime(e.target.value)}
                             placeholder="19:30"
-                            className="w-full px-4 py-3 rounded-xl bg-[#161616] border border-white/10 text-white font-mono text-xs focus:outline-none focus:border-[#E9C349] transition-all"
+                            className="w-full px-4 py-3 rounded-xl bg-[#161616] border border-white/10 text-white font-mono text-xs focus:outline-none focus:border-[#D9A9FF] transition-all"
                           />
                         </div>
 
@@ -3894,7 +3894,7 @@ Semana 3-4 (Progresión):
                             value={classDuration}
                             onChange={e => setClassDuration(e.target.value)}
                             placeholder="90 min"
-                            className="w-full px-4 py-3 rounded-xl bg-[#161616] border border-white/10 text-white font-mono text-xs focus:outline-none focus:border-[#E9C349] transition-all"
+                            className="w-full px-4 py-3 rounded-xl bg-[#161616] border border-white/10 text-white font-mono text-xs focus:outline-none focus:border-[#D9A9FF] transition-all"
                           />
                         </div>
                       </div>
@@ -3908,7 +3908,7 @@ Semana 3-4 (Progresión):
                           <select
                             value={classTargetAudience}
                             onChange={e => setClassTargetAudience(e.target.value as any)}
-                            className="w-full px-4 py-2.5 rounded-xl bg-[#161616] border border-white/10 text-white font-bold text-xs focus:outline-none focus:border-[#E9C349]"
+                            className="w-full px-4 py-2.5 rounded-xl bg-[#161616] border border-white/10 text-white font-bold text-xs focus:outline-none focus:border-[#D9A9FF]"
                           >
                             <option value="all">Toda la Cátedra ({students.length} Alumnos)</option>
                             {selectedStudent && (
@@ -3926,7 +3926,7 @@ Semana 3-4 (Progresión):
                             <select
                               value={classTargetLevel}
                               onChange={e => setClassTargetLevel(e.target.value as any)}
-                              className="w-full px-4 py-2.5 rounded-xl bg-[#161616] border border-white/10 text-white font-bold text-xs focus:outline-none focus:border-[#E9C349]"
+                              className="w-full px-4 py-2.5 rounded-xl bg-[#161616] border border-white/10 text-white font-bold text-xs focus:outline-none focus:border-[#D9A9FF]"
                             >
                               <option value="all">Todos los Niveles</option>
                               <option value="Principiante">Nivel Principiante</option>
@@ -3957,15 +3957,15 @@ Semana 3-4 (Progresión):
                           value={classMeet}
                           onChange={e => setClassMeet(e.target.value)}
                           placeholder="https://meet.google.com/abc-defg-hij"
-                          className="w-full px-4 py-3 rounded-xl bg-[#161616] border border-white/10 text-white font-mono text-xs focus:outline-none focus:border-[#E9C349] transition-all"
+                          className="w-full px-4 py-3 rounded-xl bg-[#161616] border border-white/10 text-white font-mono text-xs focus:outline-none focus:border-[#D9A9FF] transition-all"
                         />
                       </div>
 
                       {/* Música y BPM para la clase */}
                       <div className="p-4 rounded-2xl bg-[#1a1528] border border-purple-500/30 space-y-3">
                         <div className="flex items-center justify-between">
-                          <label className="block text-[10px] font-mono text-[#E9C349] font-bold uppercase flex items-center gap-1.5">
-                            <Radio className="w-3.5 h-3.5 text-[#E9C349]" />
+                          <label className="block text-[10px] font-mono text-[#D9A9FF] font-bold uppercase flex items-center gap-1.5">
+                            <Radio className="w-3.5 h-3.5 text-[#D9A9FF]" />
                             Pista Musical Multifuente (YouTube, Spotify, SoundCloud)
                           </label>
                           <span className="text-[9px] font-mono text-purple-300 bg-purple-500/20 px-2 py-0.5 rounded border border-purple-500/30 font-semibold">
@@ -4018,13 +4018,13 @@ Semana 3-4 (Progresión):
                           value={classNotes}
                           onChange={e => setClassNotes(e.target.value)}
                           placeholder="Requisitos: Calzado de suela plana, toalla, calentamiento previo de manguito rotador y espacio despejado..."
-                          className="w-full px-4 py-2.5 rounded-xl bg-[#161616] border border-white/10 text-slate-300 text-xs focus:outline-none focus:border-[#E9C349] resize-none"
+                          className="w-full px-4 py-2.5 rounded-xl bg-[#161616] border border-white/10 text-slate-300 text-xs focus:outline-none focus:border-[#D9A9FF] resize-none"
                         />
                       </div>
 
                       <button
                         type="submit"
-                        className="w-full py-3.5 px-5 rounded-xl bg-[#E9C349] hover:bg-[#ffdf6b] text-black font-black text-xs uppercase tracking-wider transition-all shadow-md active:scale-95 flex items-center justify-center gap-2"
+                        className="w-full py-3.5 px-5 rounded-xl bg-[#D9A9FF] hover:bg-[#F2CFFF] text-black font-black text-xs uppercase tracking-wider transition-all shadow-md active:scale-95 flex items-center justify-center gap-2"
                       >
                         <Calendar className="w-4 h-4" />
                         <span>{language === 'es' ? 'Programar e Inyectar en Agenda de Cátedra' : 'Inject Class to Calendar'}</span>
@@ -4038,7 +4038,7 @@ Semana 3-4 (Progresión):
                       <h3 className="text-sm font-mono tracking-wider text-[#8A8A8A] font-bold uppercase">
                         {language === 'es' ? 'Tus Clases en Agenda' : 'Your Scheduled Events'}
                       </h3>
-                      <span className="text-[10px] font-mono text-[#E9C349] bg-[#E9C349]/10 px-2 py-0.5 rounded border border-[#E9C349]/20 font-bold">
+                      <span className="text-[10px] font-mono text-[#D9A9FF] bg-[#D9A9FF]/10 px-2 py-0.5 rounded border border-[#D9A9FF]/20 font-bold">
                         {(events || []).filter(ev => ev.instructor === currentUser.name || (ev.title && ev.title.includes('[Taller]'))).length} Clases
                       </span>
                     </div>
@@ -4051,7 +4051,7 @@ Semana 3-4 (Progresión):
                         return (
                           <div key={ev.id} className="p-4 bg-[#161616] border border-white/5 hover:border-white/15 rounded-2xl space-y-3 transition-all">
                             <div className="flex items-center justify-between gap-2">
-                              <span className="text-[10px] font-mono text-[#E9C349] font-bold">{ev.date} @ {ev.time}</span>
+                              <span className="text-[10px] font-mono text-[#D9A9FF] font-bold">{ev.date} @ {ev.time}</span>
                               <span className="text-[9px] font-mono font-bold bg-emerald-500/15 text-emerald-400 px-2 py-0.5 rounded border border-emerald-500/20">
                                 {ev.rsvpCount || students.length} Alumnos
                               </span>
@@ -4094,7 +4094,7 @@ Semana 3-4 (Progresión):
                               <button
                                 type="button"
                                 onClick={() => setAttendanceModalEvent(ev)}
-                                className="py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-[#E9C349] font-mono text-[10px] font-bold uppercase transition-all flex items-center justify-center gap-1"
+                                className="py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-[#D9A9FF] font-mono text-[10px] font-bold uppercase transition-all flex items-center justify-center gap-1"
                               >
                                 <ClipboardCheck className="w-3 h-3" />
                                 <span>Lista ({presentCount} Pres.)</span>
@@ -4163,7 +4163,7 @@ Semana 3-4 (Progresión):
                           onClick={() => setCurriculumLevelFilter(lvl)}
                           className={`px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all ${
                             curriculumLevelFilter === lvl
-                              ? 'bg-[#E9C349] text-black font-black'
+                              ? 'bg-[#D9A9FF] text-black font-black'
                               : 'bg-white/5 text-slate-400 hover:text-white border border-white/5'
                           }`}
                         >
@@ -4236,7 +4236,7 @@ Semana 3-4 (Progresión):
                               )}
                               <span className={`absolute bottom-2 left-2 px-2 py-0.5 rounded text-[10px] font-mono font-bold ${
                                 levelName === 'Avanzado' ? 'bg-red-500/80 text-white' :
-                                levelName === 'Intermedio' ? 'bg-[#E9C349]/90 text-black' :
+                                levelName === 'Intermedio' ? 'bg-[#D9A9FF]/90 text-black' :
                                 'bg-cyan-500/80 text-black'
                               }`}>
                                 {levelName}
@@ -4245,7 +4245,7 @@ Semana 3-4 (Progresión):
 
                             <div>
                               <span className="text-[10px] font-mono text-purple-300 font-bold uppercase">{lesson.category}</span>
-                              <h4 className="text-sm font-extrabold text-white mt-1 group-hover:text-[#E9C349] transition-colors">{lesson.title}</h4>
+                              <h4 className="text-sm font-extrabold text-white mt-1 group-hover:text-[#D9A9FF] transition-colors">{lesson.title}</h4>
                               <p className="text-xs text-slate-400 font-medium line-clamp-2 mt-1">{lesson.description}</p>
                             </div>
                           </div>
@@ -4289,7 +4289,7 @@ Semana 3-4 (Progresión):
                               <button
                                 type="button"
                                 onClick={() => handleAssignLessonToAll(lesson.id)}
-                                className="w-full py-2 px-3 rounded-xl bg-white/5 hover:bg-[#E9C349]/20 border border-white/10 hover:border-[#E9C349]/40 text-slate-200 hover:text-[#E9C349] font-mono text-[10px] font-bold uppercase transition-all flex items-center justify-center gap-1.5"
+                                className="w-full py-2 px-3 rounded-xl bg-white/5 hover:bg-[#D9A9FF]/20 border border-white/10 hover:border-[#D9A9FF]/40 text-slate-200 hover:text-[#D9A9FF] font-mono text-[10px] font-bold uppercase transition-all flex items-center justify-center gap-1.5"
                               >
                                 <Users className="w-3 h-3" />
                                 <span>Asignar a Toda la Cátedra</span>
@@ -4309,10 +4309,10 @@ Semana 3-4 (Progresión):
                   {/* Left (2 Cols): Live Metronome & Practice Timer */}
                   <div className="lg:col-span-2 space-y-6">
                     {/* High Precision Live Metronome */}
-                    <div className="bg-[#121212] border border-[#E9C349]/30 rounded-[28px] p-6 space-y-5 shadow-2xl relative overflow-hidden">
+                    <div className="bg-[#121212] border border-[#D9A9FF]/30 rounded-[28px] p-6 space-y-5 shadow-2xl relative overflow-hidden">
                       <div className="flex items-center justify-between border-b border-white/5 pb-3">
                         <div className="flex items-center gap-2">
-                          <Zap className="w-5 h-5 text-[#E9C349]" />
+                          <Zap className="w-5 h-5 text-[#D9A9FF]" />
                           <h3 className="text-base font-black text-white uppercase tracking-wider">
                             Metrónomo en Vivo para Dirección de Clases
                           </h3>
@@ -4340,10 +4340,10 @@ Semana 3-4 (Progresión):
                                 className={`h-12 rounded-xl border flex flex-col items-center justify-center font-mono font-black text-xs transition-all ${
                                   isCurrent
                                     ? isAccentBeat
-                                      ? 'bg-[#E9C349] text-black border-[#E9C349] shadow-[0_0_20px_rgba(233,195,73,0.8)] scale-105'
+                                      ? 'bg-[#D9A9FF] text-black border-[#D9A9FF] shadow-[0_0_20px_rgba(217, 169, 255,0.8)] scale-105'
                                       : 'bg-purple-500 text-white border-purple-400 shadow-[0_0_15px_rgba(168,85,247,0.8)] scale-105'
                                     : isAccentBeat
-                                      ? 'bg-white/10 border-[#E9C349]/30 text-[#E9C349]'
+                                      ? 'bg-white/10 border-[#D9A9FF]/30 text-[#D9A9FF]'
                                       : 'bg-white/5 border-white/5 text-slate-400'
                                 }`}
                               >
@@ -4359,7 +4359,7 @@ Semana 3-4 (Progresión):
                       <div className="space-y-3">
                         <div className="flex items-center justify-between">
                           <span className="text-xs font-mono text-slate-400 font-bold uppercase">Tempo de Práctica (BPM):</span>
-                          <span className="text-3xl font-mono font-black text-[#E9C349]">{liveMetronomeBpm} <span className="text-xs text-slate-400 font-normal">BPM</span></span>
+                          <span className="text-3xl font-mono font-black text-[#D9A9FF]">{liveMetronomeBpm} <span className="text-xs text-slate-400 font-normal">BPM</span></span>
                         </div>
 
                         <input
@@ -4369,7 +4369,7 @@ Semana 3-4 (Progresión):
                           step="1"
                           value={liveMetronomeBpm}
                           onChange={e => setLiveMetronomeBpm(parseInt(e.target.value))}
-                          className="w-full accent-[#E9C349] cursor-pointer h-2 bg-white/10 rounded-lg"
+                          className="w-full accent-[#D9A9FF] cursor-pointer h-2 bg-white/10 rounded-lg"
                         />
 
                         <div className="flex flex-wrap items-center gap-2">
@@ -4383,7 +4383,7 @@ Semana 3-4 (Progresión):
                               }}
                               className={`px-3 py-1 rounded-xl text-xs font-mono font-bold transition-all ${
                                 liveMetronomeBpm === speed
-                                  ? 'bg-[#E9C349] text-black font-black'
+                                  ? 'bg-[#D9A9FF] text-black font-black'
                                   : 'bg-white/5 hover:bg-white/10 text-slate-300 border border-white/5'
                               }`}
                             >
@@ -4403,7 +4403,7 @@ Semana 3-4 (Progresión):
                         className={`w-full py-4 rounded-2xl font-black text-sm uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-xl active:scale-98 ${
                           liveMetronomeActive
                             ? 'bg-rose-600 hover:bg-rose-500 text-white'
-                            : 'bg-[#E9C349] hover:bg-[#ffdf6b] text-black'
+                            : 'bg-[#D9A9FF] hover:bg-[#F2CFFF] text-black'
                         }`}
                       >
                         {liveMetronomeActive ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5" />}
@@ -4478,7 +4478,7 @@ Semana 3-4 (Progresión):
                     <div className="space-y-3">
                       <div className="flex items-center justify-between border-b border-white/5 pb-3">
                         <h4 className="text-sm font-black text-white flex items-center gap-2 uppercase tracking-wider">
-                          <Edit3 className="w-4 h-4 text-[#E9C349]" />
+                          <Edit3 className="w-4 h-4 text-[#D9A9FF]" />
                           Bitácora de Observaciones en Vivo
                         </h4>
                         <span className="text-[10px] font-mono text-slate-400">Auto-Guardado</span>
@@ -4493,7 +4493,7 @@ Semana 3-4 (Progresión):
                         value={liveTeacherNotes}
                         onChange={e => setLiveTeacherNotes(e.target.value)}
                         placeholder="Escribe tus observaciones técnicas aquí..."
-                        className="w-full p-3.5 rounded-2xl bg-[#161616] border border-white/10 text-slate-200 text-xs font-mono leading-relaxed focus:outline-none focus:border-[#E9C349] resize-none"
+                        className="w-full p-3.5 rounded-2xl bg-[#161616] border border-white/10 text-slate-200 text-xs font-mono leading-relaxed focus:outline-none focus:border-[#D9A9FF] resize-none"
                       />
                     </div>
 
@@ -4507,7 +4507,7 @@ Semana 3-4 (Progresión):
                       }}
                       className="w-full py-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-slate-200 text-xs font-mono font-bold uppercase transition-all flex items-center justify-center gap-2"
                     >
-                      <Copy className="w-4 h-4 text-[#E9C349]" />
+                      <Copy className="w-4 h-4 text-[#D9A9FF]" />
                       <span>Copiar Bitácora para WhatsApp / Email</span>
                     </button>
                   </div>
@@ -4527,7 +4527,7 @@ Semana 3-4 (Progresión):
                       </p>
                     </div>
 
-                    <span className="text-xs font-mono text-[#E9C349] bg-[#E9C349]/10 px-3 py-1 rounded-xl border border-[#E9C349]/20 font-bold">
+                    <span className="text-xs font-mono text-[#D9A9FF] bg-[#D9A9FF]/10 px-3 py-1 rounded-xl border border-[#D9A9FF]/20 font-bold">
                       {studentSubmissions.length} Tareas Registradas
                     </span>
                   </div>
@@ -4538,7 +4538,7 @@ Semana 3-4 (Progresión):
                         <div className="space-y-3">
                           <div className="flex items-center justify-between gap-2 border-b border-white/5 pb-3">
                             <div className="flex items-center gap-2.5">
-                              <div className="w-8 h-8 rounded-full bg-[#E9C349]/10 text-[#E9C349] font-bold text-xs flex items-center justify-center border border-[#E9C349]/20">
+                              <div className="w-8 h-8 rounded-full bg-[#D9A9FF]/10 text-[#D9A9FF] font-bold text-xs flex items-center justify-center border border-[#D9A9FF]/20">
                                 {sub.studentName.substring(0, 2).toUpperCase()}
                               </div>
                               <div>
@@ -4564,7 +4564,7 @@ Semana 3-4 (Progresión):
                           <div className="relative rounded-2xl overflow-hidden aspect-video bg-black/40 border border-white/10">
                             <img src={sub.videoUrl} alt={sub.lessonTitle} className="w-full h-full object-cover" />
                             <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-                              <div className="w-10 h-10 rounded-full bg-[#E9C349] text-black flex items-center justify-center shadow-lg font-bold">
+                              <div className="w-10 h-10 rounded-full bg-[#D9A9FF] text-black flex items-center justify-center shadow-lg font-bold">
                                 <Play className="w-5 h-5 ml-0.5" />
                               </div>
                             </div>
@@ -4586,7 +4586,7 @@ Semana 3-4 (Progresión):
                               score: sub.score || 85,
                               feedback: sub.feedback || 'Excelente fluidez en el patrón. Recuerda mantener la extensión de codos en los compases acelerados.'
                             })}
-                            className="w-full py-2.5 px-4 rounded-xl bg-[#E9C349] hover:bg-[#ffdf6b] text-black font-mono text-xs font-black uppercase transition-all flex items-center justify-center gap-1.5 shadow-md active:scale-95 cursor-pointer"
+                            className="w-full py-2.5 px-4 rounded-xl bg-[#D9A9FF] hover:bg-[#F2CFFF] text-black font-mono text-xs font-black uppercase transition-all flex items-center justify-center gap-1.5 shadow-md active:scale-95 cursor-pointer"
                           >
                             <ClipboardCheck className="w-4 h-4" />
                             <span>{sub.status === 'graded' ? 'Editar Calificación & Feedback' : 'Calificar Entrega Técnica'}</span>
@@ -4606,11 +4606,11 @@ Semana 3-4 (Progresión):
               <motion.div
                 initial={{ scale: 0.95, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
-                className="bg-[#141414] border border-[#E9C349]/40 rounded-[28px] p-6 max-w-xl w-full space-y-5 shadow-2xl relative"
+                className="bg-[#141414] border border-[#D9A9FF]/40 rounded-[28px] p-6 max-w-xl w-full space-y-5 shadow-2xl relative"
               >
                 <div className="flex items-center justify-between border-b border-white/10 pb-3">
                   <div>
-                    <span className="text-[10px] font-mono font-bold text-[#E9C349] uppercase">CONTROL DE ASISTENCIA OFICIAL</span>
+                    <span className="text-[10px] font-mono font-bold text-[#D9A9FF] uppercase">CONTROL DE ASISTENCIA OFICIAL</span>
                     <h3 className="text-base font-black text-white">{attendanceModalEvent.title}</h3>
                     <p className="text-xs font-mono text-slate-400">{attendanceModalEvent.date} @ {attendanceModalEvent.time}</p>
                   </div>
@@ -4630,7 +4630,7 @@ Semana 3-4 (Progresión):
                     return (
                       <div key={std.id} className="p-3 rounded-2xl bg-white/5 border border-white/5 flex items-center justify-between gap-3">
                         <div className="flex items-center gap-2.5">
-                          <div className="w-7 h-7 rounded-full bg-white/10 flex items-center justify-center text-[10px] font-bold text-[#E9C349]">
+                          <div className="w-7 h-7 rounded-full bg-white/10 flex items-center justify-center text-[10px] font-bold text-[#D9A9FF]">
                             {std.name.substring(0, 2).toUpperCase()}
                           </div>
                           <div>
@@ -4691,7 +4691,7 @@ Semana 3-4 (Progresión):
                       setAttendanceModalEvent(null);
                       setTimeout(() => setAlertText(null), 3000);
                     }}
-                    className="py-2 px-4 rounded-xl bg-[#E9C349] text-black font-mono text-xs font-black uppercase transition-all"
+                    className="py-2 px-4 rounded-xl bg-[#D9A9FF] text-black font-mono text-xs font-black uppercase transition-all"
                   >
                     Guardar Asistencia
                   </button>
@@ -4706,11 +4706,11 @@ Semana 3-4 (Progresión):
               <motion.div
                 initial={{ scale: 0.95, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
-                className="bg-[#141414] border border-[#E9C349]/40 rounded-[28px] p-6 max-w-lg w-full space-y-4 shadow-2xl relative"
+                className="bg-[#141414] border border-[#D9A9FF]/40 rounded-[28px] p-6 max-w-lg w-full space-y-4 shadow-2xl relative"
               >
                 <div className="flex items-center justify-between border-b border-white/10 pb-3">
                   <div>
-                    <span className="text-[10px] font-mono font-bold text-[#E9C349] uppercase">CALIFICAR ENTREGA TÉCNICA</span>
+                    <span className="text-[10px] font-mono font-bold text-[#D9A9FF] uppercase">CALIFICAR ENTREGA TÉCNICA</span>
                     <h3 className="text-sm font-black text-white">{gradingSubmission.submission.studentName}</h3>
                     <p className="text-xs font-mono text-slate-400">{gradingSubmission.submission.lessonTitle}</p>
                   </div>
@@ -4738,9 +4738,9 @@ Semana 3-4 (Progresión):
                           ...gradingSubmission,
                           score: parseInt(e.target.value)
                         })}
-                        className="flex-1 accent-[#E9C349] cursor-pointer"
+                        className="flex-1 accent-[#D9A9FF] cursor-pointer"
                       />
-                      <span className="text-xl font-mono font-black text-[#E9C349] w-14 text-right">
+                      <span className="text-xl font-mono font-black text-[#D9A9FF] w-14 text-right">
                         {gradingSubmission.score}/100
                       </span>
                     </div>
@@ -4758,7 +4758,7 @@ Semana 3-4 (Progresión):
                         feedback: e.target.value
                       })}
                       placeholder="Indica correcciones sobre la simetría de rolls, posición de hombros y musicalidad..."
-                      className="w-full p-3 rounded-xl bg-[#1a1a1a] border border-white/10 text-white text-xs font-medium focus:outline-none focus:border-[#E9C349] resize-none"
+                      className="w-full p-3 rounded-xl bg-[#1a1a1a] border border-white/10 text-white text-xs font-medium focus:outline-none focus:border-[#D9A9FF] resize-none"
                     />
                   </div>
                 </div>
@@ -4778,7 +4778,7 @@ Semana 3-4 (Progresión):
                       gradingSubmission.score,
                       gradingSubmission.feedback
                     )}
-                    className="py-2 px-4 rounded-xl bg-[#E9C349] hover:bg-[#ffdf6b] text-black font-mono text-xs font-black uppercase transition-all shadow-md"
+                    className="py-2 px-4 rounded-xl bg-[#D9A9FF] hover:bg-[#F2CFFF] text-black font-mono text-xs font-black uppercase transition-all shadow-md"
                   >
                     Guardar & Emitir Nota
                   </button>
@@ -4793,7 +4793,7 @@ Semana 3-4 (Progresión):
               <motion.div
                 initial={{ scale: 0.95, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
-                className="bg-[#141414] border border-[#E9C349]/40 rounded-[28px] p-6 max-w-lg w-full space-y-4 shadow-2xl relative"
+                className="bg-[#141414] border border-[#D9A9FF]/40 rounded-[28px] p-6 max-w-lg w-full space-y-4 shadow-2xl relative"
               >
                 <div className="flex items-center justify-between border-b border-white/10 pb-3">
                   <div className="flex items-center gap-2">
@@ -4827,7 +4827,7 @@ Semana 3-4 (Progresión):
                       value={newLessonTitle}
                       onChange={e => setNewLessonTitle(e.target.value)}
                       placeholder="ej: Micro-Musicalidad & Sincopa a 130 BPM"
-                      className="w-full px-3 py-2 rounded-xl bg-[#1a1a1a] border border-white/10 text-white font-bold text-xs focus:outline-none focus:border-[#E9C349]"
+                      className="w-full px-3 py-2 rounded-xl bg-[#1a1a1a] border border-white/10 text-white font-bold text-xs focus:outline-none focus:border-[#D9A9FF]"
                     />
                   </div>
 
@@ -4918,12 +4918,12 @@ Semana 3-4 (Progresión):
               id="promotion-tab-container"
             >
               {/* Introduction Banner */}
-              <div className="bg-[#121212] border border-[#E9C349]/20 rounded-[24px] p-6 sm:p-8 relative overflow-hidden shadow-2xl">
-                <div className="absolute right-[-30px] top-[-30px] w-48 h-48 bg-[#E9C349]/5 rounded-full blur-2xl pointer-events-none" />
+              <div className="bg-[#121212] border border-[#D9A9FF]/20 rounded-[24px] p-6 sm:p-8 relative overflow-hidden shadow-2xl">
+                <div className="absolute right-[-30px] top-[-30px] w-48 h-48 bg-[#D9A9FF]/5 rounded-full blur-2xl pointer-events-none" />
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
                   <div className="space-y-2 max-w-xl">
-                    <span className="inline-flex items-center gap-1 bg-[#E9C349]/10 text-[#E9C349] border border-[#E9C349]/30 text-[9px] font-mono font-bold tracking-widest px-2.5 py-1 rounded-full uppercase">
-                      <Sparkles className="w-3.5 h-3.5 text-[#E9C349]" /> 
+                    <span className="inline-flex items-center gap-1 bg-[#D9A9FF]/10 text-[#D9A9FF] border border-[#D9A9FF]/30 text-[9px] font-mono font-bold tracking-widest px-2.5 py-1 rounded-full uppercase">
+                      <Sparkles className="w-3.5 h-3.5 text-[#D9A9FF]" /> 
                       {language === 'es' ? 'ALCANCE GLOBAL DESTACADO' : 'GLOBAL OUTREACH FEATURES'}
                     </span>
                     <h3 className="text-lg md:text-2xl font-serif-elegant font-black text-white uppercase leading-tight">
@@ -4937,10 +4937,10 @@ Semana 3-4 (Progresión):
                   </div>
 
                   {currentUser.isFeaturedInstructor ? (
-                    <div className="bg-[#161616] border border-[#E9C349]/30 p-4 rounded-2xl flex flex-col items-start gap-1 w-full md:w-auto shrink-0 shadow-lg">
+                    <div className="bg-[#161616] border border-[#D9A9FF]/30 p-4 rounded-2xl flex flex-col items-start gap-1 w-full md:w-auto shrink-0 shadow-lg">
                       <div className="flex items-center gap-2">
-                        <div className="w-2 h-2 rounded-full bg-[#E9C349] animate-pulse" />
-                        <span className="text-[10px] font-mono font-bold text-[#E9C349] uppercase">
+                        <div className="w-2 h-2 rounded-full bg-[#D9A9FF] animate-pulse" />
+                        <span className="text-[10px] font-mono font-bold text-[#D9A9FF] uppercase">
                           {language === 'es' ? 'ESTATUS: DESTACADO ACTIVO' : 'STATUS: ACTIVE FEATURED'}
                         </span>
                       </div>
@@ -4971,10 +4971,10 @@ Semana 3-4 (Progresión):
               </div>
 
               {/* ESTABLECER PRECIO DE MEMBRESÍA MENSUAL */}
-              <div className="bg-[#121212] border border-[#E9C349]/30 rounded-[24px] p-6 space-y-4 shadow-2xl relative overflow-hidden">
-                <div className="absolute right-0 top-0 w-48 h-48 bg-[#E9C349]/5 rounded-full blur-2xl pointer-events-none" />
+              <div className="bg-[#121212] border border-[#D9A9FF]/30 rounded-[24px] p-6 space-y-4 shadow-2xl relative overflow-hidden">
+                <div className="absolute right-0 top-0 w-48 h-48 bg-[#D9A9FF]/5 rounded-full blur-2xl pointer-events-none" />
                 <div className="flex items-center gap-2">
-                  <DollarSign className="w-5 h-5 text-[#E9C349]" />
+                  <DollarSign className="w-5 h-5 text-[#D9A9FF]" />
                   <h4 className="text-sm font-mono font-bold tracking-widest text-white uppercase">
                     {language === 'es' ? 'Establece tu Precio de Membresía Mensual ($ USD/mes)' : 'Set Your Monthly Membership Fee ($ USD/mo)'}
                   </h4>
@@ -4995,7 +4995,7 @@ Semana 3-4 (Progresión):
 
                 <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-2">
                   <div className="relative flex-1">
-                    <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-xs font-mono font-bold text-[#E9C349]">$</span>
+                    <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-xs font-mono font-bold text-[#D9A9FF]">$</span>
                     <input 
                       type="number"
                       step="0.50"
@@ -5006,7 +5006,7 @@ Semana 3-4 (Progresión):
                         setPriceNumberInput(e.target.value);
                       }}
                       placeholder="15.00"
-                      className="w-full bg-[#161616] border border-white/10 rounded-xl pl-8 pr-16 py-2.5 text-xs text-white font-mono font-bold focus:border-[#E9C349] outline-none"
+                      className="w-full bg-[#161616] border border-white/10 rounded-xl pl-8 pr-16 py-2.5 text-xs text-white font-mono font-bold focus:border-[#D9A9FF] outline-none"
                     />
                     <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-mono text-slate-400 font-bold">USD/mes</span>
                   </div>
@@ -5023,7 +5023,7 @@ Semana 3-4 (Progresión):
                         }}
                         className={`px-2.5 py-1.5 rounded-lg text-[10px] font-mono font-bold border transition-all ${
                           priceNumberInput === presetPrice 
-                            ? 'bg-[#E9C349]/20 text-[#E9C349] border-[#E9C349]' 
+                            ? 'bg-[#D9A9FF]/20 text-[#D9A9FF] border-[#D9A9FF]' 
                             : 'bg-white/5 text-[#8A8A8A] border-white/5 hover:text-white'
                         }`}
                       >
@@ -5036,16 +5036,16 @@ Semana 3-4 (Progresión):
                     type="button"
                     disabled={isUpdatingPrice}
                     onClick={() => handleUpdatePricing(priceNumberInput)}
-                    className="px-5 py-2.5 bg-gradient-to-r from-[#9A2B3C] via-[#B8344B] to-[#E9C349] hover:brightness-110 text-white text-xs font-black rounded-xl uppercase tracking-wider transition-all shrink-0 active:scale-95 flex items-center justify-center gap-1.5 shadow-lg"
+                    className="px-5 py-2.5 bg-gradient-to-r from-[#C23E9E] via-[#C23FA0] to-[#D9A9FF] hover:brightness-110 text-white text-xs font-black rounded-xl uppercase tracking-wider transition-all shrink-0 active:scale-95 flex items-center justify-center gap-1.5 shadow-lg"
                   >
                     {isUpdatingPrice ? (
                       <>
-                        <Loader2 className="w-4 h-4 animate-spin text-[#E9C349]" />
+                        <Loader2 className="w-4 h-4 animate-spin text-[#D9A9FF]" />
                         <span>Validando...</span>
                       </>
                     ) : (
                       <>
-                        <CheckCircle2 className="w-4 h-4 text-[#E9C349]" />
+                        <CheckCircle2 className="w-4 h-4 text-[#D9A9FF]" />
                         <span>Actualizar Tarifa</span>
                       </>
                     )}
@@ -5055,9 +5055,9 @@ Semana 3-4 (Progresión):
 
               {/* CONFIGURATION SECTION: BILLING & VISIBILITY */}
               <div className="bg-[#121212] border border-[#262626] rounded-[24px] p-6 space-y-4 shadow-2xl relative overflow-hidden">
-                <div className="absolute right-0 bottom-0 w-48 h-48 bg-[#E9C349]/5 rounded-full blur-2xl pointer-events-none" />
+                <div className="absolute right-0 bottom-0 w-48 h-48 bg-[#D9A9FF]/5 rounded-full blur-2xl pointer-events-none" />
                 <div className="flex items-center gap-2">
-                  <Settings className="w-4.5 h-4.5 text-[#E9C349]" />
+                  <Settings className="w-4.5 h-4.5 text-[#D9A9FF]" />
                   <h4 className="text-xs font-mono font-bold tracking-widest text-white uppercase">
                     {language === 'es' ? 'Configuración de Suscripción & Visibilidad' : 'Subscription & Visibility Configuration'}
                   </h4>
@@ -5118,7 +5118,7 @@ Semana 3-4 (Progresión):
                           setSelectedPlan('monthly');
                           setIsCheckingOut(true);
                         }}
-                        className="mt-4 px-3 py-1.5 bg-[#E9C349] hover:bg-[#ffe175] text-black rounded-xl text-[10px] font-black transition-all text-center uppercase cursor-pointer"
+                        className="mt-4 px-3 py-1.5 bg-[#D9A9FF] hover:bg-[#F2CFFF] text-black rounded-xl text-[10px] font-black transition-all text-center uppercase cursor-pointer"
                       >
                         {language === 'es' ? 'Activar con Plan de Destacado' : 'Activate with Promotion Plan'}
                       </button>
@@ -5132,7 +5132,7 @@ Semana 3-4 (Progresión):
                         {language === 'es' ? 'VISIBILIDAD EN EL DIRECTORIO' : 'DIRECTORY VISIBILITY'}
                       </span>
                       <div className="flex items-center gap-2 mt-2">
-                        <div className={`w-2.5 h-2.5 rounded-full ${currentUser.isFeaturedInstructor ? 'bg-[#E9C349] animate-pulse' : 'bg-zinc-600'}`} />
+                        <div className={`w-2.5 h-2.5 rounded-full ${currentUser.isFeaturedInstructor ? 'bg-[#D9A9FF] animate-pulse' : 'bg-zinc-600'}`} />
                         <span className="text-xs font-bold text-white uppercase font-mono">
                           {currentUser.isFeaturedInstructor 
                             ? (language === 'es' ? 'DESTACADO (Arriba de la Lista)' : 'FEATURED (Top of List)') 
@@ -5169,7 +5169,7 @@ Semana 3-4 (Progresión):
                             }}
                             className={`px-3 py-1.5 rounded-xl text-[10px] font-bold transition-all cursor-pointer uppercase ${
                               currentUser.isFeaturedInstructor 
-                                ? 'bg-[#E9C349] text-black hover:bg-[#ffe175]' 
+                                ? 'bg-[#D9A9FF] text-black hover:bg-[#F2CFFF]' 
                                 : 'bg-white/5 text-white hover:bg-white/10 border border-white/10'
                             }`}
                           >
@@ -5187,13 +5187,13 @@ Semana 3-4 (Progresión):
               </div>
 
               {/* Single $15/mo Instructor Subscription Plan */}
-              <div className="max-w-2xl mx-auto bg-gradient-to-br from-[#18122a] via-[#130f21] to-[#0f0b1a] border-2 border-[#E9C349] rounded-[28px] p-6 sm:p-8 relative shadow-2xl overflow-hidden space-y-6">
-                <div className="absolute top-0 right-0 bg-[#E9C349] text-black text-[9px] font-mono font-black uppercase px-4 py-1.5 rounded-bl-2xl tracking-widest shadow-md">
+              <div className="max-w-2xl mx-auto bg-gradient-to-br from-[#18122a] via-[#130f21] to-[#0f0b1a] border-2 border-[#D9A9FF] rounded-[28px] p-6 sm:p-8 relative shadow-2xl overflow-hidden space-y-6">
+                <div className="absolute top-0 right-0 bg-[#D9A9FF] text-black text-[9px] font-mono font-black uppercase px-4 py-1.5 rounded-bl-2xl tracking-widest shadow-md">
                   MODELO DE SUSCRIPCIÓN INDEPENDIENTE
                 </div>
 
                 <div className="space-y-3">
-                  <span className="text-[10px] font-mono font-black text-[#E9C349] bg-[#E9C349]/15 border border-[#E9C349]/30 px-3 py-1 rounded-full uppercase inline-block">
+                  <span className="text-[10px] font-mono font-black text-[#D9A9FF] bg-[#D9A9FF]/15 border border-[#D9A9FF]/30 px-3 py-1 rounded-full uppercase inline-block">
                     SUSCRIPCIÓN POR PROFESOR
                   </span>
                   <h4 className="text-xl sm:text-2xl font-black text-white uppercase tracking-wide">
@@ -5203,7 +5203,7 @@ Semana 3-4 (Progresión):
                     Acceso completo al programa intensivo de 4 semanas, material descargable, evaluaciones personalizadas y clases en vivo del instructor seleccionado.
                   </p>
                   <div className="flex items-baseline gap-2 pt-2">
-                    <span className="text-4xl font-serif-elegant font-black text-[#E9C349]">$15.00</span>
+                    <span className="text-4xl font-serif-elegant font-black text-[#D9A9FF]">$15.00</span>
                     <span className="text-xs font-mono font-bold text-slate-300 uppercase">USD / mes por instructor</span>
                   </div>
                 </div>
@@ -5212,19 +5212,19 @@ Semana 3-4 (Progresión):
 
                 <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs font-semibold text-slate-200">
                   <li className="flex items-start gap-2.5">
-                    <Check className="w-4 h-4 text-[#E9C349] shrink-0 mt-0.5" />
+                    <Check className="w-4 h-4 text-[#D9A9FF] shrink-0 mt-0.5" />
                     <span>Programa Intensivo de 4 Semanas HD</span>
                   </li>
                   <li className="flex items-start gap-2.5">
-                    <Check className="w-4 h-4 text-[#E9C349] shrink-0 mt-0.5" />
+                    <Check className="w-4 h-4 text-[#D9A9FF] shrink-0 mt-0.5" />
                     <span>Feedback en Video del Instructor</span>
                   </li>
                   <li className="flex items-start gap-2.5">
-                    <Check className="w-4 h-4 text-[#E9C349] shrink-0 mt-0.5" />
+                    <Check className="w-4 h-4 text-[#D9A9FF] shrink-0 mt-0.5" />
                     <span>Acceso a Live Battles & Q&A</span>
                   </li>
                   <li className="flex items-start gap-2.5">
-                    <Check className="w-4 h-4 text-[#E9C349] shrink-0 mt-0.5" />
+                    <Check className="w-4 h-4 text-[#D9A9FF] shrink-0 mt-0.5" />
                     <span>Cancelación en cualquier momento</span>
                   </li>
                 </ul>
@@ -5235,7 +5235,7 @@ Semana 3-4 (Progresión):
                     setSelectedPlan('monthly');
                     setIsCheckingOut(true);
                   }}
-                  className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-[#E9C349] via-[#f7d978] to-[#E9C349] hover:opacity-95 text-black font-black text-xs uppercase tracking-wider transition-all shadow-xl shadow-[#E9C349]/20 active:scale-95 flex items-center justify-center gap-2"
+                  className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-[#D9A9FF] via-[#f7d978] to-[#D9A9FF] hover:opacity-95 text-black font-black text-xs uppercase tracking-wider transition-all shadow-xl shadow-[#D9A9FF]/20 active:scale-95 flex items-center justify-center gap-2"
                 >
                   <CreditCard className="w-4 h-4 text-black" />
                   ACTIVAR SUSCRIPCIÓN ({currentUser.monthlyPrice || '$35 USD / MES'})
@@ -5260,7 +5260,7 @@ Semana 3-4 (Progresión):
                       initial={{ scale: 0.9, opacity: 0 }}
                       animate={{ scale: 1, opacity: 1 }}
                       exit={{ scale: 0.9, opacity: 0 }}
-                      className="bg-[#0F0F13] border-2 border-[#E9C349]/30 rounded-3xl p-6 sm:p-8 max-w-md w-full relative shadow-[0_20px_50px_rgba(233,195,73,0.1)] space-y-6"
+                      className="bg-[#0F0F13] border-2 border-[#D9A9FF]/30 rounded-3xl p-6 sm:p-8 max-w-md w-full relative shadow-[0_20px_50px_rgba(217, 169, 255,0.1)] space-y-6"
                     >
                       <button
                         onClick={() => {
@@ -5275,7 +5275,7 @@ Semana 3-4 (Progresión):
 
                       {checkoutSuccess ? (
                         <div className="py-8 text-center space-y-4">
-                          <div className="w-16 h-16 bg-[#E9C349]/10 border-2 border-[#E9C349] rounded-full flex items-center justify-center mx-auto text-[#E9C349] shadow-xl animate-bounce">
+                          <div className="w-16 h-16 bg-[#D9A9FF]/10 border-2 border-[#D9A9FF] rounded-full flex items-center justify-center mx-auto text-[#D9A9FF] shadow-xl animate-bounce">
                             <ShieldCheck className="w-8 h-8" />
                           </div>
                           <h4 className="text-lg font-serif-elegant font-black text-white uppercase tracking-tight">
@@ -5290,7 +5290,7 @@ Semana 3-4 (Progresión):
                       ) : (
                         <form onSubmit={handleCheckoutSubmit} className="space-y-4">
                           <div className="text-center space-y-2">
-                            <span className="text-[9px] font-mono bg-[#E9C349]/15 text-[#E9C349] border border-[#E9C349]/20 px-2.5 py-0.5 rounded uppercase">
+                            <span className="text-[9px] font-mono bg-[#D9A9FF]/15 text-[#D9A9FF] border border-[#D9A9FF]/20 px-2.5 py-0.5 rounded uppercase">
                               {language === 'es' ? 'MÉTODO DE PAGO SEGURO' : 'SECURE PAYMENT METHOD'}
                             </span>
                             <h3 className="text-lg font-serif-elegant font-black text-white uppercase tracking-tight">
@@ -5317,7 +5317,7 @@ Semana 3-4 (Progresión):
                                 placeholder="BRANDO HERMOSO"
                                 value={checkoutCardName}
                                 onChange={e => setCheckoutCardName(e.target.value.toUpperCase())}
-                                className="w-full px-4 py-2.5 rounded-xl bg-[#161616] border border-white/10 text-white font-mono text-xs focus:outline-none focus:border-[#E9C349] transition-all"
+                                className="w-full px-4 py-2.5 rounded-xl bg-[#161616] border border-white/10 text-white font-mono text-xs focus:outline-none focus:border-[#D9A9FF] transition-all"
                               />
                             </div>
 
@@ -5346,7 +5346,7 @@ Semana 3-4 (Progresión):
                                     setCheckoutCardNumber(val);
                                   }
                                 }}
-                                className="w-full px-4 py-2.5 rounded-xl bg-[#161616] border border-white/10 text-white font-mono text-xs focus:outline-none focus:border-[#E9C349] transition-all"
+                                className="w-full px-4 py-2.5 rounded-xl bg-[#161616] border border-white/10 text-white font-mono text-xs focus:outline-none focus:border-[#D9A9FF] transition-all"
                               />
                             </div>
 
@@ -5369,7 +5369,7 @@ Semana 3-4 (Progresión):
                                       setCheckoutCardExpiry(val);
                                     }
                                   }}
-                                  className="w-full px-4 py-2.5 rounded-xl bg-[#161616] border border-white/10 text-white font-mono text-xs focus:outline-none focus:border-[#E9C349] transition-all"
+                                  className="w-full px-4 py-2.5 rounded-xl bg-[#161616] border border-white/10 text-white font-mono text-xs focus:outline-none focus:border-[#D9A9FF] transition-all"
                                 />
                               </div>
 
@@ -5384,7 +5384,7 @@ Semana 3-4 (Progresión):
                                   placeholder="•••"
                                   value={checkoutCardCVC}
                                   onChange={e => setCheckoutCardCVC(e.target.value.replace(/\D/g, ''))}
-                                  className="w-full px-4 py-2.5 rounded-xl bg-[#161616] border border-white/10 text-white font-mono text-xs focus:outline-none focus:border-[#E9C349] transition-all"
+                                  className="w-full px-4 py-2.5 rounded-xl bg-[#161616] border border-white/10 text-white font-mono text-xs focus:outline-none focus:border-[#D9A9FF] transition-all"
                                 />
                               </div>
                             </div>
@@ -5393,7 +5393,7 @@ Semana 3-4 (Progresión):
                           <button
                             type="submit"
                             disabled={checkoutLoading}
-                            className="w-full mt-4 py-3 bg-[#E9C349] hover:bg-[#ffe175] text-black font-black text-xs uppercase tracking-wider rounded-xl transition-all shadow-lg active:scale-95 flex items-center justify-center gap-1.5"
+                            className="w-full mt-4 py-3 bg-[#D9A9FF] hover:bg-[#F2CFFF] text-black font-black text-xs uppercase tracking-wider rounded-xl transition-all shadow-lg active:scale-95 flex items-center justify-center gap-1.5"
                           >
                             {checkoutLoading ? (
                               <>
@@ -5433,7 +5433,7 @@ Semana 3-4 (Progresión):
               {/* SoundCloud Fallback Sync Option */}
               <div className="bg-[#121212]/80 border border-white/10 p-6 rounded-3xl shadow-xl space-y-4">
                 <div className="flex items-center gap-3 border-b border-[#262626] pb-4">
-                  <div className="w-10 h-10 rounded-2xl bg-[#9A2B3C]/20 border border-[#9A2B3C] flex items-center justify-center text-[#E9C349]">
+                  <div className="w-10 h-10 rounded-2xl bg-[#C23E9E]/20 border border-[#C23E9E] flex items-center justify-center text-[#D9A9FF]">
                     <Music className="w-5 h-5" />
                   </div>
                   <div>
@@ -5459,9 +5459,9 @@ Semana 3-4 (Progresión):
               className="space-y-6"
             >
               {/* Header Card */}
-              <div className="bg-[#121226] border-2 border-[#E9C349]/40 p-6 sm:p-8 rounded-3xl shadow-2xl relative overflow-hidden flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+              <div className="bg-[#121226] border-2 border-[#D9A9FF]/40 p-6 sm:p-8 rounded-3xl shadow-2xl relative overflow-hidden flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
                 <div className="space-y-2 max-w-xl">
-                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#E9C349]/20 border border-[#E9C349]/50 text-[#E9C349] text-xs font-mono font-bold uppercase">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#D9A9FF]/20 border border-[#D9A9FF]/50 text-[#D9A9FF] text-xs font-mono font-bold uppercase">
                     <Radio className="w-4 h-4 animate-pulse" />
                     GESTIÓN DE AUDIO CÁTEDRA & PODCASTS
                   </div>
@@ -5469,7 +5469,7 @@ Semana 3-4 (Progresión):
                     Tus Programas de Podcast & Episodios
                   </h3>
                   <p className="text-xs text-gray-300 leading-relaxed">
-                    Publica audio episodios técnicos, entrevistas y teoría de waacking. <strong className="text-[#E9C349]">Los podcasts se incluyen automáticamente dentro de la suscripción mensual de tu cátedra.</strong> No hay precios independientes.
+                    Publica audio episodios técnicos, entrevistas y teoría de waacking. <strong className="text-[#D9A9FF]">Los podcasts se incluyen automáticamente dentro de la suscripción mensual de tu cátedra.</strong> No hay precios independientes.
                   </p>
                 </div>
 
@@ -5479,7 +5479,7 @@ Semana 3-4 (Progresión):
                     setPodcastModalMode('create_show');
                     setIsPodcastModalOpen(true);
                   }}
-                  className="px-6 py-3 rounded-2xl bg-gradient-to-r from-[#E9C349] to-[#f3d775] text-black font-mono text-xs font-black uppercase tracking-wider shadow-lg hover:brightness-110 transition-all flex items-center gap-2 shrink-0 cursor-pointer"
+                  className="px-6 py-3 rounded-2xl bg-gradient-to-r from-[#D9A9FF] to-[#f3d775] text-black font-mono text-xs font-black uppercase tracking-wider shadow-lg hover:brightness-110 transition-all flex items-center gap-2 shrink-0 cursor-pointer"
                 >
                   <Plus className="w-5 h-5" />
                   + Crear Podcast (Show)
@@ -5499,12 +5499,12 @@ Semana 3-4 (Progresión):
                         <img
                           src={pod.coverImage}
                           alt={pod.title}
-                          className="w-20 h-20 rounded-2xl object-cover border border-[#E9C349]"
+                          className="w-20 h-20 rounded-2xl object-cover border border-[#D9A9FF]"
                           referrerPolicy="no-referrer"
                         />
                         <div>
                           <div className="flex items-center gap-2">
-                            <span className="px-2.5 py-0.5 rounded-full bg-[#E9C349]/20 text-[#E9C349] text-[10px] font-mono font-bold uppercase">
+                            <span className="px-2.5 py-0.5 rounded-full bg-[#D9A9FF]/20 text-[#D9A9FF] text-[10px] font-mono font-bold uppercase">
                               {pod.category || 'Podcast Cátedra'}
                             </span>
                             <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase ${
@@ -5530,7 +5530,7 @@ Semana 3-4 (Progresión):
                             setPodcastModalMode('add_episode');
                             setIsPodcastModalOpen(true);
                           }}
-                          className="px-4 py-2 rounded-xl bg-[#E9C349] hover:bg-[#d4ae36] text-black font-mono text-xs font-bold uppercase transition-all flex items-center gap-1.5 cursor-pointer shadow-md"
+                          className="px-4 py-2 rounded-xl bg-[#D9A9FF] hover:bg-[#B478F0] text-black font-mono text-xs font-bold uppercase transition-all flex items-center gap-1.5 cursor-pointer shadow-md"
                         >
                           <Plus className="w-4 h-4" /> + Agregar Episodio
                         </button>
@@ -5573,7 +5573,7 @@ Semana 3-4 (Progresión):
                               className="p-3.5 rounded-2xl bg-white/5 border border-white/10 hover:border-white/20 transition-all flex items-center justify-between gap-4"
                             >
                               <div className="flex items-center gap-3 min-w-0">
-                                <div className="w-10 h-10 rounded-xl bg-[#E9C349]/20 border border-[#E9C349]/40 flex items-center justify-center text-[#E9C349] shrink-0">
+                                <div className="w-10 h-10 rounded-xl bg-[#D9A9FF]/20 border border-[#D9A9FF]/40 flex items-center justify-center text-[#D9A9FF] shrink-0">
                                   <Radio className="w-5 h-5" />
                                 </div>
                                 <div className="min-w-0">
@@ -5788,7 +5788,7 @@ Semana 3-4 (Progresión):
                       handleSetPortfolioAsInstructorAvatar(instructorLightboxPhoto);
                       setInstructorLightboxPhoto(null);
                     }}
-                    className="px-4 py-2 bg-[#E9C349] text-black text-xs font-mono font-bold uppercase rounded-xl hover:bg-[#f3d362] transition-all flex items-center gap-1.5"
+                    className="px-4 py-2 bg-[#D9A9FF] text-black text-xs font-mono font-bold uppercase rounded-xl hover:bg-[#E4B8FF] transition-all flex items-center gap-1.5"
                   >
                     <Sparkles className="w-4 h-4 text-black" />
                     <span>Establecer como Foto de Perfil</span>
