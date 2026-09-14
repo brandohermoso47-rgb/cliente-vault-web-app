@@ -78,6 +78,7 @@ import {
 } from 'lucide-react';
 import { User, CalendarEvent, Lesson, PodcastShow, PodcastEpisode } from '../types';
 import { INITIAL_PODCAST_SHOWS } from '../data';
+import { StudioVibeCard } from './DiscoBallWidget';
 import { Language } from '../lib/translations';
 import { generateGoogleMeetRoomUrl } from '../googleCalendar';
 import { fetchInstructorMetrics, createInstructorTask, generateOnboardingPlanBackend, updateInstructorPricingMethodologyBackend } from '../lib/api';
@@ -450,62 +451,6 @@ const INITIAL_TRANSACTIONS: InstructorTransaction[] = [
     date: '2026-07-14 11:20'
   }
 ];
-
-// Metallic Disco Ball Graphic Component with animated facets and radial glint rays
-function DiscoBall() {
-  return (
-    <div className="relative flex flex-col items-center justify-center h-full min-h-[200px] w-full group select-none py-2">
-      {/* Background Radial Light Aura */}
-      <div className="absolute w-48 h-48 bg-gradient-to-r from-purple-600/30 via-pink-500/20 to-blue-500/30 rounded-full blur-3xl animate-pulse pointer-events-none" />
-      
-      {/* Hanging Cord */}
-      <div className="w-[2px] h-8 bg-gradient-to-b from-white/90 via-slate-300 to-slate-500 shadow-[0_0_8px_rgba(255,255,255,0.8)] z-10" />
-
-      {/* Sphere Container */}
-      <div className="relative w-32 h-32 sm:w-36 sm:h-36 rounded-full shadow-[0_0_40px_rgba(220,200,255,0.5),inset_-8px_-8px_24px_rgba(0,0,0,0.8),inset_8px_8px_24px_rgba(255,255,255,0.8)] border border-white/40 overflow-hidden bg-slate-900 z-10 flex items-center justify-center">
-        {/* Animated Metallic Mirror Tiles Grid Pattern */}
-        <svg className="w-full h-full opacity-90 transition-transform duration-700 group-hover:scale-105" viewBox="0 0 100 100">
-          <defs>
-            <radialGradient id="discoGrad" cx="35%" cy="30%" r="65%">
-              <stop offset="0%" stopColor="#ffffff" />
-              <stop offset="25%" stopColor="#e2e8f0" />
-              <stop offset="55%" stopColor="#94a3b8" />
-              <stop offset="85%" stopColor="#334155" />
-              <stop offset="100%" stopColor="#0f172a" />
-            </radialGradient>
-            <pattern id="mirrorTiles" width="8" height="8" patternUnits="userSpaceOnUse">
-              <rect x="0.5" y="0.5" width="7" height="7" fill="none" stroke="rgba(255,255,255,0.4)" strokeWidth="0.5" />
-              <rect x="1" y="1" width="6" height="6" fill="rgba(255,255,255,0.15)" />
-            </pattern>
-          </defs>
-          <circle cx="50" cy="50" r="48" fill="url(#discoGrad)" />
-          <circle cx="50" cy="50" r="48" fill="url(#mirrorTiles)" />
-          
-          {/* Latitude Curved Grid Lines */}
-          <ellipse cx="50" cy="50" rx="48" ry="12" fill="none" stroke="rgba(255,255,255,0.3)" strokeWidth="0.5" />
-          <ellipse cx="50" cy="50" rx="48" ry="28" fill="none" stroke="rgba(255,255,255,0.3)" strokeWidth="0.5" />
-          <ellipse cx="50" cy="50" rx="48" ry="40" fill="none" stroke="rgba(255,255,255,0.3)" strokeWidth="0.5" />
-          
-          {/* Specular Highlight Arc */}
-          <path d="M 20 20 A 40 40 0 0 1 80 20" fill="none" stroke="rgba(255,255,255,0.8)" strokeWidth="3" strokeLinecap="round" filter="blur(1px)" />
-        </svg>
-
-        {/* Sparkling Stars Glint Overlay */}
-        <div className="absolute inset-0 pointer-events-none">
-          <Sparkles className="absolute top-4 left-5 w-4 h-4 text-white animate-spin" style={{ animationDuration: '4s' }} />
-          <Sparkles className="absolute top-8 right-4 w-3.5 h-3.5 text-purple-200 animate-ping" />
-          <Sparkles className="absolute bottom-5 left-8 w-3.5 h-3.5 text-pink-200 animate-pulse" />
-          <Sparkles className="absolute bottom-8 right-6 w-4 h-4 text-amber-200 animate-bounce" />
-        </div>
-      </div>
-
-      {/* Rotating Light Rays */}
-      <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
-        <div className="w-48 h-48 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-white/20 via-pink-500/10 to-transparent rounded-full blur-xl animate-spin" style={{ animationDuration: '12s' }} />
-      </div>
-    </div>
-  );
-}
 
 const INITIAL_INSTRUCTOR_DOCUMENTS: InstructorDocument[] = [
   {
@@ -2031,7 +1976,7 @@ Semana 3-4 (Progresión):
                       </div>
                       <div className="mt-3">
                         <div className="text-xl font-bold text-white font-mono">2,890</div>
-                        <div className="text-[10px] text-slate-400 font-semibold mt-0.5">Free Stats</div>
+                        <div className="text-[10px] text-slate-400 font-semibold mt-0.5">Alumnos alcanzados</div>
                       </div>
                     </div>
 
@@ -2045,7 +1990,7 @@ Semana 3-4 (Progresión):
                       </div>
                       <div className="mt-3">
                         <div className="text-xl font-bold text-white font-mono">1,387</div>
-                        <div className="text-[10px] text-slate-400 font-semibold mt-0.5">Tmsa heap</div>
+                        <div className="text-[10px] text-slate-400 font-semibold mt-0.5">Lecciones completadas</div>
                       </div>
                     </div>
 
@@ -2059,7 +2004,7 @@ Semana 3-4 (Progresión):
                       </div>
                       <div className="mt-3">
                         <div className="text-xl font-bold text-white font-mono">4,017</div>
-                        <div className="text-[10px] text-slate-400 font-semibold mt-0.5">Notifications</div>
+                        <div className="text-[10px] text-slate-400 font-semibold mt-0.5">Notificaciones enviadas</div>
                       </div>
                     </div>
 
@@ -2073,17 +2018,20 @@ Semana 3-4 (Progresión):
                       </div>
                       <div className="mt-3">
                         <div className="text-xl font-bold text-white font-mono">2,033</div>
-                        <div className="text-[10px] text-slate-400 font-semibold mt-0.5">New sacks</div>
+                        <div className="text-[10px] text-slate-400 font-semibold mt-0.5">Ventas de cursos</div>
                       </div>
                     </div>
 
                   </div>
                 </div>
 
-                {/* 2. Central Disco Ball - 4 Cols */}
-                <div className="lg:col-span-4 flex items-center justify-center bg-[#17132a]/40 border border-white/10 rounded-2xl p-2 relative overflow-hidden min-h-[220px]">
-                  <DiscoBall />
-                </div>
+                {/* 2. Studio Vibe - animated 3D disco ball with tempo & live controls - 4 Cols */}
+                <StudioVibeCard
+                  onToast={(msg) => {
+                    setAlertText(msg);
+                    setTimeout(() => setAlertText(null), 3000);
+                  }}
+                />
 
                 {/* 3. Student Management Panel - 4 Cols */}
                 <div className="lg:col-span-4 bg-[#17132a]/80 border border-white/10 rounded-2xl p-4 flex flex-col justify-between space-y-3">

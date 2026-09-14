@@ -5,6 +5,7 @@ import { createServer as createViteServer } from 'vite';
 import Stripe from 'stripe';
 import { GoogleGenAI } from '@google/genai';
 import { db as drizzleDb } from './src/db/index.ts';
+import { adminAuth } from './src/lib/firebase-admin.ts';
 import { 
   users as usersTable, 
   entries as entriesTable, 
@@ -19,14 +20,15 @@ import {
   instructorBankAccounts as instructorBankAccountsTable
 } from './src/db/schema.ts';
 import { eq, count, desc } from 'drizzle-orm';
-import { 
-  requireRole, 
-  requireVipAccess, 
-  requireAcademyAccess, 
-  requireVerifiedInstructor, 
-  requireInstructorSubscriber, 
-  validateInput, 
-  getUserFromReq 
+import {
+  requireRole,
+  requireVipAccess,
+  requireAcademyAccess,
+  requireVerifiedInstructor,
+  requireInstructorSubscriber,
+  requireVerifiedUser,
+  validateInput,
+  getUnverifiedClientAssertedIdentity
 } from './src/server/rbac.ts';
 import { 
   announcementSchema, 
@@ -261,8 +263,8 @@ async function startServer() {
 
   // Log incoming API requests for auditing
   app.use('/api', (req, res, next) => {
-    const user = getUserFromReq(req);
-    console.log(`[API Request]: ${req.method} ${req.path} | Role: '${user.role}' | UserID: '${user.id}'`);
+    const user = getUnverifiedClientAssertedIdentity(req);
+    console.log(`[API Request]: ${req.method} ${req.path} | Claimed role: '${user.role}' | Claimed UserID: '${user.id}' (unverified)`);
     next();
   });
 
@@ -336,6 +338,26 @@ async function startServer() {
         }, { merge: true });
         dbUpdated = true;
         console.log(`[Firestore Admin Webhook Success]: Set user '${targetUid}' role -> '${assignedRole}', status -> '${subscriptionStatus}'`);
+
+        // SEGURIDAD: esto es lo que realmente hace segura la verificación en
+        // rbac.ts — el rol/estado de suscripción queda embebido en el ID
+        // token de Firebase del usuario (custom claims), firmado por
+        // Firebase, imposible de falsificar desde el cliente. Se fusiona con
+        // los claims existentes (nunca se sobreescriben por completo) para
+        // no pisar otros claims que pudiera tener el usuario.
+        try {
+          const existing = await adminAuth.getUser(targetUid);
+          await adminAuth.setCustomUserClaims(targetUid, {
+            ...existing.customClaims,
+            role: assignedRole,
+            plan_type: canonicalPlanType,
+            subscription_status: subscriptionStatus,
+            stripe_customer_id: stripeCustomer || `cus_${targetUid}`
+          });
+          console.log(`[Firebase Custom Claims]: Actualizados para '${targetUid}' -> role='${assignedRole}', subscription_status='${subscriptionStatus}'`);
+        } catch (claimsErr: any) {
+          console.warn('[Firebase Custom Claims Warning]:', claimsErr?.message || claimsErr);
+        }
       }
     } catch (err: any) {
       console.warn('[Firestore Admin Webhook Warning]:', err?.message || err);
@@ -1526,10 +1548,10 @@ Semana 3-4 (Progresión): [Cómo escalar la dificultad en el Lab basándose en s
   });
 
   // Post message to Communication Hub (Validated with Zod)
-  app.post('/api/community/messages', validateInput(communityMessageSchema), async (req, res) => {
+  app.post('/api/community/messages', requireVerifiedUser, validateInput(communityMessageSchema), async (req, res) => {
     try {
       const data = req.body;
-      const user = getUserFromReq(req);
+      const user = (req as any).user;
 
       const newMsg = {
         id: `msg-${Date.now()}`,
@@ -1566,10 +1588,10 @@ Semana 3-4 (Progresión): [Cómo escalar la dificultad en el Lab basándose en s
   });
 
   // Delete community message (RBAC Check: Author or Instructor)
-  app.delete('/api/community/messages/:id', async (req, res) => {
+  app.delete('/api/community/messages/:id', requireVerifiedUser, async (req, res) => {
     try {
       const { id } = req.params;
-      const user = getUserFromReq(req);
+      const user = (req as any).user;
 
       // Instructors can delete any message; students can only delete if authorized
       if (user.role !== 'instructor') {
