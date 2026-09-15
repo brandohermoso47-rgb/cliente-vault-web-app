@@ -181,7 +181,7 @@ export const GmailWidget: React.FC<GmailWidgetProps> = ({
                   onClick={() => setActiveTab('inbox')}
                   className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
                     activeTab === 'inbox'
-                      ? 'bg-[#E9C349] text-black shadow-md'
+                      ? 'bg-[#D9A9FF] text-black shadow-md'
                       : 'bg-white/5 text-slate-300 hover:bg-white/10'
                   }`}
                 >
@@ -191,7 +191,7 @@ export const GmailWidget: React.FC<GmailWidgetProps> = ({
                   onClick={() => setActiveTab('compose')}
                   className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
                     activeTab === 'compose'
-                      ? 'bg-[#E9C349] text-black shadow-md'
+                      ? 'bg-[#D9A9FF] text-black shadow-md'
                       : 'bg-white/5 text-slate-300 hover:bg-white/10'
                   }`}
                 >
@@ -244,7 +244,7 @@ export const GmailWidget: React.FC<GmailWidgetProps> = ({
                         <span className="truncate max-w-[250px]">{msg.from}</span>
                         <span className="text-[10px] text-slate-400 font-mono">{msg.date?.slice(0, 16)}</span>
                       </div>
-                      <p className="text-xs font-semibold text-[#E9C349] truncate">{msg.subject}</p>
+                      <p className="text-xs font-semibold text-[#D9A9FF] truncate">{msg.subject}</p>
                       <p className="text-[11px] text-slate-300 line-clamp-2">{msg.snippet}</p>
                     </div>
                   ))
@@ -264,7 +264,7 @@ export const GmailWidget: React.FC<GmailWidgetProps> = ({
                       onChange={(e) => setRecipient(e.target.value)}
                       placeholder="estudiante@ejemplo.com"
                       required
-                      className="w-full bg-black/40 border border-white/10 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#E9C349]"
+                      className="w-full bg-black/40 border border-white/10 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#D9A9FF]"
                     />
                   </div>
 
@@ -276,7 +276,7 @@ export const GmailWidget: React.FC<GmailWidgetProps> = ({
                       onChange={(e) => setSubject(e.target.value)}
                       placeholder="Feedback de Evaluación - Cátedra Waack On"
                       required
-                      className="w-full bg-black/40 border border-white/10 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#E9C349]"
+                      className="w-full bg-black/40 border border-white/10 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#D9A9FF]"
                     />
                   </div>
 
@@ -288,7 +288,7 @@ export const GmailWidget: React.FC<GmailWidgetProps> = ({
                       rows={5}
                       placeholder="Escribe aquí las observaciones, acentos técnicos o mensajes de cátedra..."
                       required
-                      className="w-full bg-black/40 border border-white/10 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#E9C349] resize-none"
+                      className="w-full bg-black/40 border border-white/10 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#D9A9FF] resize-none"
                     />
                   </div>
                 </div>
@@ -297,7 +297,7 @@ export const GmailWidget: React.FC<GmailWidgetProps> = ({
                   <button
                     type="submit"
                     disabled={sending || !recipient || !subject || !bodyText}
-                    className="px-6 py-2.5 rounded-xl bg-[#E9C349] text-black font-extrabold text-xs uppercase shadow-lg hover:bg-yellow-300 transition-all flex items-center gap-2 disabled:opacity-50"
+                    className="px-6 py-2.5 rounded-xl bg-[#D9A9FF] text-black font-extrabold text-xs uppercase shadow-lg hover:bg-yellow-300 transition-all flex items-center gap-2 disabled:opacity-50"
                   >
                     <Send className="w-4 h-4" /> Enviar Correo
                   </button>
@@ -315,7 +315,7 @@ export const GmailWidget: React.FC<GmailWidgetProps> = ({
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.9 }}
-                className="bg-[#120E24] border border-[#E9C349]/40 rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl text-white"
+                className="bg-[#120E24] border border-[#D9A9FF]/40 rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl text-white"
               >
                 <div className="flex items-center gap-3 text-yellow-400">
                   <AlertCircle className="w-6 h-6" />
@@ -343,7 +343,7 @@ export const GmailWidget: React.FC<GmailWidgetProps> = ({
                   </button>
                   <button
                     onClick={handleConfirmSend}
-                    className="px-5 py-2 rounded-xl bg-[#E9C349] text-black text-xs font-black uppercase shadow-lg hover:bg-yellow-300 transition-all"
+                    className="px-5 py-2 rounded-xl bg-[#D9A9FF] text-black text-xs font-black uppercase shadow-lg hover:bg-yellow-300 transition-all"
                   >
                     Sí, Enviar Correo
                   </button>

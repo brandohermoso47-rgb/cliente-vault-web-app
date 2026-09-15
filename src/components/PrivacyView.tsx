@@ -183,7 +183,7 @@ export default function PrivacyView({ currentUser, language }: PrivacyViewProps)
       <div className="border-b border-[#262626] pb-5 mb-2 flex flex-col lg:flex-row lg:items-center justify-between gap-4 z-10">
         <div className="text-left space-y-1">
           <div className="flex items-center gap-2">
-            <ShieldCheck className="w-7 h-7 text-[#E9C349]" />
+            <ShieldCheck className="w-7 h-7 text-[#D9A9FF]" />
             <h2 className="text-xl sm:text-2xl font-serif-elegant font-bold text-white tracking-tight uppercase">
               {t.privacyTitle || 'CENTRO LEGAL, POLÍTICAS Y TÉRMINOS'}
             </h2>
@@ -197,16 +197,16 @@ export default function PrivacyView({ currentUser, language }: PrivacyViewProps)
           <button
             type="button"
             onClick={handlePrintLegalNotice}
-            className="px-3 py-1.5 rounded-xl bg-[#181818] hover:bg-[#252525] border border-[#333] text-xs font-mono font-bold text-[#E9C349] flex items-center gap-1.5 transition-all shadow-md"
+            className="px-3 py-1.5 rounded-xl bg-[#181818] hover:bg-[#252525] border border-[#333] text-xs font-mono font-bold text-[#D9A9FF] flex items-center gap-1.5 transition-all shadow-md"
             title="Imprimir o guardar como PDF"
           >
             <Printer className="w-3.5 h-3.5" />
             <span className="hidden sm:inline">Imprimir / PDF</span>
           </button>
-          <span className="text-[10px] font-mono font-bold text-[#E9C349] border border-[#E9C349]/30 bg-[#E9C349]/10 px-2.5 py-1 rounded-full uppercase tracking-wider">
+          <span className="text-[10px] font-mono font-bold text-[#D9A9FF] border border-[#D9A9FF]/30 bg-[#D9A9FF]/10 px-2.5 py-1 rounded-full uppercase tracking-wider">
             TERMS v2.4 (2026)
           </span>
-          <span className="text-[10px] font-mono font-bold text-[#9A2B3C] border border-[#9A2B3C]/30 bg-[#9A2B3C]/10 px-2.5 py-1 rounded-full uppercase tracking-wider">
+          <span className="text-[10px] font-mono font-bold text-[#C23E9E] border border-[#C23E9E]/30 bg-[#C23E9E]/10 px-2.5 py-1 rounded-full uppercase tracking-wider">
             GDPR & IP PROTECTED
           </span>
         </div>
@@ -221,7 +221,7 @@ export default function PrivacyView({ currentUser, language }: PrivacyViewProps)
             onClick={() => setActiveTab('all')}
             className={`px-3.5 py-2 rounded-xl text-xs font-mono font-bold uppercase transition-all flex items-center gap-1.5 whitespace-nowrap ${
               activeTab === 'all'
-                ? 'bg-[#E9C349] text-slate-950 shadow-lg font-black'
+                ? 'bg-[#D9A9FF] text-slate-950 shadow-lg font-black'
                 : 'bg-[#1a1a1a] text-[#8A8A8A] hover:text-white hover:bg-[#252525]'
             }`}
           >
@@ -234,7 +234,7 @@ export default function PrivacyView({ currentUser, language }: PrivacyViewProps)
             onClick={() => setActiveTab('terms')}
             className={`px-3.5 py-2 rounded-xl text-xs font-mono font-bold uppercase transition-all flex items-center gap-1.5 whitespace-nowrap ${
               activeTab === 'terms'
-                ? 'bg-[#E9C349] text-slate-950 shadow-lg font-black'
+                ? 'bg-[#D9A9FF] text-slate-950 shadow-lg font-black'
                 : 'bg-[#1a1a1a] text-[#8A8A8A] hover:text-white hover:bg-[#252525]'
             }`}
           >
@@ -247,7 +247,7 @@ export default function PrivacyView({ currentUser, language }: PrivacyViewProps)
             onClick={() => setActiveTab('ip')}
             className={`px-3.5 py-2 rounded-xl text-xs font-mono font-bold uppercase transition-all flex items-center gap-1.5 whitespace-nowrap ${
               activeTab === 'ip'
-                ? 'bg-[#E9C349] text-slate-950 shadow-lg font-black'
+                ? 'bg-[#D9A9FF] text-slate-950 shadow-lg font-black'
                 : 'bg-[#1a1a1a] text-[#8A8A8A] hover:text-white hover:bg-[#252525]'
             }`}
           >
@@ -260,7 +260,7 @@ export default function PrivacyView({ currentUser, language }: PrivacyViewProps)
             onClick={() => setActiveTab('privacy')}
             className={`px-3.5 py-2 rounded-xl text-xs font-mono font-bold uppercase transition-all flex items-center gap-1.5 whitespace-nowrap ${
               activeTab === 'privacy'
-                ? 'bg-[#E9C349] text-slate-950 shadow-lg font-black'
+                ? 'bg-[#D9A9FF] text-slate-950 shadow-lg font-black'
                 : 'bg-[#1a1a1a] text-[#8A8A8A] hover:text-white hover:bg-[#252525]'
             }`}
           >
@@ -277,7 +277,7 @@ export default function PrivacyView({ currentUser, language }: PrivacyViewProps)
             placeholder="Buscar cláusula o tema..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full bg-[#0A0A0A] border border-[#262626] focus:border-[#E9C349] rounded-xl pl-8 pr-3 py-1.5 text-xs text-white placeholder-[#555] outline-none transition-colors"
+            className="w-full bg-[#0A0A0A] border border-[#262626] focus:border-[#D9A9FF] rounded-xl pl-8 pr-3 py-1.5 text-xs text-white placeholder-[#555] outline-none transition-colors"
           />
         </div>
       </div>
@@ -289,9 +289,9 @@ export default function PrivacyView({ currentUser, language }: PrivacyViewProps)
             initial={{ opacity: 0, y: 50, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
-            className="fixed bottom-6 right-6 z-50 bg-[#121212] border border-[#E9C349]/40 text-[#EDEFF4] text-xs font-mono py-3 px-5 rounded-xl shadow-2xl flex items-center gap-3"
+            className="fixed bottom-6 right-6 z-50 bg-[#121212] border border-[#D9A9FF]/40 text-[#EDEFF4] text-xs font-mono py-3 px-5 rounded-xl shadow-2xl flex items-center gap-3"
           >
-            <ShieldCheck className="w-4 h-4 text-[#E9C349]" />
+            <ShieldCheck className="w-4 h-4 text-[#D9A9FF]" />
             <span>{notification}</span>
           </motion.div>
         )}
@@ -310,15 +310,15 @@ export default function PrivacyView({ currentUser, language }: PrivacyViewProps)
               animate={{ opacity: 1, y: 0 }}
               className="bg-[#121212] border border-[#262626] rounded-2xl p-6 shadow-2xl space-y-5 text-left relative overflow-hidden"
             >
-              <div className="absolute top-0 right-0 w-32 h-32 bg-[#E9C349]/5 rounded-bl-full pointer-events-none" />
+              <div className="absolute top-0 right-0 w-32 h-32 bg-[#D9A9FF]/5 rounded-bl-full pointer-events-none" />
               
               <div className="flex items-center justify-between border-b border-[#262626] pb-3">
                 <div className="flex items-center gap-2.5">
-                  <div className="p-2 bg-[#E9C349]/10 rounded-xl border border-[#E9C349]/30">
-                    <CreditCard className="w-5 h-5 text-[#E9C349]" />
+                  <div className="p-2 bg-[#D9A9FF]/10 rounded-xl border border-[#D9A9FF]/30">
+                    <CreditCard className="w-5 h-5 text-[#D9A9FF]" />
                   </div>
                   <div>
-                    <h3 className="text-sm font-mono font-bold text-[#E9C349] uppercase tracking-wider">
+                    <h3 className="text-sm font-mono font-bold text-[#D9A9FF] uppercase tracking-wider">
                       1. TÉRMINOS DE USO Y SUSCRIPCIÓN
                     </h3>
                     <p className="text-[10px] text-[#8A8A8A] font-medium">Políticas de pagos recurrentes, cancelaciones y licencias de acceso</p>
@@ -334,12 +334,12 @@ export default function PrivacyView({ currentUser, language }: PrivacyViewProps)
                 {/* 1.1 Pagos Recurrentes */}
                 <div className="bg-[#0A0A0A] p-4 rounded-xl border border-[#262626] space-y-2.5">
                   <h4 className="font-bold text-white text-xs flex items-center gap-2 uppercase">
-                    <DollarSign className="w-4 h-4 text-[#E9C349]" /> 1.1 Pagos Recurrentes y Facturación Automática
+                    <DollarSign className="w-4 h-4 text-[#D9A9FF]" /> 1.1 Pagos Recurrentes y Facturación Automática
                   </h4>
                   <p className="text-[11px] text-[#8A8A8A] leading-relaxed">
                     Al suscribirte a los planes <strong>PRO ($29.99 USD/mes)</strong> o <strong>VIP Instructor ($59.99 USD/mes)</strong> de Waack On Academy, autorizas expresamente el cobro automático recurrente operado a través de la entidad legal <strong>Monroe Dance Group LLC</strong> a la tarjeta de crédito/débito o cuenta de PayPal registrada. Los cobros se procesarán el mismo día de cada período (mensual o anual). Recibirás un comprobante digital por cada transacción reflejado a nombre de <strong>Monroe Dance Group LLC</strong>.
                   </p>
-                  <div className="flex items-center gap-2 pt-1 text-[10px] text-[#E9C349] font-mono">
+                  <div className="flex items-center gap-2 pt-1 text-[10px] text-[#D9A9FF] font-mono">
                     <CheckCircle className="w-3.5 h-3.5" />
                     <span>Notificación previa de 30 días en caso de modificaciones de tarifa.</span>
                   </div>
@@ -348,7 +348,7 @@ export default function PrivacyView({ currentUser, language }: PrivacyViewProps)
                 {/* 1.2 Políticas de Cancelación */}
                 <div className="bg-[#0A0A0A] p-4 rounded-xl border border-[#262626] space-y-2.5">
                   <h4 className="font-bold text-white text-xs flex items-center gap-2 uppercase">
-                    <Ban className="w-4 h-4 text-[#9A2B3C]" /> 1.2 Política Transparente de Cancelación
+                    <Ban className="w-4 h-4 text-[#C23E9E]" /> 1.2 Política Transparente de Cancelación
                   </h4>
                   <p className="text-[11px] text-[#8A8A8A] leading-relaxed">
                     Puedes cancelar tu suscripción en cualquier momento sin penalizaciones ni contratos de permanencia forzosa. Para cancelar:
@@ -363,17 +363,17 @@ export default function PrivacyView({ currentUser, language }: PrivacyViewProps)
                 {/* 1.3 Garantía y Reembolsos */}
                 <div className="bg-[#0A0A0A] p-4 rounded-xl border border-[#262626] space-y-2.5">
                   <h4 className="font-bold text-white text-xs flex items-center gap-2 uppercase">
-                    <Calendar className="w-4 h-4 text-[#E9C349]" /> 1.3 Garantía de Devolución de 7 Días
+                    <Calendar className="w-4 h-4 text-[#D9A9FF]" /> 1.3 Garantía de Devolución de 7 Días
                   </h4>
                   <p className="text-[11px] text-[#8A8A8A] leading-relaxed">
-                    Ofrecemos una garantía de satisfacción de <strong>7 días consecutivos</strong> para nuevos usuarios contados a partir del primer pago. Si durante este lapso consideras que la plataforma no cumple tus expectativas y has consumido menos del 20% del contenido de las clases, puedes solicitar la devolución del 100% de tu dinero escribiendo a <span className="text-[#E9C349] font-mono">pagos@prowaacker.com</span>. Las renovaciones automáticas posteriores no son reembolsables.
+                    Ofrecemos una garantía de satisfacción de <strong>7 días consecutivos</strong> para nuevos usuarios contados a partir del primer pago. Si durante este lapso consideras que la plataforma no cumple tus expectativas y has consumido menos del 20% del contenido de las clases, puedes solicitar la devolución del 100% de tu dinero escribiendo a <span className="text-[#D9A9FF] font-mono">pagos@prowaacker.com</span>. Las renovaciones automáticas posteriores no son reembolsables.
                   </p>
                 </div>
 
                 {/* 1.4 Derechos de Uso de Contenido */}
                 <div className="bg-[#0A0A0A] p-4 rounded-xl border border-[#262626] space-y-2.5">
                   <h4 className="font-bold text-white text-xs flex items-center gap-2 uppercase">
-                    <KeyRound className="w-4 h-4 text-[#E9C349]" /> 1.4 Licencia Personal e Intransferible
+                    <KeyRound className="w-4 h-4 text-[#D9A9FF]" /> 1.4 Licencia Personal e Intransferible
                   </h4>
                   <p className="text-[11px] text-[#8A8A8A] leading-relaxed">
                     El acceso otorga una licencia individual, revocable y no exclusiva para transmisión personal. Se prohíbe terminantemente compartir credenciales de acceso con múltiples usuarios o proyectar las clases en academias físicas con fines de lucro comercial sin una acreditación de Instructor Oficial emitida por Brando Hermoso.
@@ -391,15 +391,15 @@ export default function PrivacyView({ currentUser, language }: PrivacyViewProps)
               animate={{ opacity: 1, y: 0 }}
               className="bg-[#121212] border border-[#262626] rounded-2xl p-6 shadow-2xl space-y-5 text-left relative overflow-hidden"
             >
-              <div className="absolute top-0 right-0 w-32 h-32 bg-[#9A2B3C]/10 rounded-bl-full pointer-events-none" />
+              <div className="absolute top-0 right-0 w-32 h-32 bg-[#C23E9E]/10 rounded-bl-full pointer-events-none" />
 
               <div className="flex items-center justify-between border-b border-[#262626] pb-3">
                 <div className="flex items-center gap-2.5">
-                  <div className="p-2 bg-[#9A2B3C]/10 rounded-xl border border-[#9A2B3C]/30">
-                    <Copyright className="w-5 h-5 text-[#9A2B3C]" />
+                  <div className="p-2 bg-[#C23E9E]/10 rounded-xl border border-[#C23E9E]/30">
+                    <Copyright className="w-5 h-5 text-[#C23E9E]" />
                   </div>
                   <div>
-                    <h3 className="text-sm font-mono font-bold text-[#9A2B3C] uppercase tracking-wider">
+                    <h3 className="text-sm font-mono font-bold text-[#C23E9E] uppercase tracking-wider">
                       2. PROTECCIÓN DE PROPIEDAD INTELECTUAL
                     </h3>
                     <p className="text-[10px] text-[#8A8A8A] font-medium">Currículo pedagógico, metodologías de baile, producciones y marcas registradas</p>
@@ -415,7 +415,7 @@ export default function PrivacyView({ currentUser, language }: PrivacyViewProps)
                 {/* 2.1 Metodología de Brando Hermoso */}
                 <div className="bg-[#0A0A0A] p-4 rounded-xl border border-[#262626] space-y-2.5">
                   <h4 className="font-bold text-white text-xs flex items-center gap-2 uppercase">
-                    <Award className="w-4 h-4 text-[#E9C349]" /> 2.1 Currículo Pedagógico y Método de Brando Hermoso
+                    <Award className="w-4 h-4 text-[#D9A9FF]" /> 2.1 Currículo Pedagógico y Método de Brando Hermoso
                   </h4>
                   <p className="text-[11px] text-[#8A8A8A] leading-relaxed">
                     Toda la estructura pedagógica de Waacking, desgloses rítmicos a 128 BPM, secuencias de <em>Posing & Drama</em>, dinámicas somáticas y esquemas biomecánicos fueron diseñados exclusivamente por el bailarín profesional <strong>Brando Hermoso</strong> y son propiedad intelectual exclusiva de <strong>Monroe Dance Group LLC</strong>. Este currículo constituye una obra intelectual protegida por convenios internacionales de derecho de autor (OMPI/WIPO) y leyes federales de propiedad intelectual. Queda prohibida su reproducción, adaptación sin autorización o reclamación de autoría de la metodología.
@@ -425,7 +425,7 @@ export default function PrivacyView({ currentUser, language }: PrivacyViewProps)
                 {/* 2.2 Prohibición de Screen Recording y Descargas */}
                 <div className="bg-[#0A0A0A] p-4 rounded-xl border border-[#262626] space-y-2.5">
                   <h4 className="font-bold text-white text-xs flex items-center gap-2 uppercase">
-                    <Video className="w-4 h-4 text-[#9A2B3C]" /> 2.2 Prohibición Estricta de Grabación y Resubida
+                    <Video className="w-4 h-4 text-[#C23E9E]" /> 2.2 Prohibición Estricta de Grabación y Resubida
                   </h4>
                   <p className="text-[11px] text-[#8A8A8A] leading-relaxed">
                     Los videos interactivos en alta definición, pistas de audio del metrónomo, e-books en PDF y contenidos del Freestyle Lab son propiedad exclusiva de <strong>Monroe Dance Group LLC</strong> / Waack On Academy.
@@ -439,7 +439,7 @@ export default function PrivacyView({ currentUser, language }: PrivacyViewProps)
                 {/* 2.3 Marcas e Imagen de Marca */}
                 <div className="bg-[#0A0A0A] p-4 rounded-xl border border-[#262626] space-y-2.5">
                   <h4 className="font-bold text-white text-xs flex items-center gap-2 uppercase">
-                    <Sparkles className="w-4 h-4 text-[#E9C349]" /> 2.3 Marcas Registradas con Monroe Dance Group LLC
+                    <Sparkles className="w-4 h-4 text-[#D9A9FF]" /> 2.3 Marcas Registradas con Monroe Dance Group LLC
                   </h4>
                   <p className="text-[11px] text-[#8A8A8A] leading-relaxed">
                     Las denominaciones <strong>WAACK ON®</strong>, <strong>PROWAACKER®</strong>, <strong>WAACK ON ACADEMY®</strong>, <strong>FREESTYLE LAB®</strong>, así como los logotipos, tipografías, lemas e imagen comercial son marcas registradas de propiedad exclusiva de <strong>Monroe Dance Group LLC</strong>. Ningún tercero está autorizado a fabricar merchandising, certificados falsificados o publicidad utilizando la marca o el nombre de Brando Hermoso sin una autorización o licencia previa por escrito emitida formalmente por Monroe Dance Group LLC.
@@ -449,7 +449,7 @@ export default function PrivacyView({ currentUser, language }: PrivacyViewProps)
                 {/* 2.4 Algoritmos de IA */}
                 <div className="bg-[#0A0A0A] p-4 rounded-xl border border-[#262626] space-y-2.5">
                   <h4 className="font-bold text-white text-xs flex items-center gap-2 uppercase">
-                    <Activity className="w-4 h-4 text-[#9A2B3C]" /> 2.4 Propiedad de Software y Modelos Biomecánicos
+                    <Activity className="w-4 h-4 text-[#C23E9E]" /> 2.4 Propiedad de Software y Modelos Biomecánicos
                   </h4>
                   <p className="text-[11px] text-[#8A8A8A] leading-relaxed">
                     El motor de análisis biomecánico en tiempo real y los detectores de postura en el navegador pertenecen al equipo de desarrollo de PROWAACKER. Queda prohibida cualquier labor de ingeniería inversa, descompilación o extracción de datos de entrenamiento del modelo de IA.
@@ -469,11 +469,11 @@ export default function PrivacyView({ currentUser, language }: PrivacyViewProps)
             >
               <div className="flex items-center justify-between border-b border-[#262626] pb-3">
                 <div className="flex items-center gap-2.5">
-                  <div className="p-2 bg-[#E9C349]/10 rounded-xl border border-[#E9C349]/30">
-                    <Shield className="w-5 h-5 text-[#E9C349]" />
+                  <div className="p-2 bg-[#D9A9FF]/10 rounded-xl border border-[#D9A9FF]/30">
+                    <Shield className="w-5 h-5 text-[#D9A9FF]" />
                   </div>
                   <div>
-                    <h3 className="text-sm font-mono font-bold text-[#E9C349] uppercase tracking-wider">
+                    <h3 className="text-sm font-mono font-bold text-[#D9A9FF] uppercase tracking-wider">
                       3. POLÍTICA DE PRIVACIDAD Y PROTECCIÓN DE DATOS
                     </h3>
                     <p className="text-[10px] text-[#8A8A8A] font-medium">Cumplimiento con normativas de privacidad GDPR, CCPA y derechos ARCO</p>
@@ -489,7 +489,7 @@ export default function PrivacyView({ currentUser, language }: PrivacyViewProps)
                 {/* 3.1 Datos Recopilados */}
                 <div className="bg-[#0A0A0A] p-4 rounded-xl border border-[#262626] space-y-2.5">
                   <h4 className="font-bold text-white text-xs flex items-center gap-2 uppercase">
-                    <Database className="w-4 h-4 text-[#9A2B3C]" /> 3.1 Recolección y Finalidad de Datos en Firebase
+                    <Database className="w-4 h-4 text-[#C23E9E]" /> 3.1 Recolección y Finalidad de Datos en Firebase
                   </h4>
                   <p className="text-[11px] text-[#8A8A8A] leading-relaxed">
                     Utilizamos <strong>Firebase Authentication</strong> y <strong>Cloud Firestore</strong> para gestionar de forma cifrada tu acceso, correo electrónico, nivel de baile, medallas y minutas de práctica. Esta información tiene la finalidad exclusiva de sincronizar tu avance pedagógico en la plataforma.
@@ -499,7 +499,7 @@ export default function PrivacyView({ currentUser, language }: PrivacyViewProps)
                 {/* 3.2 Telemetría Biomecánica */}
                 <div className="bg-[#0A0A0A] p-4 rounded-xl border border-[#262626] space-y-2.5">
                   <h4 className="font-bold text-white text-xs flex items-center gap-2 uppercase">
-                    <Activity className="w-4 h-4 text-[#9A2B3C]" /> 3.2 Procesamiento Biomecánico de IA en Dispositivo Local
+                    <Activity className="w-4 h-4 text-[#C23E9E]" /> 3.2 Procesamiento Biomecánico de IA en Dispositivo Local
                   </h4>
                   <p className="text-[11px] text-[#8A8A8A] leading-relaxed">
                     Cuando activas la cámara en el Freestyle Lab o en el analizador de video, las coordenadas anatómicas de codos, hombros y tronco se procesan exclusivamente en la memoria RAM de tu propio dispositivo. No guardamos ni transmitimos imágenes faciales ni datos biométricos de identificación física a servidores externos.
@@ -509,7 +509,7 @@ export default function PrivacyView({ currentUser, language }: PrivacyViewProps)
                 {/* 3.3 Privacidad de Videos Subidos */}
                 <div className="bg-[#0A0A0A] p-4 rounded-xl border border-[#262626] space-y-2.5">
                   <h4 className="font-bold text-white text-xs flex items-center gap-2 uppercase">
-                    <Lock className="w-4 h-4 text-[#E9C349]" /> 3.3 Confidencialidad de Videos y Evaluaciones
+                    <Lock className="w-4 h-4 text-[#D9A9FF]" /> 3.3 Confidencialidad de Videos y Evaluaciones
                   </h4>
                   <p className="text-[11px] text-[#8A8A8A] leading-relaxed">
                     Los videos enviados para recibir retroalimentación del instructor son estrictamente confidenciales. Únicamente Brando Hermoso y los evaluadores certificados tienen acceso al material con la finalidad de otorgar comentarios técnicos. Tus prácticas nunca serán publicadas ni vendidas a terceros sin tu consentimiento por escrito.
@@ -520,7 +520,7 @@ export default function PrivacyView({ currentUser, language }: PrivacyViewProps)
 
               <div className="border-t border-[#262626] pt-4 text-[10px] text-[#8A8A8A] font-mono leading-tight space-y-1">
                 <p>Waack On Academy garantiza que no comercializa bases de datos personales con anunciantes o brokers.</p>
-                <p>Oficial de Protección de Datos (DPO): <span className="text-[#E9C349]">privacidad@prowaacker.com</span></p>
+                <p>Oficial de Protección de Datos (DPO): <span className="text-[#D9A9FF]">privacidad@prowaacker.com</span></p>
               </div>
             </motion.div>
           )}
@@ -532,8 +532,8 @@ export default function PrivacyView({ currentUser, language }: PrivacyViewProps)
           
           {/* Interactive Consent Toggles Panel */}
           <div className="bg-[#121212] border border-[#262626] rounded-2xl p-5 shadow-2xl space-y-4 text-left">
-            <h3 className="text-xs font-mono font-bold text-[#E9C349] uppercase tracking-widest border-b border-[#262626] pb-2 flex items-center gap-2">
-              <Lock className="w-4 h-4 text-[#E9C349]" /> CENTRO DE CONTROL DE CONSENTIMIENTO
+            <h3 className="text-xs font-mono font-bold text-[#D9A9FF] uppercase tracking-widest border-b border-[#262626] pb-2 flex items-center gap-2">
+              <Lock className="w-4 h-4 text-[#D9A9FF]" /> CENTRO DE CONTROL DE CONSENTIMIENTO
             </h3>
             
             <p className="text-[10px] text-[#8A8A8A] font-medium leading-relaxed mb-4">
@@ -543,10 +543,10 @@ export default function PrivacyView({ currentUser, language }: PrivacyViewProps)
             <div className="space-y-3">
               
               {/* Push Notifications (Web Push API) */}
-              <div className="flex items-start justify-between gap-4 p-3 bg-[#0A0A0A] border border-[#E9C349]/40 rounded-xl hover:border-[#E9C349] transition-colors shadow-sm">
+              <div className="flex items-start justify-between gap-4 p-3 bg-[#0A0A0A] border border-[#D9A9FF]/40 rounded-xl hover:border-[#D9A9FF] transition-colors shadow-sm">
                 <div className="space-y-1">
                   <p className="text-xs font-bold text-white uppercase flex items-center gap-1.5">
-                    <Bell className="w-3.5 h-3.5 text-[#E9C349] animate-pulse" /> Notificaciones Push del Navegador
+                    <Bell className="w-3.5 h-3.5 text-[#D9A9FF] animate-pulse" /> Notificaciones Push del Navegador
                   </p>
                   <p className="text-[10px] text-[#8A8A8A] leading-tight">
                     Alertas en segundo plano cuando tus videos de práctica reciban feedback o correcciones de los instructores.
@@ -561,7 +561,7 @@ export default function PrivacyView({ currentUser, language }: PrivacyViewProps)
                 <button
                   type="button"
                   onClick={handleTogglePushNotifications}
-                  className="px-3 py-1.5 bg-[#E9C349] hover:bg-[#d4ae36] text-black font-mono text-[10px] font-bold uppercase rounded-lg transition-all shadow-md shrink-0 cursor-pointer"
+                  className="px-3 py-1.5 bg-[#D9A9FF] hover:bg-[#B478F0] text-black font-mono text-[10px] font-bold uppercase rounded-lg transition-all shadow-md shrink-0 cursor-pointer"
                 >
                   {pushStatus.permission === 'granted' ? 'Reactivar' : 'Activar Push'}
                 </button>
@@ -571,7 +571,7 @@ export default function PrivacyView({ currentUser, language }: PrivacyViewProps)
               <div className="flex items-start justify-between gap-4 p-3 bg-[#0A0A0A] border border-[#262626] rounded-xl hover:border-[#333] transition-colors">
                 <div className="space-y-1">
                   <p className="text-xs font-bold text-white uppercase flex items-center gap-1.5">
-                    <Activity className="w-3.5 h-3.5 text-[#E9C349]" /> Registro Biomecánico
+                    <Activity className="w-3.5 h-3.5 text-[#D9A9FF]" /> Registro Biomecánico
                   </p>
                   <p className="text-[10px] text-[#8A8A8A] leading-tight">
                     Permitir que el motor de IA dibuje el esqueleto sobre tu video en ejercicios de brazos.
@@ -583,7 +583,7 @@ export default function PrivacyView({ currentUser, language }: PrivacyViewProps)
                   className="text-white shrink-0 focus:outline-none transition-transform hover:scale-105"
                 >
                   {consents.telemetry ? (
-                    <ToggleRight className="w-9 h-9 text-[#9A2B3C]" />
+                    <ToggleRight className="w-9 h-9 text-[#C23E9E]" />
                   ) : (
                     <ToggleLeft className="w-9 h-9 text-[#3A3A3A]" />
                   )}
@@ -594,7 +594,7 @@ export default function PrivacyView({ currentUser, language }: PrivacyViewProps)
               <div className="flex items-start justify-between gap-4 p-3 bg-[#0A0A0A] border border-[#262626] rounded-xl hover:border-[#333] transition-colors">
                 <div className="space-y-1">
                   <p className="text-xs font-bold text-white uppercase flex items-center gap-1.5">
-                    <Users className="w-3.5 h-3.5 text-[#E9C349]" /> Participación en Ranking
+                    <Users className="w-3.5 h-3.5 text-[#D9A9FF]" /> Participación en Ranking
                   </p>
                   <p className="text-[10px] text-[#8A8A8A] leading-tight">
                     Mostrar tu nombre, foto de perfil y puntos de práctica acumulados en la tabla pública de la academia.
@@ -606,7 +606,7 @@ export default function PrivacyView({ currentUser, language }: PrivacyViewProps)
                   className="text-white shrink-0 focus:outline-none transition-transform hover:scale-105"
                 >
                   {consents.ranking ? (
-                    <ToggleRight className="w-9 h-9 text-[#9A2B3C]" />
+                    <ToggleRight className="w-9 h-9 text-[#C23E9E]" />
                   ) : (
                     <ToggleLeft className="w-9 h-9 text-[#3A3A3A]" />
                   )}
@@ -617,7 +617,7 @@ export default function PrivacyView({ currentUser, language }: PrivacyViewProps)
               <div className="flex items-start justify-between gap-4 p-3 bg-[#0A0A0A] border border-[#262626] rounded-xl hover:border-[#333] transition-colors">
                 <div className="space-y-1">
                   <p className="text-xs font-bold text-white uppercase flex items-center gap-1.5">
-                    <Database className="w-3.5 h-3.5 text-[#E9C349]" /> Caché de Video Local
+                    <Database className="w-3.5 h-3.5 text-[#D9A9FF]" /> Caché de Video Local
                   </p>
                   <p className="text-[10px] text-[#8A8A8A] leading-tight">
                     Guardar temporalmente los enlaces de tus videos subidos en tu navegador para agilizar la carga.
@@ -629,7 +629,7 @@ export default function PrivacyView({ currentUser, language }: PrivacyViewProps)
                   className="text-white shrink-0 focus:outline-none transition-transform hover:scale-105"
                 >
                   {consents.videoCache ? (
-                    <ToggleRight className="w-9 h-9 text-[#9A2B3C]" />
+                    <ToggleRight className="w-9 h-9 text-[#C23E9E]" />
                   ) : (
                     <ToggleLeft className="w-9 h-9 text-[#3A3A3A]" />
                   )}
@@ -640,7 +640,7 @@ export default function PrivacyView({ currentUser, language }: PrivacyViewProps)
               <div className="flex items-start justify-between gap-4 p-3 bg-[#0A0A0A] border border-[#262626] rounded-xl hover:border-[#333] transition-colors">
                 <div className="space-y-1">
                   <p className="text-xs font-bold text-white uppercase flex items-center gap-1.5">
-                    <Award className="w-3.5 h-3.5 text-[#E9C349]" /> Evaluación del Instructor
+                    <Award className="w-3.5 h-3.5 text-[#D9A9FF]" /> Evaluación del Instructor
                   </p>
                   <p className="text-[10px] text-[#8A8A8A] leading-tight">
                     Permitir que Brando Hermoso y el cuerpo técnico revisen tus rutinas enviadas y te den correcciones.
@@ -652,7 +652,7 @@ export default function PrivacyView({ currentUser, language }: PrivacyViewProps)
                   className="text-white shrink-0 focus:outline-none transition-transform hover:scale-105"
                 >
                   {consents.instructorAccess ? (
-                    <ToggleRight className="w-9 h-9 text-[#9A2B3C]" />
+                    <ToggleRight className="w-9 h-9 text-[#C23E9E]" />
                   ) : (
                     <ToggleLeft className="w-9 h-9 text-[#3A3A3A]" />
                   )}
@@ -664,8 +664,8 @@ export default function PrivacyView({ currentUser, language }: PrivacyViewProps)
 
           {/* Data Export & ARCO Rights Panel */}
           <div className="bg-[#121212] border border-[#262626] rounded-2xl p-5 shadow-2xl space-y-4 text-left">
-            <h3 className="text-xs font-mono font-bold text-[#E9C349] uppercase tracking-widest border-b border-[#262626] pb-2 flex items-center gap-2">
-              <Download className="w-4 h-4 text-[#E9C349]" /> TUS DERECHOS ARCO (GDPR / CCPA)
+            <h3 className="text-xs font-mono font-bold text-[#D9A9FF] uppercase tracking-widest border-b border-[#262626] pb-2 flex items-center gap-2">
+              <Download className="w-4 h-4 text-[#D9A9FF]" /> TUS DERECHOS ARCO (GDPR / CCPA)
             </h3>
             
             <p className="text-[10px] text-[#8A8A8A] font-medium leading-relaxed">
@@ -682,9 +682,9 @@ export default function PrivacyView({ currentUser, language }: PrivacyViewProps)
                 className="py-2.5 px-3 bg-[#1c1e22] hover:bg-[#2c2f35] border border-[#3A3A3A] hover:border-[#5A5A5A] text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 focus:outline-none disabled:opacity-50"
               >
                 {downloadingData ? (
-                  <RefreshCw className="w-3.5 h-3.5 animate-spin text-[#E9C349]" />
+                  <RefreshCw className="w-3.5 h-3.5 animate-spin text-[#D9A9FF]" />
                 ) : (
-                  <Download className="w-3.5 h-3.5 text-[#E9C349]" />
+                  <Download className="w-3.5 h-3.5 text-[#D9A9FF]" />
                 )}
                 <span>Exportar JSON</span>
               </button>
@@ -718,7 +718,7 @@ export default function PrivacyView({ currentUser, language }: PrivacyViewProps)
           {/* Legal Support Contact Card */}
           <div className="bg-[#121212] border border-[#262626] rounded-2xl p-5 shadow-2xl space-y-3 text-left">
             <h3 className="text-xs font-mono font-bold text-[#EDEFF4] uppercase tracking-wider flex items-center gap-2 border-b border-[#262626] pb-2">
-              <Scale className="w-4 h-4 text-[#E9C349]" /> ENTIDAD LEGAL & CONTACTO
+              <Scale className="w-4 h-4 text-[#D9A9FF]" /> ENTIDAD LEGAL & CONTACTO
             </h3>
             <p className="text-[11px] text-[#8A8A8A] font-medium leading-relaxed">
               Titular legal de derechos, registros de marca y operaciones comerciales: <strong>Monroe Dance Group LLC</strong>.
@@ -730,11 +730,11 @@ export default function PrivacyView({ currentUser, language }: PrivacyViewProps)
               </div>
               <div className="flex items-center justify-between text-gray-300">
                 <span className="text-[#8A8A8A]">E-mail Legal:</span>
-                <a href="mailto:legal@prowaacker.com" className="text-[#E9C349] font-bold hover:underline">legal@prowaacker.com</a>
+                <a href="mailto:legal@prowaacker.com" className="text-[#D9A9FF] font-bold hover:underline">legal@prowaacker.com</a>
               </div>
               <div className="flex items-center justify-between text-gray-300">
                 <span className="text-[#8A8A8A]">Protección Datos:</span>
-                <a href="mailto:privacidad@prowaacker.com" className="text-[#E9C349] font-bold hover:underline">privacidad@prowaacker.com</a>
+                <a href="mailto:privacidad@prowaacker.com" className="text-[#D9A9FF] font-bold hover:underline">privacidad@prowaacker.com</a>
               </div>
               <div className="flex items-center justify-between text-gray-300">
                 <span className="text-[#8A8A8A]">Tiempo Respuesta:</span>

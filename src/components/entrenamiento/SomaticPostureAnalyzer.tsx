@@ -571,7 +571,7 @@ export const SomaticPostureAnalyzer: React.FC<SomaticPostureAnalyzerProps> = ({
           <button
             type="button"
             onClick={handleSaveLog}
-            className="px-3 py-2 bg-[#E9C349] hover:bg-[#d8b33c] text-black rounded-xl font-mono text-xs font-black transition-all flex items-center gap-1.5 shadow-lg active:scale-95"
+            className="px-3 py-2 bg-[#D9A9FF] hover:bg-[#B87CFF] text-black rounded-xl font-mono text-xs font-black transition-all flex items-center gap-1.5 shadow-lg active:scale-95"
           >
             <Download className="w-4 h-4 text-black" />
             <span>Guardar Análisis</span>
@@ -611,7 +611,7 @@ export const SomaticPostureAnalyzer: React.FC<SomaticPostureAnalyzerProps> = ({
                   onClick={() => setActivePoseIndex(idx)}
                   className={`px-2.5 py-1 rounded-lg text-[11px] font-mono font-bold uppercase transition-all shrink-0 ${
                     activePoseIndex === idx
-                      ? 'bg-[#E9C349] text-black shadow-md'
+                      ? 'bg-[#D9A9FF] text-black shadow-md'
                       : 'bg-white/5 hover:bg-white/10 text-slate-300'
                   }`}
                 >
@@ -735,22 +735,22 @@ export const SomaticPostureAnalyzer: React.FC<SomaticPostureAnalyzerProps> = ({
               {showGhost && (
                 <g opacity="0.35">
                   {/* Torso Ghost */}
-                  <line x1={`${activePreset.joints.head.x}%`} y1={`${activePreset.joints.head.y}%`} x2={`${activePreset.joints.sternum.x}%`} y2={`${activePreset.joints.sternum.y}%`} stroke="#E9C349" strokeWidth="2" strokeDasharray="3 3" />
-                  <line x1={`${activePreset.joints.sternum.x}%`} y1={`${activePreset.joints.sternum.y}%`} x2={`${activePreset.joints.pelvis.x}%`} y2={`${activePreset.joints.pelvis.y}%`} stroke="#E9C349" strokeWidth="2" strokeDasharray="3 3" />
+                  <line x1={`${activePreset.joints.head.x}%`} y1={`${activePreset.joints.head.y}%`} x2={`${activePreset.joints.sternum.x}%`} y2={`${activePreset.joints.sternum.y}%`} stroke="#D9A9FF" strokeWidth="2" strokeDasharray="3 3" />
+                  <line x1={`${activePreset.joints.sternum.x}%`} y1={`${activePreset.joints.sternum.y}%`} x2={`${activePreset.joints.pelvis.x}%`} y2={`${activePreset.joints.pelvis.y}%`} stroke="#D9A9FF" strokeWidth="2" strokeDasharray="3 3" />
 
                   {/* Left Arm Ghost */}
-                  <line x1={`${activePreset.joints.sternum.x}%`} y1={`${activePreset.joints.sternum.y}%`} x2={`${activePreset.joints.leftShoulder.x}%`} y2={`${activePreset.joints.leftShoulder.y}%`} stroke="#E9C349" strokeWidth="2" strokeDasharray="3 3" />
-                  <line x1={`${activePreset.joints.leftShoulder.x}%`} y1={`${activePreset.joints.leftShoulder.y}%`} x2={`${activePreset.joints.leftElbow.x}%`} y2={`${activePreset.joints.leftElbow.y}%`} stroke="#E9C349" strokeWidth="2" strokeDasharray="3 3" />
-                  <line x1={`${activePreset.joints.leftElbow.x}%`} y1={`${activePreset.joints.leftElbow.y}%`} x2={`${activePreset.joints.leftWrist.x}%`} y2={`${activePreset.joints.leftWrist.y}%`} stroke="#E9C349" strokeWidth="2" strokeDasharray="3 3" />
+                  <line x1={`${activePreset.joints.sternum.x}%`} y1={`${activePreset.joints.sternum.y}%`} x2={`${activePreset.joints.leftShoulder.x}%`} y2={`${activePreset.joints.leftShoulder.y}%`} stroke="#D9A9FF" strokeWidth="2" strokeDasharray="3 3" />
+                  <line x1={`${activePreset.joints.leftShoulder.x}%`} y1={`${activePreset.joints.leftShoulder.y}%`} x2={`${activePreset.joints.leftElbow.x}%`} y2={`${activePreset.joints.leftElbow.y}%`} stroke="#D9A9FF" strokeWidth="2" strokeDasharray="3 3" />
+                  <line x1={`${activePreset.joints.leftElbow.x}%`} y1={`${activePreset.joints.leftElbow.y}%`} x2={`${activePreset.joints.leftWrist.x}%`} y2={`${activePreset.joints.leftWrist.y}%`} stroke="#D9A9FF" strokeWidth="2" strokeDasharray="3 3" />
 
                   {/* Right Arm Ghost */}
-                  <line x1={`${activePreset.joints.sternum.x}%`} y1={`${activePreset.joints.sternum.y}%`} x2={`${activePreset.joints.rightShoulder.x}%`} y2={`${activePreset.joints.rightShoulder.y}%`} stroke="#E9C349" strokeWidth="2" strokeDasharray="3 3" />
-                  <line x1={`${activePreset.joints.rightShoulder.x}%`} y1={`${activePreset.joints.rightShoulder.y}%`} x2={`${activePreset.joints.rightElbow.x}%`} y2={`${activePreset.joints.rightElbow.y}%`} stroke="#E9C349" strokeWidth="2" strokeDasharray="3 3" />
-                  <line x1={`${activePreset.joints.rightElbow.x}%`} y1={`${activePreset.joints.rightElbow.y}%`} x2={`${activePreset.joints.rightWrist.x}%`} y2={`${activePreset.joints.rightWrist.y}%`} stroke="#E9C349" strokeWidth="2" strokeDasharray="3 3" />
+                  <line x1={`${activePreset.joints.sternum.x}%`} y1={`${activePreset.joints.sternum.y}%`} x2={`${activePreset.joints.rightShoulder.x}%`} y2={`${activePreset.joints.rightShoulder.y}%`} stroke="#D9A9FF" strokeWidth="2" strokeDasharray="3 3" />
+                  <line x1={`${activePreset.joints.rightShoulder.x}%`} y1={`${activePreset.joints.rightShoulder.y}%`} x2={`${activePreset.joints.rightElbow.x}%`} y2={`${activePreset.joints.rightElbow.y}%`} stroke="#D9A9FF" strokeWidth="2" strokeDasharray="3 3" />
+                  <line x1={`${activePreset.joints.rightElbow.x}%`} y1={`${activePreset.joints.rightElbow.y}%`} x2={`${activePreset.joints.rightWrist.x}%`} y2={`${activePreset.joints.rightWrist.y}%`} stroke="#D9A9FF" strokeWidth="2" strokeDasharray="3 3" />
 
                   {/* Target Joint Circles */}
                   {Object.entries(activePreset.joints).map(([k, pt]) => (
-                    <circle key={`ghost-${k}`} cx={`${pt.x}%`} cy={`${pt.y}%`} r="4" fill="#E9C349" opacity="0.6" />
+                    <circle key={`ghost-${k}`} cx={`${pt.x}%`} cy={`${pt.y}%`} r="4" fill="#D9A9FF" opacity="0.6" />
                   ))}
                 </g>
               )}
@@ -886,7 +886,7 @@ export const SomaticPostureAnalyzer: React.FC<SomaticPostureAnalyzerProps> = ({
                   type="button"
                   onClick={() => setShowGhost(!showGhost)}
                   className={`px-2 py-1 rounded-lg border flex items-center gap-1 transition-all ${
-                    showGhost ? 'bg-[#E9C349]/20 text-[#E9C349] border-[#E9C349]/40' : 'bg-white/5 text-slate-400 border-white/10'
+                    showGhost ? 'bg-[#D9A9FF]/20 text-[#D9A9FF] border-[#D9A9FF]/40' : 'bg-white/5 text-slate-400 border-white/10'
                   }`}
                 >
                   {showGhost ? <Eye className="w-3 h-3" /> : <EyeOff className="w-3 h-3" />}
@@ -920,7 +920,7 @@ export const SomaticPostureAnalyzer: React.FC<SomaticPostureAnalyzerProps> = ({
           {/* ACTIVE POSE BENCHMARK DESCRIPTION */}
           <div className="p-3.5 bg-[#120F22] rounded-2xl border border-white/10 text-xs font-sans space-y-1">
             <div className="flex items-center justify-between">
-              <span className="font-mono font-bold text-[#E9C349] text-[11px] uppercase">
+              <span className="font-mono font-bold text-[#D9A9FF] text-[11px] uppercase">
                 Objetivo Cátedra: {activePreset.nameEs}
               </span>
               <span className="font-mono text-[10px] text-slate-400">
@@ -970,7 +970,7 @@ export const SomaticPostureAnalyzer: React.FC<SomaticPostureAnalyzerProps> = ({
                   poseMatchScore >= 85
                     ? 'bg-gradient-to-r from-emerald-400 to-cyan-400'
                     : poseMatchScore >= 65
-                      ? 'bg-gradient-to-r from-[#E9C349] to-cyan-400'
+                      ? 'bg-gradient-to-r from-[#D9A9FF] to-cyan-400'
                       : 'bg-gradient-to-r from-rose-500 to-amber-500'
                 }`}
               />
@@ -1057,8 +1057,8 @@ export const SomaticPostureAnalyzer: React.FC<SomaticPostureAnalyzerProps> = ({
           </div>
 
           {/* AI BIOMECHANICAL RECOMMENDATIONS CARD */}
-          <div className="p-4 rounded-2xl bg-[#141026] border border-[#E9C349]/30 space-y-2.5">
-            <div className="flex items-center gap-2 text-[#E9C349]">
+          <div className="p-4 rounded-2xl bg-[#141026] border border-[#D9A9FF]/30 space-y-2.5">
+            <div className="flex items-center gap-2 text-[#D9A9FF]">
               <Sparkles className="w-4 h-4" />
               <h5 className="text-xs font-mono font-bold uppercase tracking-wider">
                 Recomendación Biomecánica AI

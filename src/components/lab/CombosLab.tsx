@@ -68,7 +68,7 @@ const CombosLabComponent: React.FC<CombosLabProps> = ({
 
         <div className="flex flex-col md:flex-row md:items-center justify-between border-b border-tertiary/10 pb-6 mb-6 gap-4 relative z-10">
           <div>
-            <span className="font-label-sm text-[#e9c349] bg-[#e9c349]/10 border border-[#e9c349]/20 px-3 py-1 rounded-xl uppercase tracking-wider">
+            <span className="font-label-sm text-[#d9a9ff] bg-[#d9a9ff]/10 border border-[#d9a9ff]/20 px-3 py-1 rounded-xl uppercase tracking-wider">
               DRAFT DE COREOGRAFÍA
             </span>
             <h3 className="text-2xl font-display-lg italic tracking-tight uppercase mt-3 text-[#EDEFF4]">
@@ -78,7 +78,7 @@ const CombosLabComponent: React.FC<CombosLabProps> = ({
               Crea y practica combinaciones únicas mezclando técnica de brazos, disociaciones corporales, traslados y actitud.
             </p>
           </div>
-          <div className="bg-[#9A2B3C]/10 border border-[#9A2B3C]/20 p-3 rounded-xl text-center shrink-0 min-w-[140px]">
+          <div className="bg-[#C23E9E]/10 border border-[#C23E9E]/20 p-3 rounded-xl text-center shrink-0 min-w-[140px]">
             <div className="text-[10px] font-mono text-[#ffb3b2] uppercase tracking-widest font-bold">Práctica Diaria</div>
             <div className="text-md font-bold text-white mt-0.5">+50 Pts / Combo</div>
           </div>
@@ -120,9 +120,9 @@ const CombosLabComponent: React.FC<CombosLabProps> = ({
               </div>
 
               {/* Slot Body */}
-              <div className="bg-[#121212] border border-[#262626] p-4 rounded-2xl flex flex-col justify-between min-h-[140px] hover:border-[#9A2B3C]/30 transition-all shadow-md">
+              <div className="bg-[#121212] border border-[#262626] p-4 rounded-2xl flex flex-col justify-between min-h-[140px] hover:border-[#C23E9E]/30 transition-all shadow-md">
                 <div>
-                  <span className="text-[9px] font-mono text-[#ffb3b2] bg-[#9A2B3C]/10 border border-[#9A2B3C]/20 px-2 py-0.5 rounded uppercase font-bold tracking-wider">
+                  <span className="text-[9px] font-mono text-[#ffb3b2] bg-[#C23E9E]/10 border border-[#C23E9E]/20 px-2 py-0.5 rounded uppercase font-bold tracking-wider">
                     💃 {language === 'es' ? 'Expresión Corporal' : 'Body Expression'}
                   </span>
                   <p className="font-bold text-xs text-white mt-3.5 leading-relaxed">
@@ -140,8 +140,8 @@ const CombosLabComponent: React.FC<CombosLabProps> = ({
                       }}
                       className={`px-2 py-0.5 rounded text-[8px] font-mono font-bold border shrink-0 uppercase transition-colors ${
                         comboBodyIdx === i
-                          ? 'bg-[#9A2B3C] text-white border-[#9A2B3C]'
-                          : 'bg-black/30 text-on-surface-variant border-tertiary/5 hover:border-[#9A2B3C]/20'
+                          ? 'bg-[#C23E9E] text-white border-[#C23E9E]'
+                          : 'bg-black/30 text-on-surface-variant border-tertiary/5 hover:border-[#C23E9E]/20'
                       }`}
                     >
                       Var {i + 1}
@@ -218,7 +218,7 @@ const CombosLabComponent: React.FC<CombosLabProps> = ({
               <button
                 type="button"
                 onClick={generateRandomCombo}
-                className="bg-transparent hover:bg-white/5 text-[#E9C349] border border-[#E9C349]/30 hover:border-[#E9C349] font-mono tracking-widest font-bold px-6 py-3.5 rounded-xl uppercase text-xs flex items-center justify-center gap-2 transition-all active:scale-95"
+                className="bg-transparent hover:bg-white/5 text-[#D9A9FF] border border-[#D9A9FF]/30 hover:border-[#D9A9FF] font-mono tracking-widest font-bold px-6 py-3.5 rounded-xl uppercase text-xs flex items-center justify-center gap-2 transition-all active:scale-95"
               >
                 <Shuffle className="w-4 h-4 text-tertiary" />
                 🔀 GENERAR MEZCLA ALEATORIA
@@ -283,9 +283,9 @@ const CombosLabComponent: React.FC<CombosLabProps> = ({
                   setComboPracticeActive(true);
                   playSynthBeep(1000, 0.15);
                 }}
-                className="w-full bg-[#E9C349] hover:bg-[#ffe088] text-black font-display-lg font-bold py-4 rounded-xl transition-all uppercase tracking-widest text-xs flex items-center justify-center gap-2 shadow-lg active:scale-95"
+                className="w-full bg-[#D9A9FF] hover:bg-[#ffe088] text-black font-display-lg font-bold py-4 rounded-xl transition-all uppercase tracking-widest text-xs flex items-center justify-center gap-2 shadow-lg active:scale-95"
               >
-                <Play className="w-4 h-4 text-[#9A2B3C] fill-[#9A2B3C]" />
+                <Play className="w-4 h-4 text-[#C23E9E] fill-[#C23E9E]" />
                 ⏱️ INICIAR DRILL DE PRÁCTICA DEL COMBO (60 Segundos)
               </button>
             </div>
@@ -343,7 +343,7 @@ const CombosLabComponent: React.FC<CombosLabProps> = ({
                     setComboPracticeActive(false);
                     playSynthBeep(600, 0.08);
                   }}
-                  className="bg-[#9A2B3C] text-white hover:bg-[#81262c] font-bold px-6 py-3 rounded-xl border border-[#9A2B3C] text-xs transition-all uppercase tracking-wider shadow-md"
+                  className="bg-[#C23E9E] text-white hover:bg-[#8F2C7A] font-bold px-6 py-3 rounded-xl border border-[#C23E9E] text-xs transition-all uppercase tracking-wider shadow-md"
                 >
                   ⏹️ DETENER PRÁCTICA
                 </button>

@@ -474,25 +474,25 @@ export default function WelcomeDashboard({
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="fixed top-6 right-6 z-50 bg-[#121212] border-2 border-[#E9C349] text-white px-5 py-3 rounded-2xl shadow-2xl flex items-center gap-3"
+            className="fixed top-6 right-6 z-50 bg-[#121212] border-2 border-[#D9A9FF] text-white px-5 py-3 rounded-2xl shadow-2xl flex items-center gap-3"
           >
-            <Sparkles className="w-5 h-5 text-[#E9C349] animate-spin" />
+            <Sparkles className="w-5 h-5 text-[#D9A9FF] animate-spin" />
             <span className="text-xs font-bold font-mono">{subscribedNotice}</span>
           </motion.div>
         )}
       </AnimatePresence>
 
       {/* 1. HERO BANNER DE BIENVENIDA (Clean, Motivating, High-Impact) */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#1c1a12] via-[#121212] to-[#0A0A0A] border border-[#E9C349]/40 p-6 sm:p-8 md:p-10 shadow-2xl">
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#1c1a12] via-[#121212] to-[#0A0A0A] border border-[#D9A9FF]/40 p-6 sm:p-8 md:p-10 shadow-2xl">
         {/* Background Ambient Glows */}
-        <div className="absolute top-0 right-0 w-96 h-96 bg-[#E9C349]/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 left-1/3 w-64 h-64 bg-[#9A2B3C]/15 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute top-0 right-0 w-96 h-96 bg-[#D9A9FF]/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 left-1/3 w-64 h-64 bg-[#C23E9E]/15 rounded-full blur-3xl pointer-events-none" />
 
         <div className="relative z-10 space-y-6">
           {/* Header Tag and Role Badge */}
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-4">
             <div className="flex items-center gap-2">
-              <span className="px-3 py-1 bg-[#E9C349] text-black text-[11px] font-mono font-black uppercase rounded-full shadow-md flex items-center gap-1.5">
+              <span className="px-3 py-1 bg-[#D9A9FF] text-black text-[11px] font-mono font-black uppercase rounded-full shadow-md flex items-center gap-1.5">
                 <Sparkles className="w-3.5 h-3.5 fill-black" />
                 <span>BIENVENIDO A WAACK ON</span>
               </span>
@@ -504,7 +504,7 @@ export default function WelcomeDashboard({
             {onSwitchToPracticeDashboard && (
               <button
                 onClick={onSwitchToPracticeDashboard}
-                className="px-4 py-1.5 bg-[#1a1a1a] hover:bg-[#262626] text-[#E9C349] hover:text-white border border-[#E9C349]/40 rounded-xl text-xs font-mono font-bold transition-all flex items-center gap-2 cursor-pointer shadow"
+                className="px-4 py-1.5 bg-[#1a1a1a] hover:bg-[#262626] text-[#D9A9FF] hover:text-white border border-[#D9A9FF]/40 rounded-xl text-xs font-mono font-bold transition-all flex items-center gap-2 cursor-pointer shadow"
               >
                 <span>Ir al Dashboard de Entrenamiento</span>
                 <ArrowRight className="w-3.5 h-3.5" />
@@ -516,7 +516,7 @@ export default function WelcomeDashboard({
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
             <div className="lg:col-span-8 space-y-3">
               <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white tracking-tight leading-tight">
-                ¡Hola, <span className="text-[#E9C349]">{currentUser.name || 'Bailarín'}</span>! Comienza tu viaje en el arte del <span className="underline decoration-[#9A2B3C] decoration-4">Waacking</span>.
+                ¡Hola, <span className="text-[#D9A9FF]">{currentUser.name || 'Bailarín'}</span>! Comienza tu viaje en el arte del <span className="underline decoration-[#C23E9E] decoration-4">Waacking</span>.
               </h1>
               <p className="text-sm sm:text-base text-slate-300 max-w-2xl leading-relaxed">
                 Has ingresado a la academia digital líder a nivel mundial en técnica biomecánica, entrenamiento rítmico a contratiempo, historia disco de los 70s y cátedras internacionales con maestros certificados.
@@ -528,7 +528,7 @@ export default function WelcomeDashboard({
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.97 }}
                   onClick={() => setActiveTab('cursos')}
-                  className="px-5 py-3 bg-[#E9C349] hover:bg-[#d8b33c] text-black font-bold text-xs uppercase tracking-wider rounded-xl shadow-lg transition-all flex items-center gap-2 cursor-pointer"
+                  className="px-5 py-3 bg-[#D9A9FF] hover:bg-[#B87CFF] text-black font-bold text-xs uppercase tracking-wider rounded-xl shadow-lg transition-all flex items-center gap-2 cursor-pointer"
                 >
                   <Play className="w-4 h-4 fill-black" />
                   <span>Iniciar Primera Lección (Nivel 1)</span>
@@ -545,7 +545,7 @@ export default function WelcomeDashboard({
                   }}
                   className="px-5 py-3 bg-[#1c1b1b] hover:bg-[#262626] text-white border border-white/20 font-bold text-xs uppercase tracking-wider rounded-xl shadow transition-all flex items-center gap-2 cursor-pointer"
                 >
-                  <Globe className="w-4 h-4 text-[#E9C349]" />
+                  <Globe className="w-4 h-4 text-[#D9A9FF]" />
                   <span>Explorar Profesores Globales</span>
                 </motion.button>
 
@@ -560,9 +560,9 @@ export default function WelcomeDashboard({
                       setActiveTab('planes');
                     }
                   }}
-                  className="px-5 py-3 bg-[#9A2B3C] hover:bg-[#81262c] text-white font-bold text-xs uppercase tracking-wider rounded-xl shadow transition-all flex items-center gap-2 cursor-pointer"
+                  className="px-5 py-3 bg-[#C23E9E] hover:bg-[#8F2C7A] text-white font-bold text-xs uppercase tracking-wider rounded-xl shadow transition-all flex items-center gap-2 cursor-pointer"
                 >
-                  <Award className="w-4 h-4 text-[#E9C349]" />
+                  <Award className="w-4 h-4 text-[#D9A9FF]" />
                   <span>Ver Planes & Membresías (Abajo)</span>
                 </motion.button>
               </div>
@@ -571,7 +571,7 @@ export default function WelcomeDashboard({
             {/* Quick Status / Quick Stats Snapshot */}
             <div className="lg:col-span-4 bg-[#0A0A0A]/80 border border-[#262626] rounded-2xl p-5 space-y-4 shadow-xl">
               <div className="flex items-center justify-between border-b border-white/10 pb-2">
-                <span className="text-[10px] font-mono font-bold text-[#E9C349] uppercase tracking-wider">
+                <span className="text-[10px] font-mono font-bold text-[#D9A9FF] uppercase tracking-wider">
                   Tu Perfil de Inicio
                 </span>
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
@@ -584,7 +584,7 @@ export default function WelcomeDashboard({
                 </div>
                 <div className="flex justify-between items-center text-slate-300">
                   <span className="text-slate-400 font-mono">Rol Actual:</span>
-                  <span className={`font-bold uppercase ${currentUser.role ? 'text-[#E9C349]' : 'text-slate-400'}`}>
+                  <span className={`font-bold uppercase ${currentUser.role ? 'text-[#D9A9FF]' : 'text-slate-400'}`}>
                     {currentUser.role 
                       ? (currentUser.role === 'student' ? 'Estudiante / Alumno' : currentUser.role === 'instructor' ? 'Docente / Instructor' : currentUser.role === 'studio' ? 'Academia / Estudio' : currentUser.role)
                       : 'Sin Rol (Requiere Suscripción a Instructor)'}
@@ -598,7 +598,7 @@ export default function WelcomeDashboard({
                 </div>
                 <div className="flex justify-between items-center text-slate-300">
                   <span className="text-slate-400 font-mono">Puntos Acumulados:</span>
-                  <span className="font-bold font-mono text-[#E9C349]">{currentUser.points || 0} PTS</span>
+                  <span className="font-bold font-mono text-[#D9A9FF]">{currentUser.points || 0} PTS</span>
                 </div>
               </div>
 
@@ -620,11 +620,11 @@ export default function WelcomeDashboard({
       </div>
 
       {/* GUÍA DE PRIMEROS PASOS PARA NUEVOS USUARIOS (Interactive Onboarding Roadmap) */}
-      <div className="bg-gradient-to-r from-[#141414] via-[#161410] to-[#141414] border border-[#E9C349]/30 rounded-3xl p-6 sm:p-7 shadow-2xl space-y-5">
+      <div className="bg-gradient-to-r from-[#141414] via-[#161410] to-[#141414] border border-[#D9A9FF]/30 rounded-3xl p-6 sm:p-7 shadow-2xl space-y-5">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/10 pb-4">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
-              <span className="text-[#E9C349] text-xl">🚀</span>
+              <span className="text-[#D9A9FF] text-xl">🚀</span>
               <h2 className="text-base sm:text-lg font-mono font-bold tracking-wider text-white uppercase">
                 GUÍA DE PRIMEROS PASOS DEL USUARIO
               </h2>
@@ -642,9 +642,9 @@ export default function WelcomeDashboard({
               <div className="flex items-center gap-3 bg-[#0A0A0A] px-4 py-2 rounded-2xl border border-white/10 self-start sm:self-auto">
                 <div className="text-right">
                   <span className="text-[10px] font-mono text-slate-400 block uppercase">Progreso Inicial</span>
-                  <span className="text-xs font-mono font-bold text-[#E9C349]">{completedCount} de 4 completados ({percentage}%)</span>
+                  <span className="text-xs font-mono font-bold text-[#D9A9FF]">{completedCount} de 4 completados ({percentage}%)</span>
                 </div>
-                <div className="w-8 h-8 rounded-full bg-[#E9C349]/10 border border-[#E9C349]/40 flex items-center justify-center text-[#E9C349] font-mono font-bold text-xs">
+                <div className="w-8 h-8 rounded-full bg-[#D9A9FF]/10 border border-[#D9A9FF]/40 flex items-center justify-center text-[#D9A9FF] font-mono font-bold text-xs">
                   {completedCount}/4
                 </div>
               </div>
@@ -660,12 +660,12 @@ export default function WelcomeDashboard({
             className={`p-4 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between space-y-3 ${
               completedSteps.explore 
                 ? 'bg-emerald-950/20 border-emerald-500/50' 
-                : 'bg-[#0A0A0A] border-[#262626] hover:border-[#E9C349]/50'
+                : 'bg-[#0A0A0A] border-[#262626] hover:border-[#D9A9FF]/50'
             }`}
           >
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <span className="text-[10px] font-mono font-bold text-[#E9C349] bg-[#E9C349]/10 px-2 py-0.5 rounded border border-[#E9C349]/20">
+                <span className="text-[10px] font-mono font-bold text-[#D9A9FF] bg-[#D9A9FF]/10 px-2 py-0.5 rounded border border-[#D9A9FF]/20">
                   PASO 1
                 </span>
                 <div className={`w-5 h-5 rounded-md flex items-center justify-center border ${
@@ -686,7 +686,7 @@ export default function WelcomeDashboard({
                 const el = document.getElementById('directorio-profesores-seccion');
                 if (el) el.scrollIntoView({ behavior: 'smooth' });
               }}
-              className="text-[11px] font-mono font-bold text-[#E9C349] hover:underline flex items-center gap-1 pt-1"
+              className="text-[11px] font-mono font-bold text-[#D9A9FF] hover:underline flex items-center gap-1 pt-1"
             >
               <span>Ver Profesores</span>
               <ArrowRight className="w-3 h-3" />
@@ -699,12 +699,12 @@ export default function WelcomeDashboard({
             className={`p-4 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between space-y-3 ${
               completedSteps.drill 
                 ? 'bg-emerald-950/20 border-emerald-500/50' 
-                : 'bg-[#0A0A0A] border-[#262626] hover:border-[#E9C349]/50'
+                : 'bg-[#0A0A0A] border-[#262626] hover:border-[#D9A9FF]/50'
             }`}
           >
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <span className="text-[10px] font-mono font-bold text-[#E9C349] bg-[#E9C349]/10 px-2 py-0.5 rounded border border-[#E9C349]/20">
+                <span className="text-[10px] font-mono font-bold text-[#D9A9FF] bg-[#D9A9FF]/10 px-2 py-0.5 rounded border border-[#D9A9FF]/20">
                   PASO 2
                 </span>
                 <div className={`w-5 h-5 rounded-md flex items-center justify-center border ${
@@ -724,7 +724,7 @@ export default function WelcomeDashboard({
                 e.stopPropagation();
                 setActiveTab('entrenamiento');
               }}
-              className="text-[11px] font-mono font-bold text-[#E9C349] hover:underline flex items-center gap-1 pt-1"
+              className="text-[11px] font-mono font-bold text-[#D9A9FF] hover:underline flex items-center gap-1 pt-1"
             >
               <span>Ir al Lab</span>
               <ArrowRight className="w-3 h-3" />
@@ -737,12 +737,12 @@ export default function WelcomeDashboard({
             className={`p-4 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between space-y-3 ${
               completedSteps.goals 
                 ? 'bg-emerald-950/20 border-emerald-500/50' 
-                : 'bg-[#0A0A0A] border-[#262626] hover:border-[#E9C349]/50'
+                : 'bg-[#0A0A0A] border-[#262626] hover:border-[#D9A9FF]/50'
             }`}
           >
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <span className="text-[10px] font-mono font-bold text-[#E9C349] bg-[#E9C349]/10 px-2 py-0.5 rounded border border-[#E9C349]/20">
+                <span className="text-[10px] font-mono font-bold text-[#D9A9FF] bg-[#D9A9FF]/10 px-2 py-0.5 rounded border border-[#D9A9FF]/20">
                   PASO 3
                 </span>
                 <div className={`w-5 h-5 rounded-md flex items-center justify-center border ${
@@ -762,7 +762,7 @@ export default function WelcomeDashboard({
                 e.stopPropagation();
                 setActiveTab('recursos');
               }}
-              className="text-[11px] font-mono font-bold text-[#E9C349] hover:underline flex items-center gap-1 pt-1"
+              className="text-[11px] font-mono font-bold text-[#D9A9FF] hover:underline flex items-center gap-1 pt-1"
             >
               <span>Ir a Metas & Clases</span>
               <ArrowRight className="w-3 h-3" />
@@ -775,12 +775,12 @@ export default function WelcomeDashboard({
             className={`p-4 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between space-y-3 ${
               completedSteps.community 
                 ? 'bg-emerald-950/20 border-emerald-500/50' 
-                : 'bg-[#0A0A0A] border-[#262626] hover:border-[#E9C349]/50'
+                : 'bg-[#0A0A0A] border-[#262626] hover:border-[#D9A9FF]/50'
             }`}
           >
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <span className="text-[10px] font-mono font-bold text-[#E9C349] bg-[#E9C349]/10 px-2 py-0.5 rounded border border-[#E9C349]/20">
+                <span className="text-[10px] font-mono font-bold text-[#D9A9FF] bg-[#D9A9FF]/10 px-2 py-0.5 rounded border border-[#D9A9FF]/20">
                   PASO 4
                 </span>
                 <div className={`w-5 h-5 rounded-md flex items-center justify-center border ${
@@ -800,7 +800,7 @@ export default function WelcomeDashboard({
                 e.stopPropagation();
                 setActiveTab('comunidad');
               }}
-              className="text-[11px] font-mono font-bold text-[#E9C349] hover:underline flex items-center gap-1 pt-1"
+              className="text-[11px] font-mono font-bold text-[#D9A9FF] hover:underline flex items-center gap-1 pt-1"
             >
               <span>Abrir Comunidad</span>
               <ArrowRight className="w-3 h-3" />
@@ -814,7 +814,7 @@ export default function WelcomeDashboard({
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pl-1">
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-[#E9C349] text-xl">🏛️</span>
+              <span className="text-[#D9A9FF] text-xl">🏛️</span>
               <h2 className="text-lg font-mono font-bold tracking-wider text-white uppercase">
                 ACERCA DE LA ACADEMIA WAACK ON
               </h2>
@@ -823,69 +823,69 @@ export default function WelcomeDashboard({
               Un ecosistema integral diseñado para transformar tu danza a través del rigor técnico y la libertad expresiva.
             </p>
           </div>
-          <span className="text-[10px] font-mono text-[#E9C349] bg-[#E9C349]/10 border border-[#E9C349]/30 px-3 py-1 rounded-full uppercase self-start sm:self-auto">
+          <span className="text-[10px] font-mono text-[#D9A9FF] bg-[#D9A9FF]/10 border border-[#D9A9FF]/30 px-3 py-1 rounded-full uppercase self-start sm:self-auto">
             Metodología Certificada
           </span>
         </div>
 
         {/* 4 Pillars Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="bg-[#121212] border border-[#262626] hover:border-[#E9C349]/40 transition-all rounded-2xl p-5 space-y-3 relative overflow-hidden group shadow-lg">
-            <div className="w-10 h-10 rounded-xl bg-[#E9C349]/10 border border-[#E9C349]/20 flex items-center justify-center text-[#E9C349]">
+          <div className="bg-[#121212] border border-[#262626] hover:border-[#D9A9FF]/40 transition-all rounded-2xl p-5 space-y-3 relative overflow-hidden group shadow-lg">
+            <div className="w-10 h-10 rounded-xl bg-[#D9A9FF]/10 border border-[#D9A9FF]/20 flex items-center justify-center text-[#D9A9FF]">
               <Layers className="w-5 h-5" />
             </div>
-            <h3 className="text-sm font-bold text-white group-hover:text-[#E9C349] transition-colors">
+            <h3 className="text-sm font-bold text-white group-hover:text-[#D9A9FF] transition-colors">
               1. Biomecánica & Rolls
             </h3>
             <p className="text-xs text-slate-400 leading-relaxed">
               Comprende el control de hombros, codos y muñecas para ejecutar wrist rolls y overhands con máxima velocidad sin lesiones ni tensión.
             </p>
-            <div className="pt-1 text-[10px] font-mono font-bold text-[#E9C349]">
+            <div className="pt-1 text-[10px] font-mono font-bold text-[#D9A9FF]">
               ✓ Prevención y ergonomía
             </div>
           </div>
 
-          <div className="bg-[#121212] border border-[#262626] hover:border-[#E9C349]/40 transition-all rounded-2xl p-5 space-y-3 relative overflow-hidden group shadow-lg">
-            <div className="w-10 h-10 rounded-xl bg-[#9A2B3C]/20 border border-[#9A2B3C]/40 flex items-center justify-center text-[#E9C349]">
+          <div className="bg-[#121212] border border-[#262626] hover:border-[#D9A9FF]/40 transition-all rounded-2xl p-5 space-y-3 relative overflow-hidden group shadow-lg">
+            <div className="w-10 h-10 rounded-xl bg-[#C23E9E]/20 border border-[#C23E9E]/40 flex items-center justify-center text-[#D9A9FF]">
               <Music className="w-5 h-5" />
             </div>
-            <h3 className="text-sm font-bold text-white group-hover:text-[#E9C349] transition-colors">
+            <h3 className="text-sm font-bold text-white group-hover:text-[#D9A9FF] transition-colors">
               2. Ritmo & Síncopas
             </h3>
             <p className="text-xs text-slate-400 leading-relaxed">
               Entrena tu oído con metrónomo háptico y pistas clásicas de Disco/Funk de 100 a 135 BPM para clavar cada contratiempo con precisión.
             </p>
-            <div className="pt-1 text-[10px] font-mono font-bold text-[#E9C349]">
+            <div className="pt-1 text-[10px] font-mono font-bold text-[#D9A9FF]">
               ✓ Laboratorio de tempo
             </div>
           </div>
 
-          <div className="bg-[#121212] border border-[#262626] hover:border-[#E9C349]/40 transition-all rounded-2xl p-5 space-y-3 relative overflow-hidden group shadow-lg">
+          <div className="bg-[#121212] border border-[#262626] hover:border-[#D9A9FF]/40 transition-all rounded-2xl p-5 space-y-3 relative overflow-hidden group shadow-lg">
             <div className="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/30 flex items-center justify-center text-purple-300">
               <Sparkles className="w-5 h-5" />
             </div>
-            <h3 className="text-sm font-bold text-white group-hover:text-[#E9C349] transition-colors">
+            <h3 className="text-sm font-bold text-white group-hover:text-[#D9A9FF] transition-colors">
               3. Posing & Teatro 70s
             </h3>
             <p className="text-xs text-slate-400 leading-relaxed">
               Aprende la esencia de la pasarela y la narrativa dramática. Convierte cada pose en una declaración de carácter y estilo personal.
             </p>
-            <div className="pt-1 text-[10px] font-mono font-bold text-[#E9C349]">
+            <div className="pt-1 text-[10px] font-mono font-bold text-[#D9A9FF]">
               ✓ Cultura y autenticidad
             </div>
           </div>
 
-          <div className="bg-[#121212] border border-[#262626] hover:border-[#E9C349]/40 transition-all rounded-2xl p-5 space-y-3 relative overflow-hidden group shadow-lg">
+          <div className="bg-[#121212] border border-[#262626] hover:border-[#D9A9FF]/40 transition-all rounded-2xl p-5 space-y-3 relative overflow-hidden group shadow-lg">
             <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
               <Users className="w-5 h-5" />
             </div>
-            <h3 className="text-sm font-bold text-white group-hover:text-[#E9C349] transition-colors">
+            <h3 className="text-sm font-bold text-white group-hover:text-[#D9A9FF] transition-colors">
               4. Comunidad Global
             </h3>
             <p className="text-xs text-slate-400 leading-relaxed">
               Conéctate con bailarines de más de 20 países, comparte videos de práctica, recibe correcciones y participa en batallas virtuales.
             </p>
-            <div className="pt-1 text-[10px] font-mono font-bold text-[#E9C349]">
+            <div className="pt-1 text-[10px] font-mono font-bold text-[#D9A9FF]">
               ✓ Red internacional
             </div>
           </div>
@@ -896,7 +896,7 @@ export default function WelcomeDashboard({
       <div className="space-y-4">
         <div className="flex items-center justify-between pl-1">
           <div className="flex items-center gap-2">
-            <span className="text-[#E9C349] text-xl">🧭</span>
+            <span className="text-[#D9A9FF] text-xl">🧭</span>
             <h2 className="text-lg font-mono font-bold tracking-wider text-white uppercase">
               EXPLORA LOS MÓDULOS DE LA PLATAFORMA
             </h2>
@@ -910,25 +910,25 @@ export default function WelcomeDashboard({
             whileHover={{ scale: 1.02, y: -2 }}
             whileTap={{ scale: 0.98 }}
             onClick={() => setActiveTab('cursos')}
-            className="bg-[#121212] border border-[#262626] hover:border-[#E9C349] rounded-2xl p-5 flex flex-col justify-between cursor-pointer group shadow-xl transition-all relative overflow-hidden"
+            className="bg-[#121212] border border-[#262626] hover:border-[#D9A9FF] rounded-2xl p-5 flex flex-col justify-between cursor-pointer group shadow-xl transition-all relative overflow-hidden"
           >
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <div className="p-2.5 rounded-xl bg-[#E9C349]/10 text-[#E9C349] border border-[#E9C349]/30">
+                <div className="p-2.5 rounded-xl bg-[#D9A9FF]/10 text-[#D9A9FF] border border-[#D9A9FF]/30">
                   <GraduationCap className="w-5 h-5" />
                 </div>
                 <span className="text-[10px] font-mono font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/30">
                   6 Niveles Disponibles
                 </span>
               </div>
-              <h3 className="text-base font-bold text-white group-hover:text-[#E9C349] transition-colors">
+              <h3 className="text-base font-bold text-white group-hover:text-[#D9A9FF] transition-colors">
                 Cursos & Clases Estructuradas
               </h3>
               <p className="text-xs text-slate-400 leading-relaxed">
                 Currículo progresivo desde Fundamentos de Muñecas (Nivel 1) hasta Combos Rápidos y Simetría Escénica (Nivel 5-6).
               </p>
             </div>
-            <div className="mt-4 pt-3 border-t border-white/5 flex items-center justify-between text-xs font-mono text-[#E9C349]">
+            <div className="mt-4 pt-3 border-t border-white/5 flex items-center justify-between text-xs font-mono text-[#D9A9FF]">
               <span>Comenzar a aprender</span>
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </div>
@@ -939,25 +939,25 @@ export default function WelcomeDashboard({
             whileHover={{ scale: 1.02, y: -2 }}
             whileTap={{ scale: 0.98 }}
             onClick={() => setActiveTab('entrenamiento')}
-            className="bg-[#121212] border border-[#262626] hover:border-[#E9C349] rounded-2xl p-5 flex flex-col justify-between cursor-pointer group shadow-xl transition-all relative overflow-hidden"
+            className="bg-[#121212] border border-[#262626] hover:border-[#D9A9FF] rounded-2xl p-5 flex flex-col justify-between cursor-pointer group shadow-xl transition-all relative overflow-hidden"
           >
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <div className="p-2.5 rounded-xl bg-[#9A2B3C]/20 text-[#E9C349] border border-[#9A2B3C]/40">
+                <div className="p-2.5 rounded-xl bg-[#C23E9E]/20 text-[#D9A9FF] border border-[#C23E9E]/40">
                   <Zap className="w-5 h-5" />
                 </div>
                 <span className="text-[10px] font-mono font-bold text-cyan-400 bg-cyan-500/10 px-2 py-0.5 rounded-full border border-cyan-500/30">
                   Audio + Metrónomo Lab
                 </span>
               </div>
-              <h3 className="text-base font-bold text-white group-hover:text-[#E9C349] transition-colors">
+              <h3 className="text-base font-bold text-white group-hover:text-[#D9A9FF] transition-colors">
                 Laboratorio de Entrenamiento
               </h3>
               <p className="text-xs text-slate-400 leading-relaxed">
                 Generador de retos aleatorios de freestyle, metrónomo sincronizado, espejo virtual reflectivo y biblioteca musical clasificada.
               </p>
             </div>
-            <div className="mt-4 pt-3 border-t border-white/5 flex items-center justify-between text-xs font-mono text-[#E9C349]">
+            <div className="mt-4 pt-3 border-t border-white/5 flex items-center justify-between text-xs font-mono text-[#D9A9FF]">
               <span>Entrenar ahora</span>
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </div>
@@ -968,7 +968,7 @@ export default function WelcomeDashboard({
             whileHover={{ scale: 1.02, y: -2 }}
             whileTap={{ scale: 0.98 }}
             onClick={() => setActiveTab('comunidad')}
-            className="bg-[#121212] border border-[#262626] hover:border-[#E9C349] rounded-2xl p-5 flex flex-col justify-between cursor-pointer group shadow-xl transition-all relative overflow-hidden"
+            className="bg-[#121212] border border-[#262626] hover:border-[#D9A9FF] rounded-2xl p-5 flex flex-col justify-between cursor-pointer group shadow-xl transition-all relative overflow-hidden"
           >
             <div className="space-y-3">
               <div className="flex items-center justify-between">
@@ -979,14 +979,14 @@ export default function WelcomeDashboard({
                   Chat & Duelos 1v1
                 </span>
               </div>
-              <h3 className="text-base font-bold text-white group-hover:text-[#E9C349] transition-colors">
+              <h3 className="text-base font-bold text-white group-hover:text-[#D9A9FF] transition-colors">
                 Comunidad Global & Duelos
               </h3>
               <p className="text-xs text-slate-400 leading-relaxed">
                 Interactúa en el lobby de alumnos, crea salas de práctica grupales, reta a amigos a batallas amistosas y comparte avances.
               </p>
             </div>
-            <div className="mt-4 pt-3 border-t border-white/5 flex items-center justify-between text-xs font-mono text-[#E9C349]">
+            <div className="mt-4 pt-3 border-t border-white/5 flex items-center justify-between text-xs font-mono text-[#D9A9FF]">
               <span>Entrar a la comunidad</span>
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </div>
@@ -1016,7 +1016,7 @@ export default function WelcomeDashboard({
               placeholder="Buscar profesor o estilo..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full md:w-64 bg-[#0A0A0A] border border-[#262626] rounded-xl pl-9 pr-3 py-2 text-xs text-white placeholder-slate-500 focus:border-[#E9C349] outline-none"
+              className="w-full md:w-64 bg-[#0A0A0A] border border-[#262626] rounded-xl pl-9 pr-3 py-2 text-xs text-white placeholder-slate-500 focus:border-[#D9A9FF] outline-none"
             />
             <Search className="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
           </div>
@@ -1038,7 +1038,7 @@ export default function WelcomeDashboard({
               onClick={() => setSelectedSpecialty(filter.id)}
               className={`px-3 py-1.5 text-xs font-mono font-bold rounded-xl transition-all cursor-pointer ${
                 selectedSpecialty === filter.id
-                  ? 'bg-[#E9C349] text-black shadow-md'
+                  ? 'bg-[#D9A9FF] text-black shadow-md'
                   : 'bg-[#141414] text-[#8A8A8A] hover:text-white border border-white/5'
               }`}
             >
@@ -1059,7 +1059,7 @@ export default function WelcomeDashboard({
                   isAssigned
                     ? 'border-emerald-500/80 bg-gradient-to-b from-[#111f18] via-[#121212] to-[#121212]'
                     : inst.featured 
-                    ? 'border-[#E9C349]/60 bg-gradient-to-b from-[#1a1710] to-[#121212]' 
+                    ? 'border-[#D9A9FF]/60 bg-gradient-to-b from-[#1a1710] to-[#121212]' 
                     : 'border-[#262626] hover:border-white/30'
                 }`}
               >
@@ -1070,7 +1070,7 @@ export default function WelcomeDashboard({
                     <span>✓ Tu Mentor Asignado</span>
                   </div>
                 ) : inst.featured ? (
-                  <div className="absolute -top-3 right-5 bg-[#E9C349] text-black text-[9px] font-mono font-black uppercase px-3 py-0.5 rounded-full shadow-lg flex items-center gap-1">
+                  <div className="absolute -top-3 right-5 bg-[#D9A9FF] text-black text-[9px] font-mono font-black uppercase px-3 py-0.5 rounded-full shadow-lg flex items-center gap-1">
                     <Star className="w-3 h-3 fill-black" />
                     <span>{inst.badge}</span>
                   </div>
@@ -1084,7 +1084,7 @@ export default function WelcomeDashboard({
                         src={inst.avatar}
                         alt={inst.name}
                         className={`w-16 h-16 rounded-2xl object-cover border-2 shadow-md group-hover:scale-105 transition-transform ${
-                          isAssigned ? 'border-emerald-400' : 'border-[#E9C349]'
+                          isAssigned ? 'border-emerald-400' : 'border-[#D9A9FF]'
                         }`}
                       />
                       <span className="absolute -bottom-1 -right-1 text-xs">
@@ -1093,10 +1093,10 @@ export default function WelcomeDashboard({
                     </div>
 
                     <div className="min-w-0">
-                      <h3 className="text-base font-bold text-white group-hover:text-[#E9C349] transition-colors truncate">
+                      <h3 className="text-base font-bold text-white group-hover:text-[#D9A9FF] transition-colors truncate">
                         {inst.name}
                       </h3>
-                      <p className="text-[11px] font-mono text-[#E9C349] font-bold truncate">
+                      <p className="text-[11px] font-mono text-[#D9A9FF] font-bold truncate">
                         {inst.role}
                       </p>
                       <div className="flex items-center gap-2 mt-1 text-[10px] font-mono text-slate-400">
@@ -1128,7 +1128,7 @@ export default function WelcomeDashboard({
 
                   {/* Plan Highlights */}
                   <div className="bg-[#0A0A0A] p-3 rounded-xl border border-white/5 space-y-1.5">
-                    <span className="text-[9px] font-mono font-bold text-[#E9C349] uppercase block">
+                    <span className="text-[9px] font-mono font-bold text-[#D9A9FF] uppercase block">
                       Beneficios de su Cátedra:
                     </span>
                     {inst.planHighlights.map((hl, hIdx) => (
@@ -1145,7 +1145,7 @@ export default function WelcomeDashboard({
                   <div className="flex items-center justify-between">
                     <div>
                       <span className="text-[9px] font-mono text-slate-400 block uppercase">Pase Cátedra</span>
-                      <span className="text-base font-black font-mono text-white text-[#E9C349]">
+                      <span className="text-base font-black font-mono text-white text-[#D9A9FF]">
                         {inst.monthlyPrice}
                       </span>
                     </div>
@@ -1154,7 +1154,7 @@ export default function WelcomeDashboard({
                       onClick={() => setPreviewInstructor(inst)}
                       className="text-xs font-mono text-slate-400 hover:text-white underline cursor-pointer flex items-center gap-1"
                     >
-                      <BookOpen className="w-3.5 h-3.5 text-[#E9C349]" />
+                      <BookOpen className="w-3.5 h-3.5 text-[#D9A9FF]" />
                       <span>Ver Programa 4 Semanas</span>
                     </button>
                   </div>
@@ -1168,7 +1168,7 @@ export default function WelcomeDashboard({
                           : 'bg-[#1c1b1b] hover:bg-[#262626] text-white border-white/10'
                       }`}
                     >
-                      <UserCheck className="w-3.5 h-3.5 text-[#E9C349]" />
+                      <UserCheck className="w-3.5 h-3.5 text-[#D9A9FF]" />
                       <span>{isAssigned ? 'Asignado ✓' : 'Asignar Mentor'}</span>
                     </button>
 
@@ -1176,7 +1176,7 @@ export default function WelcomeDashboard({
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                       onClick={() => handleSubscribeClick(inst)}
-                      className="py-2 bg-[#E9C349] hover:bg-[#d8b33c] text-black font-bold text-xs uppercase tracking-wider rounded-xl shadow-md transition-all flex items-center justify-center gap-1 cursor-pointer"
+                      className="py-2 bg-[#D9A9FF] hover:bg-[#B87CFF] text-black font-bold text-xs uppercase tracking-wider rounded-xl shadow-md transition-all flex items-center justify-center gap-1 cursor-pointer"
                     >
                       <span>Suscribirse</span>
                       <ChevronRight className="w-3.5 h-3.5" />
@@ -1210,21 +1210,21 @@ export default function WelcomeDashboard({
                 <img
                   src={previewInstructor.avatar}
                   alt={previewInstructor.name}
-                  className="w-16 h-16 rounded-2xl object-cover border-2 border-[#E9C349] shadow-md"
+                  className="w-16 h-16 rounded-2xl object-cover border-2 border-[#D9A9FF] shadow-md"
                 />
                 <div>
                   <div className="flex items-center gap-2">
                     <h3 className="text-xl font-extrabold text-white">{previewInstructor.name}</h3>
                     <span className="text-xs">{previewInstructor.country}</span>
                   </div>
-                  <p className="text-xs font-mono font-bold text-[#E9C349]">{previewInstructor.role}</p>
+                  <p className="text-xs font-mono font-bold text-[#D9A9FF]">{previewInstructor.role}</p>
                   <p className="text-[11px] text-slate-400 mt-0.5">Cátedra Oficial • {previewInstructor.monthlyPrice}</p>
                 </div>
               </div>
 
               <div className="space-y-4">
                 <div className="flex items-center gap-2 text-white">
-                  <Calendar className="w-5 h-5 text-[#E9C349]" />
+                  <Calendar className="w-5 h-5 text-[#D9A9FF]" />
                   <h4 className="text-sm font-mono font-bold uppercase tracking-wider">
                     Plan de Estudios & Programa (4 Semanas)
                   </h4>
@@ -1234,7 +1234,7 @@ export default function WelcomeDashboard({
                   {previewInstructor.syllabus.map((wk) => (
                     <div key={wk.week} className="bg-[#0A0A0A] border border-[#262626] rounded-2xl p-4 space-y-2">
                       <div className="flex items-center justify-between">
-                        <span className="text-xs font-bold text-[#E9C349] font-mono uppercase">
+                        <span className="text-xs font-bold text-[#D9A9FF] font-mono uppercase">
                           {wk.title}
                         </span>
                         <span className="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/30">
@@ -1257,7 +1257,7 @@ export default function WelcomeDashboard({
               <div className="pt-2 border-t border-white/10 flex flex-wrap items-center justify-between gap-3">
                 <div>
                   <span className="text-[10px] font-mono text-slate-400 block uppercase">Precio de la Cátedra</span>
-                  <span className="text-lg font-black font-mono text-[#E9C349]">{previewInstructor.monthlyPrice}</span>
+                  <span className="text-lg font-black font-mono text-[#D9A9FF]">{previewInstructor.monthlyPrice}</span>
                 </div>
 
                 <div className="flex items-center gap-2">
@@ -1265,7 +1265,7 @@ export default function WelcomeDashboard({
                     onClick={() => handleAssignInstructor(previewInstructor)}
                     className="px-4 py-2.5 bg-[#1c1b1b] hover:bg-[#262626] text-white border border-white/10 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer flex items-center gap-1.5"
                   >
-                    <UserCheck className="w-4 h-4 text-[#E9C349]" />
+                    <UserCheck className="w-4 h-4 text-[#D9A9FF]" />
                     <span>Asignar como Mentor</span>
                   </button>
 
@@ -1273,7 +1273,7 @@ export default function WelcomeDashboard({
                     whileHover={{ scale: 1.03 }}
                     whileTap={{ scale: 0.97 }}
                     onClick={() => handleSubscribeClick(previewInstructor)}
-                    className="px-5 py-2.5 bg-[#E9C349] hover:bg-[#d8b33c] text-black font-black text-xs uppercase tracking-wider rounded-xl shadow-lg transition-all flex items-center gap-1.5 cursor-pointer"
+                    className="px-5 py-2.5 bg-[#D9A9FF] hover:bg-[#B87CFF] text-black font-black text-xs uppercase tracking-wider rounded-xl shadow-lg transition-all flex items-center gap-1.5 cursor-pointer"
                   >
                     <Sparkles className="w-4 h-4 fill-black" />
                     <span>Confirmar Suscripción</span>
@@ -1288,12 +1288,12 @@ export default function WelcomeDashboard({
       {/* 5. SELECCIÓN DE PLANES Y MEMBRESÍAS (Comprehensive Pricing & Action Cards) */}
       <div id="planes-suscripcion-seccion" className="space-y-6 pt-6 scroll-mt-10">
         <div className="text-center max-w-3xl mx-auto space-y-3">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#E9C349]/15 border border-[#E9C349]/40 text-[#E9C349] font-mono text-[11px] font-black uppercase tracking-widest">
-            <Crown className="w-3.5 h-3.5 text-[#E9C349]" />
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#D9A9FF]/15 border border-[#D9A9FF]/40 text-[#D9A9FF] font-mono text-[11px] font-black uppercase tracking-widest">
+            <Crown className="w-3.5 h-3.5 text-[#D9A9FF]" />
             <span>MEMBRESÍAS Y PLANES DE SUSCRIPCIÓN</span>
           </div>
           <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight font-mono uppercase">
-            Planes de Suscripción Oficiales <span className="text-[#E9C349]">WAACK ON®</span>
+            Planes de Suscripción Oficiales <span className="text-[#D9A9FF]">WAACK ON®</span>
           </h2>
           <p className="text-xs sm:text-sm text-slate-300 max-w-xl mx-auto leading-relaxed">
             Estructura transparente y sin permanencias. Elige el plan ideal para evolucionar tu nivel como bailarín o profesionalizar tu cátedra docente.
@@ -1409,17 +1409,17 @@ export default function WelcomeDashboard({
           </div>
 
           {/* Plan 3: Membresía Cátedra de Instructor ($15 USD) - DESTACADO */}
-          <div className="bg-gradient-to-b from-[#1E172E] to-[#120E1E] border-2 border-[#E9C349] rounded-3xl p-6 flex flex-col justify-between space-y-6 relative overflow-hidden shadow-[0_0_35px_rgba(233,195,73,0.25)] hover:border-yellow-300 transition-all">
-            <div className="absolute top-0 right-0 bg-[#E9C349] text-black text-[9px] font-mono font-black uppercase px-3 py-1 rounded-bl-2xl shadow-md">
+          <div className="bg-gradient-to-b from-[#1E172E] to-[#120E1E] border-2 border-[#D9A9FF] rounded-3xl p-6 flex flex-col justify-between space-y-6 relative overflow-hidden shadow-[0_0_35px_rgba(217, 169, 255,0.25)] hover:border-yellow-300 transition-all">
+            <div className="absolute top-0 right-0 bg-[#D9A9FF] text-black text-[9px] font-mono font-black uppercase px-3 py-1 rounded-bl-2xl shadow-md">
               RECOMENDADO
             </div>
 
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <span className="px-3 py-1 bg-[#E9C349]/20 border border-[#E9C349]/40 text-[#E9C349] text-[10px] font-mono font-black rounded-full uppercase tracking-wider">
+                <span className="px-3 py-1 bg-[#D9A9FF]/20 border border-[#D9A9FF]/40 text-[#D9A9FF] text-[10px] font-mono font-black rounded-full uppercase tracking-wider">
                   PASE CÁTEDRA
                 </span>
-                <GraduationCap className="w-5 h-5 text-[#E9C349]" />
+                <GraduationCap className="w-5 h-5 text-[#D9A9FF]" />
               </div>
 
               <div>
@@ -1431,9 +1431,9 @@ export default function WelcomeDashboard({
                 </p>
               </div>
 
-              <div className="pt-2 border-t border-[#E9C349]/30">
+              <div className="pt-2 border-t border-[#D9A9FF]/30">
                 <div className="flex items-baseline gap-1">
-                  <span className="text-3xl font-black text-[#E9C349] font-mono">$15.00</span>
+                  <span className="text-3xl font-black text-[#D9A9FF] font-mono">$15.00</span>
                   <span className="text-xs font-mono text-slate-300">USD / mes</span>
                 </div>
                 <div className="mt-1 px-2 py-0.5 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-[9px] font-mono font-bold flex items-center gap-1">
@@ -1444,15 +1444,15 @@ export default function WelcomeDashboard({
 
               <ul className="space-y-2 text-xs text-slate-300">
                 <li className="flex items-start gap-2">
-                  <Check className="w-4 h-4 text-[#E9C349] shrink-0 mt-0.5" />
+                  <Check className="w-4 h-4 text-[#D9A9FF] shrink-0 mt-0.5" />
                   <span><strong>Acceso Total Cursos HD</strong>: Del maestro</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <Check className="w-4 h-4 text-[#E9C349] shrink-0 mt-0.5" />
+                  <Check className="w-4 h-4 text-[#D9A9FF] shrink-0 mt-0.5" />
                   <span><strong>Feedback Biomecánico 1v1</strong>: En video</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <Check className="w-4 h-4 text-[#E9C349] shrink-0 mt-0.5" />
+                  <Check className="w-4 h-4 text-[#D9A9FF] shrink-0 mt-0.5" />
                   <span><strong>Google Meet & Classroom</strong>: Evaluaciones</span>
                 </li>
               </ul>
@@ -1462,7 +1462,7 @@ export default function WelcomeDashboard({
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               onClick={() => onOpenPlansModal ? onOpenPlansModal() : setActiveTab('planes')}
-              className="w-full py-3.5 bg-[#E9C349] hover:bg-yellow-300 text-black font-mono font-black text-xs rounded-2xl uppercase transition-all shadow-lg active:scale-95 flex items-center justify-center gap-2 cursor-pointer"
+              className="w-full py-3.5 bg-[#D9A9FF] hover:bg-yellow-300 text-black font-mono font-black text-xs rounded-2xl uppercase transition-all shadow-lg active:scale-95 flex items-center justify-center gap-2 cursor-pointer"
             >
               <Zap className="w-4 h-4 fill-black" />
               <span>Suscribirse ($15 USD)</span>
@@ -1528,9 +1528,9 @@ export default function WelcomeDashboard({
         <div className="flex justify-center pt-2">
           <button
             onClick={() => setActiveTab('planes')}
-            className="px-6 py-2.5 bg-[#121212] hover:bg-[#1C1C1C] text-[#E9C349] border border-[#E9C349]/40 rounded-2xl text-xs font-mono font-bold transition-all flex items-center gap-2 cursor-pointer shadow-md hover:border-[#E9C349]"
+            className="px-6 py-2.5 bg-[#121212] hover:bg-[#1C1C1C] text-[#D9A9FF] border border-[#D9A9FF]/40 rounded-2xl text-xs font-mono font-bold transition-all flex items-center gap-2 cursor-pointer shadow-md hover:border-[#D9A9FF]"
           >
-            <ShieldCheck className="w-4 h-4 text-[#E9C349]" />
+            <ShieldCheck className="w-4 h-4 text-[#D9A9FF]" />
             <span>Ver Tabla Comparativa Completa de Beneficios & Planes</span>
             <ArrowRight className="w-4 h-4" />
           </button>
@@ -1541,7 +1541,7 @@ export default function WelcomeDashboard({
       <div className="bg-[#121212] border border-[#262626] rounded-2xl p-6 space-y-4">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 border-b border-white/10 pb-3">
           <div className="flex items-center gap-2">
-            <Sliders className="w-5 h-5 text-[#E9C349]" />
+            <Sliders className="w-5 h-5 text-[#D9A9FF]" />
             <h3 className="text-sm font-mono font-bold text-white uppercase tracking-wider">
               ¿Cuál es tu propósito principal en Waack On?
             </h3>
@@ -1556,13 +1556,13 @@ export default function WelcomeDashboard({
             onClick={() => handleChooseRole('student')}
             className={`p-4 rounded-xl border cursor-pointer transition-all ${
               currentUser.role === 'student'
-                ? 'bg-[#E9C349]/10 border-[#E9C349] text-white'
+                ? 'bg-[#D9A9FF]/10 border-[#D9A9FF] text-white'
                 : 'bg-[#0A0A0A] border-[#262626] text-slate-300 hover:border-white/20'
             }`}
           >
             <div className="flex items-center justify-between mb-1">
               <span className="text-xs font-bold uppercase font-mono">💃 Estudiante / Bailarín</span>
-              {currentUser.role === 'student' && <CheckCircle2 className="w-4 h-4 text-[#E9C349]" />}
+              {currentUser.role === 'student' && <CheckCircle2 className="w-4 h-4 text-[#D9A9FF]" />}
             </div>
             <p className="text-[11px] text-slate-400">
               Quiero aprender técnica, entrenar con metrónomo y subir de nivel en la academia.
@@ -1573,13 +1573,13 @@ export default function WelcomeDashboard({
             onClick={() => handleChooseRole('instructor')}
             className={`p-4 rounded-xl border cursor-pointer transition-all ${
               currentUser.role === 'instructor'
-                ? 'bg-[#E9C349]/10 border-[#E9C349] text-white'
+                ? 'bg-[#D9A9FF]/10 border-[#D9A9FF] text-white'
                 : 'bg-[#0A0A0A] border-[#262626] text-slate-300 hover:border-white/20'
             }`}
           >
             <div className="flex items-center justify-between mb-1">
               <span className="text-xs font-bold uppercase font-mono">🎓 Instructor / Docente</span>
-              {currentUser.role === 'instructor' && <CheckCircle2 className="w-4 h-4 text-[#E9C349]" />}
+              {currentUser.role === 'instructor' && <CheckCircle2 className="w-4 h-4 text-[#D9A9FF]" />}
             </div>
             <p className="text-[11px] text-slate-400">
               Quiero abrir mi cátedra, publicar anuncios, corregir tareas y gestionar alumnos.
@@ -1590,13 +1590,13 @@ export default function WelcomeDashboard({
             onClick={() => handleChooseRole('studio')}
             className={`p-4 rounded-xl border cursor-pointer transition-all ${
               currentUser.role === 'studio'
-                ? 'bg-[#E9C349]/10 border-[#E9C349] text-white'
+                ? 'bg-[#D9A9FF]/10 border-[#D9A9FF] text-white'
                 : 'bg-[#0A0A0A] border-[#262626] text-slate-300 hover:border-white/20'
             }`}
           >
             <div className="flex items-center justify-between mb-1">
               <span className="text-xs font-bold uppercase font-mono">🏢 Estudio / Academia</span>
-              {currentUser.role === 'studio' && <CheckCircle2 className="w-4 h-4 text-[#E9C349]" />}
+              {currentUser.role === 'studio' && <CheckCircle2 className="w-4 h-4 text-[#D9A9FF]" />}
             </div>
             <p className="text-[11px] text-slate-400">
               Quiero administrar múltiples instructores, eventos y matrícula institucional.

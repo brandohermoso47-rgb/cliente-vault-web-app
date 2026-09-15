@@ -12,7 +12,7 @@ import {
   limit,
   serverTimestamp 
 } from 'firebase/firestore';
-import { db, auth, handleFirestoreError, OperationType } from '../firebase';
+import { db, auth, handleFirestoreError, OperationType, sanitizeFirestoreData } from '../firebase';
 import { User, FriendshipDoc, BattleDoc } from '../types';
 
 /**
@@ -39,7 +39,7 @@ export async function upsertUserProfile(user: User, customUsername?: string) {
       isOnline: user.status === 'online' || user.status === 'in_battle' || true,
       updatedAt: new Date().toISOString()
     };
-    await setDoc(doc(db, 'users', targetUid), userPayload, { merge: true });
+    await setDoc(doc(db, 'users', targetUid), sanitizeFirestoreData(userPayload), { merge: true });
   } catch (err) {
     console.warn('Notice: Could not sync user profile to Firestore:', err);
   }
@@ -122,7 +122,7 @@ export async function sendFriendRequest(currentUserId: string, targetUserId: str
       requestedBy: currentUserId,
       createdAt: new Date().toISOString()
     };
-    await setDoc(doc(db, 'friendships', friendshipId), friendshipData, { merge: true });
+    await setDoc(doc(db, 'friendships', friendshipId), sanitizeFirestoreData(friendshipData), { merge: true });
     return friendshipId;
   } catch (err) {
     handleFirestoreError(err, OperationType.WRITE, path);
@@ -262,7 +262,7 @@ export async function createBattleInvitation(hostUser: User, guestUser: User): P
       guestScore: 0
     };
 
-    await setDoc(doc(db, 'battles', battleId), battleData);
+    await setDoc(doc(db, 'battles', battleId), sanitizeFirestoreData(battleData));
     return battleId;
   } catch (err) {
     handleFirestoreError(err, OperationType.WRITE, path);

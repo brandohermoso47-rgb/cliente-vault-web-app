@@ -1,5 +1,12 @@
 @import "tailwindcss";
 
+/* ============================================================================
+   WAACK ON — Liquid Glass Design System
+   Palette: void black ground, frosted glass panels, violet -> rose -> cyan
+   glow that drives both the animated background (see GlowField.tsx) and
+   every card / button surface via the shared --h (hue) custom property.
+   ============================================================================ */
+
 @theme {
   --font-sans: "Geist", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "Geist Mono", ui-monospace, monospace;
@@ -8,22 +15,32 @@
   --color-bg: #0A0A0C;
   --color-surface: #141418;
   --color-ink: #F0F2F7;
-  --color-accent: #E9C349;
-  --color-accent-dim: rgba(233, 195, 73, 0.15);
+  --color-accent: #D9A9FF;
+  --color-accent-dim: rgba(217, 169, 255, 0.15);
 
   --color-brand-bg: #0A0A0C;
   --color-brand-dark: #F0F2F7;
-  --color-brand-pink: #9A2B3C;
-  --color-brand-cyan: #E9C349;
+  --color-brand-pink: #C23E9E;
+  --color-brand-cyan: #7DD3FC;
 }
 
 :root {
   --bg: #0A0A0C;
+  --void: #08060d;
   --surface: #141418;
   --ink: #F0F2F7;
-  --accent: #E9C349;
-  --accent-dim: rgba(233, 195, 73, 0.15);
+  --accent: #D9A9FF;
+  --accent-dim: rgba(217, 169, 255, 0.15);
   --border-light: 1px solid rgba(240, 242, 247, 0.16);
+
+  /* Liquid-glass hue driver. GlowField.tsx animates this every frame between
+     ~250 (violet) and ~335 (rose), sweeping through the accent's own range so
+     the background glow and every glass card/button stay in the same light. */
+  --h: 285;
+
+  --glass-fill: linear-gradient(160deg, rgba(255,255,255,.09), rgba(255,255,255,.02));
+  --glass-border: rgba(255,255,255,.16);
+  --glass-glow: hsla(var(--h), 85%, 65%, .45);
 }
 
 html {
@@ -31,10 +48,90 @@ html {
 }
 
 body {
-  background-color: var(--bg);
+  background-color: var(--void);
   color: var(--ink);
   font-family: 'Geist', sans-serif;
   overflow-x: hidden;
+}
+
+/* ---------------------------------------------------------------------------
+   Ambient volumetric glow field (rendered by <GlowField/>, mounted once at
+   the app root, fixed behind all content). Colors read from --h so they stay
+   perfectly in sync with every glass surface below.
+   --------------------------------------------------------------------------- */
+.glow-field {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.glow-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  mix-blend-mode: screen;
+  will-change: transform;
+}
+.glow-vignette {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: radial-gradient(ellipse 85% 65% at 50% 38%, transparent 35%, var(--void) 94%);
+}
+.glow-noise {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: .045;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glow-blob { transition: none !important; animation: none !important; }
+}
+
+/* ---------------------------------------------------------------------------
+   Global button treatment — every <button> in the app (73 view components)
+   picks this up automatically: a soft glass sheen on hover plus an outer glow
+   in the current accent hue, without overriding each button's own semantic
+   background color (destructive/success buttons keep their meaning).
+   --------------------------------------------------------------------------- */
+button:not(:disabled) {
+  transition: box-shadow .25s ease, transform .15s ease, filter .25s ease;
+}
+button:not(:disabled):hover {
+  box-shadow: 0 0 0 1px rgba(255,255,255,.06), 0 6px 24px -6px var(--glass-glow);
+}
+button:not(:disabled):active {
+  transform: translateY(1px) scale(.99);
+}
+button:focus-visible {
+  outline: 2px solid hsl(var(--h) 90% 78%);
+  outline-offset: 2px;
+}
+
+/* Primary / accent-colored CTAs get a stronger breathing outer glow */
+[class*="bg-[#D9A9FF]"],
+[class*="bg-[#d9a9ff]"] {
+  box-shadow: 0 0 22px -2px hsla(var(--h), 90%, 72%, .55);
+}
+[class*="bg-[#D9A9FF]"]:hover,
+[class*="bg-[#d9a9ff]"]:hover {
+  box-shadow: 0 0 36px 2px hsla(var(--h), 90%, 72%, .8);
+}
+
+/* Glass surfaces (already-neutral overlays like bg-white/5, bg-white/10) get
+   real frosted blur so translucency isn't just a flat tint */
+[class*="bg-white/5"],
+[class*="bg-white/10"],
+[class*="bg-white/[0.05]"],
+[class*="bg-white/[0.08]"] {
+  backdrop-filter: blur(10px) saturate(140%);
+  -webkit-backdrop-filter: blur(10px) saturate(140%);
 }
 
 /* Enhanced subtle border and depth for dark containers */
@@ -66,7 +163,7 @@ body {
   background: #0A0A0C;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(233, 195, 73, 0.35);
+  background: hsla(var(--h), 85%, 70%, 0.35);
   border-radius: 4px;
   border: 1px solid rgba(255, 255, 255, 0.08);
 }
@@ -76,17 +173,17 @@ body {
 
 .custom-scrollbar {
   scrollbar-width: thin;
-  scrollbar-color: rgba(233, 195, 73, 0.4) #0A0A0C;
+  scrollbar-color: hsla(var(--h), 85%, 70%, 0.4) #0A0A0C;
 }
 
 @keyframes headerGlowBreathe {
   0%, 100% {
-    box-shadow: 0 4px 15px rgba(233, 195, 73, 0.12);
-    border-bottom-color: rgba(233, 195, 73, 0.25);
+    box-shadow: 0 4px 15px hsla(var(--h), 85%, 65%, 0.12);
+    border-bottom-color: hsla(var(--h), 85%, 65%, 0.25);
   }
   50% {
-    box-shadow: 0 4px 28px rgba(233, 195, 73, 0.35);
-    border-bottom-color: rgba(233, 195, 73, 0.65);
+    box-shadow: 0 4px 28px hsla(var(--h), 85%, 65%, 0.35);
+    border-bottom-color: hsla(var(--h), 85%, 65%, 0.65);
   }
 }
 
@@ -97,20 +194,20 @@ body {
 /* Subtle Rhythmic BPM Pulse Animation for Lab Video Areas */
 @keyframes bpmRhythmicPulse {
   0% {
-    box-shadow: 0 0 0 0 rgba(233, 195, 73, 0), inset 0 0 0 0 rgba(233, 195, 73, 0);
-    border-color: rgba(233, 195, 73, 0.25);
+    box-shadow: 0 0 0 0 hsla(var(--h), 85%, 65%, 0), inset 0 0 0 0 hsla(var(--h), 85%, 65%, 0);
+    border-color: hsla(var(--h), 85%, 65%, 0.25);
   }
   15% {
-    box-shadow: 0 0 22px 3px rgba(233, 195, 73, 0.42), inset 0 0 16px 2px rgba(233, 195, 73, 0.18);
-    border-color: rgba(233, 195, 73, 0.95);
+    box-shadow: 0 0 22px 3px hsla(var(--h), 85%, 65%, 0.42), inset 0 0 16px 2px hsla(var(--h), 85%, 65%, 0.18);
+    border-color: hsla(var(--h), 85%, 65%, 0.95);
   }
   45% {
-    box-shadow: 0 0 10px 1px rgba(233, 195, 73, 0.18), inset 0 0 8px 1px rgba(233, 195, 73, 0.08);
-    border-color: rgba(233, 195, 73, 0.45);
+    box-shadow: 0 0 10px 1px hsla(var(--h), 85%, 65%, 0.18), inset 0 0 8px 1px hsla(var(--h), 85%, 65%, 0.08);
+    border-color: hsla(var(--h), 85%, 65%, 0.45);
   }
   100% {
-    box-shadow: 0 0 0 0 rgba(233, 195, 73, 0), inset 0 0 0 0 rgba(233, 195, 73, 0);
-    border-color: rgba(233, 195, 73, 0.25);
+    box-shadow: 0 0 0 0 hsla(var(--h), 85%, 65%, 0), inset 0 0 0 0 hsla(var(--h), 85%, 65%, 0);
+    border-color: hsla(var(--h), 85%, 65%, 0.25);
   }
 }
 
@@ -141,4 +238,317 @@ body {
   animation: bpmRingGlow var(--bpm-pulse-duration, 0.5s) cubic-bezier(0.2, 0.8, 0.2, 1) infinite;
 }
 
+/* ============================================================================
+   Auto-generated liquid-glass sweep — every dark panel background used across
+   the 70+ view components becomes a frosted glass surface, and every dark
+   border becomes a soft glass edge, without editing each component by hand.
+   ============================================================================ */
+[class*="bg-[#000000]"],
+[class*="bg-[#03050B]"],
+[class*="bg-[#050505]"],
+[class*="bg-[#05070D]"],
+[class*="bg-[#060609]"],
+[class*="bg-[#07050e]"],
+[class*="bg-[#07060c]"],
+[class*="bg-[#070913]"],
+[class*="bg-[#070A10]"],
+[class*="bg-[#08080a]"],
+[class*="bg-[#090712]"],
+[class*="bg-[#09080d]"],
+[class*="bg-[#09090d]"],
+[class*="bg-[#090B15]"],
+[class*="bg-[#090a14]"],
+[class*="bg-[#0A0814]"],
+[class*="bg-[#0A0A0A]"],
+[class*="bg-[#0A0A0C]"],
+[class*="bg-[#0A0A0D]"],
+[class*="bg-[#0A0A0E]"],
+[class*="bg-[#0A120E]"],
+[class*="bg-[#0B0B0B]"],
+[class*="bg-[#0B0F19]"],
+[class*="bg-[#0D0A14]"],
+[class*="bg-[#0D0B18]"],
+[class*="bg-[#0D0D11]"],
+[class*="bg-[#0D0D12]"],
+[class*="bg-[#0D0F1D]"],
+[class*="bg-[#0E0B12]"],
+[class*="bg-[#0E0C14]"],
+[class*="bg-[#0E0E0E]"],
+[class*="bg-[#0E0E10]"],
+[class*="bg-[#0E101D]"],
+[class*="bg-[#0F0B1E]"],
+[class*="bg-[#0F0C16]"],
+[class*="bg-[#0F0D1A]"],
+[class*="bg-[#0F0F12]"],
+[class*="bg-[#0F0F13]"],
+[class*="bg-[#0a0814]"],
+[class*="bg-[#0a0815]"],
+[class*="bg-[#0a0a0a]"],
+[class*="bg-[#0a0a0c]"],
+[class*="bg-[#0a0a0f]"],
+[class*="bg-[#0b0816]"],
+[class*="bg-[#0b0914]"],
+[class*="bg-[#0b0a12]"],
+[class*="bg-[#0b0b0e]"],
+[class*="bg-[#0b0e1a]"],
+[class*="bg-[#0b0e1b]"],
+[class*="bg-[#0b0f19]"],
+[class*="bg-[#0c0a12]"],
+[class*="bg-[#0c0d1e]"],
+[class*="bg-[#0c0e1a]"],
+[class*="bg-[#0d0918]"],
+[class*="bg-[#0d091a]"],
+[class*="bg-[#0d0b18]"],
+[class*="bg-[#0d0d11]"],
+[class*="bg-[#0d0d12]"],
+[class*="bg-[#0d0e1b]"],
+[class*="bg-[#0e0a1b]"],
+[class*="bg-[#0e0a1f]"],
+[class*="bg-[#0e0c18]"],
+[class*="bg-[#0e0e0e]"],
+[class*="bg-[#0e0e10]"],
+[class*="bg-[#0e0e11]"],
+[class*="bg-[#0e0e12]"],
+[class*="bg-[#0e1122]"],
+[class*="bg-[#0e1224]"],
+[class*="bg-[#0f1122]"],
+[class*="bg-[#0f1224]"],
+[class*="bg-[#100D18]"],
+[class*="bg-[#100D20]"],
+[class*="bg-[#100d1a]"],
+[class*="bg-[#101010]"],
+[class*="bg-[#101014]"],
+[class*="bg-[#101224]"],
+[class*="bg-[#101322]"],
+[class*="bg-[#110e1d]"],
+[class*="bg-[#120D1F]"],
+[class*="bg-[#120E24]"],
+[class*="bg-[#120F18]"],
+[class*="bg-[#120F1A]"],
+[class*="bg-[#120F1B]"],
+[class*="bg-[#120F20]"],
+[class*="bg-[#120F22]"],
+[class*="bg-[#120f1d]"],
+[class*="bg-[#120f1e]"],
+[class*="bg-[#120f20]"],
+[class*="bg-[#120f21]"],
+[class*="bg-[#12100B]"],
+[class*="bg-[#12101F]"],
+[class*="bg-[#12101a]"],
+[class*="bg-[#12101c]"],
+[class*="bg-[#12101f]"],
+[class*="bg-[#121021]"],
+[class*="bg-[#121118]"],
+[class*="bg-[#12111A]"],
+[class*="bg-[#121212]"],
+[class*="bg-[#121215]"],
+[class*="bg-[#121216]"],
+[class*="bg-[#121217]"],
+[class*="bg-[#121218]"],
+[class*="bg-[#12121a]"],
+[class*="bg-[#121226]"],
+[class*="bg-[#121426]"],
+[class*="bg-[#121528]"],
+[class*="bg-[#121622]"],
+[class*="bg-[#12162a]"],
+[class*="bg-[#12162b]"],
+[class*="bg-[#121826]"],
+[class*="bg-[#121828]"],
+[class*="bg-[#130f21]"],
+[class*="bg-[#130f24]"],
+[class*="bg-[#13101A]"],
+[class*="bg-[#131022]"],
+[class*="bg-[#131024]"],
+[class*="bg-[#13111c]"],
+[class*="bg-[#131124]"],
+[class*="bg-[#13131a]"],
+[class*="bg-[#13172e]"],
+[class*="bg-[#131926]"],
+[class*="bg-[#140E20]"],
+[class*="bg-[#140e26]"],
+[class*="bg-[#140f26]"],
+[class*="bg-[#141022]"],
+[class*="bg-[#141026]"],
+[class*="bg-[#14121A]"],
+[class*="bg-[#141222]"],
+[class*="bg-[#141414]"],
+[class*="bg-[#141418]"],
+[class*="bg-[#141419]"],
+[class*="bg-[#141829]"],
+[class*="bg-[#14182e]"],
+[class*="bg-[#15111E]"],
+[class*="bg-[#15120C]"],
+[class*="bg-[#15121E]"],
+[class*="bg-[#15131a]"],
+[class*="bg-[#151515]"],
+[class*="bg-[#15151a]"],
+[class*="bg-[#151930]"],
+[class*="bg-[#16120A]"],
+[class*="bg-[#161220]"],
+[class*="bg-[#161224]"],
+[class*="bg-[#161227]"],
+[class*="bg-[#161229]"],
+[class*="bg-[#16131D]"],
+[class*="bg-[#161328]"],
+[class*="bg-[#161414]"],
+[class*="bg-[#161616]"],
+[class*="bg-[#16161f]"],
+[class*="bg-[#161933]"],
+[class*="bg-[#161a33]"],
+[class*="bg-[#17122e]"],
+[class*="bg-[#171329]"],
+[class*="bg-[#17132a]"],
+[class*="bg-[#171526]"],
+[class*="bg-[#171717]"],
+[class*="bg-[#17171d]"],
+[class*="bg-[#180f2b]"],
+[class*="bg-[#181214]"],
+[class*="bg-[#181222]"],
+[class*="bg-[#181224]"],
+[class*="bg-[#181321]"],
+[class*="bg-[#18140B]"],
+[class*="bg-[#181424]"],
+[class*="bg-[#18142A]"],
+[class*="bg-[#18152e]"],
+[class*="bg-[#181624]"],
+[class*="bg-[#18171B]"],
+[class*="bg-[#181818]"],
+[class*="bg-[#18181c]"],
+[class*="bg-[#181822]"],
+[class*="bg-[#181a33]"],
+[class*="bg-[#181d38]"],
+[class*="bg-[#182033]"],
+[class*="bg-[#182348]"],
+[class*="bg-[#1A1125]"],
+[class*="bg-[#1A1622]"],
+[class*="bg-[#1A1812]"],
+[class*="bg-[#1A1813]"],
+[class*="bg-[#1A1A1A]"],
+[class*="bg-[#1A1A22]"],
+[class*="bg-[#1B1624]"],
+[class*="bg-[#1C1811]"],
+[class*="bg-[#1C1B1B]"],
+[class*="bg-[#1C1C1C]"],
+[class*="bg-[#1D1728]"],
+[class*="bg-[#1D172E]"],
+[class*="bg-[#1D1730]"],
+[class*="bg-[#1E122A]"],
+[class*="bg-[#1E1E1E]"],
+[class*="bg-[#1F190E]"],
+[class*="bg-[#1F1F1F]"],
+[class*="bg-[#1F1F24]"],
+[class*="bg-[#1a1528]"],
+[class*="bg-[#1a1818]"],
+[class*="bg-[#1a1829]"],
+[class*="bg-[#1a1919]"],
+[class*="bg-[#1a1a1a]"],
+[class*="bg-[#1a2336]"],
+[class*="bg-[#1b1222]"],
+[class*="bg-[#1b122b]"],
+[class*="bg-[#1b1424]"],
+[class*="bg-[#1b1530]"],
+[class*="bg-[#1b1912]"],
+[class*="bg-[#1c1315]"],
+[class*="bg-[#1c1417]"],
+[class*="bg-[#1c1a12]"],
+[class*="bg-[#1c1a1a]"],
+[class*="bg-[#1c1b1b]"],
+[class*="bg-[#1c1c1c]"],
+[class*="bg-[#1c1e22]"],
+[class*="bg-[#1e1735]"],
+[class*="bg-[#1e1910]"],
+[class*="bg-[#1e1a38]"],
+[class*="bg-[#1e1c1c]"],
+[class*="bg-[#1e1e1e]"],
+[class*="bg-[#1f1a12]"],
+[class*="bg-[#1f1f1f]"],
+[class*="bg-[#1f1f23]"],
+[class*="bg-[#202020]"],
+[class*="bg-[#222222]"],
+[class*="bg-[#222]"],
+[class*="bg-[#241c17]"],
+[class*="bg-[#242424]"],
+[class*="bg-[#251D30]"],
+[class*="bg-[#25223a]"],
+[class*="bg-[#25223c]"],
+[class*="bg-[#252525]"],
+[class*="bg-[#261516]"],
+[class*="bg-[#261E2E]"],
+[class*="bg-[#262626]"],
+[class*="bg-[#271B33]"],
+[class*="bg-[#28203E]"],
+[class*="bg-[#282415]"],
+[class*="bg-[#28282d]"],
+[class*="bg-[#291E35]"],
+[class*="bg-[#2A2238]"],
+[class*="bg-[#2A2A2A]"],
+[class*="bg-[#2A2A32]"],
+[class*="bg-[#2B213B]"],
+[class*="bg-[#2F2F2F]"],
+[class*="bg-[#2a2214]"],
+[class*="bg-[#2b2719]"],
+[class*="bg-[#2c2f35]"],
+[class*="bg-[#333333]"],
+[class*="bg-[#333]"],
+[class*="bg-[#342740]"],
+[class*="bg-[#362547]"],
+[class*="bg-[#3d1a1c]"],
+[class*="bg-[#5e0b15]"] {
+  background-image: linear-gradient(160deg, rgba(255,255,255,.075), rgba(255,255,255,.015)) !important;
+  background-color: color-mix(in srgb, var(--void) 88%, hsl(var(--h)) 12%) !important;
+  backdrop-filter: blur(13px) saturate(150%);
+  -webkit-backdrop-filter: blur(13px) saturate(150%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.10);
+}
 
+[class*="border-[#0A0A0A]"],
+[class*="border-[#0E0E10]"],
+[class*="border-[#121212]"],
+[class*="border-[#121218]"],
+[class*="border-[#141414]"],
+[class*="border-[#181818]"],
+[class*="border-[#1A1A1A]"],
+[class*="border-[#1C1C1C]"],
+[class*="border-[#1F1F1F]"],
+[class*="border-[#1F1F24]"],
+[class*="border-[#1a1818]"],
+[class*="border-[#1a1a1a]"],
+[class*="border-[#222222]"],
+[class*="border-[#222]"],
+[class*="border-[#231A2E]"],
+[class*="border-[#241C10]"],
+[class*="border-[#242424]"],
+[class*="border-[#262626]"],
+[class*="border-[#282828]"],
+[class*="border-[#291D34]"],
+[class*="border-[#291E35]"],
+[class*="border-[#2A1E35]"],
+[class*="border-[#2A2418]"],
+[class*="border-[#2B1B33]"],
+[class*="border-[#2B1E37]"],
+[class*="border-[#2B1F33]"],
+[class*="border-[#2B1F38]"],
+[class*="border-[#2B2036]"],
+[class*="border-[#2B2B2B]"],
+[class*="border-[#2D2335]"],
+[class*="border-[#2E2416]"],
+[class*="border-[#2E2E2E]"],
+[class*="border-[#2a2a2a]"],
+[class*="border-[#312340]"],
+[class*="border-[#31253E]"],
+[class*="border-[#33243F]"],
+[class*="border-[#33273D]"],
+[class*="border-[#332A1C]"],
+[class*="border-[#333333]"],
+[class*="border-[#333]"],
+[class*="border-[#383838]"],
+[class*="border-[#3A223B]"],
+[class*="border-[#3A2542]"],
+[class*="border-[#3A2A47]"],
+[class*="border-[#3A3A3A]"],
+[class*="border-[#3D2948]"],
+[class*="border-[#3D2C4D]"],
+[class*="border-[#3D304A]"],
+[class*="border-[#5c1c1f]"] {
+  border-color: color-mix(in srgb, white 16%, hsl(var(--h)) 20%) !important;
+}

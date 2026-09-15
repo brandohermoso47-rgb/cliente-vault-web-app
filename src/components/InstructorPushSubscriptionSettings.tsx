@@ -199,10 +199,10 @@ export const InstructorPushSubscriptionSettings: React.FC<InstructorPushSubscrip
   };
 
   return (
-    <div className="bg-[#12121a] border border-[#E9C349]/30 rounded-3xl p-6 sm:p-8 space-y-6 text-white shadow-2xl relative overflow-hidden">
+    <div className="bg-[#12121a] border border-[#D9A9FF]/30 rounded-3xl p-6 sm:p-8 space-y-6 text-white shadow-2xl relative overflow-hidden">
       {/* Background Subtle Gradient Glow */}
       <div className="absolute top-0 right-0 w-80 h-80 bg-purple-600/10 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-80 h-80 bg-[#E9C349]/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-80 h-80 bg-[#D9A9FF]/10 rounded-full blur-3xl pointer-events-none" />
 
       {/* Header */}
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-white/10 pb-5">
@@ -214,7 +214,7 @@ export const InstructorPushSubscriptionSettings: React.FC<InstructorPushSubscrip
             <h3 className="text-base sm:text-lg font-black text-white uppercase tracking-wide">
               Notificaciones Push de Instructores
             </h3>
-            <span className="text-[10px] font-mono font-bold bg-[#E9C349]/20 text-[#E9C349] border border-[#E9C349]/40 px-2 py-0.5 rounded-full uppercase">
+            <span className="text-[10px] font-mono font-bold bg-[#D9A9FF]/20 text-[#D9A9FF] border border-[#D9A9FF]/40 px-2 py-0.5 rounded-full uppercase">
               Firestore Sync
             </span>
           </div>
@@ -331,7 +331,7 @@ export const InstructorPushSubscriptionSettings: React.FC<InstructorPushSubscrip
       {/* Topics Selector */}
       <div className="space-y-3 pt-2">
         <h4 className="text-xs font-mono font-bold text-slate-300 uppercase flex items-center gap-2">
-          <Radio className="w-4 h-4 text-[#E9C349]" />
+          <Radio className="w-4 h-4 text-[#D9A9FF]" />
           <span>Tipos de Alertas de Instructores</span>
         </h4>
 

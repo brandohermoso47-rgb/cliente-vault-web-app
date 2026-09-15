@@ -239,7 +239,7 @@ export default function WeeklyCommunityChallengeView({
       particleCount: 36,
       spread: 60,
       origin,
-      colors: ['#E9C349', '#FF4D6D', '#C084FC', '#F59E0B', '#38BDF8', '#FFFFFF'],
+      colors: ['#D9A9FF', '#FF4D6D', '#C084FC', '#F59E0B', '#38BDF8', '#FFFFFF'],
       ticks: 150,
       gravity: 1.15,
       scalar: 0.85,
@@ -348,14 +348,14 @@ export default function WeeklyCommunityChallengeView({
       {/* ========================================================================= */}
       <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#1b1424] via-[#121118] to-[#0A0A0E] border-2 border-tertiary/40 shadow-2xl p-6 sm:p-8">
         {/* Glow ambient effects */}
-        <div className="absolute -top-24 -right-24 w-96 h-96 bg-[#E9C349]/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-[#9A2B3C]/15 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -top-24 -right-24 w-96 h-96 bg-[#D9A9FF]/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-[#C23E9E]/15 rounded-full blur-3xl pointer-events-none" />
 
         <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
           <div className="space-y-3 max-w-2xl">
             <div className="flex flex-wrap items-center gap-2.5">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#E9C349]/15 border border-[#E9C349]/40 text-[#E9C349] text-xs font-mono font-bold uppercase tracking-wider shadow-sm">
-                <Trophy className="w-3.5 h-3.5 animate-pulse text-[#E9C349]" />
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#D9A9FF]/15 border border-[#D9A9FF]/40 text-[#D9A9FF] text-xs font-mono font-bold uppercase tracking-wider shadow-sm">
+                <Trophy className="w-3.5 h-3.5 animate-pulse text-[#D9A9FF]" />
                 Semana #{challenge.weekNumber} • Reto Oficial
               </span>
               <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-950/60 border border-emerald-500/30 text-emerald-400 text-[11px] font-mono font-semibold">
@@ -363,7 +363,7 @@ export default function WeeklyCommunityChallengeView({
                 Votaciones Abiertas
               </span>
               <span className="text-[11px] font-mono text-gray-400 flex items-center gap-1">
-                <Clock className="w-3 h-3 text-[#E9C349]" />
+                <Clock className="w-3 h-3 text-[#D9A9FF]" />
                 Finaliza: {challenge.endDate}
               </span>
             </div>
@@ -380,7 +380,7 @@ export default function WeeklyCommunityChallengeView({
             <div className="pt-2 flex flex-wrap items-center gap-4 text-xs">
               {/* Music badge & audio preview button */}
               <div className="flex items-center gap-2 bg-black/40 border border-tertiary/20 rounded-xl px-3.5 py-2">
-                <Music className="w-4 h-4 text-[#E9C349] shrink-0" />
+                <Music className="w-4 h-4 text-[#D9A9FF] shrink-0" />
                 <div>
                   <span className="text-[10px] text-gray-400 block font-mono uppercase">Música Sugerida ({challenge.recommendedTrack.bpm} BPM)</span>
                   <span className="font-bold text-white text-xs">{challenge.recommendedTrack.title}</span>
@@ -390,7 +390,7 @@ export default function WeeklyCommunityChallengeView({
                   onClick={toggleAudioTrack}
                   className={`ml-2 p-2 rounded-lg border transition-all cursor-pointer flex items-center justify-center ${
                     isPlayingAudio
-                      ? 'bg-[#E9C349] text-black border-[#E9C349] shadow-md animate-pulse'
+                      ? 'bg-[#D9A9FF] text-black border-[#D9A9FF] shadow-md animate-pulse'
                       : 'bg-white/5 text-gray-300 border-white/10 hover:bg-white/10 hover:text-white'
                   }`}
                   title={isPlayingAudio ? 'Pausar audio de referencia' : 'Escuchar audio de referencia'}
@@ -404,7 +404,7 @@ export default function WeeklyCommunityChallengeView({
                 <img
                   src={challenge.judge.avatar}
                   alt={challenge.judge.name}
-                  className="w-7 h-7 rounded-full object-cover border border-[#E9C349]/40"
+                  className="w-7 h-7 rounded-full object-cover border border-[#D9A9FF]/40"
                   referrerPolicy="no-referrer"
                 />
                 <div>
@@ -419,8 +419,8 @@ export default function WeeklyCommunityChallengeView({
           <div className="w-full lg:w-auto shrink-0 flex flex-col sm:flex-row lg:flex-col gap-3 bg-black/50 p-4 sm:p-5 rounded-2xl border border-tertiary/30 backdrop-blur-md">
             <div className="text-center lg:text-right">
               <span className="text-[10px] uppercase font-mono text-gray-400 block tracking-wider">Premio al Ganador</span>
-              <span className="text-lg font-black text-[#E9C349] flex items-center justify-center lg:justify-end gap-1.5">
-                <Sparkles className="w-4 h-4 text-[#E9C349]" />
+              <span className="text-lg font-black text-[#D9A9FF] flex items-center justify-center lg:justify-end gap-1.5">
+                <Sparkles className="w-4 h-4 text-[#D9A9FF]" />
                 +{challenge.rewardXp} XP + Trofeo de Oro
               </span>
               <span className="text-[11px] text-gray-400 font-mono block">
@@ -431,7 +431,7 @@ export default function WeeklyCommunityChallengeView({
             <button
               id="btn-open-submit-challenge-modal"
               onClick={() => setIsSubmitModalOpen(true)}
-              className="w-full bg-gradient-to-r from-[#E9C349] to-[#d4af37] hover:from-[#f3ce56] hover:to-[#dfbb43] text-black font-extrabold text-xs sm:text-sm px-6 py-3.5 rounded-xl shadow-lg hover:shadow-[#E9C349]/20 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 cursor-pointer uppercase tracking-wider"
+              className="w-full bg-gradient-to-r from-[#D9A9FF] to-[#B87CFF] hover:from-[#f3ce56] hover:to-[#dfbb43] text-black font-extrabold text-xs sm:text-sm px-6 py-3.5 rounded-xl shadow-lg hover:shadow-[#D9A9FF]/20 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 cursor-pointer uppercase tracking-wider"
             >
               <Upload className="w-4 h-4" />
               Subir Mi Video al Reto
@@ -446,10 +446,10 @@ export default function WeeklyCommunityChallengeView({
             className="flex items-center justify-between w-full text-xs font-mono font-bold text-gray-300 hover:text-white uppercase tracking-wider transition-colors"
           >
             <span className="flex items-center gap-2">
-              <Award className="w-4 h-4 text-[#E9C349]" />
+              <Award className="w-4 h-4 text-[#D9A9FF]" />
               Criterios de Evaluación Oficial ({(challenge.criteria || []).length})
             </span>
-            {showAllCriteria ? <ChevronDown className="w-4 h-4 text-[#E9C349]" /> : <ChevronRight className="w-4 h-4" />}
+            {showAllCriteria ? <ChevronDown className="w-4 h-4 text-[#D9A9FF]" /> : <ChevronRight className="w-4 h-4" />}
           </button>
 
           <AnimatePresence>
@@ -467,7 +467,7 @@ export default function WeeklyCommunityChallengeView({
                   >
                     <div className="flex items-center justify-between mb-1.5">
                       <h4 className="text-xs font-bold text-white">{crit.title}</h4>
-                      <span className="text-[10px] font-mono font-bold text-[#E9C349] bg-[#E9C349]/10 px-2 py-0.5 rounded-full border border-[#E9C349]/20">
+                      <span className="text-[10px] font-mono font-bold text-[#D9A9FF] bg-[#D9A9FF]/10 px-2 py-0.5 rounded-full border border-[#D9A9FF]/20">
                         {crit.weight}
                       </span>
                     </div>
@@ -492,7 +492,7 @@ export default function WeeklyCommunityChallengeView({
             onClick={() => setActiveTab('leaderboard')}
             className={`px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all flex items-center gap-2 border cursor-pointer ${
               activeTab === 'leaderboard'
-                ? 'bg-[#E9C349] text-black border-[#E9C349] shadow-md scale-105'
+                ? 'bg-[#D9A9FF] text-black border-[#D9A9FF] shadow-md scale-105'
                 : 'bg-[#121118] text-gray-400 border-white/10 hover:border-tertiary/40 hover:text-white'
             }`}
           >
@@ -546,7 +546,7 @@ export default function WeeklyCommunityChallengeView({
         {activeTab === 'gallery' && (
           <div className="flex items-center gap-2 text-xs">
             <span className="text-[11px] font-mono text-gray-400 uppercase flex items-center gap-1">
-              <Filter className="w-3 h-3 text-[#E9C349]" />
+              <Filter className="w-3 h-3 text-[#D9A9FF]" />
               Ordenar por:
             </span>
             <select
@@ -572,7 +572,7 @@ export default function WeeklyCommunityChallengeView({
             <div className="flex items-center justify-between mb-4">
               <div>
                 <h3 className="text-lg font-bold text-white flex items-center gap-2">
-                  <Trophy className="w-5 h-5 text-[#E9C349]" />
+                  <Trophy className="w-5 h-5 text-[#D9A9FF]" />
                   Podio de Ganadores Provisionales
                 </h3>
                 <p className="text-xs text-gray-400">
@@ -603,7 +603,7 @@ export default function WeeklyCommunityChallengeView({
                       isRecentlyVoted
                         ? 'ring-4 ring-rose-500/80 border-rose-400 shadow-[0_0_35px_rgba(244,63,94,0.4)]'
                         : isGold
-                        ? 'bg-gradient-to-b from-[#241C10] via-[#17141D] to-[#0D0D11] border-[#E9C349]/60 ring-2 ring-[#E9C349]/20 md:-translate-y-2'
+                        ? 'bg-gradient-to-b from-[#241C10] via-[#17141D] to-[#0D0D11] border-[#D9A9FF]/60 ring-2 ring-[#D9A9FF]/20 md:-translate-y-2'
                         : isSilver
                         ? 'bg-gradient-to-b from-[#1C1F26] via-[#14161C] to-[#0D0D11] border-slate-400/40'
                         : 'bg-gradient-to-b from-[#251815] via-[#17141D] to-[#0D0D11] border-amber-700/40'
@@ -614,7 +614,7 @@ export default function WeeklyCommunityChallengeView({
                       <div className="flex items-center gap-2">
                         <span className={`w-8 h-8 rounded-full flex items-center justify-center font-black text-sm shadow-md ${
                           isGold
-                            ? 'bg-[#E9C349] text-black ring-4 ring-[#E9C349]/20'
+                            ? 'bg-[#D9A9FF] text-black ring-4 ring-[#D9A9FF]/20'
                             : isSilver
                             ? 'bg-slate-300 text-black ring-4 ring-slate-400/20'
                             : 'bg-amber-700 text-white ring-4 ring-amber-700/20'
@@ -622,7 +622,7 @@ export default function WeeklyCommunityChallengeView({
                           #{rank}
                         </span>
                         <span className={`text-xs font-mono font-bold uppercase tracking-wider ${
-                          isGold ? 'text-[#E9C349]' : isSilver ? 'text-slate-300' : 'text-amber-500'
+                          isGold ? 'text-[#D9A9FF]' : isSilver ? 'text-slate-300' : 'text-amber-500'
                         }`}>
                           {isGold ? '🥇 1er Lugar' : isSilver ? '🥈 2do Lugar' : '🥉 3er Lugar'}
                         </span>
@@ -639,7 +639,7 @@ export default function WeeklyCommunityChallengeView({
                         src={sub.dancerAvatar}
                         alt={sub.dancerName}
                         className={`w-11 h-11 rounded-full object-cover border-2 ${
-                          isGold ? 'border-[#E9C349]' : isSilver ? 'border-slate-300' : 'border-amber-700'
+                          isGold ? 'border-[#D9A9FF]' : isSilver ? 'border-slate-300' : 'border-amber-700'
                         }`}
                         referrerPolicy="no-referrer"
                       />
@@ -672,14 +672,14 @@ export default function WeeklyCommunityChallengeView({
                           referrerPolicy="no-referrer"
                         />
                         <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors flex items-center justify-center">
-                          <div className="w-10 h-10 rounded-full bg-[#E9C349] text-black flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                          <div className="w-10 h-10 rounded-full bg-[#D9A9FF] text-black flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
                             <Play className="w-5 h-5 fill-current ml-0.5" />
                           </div>
                         </div>
                         <div className="absolute bottom-2 left-2 right-2 flex items-center justify-between text-[10px] font-mono text-white bg-black/70 px-2 py-0.5 rounded backdrop-blur-sm">
                           <span>Ver Coreografía</span>
-                          <span className="text-[#E9C349] flex items-center gap-1 font-bold">
-                            <Flame className="w-3 h-3 text-[#E9C349]" /> {sub.votesCount} cheers
+                          <span className="text-[#D9A9FF] flex items-center gap-1 font-bold">
+                            <Flame className="w-3 h-3 text-[#D9A9FF]" /> {sub.votesCount} cheers
                           </span>
                         </div>
                       </div>
@@ -688,8 +688,8 @@ export default function WeeklyCommunityChallengeView({
                     {/* Instructor Badge Critique if available */}
                     {sub.instructorFeedback && (
                       <div className="p-2.5 rounded-xl bg-black/40 border border-white/10 text-[11px] text-gray-300 mb-3">
-                        <div className="flex items-center gap-1.5 text-[10px] font-mono text-[#E9C349] font-bold mb-1">
-                          <Crown className="w-3 h-3 text-[#E9C349]" />
+                        <div className="flex items-center gap-1.5 text-[10px] font-mono text-[#D9A9FF] font-bold mb-1">
+                          <Crown className="w-3 h-3 text-[#D9A9FF]" />
                           <span>Critique: {sub.instructorFeedback.author}</span>
                         </div>
                         <p className="italic text-gray-400 line-clamp-2">
@@ -708,7 +708,7 @@ export default function WeeklyCommunityChallengeView({
                           className={`px-3 py-1.5 rounded-xl text-xs font-mono font-bold flex items-center gap-1.5 transition-all cursor-pointer shadow-md ${
                             sub.votedByMe
                               ? 'bg-rose-500/25 text-rose-300 border border-rose-500/60 shadow-[0_0_15px_rgba(244,63,94,0.35)] scale-105'
-                              : 'bg-[#E9C349]/15 hover:bg-[#E9C349]/25 text-[#E9C349] border border-[#E9C349]/40 hover:border-[#E9C349]'
+                              : 'bg-[#D9A9FF]/15 hover:bg-[#D9A9FF]/25 text-[#D9A9FF] border border-[#D9A9FF]/40 hover:border-[#D9A9FF]'
                           }`}
                           title="Votar por esta coreografía"
                         >
@@ -716,7 +716,7 @@ export default function WeeklyCommunityChallengeView({
                             animate={isRecentlyVoted ? { scale: [1, 1.8, 1], rotate: [0, -15, 15, 0] } : {}}
                             transition={{ duration: 0.5 }}
                           >
-                            <Heart className={`w-3.5 h-3.5 ${sub.votedByMe ? 'text-rose-400 fill-rose-400' : 'text-[#E9C349]'}`} />
+                            <Heart className={`w-3.5 h-3.5 ${sub.votedByMe ? 'text-rose-400 fill-rose-400' : 'text-[#D9A9FF]'}`} />
                           </motion.div>
                           <span>{sub.votedByMe ? '¡Votado!' : 'Votar'}</span>
                           <span className="bg-black/50 px-1.5 py-0.2 rounded font-bold text-[10px] text-white">
@@ -757,7 +757,7 @@ export default function WeeklyCommunityChallengeView({
                           notes: sub.notes,
                           feedback: sub.instructorFeedback
                         })}
-                        className="text-xs text-[#E9C349] hover:underline font-mono font-bold flex items-center gap-1 shrink-0"
+                        className="text-xs text-[#D9A9FF] hover:underline font-mono font-bold flex items-center gap-1 shrink-0"
                       >
                         <span>Ver</span>
                         <ExternalLink className="w-3 h-3" />
@@ -773,7 +773,7 @@ export default function WeeklyCommunityChallengeView({
           <div className="bg-[#121118] border border-tertiary/20 rounded-2xl p-5 shadow-xl">
             <div className="flex items-center justify-between mb-4">
               <h4 className="text-sm font-mono font-bold text-white uppercase tracking-wider flex items-center gap-2">
-                <Medal className="w-4 h-4 text-[#E9C349]" />
+                <Medal className="w-4 h-4 text-[#D9A9FF]" />
                 Tabla Completa de Participantes & Puntuaciones
               </h4>
               <span className="text-xs font-mono text-gray-400">
@@ -810,7 +810,7 @@ export default function WeeklyCommunityChallengeView({
                         <td className="py-3 px-3 font-mono font-bold">
                           <span className={`inline-flex items-center justify-center w-6 h-6 rounded-full text-xs ${
                             rankNum === 1
-                              ? 'bg-[#E9C349] text-black font-extrabold shadow-sm'
+                              ? 'bg-[#D9A9FF] text-black font-extrabold shadow-sm'
                               : rankNum === 2
                               ? 'bg-slate-300 text-black font-extrabold shadow-sm'
                               : rankNum === 3
@@ -872,7 +872,7 @@ export default function WeeklyCommunityChallengeView({
                               notes: sub.notes,
                               feedback: sub.instructorFeedback
                             })}
-                            className="p-1.5 rounded-lg bg-tertiary/10 hover:bg-tertiary/20 text-[#E9C349] transition-all inline-flex items-center gap-1 font-mono text-[11px] font-bold"
+                            className="p-1.5 rounded-lg bg-tertiary/10 hover:bg-tertiary/20 text-[#D9A9FF] transition-all inline-flex items-center gap-1 font-mono text-[11px] font-bold"
                           >
                             <Play className="w-3 h-3 fill-current" />
                             <span>Ver Video</span>
@@ -906,7 +906,7 @@ export default function WeeklyCommunityChallengeView({
 
             <button
               onClick={() => setIsSubmitModalOpen(true)}
-              className="bg-[#E9C349] hover:bg-[#d4af37] text-black font-bold text-xs px-4 py-2 rounded-xl shadow-md transition-all flex items-center gap-1.5 cursor-pointer font-mono"
+              className="bg-[#D9A9FF] hover:bg-[#B87CFF] text-black font-bold text-xs px-4 py-2 rounded-xl shadow-md transition-all flex items-center gap-1.5 cursor-pointer font-mono"
             >
               <Plus className="w-3.5 h-3.5" />
               <span>Publicar Mi Video</span>
@@ -936,7 +936,7 @@ export default function WeeklyCommunityChallengeView({
                       <img
                         src={sub.dancerAvatar}
                         alt={sub.dancerName}
-                        className="w-9 h-9 rounded-full object-cover border border-[#E9C349]/30 shrink-0"
+                        className="w-9 h-9 rounded-full object-cover border border-[#D9A9FF]/30 shrink-0"
                         referrerPolicy="no-referrer"
                       />
                       <div className="min-w-0">
@@ -966,7 +966,7 @@ export default function WeeklyCommunityChallengeView({
                       referrerPolicy="no-referrer"
                     />
                     <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors flex items-center justify-center">
-                      <div className="w-11 h-11 rounded-full bg-[#E9C349] text-black flex items-center justify-center shadow-xl group-hover:scale-110 transition-transform">
+                      <div className="w-11 h-11 rounded-full bg-[#D9A9FF] text-black flex items-center justify-center shadow-xl group-hover:scale-110 transition-transform">
                         <Play className="w-5 h-5 fill-current ml-0.5" />
                       </div>
                     </div>
@@ -987,9 +987,9 @@ export default function WeeklyCommunityChallengeView({
 
                   {/* Instructor Feedback Snippet */}
                   {sub.instructorFeedback && (
-                    <div className="mb-3 p-2.5 rounded-xl bg-black/40 border border-[#E9C349]/20 text-[11px]">
-                      <div className="flex items-center gap-1 font-mono font-bold text-[#E9C349] text-[10px] mb-0.5">
-                        <Crown className="w-3 h-3 text-[#E9C349]" />
+                    <div className="mb-3 p-2.5 rounded-xl bg-black/40 border border-[#D9A9FF]/20 text-[11px]">
+                      <div className="flex items-center gap-1 font-mono font-bold text-[#D9A9FF] text-[10px] mb-0.5">
+                        <Crown className="w-3 h-3 text-[#D9A9FF]" />
                         <span>{sub.instructorFeedback.author}</span>
                       </div>
                       <p className="italic text-gray-400 text-[10px] line-clamp-2">
@@ -1007,7 +1007,7 @@ export default function WeeklyCommunityChallengeView({
                         className={`px-2 py-1 rounded-lg text-xs font-mono font-bold flex items-center gap-1 transition-all cursor-pointer ${
                           sub.votedByMe
                             ? 'bg-rose-500/25 text-rose-300 border border-rose-500/50 shadow-sm'
-                            : 'bg-[#E9C349]/10 text-[#E9C349] border border-[#E9C349]/20 hover:bg-[#E9C349]/20'
+                            : 'bg-[#D9A9FF]/10 text-[#D9A9FF] border border-[#D9A9FF]/20 hover:bg-[#D9A9FF]/20'
                         }`}
                         title="Votar"
                       >
@@ -1015,7 +1015,7 @@ export default function WeeklyCommunityChallengeView({
                           animate={isRecentlyVoted ? { scale: [1, 1.6, 1] } : {}}
                           transition={{ duration: 0.4 }}
                         >
-                          <Heart className={`w-3.5 h-3.5 ${sub.votedByMe ? 'text-rose-400 fill-rose-400' : 'text-[#E9C349]'}`} />
+                          <Heart className={`w-3.5 h-3.5 ${sub.votedByMe ? 'text-rose-400 fill-rose-400' : 'text-[#D9A9FF]'}`} />
                         </motion.div>
                         <span>{sub.votesCount || 0}</span>
                       </button>
@@ -1068,7 +1068,7 @@ export default function WeeklyCommunityChallengeView({
                         notes: sub.notes,
                         feedback: sub.instructorFeedback
                       })}
-                      className="text-xs text-[#E9C349] hover:underline font-mono font-bold flex items-center gap-1 shrink-0"
+                      className="text-xs text-[#D9A9FF] hover:underline font-mono font-bold flex items-center gap-1 shrink-0"
                     >
                       <span>Ver</span>
                       <Maximize2 className="w-3 h-3" />
@@ -1088,7 +1088,7 @@ export default function WeeklyCommunityChallengeView({
         <div className="space-y-4">
           <div>
             <h3 className="text-base font-bold text-white flex items-center gap-2">
-              <Crown className="w-4 h-4 text-[#E9C349]" />
+              <Crown className="w-4 h-4 text-[#D9A9FF]" />
               Salón de la Fama • Ganadores de Retos Anteriores
             </h3>
             <p className="text-xs text-gray-400">
@@ -1102,11 +1102,11 @@ export default function WeeklyCommunityChallengeView({
                 key={winner.id}
                 className="bg-gradient-to-b from-[#1c1824] via-[#121118] to-[#0A0A0E] border border-amber-500/30 rounded-2xl p-5 shadow-xl flex flex-col justify-between relative overflow-hidden"
               >
-                <div className="absolute top-0 right-0 transform translate-x-3 -translate-y-3 bg-[#E9C349]/10 w-24 h-24 rounded-full blur-xl pointer-events-none" />
+                <div className="absolute top-0 right-0 transform translate-x-3 -translate-y-3 bg-[#D9A9FF]/10 w-24 h-24 rounded-full blur-xl pointer-events-none" />
 
                 <div>
                   <div className="flex items-center justify-between mb-3">
-                    <span className="text-[11px] font-mono font-bold text-[#E9C349] bg-[#E9C349]/10 px-2.5 py-0.5 rounded-full border border-[#E9C349]/30">
+                    <span className="text-[11px] font-mono font-bold text-[#D9A9FF] bg-[#D9A9FF]/10 px-2.5 py-0.5 rounded-full border border-[#D9A9FF]/30">
                       Semana #{winner.weekNumber}
                     </span>
                     <span className="text-[10px] font-mono text-gray-400">{winner.dateRange}</span>
@@ -1119,13 +1119,13 @@ export default function WeeklyCommunityChallengeView({
                     <img
                       src={winner.winnerAvatar}
                       alt={winner.winnerName}
-                      className="w-10 h-10 rounded-full object-cover border-2 border-[#E9C349]"
+                      className="w-10 h-10 rounded-full object-cover border-2 border-[#D9A9FF]"
                       referrerPolicy="no-referrer"
                     />
                     <div>
                       <div className="flex items-center gap-1.5">
                         <span className="text-xs font-bold text-white">{winner.winnerName}</span>
-                        <Crown className="w-3.5 h-3.5 text-[#E9C349]" />
+                        <Crown className="w-3.5 h-3.5 text-[#D9A9FF]" />
                       </div>
                       <span className="text-[10px] font-mono text-gray-400 block">{winner.winnerLevel}</span>
                     </div>
@@ -1147,13 +1147,13 @@ export default function WeeklyCommunityChallengeView({
                       referrerPolicy="no-referrer"
                     />
                     <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors flex items-center justify-center">
-                      <div className="w-10 h-10 rounded-full bg-[#E9C349] text-black flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                      <div className="w-10 h-10 rounded-full bg-[#D9A9FF] text-black flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
                         <Play className="w-5 h-5 fill-current ml-0.5" />
                       </div>
                     </div>
                     <div className="absolute bottom-2 left-2 right-2 flex items-center justify-between text-[10px] font-mono text-white bg-black/70 px-2 py-0.5 rounded backdrop-blur-sm">
                       <span className="truncate">{winner.entryTitle}</span>
-                      <span className="text-[#E9C349] font-bold">⭐ {winner.score}</span>
+                      <span className="text-[#D9A9FF] font-bold">⭐ {winner.score}</span>
                     </div>
                   </div>
 
@@ -1164,7 +1164,7 @@ export default function WeeklyCommunityChallengeView({
                 </div>
 
                 <div className="mt-3 pt-3 border-t border-white/10 text-center">
-                  <span className="text-[11px] font-mono font-bold text-[#E9C349] block">
+                  <span className="text-[11px] font-mono font-bold text-[#D9A9FF] block">
                     🏆 {winner.prizeAwarded}
                   </span>
                 </div>
@@ -1188,12 +1188,12 @@ export default function WeeklyCommunityChallengeView({
             >
               <div className="flex items-center justify-between border-b border-white/10 pb-4">
                 <div className="flex items-center gap-2.5">
-                  <div className="w-9 h-9 rounded-xl bg-[#E9C349]/15 border border-[#E9C349]/40 flex items-center justify-center text-[#E9C349]">
+                  <div className="w-9 h-9 rounded-xl bg-[#D9A9FF]/15 border border-[#D9A9FF]/40 flex items-center justify-center text-[#D9A9FF]">
                     <Upload className="w-5 h-5" />
                   </div>
                   <div>
                     <h3 className="text-base font-bold text-white">Subir Video al Reto Semanal</h3>
-                    <span className="text-[11px] font-mono text-[#E9C349]">Semana #{challenge.weekNumber} • {challenge.theme}</span>
+                    <span className="text-[11px] font-mono text-[#D9A9FF]">Semana #{challenge.weekNumber} • {challenge.theme}</span>
                   </div>
                 </div>
                 <button
@@ -1231,7 +1231,7 @@ export default function WeeklyCommunityChallengeView({
                       value={entryTitle}
                       onChange={(e) => setEntryTitle(e.target.value)}
                       placeholder="Ej: Cross Rolls a 126 BPM con Pose Teatral Final"
-                      className="w-full bg-black/50 border border-white/15 rounded-xl px-4 py-2.5 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#E9C349]"
+                      className="w-full bg-black/50 border border-white/15 rounded-xl px-4 py-2.5 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#D9A9FF]"
                     />
                   </div>
 
@@ -1245,7 +1245,7 @@ export default function WeeklyCommunityChallengeView({
                       value={entryVideoUrl}
                       onChange={(e) => setEntryVideoUrl(e.target.value)}
                       placeholder="https://commondatastorage.googleapis.com/... o enlace YouTube"
-                      className="w-full bg-black/50 border border-white/15 rounded-xl px-4 py-2.5 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#E9C349]"
+                      className="w-full bg-black/50 border border-white/15 rounded-xl px-4 py-2.5 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#D9A9FF]"
                     />
                     {/* Quick Demo URLs for Testing */}
                     <div className="mt-2 flex flex-wrap items-center gap-1.5 text-[10px] font-mono text-gray-400">
@@ -1253,7 +1253,7 @@ export default function WeeklyCommunityChallengeView({
                       <button
                         type="button"
                         onClick={() => setEntryVideoUrl('https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4')}
-                        className="text-[#E9C349] underline hover:text-white"
+                        className="text-[#D9A9FF] underline hover:text-white"
                       >
                         Sample 1 (MP4)
                       </button>
@@ -1261,7 +1261,7 @@ export default function WeeklyCommunityChallengeView({
                       <button
                         type="button"
                         onClick={() => setEntryVideoUrl('https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyBlazes.mp4')}
-                        className="text-[#E9C349] underline hover:text-white"
+                        className="text-[#D9A9FF] underline hover:text-white"
                       >
                         Sample 2 (MP4)
                       </button>
@@ -1278,14 +1278,14 @@ export default function WeeklyCommunityChallengeView({
                       onChange={(e) => setEntryNotes(e.target.value)}
                       placeholder="¿Qué aspecto técnico o dramático exploraste en esta toma? (Ej: Altura de codos en rotación rápida, acentos de síncopa...)"
                       rows={3}
-                      className="w-full bg-black/50 border border-white/15 rounded-xl p-3 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#E9C349]"
+                      className="w-full bg-black/50 border border-white/15 rounded-xl p-3 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#D9A9FF]"
                     />
                   </div>
 
                   {/* Guidelines reminder */}
                   <div className="p-3 rounded-xl bg-white/[0.02] border border-white/10 text-[11px] text-gray-400 space-y-1">
                     <span className="font-bold text-white font-mono flex items-center gap-1">
-                      <Info className="w-3.5 h-3.5 text-[#E9C349]" /> Recuerda las reglas del reto:
+                      <Info className="w-3.5 h-3.5 text-[#D9A9FF]" /> Recuerda las reglas del reto:
                     </span>
                     <p>• Mantén la cámara fija y el cuerpo completo visible.</p>
                     <p>• Incluye la música de referencia ({challenge.recommendedTrack.bpm} BPM).</p>
@@ -1303,7 +1303,7 @@ export default function WeeklyCommunityChallengeView({
                     </button>
                     <button
                       type="submit"
-                      className="px-6 py-2.5 rounded-xl bg-[#E9C349] hover:bg-[#d4af37] text-black font-extrabold text-xs font-mono uppercase tracking-wider shadow-lg flex items-center gap-2 cursor-pointer"
+                      className="px-6 py-2.5 rounded-xl bg-[#D9A9FF] hover:bg-[#B87CFF] text-black font-extrabold text-xs font-mono uppercase tracking-wider shadow-lg flex items-center gap-2 cursor-pointer"
                     >
                       <Upload className="w-4 h-4" />
                       Publicar Video
@@ -1330,7 +1330,7 @@ export default function WeeklyCommunityChallengeView({
             >
               <div className="flex items-center justify-between border-b border-white/10 pb-3">
                 <div className="flex items-center gap-2 min-w-0">
-                  <Trophy className="w-4 h-4 text-[#E9C349] shrink-0" />
+                  <Trophy className="w-4 h-4 text-[#D9A9FF] shrink-0" />
                   <div className="min-w-0">
                     <h3 className="text-sm font-bold text-white truncate">{activeVideoItem.title}</h3>
                     <span className="text-[11px] font-mono text-gray-400">Bailarín: {activeVideoItem.dancer}</span>
@@ -1374,13 +1374,13 @@ export default function WeeklyCommunityChallengeView({
                 )}
 
                 {activeVideoItem.feedback && (
-                  <div className="p-3.5 rounded-xl bg-gradient-to-r from-amber-950/40 to-[#1b1424] border border-[#E9C349]/40 text-xs text-gray-200">
+                  <div className="p-3.5 rounded-xl bg-gradient-to-r from-amber-950/40 to-[#1b1424] border border-[#D9A9FF]/40 text-xs text-gray-200">
                     <div className="flex items-center justify-between mb-1.5">
-                      <div className="flex items-center gap-2 font-mono font-bold text-[#E9C349]">
-                        <Crown className="w-4 h-4 text-[#E9C349]" />
+                      <div className="flex items-center gap-2 font-mono font-bold text-[#D9A9FF]">
+                        <Crown className="w-4 h-4 text-[#D9A9FF]" />
                         <span>Evaluación Oficial: {activeVideoItem.feedback.author}</span>
                       </div>
-                      <span className="text-xs font-mono font-bold text-white bg-black/40 px-2 py-0.5 rounded border border-[#E9C349]/30">
+                      <span className="text-xs font-mono font-bold text-white bg-black/40 px-2 py-0.5 rounded border border-[#D9A9FF]/30">
                         ⭐ {activeVideoItem.feedback.score} / 100
                       </span>
                     </div>
@@ -1388,7 +1388,7 @@ export default function WeeklyCommunityChallengeView({
                     {activeVideoItem.feedback.badges && (
                       <div className="flex flex-wrap gap-1.5">
                         {activeVideoItem.feedback.badges.map((b: string, i: number) => (
-                          <span key={i} className="text-[10px] font-mono bg-[#E9C349]/15 border border-[#E9C349]/30 text-[#E9C349] px-2 py-0.5 rounded-full font-bold">
+                          <span key={i} className="text-[10px] font-mono bg-[#D9A9FF]/15 border border-[#D9A9FF]/30 text-[#D9A9FF] px-2 py-0.5 rounded-full font-bold">
                             {b}
                           </span>
                         ))}
@@ -1412,7 +1412,7 @@ export default function WeeklyCommunityChallengeView({
                           className={`px-3 py-1.5 rounded-xl text-xs font-mono font-bold flex items-center gap-1.5 transition-all cursor-pointer shadow-lg ${
                             matchingSub.votedByMe
                               ? 'bg-rose-500/25 text-rose-300 border border-rose-500/60 shadow-[0_0_15px_rgba(244,63,94,0.35)] scale-105'
-                              : 'bg-[#E9C349] hover:bg-[#d4af37] text-black'
+                              : 'bg-[#D9A9FF] hover:bg-[#B87CFF] text-black'
                           }`}
                         >
                           <motion.div
@@ -1481,7 +1481,7 @@ export default function WeeklyCommunityChallengeView({
               }}
               exit={{ opacity: 0, scale: 0.4 }}
               transition={{ duration: 1.1, ease: 'easeOut' }}
-              className="absolute flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/90 border border-[#E9C349] text-white shadow-2xl backdrop-blur-md font-mono font-extrabold text-xs"
+              className="absolute flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/90 border border-[#D9A9FF] text-white shadow-2xl backdrop-blur-md font-mono font-extrabold text-xs"
             >
               <motion.div
                 animate={{ scale: [1, 1.4, 1] }}
@@ -1490,7 +1490,7 @@ export default function WeeklyCommunityChallengeView({
               >
                 {pulse.icon === 'queen' ? '👑' : pulse.icon === 'precision' ? '⚡' : pulse.icon === 'flame' ? '🔥' : '❤️'}
               </motion.div>
-              <span className="text-[#E9C349] drop-shadow-[0_0_8px_rgba(233,195,73,0.6)]">
+              <span className="text-[#D9A9FF] drop-shadow-[0_0_8px_rgba(217, 169, 255,0.6)]">
                 {pulse.label}
               </span>
             </motion.div>

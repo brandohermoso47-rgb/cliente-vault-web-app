@@ -73,14 +73,14 @@ export default function PlansView({ currentUser, onUserChange, language, onOpenP
   return (
     <div className="bg-[#121212] border border-[#262626] rounded-3xl p-6 sm:p-8 space-y-8 shadow-2xl relative overflow-hidden text-white w-full">
       {/* Background Glow */}
-      <div className="absolute top-0 right-0 w-96 h-96 bg-[#E9C349]/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-0 right-0 w-96 h-96 bg-[#D9A9FF]/10 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-purple-600/10 rounded-full blur-3xl pointer-events-none" />
 
       {/* Main Banner Header */}
-      <div className="bg-gradient-to-r from-[#1A1528] via-[#221835] to-[#120F1D] border border-[#E9C349]/30 rounded-3xl p-6 sm:p-10 shadow-2xl relative overflow-hidden flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+      <div className="bg-gradient-to-r from-[#1A1528] via-[#221835] to-[#120F1D] border border-[#D9A9FF]/30 rounded-3xl p-6 sm:p-10 shadow-2xl relative overflow-hidden flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
         <div className="space-y-3 max-w-2xl relative z-10">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#E9C349]/15 border border-[#E9C349]/40 text-[#E9C349] font-mono text-[10px] font-black uppercase tracking-widest">
-            <Crown className="w-3.5 h-3.5 text-[#E9C349]" />
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#D9A9FF]/15 border border-[#D9A9FF]/40 text-[#D9A9FF] font-mono text-[10px] font-black uppercase tracking-widest">
+            <Crown className="w-3.5 h-3.5 text-[#D9A9FF]" />
             {isEs ? 'MODELO OFICIAL DE SUSCRIPCIONES & BENEFICIOS' : 'OFFICIAL MEMBERSHIPS & BENEFITS MODEL'}
           </div>
 
@@ -98,7 +98,7 @@ export default function PlansView({ currentUser, onUserChange, language, onOpenP
         <div className="shrink-0 flex flex-col gap-3 relative z-10 w-full sm:w-auto">
           <button
             onClick={() => onOpenPlansModal && onOpenPlansModal()}
-            className="px-6 py-3.5 bg-[#E9C349] hover:bg-yellow-300 text-black text-xs font-mono font-black rounded-2xl transition-all shadow-[0_0_30px_rgba(233,195,73,0.3)] flex items-center justify-center gap-2 cursor-pointer active:scale-95 uppercase"
+            className="px-6 py-3.5 bg-[#D9A9FF] hover:bg-yellow-300 text-black text-xs font-mono font-black rounded-2xl transition-all shadow-[0_0_30px_rgba(217, 169, 255,0.3)] flex items-center justify-center gap-2 cursor-pointer active:scale-95 uppercase"
           >
             <Zap className="w-4 h-4 fill-black" />
             <span>{isEs ? 'VER MODAL DE PAGO / CHECKOUT' : 'OPEN PAYMENT CHECKOUT'}</span>
@@ -113,7 +113,7 @@ export default function PlansView({ currentUser, onUserChange, language, onOpenP
             onClick={() => setFilterCategory('all')}
             className={`px-4 py-2 text-xs font-mono font-bold uppercase rounded-xl transition-all flex items-center gap-2 ${
               filterCategory === 'all'
-                ? 'bg-[#E9C349] text-black shadow-md'
+                ? 'bg-[#D9A9FF] text-black shadow-md'
                 : 'text-slate-400 hover:text-white'
             }`}
           >
@@ -124,7 +124,7 @@ export default function PlansView({ currentUser, onUserChange, language, onOpenP
             onClick={() => setFilterCategory('alumnos')}
             className={`px-4 py-2 text-xs font-mono font-bold uppercase rounded-xl transition-all flex items-center gap-2 ${
               filterCategory === 'alumnos'
-                ? 'bg-[#E9C349] text-black shadow-md'
+                ? 'bg-[#D9A9FF] text-black shadow-md'
                 : 'text-slate-400 hover:text-white'
             }`}
           >
@@ -135,7 +135,7 @@ export default function PlansView({ currentUser, onUserChange, language, onOpenP
             onClick={() => setFilterCategory('instructores')}
             className={`px-4 py-2 text-xs font-mono font-bold uppercase rounded-xl transition-all flex items-center gap-2 ${
               filterCategory === 'instructores'
-                ? 'bg-[#E9C349] text-black shadow-md'
+                ? 'bg-[#D9A9FF] text-black shadow-md'
                 : 'text-slate-400 hover:text-white'
             }`}
           >
@@ -146,7 +146,7 @@ export default function PlansView({ currentUser, onUserChange, language, onOpenP
             onClick={() => setFilterCategory('estudios')}
             className={`px-4 py-2 text-xs font-mono font-bold uppercase rounded-xl transition-all flex items-center gap-2 ${
               filterCategory === 'estudios'
-                ? 'bg-[#E9C349] text-black shadow-md'
+                ? 'bg-[#D9A9FF] text-black shadow-md'
                 : 'text-slate-400 hover:text-white'
             }`}
           >
@@ -157,7 +157,7 @@ export default function PlansView({ currentUser, onUserChange, language, onOpenP
 
         <div className="flex items-center gap-2 bg-[#0A0A0A] px-3 py-1.5 rounded-xl border border-[#262626] text-xs font-mono">
           <span className="text-slate-400">{isEs ? 'Formato de Facturación:' : 'Billing Format:'}</span>
-          <span className="text-[#E9C349] font-bold uppercase">{isEs ? 'Mensual sin Permanencia' : 'Monthly No Contract'}</span>
+          <span className="text-[#D9A9FF] font-bold uppercase">{isEs ? 'Mensual sin Permanencia' : 'Monthly No Contract'}</span>
         </div>
       </div>
 
@@ -289,17 +289,17 @@ export default function PlansView({ currentUser, onUserChange, language, onOpenP
 
         {/* PLAN 3: MEMBRESÍA DE INSTRUCTOR ($15 USD) */}
         {(filterCategory === 'all' || filterCategory === 'alumnos') && (
-          <div className="bg-gradient-to-b from-[#1E172E] to-[#120E1E] border-2 border-[#E9C349] rounded-3xl p-6 flex flex-col justify-between space-y-6 relative overflow-hidden shadow-[0_0_35px_rgba(233,195,73,0.25)] hover:border-yellow-300 transition-all">
-            <div className="absolute top-0 right-0 bg-[#E9C349] text-black text-[9px] font-mono font-black uppercase px-3 py-1 rounded-bl-2xl shadow-md">
+          <div className="bg-gradient-to-b from-[#1E172E] to-[#120E1E] border-2 border-[#D9A9FF] rounded-3xl p-6 flex flex-col justify-between space-y-6 relative overflow-hidden shadow-[0_0_35px_rgba(217, 169, 255,0.25)] hover:border-yellow-300 transition-all">
+            <div className="absolute top-0 right-0 bg-[#D9A9FF] text-black text-[9px] font-mono font-black uppercase px-3 py-1 rounded-bl-2xl shadow-md">
               {isEs ? 'MÁS POPULAR ALUMNOS' : 'MOST POPULAR'}
             </div>
 
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <span className="px-3 py-1 bg-[#E9C349]/20 border border-[#E9C349]/40 text-[#E9C349] text-[10px] font-mono font-black rounded-full uppercase tracking-wider">
+                <span className="px-3 py-1 bg-[#D9A9FF]/20 border border-[#D9A9FF]/40 text-[#D9A9FF] text-[10px] font-mono font-black rounded-full uppercase tracking-wider">
                   {isEs ? 'PANEL DE INSTRUCTOR' : 'INSTRUCTOR PASS'}
                 </span>
-                <GraduationCap className="w-5 h-5 text-[#E9C349]" />
+                <GraduationCap className="w-5 h-5 text-[#D9A9FF]" />
               </div>
 
               <div>
@@ -313,9 +313,9 @@ export default function PlansView({ currentUser, onUserChange, language, onOpenP
                 </p>
               </div>
 
-              <div className="pt-3 border-t border-[#E9C349]/30">
+              <div className="pt-3 border-t border-[#D9A9FF]/30">
                 <div className="flex items-baseline gap-1">
-                  <span className="text-3xl font-black text-[#E9C349] font-mono">$15.00</span>
+                  <span className="text-3xl font-black text-[#D9A9FF] font-mono">$15.00</span>
                   <span className="text-xs font-mono text-slate-300">USD / mes por profesor</span>
                 </div>
                 <div className="mt-1 px-2.5 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-[10px] font-mono font-bold flex items-center gap-1">
@@ -326,19 +326,19 @@ export default function PlansView({ currentUser, onUserChange, language, onOpenP
 
               <div className="space-y-2.5 pt-2 text-xs text-slate-300">
                 <div className="flex items-start gap-2">
-                  <Check className="w-4 h-4 text-[#E9C349] shrink-0 mt-0.5" />
+                  <Check className="w-4 h-4 text-[#D9A9FF] shrink-0 mt-0.5" />
                   <span><strong>Acceso Total a Cursos HD</strong>: Módulos grabados y transmisiones en vivo</span>
                 </div>
                 <div className="flex items-start gap-2">
-                  <Check className="w-4 h-4 text-[#E9C349] shrink-0 mt-0.5" />
+                  <Check className="w-4 h-4 text-[#D9A9FF] shrink-0 mt-0.5" />
                   <span><strong>Feedback Biomecánico 1v1</strong>: Corrección directa en video por el profesor</span>
                 </div>
                 <div className="flex items-start gap-2">
-                  <Check className="w-4 h-4 text-[#E9C349] shrink-0 mt-0.5" />
+                  <Check className="w-4 h-4 text-[#D9A9FF] shrink-0 mt-0.5" />
                   <span><strong>Google Classroom Integration</strong>: Tareas, evaluaciones y certificados</span>
                 </div>
                 <div className="flex items-start gap-2">
-                  <Check className="w-4 h-4 text-[#E9C349] shrink-0 mt-0.5" />
+                  <Check className="w-4 h-4 text-[#D9A9FF] shrink-0 mt-0.5" />
                   <span><strong>Freestyle Lab Incluido</strong>: Acceso sin costo extra al laboratorio</span>
                 </div>
               </div>
@@ -346,7 +346,7 @@ export default function PlansView({ currentUser, onUserChange, language, onOpenP
 
             <button
               onClick={() => handleActivatePlan('instructor_pass')}
-              className="w-full py-3 bg-[#E9C349] hover:bg-yellow-300 text-black font-mono font-black text-xs rounded-2xl uppercase transition-all shadow-lg active:scale-95 flex items-center justify-center gap-2 cursor-pointer"
+              className="w-full py-3 bg-[#D9A9FF] hover:bg-yellow-300 text-black font-mono font-black text-xs rounded-2xl uppercase transition-all shadow-lg active:scale-95 flex items-center justify-center gap-2 cursor-pointer"
             >
               <span>{isEs ? 'Suscribirse a Instructor ($15 USD)' : 'Subscribe to Pass ($15 USD)'}</span>
               <ArrowRight className="w-4 h-4" />
@@ -606,7 +606,7 @@ export default function PlansView({ currentUser, onUserChange, language, onOpenP
       {/* COMPARATIVE SUMMARY TABLE */}
       <div className="bg-[#0A0A0A] border border-[#262626] rounded-3xl p-6 sm:p-8 space-y-6">
         <div className="flex items-center gap-3">
-          <ShieldCheck className="w-6 h-6 text-[#E9C349]" />
+          <ShieldCheck className="w-6 h-6 text-[#D9A9FF]" />
           <div>
             <h3 className="text-lg font-black text-white font-mono uppercase">
               {isEs ? 'Tabla Comparativa de Características' : 'Feature Comparison Matrix'}
@@ -624,7 +624,7 @@ export default function PlansView({ currentUser, onUserChange, language, onOpenP
                 <th className="py-3 px-4 uppercase font-bold">{isEs ? 'Función / Herramienta' : 'Feature / Tool'}</th>
                 <th className="py-3 px-4 text-center uppercase font-bold">{isEs ? 'Gratuito ($0)' : 'Free ($0)'}</th>
                 <th className="py-3 px-4 text-center uppercase font-bold text-cyan-400">{isEs ? 'Básico Práctica ($8)' : 'Basic Practice ($8)'}</th>
-                <th className="py-3 px-4 text-center uppercase font-bold text-[#E9C349]">{isEs ? 'Cátedra Alumno ($15)' : 'Cátedra Pass ($15)'}</th>
+                <th className="py-3 px-4 text-center uppercase font-bold text-[#D9A9FF]">{isEs ? 'Cátedra Alumno ($15)' : 'Cátedra Pass ($15)'}</th>
                 <th className="py-3 px-4 text-center uppercase font-bold text-purple-400">{isEs ? 'Instructor ($15)' : 'Instructor ($15)'}</th>
               </tr>
             </thead>
@@ -668,7 +668,7 @@ export default function PlansView({ currentUser, onUserChange, language, onOpenP
                 <td className="py-3 px-4 font-sans font-medium">Repartición de Ingresos 80% / 20%</td>
                 <td className="py-3 px-4 text-center text-slate-600">-</td>
                 <td className="py-3 px-4 text-center text-slate-600">-</td>
-                <td className="py-3 px-4 text-center text-[#E9C349] font-bold">80% al Profesor</td>
+                <td className="py-3 px-4 text-center text-[#D9A9FF] font-bold">80% al Profesor</td>
                 <td className="py-3 px-4 text-center text-purple-300 font-bold">80% Recaudo</td>
               </tr>
             </tbody>

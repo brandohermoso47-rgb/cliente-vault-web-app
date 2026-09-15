@@ -139,7 +139,7 @@ export function AICanvasExerciseVideo({
     const wristTrailsR: { x: number; y: number; alpha: number }[] = [];
 
     const drawGrid = (c: CanvasRenderingContext2D, w: number, h: number, time: number) => {
-      c.strokeStyle = 'rgba(233, 195, 73, 0.04)';
+      c.strokeStyle = 'rgba(217, 169, 255, 0.04)';
       c.lineWidth = 1;
       const gridSize = 40;
       // moving grid lines for cardio/speed
@@ -159,7 +159,7 @@ export function AICanvasExerciseVideo({
       }
 
       // Draw center crosshair lines
-      c.strokeStyle = 'rgba(233, 195, 73, 0.12)';
+      c.strokeStyle = 'rgba(217, 169, 255, 0.12)';
       c.lineWidth = 1.5;
       c.beginPath();
       c.moveTo(w / 2, 0);
@@ -246,7 +246,7 @@ export function AICanvasExerciseVideo({
         rightWristY = rightElbowY + radius * Math.sin(angleR);
 
         // Draw arm movement plane circles in background
-        ctx.strokeStyle = 'rgba(233, 195, 73, 0.15)';
+        ctx.strokeStyle = 'rgba(217, 169, 255, 0.15)';
         ctx.lineWidth = 2 * baseScale;
         ctx.beginPath();
         ctx.arc(leftElbowX, leftElbowY, radius, 0, Math.PI * 2);
@@ -258,7 +258,7 @@ export function AICanvasExerciseVideo({
         ctx.stroke();
 
         // Draw arc indicator
-        ctx.strokeStyle = 'rgba(233, 195, 73, 0.6)';
+        ctx.strokeStyle = 'rgba(217, 169, 255, 0.6)';
         ctx.lineWidth = 1;
         ctx.beginPath();
         ctx.arc(leftElbowX, leftElbowY, radius + 8, angleL - 0.5, angleL + 0.5);
@@ -337,7 +337,7 @@ export function AICanvasExerciseVideo({
         ctx.fill();
 
         // Draw muscle lines linking scapulas
-        ctx.strokeStyle = `rgba(233, 195, 73, ${0.2 + squeeze * 0.7})`;
+        ctx.strokeStyle = `rgba(217, 169, 255, ${0.2 + squeeze * 0.7})`;
         ctx.lineWidth = 3 * baseScale;
         ctx.beginPath();
         ctx.moveTo(shoulderLeftX, shoulderY + 10 * baseScale);
@@ -345,7 +345,7 @@ export function AICanvasExerciseVideo({
         ctx.lineTo(shoulderRightX, shoulderY + 10 * baseScale);
         ctx.stroke();
 
-        ctx.fillStyle = '#e9c349';
+        ctx.fillStyle = '#d9a9ff';
         ctx.font = `bold ${Math.round(10 * baseScale)}px monospace`;
         ctx.fillText(`TENSIÓN TRAPECIO: ${(squeeze * 100).toFixed(0)}%`, cx - 55 * baseScale, cy - 105 * baseScale);
       }
@@ -382,7 +382,7 @@ export function AICanvasExerciseVideo({
         rightWristY = headY - 15 * baseScale;
 
         // Draw ground plane line
-        ctx.strokeStyle = 'rgba(233, 195, 73, 0.4)';
+        ctx.strokeStyle = 'rgba(217, 169, 255, 0.4)';
         ctx.lineWidth = 3 * baseScale;
         ctx.beginPath();
         ctx.moveTo(cx - 100 * baseScale, cy + 150 * baseScale);
@@ -452,7 +452,7 @@ export function AICanvasExerciseVideo({
         const pt1 = wristTrailsL[i - 1];
         const pt2 = wristTrailsL[i];
         const alpha = (i / wristTrailsL.length) * 0.35;
-        ctx.strokeStyle = `rgba(233, 195, 73, ${alpha})`;
+        ctx.strokeStyle = `rgba(217, 169, 255, ${alpha})`;
         ctx.beginPath();
         ctx.moveTo(pt1.x, pt1.y);
         ctx.lineTo(pt2.x, pt2.y);
@@ -495,7 +495,7 @@ export function AICanvasExerciseVideo({
         ctx.stroke();
 
         // Left Arm
-        ctx.strokeStyle = '#e9c349'; // Gold tracker for Left
+        ctx.strokeStyle = '#d9a9ff'; // Gold tracker for Left
         ctx.beginPath();
         ctx.moveTo(shoulderLeftX, shoulderY);
         ctx.lineTo(leftElbowX, leftElbowY);
@@ -511,7 +511,7 @@ export function AICanvasExerciseVideo({
         ctx.stroke();
 
         // Legs
-        ctx.strokeStyle = '#81262c';
+        ctx.strokeStyle = '#8F2C7A';
         ctx.beginPath();
         ctx.moveTo(pelvisLeftX, pelvisY);
         ctx.lineTo(leftKneeX, leftKneeY);
@@ -528,14 +528,14 @@ export function AICanvasExerciseVideo({
           { x: cx, y: neckY, r: 4 * baseScale, color: '#e5e2e1' },
           { x: shoulderLeftX, y: shoulderY, r: 5 * baseScale, color: '#e5e2e1' },
           { x: shoulderRightX, y: shoulderY, r: 5 * baseScale, color: '#e5e2e1' },
-          { x: leftElbowX, y: leftElbowY, r: 4.5 * baseScale, color: '#e9c349' },
+          { x: leftElbowX, y: leftElbowY, r: 4.5 * baseScale, color: '#d9a9ff' },
           { x: rightElbowX, y: rightElbowY, r: 4.5 * baseScale, color: '#ffb3b2' },
-          { x: leftWristX, y: leftWristY, r: 5.5 * baseScale, color: '#e9c349', highlight: true },
+          { x: leftWristX, y: leftWristY, r: 5.5 * baseScale, color: '#d9a9ff', highlight: true },
           { x: rightWristX, y: rightWristY, r: 5.5 * baseScale, color: '#ffb3b2', highlight: true },
-          { x: pelvisLeftX, y: pelvisY, r: 4.5 * baseScale, color: '#81262c' },
-          { x: pelvisRightX, y: pelvisY, r: 4.5 * baseScale, color: '#81262c' },
-          { x: leftKneeX, y: leftKneeY, r: 4 * baseScale, color: '#81262c' },
-          { x: rightKneeX, y: rightKneeY, r: 4 * baseScale, color: '#81262c' },
+          { x: pelvisLeftX, y: pelvisY, r: 4.5 * baseScale, color: '#8F2C7A' },
+          { x: pelvisRightX, y: pelvisY, r: 4.5 * baseScale, color: '#8F2C7A' },
+          { x: leftKneeX, y: leftKneeY, r: 4 * baseScale, color: '#8F2C7A' },
+          { x: rightKneeX, y: rightKneeY, r: 4 * baseScale, color: '#8F2C7A' },
           { x: leftFootX, y: leftFootY, r: 5 * baseScale, color: '#e5e2e1' },
           { x: rightFootX, y: rightFootY, r: 5 * baseScale, color: '#e5e2e1' },
         ];
@@ -1579,13 +1579,13 @@ export default function FisicoView({ currentUser, language, onAddBonusPoints }: 
                   </div>
 
                   {/* Terminal de observaciones IA */}
-                  <div className="bg-black/90 border border-[#81262c]/20 p-3 rounded-2xl flex-1 flex flex-col justify-between min-h-[140px] max-h-[180px] lg:max-h-none overflow-hidden relative">
+                  <div className="bg-black/90 border border-[#8F2C7A]/20 p-3 rounded-2xl flex-1 flex flex-col justify-between min-h-[140px] max-h-[180px] lg:max-h-none overflow-hidden relative">
                     <div className="absolute top-2 right-2 flex items-center gap-1 pointer-events-none">
                       <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
-                      <span className="text-[7px] font-mono text-[#81262c] font-bold uppercase">SEC_LOG_OK</span>
+                      <span className="text-[7px] font-mono text-[#8F2C7A] font-bold uppercase">SEC_LOG_OK</span>
                     </div>
 
-                    <h5 className="text-[8px] font-mono font-bold text-primary uppercase tracking-widest border-b border-[#81262c]/20 pb-1 mb-2 flex items-center gap-1">
+                    <h5 className="text-[8px] font-mono font-bold text-primary uppercase tracking-widest border-b border-[#8F2C7A]/20 pb-1 mb-2 flex items-center gap-1">
                       🔬 CONSOLE OBSERVACIONES IA:
                     </h5>
 
@@ -1609,7 +1609,7 @@ export default function FisicoView({ currentUser, language, onAddBonusPoints }: 
                       )}
                     </div>
 
-                    <div className="border-t border-[#81262c]/10 pt-1.5 mt-2 flex justify-between text-[7px] font-mono text-[#81262c] font-bold">
+                    <div className="border-t border-[#8F2C7A]/10 pt-1.5 mt-2 flex justify-between text-[7px] font-mono text-[#8F2C7A] font-bold">
                       <span>ANTIGRAVITY_CORE_V1.1</span>
                       <span>BUFFER: 100%</span>
                     </div>

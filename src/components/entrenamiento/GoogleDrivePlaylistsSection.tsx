@@ -23,7 +23,7 @@ import {
 } from 'lucide-react';
 import { User } from '../../types';
 import { Language } from '../../lib/translations';
-import { db } from '../../lib/firebase';
+import { db, sanitizeFirestoreData } from '../../lib/firebase';
 import { collection, onSnapshot, doc, setDoc, deleteDoc, query, orderBy } from 'firebase/firestore';
 import GoogleDriveMusicPickerModal, { ImportedDriveTrack } from '../GoogleDriveMusicPickerModal';
 
@@ -115,7 +115,7 @@ export const GoogleDrivePlaylistsSection: React.FC<GoogleDrivePlaylistsSectionPr
     try {
       // Save to Firestore
       const docRef = doc(db, 'instructor_drive_tracks', newTrack.id);
-      await setDoc(docRef, newTrack);
+      await setDoc(docRef, sanitizeFirestoreData(newTrack));
       setTracks((prev) => [newTrack, ...prev.filter((t) => t.id !== newTrack.id)]);
     } catch (err) {
       console.error('Error saving imported track to Firestore:', err);
@@ -144,7 +144,7 @@ export const GoogleDrivePlaylistsSection: React.FC<GoogleDrivePlaylistsSectionPr
   const handleToggleShare = async (track: ImportedDriveTrack) => {
     const updated = { ...track, isSharedWithStudents: !track.isSharedWithStudents };
     try {
-      await setDoc(doc(db, 'instructor_drive_tracks', track.id), updated, { merge: true });
+      await setDoc(doc(db, 'instructor_drive_tracks', track.id), sanitizeFirestoreData(updated), { merge: true });
       setTracks((prev) => prev.map((t) => (t.id === track.id ? updated : t)));
     } catch (err) {
       console.error('Error toggling share state:', err);
@@ -242,7 +242,7 @@ export const GoogleDrivePlaylistsSection: React.FC<GoogleDrivePlaylistsSectionPr
               <HardDrive className="w-3.5 h-3.5" />
               <span>Google Drive API Sync</span>
             </span>
-            <span className="px-3 py-1 rounded-full bg-[#E9C349]/20 border border-[#E9C349]/40 text-[#E9C349] text-[10px] font-mono font-bold uppercase tracking-wider flex items-center gap-1.5">
+            <span className="px-3 py-1 rounded-full bg-[#D9A9FF]/20 border border-[#D9A9FF]/40 text-[#D9A9FF] text-[10px] font-mono font-bold uppercase tracking-wider flex items-center gap-1.5">
               <Sparkles className="w-3.5 h-3.5" />
               <span>Google Picker Integrado</span>
             </span>
@@ -359,7 +359,7 @@ export const GoogleDrivePlaylistsSection: React.FC<GoogleDrivePlaylistsSectionPr
                         onClick={() => handlePlayTrack(track)}
                         className={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 shadow-lg transition-all cursor-pointer ${
                           isCurrentlyPlaying
-                            ? 'bg-[#9A2B3C] text-white border border-[#ffb3b2] scale-105'
+                            ? 'bg-[#C23E9E] text-white border border-[#ffb3b2] scale-105'
                             : 'bg-[#4285F4] hover:bg-[#3367d6] text-white'
                         }`}
                       >
@@ -375,7 +375,7 @@ export const GoogleDrivePlaylistsSection: React.FC<GoogleDrivePlaylistsSectionPr
                           <h4 className="text-sm font-bold text-white uppercase tracking-tight truncate">
                             {track.title}
                           </h4>
-                          <span className="px-2 py-0.5 rounded-lg bg-[#E9C349]/20 border border-[#E9C349]/40 text-[#E9C349] font-mono font-bold text-[10px]">
+                          <span className="px-2 py-0.5 rounded-lg bg-[#D9A9FF]/20 border border-[#D9A9FF]/40 text-[#D9A9FF] font-mono font-bold text-[10px]">
                             {track.bpm} BPM
                           </span>
                           <span className="px-2 py-0.5 rounded-lg bg-white/10 text-slate-300 font-mono text-[10px]">
@@ -453,7 +453,7 @@ export const GoogleDrivePlaylistsSection: React.FC<GoogleDrivePlaylistsSectionPr
 
                       <div className="flex justify-between text-[10px] font-mono text-slate-400">
                         <span>{Math.floor(currentTime / 60)}:{Math.floor(currentTime % 60).toString().padStart(2, '0')}</span>
-                        <span className="text-[#E9C349]">Reproduciendo pista de Google Drive</span>
+                        <span className="text-[#D9A9FF]">Reproduciendo pista de Google Drive</span>
                         <span>{Math.floor(duration / 60)}:{Math.floor(duration % 60).toString().padStart(2, '0')}</span>
                       </div>
                     </div>
@@ -462,9 +462,9 @@ export const GoogleDrivePlaylistsSection: React.FC<GoogleDrivePlaylistsSectionPr
                   {/* Notes for students */}
                   {track.notesForStudents && (
                     <div className="p-3 rounded-xl bg-black/40 border border-white/5 text-xs text-slate-300 font-sans flex items-start gap-2">
-                      <Sparkles className="w-3.5 h-3.5 text-[#E9C349] shrink-0 mt-0.5" />
+                      <Sparkles className="w-3.5 h-3.5 text-[#D9A9FF] shrink-0 mt-0.5" />
                       <p>
-                        <strong className="text-[#E9C349] font-mono">Nota del Profesor:</strong> {track.notesForStudents}
+                        <strong className="text-[#D9A9FF] font-mono">Nota del Profesor:</strong> {track.notesForStudents}
                       </p>
                     </div>
                   )}

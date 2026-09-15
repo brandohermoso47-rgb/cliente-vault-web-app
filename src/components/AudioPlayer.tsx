@@ -148,7 +148,7 @@ export default function AudioPlayer({
         initial={{ y: 100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         exit={{ y: 100, opacity: 0 }}
-        className={`fixed bottom-0 left-0 right-0 z-50 bg-[#0d0e1b]/98 border-t-2 border-[#E9C349]/40 shadow-[0_-10px_40px_rgba(0,0,0,0.8)] backdrop-blur-2xl text-white transition-all duration-300 ${
+        className={`fixed bottom-0 left-0 right-0 z-50 bg-[#0d0e1b]/98 border-t-2 border-[#D9A9FF]/40 shadow-[0_-10px_40px_rgba(0,0,0,0.8)] backdrop-blur-2xl text-white transition-all duration-300 ${
           isMinimized ? 'py-2 px-4' : 'py-3.5 px-4 sm:px-6'
         }`}
       >
@@ -168,15 +168,15 @@ export default function AudioPlayer({
                   referrerPolicy="no-referrer"
                 />
                 {!isSubscribed && (
-                  <div className="absolute inset-0 bg-black/70 rounded-xl flex items-center justify-center border border-[#9A2B3C]">
-                    <Lock className="w-4 h-4 text-[#E9C349]" />
+                  <div className="absolute inset-0 bg-black/70 rounded-xl flex items-center justify-center border border-[#C23E9E]">
+                    <Lock className="w-4 h-4 text-[#D9A9FF]" />
                   </div>
                 )}
               </div>
 
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-2">
-                  <span className="px-2 py-0.5 rounded-full bg-[#E9C349]/20 border border-[#E9C349]/40 text-[#E9C349] font-mono text-[9px] font-bold uppercase tracking-wider">
+                  <span className="px-2 py-0.5 rounded-full bg-[#D9A9FF]/20 border border-[#D9A9FF]/40 text-[#D9A9FF] font-mono text-[9px] font-bold uppercase tracking-wider">
                     PODCAST
                   </span>
                   {episode.episodeNumber && (
@@ -189,7 +189,7 @@ export default function AudioPlayer({
                   {episode.title}
                 </h4>
                 <p className="text-[11px] text-gray-400 truncate">
-                  {show.title} • <span className="text-[#E9C349]">{show.instructorName}</span>
+                  {show.title} • <span className="text-[#D9A9FF]">{show.instructorName}</span>
                 </p>
               </div>
             </div>
@@ -209,10 +209,10 @@ export default function AudioPlayer({
                 onClick={handleTogglePlay}
                 className={`p-3.5 rounded-full font-bold transition-all shadow-lg flex items-center justify-center cursor-pointer ${
                   !isSubscribed
-                    ? 'bg-[#9A2B3C] hover:bg-[#b03246] text-white ring-2 ring-[#E9C349]/50'
+                    ? 'bg-[#C23E9E] hover:bg-[#C13F9C] text-white ring-2 ring-[#D9A9FF]/50'
                     : isPlaying
-                      ? 'bg-[#E9C349] text-black hover:scale-105 shadow-[0_0_20px_rgba(233,195,73,0.5)]'
-                      : 'bg-[#E9C349] text-black hover:scale-105 shadow-[0_0_20px_rgba(233,195,73,0.3)]'
+                      ? 'bg-[#D9A9FF] text-black hover:scale-105 shadow-[0_0_20px_rgba(217, 169, 255,0.5)]'
+                      : 'bg-[#D9A9FF] text-black hover:scale-105 shadow-[0_0_20px_rgba(217, 169, 255,0.3)]'
                 }`}
                 title={!isSubscribed ? 'Suscríbete para escuchar' : isPlaying ? 'Pausar' : 'Reproducir'}
               >
@@ -256,7 +256,7 @@ export default function AudioPlayer({
                             setShowSpeedMenu(false);
                           }}
                           className={`px-2 py-1 text-[11px] font-mono font-bold rounded-lg text-left transition-all ${
-                            playbackRate === rate ? 'bg-[#E9C349] text-black' : 'text-gray-300 hover:bg-white/10'
+                            playbackRate === rate ? 'bg-[#D9A9FF] text-black' : 'text-gray-300 hover:bg-white/10'
                           }`}
                         >
                           {rate}x
@@ -286,7 +286,7 @@ export default function AudioPlayer({
                       setVolume(parseFloat(e.target.value));
                       setIsMuted(false);
                     }}
-                    className="w-16 accent-[#E9C349] h-1.5 bg-gray-700 rounded-lg cursor-pointer"
+                    className="w-16 accent-[#D9A9FF] h-1.5 bg-gray-700 rounded-lg cursor-pointer"
                   />
                 </div>
               )}
@@ -296,10 +296,10 @@ export default function AudioPlayer({
                 onClick={handleTogglePlay}
                 className={`md:hidden p-2.5 rounded-full font-bold transition-all shadow-md ${
                   !isSubscribed
-                    ? 'bg-[#9A2B3C] text-white'
+                    ? 'bg-[#C23E9E] text-white'
                     : isPlaying
-                      ? 'bg-[#E9C349] text-black'
-                      : 'bg-[#E9C349] text-black'
+                      ? 'bg-[#D9A9FF] text-black'
+                      : 'bg-[#D9A9FF] text-black'
                 }`}
               >
                 {!isSubscribed ? (
@@ -348,7 +348,7 @@ export default function AudioPlayer({
                   value={currentTime}
                   onChange={handleSeek}
                   disabled={!isSubscribed}
-                  className="w-full accent-[#E9C349] h-1.5 bg-white/15 rounded-lg cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed"
+                  className="w-full accent-[#D9A9FF] h-1.5 bg-white/15 rounded-lg cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed"
                 />
               </div>
 
@@ -360,13 +360,13 @@ export default function AudioPlayer({
 
           {/* Locked Subscription Notice Banner */}
           {!isSubscribed && !isMinimized && (
-            <div className="mt-2 p-3 rounded-2xl bg-gradient-to-r from-[#9A2B3C]/30 via-purple-950/40 to-[#0A0A0A] border border-[#9A2B3C]/60 flex flex-col sm:flex-row items-center justify-between gap-3">
+            <div className="mt-2 p-3 rounded-2xl bg-gradient-to-r from-[#C23E9E]/30 via-purple-950/40 to-[#0A0A0A] border border-[#C23E9E]/60 flex flex-col sm:flex-row items-center justify-between gap-3">
               <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-full bg-[#9A2B3C]/40 border border-[#E9C349]/50 flex items-center justify-center shrink-0">
-                  <Lock className="w-4 h-4 text-[#E9C349]" />
+                <div className="w-8 h-8 rounded-full bg-[#C23E9E]/40 border border-[#D9A9FF]/50 flex items-center justify-center shrink-0">
+                  <Lock className="w-4 h-4 text-[#D9A9FF]" />
                 </div>
                 <div>
-                  <h5 className="font-mono font-bold text-xs uppercase text-[#E9C349] tracking-wider">
+                  <h5 className="font-mono font-bold text-xs uppercase text-[#D9A9FF] tracking-wider">
                     Contenido Exclusivo para Suscriptores
                   </h5>
                   <p className="text-[11px] text-gray-300">
@@ -381,7 +381,7 @@ export default function AudioPlayer({
                     onSubscribeCTA(show.instructorId, show.instructorName);
                   }
                 }}
-                className="w-full sm:w-auto px-4 py-2 rounded-xl bg-gradient-to-r from-[#E9C349] to-[#f3d775] text-black font-bold text-xs shadow-lg hover:brightness-110 transition-all flex items-center justify-center gap-1.5 shrink-0 cursor-pointer"
+                className="w-full sm:w-auto px-4 py-2 rounded-xl bg-gradient-to-r from-[#D9A9FF] to-[#f3d775] text-black font-bold text-xs shadow-lg hover:brightness-110 transition-all flex items-center justify-center gap-1.5 shrink-0 cursor-pointer"
               >
                 <Sparkles className="w-3.5 h-3.5" />
                 Suscribirme a {show.instructorName}

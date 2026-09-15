@@ -161,10 +161,10 @@ export default function PodcastsView({
       
       {/* Page Header */}
       <div className="relative rounded-3xl bg-gradient-to-r from-[#14162e] via-[#0f1020] to-[#1c1228] p-6 sm:p-8 border border-white/10 overflow-hidden shadow-2xl">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-[radial-gradient(circle_at_center,rgba(233,195,73,0.15)_0%,transparent_70%)] pointer-events-none" />
+        <div className="absolute top-0 right-0 w-96 h-96 bg-[radial-gradient(circle_at_center,rgba(217, 169, 255,0.15)_0%,transparent_70%)] pointer-events-none" />
         
         <div className="relative z-10 max-w-3xl space-y-3">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#E9C349]/20 border border-[#E9C349]/40 text-[#E9C349] text-xs font-mono font-bold uppercase tracking-widest">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#D9A9FF]/20 border border-[#D9A9FF]/40 text-[#D9A9FF] text-xs font-mono font-bold uppercase tracking-widest">
             <Radio className="w-3.5 h-3.5 animate-pulse" />
             WAACK ON PODCASTS CÁTEDRA
           </div>
@@ -174,7 +174,7 @@ export default function PodcastsView({
           </h1>
 
           <p className="text-sm text-gray-300 leading-relaxed font-sans">
-            Escucha episodios exclusivos sobre historia del Disco 1970s, análisis biomecánico de aceleración de brazos, secretos de freestyle y metodologías pedagógicas. <strong className="text-[#E9C349]">Incluido 100% en la suscripción de cada instructor.</strong>
+            Escucha episodios exclusivos sobre historia del Disco 1970s, análisis biomecánico de aceleración de brazos, secretos de freestyle y metodologías pedagógicas. <strong className="text-[#D9A9FF]">Incluido 100% en la suscripción de cada instructor.</strong>
           </p>
         </div>
       </div>
@@ -187,7 +187,7 @@ export default function PodcastsView({
             onClick={() => setActiveSubTab('all')}
             className={`flex-1 sm:flex-none px-5 py-2.5 rounded-xl font-mono text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer ${
               activeSubTab === 'all'
-                ? 'bg-gradient-to-r from-[#E9C349] to-[#f3d775] text-black shadow-lg'
+                ? 'bg-gradient-to-r from-[#D9A9FF] to-[#f3d775] text-black shadow-lg'
                 : 'text-gray-400 hover:text-white'
             }`}
           >
@@ -199,7 +199,7 @@ export default function PodcastsView({
             onClick={() => setActiveSubTab('my_library')}
             className={`flex-1 sm:flex-none px-5 py-2.5 rounded-xl font-mono text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer ${
               activeSubTab === 'my_library'
-                ? 'bg-gradient-to-r from-[#E9C349] to-[#f3d775] text-black shadow-lg'
+                ? 'bg-gradient-to-r from-[#D9A9FF] to-[#f3d775] text-black shadow-lg'
                 : 'text-gray-400 hover:text-white'
             }`}
           >
@@ -216,7 +216,7 @@ export default function PodcastsView({
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Buscar podcast o episodio..."
-            className="w-full bg-[#121426] border border-white/15 rounded-xl pl-10 pr-4 py-2 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#E9C349] transition-all"
+            className="w-full bg-[#121426] border border-white/15 rounded-xl pl-10 pr-4 py-2 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#D9A9FF] transition-all"
           />
         </div>
       </div>
@@ -232,7 +232,7 @@ export default function PodcastsView({
             onClick={() => setSelectedCategory(cat)}
             className={`px-3.5 py-1.5 rounded-full text-xs font-mono font-bold tracking-wider uppercase transition-all shrink-0 cursor-pointer border ${
               selectedCategory === cat
-                ? 'bg-[#E9C349] text-black border-[#E9C349] font-black shadow-md'
+                ? 'bg-[#D9A9FF] text-black border-[#D9A9FF] font-black shadow-md'
                 : 'bg-white/5 text-gray-300 border-white/10 hover:border-white/30'
             }`}
           >
@@ -248,7 +248,7 @@ export default function PodcastsView({
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="rounded-3xl bg-[#0f1122] border-2 border-[#E9C349]/40 p-6 sm:p-8 shadow-2xl relative overflow-hidden"
+            className="rounded-3xl bg-[#0f1122] border-2 border-[#D9A9FF]/40 p-6 sm:p-8 shadow-2xl relative overflow-hidden"
           >
             <button
               onClick={() => setSelectedShow(null)}
@@ -267,11 +267,11 @@ export default function PodcastsView({
                   referrerPolicy="no-referrer"
                 />
                 {!isUserSubscribedToInstructor(selectedShow.instructorId) && (
-                  <div className="absolute inset-0 bg-black/75 backdrop-blur-sm flex flex-col items-center justify-center p-4 text-center border-2 border-[#9A2B3C]">
-                    <div className="w-12 h-12 rounded-full bg-[#9A2B3C]/50 border border-[#E9C349] flex items-center justify-center mb-2">
-                      <Lock className="w-6 h-6 text-[#E9C349]" />
+                  <div className="absolute inset-0 bg-black/75 backdrop-blur-sm flex flex-col items-center justify-center p-4 text-center border-2 border-[#C23E9E]">
+                    <div className="w-12 h-12 rounded-full bg-[#C23E9E]/50 border border-[#D9A9FF] flex items-center justify-center mb-2">
+                      <Lock className="w-6 h-6 text-[#D9A9FF]" />
                     </div>
-                    <span className="font-mono font-bold text-xs uppercase text-[#E9C349]">
+                    <span className="font-mono font-bold text-xs uppercase text-[#D9A9FF]">
                       Contenido Bloqueado
                     </span>
                     <p className="text-[11px] text-gray-300 mt-1">
@@ -284,7 +284,7 @@ export default function PodcastsView({
               {/* Show Details */}
               <div className="md:col-span-2 space-y-4">
                 <div className="flex flex-wrap items-center gap-2">
-                  <span className="px-3 py-1 rounded-full bg-[#E9C349]/20 border border-[#E9C349]/50 text-[#E9C349] text-xs font-mono font-bold uppercase">
+                  <span className="px-3 py-1 rounded-full bg-[#D9A9FF]/20 border border-[#D9A9FF]/50 text-[#D9A9FF] text-xs font-mono font-bold uppercase">
                     {selectedShow.category || 'Podcast Cátedra'}
                   </span>
                   <span className="text-xs font-mono text-gray-400">
@@ -300,7 +300,7 @@ export default function PodcastsView({
                   <img
                     src={selectedShow.instructorAvatar || 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=120'}
                     alt={selectedShow.instructorName}
-                    className="w-10 h-10 rounded-full object-cover border-2 border-[#E9C349]"
+                    className="w-10 h-10 rounded-full object-cover border-2 border-[#D9A9FF]"
                     referrerPolicy="no-referrer"
                   />
                   <div>
@@ -315,9 +315,9 @@ export default function PodcastsView({
 
                 {/* Subscription CTA if not subscribed */}
                 {!isUserSubscribedToInstructor(selectedShow.instructorId) && (
-                  <div className="p-4 rounded-2xl bg-gradient-to-r from-[#9A2B3C]/40 via-purple-950/40 to-[#0A0A0A] border border-[#9A2B3C] flex flex-col sm:flex-row items-center justify-between gap-3">
+                  <div className="p-4 rounded-2xl bg-gradient-to-r from-[#C23E9E]/40 via-purple-950/40 to-[#0A0A0A] border border-[#C23E9E] flex flex-col sm:flex-row items-center justify-between gap-3">
                     <div>
-                      <h4 className="font-mono font-bold text-xs text-[#E9C349] uppercase tracking-wider">
+                      <h4 className="font-mono font-bold text-xs text-[#D9A9FF] uppercase tracking-wider">
                         🔒 Acceso Exclusivo para Suscriptores
                       </h4>
                       <p className="text-xs text-gray-300 mt-0.5">
@@ -326,7 +326,7 @@ export default function PodcastsView({
                     </div>
                     <button
                       onClick={() => (selectedShow?.episodes || [])[0] && handlePlayEpisode((selectedShow?.episodes || [])[0], selectedShow)}
-                      className="px-5 py-2.5 rounded-xl bg-[#E9C349] hover:bg-[#d4ae36] text-black font-mono text-xs font-black uppercase tracking-wider shadow-lg transition-all flex items-center gap-1.5 shrink-0 cursor-pointer"
+                      className="px-5 py-2.5 rounded-xl bg-[#D9A9FF] hover:bg-[#B478F0] text-black font-mono text-xs font-black uppercase tracking-wider shadow-lg transition-all flex items-center gap-1.5 shrink-0 cursor-pointer"
                     >
                       <Sparkles className="w-4 h-4" /> Suscribirme Ahora
                     </button>
@@ -336,7 +336,7 @@ export default function PodcastsView({
                 {/* EPISODES LIST */}
                 <div className="pt-4 space-y-3">
                   <h3 className="font-mono font-bold text-sm uppercase text-gray-300 tracking-wider flex items-center gap-2 border-b border-white/10 pb-2">
-                    <Radio className="w-4 h-4 text-[#E9C349]" />
+                    <Radio className="w-4 h-4 text-[#D9A9FF]" />
                     Episodios Disponibles ({(selectedShow?.episodes || []).length})
                   </h3>
 
@@ -350,7 +350,7 @@ export default function PodcastsView({
                           key={ep.id}
                           className={`p-4 rounded-2xl border transition-all flex items-center justify-between gap-4 ${
                             isCurrentlyPlaying
-                              ? 'bg-[#E9C349]/15 border-[#E9C349] shadow-lg'
+                              ? 'bg-[#D9A9FF]/15 border-[#D9A9FF] shadow-lg'
                               : 'bg-white/5 border-white/10 hover:border-white/20'
                           }`}
                         >
@@ -359,10 +359,10 @@ export default function PodcastsView({
                               onClick={() => handlePlayEpisode(ep, selectedShow)}
                               className={`w-11 h-11 rounded-2xl flex items-center justify-center font-bold transition-all shrink-0 cursor-pointer ${
                                 !isSub
-                                  ? 'bg-[#9A2B3C] hover:bg-[#b03246] text-white shadow-md'
+                                  ? 'bg-[#C23E9E] hover:bg-[#C13F9C] text-white shadow-md'
                                   : isCurrentlyPlaying
-                                    ? 'bg-[#E9C349] text-black shadow-[0_0_15px_rgba(233,195,73,0.5)]'
-                                    : 'bg-white/10 hover:bg-[#E9C349] text-white hover:text-black'
+                                    ? 'bg-[#D9A9FF] text-black shadow-[0_0_15px_rgba(217, 169, 255,0.5)]'
+                                    : 'bg-white/10 hover:bg-[#D9A9FF] text-white hover:text-black'
                               }`}
                               title={!isSub ? 'Suscríbete para escuchar' : 'Reproducir Episodio'}
                             >
@@ -379,7 +379,7 @@ export default function PodcastsView({
                               <div className="flex items-center gap-2 text-[10px] font-mono text-gray-400">
                                 {ep.episodeNumber && <span>E{ep.episodeNumber}</span>}
                                 <span>•</span>
-                                <span className="flex items-center gap-1"><Clock className="w-3 h-3 text-[#E9C349]" /> {ep.duration}</span>
+                                <span className="flex items-center gap-1"><Clock className="w-3 h-3 text-[#D9A9FF]" /> {ep.duration}</span>
                                 <span>•</span>
                                 <span>{ep.publishDate}</span>
                               </div>
@@ -419,7 +419,7 @@ export default function PodcastsView({
               key={pod.id}
               whileHover={{ y: -4 }}
               onClick={() => setSelectedShow(pod)}
-              className="group rounded-3xl bg-[#101224] border border-white/10 hover:border-[#E9C349]/60 p-5 transition-all shadow-xl flex flex-col justify-between cursor-pointer relative overflow-hidden"
+              className="group rounded-3xl bg-[#101224] border border-white/10 hover:border-[#D9A9FF]/60 p-5 transition-all shadow-xl flex flex-col justify-between cursor-pointer relative overflow-hidden"
             >
               <div>
                 {/* 1:1 Cover Art Image */}
@@ -432,14 +432,14 @@ export default function PodcastsView({
                   />
 
                   {/* Badge */}
-                  <div className="absolute top-3 left-3 px-3 py-1 rounded-full bg-black/80 backdrop-blur-md border border-white/20 text-[#E9C349] font-mono text-[10px] font-bold uppercase tracking-wider">
+                  <div className="absolute top-3 left-3 px-3 py-1 rounded-full bg-black/80 backdrop-blur-md border border-white/20 text-[#D9A9FF] font-mono text-[10px] font-bold uppercase tracking-wider">
                     {pod.category || 'Podcast'}
                   </div>
 
                   {/* Lock Overlay if not subscribed */}
                   {!isSub ? (
-                    <div className="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-[#9A2B3C] border border-[#E9C349]/50 text-white font-mono text-[9px] font-bold uppercase flex items-center gap-1 shadow-md">
-                      <Lock className="w-3 h-3 text-[#E9C349]" /> Suscripción
+                    <div className="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-[#C23E9E] border border-[#D9A9FF]/50 text-white font-mono text-[9px] font-bold uppercase flex items-center gap-1 shadow-md">
+                      <Lock className="w-3 h-3 text-[#D9A9FF]" /> Suscripción
                     </div>
                   ) : (
                     <div className="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-emerald-950/90 border border-emerald-500/50 text-emerald-300 font-mono text-[9px] font-bold uppercase flex items-center gap-1 shadow-md">
@@ -448,7 +448,7 @@ export default function PodcastsView({
                   )}
 
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
-                    <span className="text-xs font-mono font-bold text-[#E9C349] flex items-center gap-1">
+                    <span className="text-xs font-mono font-bold text-[#D9A9FF] flex items-center gap-1">
                       Ver Episodios <ChevronRight className="w-4 h-4" />
                     </span>
                   </div>
@@ -459,14 +459,14 @@ export default function PodcastsView({
                   <img
                     src={pod.instructorAvatar || 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=120'}
                     alt={pod.instructorName}
-                    className="w-6 h-6 rounded-full object-cover border border-[#E9C349]"
+                    className="w-6 h-6 rounded-full object-cover border border-[#D9A9FF]"
                     referrerPolicy="no-referrer"
                   />
                   <span className="text-xs font-bold text-gray-300">{pod.instructorName}</span>
                 </div>
 
                 {/* Show Title & Desc */}
-                <h3 className="font-mono font-black text-base text-white uppercase tracking-wide group-hover:text-[#E9C349] transition-colors leading-snug">
+                <h3 className="font-mono font-black text-base text-white uppercase tracking-wide group-hover:text-[#D9A9FF] transition-colors leading-snug">
                   {pod.title}
                 </h3>
 
@@ -478,7 +478,7 @@ export default function PodcastsView({
               {/* Bottom Card Footer */}
               <div className="pt-4 border-t border-white/10 mt-4 flex items-center justify-between text-xs font-mono text-gray-400">
                 <span className="flex items-center gap-1">
-                  <Radio className="w-3.5 h-3.5 text-[#E9C349]" /> {(pod?.episodes || []).length} episodios
+                  <Radio className="w-3.5 h-3.5 text-[#D9A9FF]" /> {(pod?.episodes || []).length} episodios
                 </span>
 
                 <button
@@ -486,7 +486,7 @@ export default function PodcastsView({
                     e.stopPropagation();
                     setSelectedShow(pod);
                   }}
-                  className="text-[#E9C349] font-bold hover:underline flex items-center gap-0.5"
+                  className="text-[#D9A9FF] font-bold hover:underline flex items-center gap-0.5"
                 >
                   Explorar
                 </button>
@@ -499,7 +499,7 @@ export default function PodcastsView({
       {/* Empty State */}
       {filteredPodcasts.length === 0 && (
         <div className="p-12 text-center rounded-3xl bg-[#121426] border border-white/10 space-y-3">
-          <Radio className="w-12 h-12 text-[#E9C349] mx-auto opacity-50" />
+          <Radio className="w-12 h-12 text-[#D9A9FF] mx-auto opacity-50" />
           <h3 className="text-lg font-bold font-mono text-white uppercase">
             No se encontraron podcasts
           </h3>

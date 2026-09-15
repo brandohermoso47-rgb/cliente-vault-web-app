@@ -376,15 +376,15 @@ export const InstagramFeed: React.FC<InstagramFeedProps> = ({
   return (
     <div className="w-full space-y-6 text-left">
       {/* Top Banner / Instagram Header Info */}
-      <div className="bg-[#141414] border border-[#E9C349]/30 rounded-2xl p-5 sm:p-6 shadow-2xl relative overflow-hidden">
+      <div className="bg-[#141414] border border-[#D9A9FF]/30 rounded-2xl p-5 sm:p-6 shadow-2xl relative overflow-hidden">
         {/* Glow ambient background accents */}
-        <div className="absolute top-0 right-0 w-80 h-80 bg-[#9A2B3C]/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-60 h-60 bg-[#E9C349]/10 rounded-full blur-2xl pointer-events-none" />
+        <div className="absolute top-0 right-0 w-80 h-80 bg-[#C23E9E]/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-60 h-60 bg-[#D9A9FF]/10 rounded-full blur-2xl pointer-events-none" />
 
         <div className="relative z-10 flex flex-col md:flex-row items-center md:items-start gap-6">
           {/* Avatar with Story Ring */}
           <div className="relative group cursor-pointer shrink-0" onClick={() => stories.length > 0 && setActiveStoryIndex(0)}>
-            <div className="p-1 rounded-full bg-gradient-to-tr from-[#E9C349] via-[#9A2B3C] to-purple-600 shadow-xl group-hover:scale-105 transition-transform">
+            <div className="p-1 rounded-full bg-gradient-to-tr from-[#D9A9FF] via-[#C23E9E] to-purple-600 shadow-xl group-hover:scale-105 transition-transform">
               <div className="p-1 bg-[#141414] rounded-full">
                 <img 
                   src={currentUser.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=300'} 
@@ -401,7 +401,7 @@ export const InstagramFeed: React.FC<InstagramFeedProps> = ({
                 setCreateMediaType('story');
                 setIsCreateModalOpen(true);
               }}
-              className="absolute bottom-1 right-1 p-2 rounded-full bg-[#9A2B3C] text-white border-2 border-[#141414] hover:bg-[#b03246] hover:scale-110 transition-all shadow-lg"
+              className="absolute bottom-1 right-1 p-2 rounded-full bg-[#C23E9E] text-white border-2 border-[#141414] hover:bg-[#C13F9C] hover:scale-110 transition-all shadow-lg"
               title="Añadir nueva Historia"
               aria-label="Añadir nueva Historia"
             >
@@ -414,7 +414,7 @@ export const InstagramFeed: React.FC<InstagramFeedProps> = ({
             <div className="flex flex-col sm:flex-row sm:items-center gap-3">
               <h1 className="text-xl sm:text-2xl font-black text-white tracking-wide uppercase flex items-center justify-center md:justify-start gap-2">
                 @{currentUser?.nickname || (currentUser?.name || 'waacker').toLowerCase().replace(/\s+/g, '_')}
-                <span className="p-1 bg-[#E9C349]/20 text-[#E9C349] rounded-full border border-[#E9C349]/40" title="Bailarín Verificado Waack ON">
+                <span className="p-1 bg-[#D9A9FF]/20 text-[#D9A9FF] rounded-full border border-[#D9A9FF]/40" title="Bailarín Verificado Waack ON">
                   <Sparkles className="w-3.5 h-3.5" />
                 </span>
               </h1>
@@ -425,7 +425,7 @@ export const InstagramFeed: React.FC<InstagramFeedProps> = ({
                     setCreateMediaType('image');
                     setIsCreateModalOpen(true);
                   }}
-                  className="px-3.5 py-1.5 rounded-xl bg-[#E9C349] text-slate-950 font-black text-xs hover:bg-[#f3d362] transition-all flex items-center gap-1.5 shadow-md"
+                  className="px-3.5 py-1.5 rounded-xl bg-[#D9A9FF] text-slate-950 font-black text-xs hover:bg-[#E4B8FF] transition-all flex items-center gap-1.5 shadow-md"
                   aria-label="Publicar foto o video"
                 >
                   <Plus className="w-3.5 h-3.5" />
@@ -462,7 +462,7 @@ export const InstagramFeed: React.FC<InstagramFeedProps> = ({
                 <span className="text-slate-400 text-[11px] font-mono uppercase">Seguidos</span>
               </div>
               <div className="text-center md:text-left">
-                <span className="font-black text-[#E9C349] text-base block">24</span>
+                <span className="font-black text-[#D9A9FF] text-base block">24</span>
                 <span className="text-slate-400 text-[11px] font-mono uppercase">Live Battles</span>
               </div>
             </div>
@@ -475,7 +475,7 @@ export const InstagramFeed: React.FC<InstagramFeedProps> = ({
               <p className="text-xs text-slate-400 max-w-xl line-clamp-2">
                 {currentUser.bio || 'Especialista en Waacking, Arm Control, Posing y Expresividad Escénica. Miembro activo del portal oficial de entrenamiento.'}
               </p>
-              <div className="flex flex-wrap items-center justify-center md:justify-start gap-2 pt-1 text-[11px] font-mono text-[#E9C349]">
+              <div className="flex flex-wrap items-center justify-center md:justify-start gap-2 pt-1 text-[11px] font-mono text-[#D9A9FF]">
                 <span>#Waacking</span>
                 <span>#WaackON</span>
                 <span>#WhackingDancer</span>
@@ -490,7 +490,7 @@ export const InstagramFeed: React.FC<InstagramFeedProps> = ({
       <div className="bg-[#141414] border border-white/10 rounded-2xl p-4 shadow-xl">
         <div className="flex items-center justify-between mb-3 px-1">
           <div className="flex items-center gap-2">
-            <Sparkles className="w-4 h-4 text-[#E9C349]" />
+            <Sparkles className="w-4 h-4 text-[#D9A9FF]" />
             <h3 className="text-xs font-black uppercase text-white tracking-wider">Historias de Waacking & Drills</h3>
           </div>
           <button 
@@ -498,13 +498,13 @@ export const InstagramFeed: React.FC<InstagramFeedProps> = ({
               setCreateMediaType('story');
               setIsCreateModalOpen(true);
             }}
-            className="text-xs font-bold text-[#E9C349] hover:underline flex items-center gap-1"
+            className="text-xs font-bold text-[#D9A9FF] hover:underline flex items-center gap-1"
           >
             <Plus className="w-3.5 h-3.5" /> Nueva Historia
           </button>
         </div>
 
-        <div className="flex items-center gap-4 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-[#9A2B3C]">
+        <div className="flex items-center gap-4 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-[#C23E9E]">
           {/* Add story item button */}
           <button 
             onClick={() => {
@@ -513,8 +513,8 @@ export const InstagramFeed: React.FC<InstagramFeedProps> = ({
             }}
             className="flex flex-col items-center gap-1.5 shrink-0 group"
           >
-            <div className="w-16 h-16 rounded-full border-2 border-dashed border-[#E9C349]/60 flex items-center justify-center bg-[#1c1a1a] group-hover:border-[#E9C349] transition-all">
-              <Plus className="w-6 h-6 text-[#E9C349]" />
+            <div className="w-16 h-16 rounded-full border-2 border-dashed border-[#D9A9FF]/60 flex items-center justify-center bg-[#1c1a1a] group-hover:border-[#D9A9FF] transition-all">
+              <Plus className="w-6 h-6 text-[#D9A9FF]" />
             </div>
             <span className="text-[10px] font-mono text-slate-300 font-bold">Tu historia</span>
           </button>
@@ -526,7 +526,7 @@ export const InstagramFeed: React.FC<InstagramFeedProps> = ({
               onClick={() => setActiveStoryIndex(idx)}
               className="flex flex-col items-center gap-1.5 shrink-0 group"
             >
-              <div className={`p-0.5 rounded-full ${story.seen ? 'bg-slate-700' : 'bg-gradient-to-tr from-[#E9C349] to-[#9A2B3C] shadow-md'} group-hover:scale-105 transition-transform`}>
+              <div className={`p-0.5 rounded-full ${story.seen ? 'bg-slate-700' : 'bg-gradient-to-tr from-[#D9A9FF] to-[#C23E9E] shadow-md'} group-hover:scale-105 transition-transform`}>
                 <div className="p-0.5 bg-[#141414] rounded-full">
                   <img 
                     src={story.mediaUrl} 
@@ -550,7 +550,7 @@ export const InstagramFeed: React.FC<InstagramFeedProps> = ({
           onClick={() => setActiveTab('grid')}
           className={`flex-1 py-2.5 rounded-lg font-mono text-xs font-extrabold transition-all flex items-center justify-center gap-2 border ${
             activeTab === 'grid'
-              ? 'bg-[#E9C349] text-slate-950 border-[#E9C349] shadow-lg'
+              ? 'bg-[#D9A9FF] text-slate-950 border-[#D9A9FF] shadow-lg'
               : 'text-slate-400 border-transparent hover:text-white hover:bg-white/5'
           }`}
           aria-label="Ver todas las publicaciones en cuadrícula"
@@ -563,12 +563,12 @@ export const InstagramFeed: React.FC<InstagramFeedProps> = ({
           onClick={() => setActiveTab('reels')}
           className={`flex-1 py-2.5 rounded-lg font-mono text-xs font-extrabold transition-all flex items-center justify-center gap-2 border ${
             activeTab === 'reels'
-              ? 'bg-[#9A2B3C] text-white border-[#9A2B3C] shadow-lg'
+              ? 'bg-[#C23E9E] text-white border-[#C23E9E] shadow-lg'
               : 'text-slate-400 border-transparent hover:text-white hover:bg-white/5'
           }`}
           aria-label="Ver videos y reels de entrenamiento"
         >
-          <Film className="w-4 h-4 text-[#E9C349]" />
+          <Film className="w-4 h-4 text-[#D9A9FF]" />
           REELS & DRILLS ({safePosts.filter(p => p && (p.type === 'video' || p.type === 'reel')).length})
         </button>
 
@@ -576,7 +576,7 @@ export const InstagramFeed: React.FC<InstagramFeedProps> = ({
           onClick={() => setActiveTab('saved')}
           className={`flex-1 py-2.5 rounded-lg font-mono text-xs font-extrabold transition-all flex items-center justify-center gap-2 border ${
             activeTab === 'saved'
-              ? 'bg-[#E9C349]/20 text-[#E9C349] border-[#E9C349]'
+              ? 'bg-[#D9A9FF]/20 text-[#D9A9FF] border-[#D9A9FF]'
               : 'text-slate-400 border-transparent hover:text-white hover:bg-white/5'
           }`}
           aria-label="Ver publicaciones guardadas y con Me Gusta"
@@ -596,7 +596,7 @@ export const InstagramFeed: React.FC<InstagramFeedProps> = ({
           </p>
           <button 
             onClick={() => setIsCreateModalOpen(true)}
-            className="px-4 py-2 bg-[#E9C349] text-slate-950 font-black rounded-xl text-xs hover:bg-[#f3d362] transition-all inline-flex items-center gap-1.5"
+            className="px-4 py-2 bg-[#D9A9FF] text-slate-950 font-black rounded-xl text-xs hover:bg-[#E4B8FF] transition-all inline-flex items-center gap-1.5"
           >
             <Plus className="w-4 h-4" /> Subir Primera Publicación
           </button>
@@ -611,7 +611,7 @@ export const InstagramFeed: React.FC<InstagramFeedProps> = ({
               animate={{ opacity: 1, scale: 1 }}
               whileHover={{ y: -3 }}
               onClick={() => setSelectedPost(post)}
-              className="relative aspect-square bg-[#1a1a1a] rounded-xl overflow-hidden cursor-pointer group border border-white/10 hover:border-[#E9C349]/60 shadow-lg"
+              className="relative aspect-square bg-[#1a1a1a] rounded-xl overflow-hidden cursor-pointer group border border-white/10 hover:border-[#D9A9FF]/60 shadow-lg"
             >
               {post.type === 'video' || post.type === 'reel' ? (
                 <div className="w-full h-full relative">
@@ -622,7 +622,7 @@ export const InstagramFeed: React.FC<InstagramFeedProps> = ({
                     playsInline 
                   />
                   <div className="absolute top-2 right-2 p-1.5 rounded-lg bg-black/60 text-white backdrop-blur-md">
-                    <Film className="w-3.5 h-3.5 text-[#E9C349]" />
+                    <Film className="w-3.5 h-3.5 text-[#D9A9FF]" />
                   </div>
                 </div>
               ) : (
@@ -636,7 +636,7 @@ export const InstagramFeed: React.FC<InstagramFeedProps> = ({
 
               {/* Pin indicator */}
               {post.isPinned && (
-                <div className="absolute top-2 left-2 px-2 py-0.5 rounded-md bg-[#9A2B3C] text-white text-[9px] font-mono font-bold tracking-wider uppercase border border-[#E9C349]/40">
+                <div className="absolute top-2 left-2 px-2 py-0.5 rounded-md bg-[#C23E9E] text-white text-[9px] font-mono font-bold tracking-wider uppercase border border-[#D9A9FF]/40">
                   Fijado
                 </div>
               )}
@@ -665,7 +665,7 @@ export const InstagramFeed: React.FC<InstagramFeedProps> = ({
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="relative w-full max-w-4xl bg-[#141414] border border-[#E9C349]/40 rounded-2xl overflow-hidden shadow-2xl flex flex-col md:flex-row max-h-[90vh]"
+              className="relative w-full max-w-4xl bg-[#141414] border border-[#D9A9FF]/40 rounded-2xl overflow-hidden shadow-2xl flex flex-col md:flex-row max-h-[90vh]"
             >
               {/* Close Button */}
               <button 
@@ -692,7 +692,7 @@ export const InstagramFeed: React.FC<InstagramFeedProps> = ({
                       onClick={() => setIsMuted(!isMuted)}
                       className="absolute bottom-4 right-4 p-2 rounded-full bg-black/60 text-white hover:bg-black"
                     >
-                      {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4 text-[#E9C349]" />}
+                      {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4 text-[#D9A9FF]" />}
                     </button>
                   </div>
                 ) : (
@@ -713,7 +713,7 @@ export const InstagramFeed: React.FC<InstagramFeedProps> = ({
                     <img 
                       src={currentUser.avatar} 
                       alt={currentUser.name} 
-                      className="w-9 h-9 rounded-full object-cover border border-[#E9C349]"
+                      className="w-9 h-9 rounded-full object-cover border border-[#D9A9FF]"
                       referrerPolicy="no-referrer"
                     />
                     <div>
@@ -736,13 +736,13 @@ export const InstagramFeed: React.FC<InstagramFeedProps> = ({
                 </div>
 
                 {/* Caption & Music */}
-                <div className="py-3 space-y-2 flex-1 overflow-y-auto max-h-[220px] scrollbar-thin scrollbar-thumb-[#9A2B3C]">
+                <div className="py-3 space-y-2 flex-1 overflow-y-auto max-h-[220px] scrollbar-thin scrollbar-thumb-[#C23E9E]">
                   <p className="text-xs text-slate-200 leading-relaxed">
                     {selectedPost.caption}
                   </p>
 
                   {selectedPost.musicTrack && (
-                    <div className="flex items-center gap-1.5 text-[11px] font-mono text-[#E9C349]">
+                    <div className="flex items-center gap-1.5 text-[11px] font-mono text-[#D9A9FF]">
                       <Music className="w-3.5 h-3.5 animate-spin" style={{ animationDuration: '4s' }} />
                       <span className="truncate">{selectedPost.musicTrack}</span>
                     </div>
@@ -768,7 +768,7 @@ export const InstagramFeed: React.FC<InstagramFeedProps> = ({
                         <div key={c.id} className="flex items-start gap-2 text-xs">
                           <img src={c.avatar} alt={c.user} className="w-6 h-6 rounded-full object-cover shrink-0 mt-0.5" />
                           <div className="bg-white/5 p-2 rounded-xl flex-1">
-                            <span className="font-bold text-[#E9C349] mr-1.5">{c.user}:</span>
+                            <span className="font-bold text-[#D9A9FF] mr-1.5">{c.user}:</span>
                             <span className="text-slate-200">{c.text}</span>
                           </div>
                         </div>
@@ -810,12 +810,12 @@ export const InstagramFeed: React.FC<InstagramFeedProps> = ({
                       placeholder="Añade un comentario..."
                       value={commentText}
                       onChange={(e) => setCommentText(e.target.value)}
-                      className="flex-1 bg-white/5 border border-white/10 rounded-xl px-3 py-1.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#E9C349]"
+                      className="flex-1 bg-white/5 border border-white/10 rounded-xl px-3 py-1.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#D9A9FF]"
                     />
                     <button 
                       type="submit"
                       disabled={!commentText.trim()}
-                      className="px-3 py-1.5 bg-[#E9C349] text-slate-950 font-bold rounded-xl text-xs hover:bg-[#f3d362] disabled:opacity-40 transition-all"
+                      className="px-3 py-1.5 bg-[#D9A9FF] text-slate-950 font-bold rounded-xl text-xs hover:bg-[#E4B8FF] disabled:opacity-40 transition-all"
                     >
                       <Send className="w-3.5 h-3.5" />
                     </button>
@@ -831,13 +831,13 @@ export const InstagramFeed: React.FC<InstagramFeedProps> = ({
       <AnimatePresence>
         {activeStoryIndex !== null && stories[activeStoryIndex] && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 p-4">
-            <div className="relative w-full max-w-sm h-[80vh] bg-black rounded-3xl overflow-hidden border border-[#E9C349]/40 shadow-2xl flex flex-col justify-between">
+            <div className="relative w-full max-w-sm h-[80vh] bg-black rounded-3xl overflow-hidden border border-[#D9A9FF]/40 shadow-2xl flex flex-col justify-between">
               {/* Progress bar timer */}
               <div className="absolute top-3 left-3 right-3 z-30 flex gap-1">
                 {stories.map((s, i) => (
                   <div key={s.id} className="h-1 flex-1 bg-white/30 rounded-full overflow-hidden">
                     <div 
-                      className={`h-full bg-[#E9C349] transition-all duration-300 ${
+                      className={`h-full bg-[#D9A9FF] transition-all duration-300 ${
                         i < activeStoryIndex ? 'w-full' : i === activeStoryIndex ? 'animate-pulse w-full' : 'w-0'
                       }`} 
                     />
@@ -848,7 +848,7 @@ export const InstagramFeed: React.FC<InstagramFeedProps> = ({
               {/* Story Header */}
               <div className="absolute top-6 left-3 right-3 z-30 flex items-center justify-between text-white">
                 <div className="flex items-center gap-2">
-                  <img src={currentUser.avatar} alt="User" className="w-8 h-8 rounded-full border border-[#E9C349] object-cover" />
+                  <img src={currentUser.avatar} alt="User" className="w-8 h-8 rounded-full border border-[#D9A9FF] object-cover" />
                   <div>
                     <span className="text-xs font-black uppercase block">{currentUser.nickname || currentUser.name}</span>
                     <span className="text-[9px] text-slate-300 font-mono">{stories[activeStoryIndex].createdAt}</span>
@@ -895,7 +895,7 @@ export const InstagramFeed: React.FC<InstagramFeedProps> = ({
                   placeholder="Enviar mensaje sobre la historia..."
                   value={storyReplyText}
                   onChange={(e) => setStoryReplyText(e.target.value)}
-                  className="flex-1 bg-white/10 border border-white/20 rounded-full px-4 py-2 text-xs text-white placeholder-slate-400 focus:outline-none focus:border-[#E9C349]"
+                  className="flex-1 bg-white/10 border border-white/20 rounded-full px-4 py-2 text-xs text-white placeholder-slate-400 focus:outline-none focus:border-[#D9A9FF]"
                 />
                 <button 
                   onClick={() => {
@@ -904,7 +904,7 @@ export const InstagramFeed: React.FC<InstagramFeedProps> = ({
                       setStoryReplyText('');
                     }
                   }}
-                  className="p-2.5 rounded-full bg-[#9A2B3C] text-white hover:bg-rose-600 transition-colors"
+                  className="p-2.5 rounded-full bg-[#C23E9E] text-white hover:bg-rose-600 transition-colors"
                 >
                   <Heart className="w-4 h-4 fill-white" />
                 </button>
@@ -922,11 +922,11 @@ export const InstagramFeed: React.FC<InstagramFeedProps> = ({
               initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.95, opacity: 0 }}
-              className="relative w-full max-w-md bg-[#141414] border border-[#E9C349]/40 rounded-2xl p-6 shadow-2xl space-y-4"
+              className="relative w-full max-w-md bg-[#141414] border border-[#D9A9FF]/40 rounded-2xl p-6 shadow-2xl space-y-4"
             >
               <div className="flex items-center justify-between pb-3 border-b border-white/10">
                 <h3 className="text-base font-black text-white uppercase tracking-wide flex items-center gap-2">
-                  <Sparkles className="w-4 h-4 text-[#E9C349]" />
+                  <Sparkles className="w-4 h-4 text-[#D9A9FF]" />
                   Crear {createMediaType === 'story' ? 'Historia' : createMediaType === 'reel' ? 'Reel de Waacking' : 'Publicación'}
                 </h3>
                 <button 
@@ -942,21 +942,21 @@ export const InstagramFeed: React.FC<InstagramFeedProps> = ({
                 <button 
                   type="button"
                   onClick={() => setCreateMediaType('image')}
-                  className={`flex-1 py-1.5 text-xs font-bold rounded-lg transition-all ${createMediaType === 'image' ? 'bg-[#E9C349] text-slate-950' : 'text-slate-400'}`}
+                  className={`flex-1 py-1.5 text-xs font-bold rounded-lg transition-all ${createMediaType === 'image' ? 'bg-[#D9A9FF] text-slate-950' : 'text-slate-400'}`}
                 >
                   Foto Grid
                 </button>
                 <button 
                   type="button"
                   onClick={() => setCreateMediaType('video')}
-                  className={`flex-1 py-1.5 text-xs font-bold rounded-lg transition-all ${createMediaType === 'video' ? 'bg-[#9A2B3C] text-white' : 'text-slate-400'}`}
+                  className={`flex-1 py-1.5 text-xs font-bold rounded-lg transition-all ${createMediaType === 'video' ? 'bg-[#C23E9E] text-white' : 'text-slate-400'}`}
                 >
                   Video / Reel
                 </button>
                 <button 
                   type="button"
                   onClick={() => setCreateMediaType('story')}
-                  className={`flex-1 py-1.5 text-xs font-bold rounded-lg transition-all ${createMediaType === 'story' ? 'bg-gradient-to-r from-[#E9C349] to-[#9A2B3C] text-white' : 'text-slate-400'}`}
+                  className={`flex-1 py-1.5 text-xs font-bold rounded-lg transition-all ${createMediaType === 'story' ? 'bg-gradient-to-r from-[#D9A9FF] to-[#C23E9E] text-white' : 'text-slate-400'}`}
                 >
                   Historia
                 </button>
@@ -968,7 +968,7 @@ export const InstagramFeed: React.FC<InstagramFeedProps> = ({
                   <label className="text-xs font-mono font-bold text-slate-300 block mb-1">
                     Multimedia (Archivo o URL)
                   </label>
-                  <div className="border-2 border-dashed border-white/20 rounded-xl p-4 text-center bg-white/5 hover:border-[#E9C349] transition-all relative">
+                  <div className="border-2 border-dashed border-white/20 rounded-xl p-4 text-center bg-white/5 hover:border-[#D9A9FF] transition-all relative">
                     {previewFile ? (
                       <div className="relative aspect-video max-h-40 rounded-lg overflow-hidden mx-auto">
                         <img src={previewFile} alt="Preview" className="w-full h-full object-cover" />
@@ -982,7 +982,7 @@ export const InstagramFeed: React.FC<InstagramFeedProps> = ({
                       </div>
                     ) : (
                       <>
-                        <Upload className="w-8 h-8 text-[#E9C349] mx-auto mb-2" />
+                        <Upload className="w-8 h-8 text-[#D9A9FF] mx-auto mb-2" />
                         <span className="text-xs text-slate-300 font-bold block mb-1">
                           Seleccionar desde tu dispositivo
                         </span>
@@ -1003,7 +1003,7 @@ export const InstagramFeed: React.FC<InstagramFeedProps> = ({
                       placeholder="https://images.unsplash.com/photo-..."
                       value={newMediaUrl}
                       onChange={(e) => setNewMediaUrl(e.target.value)}
-                      className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#E9C349]"
+                      className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#D9A9FF]"
                     />
                   </div>
                 </div>
@@ -1018,7 +1018,7 @@ export const InstagramFeed: React.FC<InstagramFeedProps> = ({
                     placeholder="Escribe sobre la técnica, la música, o la batalla..."
                     value={newCaption}
                     onChange={(e) => setNewCaption(e.target.value)}
-                    className="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#E9C349]"
+                    className="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#D9A9FF]"
                   />
                 </div>
 
@@ -1033,7 +1033,7 @@ export const InstagramFeed: React.FC<InstagramFeedProps> = ({
                         type="text"
                         value={newTags}
                         onChange={(e) => setNewTags(e.target.value)}
-                        className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#E9C349]"
+                        className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#D9A9FF]"
                       />
                     </div>
 
@@ -1047,7 +1047,7 @@ export const InstagramFeed: React.FC<InstagramFeedProps> = ({
                         placeholder="Ej. Disco Beats 128 BPM"
                         value={newMusic}
                         onChange={(e) => setNewMusic(e.target.value)}
-                        className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#E9C349]"
+                        className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#D9A9FF]"
                       />
                     </div>
                   </>
@@ -1063,7 +1063,7 @@ export const InstagramFeed: React.FC<InstagramFeedProps> = ({
                   </button>
                   <button 
                     type="submit"
-                    className="flex-1 py-2 rounded-xl bg-[#E9C349] text-slate-950 font-black text-xs hover:bg-[#f3d362] transition-all shadow-lg"
+                    className="flex-1 py-2 rounded-xl bg-[#D9A9FF] text-slate-950 font-black text-xs hover:bg-[#E4B8FF] transition-all shadow-lg"
                   >
                     Publicar
                   </button>

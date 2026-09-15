@@ -55,7 +55,7 @@ const SomaticFeedbackLabComponent: React.FC<SomaticFeedbackLabProps> = ({
   return (
     <div className="space-y-6">
       {/* PANEL DEDICADO: VÍDEOS PENDIENTES DE REVISIÓN & FILTROS */}
-      <div className="bg-[#121212] border border-[#E9C349]/30 rounded-2xl p-5 shadow-2xl space-y-4">
+      <div className="bg-[#121212] border border-[#D9A9FF]/30 rounded-2xl p-5 shadow-2xl space-y-4">
         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 border-b border-[#262626] pb-4">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 shrink-0">
@@ -84,7 +84,7 @@ const SomaticFeedbackLabComponent: React.FC<SomaticFeedbackLabProps> = ({
               onClick={() => setFilterStatus('all')}
               className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
                 filterStatus === 'all'
-                  ? 'bg-[#E9C349] text-black shadow-md'
+                  ? 'bg-[#D9A9FF] text-black shadow-md'
                   : 'text-[#8A8A8A] hover:text-white'
               }`}
             >

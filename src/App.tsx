@@ -30,7 +30,6 @@ import {
   Disc,
   FileText,
   Flame,
-  Smartphone,
   Download,
   Crown
 } from 'lucide-react';
@@ -40,6 +39,9 @@ import { GooglePickerModal } from './components/GooglePickerModal';
 import { GoogleDocsModal } from './components/GoogleDocsModal';
 import SpotifyMusicPlayer, { SpotifyFloatingMiniPlayer } from './components/SpotifyMusicPlayer';
 import AdminDashboardView, { ADMIN_USER_ID } from './components/AdminDashboardView';
+import { InstructorQuickActions } from './components/instructor/InstructorQuickActions';
+import { useCircadianTheme } from './hooks/useCircadianTheme';
+import { CircadianHeaderControl } from './components/CircadianHeaderControl';
 import { Language, translations, languageNames } from './lib/translations';
 import { 
   createBackendAnnouncement, 
@@ -87,6 +89,7 @@ import {
 
 // Import Shell Components
 import Sidebar from './components/Sidebar';
+import GlowField from './components/GlowField';
 import DashboardView from './components/DashboardView';
 import WelcomeDashboard from './components/WelcomeDashboard';
 import OnboardingTour from './components/OnboardingTour';
@@ -124,7 +127,7 @@ const PodcastsView = React.lazy(() => import('./components/PodcastsView'));
 const AIPoseLab = React.lazy(() => import('./components/AIPoseLab'));
 
 // Import Firebase
-import { auth, db, OperationType, handleFirestoreError } from './firebase';
+import { auth, db, OperationType, handleFirestoreError, sanitizeFirestoreData } from './firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 import { collection, doc, onSnapshot, setDoc, deleteDoc, query, orderBy, limit, getDoc } from 'firebase/firestore';
 
@@ -271,6 +274,9 @@ export default function App() {
     return (localStorage.getItem('waacking_theme') as 'dark' | 'light') || 'dark';
   });
 
+  // Circadian Time-of-Day Adaptive Color Scheme for #top-header (Anti-fatiga visual del instructor)
+  const circadian = useCircadianTheme(theme, language);
+
   useEffect(() => {
     localStorage.setItem('waacking_theme', theme);
     if (theme === 'dark') {
@@ -382,7 +388,7 @@ export default function App() {
       // Persist to Firestore if logged in
       if (auth.currentUser) {
         const docRef = doc(db, 'users', auth.currentUser.uid);
-        setDoc(docRef, {
+        setDoc(docRef, sanitizeFirestoreData({
           id: updated.id,
           name: updated.name,
           avatar: updated.avatar,
@@ -403,7 +409,7 @@ export default function App() {
           },
           customAchievements: updated.customAchievements || [],
           billingStatus: updated.billingStatus || 'cancelled'
-        }).catch(err => {
+        })).catch(err => {
           console.error("Error saving updated profile to Firestore:", err);
         });
       }
@@ -425,7 +431,7 @@ export default function App() {
 
   // Real-time Firestore Listener for current user profile & webhook role changes
   useEffect(() => {
-    const activeUid = firebaseUser?.uid || currentUser.id;
+    const activeUid = firebaseUser?.uid;
     if (!activeUid) return;
 
     const userDocRef = doc(db, 'users', activeUid);
@@ -478,7 +484,7 @@ export default function App() {
     });
 
     return () => unsub();
-  }, [firebaseUser?.uid, currentUser.id]);
+  }, [firebaseUser?.uid]);
 
   // Handle URL path routing & payment redirect query parameters
   useEffect(() => {
@@ -592,7 +598,7 @@ export default function App() {
               nickname: defaultNickname,
               billingStatus: 'cancelled'
             };
-            await setDoc(docRef, newUserProfile, { merge: true });
+            await setDoc(docRef, sanitizeFirestoreData(newUserProfile), { merge: true });
             setCurrentUser(newUserProfile);
           }
         } catch (error) {
@@ -689,7 +695,7 @@ export default function App() {
           setChatMessages(msgs);
         } else {
           INITIAL_CHAT_MESSAGES.forEach(msg => {
-            setDoc(doc(db, 'chat_messages', msg.id), msg).catch(err =>
+            setDoc(doc(db, 'chat_messages', msg.id), sanitizeFirestoreData(msg)).catch(err =>
               handleFirestoreError(err, OperationType.WRITE, `chat_messages/${msg.id}`)
             );
           });
@@ -716,7 +722,7 @@ export default function App() {
           setPresentations(items);
         } else {
           INITIAL_PRESENTATIONS.forEach(p => {
-            setDoc(doc(db, 'presentations', p.id), p).catch(err =>
+            setDoc(doc(db, 'presentations', p.id), sanitizeFirestoreData(p)).catch(err =>
               handleFirestoreError(err, OperationType.WRITE, `presentations/${p.id}`)
             );
           });
@@ -743,7 +749,7 @@ export default function App() {
           setAnnouncements(items);
         } else {
           INITIAL_ANNOUNCEMENTS.forEach(a => {
-            setDoc(doc(db, 'announcements', a.id), a).catch(err =>
+            setDoc(doc(db, 'announcements', a.id), sanitizeFirestoreData(a)).catch(err =>
               handleFirestoreError(err, OperationType.WRITE, `announcements/${a.id}`)
             );
           });
@@ -770,7 +776,7 @@ export default function App() {
           setFeedbackItems(items);
         } else {
           INITIAL_FEEDBACK_ITEMS.forEach(f => {
-            setDoc(doc(db, 'feedback_items', f.id), f).catch(err =>
+            setDoc(doc(db, 'feedback_items', f.id), sanitizeFirestoreData(f)).catch(err =>
               handleFirestoreError(err, OperationType.WRITE, `feedback_items/${f.id}`)
             );
           });
@@ -870,7 +876,7 @@ export default function App() {
       return list.map(n => n.id === notifId ? { ...n, read: true } : n);
     });
     if (db) {
-      setDoc(doc(db, 'notifications', notifId), { read: true }, { merge: true }).catch(() => {});
+      setDoc(doc(db, 'notifications', notifId), sanitizeFirestoreData({ read: true }), { merge: true }).catch(() => {});
     }
   };
 
@@ -882,7 +888,7 @@ export default function App() {
     if (db && notificationsList.length > 0) {
       notificationsList.forEach(n => {
         if (!n.read) {
-          setDoc(doc(db, 'notifications', n.id), { read: true }, { merge: true }).catch(() => {});
+          setDoc(doc(db, 'notifications', n.id), sanitizeFirestoreData({ read: true }), { merge: true }).catch(() => {});
         }
       });
     }
@@ -900,7 +906,7 @@ export default function App() {
     };
     setNotificationsList(prev => [newNotif, ...(prev.length > 0 ? prev : INITIAL_DEMO_NOTIFICATIONS)]);
     if (db) {
-      setDoc(doc(db, 'notifications', newNotif.id), newNotif).catch(err => {
+      setDoc(doc(db, 'notifications', newNotif.id), sanitizeFirestoreData(newNotif)).catch(err => {
         handleFirestoreError(err, OperationType.WRITE, `notifications/${newNotif.id}`);
       });
     }
@@ -921,7 +927,7 @@ export default function App() {
           setLessons(items);
         } else {
           INITIAL_LESSONS.forEach(l => {
-            setDoc(doc(db, 'lessons', l.id), l).catch(err =>
+            setDoc(doc(db, 'lessons', l.id), sanitizeFirestoreData(l)).catch(err =>
               handleFirestoreError(err, OperationType.WRITE, `lessons/${l.id}`)
             );
           });
@@ -949,7 +955,7 @@ export default function App() {
           setPracticeLogs(logs);
         } else {
           INITIAL_PRACTICE_LOGS.forEach(log => {
-            setDoc(doc(db, 'users', activeUid, 'practice_logs', log.id), log).catch(err =>
+            setDoc(doc(db, 'users', activeUid, 'practice_logs', log.id), sanitizeFirestoreData(log)).catch(err =>
               handleFirestoreError(err, OperationType.WRITE, `users/${activeUid}/practice_logs/${log.id}`)
             );
           });
@@ -1016,7 +1022,7 @@ export default function App() {
 
     if (lesson) {
       const updatedLesson = { ...lesson, completed };
-      setDoc(doc(db, 'lessons', lessonId), updatedLesson, { merge: true }).catch(err => {
+      setDoc(doc(db, 'lessons', lessonId), sanitizeFirestoreData(updatedLesson), { merge: true }).catch(err => {
         handleFirestoreError(err, OperationType.WRITE, `lessons/${lessonId}`);
       });
     }
@@ -1058,7 +1064,7 @@ export default function App() {
         actionUrl,
         imageUrl
       };
-      setDoc(doc(db, 'announcements', newAnn.id), newAnn).catch(err => {
+      setDoc(doc(db, 'announcements', newAnn.id), sanitizeFirestoreData(newAnn)).catch(err => {
         handleFirestoreError(err, OperationType.WRITE, `announcements/${newAnn.id}`);
       });
     } catch (err: any) {
@@ -1085,7 +1091,7 @@ export default function App() {
       likes: 0,
       comments: []
     };
-    setDoc(doc(db, 'presentations', newPres.id), newPres).catch(err => {
+    setDoc(doc(db, 'presentations', newPres.id), sanitizeFirestoreData(newPres)).catch(err => {
       handleFirestoreError(err, OperationType.WRITE, `presentations/${newPres.id}`);
     });
   };
@@ -1100,7 +1106,7 @@ export default function App() {
       likes: isLiked ? Math.max(0, p.likes - 1) : p.likes + 1,
       isLikedByMe: !isLiked
     };
-    setDoc(doc(db, 'presentations', id), updated).catch(err => {
+    setDoc(doc(db, 'presentations', id), sanitizeFirestoreData(updated)).catch(err => {
       handleFirestoreError(err, OperationType.WRITE, `presentations/${id}`);
     });
   };
@@ -1122,7 +1128,7 @@ export default function App() {
         }
       ]
     };
-    setDoc(doc(db, 'presentations', presId), updated).catch(err => {
+    setDoc(doc(db, 'presentations', presId), sanitizeFirestoreData(updated)).catch(err => {
       handleFirestoreError(err, OperationType.WRITE, `presentations/${presId}`);
     });
   };
@@ -1143,7 +1149,7 @@ export default function App() {
         time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
         role: currentUser.role
       };
-      setDoc(doc(db, 'chat_messages', newMsg.id), newMsg).catch(err => {
+      setDoc(doc(db, 'chat_messages', newMsg.id), sanitizeFirestoreData(newMsg)).catch(err => {
         handleFirestoreError(err, OperationType.WRITE, `chat_messages/${newMsg.id}`);
       });
       
@@ -1171,7 +1177,7 @@ export default function App() {
       corrections: [],
       completed: false
     };
-    setDoc(doc(db, 'feedback_items', newFeedback.id), newFeedback).catch(err => {
+    setDoc(doc(db, 'feedback_items', newFeedback.id), sanitizeFirestoreData(newFeedback)).catch(err => {
       handleFirestoreError(err, OperationType.WRITE, `feedback_items/${newFeedback.id}`);
     });
 
@@ -1203,12 +1209,12 @@ export default function App() {
       minutes,
       activityType,
       description,
-      category: extra?.category,
-      bpm: extra?.bpm
+      ...(extra?.category ? { category: extra.category } : {}),
+      ...(extra?.bpm ? { bpm: extra.bpm } : {})
     };
 
     if (activeUid) {
-      setDoc(doc(db, 'users', activeUid, 'practice_logs', newLog.id), newLog).catch(err => {
+      setDoc(doc(db, 'users', activeUid, 'practice_logs', newLog.id), sanitizeFirestoreData(newLog)).catch(err => {
         handleFirestoreError(err, OperationType.WRITE, `users/${activeUid}/practice_logs/${newLog.id}`);
       });
     }
@@ -1243,7 +1249,7 @@ export default function App() {
         }
       ]
     };
-    setDoc(doc(db, 'feedback_items', itemId), updated).catch(err => {
+    setDoc(doc(db, 'feedback_items', itemId), sanitizeFirestoreData(updated)).catch(err => {
       handleFirestoreError(err, OperationType.WRITE, `feedback_items/${itemId}`);
     });
 
@@ -1652,7 +1658,7 @@ export default function App() {
             </div>
             <button
               onClick={() => setShowGmailModal(true)}
-              className="px-6 py-3 bg-[#E9C349] text-black text-xs font-black rounded-2xl shadow-xl hover:bg-yellow-300 transition-all uppercase flex items-center gap-2"
+              className="px-6 py-3 bg-[#D9A9FF] text-black text-xs font-black rounded-2xl shadow-xl hover:bg-yellow-300 transition-all uppercase flex items-center gap-2"
             >
               <Mail className="w-4 h-4" /> Abrir Gestor de Gmail
             </button>
@@ -1672,7 +1678,7 @@ export default function App() {
             </div>
             <button
               onClick={() => setShowPickerModal(true)}
-              className="px-6 py-3 bg-[#E9C349] text-black text-xs font-black rounded-2xl shadow-xl hover:bg-yellow-300 transition-all uppercase flex items-center gap-2"
+              className="px-6 py-3 bg-[#D9A9FF] text-black text-xs font-black rounded-2xl shadow-xl hover:bg-yellow-300 transition-all uppercase flex items-center gap-2"
             >
               <HardDrive className="w-4 h-4" /> Abrir Selector de Drive
             </button>
@@ -1768,7 +1774,7 @@ export default function App() {
       particleCount: 55,
       spread: 75,
       origin: { x: originX, y: originY },
-      colors: ['#10B981', '#E9C349', '#3B82F6', '#EC4899', '#8B5CF6'],
+      colors: ['#10B981', '#D9A9FF', '#3B82F6', '#EC4899', '#8B5CF6'],
       zIndex: 9999
     });
 
@@ -1778,7 +1784,7 @@ export default function App() {
         angle: 60,
         spread: 55,
         origin: { x: Math.max(0.1, originX - 0.05), y: originY },
-        colors: ['#10B981', '#E9C349', '#FFFFFF'],
+        colors: ['#10B981', '#D9A9FF', '#FFFFFF'],
         zIndex: 9999
       });
       confetti({
@@ -1786,7 +1792,7 @@ export default function App() {
         angle: 120,
         spread: 55,
         origin: { x: Math.min(0.9, originX + 0.05), y: originY },
-        colors: ['#10B981', '#E9C349', '#FFFFFF'],
+        colors: ['#10B981', '#D9A9FF', '#FFFFFF'],
         zIndex: 9999
       });
     }, 150);
@@ -1824,7 +1830,8 @@ export default function App() {
         />
       }
     >
-      <div id="app-container" className={`w-full max-w-[1920px] mx-auto overflow-x-hidden flex min-h-screen lg:h-screen lg:max-h-screen font-sans selection:bg-[#9A2B3C] selection:text-[#EDEFF4] flex-col lg:flex-row relative transition-all duration-300 ${
+      {theme !== 'light' && <GlowField />}
+      <div id="app-container" className={`w-full max-w-[1920px] mx-auto overflow-x-hidden flex min-h-screen lg:h-screen lg:max-h-screen font-sans selection:bg-[#C23E9E] selection:text-[#EDEFF4] flex-col lg:flex-row relative z-[2] transition-all duration-300 ${
         isGrayscaleGlobal ? 'grayscale contrast-125' : ''
       } ${theme === 'light' ? 'bg-[#f4f5f7] text-[#1a1a1a]' : 'bg-[#0A0A0A] text-[#EDEFF4]'}`}>
       {/* Mobile Sidebar Drawer (Sliding menu) */}
@@ -1850,7 +1857,7 @@ export default function App() {
               {/* Close Button overlay inside the sliding drawer */}
               <button
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="absolute top-4 right-4 p-2 rounded-lg bg-[#121212] border border-[#262626] text-[#EDEFF4] hover:bg-[#9A2B3C] transition-all z-20 focus:outline-none"
+                className="absolute top-4 right-4 p-2 rounded-lg bg-[#121212] border border-[#262626] text-[#EDEFF4] hover:bg-[#C23E9E] transition-all z-20 focus:outline-none"
                 title="Cerrar menú"
               >
                 <X className="w-4 h-4" />
@@ -1902,7 +1909,7 @@ export default function App() {
       <div className={`flex-1 flex flex-col min-w-0 min-h-screen lg:min-h-0 lg:h-full lg:max-h-screen lg:overflow-hidden ${theme === 'light' ? 'bg-[#f8f9fa] text-[#1a1a1a]' : 'bg-[#0A0A0A] text-[#EDEFF4]'}`}>
         
         {/* Top Header Navigation */}
-        <header id="top-header" className={`h-16 border-b px-4 sm:px-6 flex items-center justify-between shrink-0 select-none relative z-20 ${theme === 'light' ? 'bg-white border-slate-300 text-slate-900 shadow-sm' : 'bg-[#0A0A0A] border-[#262626] animate-header-glow'}`}>
+        <header id="top-header" className={`h-16 border-b px-4 sm:px-6 flex items-center justify-between shrink-0 select-none relative z-20 backdrop-blur-2xl ${circadian.headerClasses}`}>
           <div className="flex items-center gap-3 min-w-0">
             {/* Hamburger button for mobile menu */}
             {!isFocusMode && (
@@ -1911,7 +1918,7 @@ export default function App() {
                 className={`lg:hidden p-2 rounded-xl transition-all focus:outline-none shrink-0 border ${
                   theme === 'light' 
                     ? 'bg-slate-100 hover:bg-slate-200 border-slate-300 text-slate-900' 
-                    : 'bg-[#141414] hover:bg-[#9A2B3C] border-[#333333] text-white'
+                    : 'bg-[#141414] hover:bg-[#C23E9E] border-[#333333] text-white'
                 }`}
                 aria-label="Abrir menú de navegación"
                 title="Abrir menú de navegación"
@@ -1923,15 +1930,15 @@ export default function App() {
             {/* 1. BRAND IDENTITY: Circular "WAACK ON" Logo with Gold Wing & Impactful Black Typography on White Circle */}
             <div 
               onClick={() => setActiveTab('dashboard')} 
-              className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white border-2 border-[#E9C349] shadow-[0_0_12px_rgba(233,195,73,0.35)] flex items-center justify-center p-0.5 shrink-0 select-none cursor-pointer hover:scale-105 transition-transform"
+              className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white border-2 border-[#D9A9FF] shadow-[0_0_12px_rgba(217, 169, 255,0.35)] flex items-center justify-center p-0.5 shrink-0 select-none cursor-pointer hover:scale-105 transition-transform"
               title="WAACK ON - Portal Principal"
             >
               <svg viewBox="0 0 100 100" className="w-full h-full">
                 {/* White Background Circle */}
                 <circle cx="50" cy="50" r="48" fill="#FFFFFF" />
                 {/* Golden Wing Sculpture */}
-                <path d="M22 45 C35 25, 60 20, 78 30 C65 35, 50 42, 40 52 C30 62, 25 72, 22 45 Z" fill="#E9C349" />
-                <path d="M28 50 C38 35, 58 32, 72 40 C60 45, 48 50, 40 58 C32 66, 28 72, 28 50 Z" fill="#D4AF37" />
+                <path d="M22 45 C35 25, 60 20, 78 30 C65 35, 50 42, 40 52 C30 62, 25 72, 22 45 Z" fill="#D9A9FF" />
+                <path d="M28 50 C38 35, 58 32, 72 40 C60 45, 48 50, 40 58 C32 66, 28 72, 28 50 Z" fill="#B87CFF" />
                 {/* Impactful Black "WAACK ON" Text */}
                 <text x="50" y="78" textAnchor="middle" fill="#000000" fontSize="16" fontWeight="900" fontFamily="sans-serif" letterSpacing="-0.5">WAACK ON</text>
               </svg>
@@ -1942,10 +1949,10 @@ export default function App() {
               {isFocusMode ? (
                 <div className="flex items-center gap-2">
                   <span className="flex h-2.5 w-2.5 relative">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#9A2B3C] opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#9A2B3C]"></span>
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#C23E9E] opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#C23E9E]"></span>
                   </span>
-                  <span className="text-[10px] sm:text-[11px] font-mono tracking-widest text-[#9A2B3C] font-black uppercase">
+                  <span className="text-[10px] sm:text-[11px] font-mono tracking-widest text-[#C23E9E] font-black uppercase">
                     {focusModeText[language]?.activeLabel || 'MODO ENFOQUE'}
                   </span>
                   <span className="text-slate-400 font-mono font-bold">/</span>
@@ -1965,7 +1972,7 @@ export default function App() {
                   {activeTab !== 'dashboard' && (
                     <div className="hidden xl:flex items-center gap-1.5 shrink-0">
                       <span className="text-slate-500 font-mono text-xs font-bold">/</span>
-                      <span className="text-xs font-mono font-bold text-[#E9C349] uppercase">{activeTab}</span>
+                      <span className="text-xs font-mono font-bold text-[#D9A9FF] uppercase">{activeTab}</span>
                     </div>
                   )}
                 </div>
@@ -1974,30 +1981,28 @@ export default function App() {
           </div>
 
           <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+            {/* [INSTRUCTOR QUICK ACTIONS HUB - Persistent Top Header Menu] */}
+            {(currentUser.role === 'instructor' || currentUser.role === 'studio' || currentUser.id === ADMIN_USER_ID || auth.currentUser?.uid === ADMIN_USER_ID) && (
+              <InstructorQuickActions
+                currentUser={currentUser}
+                theme={theme}
+                language={language}
+                activeTab={activeTab}
+                setActiveTab={setActiveTab}
+                onOpenDocsModal={() => setShowDocsModal(true)}
+                onOpenFormationPreview={() => setShowFormationPreviewModal(true)}
+                onOpenSomaticPosingPrototype={() => setShowSomaticPosingModal(true)}
+                onQuickBpmSelect={(bpm) => setTrainingBpm(bpm)}
+              />
+            )}
+
             {/* [ADMIN BADGE INDICATOR] */}
             {(currentUser.id === ADMIN_USER_ID || auth.currentUser?.uid === ADMIN_USER_ID || firebaseUser?.uid === ADMIN_USER_ID) && (
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-[#E9C349] to-amber-500 text-black font-extrabold text-[11px] font-mono uppercase tracking-wider shadow-[0_0_15px_rgba(233,195,73,0.5)] border border-amber-300">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-[#D9A9FF] to-amber-500 text-black font-extrabold text-[11px] font-mono uppercase tracking-wider shadow-[0_0_15px_rgba(217, 169, 255,0.5)] border border-amber-300">
                 <ShieldAlert className="w-4 h-4 text-black fill-black" />
                 <span>ADMIN</span>
               </span>
             )}
-
-            {/* [BOTÓN DE APLICACIÓN - PWA APP & DESKTOP - "Add an application"] */}
-            <motion.button
-              whileHover={{ scale: 1.04 }}
-              whileTap={{ scale: 0.96 }}
-              onClick={() => setIsAppInstallModalOpen(true)}
-              className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border text-[11px] font-mono font-black uppercase tracking-wider transition-all shadow-md active:scale-95 cursor-pointer ${
-                theme === 'light'
-                  ? 'bg-amber-500/10 hover:bg-amber-500/20 text-amber-950 border-amber-500/40'
-                  : 'bg-gradient-to-r from-[#171510] to-[#261f14] hover:from-[#221c12] hover:to-[#332816] text-[#E9C349] border-[#E9C349]/50 hover:border-[#E9C349]'
-              }`}
-              title="Instalar Aplicación Waack On (PWA, Soporte Offline y Notificaciones)"
-              aria-label="Instalar Aplicación"
-            >
-              <Smartphone className="w-3.5 h-3.5 text-[#E9C349]" />
-              <span className="hidden sm:inline">App PWA</span>
-            </motion.button>
 
             {/* [CENTRO DE NOTIFICACIONES & WEB PUSH - "Add notifications / Add push notifications / Add all notifications"] */}
             <motion.button
@@ -2006,7 +2011,7 @@ export default function App() {
               onClick={() => setIsNotificationCenterOpen(true)}
               className={`relative p-2 rounded-xl transition-all border flex items-center justify-center cursor-pointer ${
                 unreadNotificationsCount > 0
-                  ? 'bg-[#1e1910] hover:bg-[#2a2214] border-[#E9C349] text-[#E9C349] shadow-[0_0_12px_rgba(233,195,73,0.35)]'
+                  ? 'bg-[#1e1910] hover:bg-[#2a2214] border-[#D9A9FF] text-[#D9A9FF] shadow-[0_0_12px_rgba(217, 169, 255,0.35)]'
                   : theme === 'light'
                   ? 'bg-slate-100 hover:bg-slate-200 border-slate-300 text-slate-700'
                   : 'bg-[#141414] hover:bg-[#202020] border-[#333333] text-white'
@@ -2031,21 +2036,21 @@ export default function App() {
                 className={`relative flex items-center gap-1 sm:gap-1.5 px-2 py-1 rounded-xl border transition-all shadow-sm ${
                   theme === 'light'
                     ? 'bg-amber-500/10 border-amber-500/40 text-amber-950'
-                    : 'bg-[#141414] border-[#9A2B3C]/80 text-white'
+                    : 'bg-[#141414] border-[#C23E9E]/80 text-white'
                 }`}
               >
-                <div className="flex items-center gap-1.5 text-[#E9C349]">
+                <div className="flex items-center gap-1.5 text-[#D9A9FF]">
                   <div className="relative flex items-center justify-center">
                     <motion.div
                       key={`bpm-gauge-pulse-${trainingBpm}`}
                       animate={{ scale: [1, 1.25, 1], opacity: [0.8, 1, 0.8] }}
                       transition={{ repeat: Infinity, duration: 60 / Math.max(40, trainingBpm), ease: "easeInOut" }}
                     >
-                      <Gauge className="w-3.5 h-3.5 text-[#E9C349]" />
+                      <Gauge className="w-3.5 h-3.5 text-[#D9A9FF]" />
                     </motion.div>
                     <motion.span
                       key={`bpm-beat-dot-${trainingBpm}`}
-                      className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 rounded-full bg-[#E9C349] shadow-[0_0_6px_#E9C349]"
+                      className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 rounded-full bg-[#D9A9FF] shadow-[0_0_6px_#D9A9FF]"
                       animate={{ scale: [0.6, 1.5, 0.6], opacity: [0.3, 1, 0.3] }}
                       transition={{ repeat: Infinity, duration: 60 / Math.max(40, trainingBpm), ease: "easeInOut" }}
                     />
@@ -2055,7 +2060,7 @@ export default function App() {
 
                 <button
                   onClick={() => setTrainingBpm(prev => Math.max(60, prev - 2))}
-                  className="p-1 hover:bg-[#9A2B3C]/40 text-[#E9C349] rounded-md transition-colors active:scale-95 focus:outline-none"
+                  className="p-1 hover:bg-[#C23E9E]/40 text-[#D9A9FF] rounded-md transition-colors active:scale-95 focus:outline-none"
                   title="Disminuir velocidad (-2 BPM)"
                   aria-label="Disminuir BPM"
                 >
@@ -2069,16 +2074,16 @@ export default function App() {
                   animate={{
                     scale: [1, 1.05, 1],
                     boxShadow: [
-                      "0 0 0px rgba(233,195,73,0)",
-                      "0 0 8px rgba(233,195,73,0.45)",
-                      "0 0 0px rgba(233,195,73,0)"
+                      "0 0 0px rgba(217, 169, 255,0)",
+                      "0 0 8px rgba(217, 169, 255,0.45)",
+                      "0 0 0px rgba(217, 169, 255,0)"
                     ]
                   }}
                   transition={{ repeat: Infinity, duration: 60 / Math.max(40, trainingBpm), ease: "easeInOut" }}
                   className={`px-2.5 py-0.5 rounded border font-mono text-xs font-black transition-all cursor-pointer select-none active:scale-95 ${
                     trainingBpm % 10 === 0
-                      ? 'bg-[#E9C349] text-black border-[#E9C349] shadow-sm font-extrabold'
-                      : 'bg-black/50 border-[#E9C349]/40 text-[#E9C349] hover:bg-black/70'
+                      ? 'bg-[#D9A9FF] text-black border-[#D9A9FF] shadow-sm font-extrabold'
+                      : 'bg-black/50 border-[#D9A9FF]/40 text-[#D9A9FF] hover:bg-black/70'
                   }`}
                   title="Haz clic para marcar el ritmo (Tap Tempo)"
                   aria-label="BPM Tap Tempo"
@@ -2088,7 +2093,7 @@ export default function App() {
 
                 <button
                   onClick={() => setTrainingBpm(prev => Math.min(220, prev + 2))}
-                  className="p-1 hover:bg-[#9A2B3C]/40 text-[#E9C349] rounded-md transition-colors active:scale-95 focus:outline-none"
+                  className="p-1 hover:bg-[#C23E9E]/40 text-[#D9A9FF] rounded-md transition-colors active:scale-95 focus:outline-none"
                   title="Aumentar velocidad (+2 BPM)"
                   aria-label="Aumentar BPM"
                 >
@@ -2123,6 +2128,13 @@ export default function App() {
               </div>
             )}
 
+            {/* [MODO CIRCADIANO ANTI-FATIGA VISUAL DEL INSTRUCTOR] */}
+            <CircadianHeaderControl
+              circadian={circadian}
+              theme={theme}
+              language={language}
+            />
+
             {/* [BOTÓN DE LUZ - LIGHT BUTTON - "Add a light button"] */}
             <motion.button
               whileHover={{ scale: 1.05 }}
@@ -2131,15 +2143,15 @@ export default function App() {
               className={`px-2.5 py-1.5 rounded-xl transition-all border focus:outline-none flex items-center gap-1.5 cursor-pointer select-none font-mono text-xs font-black shadow-sm ${
                 theme === 'light'
                   ? 'bg-amber-100 hover:bg-amber-200 border-amber-400 text-amber-950 shadow-[0_0_12px_rgba(245,158,11,0.35)]'
-                  : 'bg-[#141414] hover:bg-[#202020] border-[#333333] hover:border-[#E9C349]/50 text-white'
+                  : 'bg-[#141414] hover:bg-[#202020] border-[#333333] hover:border-[#D9A9FF]/50 text-white'
               }`}
               aria-label={theme === 'dark' ? 'Botón de Luz / Modo Iluminado' : 'Botón de Luz / Modo Escenario'}
               title={theme === 'dark' ? 'Encender Luz de Estudio (Modo Iluminado)' : 'Apagar Luz (Modo Escenario Oscuro)'}
             >
               {theme === 'dark' ? (
                 <>
-                  <Sun className="w-4 h-4 text-[#E9C349] animate-spin-slow" />
-                  <span className="hidden xl:inline text-[10px] text-[#E9C349] uppercase">Luz</span>
+                  <Sun className="w-4 h-4 text-[#D9A9FF] animate-spin-slow" />
+                  <span className="hidden xl:inline text-[10px] text-[#D9A9FF] uppercase">Luz</span>
                 </>
               ) : (
                 <>
@@ -2154,7 +2166,7 @@ export default function App() {
               onClick={() => setActiveTab('profile')}
               className={`flex items-center gap-2 px-2.5 py-1.5 rounded-xl transition-all cursor-pointer focus:outline-none border ${
                 activeTab === 'profile'
-                  ? 'bg-[#E9C349]/20 border-[#E9C349] shadow-[0_0_12px_rgba(233,195,73,0.3)]'
+                  ? 'bg-[#D9A9FF]/20 border-[#D9A9FF] shadow-[0_0_12px_rgba(217, 169, 255,0.3)]'
                   : theme === 'light' 
                     ? 'bg-slate-100 hover:bg-slate-200 border-slate-300 text-slate-900' 
                     : 'bg-[#141414] hover:bg-[#202020] border-[#333333] text-white'
@@ -2165,7 +2177,7 @@ export default function App() {
               <img 
                 src={currentUser.avatar} 
                 alt={currentUser.name} 
-                className="w-7 h-7 sm:w-8 sm:h-8 rounded-full border-2 border-[#E9C349] object-cover shrink-0 shadow-sm" 
+                className="w-7 h-7 sm:w-8 sm:h-8 rounded-full border-2 border-[#D9A9FF] object-cover shrink-0 shadow-sm" 
                 referrerPolicy="no-referrer"
               />
               <div className="hidden sm:flex flex-col text-left leading-tight">
@@ -2173,7 +2185,7 @@ export default function App() {
                   {currentUser.name}
                 </span>
                 {currentUser.role === 'studio' ? (
-                  <span className="text-[10px] text-[#E9C349] font-mono font-bold uppercase">
+                  <span className="text-[10px] text-[#D9A9FF] font-mono font-bold uppercase">
                     Academia / Estudio
                   </span>
                 ) : currentUser.role === 'instructor' ? (
@@ -2181,12 +2193,12 @@ export default function App() {
                     Instructor Senior
                   </span>
                 ) : (
-                  <span className="text-[10px] text-[#E9C349] font-mono font-bold uppercase">
+                  <span className="text-[10px] text-[#D9A9FF] font-mono font-bold uppercase">
                     Estudiante Avanzada
                   </span>
                 )}
               </div>
-              <span className="text-[10px] font-mono font-bold text-[#E9C349] bg-[#E9C349]/10 px-1.5 py-0.5 rounded border border-[#E9C349]/30 hidden lg:inline ml-1">
+              <span className="text-[10px] font-mono font-bold text-[#D9A9FF] bg-[#D9A9FF]/10 px-1.5 py-0.5 rounded border border-[#D9A9FF]/30 hidden lg:inline ml-1">
                 [Mi Cuenta]
               </span>
             </button>
@@ -2217,11 +2229,11 @@ export default function App() {
 
         {/* Tactile Bottom Navigation for Mobile Devices */}
         {!isFocusMode && (
-          <div id="mobile-bottom-nav" className="lg:hidden fixed bottom-0 left-0 right-0 h-16 bg-black border-t-2 border-[#E9C349] flex items-center justify-around px-2 shrink-0 select-none z-40 pb-safe shadow-[0_-4px_20px_rgba(0,0,0,0.9)]">
+          <div id="mobile-bottom-nav" className="lg:hidden fixed bottom-0 left-0 right-0 h-16 bg-black border-t-2 border-[#D9A9FF] flex items-center justify-around px-2 shrink-0 select-none z-40 pb-safe shadow-[0_-4px_20px_rgba(0,0,0,0.9)]">
             <button
               onClick={() => setActiveTab('dashboard')}
               className={`flex flex-col items-center justify-center flex-1 h-full py-1 text-[9px] sm:text-[10px] font-black transition-all focus:outline-none ${
-                activeTab === 'dashboard' ? 'text-[#E9C349]' : 'text-slate-400 hover:text-[#E9C349]'
+                activeTab === 'dashboard' ? 'text-[#D9A9FF]' : 'text-slate-400 hover:text-[#D9A9FF]'
               }`}
             >
               <LayoutDashboard className="w-5 h-5 mb-0.5" />
@@ -2230,7 +2242,7 @@ export default function App() {
             <button
               onClick={() => setActiveTab('cursos')}
               className={`flex flex-col items-center justify-center flex-1 h-full py-1 text-[9px] sm:text-[10px] font-black transition-all focus:outline-none ${
-                activeTab === 'cursos' ? 'text-[#E9C349]' : 'text-slate-400 hover:text-[#E9C349]'
+                activeTab === 'cursos' ? 'text-[#D9A9FF]' : 'text-slate-400 hover:text-[#D9A9FF]'
               }`}
             >
               <GraduationCap className="w-5 h-5 mb-0.5" />
@@ -2239,7 +2251,7 @@ export default function App() {
             <button
               onClick={() => setActiveTab('ebooks')}
               className={`flex flex-col items-center justify-center flex-1 h-full py-1 text-[9px] sm:text-[10px] font-black transition-all focus:outline-none ${
-                activeTab === 'ebooks' ? 'text-[#E9C349]' : 'text-slate-400 hover:text-[#E9C349]'
+                activeTab === 'ebooks' ? 'text-[#D9A9FF]' : 'text-slate-400 hover:text-[#D9A9FF]'
               }`}
             >
               <BookOpen className="w-5 h-5 mb-0.5" />
@@ -2248,7 +2260,7 @@ export default function App() {
             <button
               onClick={() => setActiveTab('entrenamiento')}
               className={`flex flex-col items-center justify-center flex-1 h-full py-1 text-[9px] sm:text-[10px] font-black transition-all focus:outline-none ${
-                activeTab === 'entrenamiento' ? 'text-[#E9C349]' : 'text-slate-400 hover:text-[#E9C349]'
+                activeTab === 'entrenamiento' ? 'text-[#D9A9FF]' : 'text-slate-400 hover:text-[#D9A9FF]'
               }`}
             >
               <Sparkles className="w-5 h-5 mb-0.5" />
@@ -2257,14 +2269,14 @@ export default function App() {
             <button
               onClick={() => setActiveTab('profile')}
               className={`flex flex-col items-center justify-center flex-1 h-full py-1 text-[9px] sm:text-[10px] font-black transition-all focus:outline-none ${
-                activeTab === 'profile' ? 'text-[#E9C349]' : 'text-slate-400 hover:text-[#E9C349]'
+                activeTab === 'profile' ? 'text-[#D9A9FF]' : 'text-slate-400 hover:text-[#D9A9FF]'
               }`}
             >
               <img 
                 src={currentUser.avatar} 
                 alt={currentUser.name} 
                 className={`w-5 h-5 rounded-full object-cover border-2 shrink-0 ${
-                  activeTab === 'profile' ? 'border-[#E9C349] shadow-[0_0_8px_#E9C349]' : 'border-[#333333]'
+                  activeTab === 'profile' ? 'border-[#D9A9FF] shadow-[0_0_8px_#D9A9FF]' : 'border-[#333333]'
                 }`}
                 referrerPolicy="no-referrer"
               />
@@ -2348,15 +2360,15 @@ export default function App() {
             initial={{ opacity: 0, y: 50, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 50, scale: 0.9 }}
-            className="fixed bottom-6 right-6 z-[9999] max-w-md bg-[#121212] border-2 border-[#E9C349] p-4 rounded-2xl shadow-[0_10px_35px_rgba(233,195,73,0.3)] text-white flex flex-col gap-3"
+            className="fixed bottom-6 right-6 z-[9999] max-w-md bg-[#121212] border-2 border-[#D9A9FF] p-4 rounded-2xl shadow-[0_10px_35px_rgba(217, 169, 255,0.3)] text-white flex flex-col gap-3"
           >
             <div className="flex items-start justify-between gap-3">
               <div className="flex items-center gap-2.5">
-                <div className="w-9 h-9 rounded-xl bg-[#E9C349]/20 border border-[#E9C349]/50 flex items-center justify-center text-[#E9C349] shrink-0">
+                <div className="w-9 h-9 rounded-xl bg-[#D9A9FF]/20 border border-[#D9A9FF]/50 flex items-center justify-center text-[#D9A9FF] shrink-0">
                   <Bell className="w-5 h-5 animate-bounce" />
                 </div>
                 <div>
-                  <h4 className="font-mono font-bold text-xs uppercase text-[#E9C349] tracking-wider">
+                  <h4 className="font-mono font-bold text-xs uppercase text-[#D9A9FF] tracking-wider">
                     {pushToast.title}
                   </h4>
                   <p className="text-[11px] text-gray-300 font-medium leading-tight mt-0.5">
@@ -2377,7 +2389,7 @@ export default function App() {
                   setPushToast(null);
                   setActiveTab('entrenamiento');
                 }}
-                className="px-3 py-1.5 bg-[#E9C349] hover:bg-[#d4ae36] text-black font-mono text-[11px] font-bold uppercase rounded-xl transition-all shadow-md cursor-pointer flex items-center gap-1.5"
+                className="px-3 py-1.5 bg-[#D9A9FF] hover:bg-[#B478F0] text-black font-mono text-[11px] font-bold uppercase rounded-xl transition-all shadow-md cursor-pointer flex items-center gap-1.5"
               >
                 <Sparkles className="w-3.5 h-3.5" /> Ver Retroalimentación
               </button>
