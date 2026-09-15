@@ -179,7 +179,7 @@ export default function RankingView({
             <span className="text-[9px] font-mono font-bold text-tertiary bg-tertiary/10 border border-tertiary/20 px-2.5 py-0.5 rounded-full uppercase tracking-wider">
               SISTEMA DE GAMIFICACIÓN
             </span>
-            <h2 className="text-2xl md:text-3xl font-display-lg font-bold text-white uppercase tracking-tight mt-1">
+            <h2 className="text-2xl md:text-3xl font-display-lg font-bold text-slate-900 dark:text-white uppercase tracking-tight mt-1">
               RANKING & LOGROS WAACK ON
             </h2>
             <p className="text-on-surface-variant text-xs mt-1 font-semibold max-w-2xl leading-relaxed">
@@ -190,13 +190,13 @@ export default function RankingView({
       </div>
 
       {/* Subtab Switcher */}
-      <div className="flex flex-wrap gap-2 bg-[#121212]/80 border border-[#262626] p-1.5 rounded-xl backdrop-blur-sm z-10 w-full sm:w-auto">
+      <div className="flex flex-wrap gap-2 bg-white/80 dark:bg-[#121212]/80 border border-slate-200 dark:border-[#262626] p-1.5 rounded-xl backdrop-blur-sm z-10 w-full sm:w-auto">
         <button
           onClick={() => setSubTab('achievements')}
           className={`px-4 py-2 text-[11px] font-mono font-bold uppercase tracking-wider rounded-lg transition-all ${
             subTab === 'achievements'
-              ? 'bg-[#C23E9E] text-white shadow-[0_2px_10px_rgba(194, 62, 158,0.4)] border border-[#C23E9E]/50'
-              : 'text-[#8A8A8A] hover:text-white hover:bg-[#1A1A1A]'
+              ? 'bg-[#9A2B3C] text-white shadow-[0_2px_10px_rgba(154,43,60,0.4)] border border-[#9A2B3C]/50'
+              : 'text-[#8A8A8A] hover:text-slate-900 dark:hover:text-white hover:bg-[#1A1A1A]'
           }`}
         >
           {language === 'es' ? 'Logros y Medallas' : 'Achievements & Medals'}
@@ -205,8 +205,8 @@ export default function RankingView({
           onClick={() => setSubTab('ranking')}
           className={`px-4 py-2 text-[11px] font-mono font-bold uppercase tracking-wider rounded-lg transition-all ${
             subTab === 'ranking'
-              ? 'bg-[#C23E9E] text-white shadow-[0_2px_10px_rgba(194, 62, 158,0.4)] border border-[#C23E9E]/50'
-              : 'text-[#8A8A8A] hover:text-white hover:bg-[#1A1A1A]'
+              ? 'bg-[#9A2B3C] text-white shadow-[0_2px_10px_rgba(154,43,60,0.4)] border border-[#9A2B3C]/50'
+              : 'text-[#8A8A8A] hover:text-slate-900 dark:hover:text-white hover:bg-[#1A1A1A]'
           }`}
         >
           {language === 'es' ? 'Leaderboard Global' : 'Global Leaderboard'}
@@ -216,14 +216,14 @@ export default function RankingView({
       {subTab === 'achievements' ? (
         <div className="space-y-6 z-10 w-full">
           {/* Level Progress Banner */}
-          <div className="bg-[#121212]/80 border border-[#262626] rounded-2xl p-5 shadow-xl flex flex-col md:flex-row items-center justify-between gap-4 relative overflow-hidden backdrop-blur-md">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-[#C23E9E]/10 rounded-full blur-2xl pointer-events-none" />
+          <div className="bg-white/80 dark:bg-[#121212]/80 border border-slate-200 dark:border-[#262626] rounded-2xl p-5 shadow-xl flex flex-col md:flex-row items-center justify-between gap-4 relative overflow-hidden backdrop-blur-md">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-[#9A2B3C]/10 rounded-full blur-2xl pointer-events-none" />
             <div className="flex items-center gap-4">
               <div className="p-4 bg-gradient-to-tr from-[#C23E9E] to-[#D9A9FF] text-white rounded-2xl font-bold font-mono text-xl shadow-lg flex items-center justify-center min-w-[70px]">
                 Lvl {Math.max(1, Math.floor(currentUser.points / 15))}
               </div>
               <div>
-                <h3 className="text-white font-bold uppercase tracking-wider text-sm">
+                <h3 className="text-slate-900 dark:text-white font-bold uppercase tracking-wider text-sm">
                   {language === 'es' ? 'Nivel ' : 'Level '}{Math.max(1, Math.floor(currentUser.points / 15))}: {
                     language === 'es' 
                       ? (currentUser.points >= 400 ? 'Leyenda Waack On 👑' : currentUser.points >= 250 ? 'Waack Elite 🌟' : currentUser.points >= 120 ? 'Ritmo Guerrero ⚡' : 'Iniciado Waacker 🌱')
@@ -328,7 +328,7 @@ export default function RankingView({
               return (
                 <div 
                   key={idx}
-                  className="bg-[#121212]/40 backdrop-blur-md border border-[#262626] rounded-2xl p-6 flex flex-col items-center justify-between text-center relative overflow-hidden h-[260px] group hover:border-[#C23E9E]/50 transition-all duration-300"
+                  className="bg-white/60 dark:bg-[#121212]/40 backdrop-blur-md border border-slate-200 dark:border-[#262626] rounded-2xl p-6 flex flex-col items-center justify-between text-center relative overflow-hidden h-[260px] group hover:border-[#9A2B3C]/50 transition-all duration-300"
                 >
                   {/* Outer glowing ring or lock state */}
                   {isUnlocked ? (
@@ -339,7 +339,7 @@ export default function RankingView({
                       </div>
                     </div>
                   ) : (
-                    <div className="w-20 h-20 rounded-full border border-[#262626] bg-[#0A0A0A]/80 flex items-center justify-center relative opacity-40">
+                    <div className="w-20 h-20 rounded-full border border-slate-200 dark:border-[#262626] bg-slate-100 dark:bg-[#0A0A0A]/80 flex items-center justify-center relative opacity-40">
                       <IconComp className="w-10 h-10 text-[#555]" />
                       <div className="absolute -top-1 -right-1 bg-[#3f3f46] p-1 rounded-full border border-black shadow">
                         <Lock className="w-2.5 h-2.5 text-white" />
@@ -348,7 +348,7 @@ export default function RankingView({
                   )}
 
                   <div className="mt-4 flex-1 flex flex-col justify-center">
-                    <h4 className={`font-bold uppercase text-xs tracking-wider ${isUnlocked ? 'text-white' : 'text-[#8A8A8A]'}`}>
+                    <h4 className={`font-bold uppercase text-xs tracking-wider ${isUnlocked ? 'text-slate-900 dark:text-white' : 'text-[#8A8A8A]'}`}>
                       {medal.title}
                     </h4>
                     <p className="text-[#8A8A8A] text-[10px] leading-snug font-medium mt-1.5 max-w-[160px] mx-auto">
@@ -373,10 +373,10 @@ export default function RankingView({
           </div>
 
           {/* Points Simulation in Achievements Tab */}
-          <div className="bg-[#121212]/80 border border-[#262626] rounded-2xl p-5 shadow-xl flex flex-col sm:flex-row items-center justify-between gap-4 backdrop-blur-md">
+          <div className="bg-white/80 dark:bg-[#121212]/80 border border-slate-200 dark:border-[#262626] rounded-2xl p-5 shadow-xl flex flex-col sm:flex-row items-center justify-between gap-4 backdrop-blur-md">
             <div>
-              <h4 className="text-white font-bold text-xs uppercase tracking-wider flex items-center gap-1.5">
-                <Sparkles className="w-4 h-4 text-[#D9A9FF]" /> {language === 'es' ? 'Simulador de Puntos de Práctica' : 'Practice Points Simulator'}
+              <h4 className="text-slate-900 dark:text-white font-bold text-xs uppercase tracking-wider flex items-center gap-1.5">
+                <Sparkles className="w-4 h-4 text-[#E9C349]" /> {language === 'es' ? 'Simulador de Puntos de Práctica' : 'Practice Points Simulator'}
               </h4>
               <p className="text-[#8A8A8A] text-[10px] font-medium mt-1 max-w-xl">
                 {language === 'es' 
@@ -422,7 +422,7 @@ export default function RankingView({
                     className="w-14 h-14 rounded-full border-2 border-tertiary/20 object-cover shadow-lg"
                   />
                   <div>
-                    <h3 className="text-lg font-bold text-white uppercase leading-tight">{currentUser.name}</h3>
+                    <h3 className="text-lg font-bold text-slate-900 dark:text-white uppercase leading-tight">{currentUser.name}</h3>
                     <p className="text-xs font-mono font-bold text-tertiary mt-0.5 uppercase">{getRankTitle(currentUser.points)}</p>
                   </div>
                 </div>
@@ -435,7 +435,7 @@ export default function RankingView({
               <div className="mt-4 pt-4 border-t border-dashed border-tertiary/10">
                 <div className="flex justify-between items-center text-[10px] font-mono font-bold text-on-surface-variant mb-1.5">
                   <span>Próximo Rango: <strong className="text-tertiary">{nextRank.name}</strong></span>
-                  <span className="text-white">{currentUser.points} / {nextRank.required} PTS</span>
+                  <span className="text-slate-900 dark:text-white">{currentUser.points} / {nextRank.required} PTS</span>
                 </div>
                 <div className="w-full bg-[#08080a] border border-tertiary/10 h-3 rounded-full overflow-hidden flex items-center">
                   <div 
@@ -462,7 +462,7 @@ export default function RankingView({
                   POSICIÓN GLOBAL
                 </span>
                 <div className="my-4">
-                  <span className="text-5xl font-display-lg font-bold text-white font-mono">#{curUserIndex}</span>
+                  <span className="text-5xl font-display-lg font-bold text-slate-900 dark:text-white font-mono">#{curUserIndex}</span>
                   <span className="text-lg text-on-surface-variant font-bold font-mono"> / {leaderboardList.length}</span>
                 </div>
                 <p className="text-[10px] text-on-surface-variant font-medium max-w-xs mx-auto leading-relaxed">
@@ -472,17 +472,17 @@ export default function RankingView({
 
               <div className="flex items-center justify-center gap-4 text-[10px] font-mono font-bold text-on-surface border-t border-dashed border-tertiary/10 pt-3">
                 <div className="flex flex-col">
-                  <span className="text-white font-bold">{currentUser.points}</span>
+                  <span className="text-slate-900 dark:text-white font-bold">{currentUser.points}</span>
                   <span className="text-[8px] text-on-surface-variant font-normal">PUNTOS</span>
                 </div>
                 <div className="w-px h-6 bg-tertiary/10" />
                 <div className="flex flex-col">
-                  <span className="text-white font-bold">{curUserLessonsCount}</span>
+                  <span className="text-slate-900 dark:text-white font-bold">{curUserLessonsCount}</span>
                   <span className="text-[8px] text-on-surface-variant font-normal">LECCIONES</span>
                 </div>
                 <div className="w-px h-6 bg-tertiary/10" />
                 <div className="flex flex-col">
-                  <span className="text-white font-bold">{curUserVideosCount}</span>
+                  <span className="text-slate-900 dark:text-white font-bold">{curUserVideosCount}</span>
                   <span className="text-[8px] text-on-surface-variant font-normal">VIDEOS</span>
                 </div>
               </div>
@@ -540,7 +540,7 @@ export default function RankingView({
               ].map((act, idx) => {
                 const Icon = act.icon;
                 return (
-                  <div key={idx} className="bg-[#0d0d11]/60 border border-tertiary/10 rounded-xl p-3 flex flex-col justify-between text-left shadow-lg">
+                  <div key={idx} className="bg-slate-50 dark:bg-[#0d0d11]/60 border border-tertiary/10 rounded-xl p-3 flex flex-col justify-between text-left shadow-lg">
                     <div>
                       <div className="flex justify-between items-start mb-2">
                         <div className={`p-1.5 rounded-lg border ${(act.color || '').split(' ')[2] || ''} ${(act.color || '').split(' ')[0] || ''}`}>
@@ -550,13 +550,13 @@ export default function RankingView({
                           {act.value}
                         </span>
                       </div>
-                      <h5 className="text-[11px] font-bold text-white uppercase leading-tight">{act.title}</h5>
+                      <h5 className="text-[11px] font-bold text-slate-900 dark:text-white uppercase leading-tight">{act.title}</h5>
                       <p className="text-[9px] text-on-surface-variant font-medium leading-tight mt-1">{act.desc}</p>
                     </div>
                     
                     <button
                       onClick={() => setActiveTab(act.tabToGo)}
-                      className="w-full mt-3 py-1 bg-black/40 hover:bg-[#0d0d11] border border-tertiary/20 hover:border-tertiary/40 text-[9px] text-on-surface font-mono font-bold rounded uppercase text-center transition-all flex items-center justify-center gap-0.5"
+                      className="w-full mt-3 py-1 bg-slate-100 dark:bg-black/40 hover:bg-slate-200 dark:hover:bg-[#0d0d11] border border-tertiary/20 hover:border-tertiary/40 text-[9px] text-on-surface font-mono font-bold rounded uppercase text-center transition-all flex items-center justify-center gap-0.5"
                     >
                       <span>{act.actionText}</span>
                       <ChevronRight className="w-3 h-3" />
@@ -581,25 +581,25 @@ export default function RankingView({
                   Para facilitar la evaluación de este sistema de gamificación y observar los movimientos dinámicos en la tabla de clasificación sin tener que completar lecciones reales, puedes simular una acción de bonificación a continuación.
                 </p>
                 <div className="flex flex-wrap gap-2 pt-1 items-center">
-                  <div className="flex border border-tertiary/10 rounded-xl overflow-hidden bg-black/40 shadow-lg">
+                  <div className="flex border border-tertiary/10 rounded-xl overflow-hidden bg-slate-100 dark:bg-black/40 shadow-lg">
                     <button 
                       type="button"
                       onClick={() => setSimulationBonus(20)}
-                      className={`px-3 py-1.5 text-[10px] font-bold ${simulationBonus === 20 ? 'bg-on-primary-fixed-variant text-primary-fixed border-r border-primary/20' : 'hover:bg-black/30 text-on-surface-variant border-r border-tertiary/10'}`}
+                      className={`px-3 py-1.5 text-[10px] font-bold ${simulationBonus === 20 ? 'bg-on-primary-fixed-variant text-primary-fixed border-r border-primary/20' : 'hover:bg-slate-200 dark:hover:bg-black/30 text-on-surface-variant border-r border-tertiary/10'}`}
                     >
                       +20 PTS
                     </button>
                     <button 
                       type="button"
                       onClick={() => setSimulationBonus(50)}
-                      className={`px-3 py-1.5 text-[10px] font-bold ${simulationBonus === 50 ? 'bg-on-primary-fixed-variant text-primary-fixed border-r border-primary/20' : 'hover:bg-black/30 text-on-surface-variant border-r border-tertiary/10'}`}
+                      className={`px-3 py-1.5 text-[10px] font-bold ${simulationBonus === 50 ? 'bg-on-primary-fixed-variant text-primary-fixed border-r border-primary/20' : 'hover:bg-slate-200 dark:hover:bg-black/30 text-on-surface-variant border-r border-tertiary/10'}`}
                     >
                       +50 PTS
                     </button>
                     <button 
                       type="button"
                       onClick={() => setSimulationBonus(100)}
-                      className={`px-3 py-1.5 text-[10px] font-bold ${simulationBonus === 100 ? 'bg-on-primary-fixed-variant text-primary-fixed' : 'hover:bg-black/30 text-on-surface-variant'}`}
+                      className={`px-3 py-1.5 text-[10px] font-bold ${simulationBonus === 100 ? 'bg-on-primary-fixed-variant text-primary-fixed' : 'hover:bg-slate-200 dark:hover:bg-black/30 text-on-surface-variant'}`}
                     >
                       +100 PTS
                     </button>
@@ -610,7 +610,7 @@ export default function RankingView({
                       onAddBonusPoints(simulationBonus);
                       alert(`🧪 ¡Simulación Exitosa!\nSe han otorgado +${simulationBonus} puntos a ${currentUser.name}. Comprueba cómo se reordena el ranking.`);
                     }}
-                    className="px-4 py-2 bg-[#0d0d11]/80 hover:bg-[#0d0d11] text-primary-fixed hover:text-white border border-primary/30 rounded-xl shadow-lg hover:scale-105 active:scale-95 transition-all text-[10px] font-bold uppercase"
+                    className="px-4 py-2 bg-slate-100 dark:bg-[#0d0d11]/80 hover:bg-slate-200 dark:hover:bg-[#0d0d11] text-primary-fixed hover:text-slate-900 dark:hover:text-white border border-primary/30 rounded-xl shadow-lg hover:scale-105 active:scale-95 transition-all text-[10px] font-bold uppercase"
                   >
                     Simular Puntos Bonus &rarr;
                   </button>
@@ -626,10 +626,10 @@ export default function RankingView({
           <div className="bg-surface-container border border-tertiary/10 rounded-2xl overflow-hidden shadow-2xl text-on-surface flex flex-col">
             {/* Header */}
             <div className="p-4 border-b border-tertiary/10 flex justify-between items-center bg-primary-container/10">
-              <h4 className="text-xs font-bold tracking-tight text-white font-mono uppercase flex items-center gap-1.5">
+              <h4 className="text-xs font-bold tracking-tight text-slate-900 dark:text-white font-mono uppercase flex items-center gap-1.5">
                 <Trophy className="w-3.5 h-3.5 text-tertiary" /> RANKING GLOBAL
               </h4>
-              <span className="text-[8px] bg-black/40 border border-tertiary/25 px-2 py-0.5 rounded font-mono font-bold text-tertiary">
+              <span className="text-[8px] bg-slate-100 dark:bg-black/40 border border-tertiary/25 px-2 py-0.5 rounded font-mono font-bold text-tertiary">
                 ACTUALIZADO EN VIVO
               </span>
             </div>
@@ -680,7 +680,7 @@ export default function RankingView({
 
                         <div className="min-w-0">
                           <h5 className={`text-xs font-bold truncate uppercase ${
-                            user.isCurrentUser ? 'text-primary' : 'text-white'
+                            user.isCurrentUser ? 'text-primary' : 'text-slate-900 dark:text-white'
                           }`}>
                             {user.name}
                           </h5>
@@ -695,7 +695,7 @@ export default function RankingView({
                         <span className={`text-[11px] font-mono font-bold border px-2.5 py-1 rounded-xl shadow-md block ${
                           user.isCurrentUser 
                             ? 'bg-primary-container/30 border-primary/40 text-primary' 
-                            : 'bg-black/40 border-tertiary/20 text-tertiary'
+                            : 'bg-slate-100 dark:bg-black/40 border-tertiary/20 text-tertiary'
                         }`}>
                           {user.points} <span className="text-[8px]">PTS</span>
                         </span>
@@ -712,7 +712,7 @@ export default function RankingView({
             </div>
 
             {/* Bottom Note */}
-            <div className="p-3 bg-[#08080a]/60 border-t border-tertiary/10 flex items-center gap-2 text-[9px] text-on-surface-variant font-bold leading-normal">
+            <div className="p-3 bg-slate-50 dark:bg-[#08080a]/60 border-t border-tertiary/10 flex items-center gap-2 text-[9px] text-on-surface-variant font-bold leading-normal">
               <Info className="w-4 h-4 text-tertiary shrink-0" />
               <span>
                 Completa tus tareas para seguir acumulando puntos. Los tutores otorgan puntos bonus semanales.
@@ -722,7 +722,7 @@ export default function RankingView({
 
           {/* Achievement badge unlocks */}
           <div className="bg-surface-container border border-tertiary/10 rounded-2xl p-5 shadow-2xl">
-            <h4 className="text-xs font-mono font-bold text-white uppercase border-b border-tertiary/10 pb-2 mb-4 flex items-center gap-1.5">
+            <h4 className="text-xs font-mono font-bold text-slate-900 dark:text-white uppercase border-b border-tertiary/10 pb-2 mb-4 flex items-center gap-1.5">
               <Award className="w-4 h-4 text-tertiary" /> LOGROS DISPONIBLES
             </h4>
             
@@ -759,17 +759,17 @@ export default function RankingView({
                 <div 
                   key={idx} 
                   className={`p-3 rounded-xl border flex items-center justify-between gap-3 ${
-                    achievement.completed ? 'bg-primary-container/10 border-primary/20' : 'bg-[#0d0d11]/30 border-tertiary/5 opacity-50'
+                    achievement.completed ? 'bg-primary-container/10 border-primary/20' : 'bg-slate-50 dark:bg-[#0d0d11]/30 border-tertiary/5 opacity-50'
                   }`}
                 >
                   <div className="min-w-0">
-                    <h5 className="text-[11px] font-bold text-white uppercase leading-tight flex items-center gap-1.5">
+                    <h5 className="text-[11px] font-bold text-slate-900 dark:text-white uppercase leading-tight flex items-center gap-1.5">
                       {achievement.completed ? '✅' : '🔒'} {achievement.name}
                     </h5>
                     <p className="text-[9px] text-on-surface-variant font-medium leading-tight mt-1">{achievement.desc}</p>
                   </div>
                   
-                  <span className={`text-[9px] font-mono font-bold border px-1.5 py-0.5 rounded-md shrink-0 bg-black/40 ${
+                  <span className={`text-[9px] font-mono font-bold border px-1.5 py-0.5 rounded-md shrink-0 bg-slate-100 dark:bg-black/40 ${
                     achievement.completed ? 'text-tertiary border-tertiary/20' : 'text-on-surface-variant/40 border-tertiary/5'
                   }`}>
                     {achievement.badgeText}

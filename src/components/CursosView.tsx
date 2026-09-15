@@ -482,7 +482,7 @@ export default function CursosView({
   const subscribedInstructors = (instructors || []).filter(i => i && i.isSubscribed);
 
   return (
-    <div className="flex-1 min-h-full w-full p-4 sm:p-6 bg-[#09080d] text-white flex flex-col font-body-md space-y-6">
+    <div className="flex-1 min-h-full w-full p-4 sm:p-6 bg-white dark:bg-[#09080d] text-slate-900 dark:text-white flex flex-col font-body-md space-y-6">
       
       {/* Toast Notification */}
       <AnimatePresence>
@@ -534,7 +534,7 @@ export default function CursosView({
       ) : (
         <>
           {/* HEADER SECTION FOR STUDENTS */}
-          <div className="bg-gradient-to-r from-purple-900/30 via-indigo-900/20 to-pink-900/20 border border-white/15 p-6 rounded-3xl backdrop-blur-xl shadow-2xl flex flex-col lg:flex-row lg:items-center justify-between gap-6 relative overflow-hidden">
+          <div className="bg-gradient-to-r from-purple-100 via-indigo-50 to-pink-50 dark:from-purple-900/30 dark:via-indigo-900/20 dark:to-pink-900/20 border border-slate-200 dark:border-white/15 p-6 rounded-3xl backdrop-blur-xl shadow-2xl flex flex-col lg:flex-row lg:items-center justify-between gap-6 relative overflow-hidden">
             <div className="flex flex-col sm:flex-row sm:items-center gap-5">
               <Logo variant="full" className="w-36 h-auto shrink-0" />
               <div>
@@ -546,10 +546,10 @@ export default function CursosView({
                     {(subscribedInstructors || []).length} PROFESORES SUSCRITOS
                   </span>
                 </div>
-                <h1 className="text-2xl sm:text-3xl font-black text-white uppercase tracking-tight">
+                <h1 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white uppercase tracking-tight">
                   Clases, Cursos & Materiales por Instructor
                 </h1>
-                <p className="text-xs sm:text-sm text-slate-300 mt-1 max-w-3xl leading-relaxed">
+                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 mt-1 max-w-3xl leading-relaxed">
                   Accede al desglose exclusivo de lecciones en video, programas intensivos y guías teóricas organizados específicamente según tus catedráticos suscritos.
                 </p>
               </div>
@@ -589,11 +589,11 @@ export default function CursosView({
                 <span>Google Classroom</span>
               </button>
 
-              <div className="bg-black/60 border border-white/15 p-1 rounded-2xl flex gap-1 shadow-xl flex-wrap">
+              <div className="bg-slate-100 dark:bg-black/60 border border-slate-200 dark:border-white/15 p-1 rounded-2xl flex gap-1 shadow-xl flex-wrap">
                 <button
                   onClick={() => setCurrentTab('catedras')}
                   className={`px-4 py-2 text-xs font-extrabold rounded-xl transition-all flex items-center gap-1.5 ${
-                    currentTab === 'catedras' ? 'bg-[#D9A9FF] text-black shadow-lg' : 'text-slate-300 hover:text-white'
+                    currentTab === 'catedras' ? 'bg-[#E9C349] text-black shadow-lg' : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
                   }`}
                 >
                   <Users className="w-3.5 h-3.5" />
@@ -602,7 +602,7 @@ export default function CursosView({
                 <button
                   onClick={() => setCurrentTab('metas')}
                   className={`px-4 py-2 text-xs font-extrabold rounded-xl transition-all flex items-center gap-1.5 ${
-                    currentTab === 'metas' ? 'bg-[#D9A9FF] text-black shadow-lg' : 'text-slate-300 hover:text-white'
+                    currentTab === 'metas' ? 'bg-[#E9C349] text-black shadow-lg' : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
                   }`}
                 >
                   <Target className="w-3.5 h-3.5" />
@@ -611,7 +611,7 @@ export default function CursosView({
                 <button
                   onClick={() => setCurrentTab('workbook')}
                   className={`px-4 py-2 text-xs font-extrabold rounded-xl transition-all flex items-center gap-1.5 ${
-                    currentTab === 'workbook' ? 'bg-[#D9A9FF] text-black shadow-lg' : 'text-slate-300 hover:text-white'
+                    currentTab === 'workbook' ? 'bg-[#E9C349] text-black shadow-lg' : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
                   }`}
                 >
                   <BookOpen className="w-3.5 h-3.5" />
@@ -620,7 +620,7 @@ export default function CursosView({
                 <button
                   onClick={() => setCurrentTab('feedback')}
                   className={`px-4 py-2 text-xs font-extrabold rounded-xl transition-all flex items-center gap-1.5 ${
-                    currentTab === 'feedback' ? 'bg-[#D9A9FF] text-black shadow-lg' : 'text-slate-300 hover:text-white'
+                    currentTab === 'feedback' ? 'bg-[#E9C349] text-black shadow-lg' : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
                   }`}
                 >
                   <Video className="w-3.5 h-3.5" />
@@ -631,16 +631,16 @@ export default function CursosView({
           </div>
 
           {/* SUBSCRIBED INSTRUCTORS SELECTOR BAR */}
-          <div className="bg-gradient-to-r from-[#171322] via-[#211a30] to-[#12101b] border border-white/10 rounded-2xl p-4 shadow-2xl flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="bg-gradient-to-r from-purple-50 via-indigo-50 to-purple-50 dark:from-[#171322] dark:via-[#211a30] dark:to-[#12101b] border border-slate-200 dark:border-white/10 rounded-2xl p-4 shadow-2xl flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-[#D9A9FF]/15 border border-[#D9A9FF]/40 flex items-center justify-center text-[#D9A9FF] shrink-0">
                 <UserCheck className="w-5 h-5" />
               </div>
               <div>
-                <h3 className="text-xs font-mono font-bold text-slate-300 uppercase tracking-wider">
+                <h3 className="text-xs font-mono font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider">
                   TUS PROFESORES ACTUALES EN CÁTEDRA:
                 </h3>
-                <p className="text-[11px] text-slate-400">
+                <p className="text-[11px] text-slate-500 dark:text-slate-400">
                   Selecciona un profesor para filtrar todo su contenido o mantén la vista unificada.
                 </p>
               </div>
@@ -653,8 +653,8 @@ export default function CursosView({
                 onClick={() => setSelectedInstructorFilter('all')}
                 className={`px-3.5 py-2 rounded-xl text-xs font-extrabold border transition-all shrink-0 flex items-center gap-2 ${
                   selectedInstructorFilter === 'all'
-                    ? 'bg-white text-black border-white shadow-lg'
-                    : 'bg-black/40 text-slate-300 border-white/10 hover:border-white/30'
+                    ? 'bg-slate-900 dark:bg-white text-white dark:text-black border-slate-900 dark:border-white shadow-lg'
+                    : 'bg-slate-100 dark:bg-black/40 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-white/10 hover:border-slate-400 dark:hover:border-white/30'
                 }`}
               >
                 <Layers className="w-3.5 h-3.5" />
@@ -670,13 +670,13 @@ export default function CursosView({
                     onClick={() => setSelectedInstructorFilter(inst.id)}
                     className={`px-3.5 py-1.5 rounded-xl text-xs font-extrabold border transition-all shrink-0 flex items-center gap-2 ${
                       isSel
-                        ? 'bg-[#D9A9FF] text-black border-[#D9A9FF] shadow-lg'
-                        : 'bg-black/40 text-slate-200 border-white/10 hover:border-white/30'
+                        ? 'bg-[#E9C349] text-black border-[#E9C349] shadow-lg'
+                        : 'bg-slate-100 dark:bg-black/40 text-slate-700 dark:text-slate-200 border-slate-200 dark:border-white/10 hover:border-slate-400 dark:hover:border-white/30'
                     }`}
                   >
                     <img src={inst.avatar} alt={inst.name} className="w-5 h-5 rounded-full object-cover border border-white/20" />
                     <span>{inst.name}</span>
-                    <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-black/30 text-current">
+                    <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-black/10 dark:bg-black/30 text-current">
                       {inst.lessonsCount} Lecciones
                     </span>
                   </button>
@@ -699,7 +699,7 @@ export default function CursosView({
       />
 
       {/* VIEW LAYOUT TOGGLE */}
-      <div className="flex items-center justify-between gap-4 flex-wrap bg-[#100d1a] border border-white/10 p-3 rounded-2xl">
+      <div className="flex items-center justify-between gap-4 flex-wrap bg-white dark:bg-[#100d1a] border border-white/10 p-3 rounded-2xl">
         <div className="flex items-center gap-2">
           <span className="text-xs font-mono text-slate-400 font-bold uppercase">Modo de Visualización:</span>
           <span className="text-xs font-bold text-[#D9A9FF] bg-[#D9A9FF]/10 px-2 py-0.5 rounded-lg border border-[#D9A9FF]/30">
@@ -713,8 +713,8 @@ export default function CursosView({
             onClick={() => setViewLayout('catedras')}
             className={`px-3.5 py-1.5 rounded-lg text-xs font-extrabold transition-all flex items-center gap-1.5 cursor-pointer ${
               viewLayout === 'catedras'
-                ? 'bg-[#D9A9FF] text-black shadow-md'
-                : 'text-slate-400 hover:text-white'
+                ? 'bg-[#E9C349] text-black shadow-md'
+                : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
             }`}
           >
             <Users className="w-3.5 h-3.5" />
@@ -726,8 +726,8 @@ export default function CursosView({
             onClick={() => setViewLayout('catalog')}
             className={`px-3.5 py-1.5 rounded-lg text-xs font-extrabold transition-all flex items-center gap-1.5 cursor-pointer ${
               viewLayout === 'catalog'
-                ? 'bg-[#D9A9FF] text-black shadow-md'
-                : 'text-slate-400 hover:text-white'
+                ? 'bg-[#E9C349] text-black shadow-md'
+                : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
             }`}
           >
             <LayoutGrid className="w-3.5 h-3.5" />
@@ -741,26 +741,26 @@ export default function CursosView({
         <div className="space-y-8">
 
           {/* GLOBAL PROGRESS SUMMARY */}
-          <div className="bg-[#12101c] border border-white/10 rounded-2xl p-5 shadow-xl grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
+          <div className="bg-white dark:bg-[#12101c] border border-white/10 rounded-2xl p-5 shadow-xl grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
             <div className="md:col-span-8 space-y-2">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-mono font-bold text-[#D9A9FF] uppercase tracking-wider">
                   AVANCE DE APRENDIZAZAJE UNIFICADO EN TUS CÁTEDRAS
                 </span>
-                <span className="text-xs font-mono font-extrabold text-white">
+                <span className="text-xs font-mono font-extrabold text-slate-900 dark:text-white">
                   {completedCount} de {(lessons || []).length} Lecciones Completadas ({progressPercent}%)
                 </span>
               </div>
-              <div className="w-full bg-black/60 h-3 rounded-full overflow-hidden border border-white/10">
-                <div 
-                  className="bg-gradient-to-r from-[#D9A9FF] via-amber-400 to-purple-500 h-full transition-all duration-700"
+              <div className="w-full bg-slate-200 dark:bg-black/60 h-3 rounded-full overflow-hidden border border-white/10">
+                <div
+                  className="bg-gradient-to-r from-[#E9C349] via-amber-400 to-purple-500 h-full transition-all duration-700"
                   style={{ width: `${progressPercent}%` }}
                 />
               </div>
             </div>
-            <div className="md:col-span-4 flex items-center justify-end gap-3 text-xs font-mono text-slate-300">
+            <div className="md:col-span-4 flex items-center justify-end gap-3 text-xs font-mono text-slate-600 dark:text-slate-300">
               <div className="bg-white/5 border border-white/10 px-3 py-2 rounded-xl text-center flex-1">
-                <span className="text-lg font-black text-white block">{(subscribedInstructors || []).length}</span>
+                <span className="text-lg font-black text-slate-900 dark:text-white block">{(subscribedInstructors || []).length}</span>
                 <span className="text-[9px] text-slate-400 uppercase">Cátedras Activas</span>
               </div>
               <div className="bg-white/5 border border-white/10 px-3 py-2 rounded-xl text-center flex-1">
@@ -784,10 +784,10 @@ export default function CursosView({
               return (
                 <div 
                   key={instructor.id}
-                  className="bg-[#120f1d] border border-white/10 rounded-3xl overflow-hidden shadow-2xl transition-all"
+                  className="bg-white dark:bg-[#120f1d] border border-white/10 rounded-3xl overflow-hidden shadow-2xl transition-all"
                 >
                   {/* CATEDRA HEADER SHOWCASE BANNER */}
-                  <div className={`p-6 bg-gradient-to-r ${instructor.featuredColor} border-b border-white/10 relative overflow-hidden`}>
+                  <div className={`p-6 bg-slate-900 bg-gradient-to-r ${instructor.featuredColor} border-b border-white/10 relative overflow-hidden`}>
                     <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 relative z-10">
                       <div className="flex items-start gap-4">
                         <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl overflow-hidden border-2 border-[#D9A9FF] shadow-2xl shrink-0">
@@ -837,8 +837,8 @@ export default function CursosView({
                     {/* 1. PROGRAMAS & CURSOS INTENSIVOS DE LA CÁTEDRA */}
                     <div>
                       <div className="flex items-center justify-between mb-4 border-b border-white/10 pb-2">
-                        <h3 className="text-sm font-black text-white uppercase tracking-wider flex items-center gap-2">
-                          <Award className="w-4 h-4 text-[#D9A9FF]" />
+                        <h3 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
+                          <Award className="w-4 h-4 text-[#E9C349]" />
                           Programas & Cursos Intensivos de {instructor.name}
                         </h3>
                         <span className="text-[10px] font-mono text-slate-400">
@@ -850,7 +850,7 @@ export default function CursosView({
                         {(instructor.courses || []).map((course) => (
                           <div 
                             key={course.id}
-                            className="bg-[#0b0a12] border border-white/10 rounded-2xl overflow-hidden flex flex-col justify-between hover:border-[#D9A9FF]/40 transition-all shadow-lg group"
+                            className="bg-white dark:bg-[#0b0a12] border border-white/10 rounded-2xl overflow-hidden flex flex-col justify-between hover:border-[#E9C349]/40 transition-all shadow-lg group"
                           >
                             <div className="relative aspect-video overflow-hidden">
                               <img 
@@ -897,7 +897,7 @@ export default function CursosView({
                     {/* 2. CLASES EN VIDEO Y REPRODUCTOR DE LA CÁTEDRA */}
                     <div>
                       <div className="flex items-center justify-between mb-4 border-b border-white/10 pb-2">
-                        <h3 className="text-sm font-black text-white uppercase tracking-wider flex items-center gap-2">
+                        <h3 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
                           <Video className="w-4 h-4 text-purple-400" />
                           Clases en Video de {instructor.name}
                         </h3>
@@ -927,7 +927,7 @@ export default function CursosView({
                       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
                         
                         {/* Video Player (7 cols) */}
-                        <div className="lg:col-span-7 bg-[#0b0a12] border border-white/10 rounded-2xl overflow-hidden shadow-xl">
+                        <div className="lg:col-span-7 bg-white dark:bg-[#0b0a12] border border-white/10 rounded-2xl overflow-hidden shadow-xl">
                           {(() => {
                             const curL = (activeLesson && activeLesson.instructorId === instructor.id) ? activeLesson : (instLessons[0] || activeLesson);
                             if (!curL) {
@@ -959,8 +959,8 @@ export default function CursosView({
                                 <div className="p-4 space-y-3">
                                   <div className="flex items-start justify-between gap-3 flex-wrap">
                                     <div>
-                                      <h4 className="text-base font-black text-white uppercase">{curL.title}</h4>
-                                      <p className="text-[10px] text-[#D9A9FF] font-mono uppercase mt-0.5">
+                                      <h4 className="text-base font-black text-slate-900 dark:text-white uppercase">{curL.title}</h4>
+                                      <p className="text-[10px] text-[#E9C349] font-mono uppercase mt-0.5">
                                         {instructor.name} • DURACIÓN: {curL.duration}
                                       </p>
                                     </div>
@@ -1053,11 +1053,11 @@ export default function CursosView({
 
                                     {/* Loading State */}
                                     {isSummarizing && (
-                                      <div className="p-4 rounded-xl bg-purple-950/40 border border-purple-500/30 text-purple-200 flex items-center gap-3 animate-pulse">
-                                        <Sparkles className="w-5 h-5 text-[#D9A9FF] animate-spin shrink-0" />
+                                      <div className="p-4 rounded-xl bg-purple-50 dark:bg-purple-950/40 border border-purple-500/30 text-purple-700 dark:text-purple-200 flex items-center gap-3 animate-pulse">
+                                        <Sparkles className="w-5 h-5 text-[#E9C349] animate-spin shrink-0" />
                                         <div>
-                                          <p className="text-xs font-bold text-white">Generando Resumen Ejecutivo con Gemini IA...</p>
-                                          <p className="text-[10px] text-purple-300 font-mono">Procesando transcripción limpia para extraer objetivos, pilares técnicos y ejercicios somáticos.</p>
+                                          <p className="text-xs font-bold text-slate-900 dark:text-white">Generando Resumen Ejecutivo con Gemini IA...</p>
+                                          <p className="text-[10px] text-purple-600 dark:text-purple-300 font-mono">Procesando transcripción limpia para extraer objetivos, pilares técnicos y ejercicios somáticos.</p>
                                         </div>
                                       </div>
                                     )}
@@ -1067,7 +1067,7 @@ export default function CursosView({
                                       <motion.div
                                         initial={{ opacity: 0, y: 10 }}
                                         animate={{ opacity: 1, y: 0 }}
-                                        className="p-4 rounded-xl bg-slate-900/90 border border-[#D9A9FF]/40 space-y-3 shadow-2xl relative overflow-hidden"
+                                        className="p-4 rounded-xl bg-white dark:bg-slate-900/90 border border-[#E9C349]/40 space-y-3 shadow-2xl relative overflow-hidden"
                                       >
                                         <div className="absolute top-0 right-0 w-32 h-32 bg-[#D9A9FF]/5 rounded-full blur-2xl pointer-events-none" />
                                         <div className="flex items-center justify-between pb-2 border-b border-white/10">
@@ -1076,15 +1076,15 @@ export default function CursosView({
                                               <Sparkles className="w-4 h-4" />
                                             </div>
                                             <div>
-                                              <h5 className="text-xs font-black text-white uppercase tracking-wider">RESUMEN EJECUTIVO (GEMINI IA)</h5>
-                                              <p className="text-[10px] text-[#D9A9FF] font-mono">Análisis inteligente basado en la transcripción limpia de la clase</p>
+                                              <h5 className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-wider">RESUMEN EJECUTIVO (GEMINI IA)</h5>
+                                              <p className="text-[10px] text-[#E9C349] font-mono">Análisis inteligente basado en la transcripción limpia de la clase</p>
                                             </div>
                                           </div>
 
                                           <button
                                             type="button"
                                             onClick={() => handleCopySummary(generatedSummaries[curL.id], curL.id)}
-                                            className="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-slate-200 text-[10px] font-mono font-bold flex items-center gap-1.5 transition-all border border-white/10 cursor-pointer"
+                                            className="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-slate-700 dark:text-slate-200 text-[10px] font-mono font-bold flex items-center gap-1.5 transition-all border border-white/10 cursor-pointer"
                                           >
                                             {copiedSummaryId === curL.id ? (
                                               <>
@@ -1100,7 +1100,7 @@ export default function CursosView({
                                           </button>
                                         </div>
 
-                                        <div className="text-xs text-slate-200 leading-relaxed font-sans space-y-2 whitespace-pre-line max-h-96 overflow-y-auto pr-2 custom-scrollbar">
+                                        <div className="text-xs text-slate-700 dark:text-slate-200 leading-relaxed font-sans space-y-2 whitespace-pre-line max-h-96 overflow-y-auto pr-2 custom-scrollbar">
                                           {generatedSummaries[curL.id]}
                                         </div>
                                       </motion.div>
@@ -1111,7 +1111,7 @@ export default function CursosView({
                                       <motion.div
                                         initial={{ opacity: 0, height: 0 }}
                                         animate={{ opacity: 1, height: 'auto' }}
-                                        className="p-4 rounded-xl bg-black/60 border border-white/10 space-y-2"
+                                        className="p-4 rounded-xl bg-slate-100 dark:bg-black/60 border border-white/10 space-y-2"
                                       >
                                         <div className="flex items-center justify-between">
                                           <h5 className="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center gap-2">
@@ -1120,7 +1120,7 @@ export default function CursosView({
                                           </h5>
                                           <span className="text-[10px] font-mono text-slate-500">Audio limpio • Marcas de tiempo</span>
                                         </div>
-                                        <div className="p-3 bg-slate-950/80 rounded-lg border border-white/5 text-xs text-slate-300 font-mono leading-relaxed max-h-60 overflow-y-auto whitespace-pre-line custom-scrollbar">
+                                        <div className="p-3 bg-white dark:bg-slate-950/80 rounded-lg border border-white/5 text-xs text-slate-600 dark:text-slate-300 font-mono leading-relaxed max-h-60 overflow-y-auto whitespace-pre-line custom-scrollbar">
                                           {curL.transcription || `[00:00] Inicio de la clase ${curL.title}.\n[02:00] Explicación biomecánica de la postura y control articular.\n[05:00] Ejecución de drills a velocidad progresiva.\n[10:00] Consejos de improvisación y musicalidad en compás 4/4.`}
                                         </div>
                                       </motion.div>
@@ -1139,7 +1139,7 @@ export default function CursosView({
                         </div>
 
                         {/* Lesson List (5 cols) */}
-                        <div className="lg:col-span-5 bg-[#0b0a12] border border-white/10 rounded-2xl p-4 flex flex-col justify-between">
+                        <div className="lg:col-span-5 bg-white dark:bg-[#0b0a12] border border-white/10 rounded-2xl p-4 flex flex-col justify-between">
                           <div className="space-y-2">
                             <p className="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-wider mb-2">
                               LECCIONES DE LA CÁTEDRA ({(instLessons || []).length})
@@ -1153,9 +1153,9 @@ export default function CursosView({
                                     key={l.id}
                                     onClick={() => handleLessonSelect(l)}
                                     className={`p-3 rounded-xl border transition-all cursor-pointer flex items-center justify-between gap-2 ${
-                                      isAct 
-                                        ? 'bg-[#D9A9FF]/15 border-[#D9A9FF] text-white shadow-md' 
-                                        : 'bg-black/40 border-white/5 hover:border-white/20 text-slate-300'
+                                      isAct
+                                        ? 'bg-[#E9C349]/15 border-[#E9C349] text-slate-900 dark:text-white shadow-md'
+                                        : 'bg-slate-100 dark:bg-black/40 border-white/5 hover:border-white/20 text-slate-600 dark:text-slate-300'
                                     }`}
                                   >
                                     <div className="flex items-center gap-2.5 min-w-0">
@@ -1180,7 +1180,7 @@ export default function CursosView({
                           <button
                             type="button"
                             onClick={() => setActiveTab('entrenamiento')}
-                            className="w-full mt-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/15 text-slate-200 text-xs font-extrabold uppercase transition-all flex items-center justify-center gap-1.5"
+                            className="w-full mt-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/15 text-slate-700 dark:text-slate-200 text-xs font-extrabold uppercase transition-all flex items-center justify-center gap-1.5"
                           >
                             Ir a Entrenar con el Botón de Drill <ArrowRight className="w-3.5 h-3.5" />
                           </button>
@@ -1192,7 +1192,7 @@ export default function CursosView({
                     {/* 3. MATERIALES & WORKBOOKS EXCLUSIVOS DE LA CÁTEDRA */}
                     <div>
                       <div className="flex items-center justify-between mb-4 border-b border-white/10 pb-2">
-                        <h3 className="text-sm font-black text-white uppercase tracking-wider flex items-center gap-2">
+                        <h3 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
                           <FileText className="w-4 h-4 text-blue-400" />
                           Materiales de Estudio & Workbooks de {instructor.name}
                         </h3>
@@ -1205,7 +1205,7 @@ export default function CursosView({
                         {(instructor.materials || []).map((mat) => (
                           <div 
                             key={mat.id}
-                            className="bg-[#0b0a12] border border-white/10 p-4 rounded-2xl flex flex-col justify-between hover:border-purple-400/40 transition-all shadow-md"
+                            className="bg-white dark:bg-[#0b0a12] border border-white/10 p-4 rounded-2xl flex flex-col justify-between hover:border-purple-400/40 transition-all shadow-md"
                           >
                             <div className="space-y-2">
                               <div className="flex items-center justify-between">
@@ -1214,7 +1214,7 @@ export default function CursosView({
                                 </span>
                                 <span className="text-[9px] font-mono text-slate-400">{mat.fileSize}</span>
                               </div>
-                              <h4 className="text-xs font-black text-white uppercase">{mat.title}</h4>
+                              <h4 className="text-xs font-black text-slate-900 dark:text-white uppercase">{mat.title}</h4>
                               <p className="text-xs text-slate-400 leading-relaxed">{mat.description}</p>
                             </div>
 
@@ -1242,10 +1242,10 @@ export default function CursosView({
       {currentTab === 'catedras' && viewLayout === 'catalog' && (
         <div className="space-y-6">
           {/* CATALOG HEADER WITH ACTIVE FILTER CHIPS */}
-          <div className="bg-[#12101f] border border-white/10 p-5 rounded-3xl flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-xl">
+          <div className="bg-white dark:bg-[#12101f] border border-white/10 p-5 rounded-3xl flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-xl">
             <div>
-              <h2 className="text-lg font-black text-white uppercase flex items-center gap-2">
-                <LayoutGrid className="w-5 h-5 text-[#D9A9FF]" />
+              <h2 className="text-lg font-black text-slate-900 dark:text-white uppercase flex items-center gap-2">
+                <LayoutGrid className="w-5 h-5 text-[#E9C349]" />
                 Catálogo Unificado de Clases de Waacking
               </h2>
               <p className="text-xs text-slate-400 mt-0.5">
@@ -1283,9 +1283,9 @@ export default function CursosView({
 
           {/* CATALOG GRID */}
           {filteredLessons.length === 0 ? (
-            <div className="bg-[#12101f] border border-white/10 p-12 rounded-3xl text-center space-y-4 shadow-xl">
+            <div className="bg-white dark:bg-[#12101f] border border-white/10 p-12 rounded-3xl text-center space-y-4 shadow-xl">
               <ListFilter className="w-12 h-12 text-slate-500 mx-auto" />
-              <h3 className="text-base font-black text-white uppercase">No se encontraron lecciones</h3>
+              <h3 className="text-base font-black text-slate-900 dark:text-white uppercase">No se encontraron lecciones</h3>
               <p className="text-xs text-slate-400 max-w-md mx-auto">
                 No hay clases que cumplan simultáneamente con todos los criterios de estilo, técnica o nivel seleccionados.
               </p>
@@ -1312,8 +1312,8 @@ export default function CursosView({
                 return (
                   <div
                     key={lesson.id}
-                    className={`bg-[#120f1d] border rounded-2xl overflow-hidden flex flex-col justify-between transition-all group hover:border-[#D9A9FF]/50 shadow-xl ${
-                      isAct ? 'border-[#D9A9FF] ring-1 ring-[#D9A9FF]/40' : 'border-white/10'
+                    className={`bg-white dark:bg-[#120f1d] border rounded-2xl overflow-hidden flex flex-col justify-between transition-all group hover:border-[#E9C349]/50 shadow-xl ${
+                      isAct ? 'border-[#E9C349] ring-1 ring-[#E9C349]/40' : 'border-white/10'
                     }`}
                   >
                     {/* Thumbnail & Badges */}
@@ -1398,7 +1398,7 @@ export default function CursosView({
                         </div>
 
                         {/* Title */}
-                        <h4 className="text-xs font-black text-white uppercase line-clamp-2">
+                        <h4 className="text-xs font-black text-slate-900 dark:text-white uppercase line-clamp-2">
                           {lesson.title}
                         </h4>
 
@@ -1502,8 +1502,8 @@ export default function CursosView({
       {/* WORKBOOK MODE */}
       {currentTab === 'workbook' && (
         <div className="flex-1 flex flex-col items-center justify-center w-full py-4 space-y-6">
-          <div className="bg-[#12101f] border border-[#D9A9FF]/30 p-6 rounded-3xl text-center w-full relative overflow-hidden shadow-2xl text-white">
-            <Book className="w-10 h-10 text-[#D9A9FF] mx-auto mb-3 animate-pulse" />
+          <div className="bg-white dark:bg-[#12101f] border border-[#E9C349]/30 p-6 rounded-3xl text-center w-full relative overflow-hidden shadow-2xl text-white">
+            <Book className="w-10 h-10 text-[#E9C349] mx-auto mb-3 animate-pulse" />
             <h3 className="text-xl font-black text-white uppercase tracking-tight">BITÁCORA TEÓRICA UNIFICADA v2.1</h3>
             <p className="text-xs text-slate-300 font-medium max-w-xl mx-auto mt-2 leading-relaxed">
               Recopilación teórica que integra las cátedras de Brando Hermoso y Elena Rostova: terminología, historia de los años 70 y plantillas de práctica.
@@ -1518,7 +1518,7 @@ export default function CursosView({
           </div>
 
           {/* Interactive Workbook Reader */}
-          <div className="bg-[#12101f] border border-white/10 w-full rounded-3xl overflow-hidden flex flex-col md:flex-row h-[380px] shadow-2xl text-white">
+          <div className="bg-white dark:bg-[#12101f] border border-white/10 w-full rounded-3xl overflow-hidden flex flex-col md:flex-row h-[380px] shadow-2xl text-white">
             {/* Navigation */}
             <div className="md:w-1/3 bg-black/50 p-4 border-r border-white/10 flex flex-col gap-2 overflow-y-auto">
               <p className="text-[10px] font-mono font-bold text-slate-400 tracking-wider mb-2 uppercase">CAPÍTULOS DISPONIBLES</p>
@@ -1640,7 +1640,7 @@ export default function CursosView({
 
           {/* Quick Metrics Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="bg-[#12101f] border border-white/10 p-5 rounded-2xl shadow-xl flex items-center justify-between">
+            <div className="bg-white dark:bg-[#12101f] border border-white/10 p-5 rounded-2xl shadow-xl flex items-center justify-between">
               <div>
                 <span className="text-[10px] font-mono font-bold text-[#8A8A8A] uppercase block">Meta Diaria Actual</span>
                 <div className="flex items-baseline gap-1.5 mt-1">
@@ -1653,7 +1653,7 @@ export default function CursosView({
               </div>
             </div>
 
-            <div className="bg-[#12101f] border border-white/10 p-5 rounded-2xl shadow-xl flex items-center justify-between">
+            <div className="bg-white dark:bg-[#12101f] border border-white/10 p-5 rounded-2xl shadow-xl flex items-center justify-between">
               <div>
                 <span className="text-[10px] font-mono font-bold text-[#8A8A8A] uppercase block">Objetivo Semanal (7 Días)</span>
                 <div className="flex items-baseline gap-1.5 mt-1">
@@ -1666,7 +1666,7 @@ export default function CursosView({
               </div>
             </div>
 
-            <div className="bg-[#12101f] border border-white/10 p-5 rounded-2xl shadow-xl flex items-center justify-between">
+            <div className="bg-white dark:bg-[#12101f] border border-white/10 p-5 rounded-2xl shadow-xl flex items-center justify-between">
               <div>
                 <span className="text-[10px] font-mono font-bold text-[#8A8A8A] uppercase block">Horas Totales Estimadas</span>
                 <div className="flex items-baseline gap-1.5 mt-1">
@@ -1681,7 +1681,7 @@ export default function CursosView({
               </div>
             </div>
 
-            <div className="bg-[#12101f] border border-white/10 p-5 rounded-2xl shadow-xl flex items-center justify-between">
+            <div className="bg-white dark:bg-[#12101f] border border-white/10 p-5 rounded-2xl shadow-xl flex items-center justify-between">
               <div>
                 <span className="text-[10px] font-mono font-bold text-[#8A8A8A] uppercase block">Lecciones Completadas</span>
                 <div className="flex items-baseline gap-1.5 mt-1">
@@ -1696,7 +1696,7 @@ export default function CursosView({
           </div>
 
           {/* Interactive Goal Editor Card */}
-          <div className="bg-[#120f1d] border border-white/15 p-6 rounded-3xl shadow-2xl space-y-6">
+          <div className="bg-white dark:bg-[#120f1d] border border-white/15 p-6 rounded-3xl shadow-2xl space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-4">
               <div>
                 <h3 className="text-lg font-black text-white uppercase tracking-tight flex items-center gap-2">

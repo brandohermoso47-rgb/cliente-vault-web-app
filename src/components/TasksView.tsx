@@ -296,8 +296,8 @@ export default function TasksView({ currentUser, language, lessons, onAddBonusPo
   return (
     <div className="space-y-6 pb-12">
       {/* Header Banner */}
-      <div className="bg-gradient-to-r from-[#1c1815] via-[#2a1e1b] to-[#17131a] p-6 sm:p-8 rounded-3xl border border-[#D9A9FF]/30 shadow-2xl relative overflow-hidden">
-        <div className="absolute -right-10 -bottom-10 w-64 h-64 bg-[#D9A9FF]/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="bg-gradient-to-r from-amber-50 via-orange-50 to-amber-50 dark:from-[#1c1815] dark:via-[#2a1e1b] dark:to-[#17131a] p-6 sm:p-8 rounded-3xl border border-[#E9C349]/30 shadow-2xl relative overflow-hidden">
+        <div className="absolute -right-10 -bottom-10 w-64 h-64 bg-[#E9C349]/10 rounded-full blur-3xl pointer-events-none" />
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
           <div>
             <div className="flex items-center gap-2 mb-2">
@@ -312,11 +312,11 @@ export default function TasksView({ currentUser, language, lessons, onAddBonusPo
                 </span>
               )}
             </div>
-            <h1 className="text-2xl sm:text-3xl font-black text-white uppercase tracking-tight flex items-center gap-3">
-              <ListTodo className="w-8 h-8 text-[#D9A9FF] shrink-0" />
+            <h1 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white uppercase tracking-tight flex items-center gap-3">
+              <ListTodo className="w-8 h-8 text-[#E9C349] shrink-0" />
               Metas & Google Tasks
             </h1>
-            <p className="text-sm text-slate-300 mt-1 max-w-2xl font-medium">
+            <p className="text-sm text-slate-600 dark:text-slate-300 mt-1 max-w-2xl font-medium">
               Sincroniza tus objetivos de entrenamiento, tareas de práctica diario y rutinas de baile con tu cuenta oficial de Google Tasks.
             </p>
           </div>
@@ -347,7 +347,7 @@ export default function TasksView({ currentUser, language, lessons, onAddBonusPo
                 type="button"
                 onClick={() => loadLists()}
                 disabled={loading}
-                className="px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white border border-white/10 text-xs font-bold transition-all flex items-center gap-2 shadow-lg"
+                className="px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-white/5 hover:bg-slate-200 dark:hover:bg-white/10 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white border border-slate-200 dark:border-white/10 text-xs font-bold transition-all flex items-center gap-2 shadow-lg"
               >
                 <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
                 Actualizar
@@ -388,15 +388,15 @@ export default function TasksView({ currentUser, language, lessons, onAddBonusPo
 
       {/* Instructor Assigned Tasks Section */}
       {assignedInstructorTasks.length > 0 && (
-        <div className="bg-gradient-to-r from-[#1c1912] via-[#121212] to-[#121212] border-2 border-[#D9A9FF] rounded-3xl p-6 shadow-2xl space-y-4">
+        <div className="bg-gradient-to-r from-amber-50 via-white to-white dark:from-[#1c1912] dark:via-[#121212] dark:to-[#121212] border-2 border-[#E9C349] rounded-3xl p-6 shadow-2xl space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <span className="p-2 rounded-xl bg-[#D9A9FF]/20 text-[#D9A9FF]">
                 <Sparkles className="w-5 h-5 animate-pulse" />
               </span>
               <div>
-                <h3 className="text-base font-black text-white uppercase">Tareas Asignadas por Instructores / IA</h3>
-                <p className="text-xs text-slate-400">Completa estas misiones para sumar puntos directos a tu ranking somático.</p>
+                <h3 className="text-base font-black text-slate-900 dark:text-white uppercase">Tareas Asignadas por Instructores / IA</h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400">Completa estas misiones para sumar puntos directos a tu ranking somático.</p>
               </div>
             </div>
             <span className="text-xs font-mono font-bold text-[#D9A9FF] bg-[#D9A9FF]/10 px-3 py-1 rounded-full border border-[#D9A9FF]/30">
@@ -418,8 +418,8 @@ export default function TasksView({ currentUser, language, lessons, onAddBonusPo
                     transition={{ duration: 0.3, ease: 'easeOut' }}
                     className={`p-5 rounded-2xl border transition-all flex flex-col justify-between gap-4 ${
                       isCompleted
-                        ? 'bg-black/30 border-white/5 opacity-70'
-                        : 'bg-black/50 border-[#D9A9FF]/40 hover:border-[#D9A9FF] shadow-lg'
+                        ? 'bg-slate-50 dark:bg-black/30 border-slate-200 dark:border-white/5 opacity-70'
+                        : 'bg-white dark:bg-black/50 border-[#E9C349]/40 hover:border-[#E9C349] shadow-lg'
                     }`}
                   >
                     <div className="space-y-2">
@@ -446,13 +446,13 @@ export default function TasksView({ currentUser, language, lessons, onAddBonusPo
                           />
                         </motion.h4>
                       </div>
-                      <p className="text-xs text-slate-300 leading-relaxed">
+                      <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
                         {task.description}
                       </p>
                     </div>
 
-                    <div className="pt-3 border-t border-white/10 flex items-center justify-between">
-                      <span className="text-[10px] font-mono text-slate-400">
+                    <div className="pt-3 border-t border-slate-200 dark:border-white/10 flex items-center justify-between">
+                      <span className="text-[10px] font-mono text-slate-500 dark:text-slate-400">
                         {isCompleted ? '✓ Completada y Sumada' : 'Pendiente de entrega'}
                       </span>
                       {!isCompleted ? (
@@ -483,14 +483,14 @@ export default function TasksView({ currentUser, language, lessons, onAddBonusPo
           {/* Task Lists Sidebar */}
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <h2 className="text-sm font-black text-white uppercase tracking-wider flex items-center gap-2">
-                <ListTodo className="w-4 h-4 text-[#D9A9FF]" />
+              <h2 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
+                <ListTodo className="w-4 h-4 text-[#E9C349]" />
                 Mis Listas de Tareas ({taskLists.length})
               </h2>
               <button
                 type="button"
                 onClick={() => setShowCreateListModal(true)}
-                className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white border border-white/10 text-xs font-bold transition-all"
+                className="p-1.5 rounded-lg bg-slate-100 dark:bg-white/5 hover:bg-slate-200 dark:hover:bg-white/10 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white border border-slate-200 dark:border-white/10 text-xs font-bold transition-all"
                 title="Crear nueva lista en Google Tasks"
               >
                 <FolderPlus className="w-4 h-4" />
@@ -506,8 +506,8 @@ export default function TasksView({ currentUser, language, lessons, onAddBonusPo
                     onClick={() => setSelectedListId(list.id)}
                     className={`w-full text-left p-4 rounded-2xl border transition-all flex items-center justify-between ${
                       isSelected
-                        ? 'bg-[#241c17] border-[#D9A9FF]/60 text-white shadow-xl'
-                        : 'bg-[#121021] border-white/10 text-slate-300 hover:border-white/20 hover:bg-[#18152e]'
+                        ? 'bg-amber-50 dark:bg-[#241c17] border-[#E9C349]/60 text-slate-900 dark:text-white shadow-xl'
+                        : 'bg-white dark:bg-[#121021] border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-300 hover:border-slate-300 dark:hover:border-white/20 hover:bg-slate-50 dark:hover:bg-[#18152e]'
                     }`}
                   >
                     <span className="text-xs font-extrabold uppercase truncate">{list.title}</span>
@@ -518,12 +518,12 @@ export default function TasksView({ currentUser, language, lessons, onAddBonusPo
             </div>
 
             {/* Quick Presets Panel */}
-            <div className="p-5 bg-[#121021] border border-[#D9A9FF]/20 rounded-2xl space-y-3">
+            <div className="p-5 bg-white dark:bg-[#121021] border border-[#E9C349]/20 rounded-2xl space-y-3">
               <div className="flex items-center gap-2">
-                <Target className="w-4 h-4 text-[#D9A9FF]" />
-                <h3 className="text-xs font-black text-white uppercase">Sugerencias de Práctica</h3>
+                <Target className="w-4 h-4 text-[#E9C349]" />
+                <h3 className="text-xs font-black text-slate-900 dark:text-white uppercase">Sugerencias de Práctica</h3>
               </div>
-              <p className="text-[11px] text-slate-400 leading-relaxed">
+              <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">
                 Haz clic en una sugerencia para enviarla como meta directamente a tu Google Tasks:
               </p>
               <div className="space-y-2">
@@ -531,10 +531,10 @@ export default function TasksView({ currentUser, language, lessons, onAddBonusPo
                   <button
                     key={idx}
                     onClick={() => handleQuickAddPreset(preset)}
-                    className="w-full text-left p-2.5 bg-black/40 hover:bg-black/70 border border-white/5 hover:border-[#D9A9FF]/30 rounded-xl transition-all group"
+                    className="w-full text-left p-2.5 bg-slate-50 dark:bg-black/40 hover:bg-slate-100 dark:hover:bg-black/70 border border-slate-200 dark:border-white/5 hover:border-[#E9C349]/30 rounded-xl transition-all group"
                   >
-                    <p className="text-xs font-bold text-white group-hover:text-[#D9A9FF] transition-colors">{preset.title}</p>
-                    <p className="text-[10px] text-slate-400 truncate mt-0.5">{preset.notes}</p>
+                    <p className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-[#E9C349] transition-colors">{preset.title}</p>
+                    <p className="text-[10px] text-slate-500 dark:text-slate-400 truncate mt-0.5">{preset.notes}</p>
                   </button>
                 ))}
               </div>
@@ -543,24 +543,24 @@ export default function TasksView({ currentUser, language, lessons, onAddBonusPo
 
           {/* Tasks List Panel */}
           <div className="lg:col-span-2 space-y-4">
-            <div className="bg-[#121021] border border-white/10 rounded-3xl p-6 space-y-6 shadow-2xl">
+            <div className="bg-white dark:bg-[#121021] border border-slate-200 dark:border-white/10 rounded-3xl p-6 space-y-6 shadow-2xl">
               {/* Toolbar */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 dark:border-white/10 pb-4">
                 <div>
-                  <h2 className="text-lg font-black text-white uppercase">
+                  <h2 className="text-lg font-black text-slate-900 dark:text-white uppercase">
                     {taskLists.find(l => l.id === selectedListId)?.title || 'Lista de Tareas'}
                   </h2>
-                  <p className="text-xs text-slate-400">
+                  <p className="text-xs text-slate-500 dark:text-slate-400">
                     {(tasks || []).filter(t => t.status !== 'completed').length} tareas pendientes • {(tasks || []).filter(t => t.status === 'completed').length} completadas
                   </p>
                 </div>
 
-                <div className="flex items-center gap-2 bg-black/40 border border-white/10 p-1 rounded-xl self-start sm:self-auto">
+                <div className="flex items-center gap-2 bg-slate-100 dark:bg-black/40 border border-slate-200 dark:border-white/10 p-1 rounded-xl self-start sm:self-auto">
                   <button
                     type="button"
                     onClick={() => setFilter('pending')}
                     className={`px-3 py-1 text-xs font-bold rounded-lg transition-all ${
-                      filter === 'pending' ? 'bg-[#D9A9FF] text-black shadow-md' : 'text-slate-400 hover:text-white'
+                      filter === 'pending' ? 'bg-[#E9C349] text-black shadow-md' : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                     }`}
                   >
                     Pendientes
@@ -569,7 +569,7 @@ export default function TasksView({ currentUser, language, lessons, onAddBonusPo
                     type="button"
                     onClick={() => setFilter('completed')}
                     className={`px-3 py-1 text-xs font-bold rounded-lg transition-all ${
-                      filter === 'completed' ? 'bg-[#D9A9FF] text-black shadow-md' : 'text-slate-400 hover:text-white'
+                      filter === 'completed' ? 'bg-[#E9C349] text-black shadow-md' : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                     }`}
                   >
                     Completadas
@@ -578,7 +578,7 @@ export default function TasksView({ currentUser, language, lessons, onAddBonusPo
                     type="button"
                     onClick={() => setFilter('all')}
                     className={`px-3 py-1 text-xs font-bold rounded-lg transition-all ${
-                      filter === 'all' ? 'bg-[#D9A9FF] text-black shadow-md' : 'text-slate-400 hover:text-white'
+                      filter === 'all' ? 'bg-[#E9C349] text-black shadow-md' : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                     }`}
                   >
                     Todas
@@ -592,10 +592,10 @@ export default function TasksView({ currentUser, language, lessons, onAddBonusPo
                   <motion.div
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="p-8 bg-black/30 border border-white/5 rounded-2xl text-center space-y-2"
+                    className="p-8 bg-slate-50 dark:bg-black/30 border border-slate-200 dark:border-white/5 rounded-2xl text-center space-y-2"
                   >
                     <CheckCircle2 className="w-8 h-8 text-slate-500 mx-auto" />
-                    <p className="text-xs text-slate-400">No hay tareas en esta categoría.</p>
+                    <p className="text-xs text-slate-500 dark:text-slate-400">No hay tareas en esta categoría.</p>
                   </motion.div>
                 ) : (
                   <AnimatePresence mode="popLayout">
@@ -610,16 +610,16 @@ export default function TasksView({ currentUser, language, lessons, onAddBonusPo
                           exit={{ opacity: 0, x: 25, scale: 0.95 }}
                           transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
                           className={`p-4 rounded-2xl border transition-colors flex items-start justify-between gap-4 ${
-                            isDone 
-                              ? 'bg-black/20 border-white/5' 
-                              : 'bg-black/40 border-white/10 hover:border-white/20'
+                            isDone
+                              ? 'bg-slate-50 dark:bg-black/20 border-slate-200 dark:border-white/5'
+                              : 'bg-white dark:bg-black/40 border-slate-200 dark:border-white/10 hover:border-slate-300 dark:hover:border-white/20'
                           }`}
                         >
                           <div className="flex items-start gap-3 min-w-0">
                             <button
                               type="button"
                               onClick={() => handleToggleTask(task)}
-                              className="mt-0.5 text-slate-400 hover:text-[#D9A9FF] transition-colors shrink-0 cursor-pointer"
+                              className="mt-0.5 text-slate-500 dark:text-slate-400 hover:text-[#E9C349] transition-colors shrink-0 cursor-pointer"
                             >
                               <motion.div
                                 key={isDone ? 'done' : 'undone'}
@@ -667,7 +667,7 @@ export default function TasksView({ currentUser, language, lessons, onAddBonusPo
                           <button
                             type="button"
                             onClick={() => setTaskToDelete(task)}
-                            className="p-1.5 rounded-lg bg-white/5 hover:bg-rose-500/20 text-slate-400 hover:text-rose-300 transition-all border border-white/10 shrink-0 cursor-pointer"
+                            className="p-1.5 rounded-lg bg-slate-100 dark:bg-white/5 hover:bg-rose-500/20 text-slate-500 dark:text-slate-400 hover:text-rose-500 dark:hover:text-rose-300 transition-all border border-slate-200 dark:border-white/10 shrink-0 cursor-pointer"
                             title="Eliminar tarea"
                           >
                             <Trash2 className="w-3.5 h-3.5" />
@@ -683,13 +683,13 @@ export default function TasksView({ currentUser, language, lessons, onAddBonusPo
         </div>
       ) : (
         /* Not logged in landing state */
-        <div className="bg-[#121021] border border-white/10 rounded-3xl p-8 sm:p-12 text-center max-w-3xl mx-auto space-y-6">
-          <div className="w-16 h-16 rounded-3xl bg-[#D9A9FF]/20 border border-[#D9A9FF]/30 flex items-center justify-center mx-auto text-[#D9A9FF]">
+        <div className="bg-white dark:bg-[#121021] border border-slate-200 dark:border-white/10 rounded-3xl p-8 sm:p-12 text-center max-w-3xl mx-auto space-y-6">
+          <div className="w-16 h-16 rounded-3xl bg-[#E9C349]/20 border border-[#E9C349]/30 flex items-center justify-center mx-auto text-[#E9C349]">
             <ListTodo className="w-8 h-8" />
           </div>
           <div>
-            <h3 className="text-xl font-black text-white uppercase">Sincroniza tus Metas con Google Tasks</h3>
-            <p className="text-xs text-slate-400 max-w-lg mx-auto mt-2 leading-relaxed">
+            <h3 className="text-xl font-black text-slate-900 dark:text-white uppercase">Sincroniza tus Metas con Google Tasks</h3>
+            <p className="text-xs text-slate-500 dark:text-slate-400 max-w-lg mx-auto mt-2 leading-relaxed">
               Conecta tu cuenta de Google para organizar tus tareas de entrenamiento, metas diarias de Waacking y listas de práctica directamente en Google Tasks.
             </p>
           </div>
@@ -725,57 +725,57 @@ export default function TasksView({ currentUser, language, lessons, onAddBonusPo
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 15 }}
               transition={{ duration: 0.2, ease: 'easeOut' }}
-              className="bg-[#121021] border border-[#D9A9FF]/30 rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl text-white"
+              className="bg-white dark:bg-[#121021] border border-[#E9C349]/30 rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl text-slate-900 dark:text-white"
             >
-              <div className="flex items-center gap-3 border-b border-white/10 pb-3">
-                <div className="p-2 rounded-xl bg-[#D9A9FF]/20 text-[#D9A9FF]">
+              <div className="flex items-center gap-3 border-b border-slate-200 dark:border-white/10 pb-3">
+                <div className="p-2 rounded-xl bg-[#E9C349]/20 text-[#E9C349]">
                   <ListTodo className="w-5 h-5" />
                 </div>
                 <div>
                   <h3 className="text-sm font-black uppercase">Confirmar Nueva Tarea</h3>
-                  <p className="text-[11px] text-slate-400">Se añadirá a tu lista de Google Tasks.</p>
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400">Se añadirá a tu lista de Google Tasks.</p>
                 </div>
               </div>
 
               <div className="space-y-3 text-xs">
                 <div>
-                  <label className="block text-slate-300 font-bold mb-1">Título de la Tarea:</label>
+                  <label className="block text-slate-600 dark:text-slate-300 font-bold mb-1">Título de la Tarea:</label>
                   <input
                     type="text"
                     value={newTaskTitle}
                     onChange={(e) => setNewTaskTitle(e.target.value)}
                     placeholder="Ej. Practicar Posing en 8 tiempos"
-                    className="w-full bg-black/50 border border-white/10 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#D9A9FF]"
+                    className="w-full bg-slate-100 dark:bg-black/50 border border-slate-200 dark:border-white/10 rounded-xl px-3 py-2 text-slate-900 dark:text-white focus:outline-none focus:border-[#E9C349]"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-slate-300 font-bold mb-1">Notas / Detalles:</label>
+                  <label className="block text-slate-600 dark:text-slate-300 font-bold mb-1">Notas / Detalles:</label>
                   <textarea
                     rows={3}
                     value={newTaskNotes}
                     onChange={(e) => setNewTaskNotes(e.target.value)}
                     placeholder="Detalles del ejercicio o recordatorio..."
-                    className="w-full bg-black/50 border border-white/10 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#D9A9FF]"
+                    className="w-full bg-slate-100 dark:bg-black/50 border border-slate-200 dark:border-white/10 rounded-xl px-3 py-2 text-slate-900 dark:text-white focus:outline-none focus:border-[#E9C349]"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-slate-300 font-bold mb-1">Fecha Límite (Opcional):</label>
+                  <label className="block text-slate-600 dark:text-slate-300 font-bold mb-1">Fecha Límite (Opcional):</label>
                   <input
                     type="date"
                     value={newTaskDueDate}
                     onChange={(e) => setNewTaskDueDate(e.target.value)}
-                    className="w-full bg-black/50 border border-white/10 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#D9A9FF]"
+                    className="w-full bg-slate-100 dark:bg-black/50 border border-slate-200 dark:border-white/10 rounded-xl px-3 py-2 text-slate-900 dark:text-white focus:outline-none focus:border-[#E9C349]"
                   />
                 </div>
               </div>
 
-              <div className="flex items-center justify-end gap-2 pt-2 border-t border-white/10">
+              <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-200 dark:border-white/10">
                 <button
                   type="button"
                   onClick={() => setShowCreateTaskModal(false)}
-                  className="px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 text-xs font-bold cursor-pointer"
+                  className="px-4 py-2 rounded-xl bg-slate-100 dark:bg-white/5 hover:bg-slate-200 dark:hover:bg-white/10 text-slate-600 dark:text-slate-300 text-xs font-bold cursor-pointer"
                 >
                   Cancelar
                 </button>
@@ -802,36 +802,36 @@ export default function TasksView({ currentUser, language, lessons, onAddBonusPo
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 15 }}
               transition={{ duration: 0.2, ease: 'easeOut' }}
-              className="bg-[#121021] border border-[#D9A9FF]/30 rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl text-white"
+              className="bg-white dark:bg-[#121021] border border-[#E9C349]/30 rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl text-slate-900 dark:text-white"
             >
-              <div className="flex items-center gap-3 border-b border-white/10 pb-3">
-                <div className="p-2 rounded-xl bg-[#D9A9FF]/20 text-[#D9A9FF]">
+              <div className="flex items-center gap-3 border-b border-slate-200 dark:border-white/10 pb-3">
+                <div className="p-2 rounded-xl bg-[#E9C349]/20 text-[#E9C349]">
                   <FolderPlus className="w-5 h-5" />
                 </div>
                 <div>
                   <h3 className="text-sm font-black uppercase">Nueva Lista en Google Tasks</h3>
-                  <p className="text-[11px] text-slate-400">Organiza tus metas en un grupo independiente.</p>
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400">Organiza tus metas en un grupo independiente.</p>
                 </div>
               </div>
 
               <div className="space-y-3 text-xs">
                 <div>
-                  <label className="block text-slate-300 font-bold mb-1">Nombre de la Lista:</label>
+                  <label className="block text-slate-600 dark:text-slate-300 font-bold mb-1">Nombre de la Lista:</label>
                   <input
                     type="text"
                     value={newListTitle}
                     onChange={(e) => setNewListTitle(e.target.value)}
                     placeholder="Ej. Objetivos del Trimestre"
-                    className="w-full bg-black/50 border border-white/10 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#D9A9FF]"
+                    className="w-full bg-slate-100 dark:bg-black/50 border border-slate-200 dark:border-white/10 rounded-xl px-3 py-2 text-slate-900 dark:text-white focus:outline-none focus:border-[#E9C349]"
                   />
                 </div>
               </div>
 
-              <div className="flex items-center justify-end gap-2 pt-2 border-t border-white/10">
+              <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-200 dark:border-white/10">
                 <button
                   type="button"
                   onClick={() => setShowCreateListModal(false)}
-                  className="px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 text-xs font-bold cursor-pointer"
+                  className="px-4 py-2 rounded-xl bg-slate-100 dark:bg-white/5 hover:bg-slate-200 dark:hover:bg-white/10 text-slate-600 dark:text-slate-300 text-xs font-bold cursor-pointer"
                 >
                   Cancelar
                 </button>
@@ -858,7 +858,7 @@ export default function TasksView({ currentUser, language, lessons, onAddBonusPo
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 15 }}
               transition={{ duration: 0.2, ease: 'easeOut' }}
-              className="bg-[#121021] border border-rose-500/30 rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl text-white"
+              className="bg-white dark:bg-[#121021] border border-rose-500/30 rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl text-slate-900 dark:text-white"
             >
               <div className="flex items-center gap-3 border-b border-white/10 pb-3">
                 <div className="p-2 rounded-xl bg-rose-500/20 text-rose-400">
@@ -866,19 +866,19 @@ export default function TasksView({ currentUser, language, lessons, onAddBonusPo
                 </div>
                 <div>
                   <h3 className="text-sm font-black uppercase">Eliminar Tarea</h3>
-                  <p className="text-[11px] text-slate-400">¿Estás seguro de eliminar esta tarea de Google Tasks?</p>
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400">¿Estás seguro de eliminar esta tarea de Google Tasks?</p>
                 </div>
               </div>
 
-              <p className="text-xs text-white font-bold bg-black/40 p-3 rounded-xl border border-white/5">
+              <p className="text-xs text-slate-900 dark:text-white font-bold bg-slate-100 dark:bg-black/40 p-3 rounded-xl border border-slate-200 dark:border-white/5">
                 "{taskToDelete.title}"
               </p>
 
-              <div className="flex items-center justify-end gap-2 pt-2 border-t border-white/10">
+              <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-200 dark:border-white/10">
                 <button
                   type="button"
                   onClick={() => setTaskToDelete(null)}
-                  className="px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 text-xs font-bold cursor-pointer"
+                  className="px-4 py-2 rounded-xl bg-slate-100 dark:bg-white/5 hover:bg-slate-200 dark:hover:bg-white/10 text-slate-600 dark:text-slate-300 text-xs font-bold cursor-pointer"
                 >
                   Cancelar
                 </button>

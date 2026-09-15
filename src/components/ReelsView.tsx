@@ -1030,14 +1030,14 @@ export default function ReelsView({
           >
             {/* Header */}
             <div className="flex items-center justify-between pb-3 border-b border-white/10">
-              <h3 className="text-sm font-black text-white uppercase tracking-wider flex items-center gap-2">
-                <MessageCircle className="w-4 h-4 text-[#D9A9FF]" />
+              <h3 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
+                <MessageCircle className="w-4 h-4 text-[#E9C349]" />
                 COMENTARIOS DE LA COMUNIDAD (
                 {reels.find(r => r.id === activeCommentsReelId)?.commentsCount || 0})
               </h3>
               <button
                 onClick={() => setActiveCommentsReelId(null)}
-                className="p-1.5 rounded-full bg-white/10 text-slate-400 hover:text-white"
+                className="p-1.5 rounded-full bg-white/10 text-slate-400 hover:text-slate-900 dark:hover:text-white"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -1047,13 +1047,13 @@ export default function ReelsView({
             <div className="flex-1 overflow-y-auto space-y-4 py-4 scrollbar-thin scrollbar-thumb-[#C23E9E]">
               {(reels.find(r => r.id === activeCommentsReelId)?.comments || []).map((c) => (
                 <div key={c.id} className="flex items-start gap-3 text-xs">
-                  <img src={c.avatar} alt={c.user} className="w-8 h-8 rounded-full object-cover border border-[#D9A9FF]" />
-                  <div className="flex-1 bg-white/5 p-3 rounded-2xl border border-white/5">
+                  <img src={c.avatar} alt={c.user} className="w-8 h-8 rounded-full object-cover border border-[#E9C349]" />
+                  <div className="flex-1 bg-white/5 p-3 rounded-2xl border border-slate-200 dark:border-white/5">
                     <div className="flex items-center justify-between mb-1">
-                      <span className="font-bold text-white">{c.user}</span>
+                      <span className="font-bold text-slate-900 dark:text-white">{c.user}</span>
                       <span className="text-[9px] font-mono text-slate-400">{c.time}</span>
                     </div>
-                    <p className="text-slate-200 leading-relaxed">{c.text}</p>
+                    <p className="text-slate-700 dark:text-slate-200 leading-relaxed">{c.text}</p>
                   </div>
                 </div>
               ))}
@@ -1066,7 +1066,7 @@ export default function ReelsView({
                 placeholder="Escribe un comentario o pregunta sobre la técnica..."
                 value={newCommentText}
                 onChange={(e) => setNewCommentText(e.target.value)}
-                className="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#D9A9FF]"
+                className="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-xs text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-[#E9C349]"
               />
               <button
                 type="submit"
@@ -1091,10 +1091,10 @@ export default function ReelsView({
           >
             <div className="bg-[#141414] border border-[#D9A9FF]/40 p-6 rounded-3xl max-w-sm w-full space-y-5 shadow-2xl">
               <div className="flex items-center justify-between">
-                <h3 className="text-sm font-black text-white uppercase tracking-wider flex items-center gap-2">
+                <h3 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
                   <Share2 className="w-4 h-4 text-blue-400" /> COMPARTIR REEL
                 </h3>
-                <button onClick={() => setShareModalReel(null)} className="text-slate-400 hover:text-white">
+                <button onClick={() => setShareModalReel(null)} className="text-slate-400 hover:text-slate-900 dark:hover:text-white">
                   <X className="w-4 h-4" />
                 </button>
               </div>
@@ -1102,7 +1102,7 @@ export default function ReelsView({
               <div className="bg-white/5 p-3 rounded-2xl flex items-center gap-3 border border-white/10">
                 <img src={shareModalReel.posterUrl} alt="Thumbnail" className="w-12 h-16 rounded-xl object-cover shrink-0" />
                 <div className="min-w-0">
-                  <h4 className="text-xs font-bold text-white truncate">@{shareModalReel.creatorHandle}</h4>
+                  <h4 className="text-xs font-bold text-slate-900 dark:text-white truncate">@{shareModalReel.creatorHandle}</h4>
                   <p className="text-[10px] text-slate-400 line-clamp-2 mt-0.5">{shareModalReel.caption}</p>
                 </div>
               </div>
@@ -1114,7 +1114,7 @@ export default function ReelsView({
                     setCopiedLink(true);
                     setTimeout(() => setCopiedLink(false), 3000);
                   }}
-                  className="p-3 bg-white/5 hover:bg-white/10 rounded-2xl border border-white/10 text-xs font-bold text-white flex items-center justify-center gap-2 transition-all"
+                  className="p-3 bg-white/5 hover:bg-white/10 rounded-2xl border border-white/10 text-xs font-bold text-slate-900 dark:text-white flex items-center justify-center gap-2 transition-all"
                 >
                   {copiedLink ? <CheckCircle2 className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4 text-[#D9A9FF]" />}
                   {copiedLink ? '¡Enlace Copiado!' : 'Copiar Enlace'}
@@ -1148,14 +1148,14 @@ export default function ReelsView({
               className="bg-[#141414] border border-[#D9A9FF]/40 p-6 rounded-3xl max-w-md w-full space-y-4 shadow-2xl max-h-[90vh] overflow-y-auto scrollbar-thin scrollbar-thumb-[#D9A9FF]"
             >
               <div className="flex items-center justify-between pb-3 border-b border-white/10">
-                <h3 className="text-sm font-black text-white uppercase tracking-wider flex items-center gap-2">
-                  <Camera className="w-4 h-4 text-[#D9A9FF]" /> PUBLICAR NUEVO REEL EN FIREBASE
+                <h3 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
+                  <Camera className="w-4 h-4 text-[#E9C349]" /> PUBLICAR NUEVO REEL EN FIREBASE
                 </h3>
                 <button
                   type="button"
                   disabled={isUploading}
                   onClick={() => setShowCreateModal(false)}
-                  className="text-slate-400 hover:text-white disabled:opacity-40"
+                  className="text-slate-400 hover:text-slate-900 dark:hover:text-white disabled:opacity-40"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -1174,8 +1174,8 @@ export default function ReelsView({
                     onChange={handleVideoFileChange}
                     className="absolute inset-0 opacity-0 cursor-pointer w-full h-full z-10 disabled:cursor-not-allowed"
                   />
-                  <Upload className="w-8 h-8 text-[#D9A9FF] mx-auto animate-bounce" />
-                  <p className="text-xs font-bold text-white">
+                  <Upload className="w-8 h-8 text-[#E9C349] mx-auto animate-bounce" />
+                  <p className="text-xs font-bold text-slate-900 dark:text-white">
                     {selectedFile ? `🎥 Archivo seleccionado: ${selectedFile.name}` : 'Haz clic para seleccionar tu video (.mp4, .mov, .webm)'}
                   </p>
                   <p className="text-[10px] text-slate-400">Formato recomendado: 9:16 vertical • Guardado directo en Firebase</p>
@@ -1196,7 +1196,7 @@ export default function ReelsView({
                     placeholder="https://assets.mixkit.co/.../video.mp4"
                     value={uploadVideoUrlInput}
                     onChange={(e) => setUploadVideoUrlInput(e.target.value)}
-                    className="w-full bg-white/5 border border-white/10 rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-[#D9A9FF] disabled:opacity-50"
+                    className="w-full bg-white/5 border border-white/10 rounded-xl p-2.5 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-[#E9C349] disabled:opacity-50"
                   />
                 </div>
               </div>
@@ -1211,7 +1211,7 @@ export default function ReelsView({
                     </span>
                     <span>{uploadProgress}%</span>
                   </div>
-                  <div className="w-full h-2 bg-black/50 rounded-full overflow-hidden border border-white/10">
+                  <div className="w-full h-2 bg-slate-200 dark:bg-black/50 rounded-full overflow-hidden border border-white/10">
                     <div 
                       className="h-full bg-gradient-to-r from-[#D9A9FF] to-amber-400 transition-all duration-300"
                       style={{ width: `${uploadProgress}%` }}
@@ -1229,7 +1229,7 @@ export default function ReelsView({
                   disabled={isUploading}
                   value={uploadCategory}
                   onChange={(e) => setUploadCategory(e.target.value)}
-                  className="w-full bg-[#1e1e1e] border border-white/10 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-[#D9A9FF] disabled:opacity-50"
+                  className="w-full bg-[#1e1e1e] border border-white/10 rounded-xl p-3 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-[#E9C349] disabled:opacity-50"
                 >
                   <option value="Para ti">Para ti</option>
                   <option value="Comunidad">Comunidad</option>
@@ -1250,7 +1250,7 @@ export default function ReelsView({
                   value={uploadCaption}
                   onChange={(e) => setUploadCaption(e.target.value)}
                   placeholder="Describe tu rutina, velocidad de brazos o técnica ejecutada..."
-                  className="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-[#D9A9FF] disabled:opacity-50"
+                  className="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-[#E9C349] disabled:opacity-50"
                   required
                 />
               </div>
@@ -1266,7 +1266,7 @@ export default function ReelsView({
                   value={uploadHashtags}
                   onChange={(e) => setUploadHashtags(e.target.value)}
                   placeholder="#Waacking #ArmControl #WaackON"
-                  className="w-full bg-white/5 border border-white/10 rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-[#D9A9FF] disabled:opacity-50"
+                  className="w-full bg-white/5 border border-white/10 rounded-xl p-2.5 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-[#E9C349] disabled:opacity-50"
                 />
               </div>
 
@@ -1280,7 +1280,7 @@ export default function ReelsView({
                   disabled={isUploading}
                   value={uploadSong}
                   onChange={(e) => setUploadSong(e.target.value)}
-                  className="w-full bg-white/5 border border-white/10 rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-[#D9A9FF] disabled:opacity-50"
+                  className="w-full bg-white/5 border border-white/10 rounded-xl p-2.5 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-[#E9C349] disabled:opacity-50"
                 />
               </div>
 
@@ -1289,7 +1289,7 @@ export default function ReelsView({
                   type="button"
                   disabled={isUploading}
                   onClick={() => setShowCreateModal(false)}
-                  className="px-4 py-2 bg-white/10 text-xs font-bold text-slate-300 rounded-xl hover:text-white disabled:opacity-40"
+                  className="px-4 py-2 bg-white/10 text-xs font-bold text-slate-300 rounded-xl hover:text-slate-900 dark:hover:text-white disabled:opacity-40"
                 >
                   Cancelar
                 </button>

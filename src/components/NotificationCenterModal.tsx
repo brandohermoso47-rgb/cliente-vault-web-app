@@ -304,26 +304,26 @@ export default function NotificationCenterModal({
         initial={{ scale: 0.95, opacity: 0, y: 15 }}
         animate={{ scale: 1, opacity: 1, y: 0 }}
         exit={{ scale: 0.95, opacity: 0, y: 15 }}
-        className="w-full max-w-3xl max-h-[92vh] bg-[#0E0E10] border border-[#262626] rounded-3xl shadow-2xl flex flex-col overflow-hidden relative"
+        className="w-full max-w-3xl max-h-[92vh] bg-white dark:bg-[#0E0E10] border border-slate-200 dark:border-[#262626] rounded-3xl shadow-2xl flex flex-col overflow-hidden relative"
       >
         {/* Glow ambient background effect */}
         <div className="absolute top-0 right-0 w-80 h-80 bg-[#D9A9FF]/5 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute bottom-0 left-0 w-80 h-80 bg-[#C23E9E]/10 rounded-full blur-3xl pointer-events-none" />
 
         {/* Header Bar */}
-        <div className="p-4 sm:p-5 border-b border-white/10 flex items-center justify-between gap-4 bg-[#121215] shrink-0 relative z-10">
+        <div className="p-4 sm:p-5 border-b border-slate-200 dark:border-white/10 flex items-center justify-between gap-4 bg-slate-50 dark:bg-[#121215] shrink-0 relative z-10">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-2xl bg-[#D9A9FF]/10 border border-[#D9A9FF]/30 flex items-center justify-center text-[#D9A9FF] relative">
               <Bell className="w-5 h-5" />
               {unreadTotal > 0 && (
-                <span className="absolute -top-1 -right-1 px-1.5 py-0.2 bg-red-500 text-white font-mono text-[9px] font-black rounded-full border-2 border-[#0E0E10] animate-pulse">
+                <span className="absolute -top-1 -right-1 px-1.5 py-0.2 bg-red-500 text-white font-mono text-[9px] font-black rounded-full border-2 border-white dark:border-[#0E0E10] animate-pulse">
                   {unreadTotal}
                 </span>
               )}
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h2 className="text-base sm:text-lg font-black text-white uppercase tracking-wider font-sans">
+                <h2 className="text-base sm:text-lg font-black text-slate-900 dark:text-white uppercase tracking-wider font-sans">
                   Centro de Notificaciones & Web Push
                 </h2>
                 <span className="text-[10px] font-mono text-[#D9A9FF] bg-[#D9A9FF]/10 px-2 py-0.5 rounded-full border border-[#D9A9FF]/30 font-bold hidden sm:inline-block">
@@ -342,8 +342,8 @@ export default function NotificationCenterModal({
               onClick={() => setSoundEnabled(!soundEnabled)}
               className={`p-2 rounded-xl border transition-all cursor-pointer ${
                 soundEnabled
-                  ? 'bg-[#181818] text-[#D9A9FF] border-[#D9A9FF]/40'
-                  : 'bg-[#141414] text-slate-500 border-white/10'
+                  ? 'bg-amber-50 dark:bg-[#181818] text-[#E9C349] border-[#E9C349]/40'
+                  : 'bg-slate-100 dark:bg-[#141414] text-slate-500 border-slate-200 dark:border-white/10'
               }`}
               title={soundEnabled ? 'Silenciar sonidos de alerta' : 'Activar sonido de alerta'}
             >
@@ -353,7 +353,7 @@ export default function NotificationCenterModal({
             <button
               type="button"
               onClick={onClose}
-              className="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white border border-white/10 transition-all cursor-pointer"
+              className="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-400 hover:text-slate-900 dark:hover:text-white border border-slate-200 dark:border-white/10 transition-all cursor-pointer"
             >
               <X className="w-5 h-5" />
             </button>
@@ -367,10 +367,10 @@ export default function NotificationCenterModal({
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
-              className="px-5 py-2.5 bg-[#1b1912] border-b border-[#D9A9FF]/40 text-xs font-mono text-[#EDEFF4] flex items-center justify-between gap-3 shrink-0"
+              className="px-5 py-2.5 bg-amber-50 dark:bg-[#1b1912] border-b border-[#E9C349]/40 text-xs font-mono text-[#EDEFF4] flex items-center justify-between gap-3 shrink-0"
             >
               <span>{pushActionMessage}</span>
-              <button onClick={() => setPushActionMessage(null)} className="text-slate-400 hover:text-white">
+              <button onClick={() => setPushActionMessage(null)} className="text-slate-400 hover:text-slate-900 dark:hover:text-white">
                 <X className="w-3.5 h-3.5" />
               </button>
             </motion.div>
@@ -378,14 +378,14 @@ export default function NotificationCenterModal({
         </AnimatePresence>
 
         {/* Web Push Configuration Banner & Quick Actions */}
-        <div className="p-4 bg-[#141418] border-b border-white/10 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 shrink-0 relative z-10">
+        <div className="p-4 bg-slate-50 dark:bg-[#141418] border-b border-slate-200 dark:border-white/10 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 shrink-0 relative z-10">
           <div className="flex items-center gap-3">
             <div className="p-2 rounded-xl bg-[#D9A9FF]/10 text-[#D9A9FF] border border-[#D9A9FF]/30 shrink-0">
               <Smartphone className="w-4 h-4" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-xs font-mono font-bold text-white uppercase">Estado Web Push:</span>
+                <span className="text-xs font-mono font-bold text-slate-900 dark:text-white uppercase">Estado Web Push:</span>
                 <span className={`text-[10px] font-mono font-black px-2 py-0.5 rounded-full border uppercase ${
                   pushState.permission === 'granted'
                     ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/40'
@@ -420,7 +420,7 @@ export default function NotificationCenterModal({
             <button
               type="button"
               onClick={handleTriggerTestPush}
-              className="px-3 py-1.5 bg-[#1f1f23] hover:bg-[#28282d] text-[#EDEFF4] border border-white/10 hover:border-white/20 font-mono text-xs font-bold rounded-xl transition-all flex items-center gap-1.5 cursor-pointer"
+              className="px-3 py-1.5 bg-slate-100 dark:bg-[#1f1f23] hover:bg-slate-200 dark:hover:bg-[#28282d] text-[#EDEFF4] border border-slate-200 dark:border-white/10 hover:border-slate-300 dark:hover:border-white/20 font-mono text-xs font-bold rounded-xl transition-all flex items-center gap-1.5 cursor-pointer"
             >
               <Sparkles className="w-3.5 h-3.5 text-[#D9A9FF]" />
               <span>Probar Push</span>
@@ -440,7 +440,7 @@ export default function NotificationCenterModal({
         </div>
 
         {/* Filter Tabs & Bulk Actions */}
-        <div className="px-4 py-2.5 bg-[#0F0F12] border-b border-white/10 flex flex-wrap items-center justify-between gap-2 shrink-0">
+        <div className="px-4 py-2.5 bg-white dark:bg-[#0F0F12] border-b border-slate-200 dark:border-white/10 flex flex-wrap items-center justify-between gap-2 shrink-0">
           <div className="flex items-center gap-1.5 overflow-x-auto pb-1 max-w-full scrollbar-none">
             {[
               { id: 'all', label: `Todas (${allNotificationsList.length})` },
@@ -460,8 +460,8 @@ export default function NotificationCenterModal({
                 }}
                 className={`px-2.5 py-1 rounded-lg text-xs font-mono font-bold transition-all shrink-0 border ${
                   !showBroadcastTab && activeCategoryFilter === tab.id
-                    ? 'bg-[#D9A9FF] text-black border-[#D9A9FF] shadow-sm'
-                    : 'bg-[#18181c] text-slate-400 hover:text-white border-white/5 hover:border-white/15'
+                    ? 'bg-[#E9C349] text-black border-[#E9C349] shadow-sm'
+                    : 'bg-slate-100 dark:bg-[#18181c] text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white border-slate-200 dark:border-white/5 hover:border-slate-300 dark:hover:border-white/15'
                 }`}
               >
                 {tab.label}
@@ -474,8 +474,8 @@ export default function NotificationCenterModal({
                 onClick={() => setShowBroadcastTab(!showBroadcastTab)}
                 className={`px-2.5 py-1 rounded-lg text-xs font-mono font-bold transition-all shrink-0 border flex items-center gap-1 ${
                   showBroadcastTab
-                    ? 'bg-[#C23E9E] text-white border-[#C23E9E]'
-                    : 'bg-[#1c1417] text-[#D9A9FF] border-[#C23E9E]/40 hover:bg-[#C23E9E]/30'
+                    ? 'bg-[#9A2B3C] text-white border-[#9A2B3C]'
+                    : 'bg-rose-50 dark:bg-[#1c1417] text-[#E9C349] border-[#9A2B3C]/40 hover:bg-[#9A2B3C]/10 dark:hover:bg-[#9A2B3C]/30'
                 }`}
               >
                 <Send className="w-3 h-3" />
@@ -513,11 +513,11 @@ export default function NotificationCenterModal({
         <div className="flex-1 overflow-y-auto p-4 space-y-3 custom-scrollbar bg-[#0A0A0C]">
           {showBroadcastTab ? (
             /* Instructor / Studio Broadcast Form */
-            <form onSubmit={handleSendBroadcast} className="p-4 bg-[#141418] border border-[#262626] rounded-2xl space-y-4 shadow-xl">
-              <div className="flex items-center justify-between border-b border-white/10 pb-2.5">
+            <form onSubmit={handleSendBroadcast} className="p-4 bg-slate-50 dark:bg-[#141418] border border-slate-200 dark:border-[#262626] rounded-2xl space-y-4 shadow-xl">
+              <div className="flex items-center justify-between border-b border-slate-200 dark:border-white/10 pb-2.5">
                 <div className="flex items-center gap-2">
-                  <Megaphone className="w-4 h-4 text-[#D9A9FF]" />
-                  <h3 className="text-xs font-mono font-bold text-white uppercase tracking-wider">
+                  <Megaphone className="w-4 h-4 text-[#E9C349]" />
+                  <h3 className="text-xs font-mono font-bold text-slate-900 dark:text-white uppercase tracking-wider">
                     Emitir Notificación Push a los Alumnos
                   </h3>
                 </div>
@@ -535,7 +535,7 @@ export default function NotificationCenterModal({
                     value={broadcastTitle}
                     onChange={(e) => setBroadcastTitle(e.target.value)}
                     placeholder="Ej. 🔴 Live de Rolls hoy a las 19:30 hrs"
-                    className="w-full bg-[#0a0a0c] border border-white/10 rounded-xl px-3 py-2 text-white placeholder-slate-600 focus:outline-none focus:border-[#D9A9FF]"
+                    className="w-full bg-slate-50 dark:bg-[#0a0a0c] border border-slate-200 dark:border-white/10 rounded-xl px-3 py-2 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-600 focus:outline-none focus:border-[#E9C349]"
                   />
                 </div>
 
@@ -547,7 +547,7 @@ export default function NotificationCenterModal({
                     value={broadcastBody}
                     onChange={(e) => setBroadcastBody(e.target.value)}
                     placeholder="Escribe los detalles para la notificación que recibirán todos los alumnos en sus navegadores..."
-                    className="w-full bg-[#0a0a0c] border border-white/10 rounded-xl px-3 py-2 text-white placeholder-slate-600 focus:outline-none focus:border-[#D9A9FF] resize-none"
+                    className="w-full bg-slate-50 dark:bg-[#0a0a0c] border border-slate-200 dark:border-white/10 rounded-xl px-3 py-2 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-600 focus:outline-none focus:border-[#E9C349] resize-none"
                   />
                 </div>
 
@@ -557,7 +557,7 @@ export default function NotificationCenterModal({
                     <select
                       value={broadcastCategory}
                       onChange={(e) => setBroadcastCategory(e.target.value as any)}
-                      className="w-full bg-[#0a0a0c] border border-white/10 rounded-xl px-2.5 py-2 text-white focus:outline-none focus:border-[#D9A9FF]"
+                      className="w-full bg-slate-50 dark:bg-[#0a0a0c] border border-slate-200 dark:border-white/10 rounded-xl px-2.5 py-2 text-slate-900 dark:text-white focus:outline-none focus:border-[#E9C349]"
                     >
                       <option value="announcement">📢 Anuncio General</option>
                       <option value="live">🔴 Transmisión Live</option>
@@ -571,7 +571,7 @@ export default function NotificationCenterModal({
                     <select
                       value={broadcastPriority}
                       onChange={(e) => setBroadcastPriority(e.target.value as any)}
-                      className="w-full bg-[#0a0a0c] border border-white/10 rounded-xl px-2.5 py-2 text-white focus:outline-none focus:border-[#D9A9FF]"
+                      className="w-full bg-slate-50 dark:bg-[#0a0a0c] border border-slate-200 dark:border-white/10 rounded-xl px-2.5 py-2 text-slate-900 dark:text-white focus:outline-none focus:border-[#E9C349]"
                     >
                       <option value="normal">Normal</option>
                       <option value="high">Alta (Destacado)</option>
@@ -584,7 +584,7 @@ export default function NotificationCenterModal({
                     <select
                       value={broadcastTabTarget}
                       onChange={(e) => setBroadcastTabTarget(e.target.value)}
-                      className="w-full bg-[#0a0a0c] border border-white/10 rounded-xl px-2.5 py-2 text-white focus:outline-none focus:border-[#D9A9FF]"
+                      className="w-full bg-slate-50 dark:bg-[#0a0a0c] border border-slate-200 dark:border-white/10 rounded-xl px-2.5 py-2 text-slate-900 dark:text-white focus:outline-none focus:border-[#E9C349]"
                     >
                       <option value="live">Live Room</option>
                       <option value="cursos">Cursos</option>
@@ -596,7 +596,7 @@ export default function NotificationCenterModal({
                 </div>
               </div>
 
-              <div className="flex items-center justify-end gap-2 pt-2 border-t border-white/10">
+              <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-200 dark:border-white/10">
                 <button
                   type="button"
                   onClick={() => setShowBroadcastTab(false)}
@@ -618,7 +618,7 @@ export default function NotificationCenterModal({
               <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mx-auto text-slate-500">
                 <Bell className="w-6 h-6" />
               </div>
-              <p className="text-sm font-bold text-white font-mono">No hay notificaciones en esta categoría</p>
+              <p className="text-sm font-bold text-slate-900 dark:text-white font-mono">No hay notificaciones en esta categoría</p>
               <p className="text-xs text-slate-400 max-w-sm mx-auto">
                 Las alertas automáticas de feedback, transmisiones en directo y nuevos ejercicios aparecerán aquí.
               </p>
@@ -631,8 +631,8 @@ export default function NotificationCenterModal({
                 animate={{ opacity: 1, y: 0 }}
                 className={`p-3.5 sm:p-4 rounded-2xl border transition-all relative overflow-hidden flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 ${
                   !notif.read
-                    ? 'bg-[#15131a] border-[#D9A9FF]/40 shadow-[0_0_15px_rgba(217, 169, 255,0.08)]'
-                    : 'bg-[#101014] border-white/5 hover:border-white/15'
+                    ? 'bg-amber-50 dark:bg-[#15131a] border-[#E9C349]/40 shadow-[0_0_15px_rgba(233,195,73,0.08)]'
+                    : 'bg-slate-50 dark:bg-[#101014] border-slate-200 dark:border-white/5 hover:border-slate-300 dark:hover:border-white/15'
                 }`}
               >
                 {/* Left side indicator stripe for unread */}
@@ -665,7 +665,7 @@ export default function NotificationCenterModal({
                       )}
                     </div>
 
-                    <h4 className="text-xs sm:text-sm font-bold text-white leading-snug">
+                    <h4 className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white leading-snug">
                       {notif.title}
                     </h4>
 
@@ -682,7 +682,7 @@ export default function NotificationCenterModal({
                 </div>
 
                 {/* Actions on right */}
-                <div className="flex items-center gap-2 shrink-0 self-end sm:self-center w-full sm:w-auto justify-end pt-2 sm:pt-0 border-t sm:border-t-0 border-white/5">
+                <div className="flex items-center gap-2 shrink-0 self-end sm:self-center w-full sm:w-auto justify-end pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-200 dark:border-white/5">
                   {notif.actionTab && (
                     <button
                       type="button"
@@ -702,7 +702,7 @@ export default function NotificationCenterModal({
                     <button
                       type="button"
                       onClick={() => onMarkAsRead(notif.id)}
-                      className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white transition-colors"
+                      className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
                       title="Marcar como leída"
                     >
                       <Check className="w-4 h-4" />
@@ -715,7 +715,7 @@ export default function NotificationCenterModal({
         </div>
 
         {/* Footer info bar */}
-        <div className="p-3.5 bg-[#121215] border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs font-mono text-slate-400 shrink-0">
+        <div className="p-3.5 bg-slate-50 dark:bg-[#121215] border-t border-slate-200 dark:border-white/10 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs font-mono text-slate-400 shrink-0">
           <div className="flex items-center gap-2">
             <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
             <span>Sincronizado en tiempo real con Firebase Firestore & Service Worker</span>
@@ -725,7 +725,7 @@ export default function NotificationCenterModal({
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold transition-all"
+              className="px-4 py-1.5 rounded-xl bg-slate-900 dark:bg-white/10 hover:bg-slate-700 dark:hover:bg-white/20 text-white font-bold transition-all"
             >
               Cerrar
             </button>

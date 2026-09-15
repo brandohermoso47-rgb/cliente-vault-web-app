@@ -157,11 +157,11 @@ export default function PodcastsView({
   };
 
   return (
-    <div className="flex-1 bg-[#0A0A0A] text-[#EDEFF4] flex flex-col min-h-full w-full custom-scrollbar p-4 sm:p-6 lg:p-8 space-y-8">
-      
+    <div className="flex-1 bg-slate-50 dark:bg-[#0A0A0A] text-slate-900 dark:text-[#EDEFF4] flex flex-col min-h-full w-full custom-scrollbar p-4 sm:p-6 lg:p-8 space-y-8">
+
       {/* Page Header */}
-      <div className="relative rounded-3xl bg-gradient-to-r from-[#14162e] via-[#0f1020] to-[#1c1228] p-6 sm:p-8 border border-white/10 overflow-hidden shadow-2xl">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-[radial-gradient(circle_at_center,rgba(217, 169, 255,0.15)_0%,transparent_70%)] pointer-events-none" />
+      <div className="relative rounded-3xl bg-gradient-to-r from-indigo-50 via-white to-purple-50 dark:from-[#14162e] dark:via-[#0f1020] dark:to-[#1c1228] p-6 sm:p-8 border border-slate-200 dark:border-white/10 overflow-hidden shadow-2xl">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-[radial-gradient(circle_at_center,rgba(233,195,73,0.15)_0%,transparent_70%)] pointer-events-none" />
         
         <div className="relative z-10 max-w-3xl space-y-3">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#D9A9FF]/20 border border-[#D9A9FF]/40 text-[#D9A9FF] text-xs font-mono font-bold uppercase tracking-widest">
@@ -169,7 +169,7 @@ export default function PodcastsView({
             WAACK ON PODCASTS CÁTEDRA
           </div>
 
-          <h1 className="text-2xl sm:text-4xl font-black text-white tracking-tight font-mono uppercase">
+          <h1 className="text-2xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight font-mono uppercase">
             Audio Cátedra & Historia del Waacking
           </h1>
 
@@ -187,8 +187,8 @@ export default function PodcastsView({
             onClick={() => setActiveSubTab('all')}
             className={`flex-1 sm:flex-none px-5 py-2.5 rounded-xl font-mono text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer ${
               activeSubTab === 'all'
-                ? 'bg-gradient-to-r from-[#D9A9FF] to-[#f3d775] text-black shadow-lg'
-                : 'text-gray-400 hover:text-white'
+                ? 'bg-gradient-to-r from-[#E9C349] to-[#f3d775] text-black shadow-lg'
+                : 'text-gray-400 hover:text-slate-900 dark:hover:text-white'
             }`}
           >
             <Radio className="w-4 h-4" />
@@ -199,8 +199,8 @@ export default function PodcastsView({
             onClick={() => setActiveSubTab('my_library')}
             className={`flex-1 sm:flex-none px-5 py-2.5 rounded-xl font-mono text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer ${
               activeSubTab === 'my_library'
-                ? 'bg-gradient-to-r from-[#D9A9FF] to-[#f3d775] text-black shadow-lg'
-                : 'text-gray-400 hover:text-white'
+                ? 'bg-gradient-to-r from-[#E9C349] to-[#f3d775] text-black shadow-lg'
+                : 'text-gray-400 hover:text-slate-900 dark:hover:text-white'
             }`}
           >
             <Headphones className="w-4 h-4" />
@@ -216,7 +216,7 @@ export default function PodcastsView({
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Buscar podcast o episodio..."
-            className="w-full bg-[#121426] border border-white/15 rounded-xl pl-10 pr-4 py-2 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#D9A9FF] transition-all"
+            className="w-full bg-[#121426] border border-white/15 rounded-xl pl-10 pr-4 py-2 text-xs text-slate-900 dark:text-white placeholder-gray-500 focus:outline-none focus:border-[#E9C349] transition-all"
           />
         </div>
       </div>
@@ -232,8 +232,8 @@ export default function PodcastsView({
             onClick={() => setSelectedCategory(cat)}
             className={`px-3.5 py-1.5 rounded-full text-xs font-mono font-bold tracking-wider uppercase transition-all shrink-0 cursor-pointer border ${
               selectedCategory === cat
-                ? 'bg-[#D9A9FF] text-black border-[#D9A9FF] font-black shadow-md'
-                : 'bg-white/5 text-gray-300 border-white/10 hover:border-white/30'
+                ? 'bg-[#E9C349] text-black border-[#E9C349] font-black shadow-md'
+                : 'bg-white/5 text-gray-300 border-white/10 hover:border-slate-300 dark:hover:border-white/30'
             }`}
           >
             {cat === 'todos' ? 'Todas' : cat}

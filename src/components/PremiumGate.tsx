@@ -138,11 +138,11 @@ export default function PremiumGate({ language, onSubscribe, sectionName = 'defa
   };
 
   return (
-    <div className="flex-1 flex items-center justify-center p-4 md:p-8 overflow-y-auto bg-gradient-to-b from-[#0e0e12] to-[#050507]">
-      <motion.div 
+    <div className="flex-1 flex items-center justify-center p-4 md:p-8 overflow-y-auto bg-gradient-to-b from-slate-50 to-white dark:from-[#0e0e12] dark:to-[#050507]">
+      <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="w-full max-w-3xl bg-[#0F0F13]/90 border border-primary/20 hover:border-primary/35 rounded-2xl shadow-[0_20px_50px_rgba(194, 62, 158,0.15)] relative overflow-hidden p-6 md:p-10 text-center"
+        className="w-full max-w-3xl bg-white dark:bg-[#0F0F13]/90 border border-primary/20 hover:border-primary/35 rounded-2xl shadow-[0_20px_50px_rgba(154,43,60,0.15)] relative overflow-hidden p-6 md:p-10 text-center"
       >
         {/* Radial subtle glowing effect behind */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[350px] h-[150px] bg-gradient-to-b from-primary/10 via-transparent to-transparent blur-3xl rounded-full pointer-events-none" />
@@ -159,7 +159,7 @@ export default function PremiumGate({ language, onSubscribe, sectionName = 'defa
         </span>
 
         {/* Main Header */}
-        <h2 className="text-xl md:text-2xl font-display-lg font-black tracking-tight text-[#EDEFF4] uppercase max-w-xl mx-auto leading-tight">
+        <h2 className="text-xl md:text-2xl font-display-lg font-black tracking-tight text-slate-900 dark:text-[#EDEFF4] uppercase max-w-xl mx-auto leading-tight">
           {t.title}
         </h2>
         <p className="text-on-surface-variant text-xs md:text-sm mt-3 max-w-2xl mx-auto font-medium leading-relaxed">
@@ -170,36 +170,36 @@ export default function PremiumGate({ language, onSubscribe, sectionName = 'defa
         <div className="h-[1px] bg-gradient-to-r from-transparent via-primary/20 to-transparent my-6" />
 
         {/* Feature Checkmarks List */}
-        <div className="bg-[#0A0A0E] border border-tertiary/5 rounded-2xl p-4 md:p-6 text-left max-w-2xl mx-auto mb-8 shadow-inner">
-          <h4 className="text-[10px] font-mono font-bold tracking-wider text-[#D9A9FF] uppercase mb-4 flex items-center gap-2">
+        <div className="bg-slate-50 dark:bg-[#0A0A0E] border border-tertiary/5 rounded-2xl p-4 md:p-6 text-left max-w-2xl mx-auto mb-8 shadow-inner">
+          <h4 className="text-[10px] font-mono font-bold tracking-wider text-[#E9C349] uppercase mb-4 flex items-center gap-2">
             <Sparkles className="w-3.5 h-3.5" />
             {t.featuresTitle}
           </h4>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="flex gap-3 items-start text-xs font-semibold text-[#EDEFF4]">
-              <CheckCircle2 className="w-4 h-4 text-[#D9A9FF] shrink-0 mt-0.5" />
+            <div className="flex gap-3 items-start text-xs font-semibold text-slate-900 dark:text-[#EDEFF4]">
+              <CheckCircle2 className="w-4 h-4 text-[#E9C349] shrink-0 mt-0.5" />
               <span>{t.feature1}</span>
             </div>
-            <div className="flex gap-3 items-start text-xs font-semibold text-[#EDEFF4]">
-              <CheckCircle2 className="w-4 h-4 text-[#D9A9FF] shrink-0 mt-0.5" />
+            <div className="flex gap-3 items-start text-xs font-semibold text-slate-900 dark:text-[#EDEFF4]">
+              <CheckCircle2 className="w-4 h-4 text-[#E9C349] shrink-0 mt-0.5" />
               <span>{t.feature2}</span>
             </div>
-            <div className="flex gap-3 items-start text-xs font-semibold text-[#EDEFF4]">
-              <CheckCircle2 className="w-4 h-4 text-[#D9A9FF] shrink-0 mt-0.5" />
+            <div className="flex gap-3 items-start text-xs font-semibold text-slate-900 dark:text-[#EDEFF4]">
+              <CheckCircle2 className="w-4 h-4 text-[#E9C349] shrink-0 mt-0.5" />
               <span>{t.feature3}</span>
             </div>
-            <div className="flex gap-3 items-start text-xs font-semibold text-[#EDEFF4]">
-              <CheckCircle2 className="w-4 h-4 text-[#D9A9FF] shrink-0 mt-0.5" />
+            <div className="flex gap-3 items-start text-xs font-semibold text-slate-900 dark:text-[#EDEFF4]">
+              <CheckCircle2 className="w-4 h-4 text-[#E9C349] shrink-0 mt-0.5" />
               <span>{t.feature4}</span>
             </div>
           </div>
         </div>
 
         {/* Subscription Info Card */}
-        <div className="p-4 rounded-2xl bg-[#141022] border border-[#D9A9FF]/40 max-w-md mx-auto mb-6 text-center space-y-1 shadow-lg">
-          <div className="text-[10px] font-mono text-[#D9A9FF] font-black uppercase tracking-widest">SUSCRIPCIÓN POR PROFESOR</div>
-          <div className="text-sm font-mono font-bold text-white uppercase">Membresía Mensual Personalizada</div>
-          <p className="text-[10px] text-slate-300 font-medium">Pago mensual independiente por instructor. Acceso ilimitado sin permanencia.</p>
+        <div className="p-4 rounded-2xl bg-amber-50 dark:bg-[#141022] border border-[#E9C349]/40 max-w-md mx-auto mb-6 text-center space-y-1 shadow-lg">
+          <div className="text-[10px] font-mono text-[#E9C349] font-black uppercase tracking-widest">SUSCRIPCIÓN POR PROFESOR</div>
+          <div className="text-sm font-mono font-bold text-slate-900 dark:text-white uppercase">Membresía Mensual Personalizada</div>
+          <p className="text-[10px] text-slate-600 dark:text-slate-300 font-medium">Pago mensual independiente por instructor. Acceso ilimitado sin permanencia.</p>
         </div>
 
         {/* Interactive Payment / Subscription trigger button */}

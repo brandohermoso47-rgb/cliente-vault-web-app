@@ -191,7 +191,7 @@ export default function StudentLevelProgressBar({
                 </span>
               </div>
 
-              <h3 className="text-base sm:text-lg font-black text-white uppercase font-mono tracking-wide mt-1 flex items-center gap-2">
+              <h3 className="text-base sm:text-lg font-black text-slate-900 dark:text-white uppercase font-mono tracking-wide mt-1 flex items-center gap-2">
                 <span>{isEs ? currentMilestone.titleEs : currentMilestone.titleEn}</span>
                 {isMaxLevel && <Sparkles className="w-4 h-4 text-[#D9A9FF] animate-bounce" />}
               </h3>
@@ -214,7 +214,7 @@ export default function StudentLevelProgressBar({
             <button
               type="button"
               onClick={() => setIsExpanded(!isExpanded)}
-              className="p-2.5 rounded-xl bg-white/5 hover:bg-white/15 border border-white/10 text-slate-300 hover:text-white transition-all cursor-pointer flex items-center justify-center"
+              className="p-2.5 rounded-xl bg-white/5 hover:bg-slate-200 dark:hover:bg-white/15 border border-white/10 text-slate-300 hover:text-slate-900 dark:hover:text-white transition-all cursor-pointer flex items-center justify-center"
               title={isEs ? 'Ver mapa de niveles y requisitos' : 'View level roadmap & requirements'}
             >
               {isExpanded ? <ChevronUp className="w-4 h-4 text-[#D9A9FF]" /> : <ChevronDown className="w-4 h-4" />}
@@ -240,7 +240,7 @@ export default function StudentLevelProgressBar({
           </div>
 
           {/* Animated Glow Bar */}
-          <div className="w-full bg-black/60 border border-white/15 h-4 rounded-full p-0.5 relative overflow-hidden shadow-inner">
+          <div className="w-full bg-slate-100 dark:bg-black/60 border border-white/15 h-4 rounded-full p-0.5 relative overflow-hidden shadow-inner">
             {/* Shimmer effect */}
             <motion.div
               initial={{ width: 0 }}
@@ -274,7 +274,7 @@ export default function StudentLevelProgressBar({
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
           
           {/* 1. Lessons Metric Card */}
-          <div className="p-3.5 rounded-2xl bg-black/40 border border-white/10 flex items-center justify-between gap-3">
+          <div className="p-3.5 rounded-2xl bg-slate-100 dark:bg-black/40 border border-white/10 flex items-center justify-between gap-3">
             <div className="flex items-center gap-3">
               <div className="p-2.5 rounded-xl bg-amber-500/15 border border-amber-500/30 text-amber-400">
                 <BookOpen className="w-4 h-4" />
@@ -283,7 +283,7 @@ export default function StudentLevelProgressBar({
                 <span className="text-[10px] font-mono text-slate-400 uppercase block">
                   {isEs ? 'Lecciones del Nivel' : 'Level Lessons'}
                 </span>
-                <span className="text-xs font-mono font-black text-white">
+                <span className="text-xs font-mono font-black text-slate-900 dark:text-white">
                   {completedLevelLessonsCount} / {totalLevelLessons} {isEs ? 'Completadas' : 'Completed'}
                 </span>
               </div>
@@ -303,7 +303,7 @@ export default function StudentLevelProgressBar({
           </div>
 
           {/* 2. Points Metric Card */}
-          <div className="p-3.5 rounded-2xl bg-black/40 border border-white/10 flex items-center justify-between gap-3">
+          <div className="p-3.5 rounded-2xl bg-slate-100 dark:bg-black/40 border border-white/10 flex items-center justify-between gap-3">
             <div className="flex items-center gap-3">
               <div className="p-2.5 rounded-xl bg-cyan-500/15 border border-cyan-500/30 text-cyan-400">
                 <Trophy className="w-4 h-4" />
@@ -312,7 +312,7 @@ export default function StudentLevelProgressBar({
                 <span className="text-[10px] font-mono text-slate-400 uppercase block">
                   {isEs ? 'Puntos de Experiencia' : 'Experience Points'}
                 </span>
-                <span className="text-xs font-mono font-black text-white">
+                <span className="text-xs font-mono font-black text-slate-900 dark:text-white">
                   {currentPoints} {isEs ? 'PTS Acumulados' : 'PTS Total'}
                 </span>
               </div>
@@ -335,21 +335,21 @@ export default function StudentLevelProgressBar({
 
         {/* Motivational Status & Gap Notice */}
         {!isMaxLevel ? (
-          <div className="p-3.5 rounded-2xl bg-gradient-to-r from-[#D9A9FF]/10 via-amber-950/20 to-transparent border border-[#D9A9FF]/25 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-            <div className="flex items-center gap-2.5 text-xs font-mono text-slate-200">
-              <Target className="w-4 h-4 text-[#D9A9FF] shrink-0" />
+          <div className="p-3.5 rounded-2xl bg-gradient-to-r from-[#E9C349]/10 via-amber-950/20 to-transparent border border-[#E9C349]/25 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+            <div className="flex items-center gap-2.5 text-xs font-mono text-slate-700 dark:text-slate-200">
+              <Target className="w-4 h-4 text-[#E9C349] shrink-0" />
               <span>
                 {isEs ? (
                   <>
-                    Para ascender al <strong className="text-white">{nextMilestone.titleEs}</strong> te faltan{' '}
-                    <strong className="text-[#D9A9FF]">{remainingLessons} lecciones</strong> y{' '}
-                    <strong className="text-[#D9A9FF]">{remainingPoints} PTS</strong>.
+                    Para ascender al <strong className="text-slate-900 dark:text-white">{nextMilestone.titleEs}</strong> te faltan{' '}
+                    <strong className="text-[#E9C349]">{remainingLessons} lecciones</strong> y{' '}
+                    <strong className="text-[#E9C349]">{remainingPoints} PTS</strong>.
                   </>
                 ) : (
                   <>
-                    To reach <strong className="text-white">{nextMilestone.titleEn}</strong> you need{' '}
-                    <strong className="text-[#D9A9FF]">{remainingLessons} lessons</strong> and{' '}
-                    <strong className="text-[#D9A9FF]">{remainingPoints} PTS</strong>.
+                    To reach <strong className="text-slate-900 dark:text-white">{nextMilestone.titleEn}</strong> you need{' '}
+                    <strong className="text-[#E9C349]">{remainingLessons} lessons</strong> and{' '}
+                    <strong className="text-[#E9C349]">{remainingPoints} PTS</strong>.
                   </>
                 )}
               </span>
@@ -387,8 +387,8 @@ export default function StudentLevelProgressBar({
               className="pt-4 border-t border-white/10 space-y-4 overflow-hidden"
             >
               <div className="flex items-center justify-between">
-                <h4 className="text-xs font-mono font-black text-white uppercase tracking-widest flex items-center gap-2">
-                  <Compass className="w-4 h-4 text-[#D9A9FF]" />
+                <h4 className="text-xs font-mono font-black text-slate-900 dark:text-white uppercase tracking-widest flex items-center gap-2">
+                  <Compass className="w-4 h-4 text-[#E9C349]" />
                   <span>{isEs ? 'Mapa de Ruta & Beneficios de Nivel' : 'Academic Level Roadmap'}</span>
                 </h4>
                 <span className="text-[10px] font-mono text-slate-400">
@@ -407,14 +407,14 @@ export default function StudentLevelProgressBar({
                       key={`milestone-card-${m.levelNum}`}
                       className={`p-3.5 rounded-2xl border transition-all space-y-2.5 ${
                         isCurrent 
-                          ? 'bg-[#D9A9FF]/15 border-[#D9A9FF] shadow-[0_0_20px_rgba(217, 169, 255,0.2)]' 
-                          : isUnlocked 
-                            ? 'bg-white/5 border-emerald-500/30' 
-                            : 'bg-black/40 border-white/10 opacity-70'
+                          ? 'bg-[#E9C349]/15 border-[#E9C349] shadow-[0_0_20px_rgba(233,195,73,0.2)]' 
+                          : isUnlocked
+                            ? 'bg-white/5 border-emerald-500/30'
+                            : 'bg-slate-100 dark:bg-black/40 border-white/10 opacity-70'
                       }`}
                     >
                       <div className="flex items-center justify-between">
-                        <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-md bg-black/40 border border-white/10 text-white">
+                        <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-md bg-slate-200 dark:bg-black/40 border border-white/10 text-slate-900 dark:text-white">
                           NIVEL {m.levelNum}
                         </span>
 
@@ -430,7 +430,7 @@ export default function StudentLevelProgressBar({
                       </div>
 
                       <div>
-                        <h5 className="text-xs font-bold text-white font-mono">{isEs ? m.titleEs : m.titleEn}</h5>
+                        <h5 className="text-xs font-bold text-slate-900 dark:text-white font-mono">{isEs ? m.titleEs : m.titleEn}</h5>
                         <p className="text-[10px] text-slate-400 font-mono mt-0.5">
                           {m.minPoints} PTS • {m.targetLessonsCount} {isEs ? 'Clases' : 'Lessons'}
                         </p>

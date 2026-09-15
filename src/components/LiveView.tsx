@@ -368,7 +368,7 @@ export default function LiveView({
             className={`px-4 py-2 text-xs font-black rounded-xl transition-all flex items-center gap-2 border ${
               subTab === 'live-room' 
                 ? 'bg-red-600 text-white border-red-500 shadow-lg shadow-red-600/30' 
-                : 'text-slate-400 border-transparent hover:text-white hover:bg-white/5'
+                : 'text-slate-400 border-transparent hover:text-slate-900 dark:hover:text-white hover:bg-white/5'
             }`}
           >
             <Radio className="w-4 h-4 text-white animate-pulse" />
@@ -379,8 +379,8 @@ export default function LiveView({
             onClick={() => setSubTab('go-live')}
             className={`px-4 py-2 text-xs font-black rounded-xl transition-all flex items-center gap-2 border ${
               subTab === 'go-live' 
-                ? 'bg-[#D9A9FF] text-slate-950 border-[#D9A9FF] shadow-lg shadow-[#D9A9FF]/20' 
-                : 'text-slate-400 border-transparent hover:text-white hover:bg-white/5'
+                ? 'bg-[#E9C349] text-slate-950 border-[#E9C349] shadow-lg shadow-[#E9C349]/20' 
+                : 'text-slate-400 border-transparent hover:text-slate-900 dark:hover:text-white hover:bg-white/5'
             }`}
           >
             <Tv className="w-4 h-4 text-slate-950" />
@@ -391,8 +391,8 @@ export default function LiveView({
             onClick={() => setSubTab('spectators')}
             className={`px-4 py-2 text-xs font-black rounded-xl transition-all flex items-center gap-2 border ${
               subTab === 'spectators' 
-                ? 'bg-[#C23E9E] text-white border-[#C23E9E] shadow-lg' 
-                : 'text-slate-400 border-transparent hover:text-white hover:bg-white/5'
+                ? 'bg-[#9A2B3C] text-white border-[#9A2B3C] shadow-lg' 
+                : 'text-slate-400 border-transparent hover:text-slate-900 dark:hover:text-white hover:bg-white/5'
             }`}
           >
             <Users className="w-4 h-4 text-amber-300" />
@@ -403,8 +403,8 @@ export default function LiveView({
             onClick={() => setSubTab('battle-training')}
             className={`px-4 py-2 text-xs font-black rounded-xl transition-all flex items-center gap-2 border ${
               subTab === 'battle-training' 
-                ? 'bg-white/20 text-white border-white/30' 
-                : 'text-slate-400 border-transparent hover:text-white hover:bg-white/5'
+                ? 'bg-slate-900/10 text-slate-900 border-slate-900/20 dark:bg-white/20 dark:text-white dark:border-white/30'
+                : 'text-slate-400 border-transparent hover:text-slate-900 dark:hover:text-white hover:bg-white/5'
             }`}
           >
             <Swords className="w-4 h-4 text-[#D9A9FF]" />
@@ -416,7 +416,7 @@ export default function LiveView({
             className={`px-4 py-2 text-xs font-black rounded-xl transition-all flex items-center gap-2 border ${
               subTab === 'calendar' 
                 ? 'bg-blue-600/30 text-blue-300 border-blue-500/50' 
-                : 'text-slate-400 border-transparent hover:text-white hover:bg-white/5'
+                : 'text-slate-400 border-transparent hover:text-slate-900 dark:hover:text-white hover:bg-white/5'
             }`}
           >
             <Calendar className="w-4 h-4 text-blue-400" />
@@ -593,8 +593,8 @@ export default function LiveView({
                   onClick={() => setIsWebcamOn(!isWebcamOn)}
                   className={`px-4 py-2 rounded-xl text-xs font-extrabold transition-all flex items-center gap-2 border ${
                     isWebcamOn 
-                      ? 'bg-[#D9A9FF] text-slate-950 border-[#D9A9FF]' 
-                      : 'bg-white/5 border-white/10 text-slate-300 hover:text-white'
+                      ? 'bg-[#E9C349] text-slate-950 border-[#E9C349]' 
+                      : 'bg-white/5 border-white/10 text-slate-300 hover:text-slate-900 dark:hover:text-white'
                   }`}
                 >
                   {isWebcamOn ? <Video className="w-4 h-4 text-slate-950" /> : <VideoOff className="w-4 h-4" />}
@@ -607,8 +607,8 @@ export default function LiveView({
 
               {/* Subtitles CC Toggle */}
               <div className="flex items-center gap-2 bg-white/5 border border-white/10 px-3 py-1.5 rounded-xl">
-                <Languages className="w-4 h-4 text-[#D9A9FF]" />
-                <span className="text-[10px] font-bold text-white uppercase">SUBTÍTULOS:</span>
+                <Languages className="w-4 h-4 text-[#E9C349]" />
+                <span className="text-[10px] font-bold text-slate-900 dark:text-white uppercase">SUBTÍTULOS:</span>
                 <button
                   onClick={() => setSubtitlesEnabled(!subtitlesEnabled)}
                   className={`px-2 py-0.5 text-[10px] font-bold rounded-lg ${
@@ -676,7 +676,7 @@ export default function LiveView({
                   </span>
                 </div>
                 <div>
-                  <h4 className="text-xs font-black text-white flex items-center gap-1.5 uppercase">
+                  <h4 className="text-xs font-black text-slate-900 dark:text-white flex items-center gap-1.5 uppercase">
                     <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
                     Cámara de alumno activa en la transmisión
                   </h4>
@@ -695,8 +695,8 @@ export default function LiveView({
             {/* Header */}
             <div className="p-4 bg-[#1a1a1a] border-b border-white/10 flex items-center justify-between">
               <div>
-                <h4 className="text-xs font-black uppercase text-white tracking-wider flex items-center gap-1.5">
-                  <MessageSquare className="w-4 h-4 text-[#D9A9FF]" /> CHAT EN VIVO DE LA SALA
+                <h4 className="text-xs font-black uppercase text-slate-900 dark:text-white tracking-wider flex items-center gap-1.5">
+                  <MessageSquare className="w-4 h-4 text-[#E9C349]" /> CHAT EN VIVO DE LA SALA
                 </h4>
                 <p className="text-[10px] text-slate-400">Sé constructivo y apoya a los compañeros</p>
               </div>
@@ -709,7 +709,7 @@ export default function LiveView({
             {pinnedComment && (
               <div className="p-2.5 bg-[#D9A9FF]/10 border-b border-[#D9A9FF]/20 flex items-center justify-between text-xs text-[#D9A9FF] font-medium">
                 <span className="truncate pr-2">{pinnedComment}</span>
-                <button onClick={() => setPinnedComment(null)} className="text-slate-400 hover:text-white shrink-0">
+                <button onClick={() => setPinnedComment(null)} className="text-slate-400 hover:text-slate-900 dark:hover:text-white shrink-0">
                   <X className="w-3.5 h-3.5" />
                 </button>
               </div>
@@ -727,7 +727,7 @@ export default function LiveView({
                     <div className="flex-1 bg-white/5 p-2.5 rounded-xl border border-white/5">
                       <div className="flex items-center justify-between gap-1 mb-1">
                         <div className="flex items-center gap-1.5">
-                          <span className="font-bold text-white">{msg.name}</span>
+                          <span className="font-bold text-slate-900 dark:text-white">{msg.name}</span>
                           {msg.badge && (
                             <span className="text-[8px] font-mono font-bold px-1.5 py-0.2 rounded bg-[#D9A9FF]/20 text-[#D9A9FF] border border-[#D9A9FF]/30">
                               {msg.badge}
@@ -736,7 +736,7 @@ export default function LiveView({
                         </div>
                         <span className="text-[9px] font-mono text-slate-500">{msg.time}</span>
                       </div>
-                      <p className="text-slate-200 leading-relaxed">{displayedText}</p>
+                      <p className="text-slate-700 dark:text-slate-200 leading-relaxed">{displayedText}</p>
                     </div>
                   </div>
                 );
@@ -769,7 +769,7 @@ export default function LiveView({
                   placeholder="Escribe un mensaje en la transmisión..."
                   value={chatInput}
                   onChange={(e) => setChatInput(e.target.value)}
-                  className="flex-1 bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#D9A9FF]"
+                  className="flex-1 bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white placeholder-slate-500 focus:outline-none focus:border-[#E9C349]"
                 />
                 <button 
                   type="submit"
@@ -793,8 +793,8 @@ export default function LiveView({
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-white/10">
               <div>
                 <div className="flex items-center gap-2">
-                  <Tv className="w-5 h-5 text-[#D9A9FF]" />
-                  <h3 className="text-lg font-black text-white uppercase tracking-wide">
+                  <Tv className="w-5 h-5 text-[#E9C349]" />
+                  <h3 className="text-lg font-black text-slate-900 dark:text-white uppercase tracking-wide">
                     ESTUDIO DE TRANSMISIÓN EN VIVO
                   </h3>
                 </div>
@@ -917,7 +917,7 @@ export default function LiveView({
                     type="text"
                     value={broadcastTitle}
                     onChange={(e) => setBroadcastTitle(e.target.value)}
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#D9A9FF]"
+                    className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-[#E9C349]"
                   />
                 </div>
 
@@ -928,7 +928,7 @@ export default function LiveView({
                   <select 
                     value={broadcastCategory}
                     onChange={(e) => setBroadcastCategory(e.target.value)}
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#D9A9FF]"
+                    className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-[#E9C349]"
                   >
                     <option value="Waacking">Waacking (Arm Control & Rolls)</option>
                     <option value="Posing">Expressive Posing & Character</option>
@@ -945,7 +945,7 @@ export default function LiveView({
                     type="text"
                     value={broadcastMusic}
                     onChange={(e) => setBroadcastMusic(e.target.value)}
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#D9A9FF]"
+                    className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-[#E9C349]"
                   />
                 </div>
 

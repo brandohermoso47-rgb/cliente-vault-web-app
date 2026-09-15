@@ -304,7 +304,7 @@ export default function ComunidadView({
           className={`group h-11 min-w-[170px] px-4 py-2.5 text-xs font-bold tracking-wider transition-all flex items-center justify-center gap-2 border rounded-xl shrink-0 focus:outline-none ${
             subTab === 'feed' 
               ? 'bg-surface-container border-tertiary/35 text-tertiary shadow-md' 
-              : 'bg-transparent text-on-surface-variant border-transparent hover:text-white'
+              : 'bg-transparent text-on-surface-variant border-transparent hover:text-slate-900 dark:hover:text-white'
           }`}
         >
           <Globe className="w-4 h-4 text-tertiary shrink-0 transition-transform duration-300 group-hover:scale-125 group-active:scale-90" />
@@ -317,7 +317,7 @@ export default function ComunidadView({
           className={`group h-11 min-w-[170px] px-4 py-2.5 text-xs font-bold tracking-wider transition-all flex items-center justify-center gap-2 border rounded-xl shrink-0 focus:outline-none ${
             subTab === 'lobby' 
               ? 'bg-surface-container border-tertiary/35 text-tertiary shadow-md' 
-              : 'bg-transparent text-on-surface-variant border-transparent hover:text-white'
+              : 'bg-transparent text-on-surface-variant border-transparent hover:text-slate-900 dark:hover:text-white'
           }`}
         >
           <MessageSquare className="w-4 h-4 text-tertiary shrink-0 transition-transform duration-300 group-hover:scale-125 group-hover:rotate-12 group-active:scale-90" />
@@ -330,7 +330,7 @@ export default function ComunidadView({
           className={`group h-11 min-w-[170px] px-4 py-2.5 text-xs font-bold tracking-wider transition-all flex items-center justify-center gap-2 border rounded-xl shrink-0 focus:outline-none ${
             subTab === 'presentate' 
               ? 'bg-surface-container border-tertiary/35 text-tertiary shadow-md' 
-              : 'bg-transparent text-on-surface-variant border-transparent hover:text-white'
+              : 'bg-transparent text-on-surface-variant border-transparent hover:text-slate-900 dark:hover:text-white'
           }`}
         >
           <Hand className="w-4 h-4 text-primary shrink-0 transition-transform duration-300 group-hover:scale-125 group-hover:rotate-12 group-active:scale-90" />
@@ -342,8 +342,8 @@ export default function ComunidadView({
           onClick={() => setSubTab('reto')}
           className={`group h-11 min-w-[190px] px-4 py-2.5 text-xs font-bold tracking-wider transition-all flex items-center justify-center gap-2 border rounded-xl shrink-0 focus:outline-none cursor-pointer ${
             subTab === 'reto' 
-              ? 'bg-[#D9A9FF] text-black border-[#D9A9FF] shadow-lg scale-105 font-extrabold' 
-              : 'bg-[#1b1424]/70 text-[#D9A9FF] border-[#D9A9FF]/30 hover:border-[#D9A9FF] hover:bg-[#D9A9FF]/10'
+              ? 'bg-[#E9C349] text-black border-[#E9C349] shadow-lg scale-105 font-extrabold' 
+              : 'bg-amber-50/70 dark:bg-[#1b1424]/70 text-[#E9C349] border-[#E9C349]/30 hover:border-[#E9C349] hover:bg-[#E9C349]/10'
           }`}
         >
           <Trophy className={`w-4 h-4 shrink-0 transition-transform duration-300 group-hover:scale-125 ${subTab === 'reto' ? 'text-black' : 'text-[#D9A9FF]'}`} />
@@ -359,7 +359,7 @@ export default function ComunidadView({
           className={`group h-11 min-w-[170px] px-4 py-2.5 text-xs font-bold tracking-wider transition-all flex items-center justify-center gap-2 border rounded-xl shrink-0 focus:outline-none ${
             subTab === 'anuncios' 
               ? 'bg-surface-container border-tertiary/35 text-tertiary shadow-md' 
-              : 'bg-transparent text-on-surface-variant border-transparent hover:text-white'
+              : 'bg-transparent text-on-surface-variant border-transparent hover:text-slate-900 dark:hover:text-white'
           }`}
         >
           <Megaphone className="w-4 h-4 text-tertiary shrink-0 transition-transform duration-300 group-hover:scale-125 group-hover:rotate-12 group-active:scale-90" />
@@ -390,7 +390,7 @@ export default function ComunidadView({
               {searchQuery && (
                 <button
                   onClick={() => setSearchQuery('')}
-                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-white text-xs p-1"
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-slate-900 dark:hover:text-white text-xs p-1"
                 >
                   <X className="w-3 h-3" />
                 </button>
@@ -411,8 +411,8 @@ export default function ComunidadView({
               onClick={() => setActiveFilter('all')}
               className={`px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all flex items-center gap-1.5 border cursor-pointer ${
                 activeFilter === 'all'
-                  ? 'bg-[#D9A9FF] text-black border-[#D9A9FF] shadow-md scale-105'
-                  : 'bg-[#0D0D11] text-on-surface-variant border-tertiary/15 hover:border-tertiary/40 hover:text-white'
+                  ? 'bg-[#E9C349] text-black border-[#E9C349] shadow-md scale-105'
+                  : 'bg-[#0D0D11] text-on-surface-variant border-tertiary/15 hover:border-tertiary/40 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
               <span>🌟 Todos</span>
@@ -480,7 +480,7 @@ export default function ComunidadView({
                   setActiveFilter('all');
                   setSearchQuery('');
                 }}
-                className="ml-auto text-xs font-mono text-tertiary hover:text-white flex items-center gap-1 px-2.5 py-1 rounded-lg border border-tertiary/20 bg-tertiary/5 hover:bg-tertiary/20 transition-all cursor-pointer"
+                className="ml-auto text-xs font-mono text-tertiary hover:text-slate-900 dark:hover:text-white flex items-center gap-1 px-2.5 py-1 rounded-lg border border-tertiary/20 bg-tertiary/5 hover:bg-tertiary/20 transition-all cursor-pointer"
               >
                 <RotateCcw className="w-3 h-3" />
                 <span>Restablecer Filtros</span>
@@ -501,7 +501,7 @@ export default function ComunidadView({
                 <h3 className="text-xs font-mono font-bold text-tertiary uppercase tracking-wider">💬 SALA COMÚN</h3>
                 <p className="text-[11px] text-on-surface-variant font-medium">Conversación abierta sobre música, inspiración y eventos de baile.</p>
               </div>
-              <span className="text-[9px] font-mono bg-black/40 text-tertiary border border-tertiary/20 px-2.5 py-1 rounded-xl font-bold">
+              <span className="text-[9px] font-mono bg-slate-100 dark:bg-black/40 text-tertiary border border-tertiary/20 px-2.5 py-1 rounded-xl font-bold">
                 {translations[language].onlineCount}
               </span>
             </div>
@@ -524,15 +524,15 @@ export default function ComunidadView({
                     <div className={`max-w-[70%] rounded-2xl p-3.5 border shadow-md ${
                       isMe 
                         ? 'bg-primary-container/20 border-primary/20 text-on-surface rounded-tr-none' 
-                        : 'bg-[#0d0d11]/60 border-tertiary/5 text-on-surface rounded-tl-none'
+                        : 'bg-slate-100 dark:bg-[#0d0d11]/60 border-tertiary/5 text-on-surface rounded-tl-none'
                     }`}>
                       <div className="flex items-center gap-2 mb-1 justify-between flex-wrap">
                         <div className="flex items-center gap-1.5 flex-wrap">
-                          <span className="text-xs font-bold text-white uppercase">{msg.user}</span>
+                          <span className="text-xs font-bold text-slate-900 dark:text-white uppercase">{msg.user}</span>
                           <span className={`text-[9px] px-1.5 py-0.2 rounded font-mono font-bold border uppercase ${
                             msg.role === 'instructor' 
                               ? 'text-tertiary border-tertiary/20 bg-tertiary/5' 
-                              : 'text-on-surface-variant border-tertiary/10 bg-black/30'
+                              : 'text-on-surface-variant border-tertiary/10 bg-slate-100 dark:bg-black/30'
                           }`}>
                             {msg.role}
                           </span>
@@ -559,7 +559,7 @@ export default function ComunidadView({
                                 }));
                               }
                             }}
-                            className="text-[8px] text-primary hover:text-white font-mono font-bold bg-[#121212] border border-[#262626] rounded px-1.5 py-0.5 flex items-center gap-1 transition-all active:scale-95"
+                            className="text-[8px] text-primary hover:text-slate-900 dark:hover:text-white font-mono font-bold bg-[#121212] border border-[#262626] rounded px-1.5 py-0.5 flex items-center gap-1 transition-all active:scale-95"
                           >
                             <Languages className="w-2.5 h-2.5 text-primary" />
                             {isTranslated ? translations[language].showOriginal : translations[language].translateText}
@@ -607,7 +607,7 @@ export default function ComunidadView({
                   placeholder={translations[language].writeLobby}
                   value={newLobbyText}
                   onChange={(e) => setNewLobbyText(e.target.value)}
-                  className="flex-1 bg-[#18171B] border-2 border-tertiary/40 rounded-xl px-4 py-3 text-xs text-on-surface placeholder-on-surface-variant/60 focus:outline-none focus:border-tertiary focus:ring-2 focus:ring-tertiary/20 leading-relaxed font-semibold shadow-inner transition-all"
+                  className="flex-1 bg-slate-50 dark:bg-[#18171B] border-2 border-tertiary/40 rounded-xl px-4 py-3 text-xs text-on-surface placeholder-on-surface-variant/60 focus:outline-none focus:border-tertiary focus:ring-2 focus:ring-tertiary/20 leading-relaxed font-semibold shadow-inner transition-all"
                 />
                 <button
                   id="chat-lobby-submit"
@@ -668,7 +668,7 @@ export default function ComunidadView({
             {subTab === 'feed' && (
               <>
                 {/* Active Weekly Challenge Callout on Muro Feed */}
-                <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-[#21162B] via-[#15121c] to-[#0D0D11] border-2 border-tertiary/40 p-4 sm:p-5 shadow-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-amber-50 via-white to-white dark:from-[#21162B] dark:via-[#15121c] dark:to-[#0D0D11] border-2 border-tertiary/40 p-4 sm:p-5 shadow-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                   <div className="flex items-start sm:items-center gap-3.5">
                     <div className="w-12 h-12 rounded-2xl bg-[#D9A9FF]/15 border border-[#D9A9FF]/40 flex items-center justify-center text-[#D9A9FF] shrink-0 shadow-md">
                       <Trophy className="w-6 h-6 animate-bounce" />
@@ -680,7 +680,7 @@ export default function ComunidadView({
                         </span>
                         <span className="text-[11px] font-mono text-emerald-400 font-semibold">• Votaciones Abiertas</span>
                       </div>
-                      <h4 className="text-sm font-bold text-white mt-1">70s Soulful Posing & High-Speed Cross Rolls</h4>
+                      <h4 className="text-sm font-bold text-slate-900 dark:text-white mt-1">70s Soulful Posing & High-Speed Cross Rolls</h4>
                       <p className="text-xs text-gray-300 mt-0.5 font-medium">Sube tu video respondiendo a la consigna temática, gana votos de la comunidad y compite en el Leaderboard.</p>
                     </div>
                   </div>
@@ -736,7 +736,7 @@ export default function ComunidadView({
                     value={newPresText}
                     onChange={(e) => setNewPresText(e.target.value)}
                     required
-                    className="w-full bg-[#0d0d11]/80 border border-tertiary/15 rounded-xl p-3 text-xs text-on-surface placeholder-on-surface-variant/40 focus:outline-none focus:border-tertiary/40 leading-relaxed font-semibold resize-none"
+                    className="w-full bg-slate-50 dark:bg-[#0d0d11]/80 border border-tertiary/15 rounded-xl p-3 text-xs text-on-surface placeholder-on-surface-variant/40 focus:outline-none focus:border-tertiary/40 leading-relaxed font-semibold resize-none"
                   />
                   <input
                     id="pres-video-input"
@@ -744,7 +744,7 @@ export default function ComunidadView({
                     placeholder="URL de foto o vídeo de práctica (opcional, ej. link de unsplash o youtube)"
                     value={newPresVideo}
                     onChange={(e) => setNewPresVideo(e.target.value)}
-                    className="w-full bg-[#0d0d11]/80 border border-tertiary/15 rounded-xl px-3 py-2 text-xs text-on-surface placeholder-on-surface-variant/40 focus:outline-none focus:border-tertiary/40 font-semibold"
+                    className="w-full bg-slate-50 dark:bg-[#0d0d11]/80 border border-tertiary/15 rounded-xl px-3 py-2 text-xs text-on-surface placeholder-on-surface-variant/40 focus:outline-none focus:border-tertiary/40 font-semibold"
                   />
                 </div>
                 <div className="flex justify-end gap-2.5">
@@ -752,7 +752,7 @@ export default function ComunidadView({
                     id="cancel-pres-form"
                     type="button"
                     onClick={() => setShowPresForm(false)}
-                    className="px-4 py-2 bg-transparent border border-tertiary/20 text-on-surface-variant hover:text-white hover:border-tertiary/40 text-xs font-semibold rounded-lg uppercase transition-all"
+                    className="px-4 py-2 bg-transparent border border-tertiary/20 text-on-surface-variant hover:text-slate-900 dark:hover:text-white hover:border-tertiary/40 text-xs font-semibold rounded-lg uppercase transition-all"
                   >
                     Cancelar
                   </button>
@@ -838,7 +838,7 @@ export default function ComunidadView({
                     value={newAnnTitle}
                     onChange={(e) => setNewAnnTitle(e.target.value)}
                     required
-                    className="w-full bg-[#0d0d11]/80 border border-tertiary/15 rounded-lg px-3 py-2 text-xs text-on-surface font-semibold focus:outline-none focus:border-tertiary/40"
+                    className="w-full bg-slate-50 dark:bg-[#0d0d11]/80 border border-tertiary/15 rounded-lg px-3 py-2 text-xs text-on-surface font-semibold focus:outline-none focus:border-tertiary/40"
                   />
                   <label className="flex items-center gap-2 cursor-pointer select-none">
                     <input
@@ -859,7 +859,7 @@ export default function ComunidadView({
                   value={newAnnContent}
                   onChange={(e) => setNewAnnContent(e.target.value)}
                   required
-                  className="w-full bg-[#0d0d11]/80 border border-tertiary/15 rounded-lg p-3 text-xs text-on-surface font-semibold focus:outline-none focus:border-tertiary/40"
+                  className="w-full bg-slate-50 dark:bg-[#0d0d11]/80 border border-tertiary/15 rounded-lg p-3 text-xs text-on-surface font-semibold focus:outline-none focus:border-tertiary/40"
                 />
 
                 <input
@@ -867,7 +867,7 @@ export default function ComunidadView({
                   placeholder="Enlace de inscripción o reunión (Opcional): https://..."
                   value={newAnnActionUrl}
                   onChange={(e) => setNewAnnActionUrl(e.target.value)}
-                  className="w-full bg-[#0d0d11]/80 border border-tertiary/15 rounded-lg px-3 py-2 text-xs text-on-surface font-semibold focus:outline-none focus:border-tertiary/40"
+                  className="w-full bg-slate-50 dark:bg-[#0d0d11]/80 border border-tertiary/15 rounded-lg px-3 py-2 text-xs text-on-surface font-semibold focus:outline-none focus:border-tertiary/40"
                 />
 
                 {/* Adjuntar Imagen al Anuncio */}
@@ -882,7 +882,7 @@ export default function ComunidadView({
                     id="cancel-ann-form"
                     type="button"
                     onClick={() => setShowAnnForm(false)}
-                    className="px-4 py-2 bg-transparent border border-tertiary/20 text-on-surface-variant hover:text-white hover:border-tertiary/40 text-xs font-semibold rounded-lg uppercase transition-all"
+                    className="px-4 py-2 bg-transparent border border-tertiary/20 text-on-surface-variant hover:text-slate-900 dark:hover:text-white hover:border-tertiary/40 text-xs font-semibold rounded-lg uppercase transition-all"
                   >
                     Cancelar
                   </button>
@@ -910,7 +910,7 @@ export default function ComunidadView({
               <span>
                 Mostrando <strong className="text-tertiary">{filteredPosts.length}</strong> de {totalCount} publicaciones
                 {activeFilter !== 'all' && (
-                  <span> • Filtro activo: <span className="text-white font-bold uppercase">{
+                  <span> • Filtro activo: <span className="text-slate-900 dark:text-white font-bold uppercase">{
                     activeFilter === 'video' ? 'Solo con Videos' :
                     activeFilter === 'instructor' ? 'Solo Instructores' :
                     'Anuncios Importantes'
@@ -934,7 +934,7 @@ export default function ComunidadView({
                 <div className="w-12 h-12 rounded-full bg-tertiary/10 border border-tertiary/20 flex items-center justify-center mx-auto text-tertiary">
                   <Filter className="w-6 h-6" />
                 </div>
-                <h4 className="text-sm font-bold text-white uppercase">No hay publicaciones con estos criterios</h4>
+                <h4 className="text-sm font-bold text-slate-900 dark:text-white uppercase">No hay publicaciones con estos criterios</h4>
                 <p className="text-xs text-on-surface-variant max-w-md mx-auto font-medium">
                   Intenta seleccionar otro filtro o busca un término diferente para explorar más contenido de la comunidad.
                 </p>
@@ -961,12 +961,12 @@ export default function ComunidadView({
                         {/* Header info */}
                         <div className="flex items-start justify-between gap-4">
                           <div className="flex items-center gap-3">
-                            <div className={`p-2.5 rounded-xl border border-tertiary/10 shadow-md ${ann.important ? 'bg-primary-container/30 text-primary' : 'bg-black/30 text-tertiary'}`}>
+                            <div className={`p-2.5 rounded-xl border border-tertiary/10 shadow-md ${ann.important ? 'bg-primary-container/30 text-primary' : 'bg-slate-100 dark:bg-black/30 text-tertiary'}`}>
                               <Megaphone className="w-4 h-4" />
                             </div>
                             <div>
                               <div className="flex items-center gap-2 flex-wrap">
-                                <h4 className="text-sm font-bold text-white uppercase">{ann.title}</h4>
+                                <h4 className="text-sm font-bold text-slate-900 dark:text-white uppercase">{ann.title}</h4>
                                 {ann.important && (
                                   <span className="text-[8px] font-bold font-mono tracking-widest text-primary bg-primary-container/30 px-2.5 py-1 rounded-xl border border-primary/20 flex items-center gap-1">
                                     📌 IMPORTANTE
@@ -1043,7 +1043,7 @@ export default function ComunidadView({
                             />
                             <div>
                               <div className="flex items-center gap-2">
-                                <h4 className="text-xs font-bold text-white uppercase">{pres.studentName}</h4>
+                                <h4 className="text-xs font-bold text-slate-900 dark:text-white uppercase">{pres.studentName}</h4>
                                 {post.isInstructor && (
                                   <span className="text-[8px] font-mono font-extrabold bg-purple-500/20 text-purple-300 border border-purple-500/30 px-1.5 py-0.5 rounded flex items-center gap-1 uppercase">
                                     <Crown className="w-2.5 h-2.5" /> Instructor
@@ -1090,13 +1090,13 @@ export default function ComunidadView({
                             className={`flex items-center gap-1.5 transition-colors border px-2.5 py-1 rounded-xl cursor-pointer ${
                               pres.isLikedByMe 
                                 ? 'bg-tertiary/10 border-tertiary text-tertiary font-bold' 
-                                : 'bg-[#0d0d11]/40 border-tertiary/20 hover:text-white'
+                                : 'bg-slate-100 dark:bg-[#0d0d11]/40 border-tertiary/20 hover:text-slate-900 dark:hover:text-white'
                             }`}
                           >
                             <Heart className={`w-4 h-4 ${pres.isLikedByMe ? 'fill-tertiary text-tertiary' : ''}`} />
                             <span>{pres.likes} Likes</span>
                           </button>
-                          <span className="flex items-center gap-1.5 border border-tertiary/10 bg-[#0d0d11]/40 px-2.5 py-1 rounded-xl text-on-surface-variant">
+                          <span className="flex items-center gap-1.5 border border-tertiary/10 bg-slate-100 dark:bg-[#0d0d11]/40 px-2.5 py-1 rounded-xl text-on-surface-variant">
                             <MessageSquare className="w-4 h-4 text-tertiary" />
                             <span>{(pres.comments || []).length} Comentarios</span>
                           </span>
@@ -1104,10 +1104,10 @@ export default function ComunidadView({
 
                         {/* Inner Comments List */}
                         {(pres.comments || []).length > 0 && (
-                          <div className="space-y-2.5 max-h-[160px] overflow-y-auto mb-3 bg-[#08080a]/60 p-3 rounded-xl border border-tertiary/5 text-on-surface">
+                          <div className="space-y-2.5 max-h-[160px] overflow-y-auto mb-3 bg-slate-50 dark:bg-[#08080a]/60 p-3 rounded-xl border border-tertiary/5 text-on-surface">
                             {(pres.comments || []).map((comm) => (
                               <div key={comm.id} className="text-[11px] leading-relaxed border-b border-tertiary/5 pb-2 last:border-b-0">
-                                <div className="flex items-center gap-1.5 font-bold text-white uppercase text-[10px]">
+                                <div className="flex items-center gap-1.5 font-bold text-slate-900 dark:text-white uppercase text-[10px]">
                                   <img src={comm.avatar} alt={comm.author} className="w-4 h-4 rounded-full object-cover border border-tertiary/10" />
                                   <span>{comm.author}</span>
                                   <span className="text-[9px] text-on-surface-variant font-mono ml-auto">{comm.date}</span>
@@ -1126,7 +1126,7 @@ export default function ComunidadView({
                             placeholder="Escribe una respuesta de bienvenida..."
                             value={commentInputs[pres.id] || ''}
                             onChange={(e) => setCommentInputs(prev => ({ ...prev, [pres.id]: e.target.value }))}
-                            className="flex-1 bg-[#0d0d11]/80 border border-tertiary/15 rounded-xl px-2.5 py-1.5 text-xs text-on-surface placeholder-on-surface-variant/40 font-semibold focus:outline-none"
+                            className="flex-1 bg-slate-50 dark:bg-[#0d0d11]/80 border border-tertiary/15 rounded-xl px-2.5 py-1.5 text-xs text-on-surface placeholder-on-surface-variant/40 font-semibold focus:outline-none"
                             onKeyPress={(e) => {
                               if (e.key === 'Enter') {
                                 handleCommentSubmit(pres.id);

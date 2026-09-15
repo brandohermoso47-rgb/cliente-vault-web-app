@@ -222,7 +222,7 @@ export default function ClassroomView({ currentUser, language, lessons }: Classr
   return (
     <div className="space-y-6 pb-12">
       {/* Header Banner */}
-      <div className="bg-gradient-to-r from-[#17142b] via-[#1f1a3a] to-[#120f24] p-6 sm:p-8 rounded-3xl border border-blue-500/30 shadow-2xl relative overflow-hidden">
+      <div className="bg-gradient-to-r from-blue-50 via-indigo-50 to-white dark:from-[#17142b] dark:via-[#1f1a3a] dark:to-[#120f24] p-6 sm:p-8 rounded-3xl border border-blue-500/30 shadow-2xl relative overflow-hidden">
         <div className="absolute -right-10 -bottom-10 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
           <div>
@@ -238,11 +238,11 @@ export default function ClassroomView({ currentUser, language, lessons }: Classr
                 </span>
               )}
             </div>
-            <h1 className="text-2xl sm:text-3xl font-black text-white uppercase tracking-tight flex items-center gap-3">
+            <h1 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white uppercase tracking-tight flex items-center gap-3">
               <GraduationCap className="w-8 h-8 text-blue-400 shrink-0" />
               Google Classroom Sincronizado
             </h1>
-            <p className="text-sm text-slate-300 mt-1 max-w-2xl font-medium">
+            <p className="text-sm text-slate-600 dark:text-slate-300 mt-1 max-w-2xl font-medium">
               Conecta tus clases, tareas, anuncios y calificaciones directamente con Google Classroom. Sincroniza los módulos de Waack On con tus alumnos en un clic.
             </p>
           </div>
@@ -273,7 +273,7 @@ export default function ClassroomView({ currentUser, language, lessons }: Classr
                 type="button"
                 onClick={() => fetchCourses()}
                 disabled={loading}
-                className="px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white border border-white/10 text-xs font-bold transition-all flex items-center gap-2 shadow-lg"
+                className="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-white/5 dark:hover:bg-white/10 text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white border border-slate-200 dark:border-white/10 text-xs font-bold transition-all flex items-center gap-2 shadow-lg"
               >
                 <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
                 Actualizar
@@ -320,15 +320,15 @@ export default function ClassroomView({ currentUser, language, lessons }: Classr
           {/* Courses Sidebar */}
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <h2 className="text-sm font-black text-white uppercase tracking-wider flex items-center gap-2">
+              <h2 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
                 <BookOpen className="w-4 h-4 text-blue-400" />
                 Mis Clases en Google Classroom ({courses.length})
               </h2>
             </div>
 
             {courses.length === 0 ? (
-              <div className="p-6 bg-[#131124] border border-white/10 rounded-2xl text-center space-y-3">
-                <p className="text-xs text-slate-400">No se encontraron clases activas en tu cuenta de Google Classroom.</p>
+              <div className="p-6 bg-white dark:bg-[#131124] border border-slate-200 dark:border-white/10 rounded-2xl text-center space-y-3">
+                <p className="text-xs text-slate-500 dark:text-slate-400">No se encontraron clases activas en tu cuenta de Google Classroom.</p>
                 {currentUser.role === 'instructor' && (
                   <button
                     onClick={() => setShowCreateCourseModal(true)}
@@ -347,9 +347,9 @@ export default function ClassroomView({ currentUser, language, lessons }: Classr
                       key={course.id}
                       onClick={() => setSelectedCourse(course)}
                       className={`p-4 rounded-2xl border transition-all cursor-pointer relative overflow-hidden ${
-                        isSelected 
-                          ? 'bg-[#1e1a38] border-blue-500/50 text-white shadow-xl' 
-                          : 'bg-[#121021] border-white/10 text-slate-300 hover:border-white/20 hover:bg-[#18152e]'
+                        isSelected
+                          ? 'bg-blue-50 dark:bg-[#1e1a38] border-blue-300 dark:border-blue-500/50 text-slate-900 dark:text-white shadow-xl'
+                          : 'bg-white dark:bg-[#121021] border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-300 hover:border-slate-300 dark:hover:border-white/20 hover:bg-slate-50 dark:hover:bg-[#18152e]'
                       }`}
                     >
                       <div className="flex items-start justify-between gap-3">
@@ -357,8 +357,8 @@ export default function ClassroomView({ currentUser, language, lessons }: Classr
                           <span className="text-[9px] font-mono font-bold text-blue-400 uppercase bg-blue-500/10 px-2 py-0.5 rounded border border-blue-500/20">
                             {course.section || 'Clase Activa'}
                           </span>
-                          <h3 className="text-sm font-black text-white mt-1 uppercase">{course.name}</h3>
-                          <p className="text-xs text-slate-400 line-clamp-1 mt-0.5">{course.descriptionHeading || course.description}</p>
+                          <h3 className="text-sm font-black text-slate-900 dark:text-white mt-1 uppercase">{course.name}</h3>
+                          <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-1 mt-0.5">{course.descriptionHeading || course.description}</p>
                         </div>
                         {course.alternateLink && (
                           <a
@@ -366,7 +366,7 @@ export default function ClassroomView({ currentUser, language, lessons }: Classr
                             target="_blank"
                             rel="noopener noreferrer"
                             onClick={(e) => e.stopPropagation()}
-                            className="p-2 rounded-lg bg-white/5 hover:bg-blue-500/20 text-slate-400 hover:text-blue-300 transition-all border border-white/10 shrink-0"
+                            className="p-2 rounded-lg bg-slate-100 hover:bg-blue-100 dark:bg-white/5 dark:hover:bg-blue-500/20 text-slate-500 hover:text-blue-600 dark:text-slate-400 dark:hover:text-blue-300 transition-all border border-slate-200 dark:border-white/10 shrink-0"
                             title="Abrir directamente en Google Classroom"
                           >
                             <ExternalLink className="w-3.5 h-3.5" />
@@ -380,18 +380,18 @@ export default function ClassroomView({ currentUser, language, lessons }: Classr
             )}
 
             {/* Waack On Quick Sync Module Panel */}
-            <div className="p-5 bg-[#121021] border border-blue-500/20 rounded-2xl space-y-3">
+            <div className="p-5 bg-white dark:bg-[#121021] border border-blue-200 dark:border-blue-500/20 rounded-2xl space-y-3">
               <div className="flex items-center gap-2">
-                <Layers className="w-4 h-4 text-[#D9A9FF]" />
-                <h3 className="text-xs font-black text-white uppercase">Sincronización Rápida Waack On</h3>
+                <Layers className="w-4 h-4 text-[#E9C349]" />
+                <h3 className="text-xs font-black text-slate-900 dark:text-white uppercase">Sincronización Rápida Waack On</h3>
               </div>
-              <p className="text-[11px] text-slate-400 leading-relaxed">
+              <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">
                 Exporta ejercicios prácticos y lecciones de Waack On a la clase seleccionada de Google Classroom con un clic:
               </p>
               <div className="space-y-2 max-h-56 overflow-y-auto custom-scrollbar">
                 {(lessons || []).slice(0, 4).map((l) => (
-                  <div key={l.id} className="p-2.5 bg-black/40 border border-white/5 rounded-xl flex items-center justify-between text-xs">
-                    <span className="font-bold text-white truncate max-w-[170px]">{l.title}</span>
+                  <div key={l.id} className="p-2.5 bg-slate-50 dark:bg-black/40 border border-slate-200 dark:border-white/5 rounded-xl flex items-center justify-between text-xs">
+                    <span className="font-bold text-slate-900 dark:text-white truncate max-w-[170px]">{l.title}</span>
                     <button
                       type="button"
                       onClick={() => handleSyncLessonToClassroom(l)}
@@ -408,15 +408,15 @@ export default function ClassroomView({ currentUser, language, lessons }: Classr
           {/* Selected Course Content Panel */}
           <div className="lg:col-span-2 space-y-4">
             {selectedCourse ? (
-              <div className="bg-[#121021] border border-white/10 rounded-3xl p-6 space-y-6 shadow-2xl">
+              <div className="bg-white dark:bg-[#121021] border border-slate-200 dark:border-white/10 rounded-3xl p-6 space-y-6 shadow-2xl">
                 {/* Course Header */}
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-4">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 dark:border-white/10 pb-4">
                   <div>
                     <span className="text-[10px] font-mono font-black text-blue-400 bg-blue-500/10 border border-blue-500/30 px-2 py-0.5 rounded uppercase">
                       CÓDIGO AULA: {selectedCourse.enrollmentCode || 'ACTIVO'}
                     </span>
-                    <h2 className="text-xl font-black text-white uppercase mt-1">{selectedCourse.name}</h2>
-                    <p className="text-xs text-slate-400">{selectedCourse.section} • {selectedCourse.descriptionHeading}</p>
+                    <h2 className="text-xl font-black text-slate-900 dark:text-white uppercase mt-1">{selectedCourse.name}</h2>
+                    <p className="text-xs text-slate-500 dark:text-slate-400">{selectedCourse.section} • {selectedCourse.descriptionHeading}</p>
                   </div>
 
                   <div className="flex items-center gap-2">
@@ -435,7 +435,7 @@ export default function ClassroomView({ currentUser, language, lessons }: Classr
                 </div>
 
                 {/* Subtabs Toolbar */}
-                <div className="flex items-center justify-between gap-2 border-b border-white/10 pb-3">
+                <div className="flex items-center justify-between gap-2 border-b border-slate-200 dark:border-white/10 pb-3">
                   <div className="flex items-center gap-2">
                     <button
                       type="button"
@@ -443,7 +443,7 @@ export default function ClassroomView({ currentUser, language, lessons }: Classr
                       className={`px-4 py-2 rounded-xl text-xs font-extrabold uppercase transition-all flex items-center gap-2 ${
                         activeSubTab === 'work'
                           ? 'bg-blue-600 text-white shadow-lg'
-                          : 'bg-white/5 text-slate-400 hover:text-white'
+                          : 'bg-slate-100 dark:bg-white/5 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                       }`}
                     >
                       <FileText className="w-3.5 h-3.5" />
@@ -455,7 +455,7 @@ export default function ClassroomView({ currentUser, language, lessons }: Classr
                       className={`px-4 py-2 rounded-xl text-xs font-extrabold uppercase transition-all flex items-center gap-2 ${
                         activeSubTab === 'announcements'
                           ? 'bg-blue-600 text-white shadow-lg'
-                          : 'bg-white/5 text-slate-400 hover:text-white'
+                          : 'bg-slate-100 dark:bg-white/5 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                       }`}
                     >
                       <Megaphone className="w-3.5 h-3.5" />
@@ -467,7 +467,7 @@ export default function ClassroomView({ currentUser, language, lessons }: Classr
                       className={`px-4 py-2 rounded-xl text-xs font-extrabold uppercase transition-all flex items-center gap-2 ${
                         activeSubTab === 'students'
                           ? 'bg-blue-600 text-white shadow-lg'
-                          : 'bg-white/5 text-slate-400 hover:text-white'
+                          : 'bg-slate-100 dark:bg-white/5 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                       }`}
                     >
                       <Users className="w-3.5 h-3.5" />
@@ -505,29 +505,29 @@ export default function ClassroomView({ currentUser, language, lessons }: Classr
                 {activeSubTab === 'work' && (
                   <div className="space-y-3">
                     {courseWork.length === 0 ? (
-                      <div className="p-8 bg-black/30 border border-white/5 rounded-2xl text-center space-y-2">
+                      <div className="p-8 bg-slate-50 dark:bg-black/30 border border-slate-200 dark:border-white/5 rounded-2xl text-center space-y-2">
                         <FileText className="w-8 h-8 text-slate-500 mx-auto" />
-                        <p className="text-xs text-slate-400">No hay tareas o asignaciones creadas en esta clase todavía.</p>
+                        <p className="text-xs text-slate-500 dark:text-slate-400">No hay tareas o asignaciones creadas en esta clase todavía.</p>
                       </div>
                     ) : (
                       (courseWork || []).map((w) => (
-                        <div key={w.id || Math.random()} className="p-4 bg-black/40 border border-white/10 rounded-2xl flex items-start justify-between gap-4">
+                        <div key={w.id || Math.random()} className="p-4 bg-slate-50 dark:bg-black/40 border border-slate-200 dark:border-white/10 rounded-2xl flex items-start justify-between gap-4">
                           <div>
                             <div className="flex items-center gap-2">
                               <span className="text-[9px] font-mono font-bold text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20 uppercase">
                                 {w.maxPoints ? `${w.maxPoints} PTS` : 'TAREA'}
                               </span>
-                              <span className="text-[10px] font-mono text-slate-400">{w.state || 'PUBLICADA'}</span>
+                              <span className="text-[10px] font-mono text-slate-500 dark:text-slate-400">{w.state || 'PUBLICADA'}</span>
                             </div>
-                            <h4 className="text-sm font-black text-white mt-1 uppercase">{w.title}</h4>
-                            <p className="text-xs text-slate-300 whitespace-pre-line mt-1">{w.description || 'Sin descripción adicional.'}</p>
+                            <h4 className="text-sm font-black text-slate-900 dark:text-white mt-1 uppercase">{w.title}</h4>
+                            <p className="text-xs text-slate-600 dark:text-slate-300 whitespace-pre-line mt-1">{w.description || 'Sin descripción adicional.'}</p>
                           </div>
                           {w.alternateLink && (
                             <a
                               href={w.alternateLink}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-blue-500/20 text-slate-300 hover:text-blue-300 text-xs font-bold border border-white/10 transition-all shrink-0 flex items-center gap-1"
+                              className="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-blue-100 dark:bg-white/5 dark:hover:bg-blue-500/20 text-slate-600 hover:text-blue-600 dark:text-slate-300 dark:hover:text-blue-300 text-xs font-bold border border-slate-200 dark:border-white/10 transition-all shrink-0 flex items-center gap-1"
                             >
                               Ver Tarea
                               <ExternalLink className="w-3 h-3" />
@@ -543,18 +543,18 @@ export default function ClassroomView({ currentUser, language, lessons }: Classr
                 {activeSubTab === 'announcements' && (
                   <div className="space-y-3">
                     {announcements.length === 0 ? (
-                      <div className="p-8 bg-black/30 border border-white/5 rounded-2xl text-center space-y-2">
+                      <div className="p-8 bg-slate-50 dark:bg-black/30 border border-slate-200 dark:border-white/5 rounded-2xl text-center space-y-2">
                         <Megaphone className="w-8 h-8 text-slate-500 mx-auto" />
-                        <p className="text-xs text-slate-400">No hay anuncios publicados en el tablón de la clase.</p>
+                        <p className="text-xs text-slate-500 dark:text-slate-400">No hay anuncios publicados en el tablón de la clase.</p>
                       </div>
                     ) : (
                       (announcements || []).map((a) => (
-                        <div key={a.id || Math.random()} className="p-4 bg-black/40 border border-white/10 rounded-2xl space-y-2">
-                          <div className="flex items-center justify-between text-[10px] font-mono text-slate-400">
+                        <div key={a.id || Math.random()} className="p-4 bg-slate-50 dark:bg-black/40 border border-slate-200 dark:border-white/10 rounded-2xl space-y-2">
+                          <div className="flex items-center justify-between text-[10px] font-mono text-slate-500 dark:text-slate-400">
                             <span>ANUNCIO OFICIAL</span>
                             <span>{a.creationTime ? new Date(a.creationTime).toLocaleDateString() : 'Reciente'}</span>
                           </div>
-                          <p className="text-xs text-slate-200 whitespace-pre-line">{a.text}</p>
+                          <p className="text-xs text-slate-800 dark:text-slate-200 whitespace-pre-line">{a.text}</p>
                         </div>
                       ))
                     )}
@@ -565,22 +565,22 @@ export default function ClassroomView({ currentUser, language, lessons }: Classr
                 {activeSubTab === 'students' && (
                   <div className="space-y-3">
                     {students.length === 0 ? (
-                      <div className="p-8 bg-black/30 border border-white/5 rounded-2xl text-center space-y-2">
+                      <div className="p-8 bg-slate-50 dark:bg-black/30 border border-slate-200 dark:border-white/5 rounded-2xl text-center space-y-2">
                         <Users className="w-8 h-8 text-slate-500 mx-auto" />
-                        <p className="text-xs text-slate-400">Los alumnos inscritos en Google Classroom aparecerán listados aquí.</p>
+                        <p className="text-xs text-slate-500 dark:text-slate-400">Los alumnos inscritos en Google Classroom aparecerán listados aquí.</p>
                       </div>
                     ) : (
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         {(students || []).map((s) => (
-                          <div key={s.userId} className="p-3 bg-black/40 border border-white/10 rounded-xl flex items-center gap-3">
+                          <div key={s.userId} className="p-3 bg-slate-50 dark:bg-black/40 border border-slate-200 dark:border-white/10 rounded-xl flex items-center gap-3">
                             <img
                               src={s.profile?.photoUrl || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=100'}
                               alt="Alumno"
                               className="w-8 h-8 rounded-full border border-blue-400/40 object-cover"
                             />
                             <div className="min-w-0">
-                              <p className="text-xs font-bold text-white truncate">{s.profile?.name?.fullName || 'Alumno Inscrito'}</p>
-                              <p className="text-[10px] text-slate-400 truncate">{s.profile?.emailAddress || s.userId}</p>
+                              <p className="text-xs font-bold text-slate-900 dark:text-white truncate">{s.profile?.name?.fullName || 'Alumno Inscrito'}</p>
+                              <p className="text-[10px] text-slate-500 dark:text-slate-400 truncate">{s.profile?.emailAddress || s.userId}</p>
                             </div>
                           </div>
                         ))}
@@ -590,22 +590,22 @@ export default function ClassroomView({ currentUser, language, lessons }: Classr
                 )}
               </div>
             ) : (
-              <div className="bg-[#121021] border border-white/10 rounded-3xl p-12 text-center space-y-3">
+              <div className="bg-white dark:bg-[#121021] border border-slate-200 dark:border-white/10 rounded-3xl p-12 text-center space-y-3">
                 <GraduationCap className="w-12 h-12 text-slate-500 mx-auto" />
-                <p className="text-sm font-bold text-slate-300">Selecciona una clase de Google Classroom en el menú lateral para ver detalles.</p>
+                <p className="text-sm font-bold text-slate-600 dark:text-slate-300">Selecciona una clase de Google Classroom en el menú lateral para ver detalles.</p>
               </div>
             )}
           </div>
         </div>
       ) : (
         /* Not logged in landing explanation */
-        <div className="bg-[#121021] border border-white/10 rounded-3xl p-8 sm:p-12 text-center max-w-3xl mx-auto space-y-6">
+        <div className="bg-white dark:bg-[#121021] border border-slate-200 dark:border-white/10 rounded-3xl p-8 sm:p-12 text-center max-w-3xl mx-auto space-y-6">
           <div className="w-16 h-16 rounded-3xl bg-blue-600/20 border border-blue-400/30 flex items-center justify-center mx-auto text-blue-400">
             <GraduationCap className="w-8 h-8" />
           </div>
           <div>
-            <h3 className="text-xl font-black text-white uppercase">Sincroniza con Google Classroom</h3>
-            <p className="text-xs text-slate-400 max-w-lg mx-auto mt-2 leading-relaxed">
+            <h3 className="text-xl font-black text-slate-900 dark:text-white uppercase">Sincroniza con Google Classroom</h3>
+            <p className="text-xs text-slate-500 dark:text-slate-400 max-w-lg mx-auto mt-2 leading-relaxed">
               Sincroniza tus cursos de danza, asignaciones de ejercicios de Waack On y listas de alumnos con tu aula virtual oficial de Google Classroom con permisos seguros.
             </p>
           </div>
@@ -635,44 +635,44 @@ export default function ClassroomView({ currentUser, language, lessons }: Classr
       {/* 1. MODAL: Confirm Create Course */}
       {showCreateCourseModal && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm p-4 flex items-center justify-center">
-          <div className="bg-[#121021] border border-blue-500/30 rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl text-white">
-            <div className="flex items-center gap-3 border-b border-white/10 pb-3">
+          <div className="bg-white dark:bg-[#121021] border border-blue-200 dark:border-blue-500/30 rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl text-slate-900 dark:text-white">
+            <div className="flex items-center gap-3 border-b border-slate-200 dark:border-white/10 pb-3">
               <div className="p-2 rounded-xl bg-blue-600/20 text-blue-400">
                 <GraduationCap className="w-5 h-5" />
               </div>
               <div>
                 <h3 className="text-sm font-black uppercase">Confirmar Creación de Clase</h3>
-                <p className="text-[11px] text-slate-400">Se creará un nuevo curso real en tu Google Classroom.</p>
+                <p className="text-[11px] text-slate-500 dark:text-slate-400">Se creará un nuevo curso real en tu Google Classroom.</p>
               </div>
             </div>
 
             <div className="space-y-3 text-xs">
               <div>
-                <label className="block text-slate-300 font-bold mb-1">Nombre de la Clase:</label>
+                <label className="block text-slate-600 dark:text-slate-300 font-bold mb-1">Nombre de la Clase:</label>
                 <input
                   type="text"
                   value={newCourseName}
                   onChange={(e) => setNewCourseName(e.target.value)}
-                  className="w-full bg-black/50 border border-white/10 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-blue-500"
+                  className="w-full bg-slate-100 dark:bg-black/50 border border-slate-200 dark:border-white/10 rounded-xl px-3 py-2 text-slate-900 dark:text-white focus:outline-none focus:border-blue-500"
                 />
               </div>
 
               <div>
-                <label className="block text-slate-300 font-bold mb-1">Sección / Nivel:</label>
+                <label className="block text-slate-600 dark:text-slate-300 font-bold mb-1">Sección / Nivel:</label>
                 <input
                   type="text"
                   value={newCourseSection}
                   onChange={(e) => setNewCourseSection(e.target.value)}
-                  className="w-full bg-black/50 border border-white/10 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-blue-500"
+                  className="w-full bg-slate-100 dark:bg-black/50 border border-slate-200 dark:border-white/10 rounded-xl px-3 py-2 text-slate-900 dark:text-white focus:outline-none focus:border-blue-500"
                 />
               </div>
             </div>
 
-            <div className="flex items-center justify-end gap-2 pt-2 border-t border-white/10">
+            <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-200 dark:border-white/10">
               <button
                 type="button"
                 onClick={() => setShowCreateCourseModal(false)}
-                className="px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 text-xs font-bold"
+                className="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-white/5 dark:hover:bg-white/10 text-slate-600 dark:text-slate-300 text-xs font-bold"
               >
                 Cancelar
               </button>
@@ -692,56 +692,56 @@ export default function ClassroomView({ currentUser, language, lessons }: Classr
       {/* 2. MODAL: Confirm Create CourseWork */}
       {showCreateWorkModal && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm p-4 flex items-center justify-center">
-          <div className="bg-[#121021] border border-blue-500/30 rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl text-white">
-            <div className="flex items-center gap-3 border-b border-white/10 pb-3">
+          <div className="bg-white dark:bg-[#121021] border border-blue-200 dark:border-blue-500/30 rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl text-slate-900 dark:text-white">
+            <div className="flex items-center gap-3 border-b border-slate-200 dark:border-white/10 pb-3">
               <div className="p-2 rounded-xl bg-blue-600/20 text-blue-400">
                 <FileText className="w-5 h-5" />
               </div>
               <div>
                 <h3 className="text-sm font-black uppercase">Confirmar Asignación de Tarea</h3>
-                <p className="text-[11px] text-slate-400">Se enviará como tarea oficial a los alumnos en Google Classroom.</p>
+                <p className="text-[11px] text-slate-500 dark:text-slate-400">Se enviará como tarea oficial a los alumnos en Google Classroom.</p>
               </div>
             </div>
 
             <div className="space-y-3 text-xs">
               <div>
-                <label className="block text-slate-300 font-bold mb-1">Título de la Tarea:</label>
+                <label className="block text-slate-600 dark:text-slate-300 font-bold mb-1">Título de la Tarea:</label>
                 <input
                   type="text"
                   value={newWorkTitle}
                   onChange={(e) => setNewWorkTitle(e.target.value)}
                   placeholder="Ej. Rutina de Arm Control en 8 tiempos"
-                  className="w-full bg-black/50 border border-white/10 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-blue-500"
+                  className="w-full bg-slate-100 dark:bg-black/50 border border-slate-200 dark:border-white/10 rounded-xl px-3 py-2 text-slate-900 dark:text-white focus:outline-none focus:border-blue-500"
                 />
               </div>
 
               <div>
-                <label className="block text-slate-300 font-bold mb-1">Instrucciones:</label>
+                <label className="block text-slate-600 dark:text-slate-300 font-bold mb-1">Instrucciones:</label>
                 <textarea
                   rows={3}
                   value={newWorkDesc}
                   onChange={(e) => setNewWorkDesc(e.target.value)}
                   placeholder="Instrucciones para el alumno..."
-                  className="w-full bg-black/50 border border-white/10 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-blue-500"
+                  className="w-full bg-slate-100 dark:bg-black/50 border border-slate-200 dark:border-white/10 rounded-xl px-3 py-2 text-slate-900 dark:text-white focus:outline-none focus:border-blue-500"
                 />
               </div>
 
               <div>
-                <label className="block text-slate-300 font-bold mb-1">Puntuación Máxima:</label>
+                <label className="block text-slate-600 dark:text-slate-300 font-bold mb-1">Puntuación Máxima:</label>
                 <input
                   type="number"
                   value={newWorkPoints}
                   onChange={(e) => setNewWorkPoints(parseInt(e.target.value, 10) || 100)}
-                  className="w-full bg-black/50 border border-white/10 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-blue-500"
+                  className="w-full bg-slate-100 dark:bg-black/50 border border-slate-200 dark:border-white/10 rounded-xl px-3 py-2 text-slate-900 dark:text-white focus:outline-none focus:border-blue-500"
                 />
               </div>
             </div>
 
-            <div className="flex items-center justify-end gap-2 pt-2 border-t border-white/10">
+            <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-200 dark:border-white/10">
               <button
                 type="button"
                 onClick={() => setShowCreateWorkModal(false)}
-                className="px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 text-xs font-bold"
+                className="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-white/5 dark:hover:bg-white/10 text-slate-600 dark:text-slate-300 text-xs font-bold"
               >
                 Cancelar
               </button>
@@ -761,14 +761,14 @@ export default function ClassroomView({ currentUser, language, lessons }: Classr
       {/* 3. MODAL: Confirm Create Announcement */}
       {showCreateAnnouncementModal && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm p-4 flex items-center justify-center">
-          <div className="bg-[#121021] border border-blue-500/30 rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl text-white">
-            <div className="flex items-center gap-3 border-b border-white/10 pb-3">
+          <div className="bg-white dark:bg-[#121021] border border-blue-200 dark:border-blue-500/30 rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl text-slate-900 dark:text-white">
+            <div className="flex items-center gap-3 border-b border-slate-200 dark:border-white/10 pb-3">
               <div className="p-2 rounded-xl bg-blue-600/20 text-blue-400">
                 <Megaphone className="w-5 h-5" />
               </div>
               <div>
                 <h3 className="text-sm font-black uppercase">Confirmar Anuncio en Tablón</h3>
-                <p className="text-[11px] text-slate-400">Se publicará en la página principal del curso en Google Classroom.</p>
+                <p className="text-[11px] text-slate-500 dark:text-slate-400">Se publicará en la página principal del curso en Google Classroom.</p>
               </div>
             </div>
 
@@ -785,29 +785,29 @@ export default function ClassroomView({ currentUser, language, lessons }: Classr
                       setNewAnnouncementText('');
                       localStorage.removeItem('waackon_draft_classroom_announcement');
                     }}
-                    className="text-slate-400 hover:text-rose-300 text-[10px] underline cursor-pointer"
+                    className="text-slate-500 dark:text-slate-400 hover:text-rose-600 dark:hover:text-rose-300 text-[10px] underline cursor-pointer"
                   >
                     Descartar
                   </button>
                 </div>
               )}
               <div>
-                <label className="block text-slate-300 font-bold mb-1">Mensaje del Anuncio:</label>
+                <label className="block text-slate-600 dark:text-slate-300 font-bold mb-1">Mensaje del Anuncio:</label>
                 <textarea
                   rows={4}
                   value={newAnnouncementText}
                   onChange={(e) => setNewAnnouncementText(e.target.value)}
                   placeholder="Ej. Recordatorio: Hoy tenemos sesión interactiva de musicalidad..."
-                  className="w-full bg-black/50 border border-white/10 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-blue-500"
+                  className="w-full bg-slate-100 dark:bg-black/50 border border-slate-200 dark:border-white/10 rounded-xl px-3 py-2 text-slate-900 dark:text-white focus:outline-none focus:border-blue-500"
                 />
               </div>
             </div>
 
-            <div className="flex items-center justify-end gap-2 pt-2 border-t border-white/10">
+            <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-200 dark:border-white/10">
               <button
                 type="button"
                 onClick={() => setShowCreateAnnouncementModal(false)}
-                className="px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 text-xs font-bold"
+                className="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-white/5 dark:hover:bg-white/10 text-slate-600 dark:text-slate-300 text-xs font-bold"
               >
                 Cancelar
               </button>
