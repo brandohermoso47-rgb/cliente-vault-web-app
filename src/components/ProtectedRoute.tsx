@@ -18,7 +18,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   if (!authChecked) {
     return (
       <div id="auth-loading-screen" className="min-h-screen bg-[#0A0A0A] flex flex-col items-center justify-center space-y-4">
-        <div className="w-12 h-12 rounded-full border-4 border-t-[#9A2B3C] border-[#1A1A1A] animate-spin" />
+        <div className="w-12 h-12 rounded-full border-4 border-t-[#C23E9E] border-[#1A1A1A] animate-spin" />
         <p className="text-xs font-mono text-[#8A8A8A] uppercase tracking-wider">Verificando Credenciales...</p>
       </div>
     );

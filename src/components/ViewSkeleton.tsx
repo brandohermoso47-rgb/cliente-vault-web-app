@@ -5,10 +5,10 @@ export default function ViewSkeleton({ title }: { title?: string }) {
   return (
     <div className="flex-1 flex flex-col items-center justify-center min-h-[400px] p-8 text-center bg-[#0A0A0A]">
       <div className="relative mb-6">
-        <div className="w-16 h-16 rounded-2xl bg-[#121212] border border-[#262626] flex items-center justify-center text-[#9A2B3C] shadow-lg">
-          <Sparkles className="w-8 h-8 text-[#E9C349] animate-spin" style={{ animationDuration: '3s' }} />
+        <div className="w-16 h-16 rounded-2xl bg-[#121212] border border-[#262626] flex items-center justify-center text-[#C23E9E] shadow-lg">
+          <Sparkles className="w-8 h-8 text-[#D9A9FF] animate-spin" style={{ animationDuration: '3s' }} />
         </div>
-        <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-[#9A2B3C] border-2 border-[#0A0A0A] flex items-center justify-center">
+        <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-[#C23E9E] border-2 border-[#0A0A0A] flex items-center justify-center">
           <Loader2 className="w-3 h-3 text-white animate-spin" />
         </div>
       </div>
@@ -21,7 +21,7 @@ export default function ViewSkeleton({ title }: { title?: string }) {
       
       {/* Animated loading bar */}
       <div className="w-48 h-1 bg-[#1A1A1A] rounded-full overflow-hidden mt-6 border border-[#262626]">
-        <div className="w-1/2 h-full bg-gradient-to-r from-[#9A2B3C] via-[#E9C349] to-[#9A2B3C] rounded-full animate-pulse" />
+        <div className="w-1/2 h-full bg-gradient-to-r from-[#C23E9E] via-[#D9A9FF] to-[#C23E9E] rounded-full animate-pulse" />
       </div>
     </div>
   );

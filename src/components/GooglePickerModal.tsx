@@ -147,7 +147,7 @@ export const GooglePickerModal: React.FC<GooglePickerModalProps> = ({
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Buscar en Google Drive (ej: 'drill waacking', 'disco music')..."
-                  className="w-full bg-black/40 border border-white/10 rounded-2xl pl-9 pr-4 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#E9C349]"
+                  className="w-full bg-black/40 border border-white/10 rounded-2xl pl-9 pr-4 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#D9A9FF]"
                 />
               </div>
               <button
@@ -218,7 +218,7 @@ export const GooglePickerModal: React.FC<GooglePickerModalProps> = ({
 
                         <button
                           onClick={() => handleChoose(file)}
-                          className="px-3 py-1.5 rounded-xl bg-[#E9C349] text-black font-extrabold text-[11px] uppercase shadow-md hover:bg-yellow-300 transition-all flex items-center gap-1"
+                          className="px-3 py-1.5 rounded-xl bg-[#D9A9FF] text-black font-extrabold text-[11px] uppercase shadow-md hover:bg-yellow-300 transition-all flex items-center gap-1"
                         >
                           <Check className="w-3.5 h-3.5" /> Seleccionar
                         </button>

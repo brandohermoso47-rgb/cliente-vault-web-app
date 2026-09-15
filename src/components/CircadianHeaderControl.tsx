@@ -101,7 +101,7 @@ export const CircadianHeaderControl: React.FC<CircadianHeaderControlProps> = ({
       title: t.autoMode,
       desc: `${t.autoDesc} (${formattedTime})`,
       icon: Clock,
-      color: '#E9C349'
+      color: '#D9A9FF'
     },
     {
       id: 'dawn',
@@ -115,7 +115,7 @@ export const CircadianHeaderControl: React.FC<CircadianHeaderControlProps> = ({
       title: t.periods.day.title,
       desc: t.periods.day.desc,
       icon: Sun,
-      color: '#E9C349'
+      color: '#D9A9FF'
     },
     {
       id: 'sunset',
@@ -144,10 +144,10 @@ export const CircadianHeaderControl: React.FC<CircadianHeaderControlProps> = ({
           onClick={() => setIsOpen(!isOpen)}
           className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border text-xs font-mono font-bold transition-all cursor-pointer shadow-sm ${
             isOpen
-              ? 'bg-[#E9C349]/20 border-[#E9C349] text-[#E9C349] shadow-[0_0_12px_rgba(233,195,73,0.35)]'
+              ? 'bg-[#D9A9FF]/20 border-[#D9A9FF] text-[#D9A9FF] shadow-[0_0_12px_rgba(217, 169, 255,0.35)]'
               : theme === 'light'
               ? 'bg-amber-500/10 hover:bg-amber-500/20 border-amber-300/80 text-amber-950'
-              : 'bg-[#141414] hover:bg-[#1C1811] border-[#332A1C] text-slate-200 hover:text-[#E9C349]'
+              : 'bg-[#141414] hover:bg-[#1C1811] border-[#332A1C] text-slate-200 hover:text-[#D9A9FF]'
           }`}
           aria-label={`${t.title}: ${periodLabel} (${formattedTime})`}
           title={`${t.title} - ${periodLabel} (${formattedTime})`}
@@ -172,7 +172,7 @@ export const CircadianHeaderControl: React.FC<CircadianHeaderControlProps> = ({
           </span>
 
           {mode === 'auto' && (
-            <span className="px-1 py-0.2 rounded text-[8px] bg-[#E9C349]/20 text-[#E9C349] border border-[#E9C349]/30 font-bold uppercase hidden xl:inline">
+            <span className="px-1 py-0.2 rounded text-[8px] bg-[#D9A9FF]/20 text-[#D9A9FF] border border-[#D9A9FF]/30 font-bold uppercase hidden xl:inline">
               AUTO
             </span>
           )}
@@ -188,14 +188,14 @@ export const CircadianHeaderControl: React.FC<CircadianHeaderControlProps> = ({
         {!isOpen && (
           <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 pointer-events-none opacity-0 group-hover/circadian:opacity-100 transition-all duration-200 z-50 scale-95 group-hover/circadian:scale-100 flex flex-col items-center">
             <div className={`w-2 h-2 rotate-45 -mb-1 border-t border-l ${
-              theme === 'light' ? 'bg-slate-900 border-slate-700' : 'bg-[#18140B] border-[#E9C349]/40'
+              theme === 'light' ? 'bg-slate-900 border-slate-700' : 'bg-[#18140B] border-[#D9A9FF]/40'
             }`} />
             <div className={`px-2.5 py-1.5 rounded-lg text-[10px] font-mono tracking-wide shadow-2xl border flex items-center gap-2 whitespace-nowrap ${
               theme === 'light'
                 ? 'bg-slate-900 text-white border-slate-700 shadow-xl'
-                : 'bg-[#18140B] text-[#EDEFF4] border-[#E9C349]/40 shadow-[0_8px_20px_rgba(0,0,0,0.8)]'
+                : 'bg-[#18140B] text-[#EDEFF4] border-[#D9A9FF]/40 shadow-[0_8px_20px_rgba(0,0,0,0.8)]'
             }`}>
-              <PeriodIcon className="w-3 h-3 text-[#E9C349]" />
+              <PeriodIcon className="w-3 h-3 text-[#D9A9FF]" />
               <div className="flex flex-col">
                 <div className="flex items-center gap-1.5">
                   <span className="font-bold">{t.tooltipHeader} {periodLabel}</span>
@@ -227,7 +227,7 @@ export const CircadianHeaderControl: React.FC<CircadianHeaderControlProps> = ({
               theme === 'light' ? 'bg-amber-50/80 border-amber-200/80' : 'bg-[#15120C]/90 border-[#2A2418]'
             }`}>
               <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-[#E9C349] to-amber-600 flex items-center justify-center text-black font-black shadow-md">
+                <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-[#D9A9FF] to-amber-600 flex items-center justify-center text-black font-black shadow-md">
                   <PeriodIcon className="w-4 h-4" />
                 </div>
                 <div>
@@ -261,7 +261,7 @@ export const CircadianHeaderControl: React.FC<CircadianHeaderControlProps> = ({
                       isSelected
                         ? theme === 'light'
                           ? 'bg-amber-100/70 border-amber-400 text-amber-950 shadow-sm'
-                          : 'bg-[#1F190E] border-[#E9C349]/60 text-white shadow-sm'
+                          : 'bg-[#1F190E] border-[#D9A9FF]/60 text-white shadow-sm'
                         : theme === 'light'
                         ? 'bg-slate-50/70 hover:bg-slate-100 border-slate-200/80 text-slate-800'
                         : 'bg-[#141414] hover:bg-[#1A1813] border-[#222222] text-slate-300'
@@ -295,7 +295,7 @@ export const CircadianHeaderControl: React.FC<CircadianHeaderControlProps> = ({
                     </div>
 
                     {isSelected && (
-                      <Check className="w-4 h-4 text-[#E9C349] shrink-0 self-center" />
+                      <Check className="w-4 h-4 text-[#D9A9FF] shrink-0 self-center" />
                     )}
                   </button>
                 );
@@ -324,7 +324,7 @@ export const CircadianHeaderControl: React.FC<CircadianHeaderControlProps> = ({
                 type="button"
                 onClick={toggleEyeCareBoost}
                 className={`w-11 h-6 rounded-full transition-colors relative shrink-0 cursor-pointer p-0.5 ${
-                  isEyeCareBoost ? 'bg-[#E9C349]' : 'bg-slate-700'
+                  isEyeCareBoost ? 'bg-[#D9A9FF]' : 'bg-slate-700'
                 }`}
                 aria-label="Alternar refuerzo anti-fatiga ocular"
               >

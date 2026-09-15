@@ -337,14 +337,14 @@ export default function AdminDashboardView({ currentUser, language = 'es' }: Adm
       {/* ========================================================================= */}
       {/* 1. ADMIN HEADER & OFFICIAL BADGE INDICATOR */}
       {/* ========================================================================= */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#17120A] via-[#221B0D] to-[#121218] border-2 border-[#E9C349]/50 p-6 sm:p-8 shadow-2xl">
-        <div className="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 bg-[#E9C349]/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#17120A] via-[#221B0D] to-[#121218] border-2 border-[#D9A9FF]/50 p-6 sm:p-8 shadow-2xl">
+        <div className="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 bg-[#D9A9FF]/10 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute bottom-0 left-1/3 -mb-12 w-48 h-48 bg-[#FF2E63]/10 rounded-full blur-2xl pointer-events-none" />
 
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="space-y-3">
             <div className="flex items-center gap-3 flex-wrap">
-              <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-[#E9C349] to-amber-500 text-black font-extrabold text-xs tracking-wider uppercase shadow-[0_0_20px_rgba(233,195,73,0.5)]">
+              <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-[#D9A9FF] to-amber-500 text-black font-extrabold text-xs tracking-wider uppercase shadow-[0_0_20px_rgba(217, 169, 255,0.5)]">
                 <Crown className="w-4 h-4 text-black fill-black animate-bounce" />
                 PANEL DE ADMINISTRACIÓN GENERAL
               </span>
@@ -356,7 +356,7 @@ export default function AdminDashboardView({ currentUser, language = 'es' }: Adm
 
             <h1 className="text-2xl sm:text-4xl font-extrabold text-white tracking-tight flex items-center gap-3">
               Control de Usuarios y Archivos
-              <ShieldCheck className="w-7 h-7 sm:w-8 sm:h-8 text-[#E9C349] shrink-0" />
+              <ShieldCheck className="w-7 h-7 sm:w-8 sm:h-8 text-[#D9A9FF] shrink-0" />
             </h1>
             <p className="text-sm text-slate-300 max-w-2xl leading-relaxed">
               Vista administrativa autorizada. Monitorea todos los perfiles de la base de datos de Firestore, sus expedientes de registro y sus archivos/videos subidos.
@@ -368,7 +368,7 @@ export default function AdminDashboardView({ currentUser, language = 'es' }: Adm
               onClick={() => window.location.reload()}
               className="flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold text-xs transition-all cursor-pointer shadow-md active:scale-95"
             >
-              <RefreshCw className="w-4 h-4 text-[#E9C349]" />
+              <RefreshCw className="w-4 h-4 text-[#D9A9FF]" />
               <span>Actualizar ({lastRefreshedTime || 'AHORA'})</span>
             </button>
           </div>
@@ -379,7 +379,7 @@ export default function AdminDashboardView({ currentUser, language = 'es' }: Adm
           <div className="bg-black/40 backdrop-blur-md rounded-2xl p-4 border border-white/10">
             <div className="flex items-center justify-between text-slate-400 text-xs font-semibold mb-1">
               <span>Usuarios Totales</span>
-              <Users className="w-4 h-4 text-[#E9C349]" />
+              <Users className="w-4 h-4 text-[#D9A9FF]" />
             </div>
             <div className="text-2xl sm:text-3xl font-black text-white">{usersList.length}</div>
             <div className="text-[10px] text-slate-400 font-mono mt-0.5">En Firestore DB</div>
@@ -428,7 +428,7 @@ export default function AdminDashboardView({ currentUser, language = 'es' }: Adm
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Filtrar usuarios por nombre, correo electrónico o ID..."
-            className="w-full pl-11 pr-24 py-2.5 rounded-xl bg-black/60 border border-white/15 text-white placeholder-slate-400 text-sm focus:outline-none focus:border-[#E9C349] transition-all shadow-inner"
+            className="w-full pl-11 pr-24 py-2.5 rounded-xl bg-black/60 border border-white/15 text-white placeholder-slate-400 text-sm focus:outline-none focus:border-[#D9A9FF] transition-all shadow-inner"
           />
           {searchTerm && (
             <button
@@ -443,12 +443,12 @@ export default function AdminDashboardView({ currentUser, language = 'es' }: Adm
 
         {/* Sorting Dropdown / Selector */}
         <div className="flex items-center gap-2 shrink-0">
-          <ArrowUpDown className="w-4 h-4 text-[#E9C349] shrink-0" />
+          <ArrowUpDown className="w-4 h-4 text-[#D9A9FF] shrink-0" />
           <span className="text-xs text-slate-300 font-bold whitespace-nowrap">Orden:</span>
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value as any)}
-            className="bg-black/60 border border-white/15 rounded-xl text-xs text-white font-bold py-2 px-3 focus:outline-none focus:border-[#E9C349] transition-all cursor-pointer"
+            className="bg-black/60 border border-white/15 rounded-xl text-xs text-white font-bold py-2 px-3 focus:outline-none focus:border-[#D9A9FF] transition-all cursor-pointer"
           >
             <option value="date_desc">📅 Registro: Más recientes primero</option>
             <option value="date_asc">📅 Registro: Más antiguos primero</option>
@@ -460,7 +460,7 @@ export default function AdminDashboardView({ currentUser, language = 'es' }: Adm
 
         {/* Role Filters */}
         <div className="flex items-center gap-1.5 overflow-x-auto pb-1 lg:pb-0 shrink-0">
-          <Filter className="w-4 h-4 text-[#E9C349] shrink-0 ml-1" />
+          <Filter className="w-4 h-4 text-[#D9A9FF] shrink-0 ml-1" />
           <span className="text-xs text-slate-400 font-medium whitespace-nowrap">Rol:</span>
           {[
             { id: 'all', label: 'Todos' },
@@ -473,7 +473,7 @@ export default function AdminDashboardView({ currentUser, language = 'es' }: Adm
               onClick={() => setSelectedRoleFilter(f.id)}
               className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap cursor-pointer ${
                 selectedRoleFilter === f.id
-                  ? 'bg-[#E9C349] text-black shadow-md'
+                  ? 'bg-[#D9A9FF] text-black shadow-md'
                   : 'bg-white/5 text-slate-300 hover:bg-white/10 border border-white/10'
               }`}
             >
@@ -489,7 +489,7 @@ export default function AdminDashboardView({ currentUser, language = 'es' }: Adm
       <div className="bg-[#121218] rounded-3xl border border-white/10 overflow-hidden shadow-2xl">
         <div className="p-5 border-b border-white/10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
           <div className="flex items-center gap-2">
-            <Users className="w-5 h-5 text-[#E9C349]" />
+            <Users className="w-5 h-5 text-[#D9A9FF]" />
             <h2 className="text-lg font-bold text-white">Directorio de Usuarios ({filteredUsers.length})</h2>
           </div>
 
@@ -507,7 +507,7 @@ export default function AdminDashboardView({ currentUser, language = 'es' }: Adm
 
         {loading ? (
           <div className="p-12 text-center space-y-3">
-            <div className="w-10 h-10 border-4 border-[#E9C349] border-t-transparent rounded-full animate-spin mx-auto" />
+            <div className="w-10 h-10 border-4 border-[#D9A9FF] border-t-transparent rounded-full animate-spin mx-auto" />
             <p className="text-sm text-slate-400 font-mono">Cargando base de datos de usuarios desde Firestore...</p>
           </div>
         ) : filteredUsers.length === 0 ? (
@@ -519,7 +519,7 @@ export default function AdminDashboardView({ currentUser, language = 'es' }: Adm
               <button
                 type="button"
                 onClick={() => setSearchTerm('')}
-                className="mt-2 px-4 py-2 bg-[#E9C349] text-black font-bold text-xs rounded-xl shadow-md hover:bg-amber-400 transition-all cursor-pointer"
+                className="mt-2 px-4 py-2 bg-[#D9A9FF] text-black font-bold text-xs rounded-xl shadow-md hover:bg-amber-400 transition-all cursor-pointer"
               >
                 Limpiar Búsqueda
               </button>
@@ -537,9 +537,9 @@ export default function AdminDashboardView({ currentUser, language = 'es' }: Adm
                     <div className="flex items-center gap-1.5">
                       <span>Usuario</span>
                       {sortBy === 'name_asc' ? (
-                        <ArrowUp className="w-3.5 h-3.5 text-[#E9C349]" />
+                        <ArrowUp className="w-3.5 h-3.5 text-[#D9A9FF]" />
                       ) : sortBy === 'name_desc' ? (
-                        <ArrowDown className="w-3.5 h-3.5 text-[#E9C349]" />
+                        <ArrowDown className="w-3.5 h-3.5 text-[#D9A9FF]" />
                       ) : (
                         <ArrowUpDown className="w-3.5 h-3.5 text-slate-500 opacity-60" />
                       )}
@@ -553,9 +553,9 @@ export default function AdminDashboardView({ currentUser, language = 'es' }: Adm
                     <div className="flex items-center gap-1.5">
                       <span>Fecha de Registro</span>
                       {sortBy === 'date_desc' ? (
-                        <ArrowDown className="w-3.5 h-3.5 text-[#E9C349]" />
+                        <ArrowDown className="w-3.5 h-3.5 text-[#D9A9FF]" />
                       ) : sortBy === 'date_asc' ? (
-                        <ArrowUp className="w-3.5 h-3.5 text-[#E9C349]" />
+                        <ArrowUp className="w-3.5 h-3.5 text-[#D9A9FF]" />
                       ) : (
                         <ArrowUpDown className="w-3.5 h-3.5 text-slate-500 opacity-60" />
                       )}
@@ -593,7 +593,7 @@ export default function AdminDashboardView({ currentUser, language = 'es' }: Adm
                           <div className="font-bold text-white flex items-center gap-1.5">
                             {user.name}
                             {user.id === ADMIN_USER_ID && (
-                              <span className="px-1.5 py-0.5 rounded text-[9px] font-black uppercase bg-[#E9C349] text-black">
+                              <span className="px-1.5 py-0.5 rounded text-[9px] font-black uppercase bg-[#D9A9FF] text-black">
                                 ADMIN
                               </span>
                             )}
@@ -616,7 +616,7 @@ export default function AdminDashboardView({ currentUser, language = 'es' }: Adm
                     {/* Creation Date */}
                     <td className="p-4 text-xs text-slate-300">
                       <div className="flex items-center gap-1.5 font-mono">
-                        <Calendar className="w-3.5 h-3.5 text-[#E9C349] shrink-0" />
+                        <Calendar className="w-3.5 h-3.5 text-[#D9A9FF] shrink-0" />
                         <span>{user.createdAt}</span>
                       </div>
                     </td>
@@ -697,12 +697,12 @@ export default function AdminDashboardView({ currentUser, language = 'es' }: Adm
                 <img
                   src={selectedUserForFiles.avatar}
                   alt={selectedUserForFiles.name}
-                  className="w-16 h-16 rounded-full object-cover border-2 border-[#E9C349] shadow-xl"
+                  className="w-16 h-16 rounded-full object-cover border-2 border-[#D9A9FF] shadow-xl"
                 />
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
                     <h3 className="text-xl font-extrabold text-white">{selectedUserForFiles.name}</h3>
-                    <span className="px-2.5 py-0.5 rounded-full bg-[#E9C349]/20 border border-[#E9C349] text-[#E9C349] text-xs font-bold uppercase">
+                    <span className="px-2.5 py-0.5 rounded-full bg-[#D9A9FF]/20 border border-[#D9A9FF] text-[#D9A9FF] text-xs font-bold uppercase">
                       {selectedUserForFiles.role}
                     </span>
                   </div>
@@ -722,7 +722,7 @@ export default function AdminDashboardView({ currentUser, language = 'es' }: Adm
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                 <div className="bg-white/5 rounded-2xl p-3 border border-white/10 text-center">
                   <div className="text-xs text-slate-400 font-semibold mb-1">Total Subidos</div>
-                  <div className="text-xl font-extrabold text-[#E9C349]">{selectedUserForFiles.uploadedFilesCount}</div>
+                  <div className="text-xl font-extrabold text-[#D9A9FF]">{selectedUserForFiles.uploadedFilesCount}</div>
                 </div>
                 <div className="bg-white/5 rounded-2xl p-3 border border-white/10 text-center">
                   <div className="text-xs text-slate-400 font-semibold mb-1">Reels & Videos</div>
@@ -753,7 +753,7 @@ export default function AdminDashboardView({ currentUser, language = 'es' }: Adm
                     onClick={() => setActiveFileTab(tab.id as any)}
                     className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                       activeFileTab === tab.id
-                        ? 'bg-[#E9C349] text-black shadow-md'
+                        ? 'bg-[#D9A9FF] text-black shadow-md'
                         : 'bg-white/5 text-slate-400 hover:text-white'
                     }`}
                   >
@@ -765,7 +765,7 @@ export default function AdminDashboardView({ currentUser, language = 'es' }: Adm
               {/* Files List Content */}
               {loadingFiles ? (
                 <div className="py-12 text-center space-y-3">
-                  <div className="w-8 h-8 border-3 border-[#E9C349] border-t-transparent rounded-full animate-spin mx-auto" />
+                  <div className="w-8 h-8 border-3 border-[#D9A9FF] border-t-transparent rounded-full animate-spin mx-auto" />
                   <p className="text-xs text-slate-400 font-mono">Buscando archivos subidos por el usuario...</p>
                 </div>
               ) : filteredUserFiles.length === 0 ? (
@@ -828,7 +828,7 @@ export default function AdminDashboardView({ currentUser, language = 'es' }: Adm
                             href={file.videoUrl || file.audioUrl || file.fileUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1 text-[#E9C349] hover:underline text-xs font-bold"
+                            className="inline-flex items-center gap-1 text-[#D9A9FF] hover:underline text-xs font-bold"
                           >
                             <span>Abrir enlace</span>
                             <ExternalLink className="w-3 h-3" />

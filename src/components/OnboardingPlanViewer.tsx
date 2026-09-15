@@ -71,13 +71,13 @@ export default function OnboardingPlanViewer({
       {/* Top Banner */}
       <div className="p-5 rounded-3xl bg-gradient-to-r from-[#1E0F21] via-[#160B18] to-[#0D0914] border border-[#3A2542] shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="flex items-center gap-3.5">
-          <div className="p-3 rounded-2xl bg-[#9A2B3C]/20 border border-[#9A2B3C]/40 text-[#E9C349] shrink-0">
+          <div className="p-3 rounded-2xl bg-[#C23E9E]/20 border border-[#C23E9E]/40 text-[#D9A9FF] shrink-0">
             <Cpu className="w-6 h-6 animate-pulse" />
           </div>
           <div>
-            <div className="text-[10px] font-mono font-bold text-[#E9C349] uppercase tracking-widest flex items-center gap-1.5">
+            <div className="text-[10px] font-mono font-bold text-[#D9A9FF] uppercase tracking-widest flex items-center gap-1.5">
               <span>CÁTEDRA DEL INSTRUCTOR</span>
-              <span className="px-2 py-0.5 rounded-full bg-[#9A2B3C]/30 text-white text-[9px]">PLAN IA ACTIVADO</span>
+              <span className="px-2 py-0.5 rounded-full bg-[#C23E9E]/30 text-white text-[9px]">PLAN IA ACTIVADO</span>
             </div>
             <h3 className="text-base font-extrabold text-white tracking-tight mt-0.5">
               Plan de Entrenamiento Personalizado de {studentName}
@@ -93,7 +93,7 @@ export default function OnboardingPlanViewer({
             onClick={onRefreshPlan}
             className="px-4 py-2.5 rounded-2xl bg-[#261E2E] hover:bg-[#342740] border border-[#3A2A47] text-slate-200 hover:text-white text-xs font-mono font-bold transition-all flex items-center gap-2 self-start md:self-auto shrink-0"
           >
-            <Sparkles className="w-3.5 h-3.5 text-[#E9C349]" />
+            <Sparkles className="w-3.5 h-3.5 text-[#D9A9FF]" />
             <span>Re-evaluar con IA</span>
           </button>
         )}
@@ -101,7 +101,7 @@ export default function OnboardingPlanViewer({
 
       {/* Structured Plan View Container */}
       <div className="p-6 md:p-8 rounded-3xl bg-[#0E0C14] border border-[#2B1F33] text-slate-200 space-y-6 shadow-2xl relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-[#9A2B3C]/5 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute top-0 right-0 w-64 h-64 bg-[#C23E9E]/5 rounded-full blur-3xl pointer-events-none" />
 
         {/* Markdown Rendered Content */}
         <div className="prose prose-invert max-w-none space-y-5 text-sm leading-relaxed">
@@ -110,8 +110,8 @@ export default function OnboardingPlanViewer({
             if (trimmed.startsWith('👤')) {
               return (
                 <div key={idx} className="p-5 rounded-2xl bg-[#15111E] border border-[#33243F]">
-                  <h4 className="text-sm font-black text-[#E9C349] uppercase tracking-wider flex items-center gap-2 mb-3">
-                    <User className="w-4 h-4 text-[#E9C349]" />
+                  <h4 className="text-sm font-black text-[#D9A9FF] uppercase tracking-wider flex items-center gap-2 mb-3">
+                    <User className="w-4 h-4 text-[#D9A9FF]" />
                     {trimmed.split('\n')[0]}
                   </h4>
                   <div className="space-y-1.5 text-xs text-slate-300">
@@ -221,7 +221,7 @@ export default function OnboardingPlanViewer({
                     className={`p-3.5 rounded-2xl border transition-all flex items-center justify-between gap-3 ${
                       isDone
                         ? 'bg-emerald-950/20 border-emerald-500/40 text-emerald-300'
-                        : 'bg-[#15121E] border-[#31253E] hover:border-[#E9C349]/40 text-slate-200'
+                        : 'bg-[#15121E] border-[#31253E] hover:border-[#D9A9FF]/40 text-slate-200'
                     }`}
                   >
                     <span className="text-xs font-medium leading-snug line-clamp-2">
@@ -234,7 +234,7 @@ export default function OnboardingPlanViewer({
                       className={`px-3 py-1.5 rounded-xl font-mono text-[10px] font-bold uppercase shrink-0 transition-all flex items-center gap-1.5 ${
                         isDone
                           ? 'bg-emerald-500/20 text-emerald-300 cursor-default'
-                          : 'bg-[#9A2B3C] hover:bg-[#B8344B] text-white shadow-md active:scale-95'
+                          : 'bg-[#C23E9E] hover:bg-[#C23FA0] text-white shadow-md active:scale-95'
                       }`}
                     >
                       {isDone ? (
@@ -244,7 +244,7 @@ export default function OnboardingPlanViewer({
                         </>
                       ) : (
                         <>
-                          <Send className="w-3 h-3 text-[#E9C349]" />
+                          <Send className="w-3 h-3 text-[#D9A9FF]" />
                           <span>Asignar</span>
                         </>
                       )}

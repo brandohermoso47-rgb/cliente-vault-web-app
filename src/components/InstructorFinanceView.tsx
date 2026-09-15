@@ -295,15 +295,15 @@ export const InstructorFinanceView: React.FC<InstructorFinanceViewProps> = ({
       </AnimatePresence>
 
       {/* HEADER BANNER: POLÍTICA ONLYFANS 80/20 & RBAC SECURITY */}
-      <div className="bg-gradient-to-r from-[#170E28] via-[#221332] to-[#0D0B18] border border-[#E9C349]/30 rounded-3xl p-6 sm:p-8 relative overflow-hidden shadow-2xl space-y-4">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-[#E9C349]/5 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-80 h-80 bg-[#9A2B3C]/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="bg-gradient-to-r from-[#170E28] via-[#221332] to-[#0D0B18] border border-[#D9A9FF]/30 rounded-3xl p-6 sm:p-8 relative overflow-hidden shadow-2xl space-y-4">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-[#D9A9FF]/5 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-80 h-80 bg-[#C23E9E]/10 rounded-full blur-3xl pointer-events-none" />
 
         <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
           <div className="space-y-2 max-w-2xl">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="px-2.5 py-1 rounded-lg bg-[#E9C349]/20 border border-[#E9C349]/40 text-[#E9C349] text-[10px] font-mono font-black uppercase tracking-widest flex items-center gap-1.5">
-                <ShieldCheck className="w-3.5 h-3.5 text-[#E9C349]" />
+              <span className="px-2.5 py-1 rounded-lg bg-[#D9A9FF]/20 border border-[#D9A9FF]/40 text-[#D9A9FF] text-[10px] font-mono font-black uppercase tracking-widest flex items-center gap-1.5">
+                <ShieldCheck className="w-3.5 h-3.5 text-[#D9A9FF]" />
                 POLÍTICA DE CREADORES 80/20
               </span>
               <span className="px-2.5 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-[10px] font-mono font-bold flex items-center gap-1">
@@ -315,7 +315,7 @@ export const InstructorFinanceView: React.FC<InstructorFinanceViewProps> = ({
             </div>
 
             <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight flex items-center gap-2">
-              <Wallet className="w-7 h-7 text-[#E9C349]" />
+              <Wallet className="w-7 h-7 text-[#D9A9FF]" />
               {isEs ? 'Módulo Central de Finanzas & Retiros' : 'Finance & Payouts Central'}
             </h2>
 
@@ -330,9 +330,9 @@ export const InstructorFinanceView: React.FC<InstructorFinanceViewProps> = ({
             <button
               onClick={handleSimulateSale}
               disabled={isSimulating}
-              className="px-4 py-2.5 rounded-xl bg-white/10 hover:bg-[#E9C349] text-white hover:text-black font-mono font-bold text-xs border border-white/15 hover:border-[#E9C349] transition-all flex items-center gap-2 shadow-lg active:scale-95"
+              className="px-4 py-2.5 rounded-xl bg-white/10 hover:bg-[#D9A9FF] text-white hover:text-black font-mono font-bold text-xs border border-white/15 hover:border-[#D9A9FF] transition-all flex items-center gap-2 shadow-lg active:scale-95"
             >
-              {isSimulating ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4 text-[#E9C349]" />}
+              {isSimulating ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4 text-[#D9A9FF]" />}
               <span>{isEs ? 'Simular Venta Internacional' : 'Simulate Global Sale'}</span>
             </button>
 
@@ -341,9 +341,9 @@ export const InstructorFinanceView: React.FC<InstructorFinanceViewProps> = ({
                 playChime('click');
                 setIsBankModalOpen(true);
               }}
-              className="px-4 py-2.5 rounded-xl bg-[#1D172E] hover:bg-[#28203E] text-[#E9C349] border border-[#E9C349]/40 font-mono font-bold text-xs transition-all flex items-center gap-2 shadow-lg active:scale-95"
+              className="px-4 py-2.5 rounded-xl bg-[#1D172E] hover:bg-[#28203E] text-[#D9A9FF] border border-[#D9A9FF]/40 font-mono font-bold text-xs transition-all flex items-center gap-2 shadow-lg active:scale-95"
             >
-              <Landmark className="w-4 h-4 text-[#E9C349]" />
+              <Landmark className="w-4 h-4 text-[#D9A9FF]" />
               <span>{isEs ? 'Configurar Cuenta Bancaria' : 'Bank Account'}</span>
             </button>
           </div>
@@ -389,7 +389,7 @@ export const InstructorFinanceView: React.FC<InstructorFinanceViewProps> = ({
         </div>
 
         <div className="text-[11px] font-mono text-slate-400 flex items-center gap-2 pt-1">
-          <MapPin className="w-3.5 h-3.5 text-[#E9C349]" />
+          <MapPin className="w-3.5 h-3.5 text-[#D9A9FF]" />
           <span>Región seleccionada: <strong className="text-cyan-300 font-bold">{activeCurrencyConfig.flag} {activeCurrencyConfig.name} ({activeCurrencyConfig.hub})</strong></span>
           {selectedCurrency !== 'USD' && (
             <span className="text-slate-500">(1 USD = {activeCurrencyConfig.rate} {activeCurrencyConfig.code})</span>
@@ -437,12 +437,12 @@ export const InstructorFinanceView: React.FC<InstructorFinanceViewProps> = ({
         </div>
 
         {/* Card 3: Ganancia Neta 80% */}
-        <div className="bg-[#120F20] border border-[#E9C349]/30 p-5 rounded-2xl relative overflow-hidden shadow-xl space-y-2 bg-gradient-to-br from-[#E9C349]/5 to-transparent">
+        <div className="bg-[#120F20] border border-[#D9A9FF]/30 p-5 rounded-2xl relative overflow-hidden shadow-xl space-y-2 bg-gradient-to-br from-[#D9A9FF]/5 to-transparent">
           <div className="flex items-center justify-between">
-            <span className="text-[10px] font-mono font-extrabold uppercase tracking-widest text-[#E9C349]">
+            <span className="text-[10px] font-mono font-extrabold uppercase tracking-widest text-[#D9A9FF]">
               {isEs ? 'GANANCIA NETA TOTAL (80%)' : 'TOTAL NET EARNINGS (80%)'}
             </span>
-            <div className="p-2 rounded-xl bg-[#E9C349]/20 border border-[#E9C349]/40 text-[#E9C349]">
+            <div className="p-2 rounded-xl bg-[#D9A9FF]/20 border border-[#D9A9FF]/40 text-[#D9A9FF]">
               <TrendingUp className="w-4 h-4" />
             </div>
           </div>
@@ -573,7 +573,7 @@ export const InstructorFinanceView: React.FC<InstructorFinanceViewProps> = ({
           <div className="pt-3 border-t border-white/10 space-y-3">
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
               <div className="text-[11px] font-mono text-slate-300 flex items-center gap-1.5">
-                <Building2 className="w-4 h-4 text-[#E9C349]" />
+                <Building2 className="w-4 h-4 text-[#D9A9FF]" />
                 <span>
                   {finances.bankAccount?.bankName 
                     ? `${finances.bankAccount.bankName} (${finances.bankAccount.accountNumber})` 
@@ -592,7 +592,7 @@ export const InstructorFinanceView: React.FC<InstructorFinanceViewProps> = ({
                 }}
                 className={`py-3 px-6 rounded-2xl text-xs font-mono font-black uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-xl ${
                   finances.canRequestPayout
-                    ? 'bg-gradient-to-r from-emerald-500 via-teal-500 to-[#E9C349] hover:brightness-110 text-black active:scale-95 cursor-pointer'
+                    ? 'bg-gradient-to-r from-emerald-500 via-teal-500 to-[#D9A9FF] hover:brightness-110 text-black active:scale-95 cursor-pointer'
                     : 'bg-white/5 text-slate-500 border border-white/10 cursor-not-allowed'
                 }`}
                 title={!finances.canRequestPayout ? 'Requiere un Saldo Disponible mínimo de $20.00 USD' : 'Solicitar retiro a cuenta bancaria'}
@@ -622,7 +622,7 @@ export const InstructorFinanceView: React.FC<InstructorFinanceViewProps> = ({
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 border-b border-white/10 pb-4">
           <div>
             <h3 className="text-base font-black text-white font-mono uppercase tracking-wider flex items-center gap-2">
-              <ShoppingBag className="w-5 h-5 text-[#E9C349]" />
+              <ShoppingBag className="w-5 h-5 text-[#D9A9FF]" />
               {isEs ? 'Historial Detallado de Ventas Internacionales (Desglose 80/20)' : 'Detailed International Sales History (80/20 Breakdown)'}
             </h3>
             <p className="text-xs text-slate-400">
@@ -659,7 +659,7 @@ export const InstructorFinanceView: React.FC<InstructorFinanceViewProps> = ({
                     <tr key={tx.id} className="hover:bg-white/5 transition-all">
                       <td className="py-3.5 pr-3 font-bold text-white">
                         <div className="flex items-center gap-2">
-                          <span className="px-2 py-0.5 rounded bg-[#E9C349]/20 border border-[#E9C349]/40 text-[#E9C349] font-mono text-[9px] font-black uppercase">
+                          <span className="px-2 py-0.5 rounded bg-[#D9A9FF]/20 border border-[#D9A9FF]/40 text-[#D9A9FF] font-mono text-[9px] font-black uppercase">
                             {tx.itemType}
                           </span>
                           <span className="truncate max-w-[200px]">{tx.itemTitle}</span>
@@ -707,7 +707,7 @@ export const InstructorFinanceView: React.FC<InstructorFinanceViewProps> = ({
       {/* PAYOUT HISTORY LOG */}
       <div className="bg-[#120F20] border border-white/10 rounded-3xl p-6 shadow-2xl space-y-4">
         <h3 className="text-base font-black text-white font-mono uppercase tracking-wider flex items-center gap-2 border-b border-white/10 pb-4">
-          <CreditCard className="w-5 h-5 text-[#E9C349]" />
+          <CreditCard className="w-5 h-5 text-[#D9A9FF]" />
           {isEs ? 'Historial de Retiros Procesados' : 'Processed Payouts Log'}
         </h3>
 
@@ -750,7 +750,7 @@ export const InstructorFinanceView: React.FC<InstructorFinanceViewProps> = ({
               initial={{ opacity: 0, scale: 0.95, y: 10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 10 }}
-              className="w-full max-w-lg bg-[#120F20] border-2 border-[#E9C349]/50 rounded-3xl p-6 sm:p-8 shadow-2xl relative space-y-5"
+              className="w-full max-w-lg bg-[#120F20] border-2 border-[#D9A9FF]/50 rounded-3xl p-6 sm:p-8 shadow-2xl relative space-y-5"
             >
               <button
                 onClick={() => setIsPayoutModalOpen(false)}
@@ -788,7 +788,7 @@ export const InstructorFinanceView: React.FC<InstructorFinanceViewProps> = ({
                     Monto a Retirar (USD Base) *
                   </label>
                   <div className="relative flex items-center">
-                    <span className="absolute left-4 text-base font-mono font-bold text-[#E9C349]">$</span>
+                    <span className="absolute left-4 text-base font-mono font-bold text-[#D9A9FF]">$</span>
                     <input
                       type="number"
                       step="0.01"
@@ -800,7 +800,7 @@ export const InstructorFinanceView: React.FC<InstructorFinanceViewProps> = ({
                         setPayoutAmountInput(e.target.value);
                       }}
                       placeholder="20.00"
-                      className="w-full bg-[#18142A] border border-[#E9C349]/50 rounded-2xl pl-9 pr-16 py-3 text-lg font-mono font-black text-white focus:border-[#E9C349] focus:ring-1 focus:ring-[#E9C349] outline-none"
+                      className="w-full bg-[#18142A] border border-[#D9A9FF]/50 rounded-2xl pl-9 pr-16 py-3 text-lg font-mono font-black text-white focus:border-[#D9A9FF] focus:ring-1 focus:ring-[#D9A9FF] outline-none"
                     />
                     <span className="absolute right-4 text-xs font-mono font-bold text-slate-400">USD</span>
                   </div>
@@ -809,7 +809,7 @@ export const InstructorFinanceView: React.FC<InstructorFinanceViewProps> = ({
                     <button
                       type="button"
                       onClick={() => setPayoutAmountInput(finances.availableBalanceUSD.toFixed(2))}
-                      className="text-[#E9C349] hover:underline font-bold"
+                      className="text-[#D9A9FF] hover:underline font-bold"
                     >
                       Retirar todo (${finances.availableBalanceUSD.toFixed(2)} USD)
                     </button>
@@ -821,7 +821,7 @@ export const InstructorFinanceView: React.FC<InstructorFinanceViewProps> = ({
                     Destino Bancario
                   </label>
                   <div className="p-3 rounded-xl bg-[#18142A] border border-white/10 text-xs font-mono text-slate-300 flex items-center gap-2">
-                    <Landmark className="w-4 h-4 text-[#E9C349]" />
+                    <Landmark className="w-4 h-4 text-[#D9A9FF]" />
                     <span>{finances.bankAccount?.bankName} ({finances.bankAccount?.accountNumber})</span>
                   </div>
                 </div>
@@ -835,7 +835,7 @@ export const InstructorFinanceView: React.FC<InstructorFinanceViewProps> = ({
                     value={payoutNotesInput}
                     onChange={(e) => setPayoutNotesInput(e.target.value)}
                     placeholder="Ej. Retiro de membresías de Julio"
-                    className="w-full bg-[#18142A] border border-white/10 rounded-xl px-4 py-2.5 text-xs font-sans text-white focus:border-[#E9C349] outline-none"
+                    className="w-full bg-[#18142A] border border-white/10 rounded-xl px-4 py-2.5 text-xs font-sans text-white focus:border-[#D9A9FF] outline-none"
                   />
                 </div>
 
@@ -851,7 +851,7 @@ export const InstructorFinanceView: React.FC<InstructorFinanceViewProps> = ({
                   <button
                     type="submit"
                     disabled={isSubmittingPayout}
-                    className="flex-1 py-3 px-4 rounded-xl bg-gradient-to-r from-emerald-500 via-teal-500 to-[#E9C349] hover:brightness-110 text-black font-mono font-black text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-lg"
+                    className="flex-1 py-3 px-4 rounded-xl bg-gradient-to-r from-emerald-500 via-teal-500 to-[#D9A9FF] hover:brightness-110 text-black font-mono font-black text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-lg"
                   >
                     {isSubmittingPayout ? (
                       <>
@@ -880,7 +880,7 @@ export const InstructorFinanceView: React.FC<InstructorFinanceViewProps> = ({
               initial={{ opacity: 0, scale: 0.95, y: 10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 10 }}
-              className="w-full max-w-lg bg-[#120F20] border-2 border-[#E9C349]/50 rounded-3xl p-6 sm:p-8 shadow-2xl relative space-y-5"
+              className="w-full max-w-lg bg-[#120F20] border-2 border-[#D9A9FF]/50 rounded-3xl p-6 sm:p-8 shadow-2xl relative space-y-5"
             >
               <button
                 onClick={() => setIsBankModalOpen(false)}
@@ -891,7 +891,7 @@ export const InstructorFinanceView: React.FC<InstructorFinanceViewProps> = ({
 
               <div className="space-y-1">
                 <h3 className="text-xl font-black text-white tracking-tight font-mono flex items-center gap-2">
-                  <Landmark className="w-5 h-5 text-[#E9C349]" />
+                  <Landmark className="w-5 h-5 text-[#D9A9FF]" />
                   {isEs ? 'Configuración de Cuenta Bancaria Internacional' : 'Global Bank Account Configuration'}
                 </h3>
                 <p className="text-xs text-slate-300 font-sans">
@@ -919,7 +919,7 @@ export const InstructorFinanceView: React.FC<InstructorFinanceViewProps> = ({
                     value={bankNameInput}
                     onChange={(e) => setBankNameInput(e.target.value)}
                     placeholder="Ej. Chase Bank / MUFG / Barclays / BBVA"
-                    className="w-full bg-[#18142A] border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white focus:border-[#E9C349] outline-none"
+                    className="w-full bg-[#18142A] border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white focus:border-[#D9A9FF] outline-none"
                   />
                 </div>
 
@@ -933,7 +933,7 @@ export const InstructorFinanceView: React.FC<InstructorFinanceViewProps> = ({
                     value={accountHolderInput}
                     onChange={(e) => setAccountHolderInput(e.target.value)}
                     placeholder="Nombre completo legal del titular"
-                    className="w-full bg-[#18142A] border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white focus:border-[#E9C349] outline-none"
+                    className="w-full bg-[#18142A] border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white focus:border-[#D9A9FF] outline-none"
                   />
                 </div>
 
@@ -948,7 +948,7 @@ export const InstructorFinanceView: React.FC<InstructorFinanceViewProps> = ({
                       value={accountNumberInput}
                       onChange={(e) => setAccountNumberInput(e.target.value)}
                       placeholder="**** **** **** 8842"
-                      className="w-full bg-[#18142A] border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white focus:border-[#E9C349] outline-none font-mono"
+                      className="w-full bg-[#18142A] border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white focus:border-[#D9A9FF] outline-none font-mono"
                     />
                   </div>
 
@@ -961,7 +961,7 @@ export const InstructorFinanceView: React.FC<InstructorFinanceViewProps> = ({
                       value={routingNumberInput}
                       onChange={(e) => setRoutingNumberInput(e.target.value)}
                       placeholder="CHASUS33 / 121000358"
-                      className="w-full bg-[#18142A] border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white focus:border-[#E9C349] outline-none font-mono"
+                      className="w-full bg-[#18142A] border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white focus:border-[#D9A9FF] outline-none font-mono"
                     />
                   </div>
                 </div>
@@ -978,7 +978,7 @@ export const InstructorFinanceView: React.FC<InstructorFinanceViewProps> = ({
                   <button
                     type="submit"
                     disabled={isSavingBank}
-                    className="flex-1 py-3 px-4 rounded-xl bg-[#E9C349] hover:bg-[#d8b33c] text-black font-mono font-black text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-lg"
+                    className="flex-1 py-3 px-4 rounded-xl bg-[#D9A9FF] hover:bg-[#B87CFF] text-black font-mono font-black text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-lg"
                   >
                     {isSavingBank ? (
                       <>

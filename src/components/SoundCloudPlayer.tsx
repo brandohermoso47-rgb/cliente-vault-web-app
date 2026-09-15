@@ -15,7 +15,7 @@ export default function SoundCloudPlayer({
   // Codificamos la URL para el iframe de SoundCloud
   const encodedUrl = encodeURIComponent(playlistUrl);
   
-  // Parámetros de personalización visual para perfiles/playlists (Color borgoña #9A2B3C, modo oscuro)
+  // Parámetros de personalización visual para perfiles/playlists (Color borgoña #C23E9E, modo oscuro)
   const widgetSrc = `https://w.soundcloud.com/player/?url=${encodedUrl}&color=%239a2b3c&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false&visual=false`;
 
   return (
@@ -36,7 +36,7 @@ export default function SoundCloudPlayer({
           href={playlistUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-[10px] font-mono text-[#8A8A8A] hover:text-[#E9C349] flex items-center gap-1 transition-colors"
+          className="text-[10px] font-mono text-[#8A8A8A] hover:text-[#D9A9FF] flex items-center gap-1 transition-colors"
         >
           <span>Ver en SoundCloud</span>
           <ExternalLink className="w-3 h-3" />
