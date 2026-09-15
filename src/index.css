@@ -238,6 +238,67 @@ button:focus-visible {
   animation: bpmRingGlow var(--bpm-pulse-duration, 0.5s) cubic-bezier(0.2, 0.8, 0.2, 1) infinite;
 }
 
+/* Recursos y Literatura — tactile paper-grain treatment */
+@keyframes ebookLampGlow {
+  0%, 100% { opacity: .5; }
+  50% { opacity: .85; }
+}
+
+@keyframes ebookBrainSpin {
+  from { transform: rotateY(0deg); }
+  to { transform: rotateY(360deg); }
+}
+
+@keyframes ebookGearCW {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes ebookGearCCW {
+  from { transform: rotate(360deg); }
+  to { transform: rotate(0deg); }
+}
+
+.ebook-grain {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 140px;
+  mix-blend-mode: overlay;
+}
+
+.ebook-lamp-glow {
+  animation: ebookLampGlow 7s ease-in-out infinite;
+}
+
+.ebook-brain-spin {
+  animation: ebookBrainSpin 9s linear infinite;
+  transform-style: preserve-3d;
+}
+
+.ebook-gear-cw {
+  animation: ebookGearCW 6s linear infinite;
+}
+
+.ebook-gear-ccw {
+  animation: ebookGearCCW 5s linear infinite;
+}
+
+/* This screen is a deliberate exception to the liquid-glass sweep below: it
+   keeps its own lamp-lit paper/leather surfaces rather than becoming frosted
+   glass. Scoped to .ebook-tactile-scope (the EbooksView root) and only for
+   the literal dark backgrounds this file actually uses; revert-layer hands
+   background-color back to Tailwind's own utility so opacity modifiers like
+   /80 or /40 still come out correct without hardcoding every variant here. */
+.ebook-tactile-scope [class*="bg-[#0d0d11]"],
+.ebook-tactile-scope [class*="bg-[#121212]"],
+.ebook-tactile-scope [class*="bg-[#1c1b1b]"],
+.ebook-tactile-scope [class*="bg-[#5e0b15]"] {
+  background-image: none !important;
+  background-color: revert-layer !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: revert-layer !important;
+}
+
 /* ============================================================================
    Auto-generated liquid-glass sweep — every dark panel background used across
    the 70+ view components becomes a frosted glass surface, and every dark
