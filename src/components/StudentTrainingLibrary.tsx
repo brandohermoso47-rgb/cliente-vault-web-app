@@ -284,7 +284,7 @@ export default function StudentTrainingLibrary({ currentUser, onUserChange }: St
       <div className="bg-black/40 border border-white/10 rounded-2xl p-5 space-y-4 relative z-10">
         <div className="flex items-center justify-between border-b border-white/10 pb-3">
           <div className="flex items-center gap-2">
-            <Link2 className="w-4 h-4 text-[#E9C349]" />
+            <Link2 className="w-4 h-4 text-[#D9A9FF]" />
             <h4 className="text-xs font-bold uppercase tracking-wider text-white">Conexión de Cuentas & Fuentes</h4>
           </div>
           {savedSuccess && (
@@ -423,7 +423,7 @@ export default function StudentTrainingLibrary({ currentUser, onUserChange }: St
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={(e) => e.stopPropagation()}
-                    className="text-[10px] font-mono text-slate-300 hover:text-[#E9C349] flex items-center gap-1"
+                    className="text-[10px] font-mono text-slate-300 hover:text-[#D9A9FF] flex items-center gap-1"
                   >
                     <span>Abrir</span>
                     <ExternalLink className="w-3 h-3" />

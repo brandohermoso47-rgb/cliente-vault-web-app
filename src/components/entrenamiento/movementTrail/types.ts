@@ -13,7 +13,7 @@ export const FIGURE_COLORS = [
   '#06b6d4', // cyan
   '#a855f7', // purple
   '#10b981', // emerald
-  '#e9c349', // gold
+  '#d9a9ff', // gold
   '#f43f5e', // rose
   '#f5f5f7', // blanco
 ] as const;

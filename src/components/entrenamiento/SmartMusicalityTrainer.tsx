@@ -89,7 +89,7 @@ const DEMO_TRACKS: DemoTrack[] = [
     bpm: 118,
     genre: 'Soulful Disco',
     description: 'Enfocado en melodías vocales melismáticas perfectas para aislación de torso.',
-    audioUrl: 'https://assets.mixkit.co/music/preview/mixkit-[#E9C349]-funky-groove-581.mp3'
+    audioUrl: 'https://assets.mixkit.co/music/preview/mixkit-[#D9A9FF]-funky-groove-581.mp3'
   }
 ];
 
@@ -231,18 +231,18 @@ export function SmartMusicalityTrainer({
         <style>
           * { box-sizing: border-box; margin: 0; padding: 0; }
           body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: #080b18; color: #f1f5f9; padding: 32px; }
-          .header { border-bottom: 2px solid #E9C349; padding-bottom: 16px; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: flex-end; }
-          .logo { font-size: 22px; font-weight: 900; color: #E9C349; letter-spacing: 1px; text-transform: uppercase; }
+          .header { border-bottom: 2px solid #D9A9FF; padding-bottom: 16px; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: flex-end; }
+          .logo { font-size: 22px; font-weight: 900; color: #D9A9FF; letter-spacing: 1px; text-transform: uppercase; }
           .sublogo { font-size: 12px; color: #94a3b8; font-family: monospace; }
           .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 28px; }
           .card { background: #11162e; border: 1px solid #232d59; border-radius: 12px; padding: 16px; text-align: center; }
           .card-val { font-size: 28px; font-weight: 900; margin-top: 4px; font-family: monospace; }
           .card-lbl { font-size: 10px; color: #94a3b8; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; }
           .text-green { color: #10B981; }
-          .text-gold { color: #E9C349; }
+          .text-gold { color: #D9A9FF; }
           .text-amber { color: #F59E0B; }
           .text-cyan { color: #06B6D4; }
-          .section-title { font-size: 15px; font-weight: 800; color: #E9C349; margin-top: 24px; margin-bottom: 12px; border-left: 4px solid #E9C349; padding-left: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+          .section-title { font-size: 15px; font-weight: 800; color: #D9A9FF; margin-top: 24px; margin-bottom: 12px; border-left: 4px solid #D9A9FF; padding-left: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
           table { width: 100%; border-collapse: collapse; margin-top: 12px; background: #11162e; border-radius: 10px; overflow: hidden; border: 1px solid #232d59; }
           th, td { padding: 10px 14px; text-align: left; font-size: 12px; }
           th { background: #1a2247; color: #e2e8f0; font-family: monospace; text-transform: uppercase; font-size: 10px; }
@@ -768,10 +768,10 @@ export function SmartMusicalityTrainer({
 
           ctx.beginPath();
           ctx.arc(centerX, centerY, currentRadius, 0, Math.PI * 2);
-          ctx.strokeStyle = `rgba(233, 195, 73, ${opacity})`;
+          ctx.strokeStyle = `rgba(217, 169, 255, ${opacity})`;
           ctx.lineWidth = 3 + activeLevel * 10 * (1 - phase);
           ctx.shadowBlur = 20 * activeLevel;
-          ctx.shadowColor = '#E9C349';
+          ctx.shadowColor = '#D9A9FF';
           ctx.stroke();
         }
 
@@ -779,7 +779,7 @@ export function SmartMusicalityTrainer({
         const coreRadius = 30 + activeLevel * 110;
         const coreGradient = ctx.createRadialGradient(centerX, centerY, 5, centerX, centerY, coreRadius);
         coreGradient.addColorStop(0, `rgba(255, 235, 120, ${0.9 * activeLevel + 0.1})`);
-        coreGradient.addColorStop(0.5, `rgba(233, 195, 73, ${0.5 * activeLevel})`);
+        coreGradient.addColorStop(0.5, `rgba(217, 169, 255, ${0.5 * activeLevel})`);
         coreGradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
 
         ctx.beginPath();
@@ -802,9 +802,9 @@ export function SmartMusicalityTrainer({
         const barCount = 10;
         for (let i = 0; i < barCount; i++) {
           const h = (bLevel * height * 0.45) * (0.6 + Math.sin(i * 1.5 + now / 180) * 0.4);
-          ctx.fillStyle = '#E9C349';
+          ctx.fillStyle = '#D9A9FF';
           ctx.shadowBlur = 10;
-          ctx.shadowColor = '#E9C349';
+          ctx.shadowColor = '#D9A9FF';
           ctx.fillRect(25 + i * (barWidth + 6), height - h - 25, barWidth, h);
           ctx.fillRect(width - 25 - (i + 1) * (barWidth + 6), height - h - 25, barWidth, h);
         }
@@ -1009,7 +1009,7 @@ export function SmartMusicalityTrainer({
 
   return (
     <div className={`w-full rounded-3xl border p-4 sm:p-6 shadow-2xl space-y-6 overflow-hidden relative transition-colors ${
-      isDark ? 'bg-[#070913] text-white border-[#E9C349]/30' : 'bg-white text-slate-900 border-amber-400/50 shadow-md'
+      isDark ? 'bg-[#070913] text-white border-[#D9A9FF]/30' : 'bg-white text-slate-900 border-amber-400/50 shadow-md'
     }`}>
       
       {/* Hidden HTML5 Audio Element */}
@@ -1023,12 +1023,12 @@ export function SmartMusicalityTrainer({
       {/* HEADER SECTION */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-white/10 pb-5">
         <div className="flex items-center gap-3.5">
-          <div className="w-12 h-12 rounded-2xl bg-[#E9C349]/20 border border-[#E9C349] flex items-center justify-center text-[#E9C349] shrink-0 shadow-lg shadow-[#E9C349]/10">
-            <Radio className="w-6 h-6 text-[#E9C349] animate-pulse" />
+          <div className="w-12 h-12 rounded-2xl bg-[#D9A9FF]/20 border border-[#D9A9FF] flex items-center justify-center text-[#D9A9FF] shrink-0 shadow-lg shadow-[#D9A9FF]/10">
+            <Radio className="w-6 h-6 text-[#D9A9FF] animate-pulse" />
           </div>
           <div>
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="px-2.5 py-0.5 rounded-full bg-[#E9C349] text-black font-mono font-black text-[10px] uppercase tracking-wider">
+              <span className="px-2.5 py-0.5 rounded-full bg-[#D9A9FF] text-black font-mono font-black text-[10px] uppercase tracking-wider">
                 WAKAON MUSICALITY LAB
               </span>
               <span className="text-[10px] font-mono text-cyan-300 bg-cyan-500/20 px-2 py-0.5 rounded border border-cyan-500/30">
@@ -1048,7 +1048,7 @@ export function SmartMusicalityTrainer({
         <div className="flex items-center gap-3 bg-black/60 border border-white/10 p-3 rounded-2xl shrink-0 self-start lg:self-auto">
           <div className="text-right">
             <span className="text-[10px] font-mono text-slate-400 uppercase block">Racha Musical</span>
-            <span className="text-base font-mono font-black text-[#E9C349] flex items-center justify-end gap-1">
+            <span className="text-base font-mono font-black text-[#D9A9FF] flex items-center justify-end gap-1">
               <Flame className="w-4 h-4 text-amber-400 fill-amber-400" />
               {streak} hits
             </span>
@@ -1065,10 +1065,10 @@ export function SmartMusicalityTrainer({
       <div className="space-y-3">
         
         {/* AUTOMATIC OBJECTIVE SWITCHER PANEL */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 p-3.5 bg-[#0e1224] border border-[#E9C349]/30 rounded-2xl shadow-lg">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 p-3.5 bg-[#0e1224] border border-[#D9A9FF]/30 rounded-2xl shadow-lg">
           <div className="flex items-center gap-2.5">
             <div className={`p-2 rounded-xl flex items-center justify-center transition-all ${
-              isAutoSwitchActive ? 'bg-[#E9C349] text-black shadow-md shadow-[#E9C349]/20' : 'bg-white/10 text-slate-400'
+              isAutoSwitchActive ? 'bg-[#D9A9FF] text-black shadow-md shadow-[#D9A9FF]/20' : 'bg-white/10 text-slate-400'
             }`}>
               <RotateCcw className={`w-4 h-4 ${isAutoSwitchActive ? 'animate-spin' : ''}`} />
             </div>
@@ -1102,7 +1102,7 @@ export function SmartMusicalityTrainer({
                   onClick={() => setAutoSwitchMode('time')}
                   className={`px-2.5 py-1 rounded-lg text-[10px] font-mono font-bold transition-all cursor-pointer ${
                     autoSwitchMode === 'time'
-                      ? 'bg-[#E9C349] text-black font-black'
+                      ? 'bg-[#D9A9FF] text-black font-black'
                       : 'text-slate-400 hover:text-white'
                   }`}
                 >
@@ -1113,7 +1113,7 @@ export function SmartMusicalityTrainer({
                   onClick={() => setAutoSwitchMode('dominant')}
                   className={`px-2.5 py-1 rounded-lg text-[10px] font-mono font-bold transition-all cursor-pointer ${
                     autoSwitchMode === 'dominant'
-                      ? 'bg-[#E9C349] text-black font-black'
+                      ? 'bg-[#D9A9FF] text-black font-black'
                       : 'text-slate-400 hover:text-white'
                   }`}
                 >
@@ -1127,7 +1127,7 @@ export function SmartMusicalityTrainer({
               <select
                 value={autoSwitchIntervalSec}
                 onChange={(e) => setAutoSwitchIntervalSec(Number(e.target.value))}
-                className="bg-black/80 border border-[#E9C349]/40 text-[#E9C349] font-mono text-[10px] font-bold px-2 py-1.5 rounded-xl focus:outline-none cursor-pointer"
+                className="bg-black/80 border border-[#D9A9FF]/40 text-[#D9A9FF] font-mono text-[10px] font-bold px-2 py-1.5 rounded-xl focus:outline-none cursor-pointer"
               >
                 <option value={4}>4 Segundos (1 Compás)</option>
                 <option value={8}>8 Segundos (2 Compases)</option>
@@ -1141,7 +1141,7 @@ export function SmartMusicalityTrainer({
               onClick={() => setIsAutoSwitchActive(!isAutoSwitchActive)}
               className={`px-3.5 py-1.5 rounded-xl text-xs font-mono font-bold uppercase transition-all cursor-pointer flex items-center gap-1.5 border ${
                 isAutoSwitchActive
-                  ? 'bg-[#E9C349] text-black border-[#E9C349] font-black shadow-md'
+                  ? 'bg-[#D9A9FF] text-black border-[#D9A9FF] font-black shadow-md'
                   : 'bg-white/10 text-slate-300 border-white/20 hover:bg-white/20'
               }`}
             >
@@ -1153,7 +1153,7 @@ export function SmartMusicalityTrainer({
 
         <div className="flex items-center justify-between mb-1">
           <span className="text-xs font-mono font-bold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
-            <Sliders className="w-4 h-4 text-[#E9C349]" />
+            <Sliders className="w-4 h-4 text-[#D9A9FF]" />
             1. ENFOQUE DE FRECUENCIA Y CUERPO
           </span>
           <span className="text-[10px] font-mono text-slate-400">
@@ -1169,19 +1169,19 @@ export function SmartMusicalityTrainer({
             onClick={() => setFocusMode('graves')}
             className={`relative p-4 rounded-2xl border text-left transition-all cursor-pointer flex flex-col justify-between space-y-3 overflow-hidden ${
               focusMode === 'graves'
-                ? 'bg-gradient-to-br from-[#E9C349]/20 via-[#131006] to-black border-[#E9C349] shadow-[0_0_30px_rgba(233,195,73,0.2)]'
+                ? 'bg-gradient-to-br from-[#D9A9FF]/20 via-[#131006] to-black border-[#D9A9FF] shadow-[0_0_30px_rgba(217, 169, 255,0.2)]'
                 : 'bg-[#0D0F1D] border-white/10 hover:border-white/20 text-slate-300'
             }`}
           >
             {focusMode === 'graves' && (
-              <div className="absolute top-0 right-0 px-2.5 py-0.5 bg-[#E9C349] text-black font-mono font-black text-[9px] uppercase rounded-bl-xl">
+              <div className="absolute top-0 right-0 px-2.5 py-0.5 bg-[#D9A9FF] text-black font-mono font-black text-[9px] uppercase rounded-bl-xl">
                 ACTIVO
               </div>
             )}
             <div>
               <div className="flex items-center gap-2 mb-1.5">
                 <div className={`w-8 h-8 rounded-xl flex items-center justify-center font-mono font-black text-xs ${
-                  focusMode === 'graves' ? 'bg-[#E9C349] text-black' : 'bg-white/10 text-slate-300'
+                  focusMode === 'graves' ? 'bg-[#D9A9FF] text-black' : 'bg-white/10 text-slate-300'
                 }`}>
                   🔊
                 </div>
@@ -1202,7 +1202,7 @@ export function SmartMusicalityTrainer({
             {/* Live Frequency Bar indicator */}
             <div className="w-full bg-black/60 rounded-full h-1.5 overflow-hidden border border-white/10">
               <div 
-                className="bg-[#E9C349] h-full transition-all duration-75" 
+                className="bg-[#D9A9FF] h-full transition-all duration-75" 
                 style={{ width: `${Math.min(100, bassLevel * 100)}%` }} 
               />
             </div>
@@ -1308,7 +1308,7 @@ export function SmartMusicalityTrainer({
         <div 
           className={`lg:col-span-8 bg-[#03050B] border rounded-3xl p-3 sm:p-4 relative min-h-[380px] flex flex-col justify-between overflow-hidden group transition-all duration-300 ${
             isPlaying 
-              ? 'animate-bpm-pulse border-[#E9C349]/80 shadow-[0_0_35px_rgba(233,195,73,0.3)]' 
+              ? 'animate-bpm-pulse border-[#D9A9FF]/80 shadow-[0_0_35px_rgba(217, 169, 255,0.3)]' 
               : 'border-white/15'
           }`}
           style={{ '--bpm-pulse-duration': `${(60 / (selectedTrack.bpm || 124)).toFixed(3)}s` } as React.CSSProperties}
@@ -1317,7 +1317,7 @@ export function SmartMusicalityTrainer({
           {/* SUBTLE RHYTHMIC BPM PULSE RING OVERLAY */}
           {isPlaying && (
             <div 
-              className="absolute inset-0 pointer-events-none rounded-3xl border-2 border-[#E9C349]/40 animate-bpm-ring z-10" 
+              className="absolute inset-0 pointer-events-none rounded-3xl border-2 border-[#D9A9FF]/40 animate-bpm-ring z-10" 
               style={{ '--bpm-pulse-duration': `${(60 / (selectedTrack.bpm || 124)).toFixed(3)}s` } as React.CSSProperties}
             />
           )}
@@ -1349,9 +1349,9 @@ export function SmartMusicalityTrainer({
                 initial={{ opacity: 0, scale: 0.85, y: -20 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.85, y: -20 }}
-                className="absolute top-16 left-1/2 -translate-x-1/2 z-40 px-5 py-2.5 rounded-2xl bg-[#0e1224]/90 backdrop-blur-md border border-[#E9C349] text-[#E9C349] font-mono font-black text-xs uppercase shadow-[0_0_30px_rgba(233,195,73,0.3)] flex items-center gap-2.5 pointer-events-none"
+                className="absolute top-16 left-1/2 -translate-x-1/2 z-40 px-5 py-2.5 rounded-2xl bg-[#0e1224]/90 backdrop-blur-md border border-[#D9A9FF] text-[#D9A9FF] font-mono font-black text-xs uppercase shadow-[0_0_30px_rgba(217, 169, 255,0.3)] flex items-center gap-2.5 pointer-events-none"
               >
-                <Zap className="w-4 h-4 text-[#E9C349] animate-bounce fill-[#E9C349]" />
+                <Zap className="w-4 h-4 text-[#D9A9FF] animate-bounce fill-[#D9A9FF]" />
                 <span>{autoSwitchNotice}</span>
               </motion.div>
             )}
@@ -1361,9 +1361,9 @@ export function SmartMusicalityTrainer({
                 initial={{ opacity: 0, scale: 0.8, y: 20 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.8, y: -20 }}
-                className="absolute top-6 left-1/2 -translate-x-1/2 z-30 px-4 py-2 rounded-2xl bg-black/80 backdrop-blur-md border border-[#E9C349] text-[#E9C349] font-mono font-black text-xs uppercase shadow-2xl flex items-center gap-2 pointer-events-none"
+                className="absolute top-6 left-1/2 -translate-x-1/2 z-30 px-4 py-2 rounded-2xl bg-black/80 backdrop-blur-md border border-[#D9A9FF] text-[#D9A9FF] font-mono font-black text-xs uppercase shadow-2xl flex items-center gap-2 pointer-events-none"
               >
-                <Sparkles className="w-4 h-4 text-[#E9C349] animate-spin" />
+                <Sparkles className="w-4 h-4 text-[#D9A9FF] animate-spin" />
                 <span>{lastHitType}</span>
               </motion.div>
             )}
@@ -1377,8 +1377,8 @@ export function SmartMusicalityTrainer({
                 {isPlaying ? 'ANALIZANDO RITMO EN TIEMPO REAL' : 'PAUSADO'}
               </span>
               {isPlaying && (
-                <span className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#E9C349]/15 border border-[#E9C349]/40 text-[10px] font-mono font-black text-[#E9C349] uppercase shadow-sm">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#E9C349] animate-ping" />
+                <span className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#D9A9FF]/15 border border-[#D9A9FF]/40 text-[10px] font-mono font-black text-[#D9A9FF] uppercase shadow-sm">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#D9A9FF] animate-ping" />
                   <span>PULSO RÍTMICO ACTIVO</span>
                 </span>
               )}
@@ -1386,7 +1386,7 @@ export function SmartMusicalityTrainer({
 
             <div className="flex items-center gap-3">
               <span className="text-[10px] font-mono text-slate-300">
-                TEMPO: <strong className="text-[#E9C349]">{selectedTrack.bpm} BPM</strong>
+                TEMPO: <strong className="text-[#D9A9FF]">{selectedTrack.bpm} BPM</strong>
               </span>
 
               {/* WEBCAM TOGGLE BUTTON */}
@@ -1408,8 +1408,8 @@ export function SmartMusicalityTrainer({
           {/* CENTER GUIDE INSTRUCTION WHEN PAUSABLE */}
           {!isPlaying && (
             <div className="relative z-20 my-auto text-center p-6 space-y-3 max-w-md mx-auto">
-              <div className="w-14 h-14 rounded-full bg-[#E9C349]/20 border border-[#E9C349] flex items-center justify-center text-[#E9C349] mx-auto shadow-xl">
-                <Play className="w-7 h-7 ml-1 text-[#E9C349]" />
+              <div className="w-14 h-14 rounded-full bg-[#D9A9FF]/20 border border-[#D9A9FF] flex items-center justify-center text-[#D9A9FF] mx-auto shadow-xl">
+                <Play className="w-7 h-7 ml-1 text-[#D9A9FF]" />
               </div>
               <h3 className="text-base font-mono font-black text-white uppercase">
                 Presiona Play para Iniciar la Animación Rítmica
@@ -1420,7 +1420,7 @@ export function SmartMusicalityTrainer({
               <button
                 type="button"
                 onClick={togglePlay}
-                className="px-6 py-2.5 rounded-2xl bg-[#E9C349] hover:bg-[#ffdf6b] text-black font-mono font-black text-xs uppercase shadow-xl transition-all cursor-pointer inline-flex items-center gap-2"
+                className="px-6 py-2.5 rounded-2xl bg-[#D9A9FF] hover:bg-[#F2CFFF] text-black font-mono font-black text-xs uppercase shadow-xl transition-all cursor-pointer inline-flex items-center gap-2"
               >
                 <Play className="w-4 h-4 fill-black" />
                 <span>INICIAR PRACTICA DE RITMO</span>
@@ -1432,7 +1432,7 @@ export function SmartMusicalityTrainer({
           <div className="relative z-20 my-2 p-3 bg-black/80 backdrop-blur-md rounded-2xl border border-white/15 shadow-2xl space-y-2">
             <div className="flex items-center justify-between text-[11px] font-mono font-bold flex-wrap gap-1">
               <span className="flex items-center gap-1.5 text-slate-200">
-                <Activity className="w-3.5 h-3.5 text-[#E9C349] animate-pulse" />
+                <Activity className="w-3.5 h-3.5 text-[#D9A9FF] animate-pulse" />
                 BARRA DE PRECISIÓN RÍTMICA EN TIEMPO REAL
               </span>
               
@@ -1503,7 +1503,7 @@ export function SmartMusicalityTrainer({
               <button
                 type="button"
                 onClick={handleTapBeat}
-                className="px-3 py-1 rounded-xl bg-gradient-to-r from-[#E9C349] to-amber-500 hover:brightness-110 text-black font-mono font-black text-[10px] uppercase transition-all cursor-pointer flex items-center gap-1.5 shadow-md active:scale-95"
+                className="px-3 py-1 rounded-xl bg-gradient-to-r from-[#D9A9FF] to-amber-500 hover:brightness-110 text-black font-mono font-black text-[10px] uppercase transition-all cursor-pointer flex items-center gap-1.5 shadow-md active:scale-95"
               >
                 <Activity className="w-3.5 h-3.5 fill-black" />
                 <span>TOCAR / MARCAR BEAT [ESPACIO]</span>
@@ -1513,7 +1513,7 @@ export function SmartMusicalityTrainer({
             {/* Quick Export Toolbar Row */}
             <div className="flex items-center justify-between border-t border-white/10 pt-2 text-[10px] font-mono flex-wrap gap-2">
               <span className="text-slate-400 flex items-center gap-1">
-                <Download className="w-3.5 h-3.5 text-[#E9C349]" />
+                <Download className="w-3.5 h-3.5 text-[#D9A9FF]" />
                 REGISTRO EXTERNO DE PRECISIÓN:
               </span>
 
@@ -1543,7 +1543,7 @@ export function SmartMusicalityTrainer({
                   onClick={() => setShowSessionModal(true)}
                   className="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 border border-white/20 text-slate-200 font-mono font-bold uppercase transition-all cursor-pointer flex items-center gap-1 shadow-sm active:scale-95"
                 >
-                  <BarChart2 className="w-3 h-3 text-[#E9C349]" />
+                  <BarChart2 className="w-3 h-3 text-[#D9A9FF]" />
                   <span>VER RESUMEN ({tapHistory.length})</span>
                 </button>
               </div>
@@ -1566,7 +1566,7 @@ export function SmartMusicalityTrainer({
                   setCurrentTime(val);
                   if (audioRef.current) audioRef.current.currentTime = val;
                 }}
-                className="flex-1 accent-[#E9C349] h-1.5 bg-white/20 rounded-lg cursor-pointer"
+                className="flex-1 accent-[#D9A9FF] h-1.5 bg-white/20 rounded-lg cursor-pointer"
               />
               <span className="text-[10px] font-mono text-slate-400 w-9">{formatTime(duration)}</span>
             </div>
@@ -1578,7 +1578,7 @@ export function SmartMusicalityTrainer({
                 <button
                   type="button"
                   onClick={togglePlay}
-                  className="w-10 h-10 rounded-xl bg-[#E9C349] text-black font-bold flex items-center justify-center hover:scale-105 transition-all cursor-pointer shadow-md"
+                  className="w-10 h-10 rounded-xl bg-[#D9A9FF] text-black font-bold flex items-center justify-center hover:scale-105 transition-all cursor-pointer shadow-md"
                 >
                   {isPlaying ? <Pause className="w-5 h-5 fill-black" /> : <Play className="w-5 h-5 ml-0.5 fill-black" />}
                 </button>
@@ -1603,7 +1603,7 @@ export function SmartMusicalityTrainer({
                     onClick={() => handleSpeedChange(speed)}
                     className={`px-2 py-1 rounded-lg text-[10px] font-mono font-bold cursor-pointer transition-all ${
                       playbackSpeed === speed
-                        ? 'bg-[#E9C349] text-black'
+                        ? 'bg-[#D9A9FF] text-black'
                         : 'text-slate-300 hover:text-white'
                     }`}
                   >
@@ -1641,21 +1641,21 @@ export function SmartMusicalityTrainer({
             {/* SECTION TITLE */}
             <div className="border-b border-white/10 pb-2">
               <h3 className="text-xs font-mono font-bold text-white uppercase flex items-center gap-1.5">
-                <Music className="w-4 h-4 text-[#E9C349]" />
+                <Music className="w-4 h-4 text-[#D9A9FF]" />
                 2. PISTA O MÚSICA SUBIDA
               </h3>
               <p className="text-[10px] text-slate-400 mt-0.5">Sube tu audio o selecciona un demo de Waacking</p>
             </div>
 
             {/* UPLOAD CUSTOM FILE DROPZONE */}
-            <div className="relative border-2 border-dashed border-[#E9C349]/40 hover:border-[#E9C349] bg-black/40 p-4 rounded-2xl text-center transition-all group cursor-pointer">
+            <div className="relative border-2 border-dashed border-[#D9A9FF]/40 hover:border-[#D9A9FF] bg-black/40 p-4 rounded-2xl text-center transition-all group cursor-pointer">
               <input
                 type="file"
                 accept="audio/*"
                 onChange={handleFileUpload}
                 className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
               />
-              <Upload className="w-6 h-6 text-[#E9C349] mx-auto mb-1.5 group-hover:scale-110 transition-transform" />
+              <Upload className="w-6 h-6 text-[#D9A9FF] mx-auto mb-1.5 group-hover:scale-110 transition-transform" />
               <div className="text-xs font-mono font-bold text-white uppercase">
                 {customFileName ? 'Audio Cargado Exitosamente' : 'Subir Tu Música (.mp3 / .wav)'}
               </div>
@@ -1679,13 +1679,13 @@ export function SmartMusicalityTrainer({
                     onClick={() => handleSelectTrack(track)}
                     className={`w-full p-3 rounded-2xl border text-left transition-all cursor-pointer flex items-center justify-between gap-2 ${
                       isSelected
-                        ? 'bg-[#E9C349]/15 border-[#E9C349] text-white shadow-md'
+                        ? 'bg-[#D9A9FF]/15 border-[#D9A9FF] text-white shadow-md'
                         : 'bg-black/30 border-white/5 hover:border-white/20 text-slate-300'
                     }`}
                   >
                     <div className="flex items-center gap-2.5 truncate">
                       <div className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 ${
-                        isSelected ? 'bg-[#E9C349] text-black' : 'bg-white/10 text-slate-400'
+                        isSelected ? 'bg-[#D9A9FF] text-black' : 'bg-white/10 text-slate-400'
                       }`}>
                         <Disc className={`w-4 h-4 ${isSelected && isPlaying ? 'animate-spin' : ''}`} />
                       </div>
@@ -1695,7 +1695,7 @@ export function SmartMusicalityTrainer({
                       </div>
                     </div>
 
-                    <span className="text-[10px] font-mono text-[#E9C349] font-bold shrink-0">
+                    <span className="text-[10px] font-mono text-[#D9A9FF] font-bold shrink-0">
                       {isSelected ? 'SELECCIONADO' : 'USAR'}
                     </span>
                   </button>
@@ -1707,7 +1707,7 @@ export function SmartMusicalityTrainer({
 
           {/* DANCE GUIDANCE TIPS PER FREQUENCY */}
           <div className="p-3.5 bg-black/60 border border-white/10 rounded-2xl space-y-2">
-            <div className="flex items-center gap-1.5 text-xs font-mono font-bold text-[#E9C349] uppercase">
+            <div className="flex items-center gap-1.5 text-xs font-mono font-bold text-[#D9A9FF] uppercase">
               <Info className="w-4 h-4" />
               <span>GUÍA SOMÁTICA WAACKING</span>
             </div>
@@ -1743,15 +1743,15 @@ export function SmartMusicalityTrainer({
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="bg-[#0b0e1b] border border-[#E9C349]/40 rounded-3xl p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto space-y-6 shadow-2xl relative text-white font-sans"
+              className="bg-[#0b0e1b] border border-[#D9A9FF]/40 rounded-3xl p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto space-y-6 shadow-2xl relative text-white font-sans"
             >
               <div className="flex items-center justify-between border-b border-white/10 pb-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-2xl bg-[#E9C349]/20 border border-[#E9C349] flex items-center justify-center text-[#E9C349]">
+                  <div className="w-10 h-10 rounded-2xl bg-[#D9A9FF]/20 border border-[#D9A9FF] flex items-center justify-center text-[#D9A9FF]">
                     <BarChart2 className="w-5 h-5" />
                   </div>
                   <div>
-                    <h3 className="text-base font-mono font-black text-[#E9C349] uppercase tracking-wide">
+                    <h3 className="text-base font-mono font-black text-[#D9A9FF] uppercase tracking-wide">
                       RESUMEN DE PRECISIÓN RÍTMICA DE LA SESIÓN
                     </h3>
                     <p className="text-xs text-slate-400 font-mono">
@@ -1780,14 +1780,14 @@ export function SmartMusicalityTrainer({
 
                 <div className="p-3 bg-white/5 rounded-2xl border border-white/10 text-center">
                   <span className="text-[10px] font-mono text-slate-400 uppercase">Puntaje Total</span>
-                  <div className="text-2xl font-mono font-black text-[#E9C349] mt-1">
+                  <div className="text-2xl font-mono font-black text-[#D9A9FF] mt-1">
                     {score}
                   </div>
                 </div>
 
                 <div className="p-3 bg-white/5 rounded-2xl border border-white/10 text-center">
                   <span className="text-[10px] font-mono text-slate-400 uppercase">Mejor Racha</span>
-                  <div className="text-2xl font-mono font-black text-[#E9C349] mt-1">
+                  <div className="text-2xl font-mono font-black text-[#D9A9FF] mt-1">
                     🔥 {streak}
                   </div>
                 </div>
@@ -1836,7 +1836,7 @@ export function SmartMusicalityTrainer({
                 <button
                   type="button"
                   onClick={exportSessionPDF}
-                  className="w-full sm:flex-1 py-3 px-4 rounded-2xl bg-gradient-to-r from-[#E9C349] to-amber-500 hover:brightness-110 text-black font-mono font-black text-xs uppercase shadow-xl transition-all cursor-pointer flex items-center justify-center gap-2 active:scale-95"
+                  className="w-full sm:flex-1 py-3 px-4 rounded-2xl bg-gradient-to-r from-[#D9A9FF] to-amber-500 hover:brightness-110 text-black font-mono font-black text-xs uppercase shadow-xl transition-all cursor-pointer flex items-center justify-center gap-2 active:scale-95"
                 >
                   <FileText className="w-4 h-4 fill-black" />
                   <span>DESCARGAR REPORTE PDF</span>
@@ -1847,7 +1847,7 @@ export function SmartMusicalityTrainer({
                   onClick={exportSessionJSON}
                   className="w-full sm:flex-1 py-3 px-4 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-mono font-bold text-xs uppercase transition-all cursor-pointer flex items-center justify-center gap-2 active:scale-95"
                 >
-                  <FileJson className="w-4 h-4 text-[#E9C349]" />
+                  <FileJson className="w-4 h-4 text-[#D9A9FF]" />
                   <span>DESCARGAR DATOS JSON</span>
                 </button>
               </div>

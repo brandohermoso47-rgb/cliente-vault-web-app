@@ -187,7 +187,7 @@ const DiscoBallWidget = forwardRef<DiscoBallWidgetHandle, DiscoBallWidgetProps>(
           const g = beamsCtx.createRadialGradient(cx, cy, 0, cx, cy, len);
           const alpha = (isLive ? 0.13 + beat * 0.22 : 0.05) * (i % 3 === 0 ? 1 : 0.6);
           g.addColorStop(0, `rgba(255,255,255,${alpha})`);
-          g.addColorStop(0.35, i % 2 ? `rgba(233,195,73,${alpha * 0.7})` : `rgba(236,72,153,${alpha * 0.55})`);
+          g.addColorStop(0.35, i % 2 ? `rgba(217, 169, 255,${alpha * 0.7})` : `rgba(236,72,153,${alpha * 0.55})`);
           g.addColorStop(1, 'rgba(0,0,0,0)');
           beamsCtx.fillStyle = g;
           beamsCtx.fill();
@@ -255,14 +255,14 @@ const DiscoBallWidget = forwardRef<DiscoBallWidgetHandle, DiscoBallWidgetProps>(
           className="absolute left-1/2 top-[46%] w-[78%] aspect-square -translate-x-1/2 -translate-y-1/2 rounded-full pointer-events-none opacity-55"
           style={{
             filter: 'blur(38px)',
-            background: 'radial-gradient(circle, rgba(233,195,73,.42) 0%, rgba(236,72,153,.22) 45%, transparent 70%)',
+            background: 'radial-gradient(circle, rgba(217, 169, 255,.42) 0%, rgba(236,72,153,.22) 45%, transparent 70%)',
           }}
         />
         <canvas ref={canvasRef} className="absolute inset-0 block w-full h-full" />
         <canvas ref={beamsRef} className="absolute inset-0 block w-full h-full pointer-events-none mix-blend-screen opacity-70" />
         <div
           className="absolute left-1/2 bottom-[6%] w-[62%] h-3.5 -translate-x-1/2 rounded-full pointer-events-none"
-          style={{ background: 'radial-gradient(ellipse, rgba(233,195,73,.35), transparent 70%)', filter: 'blur(6px)' }}
+          style={{ background: 'radial-gradient(ellipse, rgba(217, 169, 255,.35), transparent 70%)', filter: 'blur(6px)' }}
         />
       </div>
     );
@@ -289,7 +289,7 @@ export function StudioVibeCard({ onToast }: StudioVibeCardProps) {
     <div className="lg:col-span-4 bg-[#17132a]/60 border border-white/10 rounded-2xl relative overflow-hidden flex flex-col min-h-[340px]">
       <div className="relative z-[2] px-3.5 pt-3.5 flex items-start justify-between gap-2">
         <div>
-          <div className="text-[10px] font-mono font-bold uppercase tracking-[0.14em] text-[#E9C349]">Studio Vibe</div>
+          <div className="text-[10px] font-mono font-bold uppercase tracking-[0.14em] text-[#D9A9FF]">Studio Vibe</div>
           <div className="text-[13px] font-extrabold text-white mt-0.5 whitespace-nowrap">Bola disco de sala</div>
         </div>
         <div
@@ -311,7 +311,7 @@ export function StudioVibeCard({ onToast }: StudioVibeCardProps) {
       <div className="relative z-[2] px-3.5 pb-3.5 flex flex-col gap-2.5">
         <div className="flex items-center justify-between gap-2 bg-[#0a0815]/75 border border-white/10 rounded-xl px-2.5 py-2">
           <div className="flex items-center gap-2 min-w-0">
-            <Disc3 className="w-3.5 h-3.5 text-[#E9C349] shrink-0" />
+            <Disc3 className="w-3.5 h-3.5 text-[#D9A9FF] shrink-0" />
             <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider">Tempo</span>
             <span className="text-[15px] font-mono font-bold text-white">{bpm}</span>
             <span className="text-[10px] font-mono text-slate-400">BPM</span>
@@ -321,7 +321,7 @@ export function StudioVibeCard({ onToast }: StudioVibeCardProps) {
               type="button"
               aria-label="Bajar BPM"
               onClick={() => setBpm(v => Math.max(60, v - 2))}
-              className="w-[26px] h-[26px] rounded-lg border border-white/10 bg-white/5 text-slate-200 font-black leading-none hover:bg-[#E9C349]/20 hover:border-[#E9C349]/50 transition-all"
+              className="w-[26px] h-[26px] rounded-lg border border-white/10 bg-white/5 text-slate-200 font-black leading-none hover:bg-[#D9A9FF]/20 hover:border-[#D9A9FF]/50 transition-all"
             >
               −
             </button>
@@ -329,7 +329,7 @@ export function StudioVibeCard({ onToast }: StudioVibeCardProps) {
               type="button"
               aria-label="Subir BPM"
               onClick={() => setBpm(v => Math.min(200, v + 2))}
-              className="w-[26px] h-[26px] rounded-lg border border-white/10 bg-white/5 text-slate-200 font-black leading-none hover:bg-[#E9C349]/20 hover:border-[#E9C349]/50 transition-all"
+              className="w-[26px] h-[26px] rounded-lg border border-white/10 bg-white/5 text-slate-200 font-black leading-none hover:bg-[#D9A9FF]/20 hover:border-[#D9A9FF]/50 transition-all"
             >
               +
             </button>
@@ -350,7 +350,7 @@ export function StudioVibeCard({ onToast }: StudioVibeCardProps) {
           <button
             type="button"
             onClick={celebrate}
-            className="flex-1 py-2 px-2.5 rounded-xl text-[11px] font-extrabold border border-[#E9C349]/40 bg-[#E9C349]/[0.14] text-[#E9C349] hover:bg-[#E9C349]/25 transition-all flex items-center justify-center gap-1.5"
+            className="flex-1 py-2 px-2.5 rounded-xl text-[11px] font-extrabold border border-[#D9A9FF]/40 bg-[#D9A9FF]/[0.14] text-[#D9A9FF] hover:bg-[#D9A9FF]/25 transition-all flex items-center justify-center gap-1.5"
           >
             <Sparkles className="w-[13px] h-[13px]" />
             Destello

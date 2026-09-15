@@ -349,30 +349,30 @@ export const InstructorQuickActions: React.FC<InstructorQuickActionsProps> = ({
             onClick={() => setActiveTab('instructor_classes')}
             className={`flex items-center gap-1 px-2.5 py-1 rounded-xl text-[11px] font-mono font-bold tracking-wider uppercase border transition-all cursor-pointer ${
               activeTab === 'instructor_classes'
-                ? 'bg-[#E9C349] text-black border-[#E9C349] font-extrabold shadow-[0_0_10px_rgba(233,195,73,0.4)]'
+                ? 'bg-[#D9A9FF] text-black border-[#D9A9FF] font-extrabold shadow-[0_0_10px_rgba(217, 169, 255,0.4)]'
                 : theme === 'light'
                 ? 'bg-slate-100 hover:bg-amber-50 text-slate-700 hover:text-amber-900 border-slate-200'
-                : 'bg-[#141414] hover:bg-[#1f1a12] text-slate-300 hover:text-[#E9C349] border-[#2a2a2a] hover:border-[#E9C349]/40'
+                : 'bg-[#141414] hover:bg-[#1f1a12] text-slate-300 hover:text-[#D9A9FF] border-[#2a2a2a] hover:border-[#D9A9FF]/40'
             }`}
             aria-label={t.tooltips.newClass}
           >
-            <Calendar className="w-3 h-3 text-[#E9C349]" />
+            <Calendar className="w-3 h-3 text-[#D9A9FF]" />
             <span>{t.quickPills.newClass}</span>
           </button>
 
           {/* Hover Label Tooltip */}
           <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 pointer-events-none opacity-0 group-hover/pill:opacity-100 transition-all duration-200 z-50 scale-95 group-hover/pill:scale-100 flex flex-col items-center">
             <div className={`w-2 h-2 rotate-45 -mb-1 border-t border-l ${
-              theme === 'light' ? 'bg-slate-900 border-slate-700' : 'bg-[#18140B] border-[#E9C349]/40'
+              theme === 'light' ? 'bg-slate-900 border-slate-700' : 'bg-[#18140B] border-[#D9A9FF]/40'
             }`} />
             <div className={`px-2.5 py-1.5 rounded-lg text-[10px] font-mono tracking-wide shadow-2xl border flex items-center gap-1.5 whitespace-nowrap ${
               theme === 'light'
                 ? 'bg-slate-900 text-white border-slate-700 shadow-xl'
-                : 'bg-[#18140B] text-[#EDEFF4] border-[#E9C349]/40 shadow-[0_8px_20px_rgba(0,0,0,0.8)]'
+                : 'bg-[#18140B] text-[#EDEFF4] border-[#D9A9FF]/40 shadow-[0_8px_20px_rgba(0,0,0,0.8)]'
             }`}>
-              <span className="w-1.5 h-1.5 rounded-full bg-[#E9C349]" />
+              <span className="w-1.5 h-1.5 rounded-full bg-[#D9A9FF]" />
               <span className="font-bold">{t.tooltips.newClass}</span>
-              <span className="px-1 py-0.2 rounded text-[8px] bg-[#E9C349]/20 text-[#E9C349] border border-[#E9C349]/30 font-bold uppercase">
+              <span className="px-1 py-0.2 rounded text-[8px] bg-[#D9A9FF]/20 text-[#D9A9FF] border border-[#D9A9FF]/30 font-bold uppercase">
                 DOCENCIA
               </span>
             </div>
@@ -386,10 +386,10 @@ export const InstructorQuickActions: React.FC<InstructorQuickActionsProps> = ({
             onClick={() => setActiveTab('instructor_students')}
             className={`flex items-center gap-1 px-2.5 py-1 rounded-xl text-[11px] font-mono font-bold tracking-wider uppercase border transition-all cursor-pointer ${
               activeTab === 'instructor_students'
-                ? 'bg-[#E9C349] text-black border-[#E9C349] font-extrabold shadow-[0_0_10px_rgba(233,195,73,0.4)]'
+                ? 'bg-[#D9A9FF] text-black border-[#D9A9FF] font-extrabold shadow-[0_0_10px_rgba(217, 169, 255,0.4)]'
                 : theme === 'light'
                 ? 'bg-slate-100 hover:bg-amber-50 text-slate-700 hover:text-amber-900 border-slate-200'
-                : 'bg-[#141414] hover:bg-[#1f1a12] text-slate-300 hover:text-[#E9C349] border-[#2a2a2a] hover:border-[#E9C349]/40'
+                : 'bg-[#141414] hover:bg-[#1f1a12] text-slate-300 hover:text-[#D9A9FF] border-[#2a2a2a] hover:border-[#D9A9FF]/40'
             }`}
             aria-label={t.tooltips.students}
           >
@@ -400,12 +400,12 @@ export const InstructorQuickActions: React.FC<InstructorQuickActionsProps> = ({
           {/* Hover Label Tooltip */}
           <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 pointer-events-none opacity-0 group-hover/pill:opacity-100 transition-all duration-200 z-50 scale-95 group-hover/pill:scale-100 flex flex-col items-center">
             <div className={`w-2 h-2 rotate-45 -mb-1 border-t border-l ${
-              theme === 'light' ? 'bg-slate-900 border-slate-700' : 'bg-[#18140B] border-[#E9C349]/40'
+              theme === 'light' ? 'bg-slate-900 border-slate-700' : 'bg-[#18140B] border-[#D9A9FF]/40'
             }`} />
             <div className={`px-2.5 py-1.5 rounded-lg text-[10px] font-mono tracking-wide shadow-2xl border flex items-center gap-1.5 whitespace-nowrap ${
               theme === 'light'
                 ? 'bg-slate-900 text-white border-slate-700 shadow-xl'
-                : 'bg-[#18140B] text-[#EDEFF4] border-[#E9C349]/40 shadow-[0_8px_20px_rgba(0,0,0,0.8)]'
+                : 'bg-[#18140B] text-[#EDEFF4] border-[#D9A9FF]/40 shadow-[0_8px_20px_rgba(0,0,0,0.8)]'
             }`}>
               <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
               <span className="font-bold">{t.tooltips.students}</span>
@@ -423,10 +423,10 @@ export const InstructorQuickActions: React.FC<InstructorQuickActionsProps> = ({
             onClick={() => setActiveTab('instructor_publish')}
             className={`flex items-center gap-1 px-2.5 py-1 rounded-xl text-[11px] font-mono font-bold tracking-wider uppercase border transition-all cursor-pointer ${
               activeTab === 'instructor_publish'
-                ? 'bg-[#E9C349] text-black border-[#E9C349] font-extrabold shadow-[0_0_10px_rgba(233,195,73,0.4)]'
+                ? 'bg-[#D9A9FF] text-black border-[#D9A9FF] font-extrabold shadow-[0_0_10px_rgba(217, 169, 255,0.4)]'
                 : theme === 'light'
                 ? 'bg-slate-100 hover:bg-amber-50 text-slate-700 hover:text-amber-900 border-slate-200'
-                : 'bg-[#141414] hover:bg-[#1f1a12] text-slate-300 hover:text-[#E9C349] border-[#2a2a2a] hover:border-[#E9C349]/40'
+                : 'bg-[#141414] hover:bg-[#1f1a12] text-slate-300 hover:text-[#D9A9FF] border-[#2a2a2a] hover:border-[#D9A9FF]/40'
             }`}
             aria-label={t.tooltips.publish}
           >
@@ -437,12 +437,12 @@ export const InstructorQuickActions: React.FC<InstructorQuickActionsProps> = ({
           {/* Hover Label Tooltip */}
           <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 pointer-events-none opacity-0 group-hover/pill:opacity-100 transition-all duration-200 z-50 scale-95 group-hover/pill:scale-100 flex flex-col items-center">
             <div className={`w-2 h-2 rotate-45 -mb-1 border-t border-l ${
-              theme === 'light' ? 'bg-slate-900 border-slate-700' : 'bg-[#18140B] border-[#E9C349]/40'
+              theme === 'light' ? 'bg-slate-900 border-slate-700' : 'bg-[#18140B] border-[#D9A9FF]/40'
             }`} />
             <div className={`px-2.5 py-1.5 rounded-lg text-[10px] font-mono tracking-wide shadow-2xl border flex items-center gap-1.5 whitespace-nowrap ${
               theme === 'light'
                 ? 'bg-slate-900 text-white border-slate-700 shadow-xl'
-                : 'bg-[#18140B] text-[#EDEFF4] border-[#E9C349]/40 shadow-[0_8px_20px_rgba(0,0,0,0.8)]'
+                : 'bg-[#18140B] text-[#EDEFF4] border-[#D9A9FF]/40 shadow-[0_8px_20px_rgba(0,0,0,0.8)]'
             }`}>
               <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
               <span className="font-bold">{t.tooltips.publish}</span>
@@ -464,16 +464,16 @@ export const InstructorQuickActions: React.FC<InstructorQuickActionsProps> = ({
           onClick={() => setIsOpen(!isOpen)}
           className={`relative flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 rounded-xl border text-xs font-mono font-black uppercase tracking-wider transition-all cursor-pointer shadow-md select-none ${
             isOpen
-              ? 'bg-gradient-to-r from-[#E9C349] to-amber-500 text-black border-amber-300 shadow-[0_0_15px_rgba(233,195,73,0.5)]'
+              ? 'bg-gradient-to-r from-[#D9A9FF] to-amber-500 text-black border-amber-300 shadow-[0_0_15px_rgba(217, 169, 255,0.5)]'
               : theme === 'light'
               ? 'bg-gradient-to-r from-amber-50 to-orange-50 hover:from-amber-100 hover:to-orange-100 text-amber-950 border-amber-300 shadow-sm'
-              : 'bg-gradient-to-r from-[#1A160D] via-[#241D12] to-[#17130A] hover:from-[#2A2315] hover:to-[#221B0E] text-[#E9C349] border-[#E9C349]/50 hover:border-[#E9C349]'
+              : 'bg-gradient-to-r from-[#1A160D] via-[#241D12] to-[#17130A] hover:from-[#2A2315] hover:to-[#221B0E] text-[#D9A9FF] border-[#D9A9FF]/50 hover:border-[#D9A9FF]'
           }`}
           aria-label={t.quickActions}
           aria-expanded={isOpen}
         >
           <div className="relative flex items-center justify-center">
-            <Zap className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${isOpen ? 'text-black fill-black' : 'text-[#E9C349] fill-[#E9C349]'}`} />
+            <Zap className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${isOpen ? 'text-black fill-black' : 'text-[#D9A9FF] fill-[#D9A9FF]'}`} />
             <motion.span
               className="absolute -top-1 -right-1 w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_#34d399]"
               animate={{ scale: [1, 1.4, 1], opacity: [0.7, 1, 0.7] }}
@@ -488,23 +488,23 @@ export const InstructorQuickActions: React.FC<InstructorQuickActionsProps> = ({
             ⚡ {language === 'es' ? 'Acciones' : 'Quick'}
           </span>
 
-          <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${isOpen ? 'rotate-180 text-black' : 'text-[#E9C349]'}`} />
+          <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${isOpen ? 'rotate-180 text-black' : 'text-[#D9A9FF]'}`} />
         </motion.button>
 
         {/* Hover Label Tooltip on Quick Actions Button */}
         {!isOpen && (
           <div className="absolute top-full right-0 sm:left-1/2 sm:-translate-x-1/2 mt-2 pointer-events-none opacity-0 group-hover/mainbtn:opacity-100 transition-all duration-200 z-50 scale-95 group-hover/mainbtn:scale-100 flex flex-col items-end sm:items-center">
             <div className={`w-2 h-2 rotate-45 -mb-1 mr-4 sm:mr-0 border-t border-l ${
-              theme === 'light' ? 'bg-slate-900 border-slate-700' : 'bg-[#18140B] border-[#E9C349]/40'
+              theme === 'light' ? 'bg-slate-900 border-slate-700' : 'bg-[#18140B] border-[#D9A9FF]/40'
             }`} />
             <div className={`px-2.5 py-1.5 rounded-lg text-[10px] font-mono tracking-wide shadow-2xl border flex items-center gap-2 whitespace-nowrap ${
               theme === 'light'
                 ? 'bg-slate-900 text-white border-slate-700 shadow-xl'
-                : 'bg-[#18140B] text-[#EDEFF4] border-[#E9C349]/40 shadow-[0_8px_20px_rgba(0,0,0,0.8)]'
+                : 'bg-[#18140B] text-[#EDEFF4] border-[#D9A9FF]/40 shadow-[0_8px_20px_rgba(0,0,0,0.8)]'
             }`}>
-              <Zap className="w-3 h-3 text-[#E9C349] fill-[#E9C349]" />
+              <Zap className="w-3 h-3 text-[#D9A9FF] fill-[#D9A9FF]" />
               <span className="font-bold">{t.tooltips.quickActionsHub}</span>
-              <span className="px-1 py-0.2 rounded text-[8px] bg-white/10 text-[#E9C349] border border-white/10 font-bold uppercase">
+              <span className="px-1 py-0.2 rounded text-[8px] bg-white/10 text-[#D9A9FF] border border-white/10 font-bold uppercase">
                 14 ACCIONES
               </span>
             </div>
@@ -533,12 +533,12 @@ export const InstructorQuickActions: React.FC<InstructorQuickActionsProps> = ({
               <div className="flex items-center gap-2.5">
                 {/* Branding Icon with Tooltip */}
                 <div className="relative group/hublogo shrink-0">
-                  <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-[#E9C349] to-amber-600 flex items-center justify-center text-black font-black shadow-md cursor-help">
+                  <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-[#D9A9FF] to-amber-600 flex items-center justify-center text-black font-black shadow-md cursor-help">
                     <Zap className="w-4 h-4 fill-black" />
                   </div>
                   <div className="absolute left-0 top-full mt-1.5 pointer-events-none opacity-0 group-hover/hublogo:opacity-100 transition-all duration-150 z-30 scale-95 group-hover/hublogo:scale-100">
                     <div className={`px-2 py-0.5 rounded-md text-[9px] font-mono font-bold tracking-wide whitespace-nowrap border shadow-lg ${
-                      theme === 'light' ? 'bg-slate-900 text-white border-slate-700' : 'bg-[#18140B] text-[#E9C349] border-[#E9C349]/40'
+                      theme === 'light' ? 'bg-slate-900 text-white border-slate-700' : 'bg-[#18140B] text-[#D9A9FF] border-[#D9A9FF]/40'
                     }`}>
                       {t.hubLogoTooltip}
                     </div>
@@ -550,7 +550,7 @@ export const InstructorQuickActions: React.FC<InstructorQuickActionsProps> = ({
                     <h3 className="text-xs font-mono font-black uppercase tracking-wider">
                       {t.quickActions}
                     </h3>
-                    <span className="px-1.5 py-0.2 rounded-md bg-[#E9C349]/20 text-[#E9C349] text-[9px] font-mono font-bold uppercase border border-[#E9C349]/30">
+                    <span className="px-1.5 py-0.2 rounded-md bg-[#D9A9FF]/20 text-[#D9A9FF] text-[9px] font-mono font-bold uppercase border border-[#D9A9FF]/30">
                       {t.instructorBadge}
                     </span>
                   </div>
@@ -575,7 +575,7 @@ export const InstructorQuickActions: React.FC<InstructorQuickActionsProps> = ({
                   <Search className="w-4 h-4 text-slate-400 absolute left-3 pointer-events-auto cursor-help" />
                   <div className="absolute left-3 bottom-full mb-1.5 pointer-events-none opacity-0 group-hover/searchicon:opacity-100 transition-all duration-150 z-30 scale-95 group-hover/searchicon:scale-100">
                     <div className={`px-2 py-0.5 rounded-md text-[9px] font-mono font-bold tracking-wide whitespace-nowrap border shadow-lg ${
-                      theme === 'light' ? 'bg-slate-900 text-white border-slate-700' : 'bg-[#18140B] text-[#E9C349] border-[#E9C349]/40'
+                      theme === 'light' ? 'bg-slate-900 text-white border-slate-700' : 'bg-[#18140B] text-[#D9A9FF] border-[#D9A9FF]/40'
                     }`}>
                       {t.searchTooltip}
                     </div>
@@ -591,7 +591,7 @@ export const InstructorQuickActions: React.FC<InstructorQuickActionsProps> = ({
                   className={`w-full pl-9 pr-3 py-1.5 rounded-xl text-xs font-sans border outline-none transition-all ${
                     theme === 'light'
                       ? 'bg-white border-slate-300 text-slate-900 focus:border-amber-500 focus:ring-1 focus:ring-amber-500'
-                      : 'bg-[#1A1A1A] border-[#333333] text-white focus:border-[#E9C349] focus:ring-1 focus:ring-[#E9C349]'
+                      : 'bg-[#1A1A1A] border-[#333333] text-white focus:border-[#D9A9FF] focus:ring-1 focus:ring-[#D9A9FF]'
                   }`}
                 />
                 {searchQuery && (
@@ -614,7 +614,7 @@ export const InstructorQuickActions: React.FC<InstructorQuickActionsProps> = ({
                       onClick={() => setActiveCategory(cat)}
                       className={`px-2 py-1 rounded-lg text-[10px] font-mono font-bold whitespace-nowrap transition-colors cursor-pointer ${
                         activeCategory === cat
-                          ? 'bg-[#E9C349] text-black font-extrabold shadow-sm'
+                          ? 'bg-[#D9A9FF] text-black font-extrabold shadow-sm'
                           : theme === 'light'
                           ? 'bg-white text-slate-600 hover:bg-slate-200 border border-slate-200'
                           : 'bg-[#1E1E1E] text-slate-400 hover:text-white hover:bg-[#2A2A2A] border border-white/5'
@@ -626,12 +626,12 @@ export const InstructorQuickActions: React.FC<InstructorQuickActionsProps> = ({
                     {/* Hover Label Tooltip */}
                     <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-1.5 pointer-events-none opacity-0 group-hover/cat:opacity-100 transition-all duration-150 z-30 scale-95 group-hover/cat:scale-100 flex flex-col items-center">
                       <div className={`px-2 py-0.5 rounded-md text-[9px] font-mono font-bold tracking-wide whitespace-nowrap border shadow-lg ${
-                        theme === 'light' ? 'bg-slate-900 text-white border-slate-700' : 'bg-[#18140B] text-[#E9C349] border-[#E9C349]/40'
+                        theme === 'light' ? 'bg-slate-900 text-white border-slate-700' : 'bg-[#18140B] text-[#D9A9FF] border-[#D9A9FF]/40'
                       }`}>
                         {t.categoryTooltips[cat]}
                       </div>
                       <div className={`w-1.5 h-1.5 rotate-45 -mt-0.5 border-b border-r ${
-                        theme === 'light' ? 'bg-slate-900 border-slate-700' : 'bg-[#18140B] border-[#E9C349]/40'
+                        theme === 'light' ? 'bg-slate-900 border-slate-700' : 'bg-[#18140B] border-[#D9A9FF]/40'
                       }`} />
                     </div>
                   </div>
@@ -658,7 +658,7 @@ export const InstructorQuickActions: React.FC<InstructorQuickActionsProps> = ({
                       className={`w-full text-left p-2.5 rounded-xl border transition-all flex items-start gap-3 cursor-pointer group ${
                         theme === 'light'
                           ? 'bg-slate-50/80 hover:bg-amber-50/70 border-slate-200/80 hover:border-amber-300'
-                          : 'bg-[#141414] hover:bg-[#1A1812] border-[#222222] hover:border-[#E9C349]/50'
+                          : 'bg-[#141414] hover:bg-[#1A1812] border-[#222222] hover:border-[#D9A9FF]/50'
                       }`}
                     >
                       {/* Icon container with dedicated Hover Label Tooltip */}
@@ -670,16 +670,16 @@ export const InstructorQuickActions: React.FC<InstructorQuickActionsProps> = ({
                         {/* Hover Label Tooltip on Icon */}
                         <div className="absolute left-0 top-full mt-1.5 pointer-events-none opacity-0 group-hover/icon:opacity-100 transition-all duration-150 z-40 scale-95 group-hover/icon:scale-100 origin-top-left flex flex-col items-start">
                           <div className={`w-2 h-2 rotate-45 -mb-1 ml-3 border-t border-l ${
-                            theme === 'light' ? 'bg-slate-950 border-slate-700' : 'bg-[#18140B] border-[#E9C349]/50'
+                            theme === 'light' ? 'bg-slate-950 border-slate-700' : 'bg-[#18140B] border-[#D9A9FF]/50'
                           }`} />
                           <div className={`px-2.5 py-1.5 rounded-lg text-[10px] font-mono tracking-wide shadow-2xl border flex items-center gap-1.5 whitespace-nowrap ${
                             theme === 'light'
                               ? 'bg-slate-950 text-white border-slate-700 shadow-slate-900/40'
-                              : 'bg-[#18140B] text-[#EDEFF4] border-[#E9C349]/50 shadow-[0_8px_25px_rgba(0,0,0,0.85)]'
+                              : 'bg-[#18140B] text-[#EDEFF4] border-[#D9A9FF]/50 shadow-[0_8px_25px_rgba(0,0,0,0.85)]'
                           }`}>
-                            <span className="w-1.5 h-1.5 rounded-full bg-[#E9C349] shrink-0 animate-pulse" />
+                            <span className="w-1.5 h-1.5 rounded-full bg-[#D9A9FF] shrink-0 animate-pulse" />
                             <span className="font-bold text-white">{action.iconTooltip || action.title}</span>
-                            <span className="px-1 py-0.2 rounded text-[8px] font-mono uppercase tracking-wider bg-white/10 text-[#E9C349] border border-white/10 shrink-0">
+                            <span className="px-1 py-0.2 rounded text-[8px] font-mono uppercase tracking-wider bg-white/10 text-[#D9A9FF] border border-white/10 shrink-0">
                               {action.category}
                             </span>
                           </div>
@@ -688,13 +688,13 @@ export const InstructorQuickActions: React.FC<InstructorQuickActionsProps> = ({
 
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center justify-between gap-1">
-                          <h4 className={`text-xs font-mono font-black tracking-wide truncate group-hover:text-[#E9C349] transition-colors ${
+                          <h4 className={`text-xs font-mono font-black tracking-wide truncate group-hover:text-[#D9A9FF] transition-colors ${
                             theme === 'light' ? 'text-slate-900' : 'text-white'
                           }`}>
                             {action.title}
                           </h4>
                           {action.badge && (
-                            <span className="px-1.5 py-0.2 rounded text-[9px] font-mono font-bold bg-[#E9C349]/15 text-[#E9C349] border border-[#E9C349]/30 shrink-0">
+                            <span className="px-1.5 py-0.2 rounded text-[9px] font-mono font-bold bg-[#D9A9FF]/15 text-[#D9A9FF] border border-[#D9A9FF]/30 shrink-0">
                               {action.badge}
                             </span>
                           )}
@@ -706,14 +706,14 @@ export const InstructorQuickActions: React.FC<InstructorQuickActionsProps> = ({
 
                       {/* Launch action icon with tooltip */}
                       <div className="relative group/link self-center">
-                        <div className="p-1 rounded-lg hover:bg-white/10 transition-colors text-[#E9C349] opacity-70 group-hover:opacity-100">
+                        <div className="p-1 rounded-lg hover:bg-white/10 transition-colors text-[#D9A9FF] opacity-70 group-hover:opacity-100">
                           <ExternalLink className="w-3.5 h-3.5" />
                         </div>
                         <div className="absolute right-0 bottom-full mb-1.5 pointer-events-none opacity-0 group-hover/link:opacity-100 transition-all duration-150 z-30 scale-95 group-hover/link:scale-100 origin-bottom-right">
                           <div className={`px-2 py-0.5 rounded-md text-[9px] font-mono font-bold tracking-wide whitespace-nowrap border shadow-lg ${
                             theme === 'light'
                               ? 'bg-slate-900 text-white border-slate-700'
-                              : 'bg-[#16120A] text-[#E9C349] border-[#E9C349]/40'
+                              : 'bg-[#16120A] text-[#D9A9FF] border-[#D9A9FF]/40'
                           }`}>
                             {t.launchTool}
                           </div>
@@ -740,7 +740,7 @@ export const InstructorQuickActions: React.FC<InstructorQuickActionsProps> = ({
                     setActiveTab('instructor_classes');
                     setIsOpen(false);
                   }}
-                  className="hover:text-[#E9C349] transition-colors underline decoration-dotted"
+                  className="hover:text-[#D9A9FF] transition-colors underline decoration-dotted"
                 >
                   Ver Todo el Panel
                 </button>

@@ -117,7 +117,7 @@ export const AudioSpectrumVisualizer: React.FC<AudioSpectrumVisualizerProps> = (
       nivel: 10 + Math.floor(Math.random() * 20),
       peak: 30,
       category: band.cat,
-      fill: '#E9C349'
+      fill: '#D9A9FF'
     }))
   );
 
@@ -225,9 +225,9 @@ export const AudioSpectrumVisualizer: React.FC<AudioSpectrumVisualizerProps> = (
       case 'fire-ruby':
         return {
           barStart: '#FF4500',
-          barMid: '#9A2B3C',
-          barEnd: '#FFD700',
-          bgGlow: 'rgba(154,43,60,0.2)',
+          barMid: '#C23E9E',
+          barEnd: '#E9B8FF',
+          bgGlow: 'rgba(194, 62, 158,0.2)',
           text: '#FF4500'
         };
       case 'matrix-green':
@@ -241,11 +241,11 @@ export const AudioSpectrumVisualizer: React.FC<AudioSpectrumVisualizerProps> = (
       case 'waack-gold':
       default:
         return {
-          barStart: '#9A2B3C',
-          barMid: '#E9C349',
+          barStart: '#C23E9E',
+          barMid: '#D9A9FF',
           barEnd: '#FFF5C0',
-          bgGlow: 'rgba(233,195,73,0.15)',
-          text: '#E9C349'
+          bgGlow: 'rgba(217, 169, 255,0.15)',
+          text: '#D9A9FF'
         };
     }
   }, [colorTheme]);
@@ -674,7 +674,7 @@ export const AudioSpectrumVisualizer: React.FC<AudioSpectrumVisualizerProps> = (
             ctx.fillText(`GRAVES (BASS / LOCKS) - ${bassAvg}%`, padding, 35);
             ctx.fillRect(padding, 42, (width - padding * 2) * (bassAvg / 100), meterHeight);
 
-            ctx.fillStyle = '#E9C349';
+            ctx.fillStyle = '#D9A9FF';
             ctx.fillText(`MEDIOS (MIDS / RITMO Y VOZ) - ${midAvg}%`, padding, 95);
             ctx.fillRect(padding, 102, (width - padding * 2) * (midAvg / 100), meterHeight);
 
@@ -699,7 +699,7 @@ export const AudioSpectrumVisualizer: React.FC<AudioSpectrumVisualizerProps> = (
     <div className={`space-y-6 ${className} ${isFullscreen ? (isDark ? 'fixed inset-0 z-[9999] bg-[#0A0A0A] p-6 overflow-y-auto' : 'fixed inset-0 z-[9999] bg-slate-100 p-6 overflow-y-auto') : ''}`}>
       {/* MAIN CONTAINER PANEL */}
       <div className={`border rounded-2xl p-6 shadow-2xl relative overflow-hidden space-y-5 transition-colors ${
-        isDark ? 'bg-[#121212] border-[#E9C349]/40 text-white' : 'bg-white border-amber-400/50 text-slate-900 shadow-md'
+        isDark ? 'bg-[#121212] border-[#D9A9FF]/40 text-white' : 'bg-white border-amber-400/50 text-slate-900 shadow-md'
       }`}>
         
         {/* HEADER SECTION */}
@@ -707,7 +707,7 @@ export const AudioSpectrumVisualizer: React.FC<AudioSpectrumVisualizerProps> = (
           isDark ? 'border-[#262626]' : 'border-slate-200'
         }`}>
           <div className="flex items-center gap-3">
-            <div className={`w-12 h-12 rounded-2xl bg-[#E9C349]/20 border border-[#E9C349]/50 flex items-center justify-center text-[#E9C349] shrink-0 shadow-lg ${beatPulse ? 'scale-110 bg-[#E9C349] text-black' : ''} transition-all duration-100`}>
+            <div className={`w-12 h-12 rounded-2xl bg-[#D9A9FF]/20 border border-[#D9A9FF]/50 flex items-center justify-center text-[#D9A9FF] shrink-0 shadow-lg ${beatPulse ? 'scale-110 bg-[#D9A9FF] text-black' : ''} transition-all duration-100`}>
               <Activity className="w-6 h-6 animate-pulse" />
             </div>
             <div>
@@ -717,7 +717,7 @@ export const AudioSpectrumVisualizer: React.FC<AudioSpectrumVisualizerProps> = (
                 }`}>
                   Visualizador Rítmico de Audio y Metrónomo
                 </h2>
-                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-[#E9C349]/20 text-[#E9C349] border border-[#E9C349]/40">
+                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-[#D9A9FF]/20 text-[#D9A9FF] border border-[#D9A9FF]/40">
                   RECHARTS & CANVAS 🎶
                 </span>
               </div>
@@ -739,13 +739,13 @@ export const AudioSpectrumVisualizer: React.FC<AudioSpectrumVisualizerProps> = (
         </div>
 
         {/* METRONOME & TEMPO CONTROLLER BAR */}
-        <div className="bg-[#0A0A0A] border border-[#E9C349]/30 rounded-xl p-4 flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-4 shadow-inner">
+        <div className="bg-[#0A0A0A] border border-[#D9A9FF]/30 rounded-xl p-4 flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-4 shadow-inner">
           {/* BPM Adjustment Controls */}
           <div className="flex items-center gap-3 flex-wrap">
             <div className="flex items-center gap-2">
-              <Clock className="w-4 h-4 text-[#E9C349]" />
+              <Clock className="w-4 h-4 text-[#D9A9FF]" />
               <span className="text-xs font-mono font-bold text-slate-300 uppercase">Tempo:</span>
-              <span className="text-xl font-black text-[#E9C349] font-mono min-w-[70px]">
+              <span className="text-xl font-black text-[#D9A9FF] font-mono min-w-[70px]">
                 {bpm} <span className="text-xs font-normal text-slate-400">BPM</span>
               </span>
             </div>
@@ -768,9 +768,9 @@ export const AudioSpectrumVisualizer: React.FC<AudioSpectrumVisualizerProps> = (
             <button
               type="button"
               onClick={handleTapTempo}
-              className="px-3 py-1.5 bg-[#9A2B3C]/30 hover:bg-[#9A2B3C]/60 text-white border border-[#9A2B3C]/60 text-xs font-mono font-bold rounded-xl transition-all cursor-pointer flex items-center gap-1 active:scale-95"
+              className="px-3 py-1.5 bg-[#C23E9E]/30 hover:bg-[#C23E9E]/60 text-white border border-[#C23E9E]/60 text-xs font-mono font-bold rounded-xl transition-all cursor-pointer flex items-center gap-1 active:scale-95"
             >
-              <Zap className="w-3.5 h-3.5 text-[#E9C349]" />
+              <Zap className="w-3.5 h-3.5 text-[#D9A9FF]" />
               <span>TAP TEMPO</span>
             </button>
           </div>
@@ -787,7 +787,7 @@ export const AudioSpectrumVisualizer: React.FC<AudioSpectrumVisualizerProps> = (
                   className={`w-8 h-9 rounded-lg flex flex-col items-center justify-center font-mono font-black text-xs border transition-all duration-100 ${
                     isActive
                       ? isAccent
-                        ? 'bg-[#E9C349] text-black border-[#E9C349] scale-110 shadow-[0_0_15px_rgba(233,195,73,0.8)]'
+                        ? 'bg-[#D9A9FF] text-black border-[#D9A9FF] scale-110 shadow-[0_0_15px_rgba(217, 169, 255,0.8)]'
                         : 'bg-emerald-500 text-black border-emerald-400 scale-105 shadow-[0_0_10px_rgba(16,185,129,0.6)]'
                       : 'bg-[#121212] text-slate-500 border-[#262626]'
                   }`}
@@ -801,7 +801,7 @@ export const AudioSpectrumVisualizer: React.FC<AudioSpectrumVisualizerProps> = (
         </div>
 
         {tapNotice && (
-          <div className="p-2 rounded-xl bg-[#E9C349]/20 border border-[#E9C349]/40 text-[#E9C349] text-xs font-mono font-bold text-center animate-fade-in">
+          <div className="p-2 rounded-xl bg-[#D9A9FF]/20 border border-[#D9A9FF]/40 text-[#D9A9FF] text-xs font-mono font-bold text-center animate-fade-in">
             {tapNotice}
           </div>
         )}
@@ -814,19 +814,19 @@ export const AudioSpectrumVisualizer: React.FC<AudioSpectrumVisualizerProps> = (
             onClick={startMetronomeMode}
             className={`p-3.5 rounded-xl border text-left transition-all flex items-center justify-between cursor-pointer ${
               sourceType === 'metronome' && isLive
-                ? 'bg-[#E9C349]/20 border-[#E9C349] text-white shadow-[0_0_20px_rgba(233,195,73,0.3)]'
-                : 'bg-[#0A0A0A] border-[#262626] text-[#8A8A8A] hover:border-[#E9C349]/40 hover:text-white'
+                ? 'bg-[#D9A9FF]/20 border-[#D9A9FF] text-white shadow-[0_0_20px_rgba(217, 169, 255,0.3)]'
+                : 'bg-[#0A0A0A] border-[#262626] text-[#8A8A8A] hover:border-[#D9A9FF]/40 hover:text-white'
             }`}
           >
             <div className="space-y-0.5">
               <div className="flex items-center gap-1.5">
-                <Clock className={`w-4 h-4 ${sourceType === 'metronome' && isLive ? 'text-[#E9C349] animate-spin' : ''}`} />
+                <Clock className={`w-4 h-4 ${sourceType === 'metronome' && isLive ? 'text-[#D9A9FF] animate-spin' : ''}`} />
                 <span className="text-xs font-mono font-bold uppercase">Metrónomo Tono</span>
               </div>
               <p className="text-[10px] opacity-75">Audio beeps a {bpm} BPM</p>
             </div>
             {sourceType === 'metronome' && isLive && (
-              <span className="w-2.5 h-2.5 rounded-full bg-[#E9C349] animate-ping" />
+              <span className="w-2.5 h-2.5 rounded-full bg-[#D9A9FF] animate-ping" />
             )}
           </button>
 
@@ -836,19 +836,19 @@ export const AudioSpectrumVisualizer: React.FC<AudioSpectrumVisualizerProps> = (
             onClick={startSynthLoop}
             className={`p-3.5 rounded-xl border text-left transition-all flex items-center justify-between cursor-pointer ${
               sourceType === 'synth' && isLive
-                ? 'bg-[#9A2B3C]/20 border-[#9A2B3C] text-white shadow-[0_0_20px_rgba(154,43,60,0.3)]'
-                : 'bg-[#0A0A0A] border-[#262626] text-[#8A8A8A] hover:border-[#9A2B3C]/40 hover:text-white'
+                ? 'bg-[#C23E9E]/20 border-[#C23E9E] text-white shadow-[0_0_20px_rgba(194, 62, 158,0.3)]'
+                : 'bg-[#0A0A0A] border-[#262626] text-[#8A8A8A] hover:border-[#C23E9E]/40 hover:text-white'
             }`}
           >
             <div className="space-y-0.5">
               <div className="flex items-center gap-1.5">
-                <Radio className={`w-4 h-4 ${sourceType === 'synth' && isLive ? 'text-[#E9C349] animate-pulse' : ''}`} />
+                <Radio className={`w-4 h-4 ${sourceType === 'synth' && isLive ? 'text-[#D9A9FF] animate-pulse' : ''}`} />
                 <span className="text-xs font-mono font-bold uppercase">Beat Funk Synth</span>
               </div>
               <p className="text-[10px] opacity-75">Groove a {bpm} BPM</p>
             </div>
             {sourceType === 'synth' && isLive && (
-              <span className="w-2.5 h-2.5 rounded-full bg-[#9A2B3C] animate-ping" />
+              <span className="w-2.5 h-2.5 rounded-full bg-[#C23E9E] animate-ping" />
             )}
           </button>
 
@@ -920,7 +920,7 @@ export const AudioSpectrumVisualizer: React.FC<AudioSpectrumVisualizerProps> = (
                 onClick={() => setVisualMode(mode.id as VisualizerMode)}
                 className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
                   visualMode === mode.id
-                    ? 'bg-[#E9C349] text-black font-bold shadow-md'
+                    ? 'bg-[#D9A9FF] text-black font-bold shadow-md'
                     : 'text-[#8A8A8A] hover:text-white'
                 }`}
               >
@@ -944,7 +944,7 @@ export const AudioSpectrumVisualizer: React.FC<AudioSpectrumVisualizerProps> = (
         {/* VISUALIZER STAGE AREA */}
         <div className={`border-2 rounded-2xl p-4 relative overflow-hidden space-y-4 transition-colors ${
           isDark 
-            ? 'bg-[#0A0A0A] border-[#E9C349]/30 shadow-[0_0_30px_rgba(233,195,73,0.08)]' 
+            ? 'bg-[#0A0A0A] border-[#D9A9FF]/30 shadow-[0_0_30px_rgba(217, 169, 255,0.08)]' 
             : 'bg-slate-50 border-amber-400/50 shadow-md'
         }`}>
           <div className={`relative h-64 sm:h-80 w-full border rounded-xl overflow-hidden shadow-inner flex items-center justify-center p-2 transition-colors ${
@@ -977,9 +977,9 @@ export const AudioSpectrumVisualizer: React.FC<AudioSpectrumVisualizerProps> = (
                         if (active && payload && payload.length) {
                           const data = payload[0].payload as RechartsFrequencyData;
                           return (
-                            <div className={isDark ? "bg-[#0A0A0A] border border-[#E9C349] p-2.5 rounded-xl shadow-xl text-xs font-mono space-y-1 text-white" : "bg-white border border-amber-400 p-2.5 rounded-xl shadow-xl text-xs font-mono space-y-1 text-slate-900"}>
+                            <div className={isDark ? "bg-[#0A0A0A] border border-[#D9A9FF] p-2.5 rounded-xl shadow-xl text-xs font-mono space-y-1 text-white" : "bg-white border border-amber-400 p-2.5 rounded-xl shadow-xl text-xs font-mono space-y-1 text-slate-900"}>
                               <p className="font-bold uppercase">{data.name} ({data.hz})</p>
-                              <p className="text-[#E9C349]">Intensidad: <span className="font-bold">{data.nivel}%</span></p>
+                              <p className="text-[#D9A9FF]">Intensidad: <span className="font-bold">{data.nivel}%</span></p>
                               <p className={isDark ? "text-slate-400 text-[10px]" : "text-slate-500 text-[10px]"}>Pico: {data.peak}%</p>
                             </div>
                           );
@@ -987,7 +987,7 @@ export const AudioSpectrumVisualizer: React.FC<AudioSpectrumVisualizerProps> = (
                         return null;
                       }}
                     />
-                    <ReferenceLine y={80} stroke="#9A2B3C" strokeDasharray="3 3" label={{ value: 'PUNCH THRESHOLD', fill: '#9A2B3C', fontSize: 9 }} />
+                    <ReferenceLine y={80} stroke="#C23E9E" strokeDasharray="3 3" label={{ value: 'PUNCH THRESHOLD', fill: '#C23E9E', fontSize: 9 }} />
                     <Bar dataKey="nivel" radius={[6, 6, 0, 0]} isAnimationActive={false}>
                       {rechartsData.map((entry, index) => (
                         <Cell
@@ -1012,7 +1012,7 @@ export const AudioSpectrumVisualizer: React.FC<AudioSpectrumVisualizerProps> = (
             {/* PAUSE OVERLAY */}
             {!isLive && (
               <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center bg-black/80 backdrop-blur-sm space-y-3 z-10">
-                <div className="w-14 h-14 rounded-2xl bg-[#121212] border border-[#E9C349]/40 flex items-center justify-center text-[#E9C349] animate-bounce">
+                <div className="w-14 h-14 rounded-2xl bg-[#121212] border border-[#D9A9FF]/40 flex items-center justify-center text-[#D9A9FF] animate-bounce">
                   <Music className="w-7 h-7" />
                 </div>
                 <h3 className="text-sm font-bold text-white uppercase tracking-wider">
@@ -1024,7 +1024,7 @@ export const AudioSpectrumVisualizer: React.FC<AudioSpectrumVisualizerProps> = (
                 <button
                   type="button"
                   onClick={startMetronomeMode}
-                  className="px-5 py-2.5 bg-[#E9C349] hover:bg-[#d4ae36] text-black font-mono font-bold text-xs uppercase rounded-xl transition-all shadow-lg cursor-pointer flex items-center gap-2 active:scale-95"
+                  className="px-5 py-2.5 bg-[#D9A9FF] hover:bg-[#B478F0] text-black font-mono font-bold text-xs uppercase rounded-xl transition-all shadow-lg cursor-pointer flex items-center gap-2 active:scale-95"
                 >
                   <Play className="w-4 h-4 fill-current" /> Activar Metrónomo ({bpm} BPM)
                 </button>
@@ -1054,13 +1054,13 @@ export const AudioSpectrumVisualizer: React.FC<AudioSpectrumVisualizerProps> = (
             <div className="space-y-1">
               <div className="flex justify-between items-center text-[10px] font-mono font-bold">
                 <span className="text-[#8A8A8A] uppercase flex items-center gap-1">
-                  <Zap className="w-3.5 h-3.5 text-[#E9C349]" /> MIDS (Medios/Dramatismo)
+                  <Zap className="w-3.5 h-3.5 text-[#D9A9FF]" /> MIDS (Medios/Dramatismo)
                 </span>
-                <span className="text-[#E9C349] font-bold">{midEnergy}%</span>
+                <span className="text-[#D9A9FF] font-bold">{midEnergy}%</span>
               </div>
               <div className="w-full bg-[#0A0A0A] h-2 rounded-full overflow-hidden border border-[#262626]">
                 <div
-                  className="h-full bg-gradient-to-r from-amber-600 to-[#E9C349] transition-all duration-75"
+                  className="h-full bg-gradient-to-r from-amber-600 to-[#D9A9FF] transition-all duration-75"
                   style={{ width: `${midEnergy}%` }}
                 />
               </div>
@@ -1097,7 +1097,7 @@ export const AudioSpectrumVisualizer: React.FC<AudioSpectrumVisualizerProps> = (
                 step="0.1"
                 value={sensitivity}
                 onChange={(e) => setSensitivity(parseFloat(e.target.value))}
-                className="w-full accent-[#E9C349] h-2 bg-[#0A0A0A] rounded-lg cursor-pointer"
+                className="w-full accent-[#D9A9FF] h-2 bg-[#0A0A0A] rounded-lg cursor-pointer"
               />
             </div>
           </div>

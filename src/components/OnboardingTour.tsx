@@ -106,7 +106,7 @@ export default function OnboardingTour({
         title: "¡Te damos la bienvenida a Waack On! 🎭",
         description: "Estás en el portal de Monroe Academy. Permítenos guiarte por las herramientas interactivas diseñadas para dominar el arte, expresión, ritmo y biomecánica del Waacking.",
         tab: "dashboard",
-        icon: <Sparkles className="w-8 h-8 text-[#E9C349]" />
+        icon: <Sparkles className="w-8 h-8 text-[#D9A9FF]" />
       },
       {
         badge: "DASHBOARD",
@@ -120,7 +120,7 @@ export default function OnboardingTour({
         title: "Laboratorio Freestyle & Práctica ⚡",
         description: "¡La zona interactiva clave! Ajusta el BPM de las pistas, activa el metrónomo, entrena tu expresión con la webcam usando filtros dramáticos y envía videos para recibir correcciones.",
         tab: "entrenamiento",
-        icon: <Sparkles className="w-8 h-8 text-[#9A2B3C]" />
+        icon: <Sparkles className="w-8 h-8 text-[#C23E9E]" />
       },
       {
         badge: "DIAGNÓSTICO",
@@ -141,7 +141,7 @@ export default function OnboardingTour({
         title: "¡Todo Listo para Brillar! 👑",
         description: "Has completado la inducción del portal. Para celebrar tu llegada a la pista, te otorgamos una bonificación de +100 puntos de experiencia iniciales. ¡Demuestra tu actitud!",
         tab: "dashboard",
-        icon: <Award className="w-10 h-10 text-[#E9C349] animate-bounce" />
+        icon: <Award className="w-10 h-10 text-[#D9A9FF] animate-bounce" />
       }
     ],
     en: [
@@ -150,7 +150,7 @@ export default function OnboardingTour({
         title: "Welcome to Waack On! 🎭",
         description: "You've entered the Monroe Academy portal. Let us guide you on a quick tour of our interactive tools designed to master the art, posture, rhythm, and biomechanics of Waacking.",
         tab: "dashboard",
-        icon: <Sparkles className="w-8 h-8 text-[#E9C349]" />
+        icon: <Sparkles className="w-8 h-8 text-[#D9A9FF]" />
       },
       {
         badge: "DASHBOARD",
@@ -164,7 +164,7 @@ export default function OnboardingTour({
         title: "Freestyle Lab & Metronome ⚡",
         description: "The core interactive practice space. Sintonize premium tracks, adjust BPM speed, enable the synchronized metronome click, and activate your camera with custom retro filters.",
         tab: "entrenamiento",
-        icon: <Sparkles className="w-8 h-8 text-[#9A2B3C]" />
+        icon: <Sparkles className="w-8 h-8 text-[#C23E9E]" />
       },
       {
         badge: "DIAGNOSTIC",
@@ -185,7 +185,7 @@ export default function OnboardingTour({
         title: "Ready to Shine! 👑",
         description: "You've completed the academy orientation tour. To celebrate your arrival, we're rewarding you with +100 experience points! Show off your unique dramatic attitude!",
         tab: "dashboard",
-        icon: <Award className="w-10 h-10 text-[#E9C349] animate-bounce" />
+        icon: <Award className="w-10 h-10 text-[#D9A9FF] animate-bounce" />
       }
     ],
     ko: [
@@ -194,7 +194,7 @@ export default function OnboardingTour({
         title: "Waack On에 오신 것을 환영합니다! 🎭",
         description: "먼로 아카데미 포털에 로그인하셨습니다. 왁킹의 예술적 감각, 춤 동작의 리듬, 그리고 어깨 관절 가동성 향상을 도울 똑똑한 전용 기능들을 빠르게 안내해 드립니다.",
         tab: "dashboard",
-        icon: <Sparkles className="w-8 h-8 text-[#E9C349]" />
+        icon: <Sparkles className="w-8 h-8 text-[#D9A9FF]" />
       },
       {
         badge: "대시보드",
@@ -208,7 +208,7 @@ export default function OnboardingTour({
         title: "프리스타일 랩 및 메트로놈 ⚡",
         description: "왁킹 연습의 핵심 공간! 비트 음악의 속도(BPM) 조절, 비트음 소리 동기화, 웹캠 레트로 필터를 사용한 역동적인 표정 연습, 강사 피드백 비디오 촬영 등이 가능합니다.",
         tab: "entrenamiento",
-        icon: <Sparkles className="w-8 h-8 text-[#9A2B3C]" />
+        icon: <Sparkles className="w-8 h-8 text-[#C23E9E]" />
       },
       {
         badge: "진단",
@@ -229,7 +229,7 @@ export default function OnboardingTour({
         title: "왁킹 무대를 정복할 준비 완료! 👑",
         description: "아카데미 오리엔테이션 투어가 모두 끝났습니다. 첫 가입을 축하하는 의미로 +100 경험치 포인트를 드립니다! 멋진 댄스 감각을 뽐내보세요!",
         tab: "dashboard",
-        icon: <Award className="w-10 h-10 text-[#E9C349] animate-bounce" />
+        icon: <Award className="w-10 h-10 text-[#D9A9FF] animate-bounce" />
       }
     ],
     ja: [
@@ -238,7 +238,7 @@ export default function OnboardingTour({
         title: "Waack On へようこそ！ 🎭",
         description: "モンロー・アカデミーの学習ポータルへようこそ！ワッキングの芸術性、リズム感、身体可動域をマスターするために設計された、高度な学習機能をご案内します。",
         tab: "dashboard",
-        icon: <Sparkles className="w-8 h-8 text-[#E9C349]" />
+        icon: <Sparkles className="w-8 h-8 text-[#D9A9FF]" />
       },
       {
         badge: "ダッシュボード",
@@ -252,7 +252,7 @@ export default function OnboardingTour({
         title: "フリースタイル・ラボ ⚡",
         description: "実際のコア練習エリア！専用音源のBPM微調整、ビート・メトロノーム機能、カメラ配信フィルターを駆使した表情演技の練習、インストラクターへの提出が全て行えます。",
         tab: "entrenamiento",
-        icon: <Sparkles className="w-8 h-8 text-[#9A2B3C]" />
+        icon: <Sparkles className="w-8 h-8 text-[#C23E9E]" />
       },
       {
         badge: "診断",
@@ -273,7 +273,7 @@ export default function OnboardingTour({
         title: "ステージで輝く準備完了！ 👑",
         description: "チュートリアル・ツアーが完了しました！最初の練習に弾みをつけるため、ボーナスとして初期ポイント+100を付与しました。自分らしい表現を追求しましょう！",
         tab: "dashboard",
-        icon: <Award className="w-10 h-10 text-[#E9C349] animate-bounce" />
+        icon: <Award className="w-10 h-10 text-[#D9A9FF] animate-bounce" />
       }
     ],
     pt: [
@@ -282,7 +282,7 @@ export default function OnboardingTour({
         title: "Boas-vindas ao Waack On! 🎭",
         description: "Você entrou no portal oficial da Monroe Academy. Deixe-nos guiar você em uma rápida jornada pelas ferramentas interativas criadas para dominar a arte, postura, ritmo e biomecânica do Waacking.",
         tab: "dashboard",
-        icon: <Sparkles className="w-8 h-8 text-[#E9C349]" />
+        icon: <Sparkles className="w-8 h-8 text-[#D9A9FF]" />
       },
       {
         badge: "DASHBOARD",
@@ -296,7 +296,7 @@ export default function OnboardingTour({
         title: "Laboratório Freestyle & Prática ⚡",
         description: "O playground de prática definitivo! Escolha faixas premium, ajuste o ritmo com o BPM tuner, ligue o metrônomo visual, treine sua dramaticidade facial com filtros na câmera e envie gravações.",
         tab: "entrenamiento",
-        icon: <Sparkles className="w-8 h-8 text-[#9A2B3C]" />
+        icon: <Sparkles className="w-8 h-8 text-[#C23E9E]" />
       },
       {
         badge: "DIAGNÓSTICO",
@@ -317,7 +317,7 @@ export default function OnboardingTour({
         title: "Pronto para Brilhar! 👑",
         description: "Você completou o tour de integração. Para comemorar seu início, adicionamos um bônus de +100 pontos de experiência à sua conta. Mostre sua atitude na pista!",
         tab: "dashboard",
-        icon: <Award className="w-10 h-10 text-[#E9C349] animate-bounce" />
+        icon: <Award className="w-10 h-10 text-[#D9A9FF] animate-bounce" />
       }
     ]
   };
@@ -393,7 +393,7 @@ export default function OnboardingTour({
     <div id="onboarding-tour-backdrop" className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/75 backdrop-blur-md">
       {/* Dynamic Animated Spotlight Box */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-[#E9C349]/5 rounded-full blur-[80px]" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-[#D9A9FF]/5 rounded-full blur-[80px]" />
       </div>
 
       <motion.div
@@ -402,7 +402,7 @@ export default function OnboardingTour({
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.9, y: -20 }}
         transition={{ type: "spring", damping: 25, stiffness: 180 }}
-        className="glass-panel bg-[#121212]/95 border-2 border-[#E9C349]/30 shadow-[0_0_50px_rgba(233,195,73,0.15)] rounded-[28px] max-w-md w-full relative overflow-hidden flex flex-col p-6 sm:p-8"
+        className="glass-panel bg-[#121212]/95 border-2 border-[#D9A9FF]/30 shadow-[0_0_50px_rgba(217, 169, 255,0.15)] rounded-[28px] max-w-md w-full relative overflow-hidden flex flex-col p-6 sm:p-8"
       >
         {/* Scanline overlay */}
         <div className="absolute inset-0 scanline pointer-events-none opacity-10" />
@@ -410,7 +410,7 @@ export default function OnboardingTour({
         {/* Top Header Row */}
         <div className="flex items-center justify-between border-b border-[#262626] pb-4 mb-5 z-10 relative">
           <div className="flex items-center gap-2">
-            <span className="text-[10px] font-mono font-black text-black bg-[#E9C349] px-2 py-0.5 rounded tracking-widest">
+            <span className="text-[10px] font-mono font-black text-black bg-[#D9A9FF] px-2 py-0.5 rounded tracking-widest">
               {activeStepData.badge}
             </span>
             <span className="text-[10px] font-mono text-[#8A8A8A] font-bold">
@@ -460,7 +460,7 @@ export default function OnboardingTour({
                 {activeStepData.description}
               </p>
               <div>
-                <label className="text-[10px] font-mono font-bold text-[#E9C349] uppercase tracking-wider block mb-1.5">
+                <label className="text-[10px] font-mono font-bold text-[#D9A9FF] uppercase tracking-wider block mb-1.5">
                   Selecciona Áreas a Mejorar:
                 </label>
                 <div className="space-y-1.5 max-h-36 overflow-y-auto pr-1">
@@ -480,12 +480,12 @@ export default function OnboardingTour({
                         }}
                         className={`w-full text-left px-3 py-2 rounded-xl text-xs font-medium border transition-all flex items-center justify-between ${
                           isSelected
-                            ? 'bg-[#9A2B3C]/30 border-[#E9C349] text-white shadow'
+                            ? 'bg-[#C23E9E]/30 border-[#D9A9FF] text-white shadow'
                             : 'bg-white/5 border-white/10 text-slate-300 hover:bg-white/10'
                         }`}
                       >
                         <span className="truncate mr-2">{area}</span>
-                        <div className={`w-4 h-4 rounded border shrink-0 flex items-center justify-center ${isSelected ? 'bg-[#E9C349] border-[#E9C349] text-black' : 'border-white/30'}`}>
+                        <div className={`w-4 h-4 rounded border shrink-0 flex items-center justify-center ${isSelected ? 'bg-[#D9A9FF] border-[#D9A9FF] text-black' : 'border-white/30'}`}>
                           {isSelected && <CheckCircle2 className="w-3.5 h-3.5" />}
                         </div>
                       </button>
@@ -502,7 +502,7 @@ export default function OnboardingTour({
                   <select
                     value={selectedLab}
                     onChange={(e) => setSelectedLab(e.target.value)}
-                    className="w-full bg-[#1C1B1B] border border-white/10 rounded-xl px-2 py-1.5 text-xs text-white font-medium focus:outline-none focus:border-[#E9C349]"
+                    className="w-full bg-[#1C1B1B] border border-white/10 rounded-xl px-2 py-1.5 text-xs text-white font-medium focus:outline-none focus:border-[#D9A9FF]"
                   >
                     {labOptions.map(l => (
                       <option key={l} value={l}>{l}</option>
@@ -516,7 +516,7 @@ export default function OnboardingTour({
                   <select
                     value={selectedBpm}
                     onChange={(e) => setSelectedBpm(e.target.value)}
-                    className="w-full bg-[#1C1B1B] border border-white/10 rounded-xl px-2 py-1.5 text-xs text-white font-medium focus:outline-none focus:border-[#E9C349]"
+                    className="w-full bg-[#1C1B1B] border border-white/10 rounded-xl px-2 py-1.5 text-xs text-white font-medium focus:outline-none focus:border-[#D9A9FF]"
                   >
                     <option value="110 BPM">110 BPM (Suave)</option>
                     <option value="120 BPM">120 BPM (Estándar)</option>
@@ -549,7 +549,7 @@ export default function OnboardingTour({
               }}
               className={`h-2 rounded-full transition-all duration-350 ${
                 currentStep === idx 
-                  ? 'w-6 bg-[#E9C349]' 
+                  ? 'w-6 bg-[#D9A9FF]' 
                   : 'w-2 bg-white/10 hover:bg-white/20'
               }`}
               title={`${labels.step} ${idx + 1}`}
@@ -580,7 +580,7 @@ export default function OnboardingTour({
             <button
               id="onboarding-next-btn"
               onClick={handleNext}
-              className="px-4 py-2.5 rounded-xl bg-[#E9C349] hover:bg-[#ffdf6b] text-black font-black text-xs transition-all flex items-center gap-1 shadow-md active:scale-95 hover:shadow-[0_0_15px_rgba(233,195,73,0.3)]"
+              className="px-4 py-2.5 rounded-xl bg-[#D9A9FF] hover:bg-[#F2CFFF] text-black font-black text-xs transition-all flex items-center gap-1 shadow-md active:scale-95 hover:shadow-[0_0_15px_rgba(217, 169, 255,0.3)]"
             >
               <span>{currentStep === steps.length - 1 ? labels.end : labels.next}</span>
               <ChevronRight className="w-3.5 h-3.5 stroke-[3px]" />

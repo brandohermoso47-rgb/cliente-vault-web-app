@@ -121,7 +121,7 @@ const DEFAULT_INSTRUCTOR_PLAYLISTS: InstructorCloudPlaylist[] = [
     category: 'Batallas & Freestyle',
     targetBpmRange: '130 - 136 BPM',
     isSharedWithStudents: true,
-    coverGradient: 'from-[#9A2B3C] to-amber-700',
+    coverGradient: 'from-[#C23E9E] to-amber-700',
     createdAt: new Date().toISOString(),
     tracks: [
       {
@@ -344,10 +344,10 @@ export default function InstructorPlaylistsManager({ currentUser, language = 'es
 
     const gradients = [
       'from-amber-600 to-purple-900',
-      'from-[#9A2B3C] to-amber-700',
+      'from-[#C23E9E] to-amber-700',
       'from-purple-900 to-indigo-900',
       'from-emerald-800 to-teal-950',
-      'from-pink-900 to-[#9A2B3C]'
+      'from-pink-900 to-[#C23E9E]'
     ];
 
     const newPl: InstructorCloudPlaylist = {
@@ -450,12 +450,12 @@ export default function InstructorPlaylistsManager({ currentUser, language = 'es
       )}
 
       {/* HEADER BANNER - INSTRUCTOR CLOUD MUSIC HUB */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#0d1021] via-[#161a33] to-[#20102b] border border-[#E9C349]/30 p-6 md:p-8 shadow-2xl">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-[#E9C349]/10 blur-[100px] rounded-full pointer-events-none" />
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#0d1021] via-[#161a33] to-[#20102b] border border-[#D9A9FF]/30 p-6 md:p-8 shadow-2xl">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-[#D9A9FF]/10 blur-[100px] rounded-full pointer-events-none" />
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="space-y-3 max-w-2xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#E9C349]/10 border border-[#E9C349]/40 text-[#E9C349] font-mono text-xs font-bold uppercase tracking-wider">
-              <Cloud className="w-3.5 h-3.5 animate-pulse text-[#E9C349]" />
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#D9A9FF]/10 border border-[#D9A9FF]/40 text-[#D9A9FF] font-mono text-xs font-bold uppercase tracking-wider">
+              <Cloud className="w-3.5 h-3.5 animate-pulse text-[#D9A9FF]" />
               <span>NUBE MUSICAL DEL INSTRUCTOR WAACKON</span>
             </div>
 
@@ -470,7 +470,7 @@ export default function InstructorPlaylistsManager({ currentUser, language = 'es
             {/* Stats Row */}
             <div className="pt-2 flex flex-wrap items-center gap-4 text-xs font-mono text-slate-300">
               <div className="flex items-center gap-1.5 bg-white/5 border border-white/10 px-3 py-1.5 rounded-xl">
-                <Disc className="w-4 h-4 text-[#E9C349]" />
+                <Disc className="w-4 h-4 text-[#D9A9FF]" />
                 <span><strong>{playlists.length}</strong> Listas Creadas</span>
               </div>
 
@@ -494,7 +494,7 @@ export default function InstructorPlaylistsManager({ currentUser, language = 'es
                 setTargetPlaylistForUpload(activePlaylistId);
                 setShowUploadModal(true);
               }}
-              className="px-5 py-3 rounded-2xl bg-gradient-to-r from-[#E9C349] to-amber-500 hover:brightness-110 text-black font-mono font-black text-xs uppercase tracking-wide shadow-xl transition-all cursor-pointer flex items-center justify-center gap-2 active:scale-95"
+              className="px-5 py-3 rounded-2xl bg-gradient-to-r from-[#D9A9FF] to-amber-500 hover:brightness-110 text-black font-mono font-black text-xs uppercase tracking-wide shadow-xl transition-all cursor-pointer flex items-center justify-center gap-2 active:scale-95"
             >
               <CloudUpload className="w-4 h-4" />
               <span>SUBIR CACIÓN / TRACK</span>
@@ -505,7 +505,7 @@ export default function InstructorPlaylistsManager({ currentUser, language = 'es
               onClick={() => setShowCreatePlaylistModal(true)}
               className="px-5 py-3 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-mono font-bold text-xs uppercase tracking-wide transition-all cursor-pointer flex items-center justify-center gap-2 active:scale-95"
             >
-              <FolderPlus className="w-4 h-4 text-[#E9C349]" />
+              <FolderPlus className="w-4 h-4 text-[#D9A9FF]" />
               <span>CREAR NUEVA LISTA</span>
             </button>
           </div>
@@ -531,7 +531,7 @@ export default function InstructorPlaylistsManager({ currentUser, language = 'es
       <div className="space-y-4">
         <div className="flex items-center justify-between flex-wrap gap-3 border-b border-white/10 pb-3">
           <div className="flex items-center gap-2">
-            <Disc className="w-5 h-5 text-[#E9C349]" />
+            <Disc className="w-5 h-5 text-[#D9A9FF]" />
             <h3 className="text-sm font-mono font-bold uppercase text-white tracking-wider">
               Tus Listas de Reproducción Activas
             </h3>
@@ -542,7 +542,7 @@ export default function InstructorPlaylistsManager({ currentUser, language = 'es
             <select
               value={categoryFilter}
               onChange={(e) => setCategoryFilter(e.target.value)}
-              className="bg-[#12162a] border border-white/20 rounded-xl px-3 py-1.5 text-slate-200 text-xs focus:outline-none focus:border-[#E9C349]"
+              className="bg-[#12162a] border border-white/20 rounded-xl px-3 py-1.5 text-slate-200 text-xs focus:outline-none focus:border-[#D9A9FF]"
             >
               <option value="all">Todas las Categorías</option>
               <option value="Fundamentos & Técnica">Fundamentos & Técnica</option>
@@ -564,13 +564,13 @@ export default function InstructorPlaylistsManager({ currentUser, language = 'es
                   onClick={() => setActivePlaylistId(pl.id)}
                   className={`relative p-5 rounded-3xl border transition-all cursor-pointer space-y-3 flex flex-col justify-between overflow-hidden ${
                     isActive
-                      ? 'bg-gradient-to-br from-[#181d38] to-[#12162b] border-[#E9C349] shadow-2xl scale-[1.01]'
+                      ? 'bg-gradient-to-br from-[#181d38] to-[#12162b] border-[#D9A9FF] shadow-2xl scale-[1.01]'
                       : 'bg-[#0f1224]/80 border-white/10 hover:border-white/30 hover:bg-[#13172e]'
                   }`}
                 >
                   <div className="space-y-2">
                     <div className="flex items-center justify-between gap-2">
-                      <span className="text-[10px] font-mono uppercase font-bold text-[#E9C349] px-2.5 py-0.5 rounded-full bg-[#E9C349]/10 border border-[#E9C349]/30">
+                      <span className="text-[10px] font-mono uppercase font-bold text-[#D9A9FF] px-2.5 py-0.5 rounded-full bg-[#D9A9FF]/10 border border-[#D9A9FF]/30">
                         {pl.category}
                       </span>
 
@@ -603,7 +603,7 @@ export default function InstructorPlaylistsManager({ currentUser, language = 'es
 
                   <div className="pt-2 border-t border-white/10 flex items-center justify-between text-xs font-mono text-slate-400">
                     <span className="flex items-center gap-1 text-slate-300">
-                      <Music className="w-3.5 h-3.5 text-[#E9C349]" />
+                      <Music className="w-3.5 h-3.5 text-[#D9A9FF]" />
                       <strong>{(pl.tracks || []).length}</strong> pistas
                     </span>
 
@@ -628,7 +628,7 @@ export default function InstructorPlaylistsManager({ currentUser, language = 'es
                 <span className="text-[10px] font-mono font-bold text-slate-400 uppercase">
                   LISTA SELECCIONADA:
                 </span>
-                <span className="text-xs font-mono font-bold text-[#E9C349]">
+                <span className="text-xs font-mono font-bold text-[#D9A9FF]">
                   {currentPlaylist.category}
                 </span>
               </div>
@@ -646,7 +646,7 @@ export default function InstructorPlaylistsManager({ currentUser, language = 'es
                 onClick={() => copyShareLink(currentPlaylist.title)}
                 className="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-slate-200 text-xs font-mono font-bold transition-all flex items-center gap-1.5 cursor-pointer"
               >
-                <Share2 className="w-3.5 h-3.5 text-[#E9C349]" />
+                <Share2 className="w-3.5 h-3.5 text-[#D9A9FF]" />
                 <span>COMPARTIR ENLACE</span>
               </button>
 
@@ -666,13 +666,13 @@ export default function InstructorPlaylistsManager({ currentUser, language = 'es
 
           {/* ACTIVE AUDIO PLAYER CONTROL BAR (IF PLAYING OR SELECTED) */}
           {activeTrack && (
-            <div className="bg-gradient-to-r from-[#171b36] via-[#1f2347] to-[#171b36] border border-[#E9C349]/40 p-4 md:p-5 rounded-2xl shadow-2xl space-y-3">
+            <div className="bg-gradient-to-r from-[#171b36] via-[#1f2347] to-[#171b36] border border-[#D9A9FF]/40 p-4 md:p-5 rounded-2xl shadow-2xl space-y-3">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div className="flex items-center gap-3">
                   <button
                     type="button"
                     onClick={() => handlePlayTrack(activeTrack)}
-                    className="w-12 h-12 rounded-2xl bg-[#E9C349] hover:bg-amber-400 text-black flex items-center justify-center font-bold shadow-xl transition-all cursor-pointer active:scale-95 shrink-0"
+                    className="w-12 h-12 rounded-2xl bg-[#D9A9FF] hover:bg-amber-400 text-black flex items-center justify-center font-bold shadow-xl transition-all cursor-pointer active:scale-95 shrink-0"
                   >
                     {isPlaying ? <Pause className="w-6 h-6 fill-black" /> : <Play className="w-6 h-6 fill-black translate-x-0.5" />}
                   </button>
@@ -680,7 +680,7 @@ export default function InstructorPlaylistsManager({ currentUser, language = 'es
                   <div>
                     <h4 className="text-sm font-bold text-white flex items-center gap-2">
                       <span>{activeTrack.title}</span>
-                      <span className="text-[10px] font-mono font-bold text-[#E9C349] px-2 py-0.5 rounded-full bg-[#E9C349]/20 border border-[#E9C349]/30">
+                      <span className="text-[10px] font-mono font-bold text-[#D9A9FF] px-2 py-0.5 rounded-full bg-[#D9A9FF]/20 border border-[#D9A9FF]/30">
                         {activeTrack.bpm} BPM
                       </span>
                     </h4>
@@ -700,7 +700,7 @@ export default function InstructorPlaylistsManager({ currentUser, language = 'es
                       onClick={() => setPlaybackSpeed(speed)}
                       className={`px-2 py-0.5 rounded-lg text-xs font-bold transition-all ${
                         playbackSpeed === speed
-                          ? 'bg-[#E9C349] text-black'
+                          ? 'bg-[#D9A9FF] text-black'
                           : 'hover:bg-white/10 text-slate-300'
                       }`}
                     >
@@ -722,7 +722,7 @@ export default function InstructorPlaylistsManager({ currentUser, language = 'es
                   max={duration || 100}
                   value={currentTime}
                   onChange={handleSeek}
-                  className="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-[#E9C349]"
+                  className="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-[#D9A9FF]"
                 />
               </div>
 
@@ -759,7 +759,7 @@ export default function InstructorPlaylistsManager({ currentUser, language = 'es
                       setTargetPlaylistForUpload(currentPlaylist.id);
                       setShowUploadModal(true);
                     }}
-                    className="px-4 py-2 rounded-xl bg-[#E9C349] text-black font-mono font-bold text-xs uppercase cursor-pointer hover:bg-amber-400"
+                    className="px-4 py-2 rounded-xl bg-[#D9A9FF] text-black font-mono font-bold text-xs uppercase cursor-pointer hover:bg-amber-400"
                   >
                     Subir Primera Canción
                   </button>
@@ -774,7 +774,7 @@ export default function InstructorPlaylistsManager({ currentUser, language = 'es
                       key={track.id}
                       className={`p-3.5 rounded-2xl border transition-all flex items-center justify-between gap-3 ${
                         isCurrent
-                          ? 'bg-[#181d38] border-[#E9C349]/60 shadow-md'
+                          ? 'bg-[#181d38] border-[#D9A9FF]/60 shadow-md'
                           : 'bg-[#121528] border-white/10 hover:border-white/20 hover:bg-[#151930]'
                       }`}
                     >
@@ -784,7 +784,7 @@ export default function InstructorPlaylistsManager({ currentUser, language = 'es
                           onClick={() => handlePlayTrack(track)}
                           className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all cursor-pointer shrink-0 ${
                             isCurrent && isPlaying
-                              ? 'bg-[#E9C349] text-black'
+                              ? 'bg-[#D9A9FF] text-black'
                               : 'bg-white/10 hover:bg-white/20 text-white'
                           }`}
                         >
@@ -798,7 +798,7 @@ export default function InstructorPlaylistsManager({ currentUser, language = 'es
                         <div className="min-w-0">
                           <h5 className="text-sm font-bold text-white truncate flex items-center gap-2">
                             <span>{track.title}</span>
-                            <span className="text-[10px] font-mono font-bold text-[#E9C349] px-2 py-0.5 rounded-full bg-[#E9C349]/10">
+                            <span className="text-[10px] font-mono font-bold text-[#D9A9FF] px-2 py-0.5 rounded-full bg-[#D9A9FF]/10">
                               {track.bpm} BPM
                             </span>
                           </h5>
@@ -846,11 +846,11 @@ export default function InstructorPlaylistsManager({ currentUser, language = 'es
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="bg-[#0c0e1a] border border-[#E9C349]/40 rounded-3xl p-6 max-w-xl w-full max-h-[90vh] overflow-y-auto space-y-5 shadow-2xl relative text-white"
+              className="bg-[#0c0e1a] border border-[#D9A9FF]/40 rounded-3xl p-6 max-w-xl w-full max-h-[90vh] overflow-y-auto space-y-5 shadow-2xl relative text-white"
             >
               <div className="flex items-center justify-between border-b border-white/10 pb-3">
                 <div className="flex items-center gap-2">
-                  <CloudUpload className="w-5 h-5 text-[#E9C349]" />
+                  <CloudUpload className="w-5 h-5 text-[#D9A9FF]" />
                   <h3 className="text-base font-mono font-bold text-white uppercase">
                     Subir Canción / Audio a la Nube
                   </h3>
@@ -866,15 +866,15 @@ export default function InstructorPlaylistsManager({ currentUser, language = 'es
 
               <form onSubmit={handleSaveTrack} className="space-y-4">
                 {/* File Dropzone */}
-                <div className="border-2 border-dashed border-[#E9C349]/40 rounded-2xl p-5 text-center bg-white/5 space-y-2 hover:border-[#E9C349] transition-all">
-                  <FileAudio className="w-8 h-8 text-[#E9C349] mx-auto" />
+                <div className="border-2 border-dashed border-[#D9A9FF]/40 rounded-2xl p-5 text-center bg-white/5 space-y-2 hover:border-[#D9A9FF] transition-all">
+                  <FileAudio className="w-8 h-8 text-[#D9A9FF] mx-auto" />
                   <div className="text-xs font-mono font-bold text-slate-200">
                     {uploadFile ? uploadFile.name : 'Selecciona o arrastra tu archivo MP3 / WAV'}
                   </div>
                   <p className="text-[11px] text-slate-400 font-sans">
                     Archivos soportados: MP3, WAV, AAC, M4A (Máx. 50 MB)
                   </p>
-                  <label className="inline-block mt-2 px-4 py-2 rounded-xl bg-[#E9C349] text-black font-mono font-bold text-xs uppercase cursor-pointer hover:bg-amber-400 transition-all">
+                  <label className="inline-block mt-2 px-4 py-2 rounded-xl bg-[#D9A9FF] text-black font-mono font-bold text-xs uppercase cursor-pointer hover:bg-amber-400 transition-all">
                     Explorar Archivo local
                     <input
                       type="file"
@@ -894,7 +894,7 @@ export default function InstructorPlaylistsManager({ currentUser, language = 'es
                       placeholder="Ej. Disco Magic (128 BPM)"
                       value={newTrackTitle}
                       onChange={(e) => setNewTrackTitle(e.target.value)}
-                      className="w-full bg-[#14182e] border border-white/20 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#E9C349]"
+                      className="w-full bg-[#14182e] border border-white/20 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#D9A9FF]"
                     />
                   </div>
 
@@ -905,7 +905,7 @@ export default function InstructorPlaylistsManager({ currentUser, language = 'es
                       placeholder="Ej. WaackOn Studio"
                       value={newTrackArtist}
                       onChange={(e) => setNewTrackArtist(e.target.value)}
-                      className="w-full bg-[#14182e] border border-white/20 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#E9C349]"
+                      className="w-full bg-[#14182e] border border-white/20 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#D9A9FF]"
                     />
                   </div>
                 </div>
@@ -918,7 +918,7 @@ export default function InstructorPlaylistsManager({ currentUser, language = 'es
                       required
                       value={newTrackBpm}
                       onChange={(e) => setNewTrackBpm(Number(e.target.value))}
-                      className="w-full bg-[#14182e] border border-white/20 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#E9C349]"
+                      className="w-full bg-[#14182e] border border-white/20 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#D9A9FF]"
                     />
                   </div>
 
@@ -927,7 +927,7 @@ export default function InstructorPlaylistsManager({ currentUser, language = 'es
                     <select
                       value={newTrackCategory}
                       onChange={(e) => setNewTrackCategory(e.target.value)}
-                      className="w-full bg-[#14182e] border border-white/20 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#E9C349]"
+                      className="w-full bg-[#14182e] border border-white/20 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#D9A9FF]"
                     >
                       <option value="Wrist Rolls & Drops">Wrist Rolls & Drops</option>
                       <option value="Groove & Grounding">Groove & Grounding</option>
@@ -942,7 +942,7 @@ export default function InstructorPlaylistsManager({ currentUser, language = 'es
                   <select
                     value={targetPlaylistForUpload}
                     onChange={(e) => setTargetPlaylistForUpload(e.target.value)}
-                    className="w-full bg-[#14182e] border border-white/20 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#E9C349]"
+                    className="w-full bg-[#14182e] border border-white/20 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#D9A9FF]"
                   >
                     {playlists.map(p => (
                       <option key={p.id} value={p.id}>{p.title}</option>
@@ -957,7 +957,7 @@ export default function InstructorPlaylistsManager({ currentUser, language = 'es
                     placeholder="Instrucciones especiales para tus alumnos al practicar esta pista..."
                     value={newTrackNotes}
                     onChange={(e) => setNewTrackNotes(e.target.value)}
-                    className="w-full bg-[#14182e] border border-white/20 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#E9C349]"
+                    className="w-full bg-[#14182e] border border-white/20 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#D9A9FF]"
                   />
                 </div>
 
@@ -967,7 +967,7 @@ export default function InstructorPlaylistsManager({ currentUser, language = 'es
                     id="shareTrackCheck"
                     checked={newTrackShare}
                     onChange={(e) => setNewTrackShare(e.target.checked)}
-                    className="w-4 h-4 accent-[#E9C349] cursor-pointer"
+                    className="w-4 h-4 accent-[#D9A9FF] cursor-pointer"
                   />
                   <label htmlFor="shareTrackCheck" className="text-xs text-slate-200 cursor-pointer">
                     Compartir inmediatamente en la biblioteca de mis alumnos
@@ -977,7 +977,7 @@ export default function InstructorPlaylistsManager({ currentUser, language = 'es
                 <button
                   type="submit"
                   disabled={isUploading}
-                  className="w-full py-3 rounded-2xl bg-gradient-to-r from-[#E9C349] to-amber-500 hover:brightness-110 text-black font-mono font-black text-xs uppercase shadow-xl transition-all cursor-pointer flex items-center justify-center gap-2 active:scale-95"
+                  className="w-full py-3 rounded-2xl bg-gradient-to-r from-[#D9A9FF] to-amber-500 hover:brightness-110 text-black font-mono font-black text-xs uppercase shadow-xl transition-all cursor-pointer flex items-center justify-center gap-2 active:scale-95"
                 >
                   <CloudUpload className="w-4 h-4" />
                   <span>{isUploading ? 'GURADANDO EN LA NUBE...' : 'ALMACENAR EN LA NUBE'}</span>
@@ -996,11 +996,11 @@ export default function InstructorPlaylistsManager({ currentUser, language = 'es
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="bg-[#0c0e1a] border border-[#E9C349]/40 rounded-3xl p-6 max-w-md w-full space-y-5 shadow-2xl relative text-white"
+              className="bg-[#0c0e1a] border border-[#D9A9FF]/40 rounded-3xl p-6 max-w-md w-full space-y-5 shadow-2xl relative text-white"
             >
               <div className="flex items-center justify-between border-b border-white/10 pb-3">
                 <div className="flex items-center gap-2">
-                  <FolderPlus className="w-5 h-5 text-[#E9C349]" />
+                  <FolderPlus className="w-5 h-5 text-[#D9A9FF]" />
                   <h3 className="text-base font-mono font-bold text-white uppercase">
                     Crear Lista de Reproducción
                   </h3>
@@ -1023,7 +1023,7 @@ export default function InstructorPlaylistsManager({ currentUser, language = 'es
                     placeholder="Ej. Disco Drills Nivel 2"
                     value={newPlaylistTitle}
                     onChange={(e) => setNewPlaylistTitle(e.target.value)}
-                    className="w-full bg-[#14182e] border border-white/20 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#E9C349]"
+                    className="w-full bg-[#14182e] border border-white/20 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#D9A9FF]"
                   />
                 </div>
 
@@ -1034,7 +1034,7 @@ export default function InstructorPlaylistsManager({ currentUser, language = 'es
                     placeholder="Objetivo pedagógico de esta lista..."
                     value={newPlaylistDesc}
                     onChange={(e) => setNewPlaylistDesc(e.target.value)}
-                    className="w-full bg-[#14182e] border border-white/20 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#E9C349]"
+                    className="w-full bg-[#14182e] border border-white/20 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#D9A9FF]"
                   />
                 </div>
 
@@ -1044,7 +1044,7 @@ export default function InstructorPlaylistsManager({ currentUser, language = 'es
                     <select
                       value={newPlaylistCategory}
                       onChange={(e) => setNewPlaylistCategory(e.target.value)}
-                      className="w-full bg-[#14182e] border border-white/20 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#E9C349]"
+                      className="w-full bg-[#14182e] border border-white/20 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#D9A9FF]"
                     >
                       <option value="Fundamentos & Técnica">Fundamentos & Técnica</option>
                       <option value="Batallas & Freestyle">Batallas & Freestyle</option>
@@ -1059,7 +1059,7 @@ export default function InstructorPlaylistsManager({ currentUser, language = 'es
                       placeholder="124 - 130 BPM"
                       value={newPlaylistBpmRange}
                       onChange={(e) => setNewPlaylistBpmRange(e.target.value)}
-                      className="w-full bg-[#14182e] border border-white/20 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#E9C349]"
+                      className="w-full bg-[#14182e] border border-white/20 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#D9A9FF]"
                     />
                   </div>
                 </div>
@@ -1070,7 +1070,7 @@ export default function InstructorPlaylistsManager({ currentUser, language = 'es
                     id="sharePlCheck"
                     checked={newPlaylistShare}
                     onChange={(e) => setNewPlaylistShare(e.target.checked)}
-                    className="w-4 h-4 accent-[#E9C349] cursor-pointer"
+                    className="w-4 h-4 accent-[#D9A9FF] cursor-pointer"
                   />
                   <label htmlFor="sharePlCheck" className="text-xs text-slate-200 cursor-pointer">
                     Hacer pública para todos mis alumnos
@@ -1079,7 +1079,7 @@ export default function InstructorPlaylistsManager({ currentUser, language = 'es
 
                 <button
                   type="submit"
-                  className="w-full py-3 rounded-2xl bg-gradient-to-r from-[#E9C349] to-amber-500 hover:brightness-110 text-black font-mono font-black text-xs uppercase shadow-xl transition-all cursor-pointer flex items-center justify-center gap-2 active:scale-95"
+                  className="w-full py-3 rounded-2xl bg-gradient-to-r from-[#D9A9FF] to-amber-500 hover:brightness-110 text-black font-mono font-black text-xs uppercase shadow-xl transition-all cursor-pointer flex items-center justify-center gap-2 active:scale-95"
                 >
                   <Plus className="w-4 h-4" />
                   <span>CREAR LISTA DE REPRODUCCIÓN</span>

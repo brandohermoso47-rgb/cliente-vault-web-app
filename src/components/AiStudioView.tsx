@@ -108,7 +108,7 @@ export default function AiStudioView() {
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-gradient-to-r from-[#221f1f] to-[#161616] border border-white/10 p-6 rounded-2xl shadow-xl">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono tracking-widest bg-[#E9C349]/20 text-[#E9C349] font-bold uppercase border border-[#E9C349]/30">
+            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono tracking-widest bg-[#D9A9FF]/20 text-[#D9A9FF] font-bold uppercase border border-[#D9A9FF]/30">
               Gemini Multimodal Studio
             </span>
             <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono tracking-widest bg-pink-500/20 text-pink-400 font-bold uppercase">
@@ -119,7 +119,7 @@ export default function AiStudioView() {
             AI Studio: Video & Image Lab
           </h1>
           <p className="text-sm text-slate-400 mt-1">
-            Analiza movimientos de baile con <code className="text-[#E9C349]">gemini-3.1-pro-preview</code> y genera arte y afiches con control total de aspect ratios.
+            Analiza movimientos de baile con <code className="text-[#D9A9FF]">gemini-3.1-pro-preview</code> y genera arte y afiches con control total de aspect ratios.
           </p>
         </div>
 
@@ -128,7 +128,7 @@ export default function AiStudioView() {
             onClick={() => setActiveTool('video')}
             className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold transition-all uppercase tracking-wider ${
               activeTool === 'video'
-                ? 'bg-[#E9C349] text-black shadow-lg font-black'
+                ? 'bg-[#D9A9FF] text-black shadow-lg font-black'
                 : 'text-slate-400 hover:text-white'
             }`}
           >
@@ -139,7 +139,7 @@ export default function AiStudioView() {
             onClick={() => setActiveTool('image')}
             className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold transition-all uppercase tracking-wider ${
               activeTool === 'image'
-                ? 'bg-[#E9C349] text-black shadow-lg font-black'
+                ? 'bg-[#D9A9FF] text-black shadow-lg font-black'
                 : 'text-slate-400 hover:text-white'
             }`}
           >
@@ -162,7 +162,7 @@ export default function AiStudioView() {
               <div>
                 <div className="flex items-center justify-between mb-2">
                   <label className="text-xs font-mono text-slate-300 uppercase tracking-wider font-bold flex items-center gap-1.5">
-                    <Cpu className="w-4 h-4 text-[#E9C349]" />
+                    <Cpu className="w-4 h-4 text-[#D9A9FF]" />
                     Modelo Activo: gemini-3.1-pro-preview
                   </label>
                   <span className="text-[10px] bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded font-mono">Alta Precisión Multimodal</span>
@@ -185,11 +185,11 @@ export default function AiStudioView() {
                       onClick={() => setSelectedVideoSample(sample.id)}
                       className={`p-3 rounded-xl border text-left text-xs transition-all ${
                         selectedVideoSample === sample.id
-                          ? 'border-[#E9C349] bg-[#E9C349]/10 text-white font-bold'
+                          ? 'border-[#D9A9FF] bg-[#D9A9FF]/10 text-white font-bold'
                           : 'border-white/10 bg-[#121212] text-slate-400 hover:border-white/30'
                       }`}
                     >
-                      <Film className="w-4 h-4 text-[#E9C349] mb-1.5" />
+                      <Film className="w-4 h-4 text-[#D9A9FF] mb-1.5" />
                       {sample.title}
                     </button>
                   ))}
@@ -200,7 +200,7 @@ export default function AiStudioView() {
                   value={videoPrompt}
                   onChange={(e) => setVideoPrompt(e.target.value)}
                   rows={4}
-                  className="w-full bg-[#121212] border border-white/10 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-[#E9C349] transition-colors resize-none font-sans"
+                  className="w-full bg-[#121212] border border-white/10 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-[#D9A9FF] transition-colors resize-none font-sans"
                   placeholder="Describe qué aspectos técnicos deseas que Gemini analice..."
                   required
                 />
@@ -209,7 +209,7 @@ export default function AiStudioView() {
               <button
                 type="submit"
                 disabled={videoLoading}
-                className="w-full py-3.5 bg-[#E9C349] hover:bg-[#d8b23c] text-black font-mono font-bold text-xs uppercase tracking-widest rounded-xl transition-all shadow-lg disabled:opacity-50 flex items-center justify-center gap-2"
+                className="w-full py-3.5 bg-[#D9A9FF] hover:bg-[#B87CFF] text-black font-mono font-bold text-xs uppercase tracking-widest rounded-xl transition-all shadow-lg disabled:opacity-50 flex items-center justify-center gap-2"
               >
                 {videoLoading ? (
                   <>
@@ -230,7 +230,7 @@ export default function AiStudioView() {
           <div className="lg:col-span-6 bg-[#1a1919] border border-white/10 p-6 rounded-2xl shadow-xl flex flex-col">
             <div className="flex items-center justify-between pb-4 border-b border-white/10 mb-4">
               <h3 className="font-serif font-bold text-lg text-white flex items-center gap-2">
-                <Film className="w-5 h-5 text-[#E9C349]" />
+                <Film className="w-5 h-5 text-[#D9A9FF]" />
                 Resultado del Análisis Técnico
               </h3>
               {videoAnalysisResult && (
@@ -251,9 +251,9 @@ export default function AiStudioView() {
             <div className="flex-1 bg-[#121212] border border-white/10 rounded-xl p-5 overflow-y-auto max-h-[420px] custom-scrollbar">
               {videoLoading ? (
                 <div className="h-full flex flex-col items-center justify-center py-16 text-center space-y-4">
-                  <div className="w-12 h-12 rounded-full border-2 border-[#E9C349] border-t-transparent animate-spin" />
+                  <div className="w-12 h-12 rounded-full border-2 border-[#D9A9FF] border-t-transparent animate-spin" />
                   <p className="text-sm font-mono text-slate-300 animate-pulse">
-                    Procesando fotogramas de video con modelo <code className="text-[#E9C349]">gemini-3.1-pro-preview</code>...
+                    Procesando fotogramas de video con modelo <code className="text-[#D9A9FF]">gemini-3.1-pro-preview</code>...
                   </p>
                 </div>
               ) : videoAnalysisResult ? (
@@ -284,13 +284,13 @@ export default function AiStudioView() {
               <div>
                 <div className="flex items-center justify-between mb-2">
                   <label className="text-xs font-mono text-slate-300 uppercase tracking-wider font-bold flex items-center gap-1.5">
-                    <Zap className="w-4 h-4 text-[#E9C349]" />
+                    <Zap className="w-4 h-4 text-[#D9A9FF]" />
                     Generador Visual Gemini
                   </label>
                   <select
                     value={selectedImageModel}
                     onChange={(e: any) => setSelectedImageModel(e.target.value)}
-                    className="bg-[#121212] border border-white/10 text-xs text-[#E9C349] font-mono rounded-lg px-2 py-1 focus:outline-none"
+                    className="bg-[#121212] border border-white/10 text-xs text-[#D9A9FF] font-mono rounded-lg px-2 py-1 focus:outline-none"
                   >
                     <option value="gemini-3.1-flash-image">gemini-3.1-flash-image</option>
                     <option value="gemini-3-pro-image">gemini-3-pro-image (Studio)</option>
@@ -302,7 +302,7 @@ export default function AiStudioView() {
                   value={imagePrompt}
                   onChange={(e) => setImagePrompt(e.target.value)}
                   rows={3}
-                  className="w-full bg-[#121212] border border-white/10 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-[#E9C349] transition-colors resize-none font-sans"
+                  className="w-full bg-[#121212] border border-white/10 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-[#D9A9FF] transition-colors resize-none font-sans"
                   placeholder="Describe la imagen que deseas generar..."
                   required
                 />
@@ -310,7 +310,7 @@ export default function AiStudioView() {
 
               <div>
                 <label className="block text-xs font-medium text-slate-300 mb-2 flex items-center gap-1.5">
-                  <Sliders className="w-3.5 h-3.5 text-[#E9C349]" />
+                  <Sliders className="w-3.5 h-3.5 text-[#D9A9FF]" />
                   Seleccionar Relación de Aspecto (Aspect Ratio):
                 </label>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
@@ -321,7 +321,7 @@ export default function AiStudioView() {
                       onClick={() => setAspectRatio(ar.value as any)}
                       className={`py-2 px-3 rounded-xl border text-xs font-mono transition-all flex flex-col items-center justify-center gap-1 ${
                         aspectRatio === ar.value
-                          ? 'border-[#E9C349] bg-[#E9C349]/15 text-[#E9C349] font-bold shadow-md'
+                          ? 'border-[#D9A9FF] bg-[#D9A9FF]/15 text-[#D9A9FF] font-bold shadow-md'
                           : 'border-white/10 bg-[#121212] text-slate-400 hover:border-white/30'
                       }`}
                     >
@@ -335,7 +335,7 @@ export default function AiStudioView() {
               <button
                 type="submit"
                 disabled={imageLoading}
-                className="w-full py-3.5 bg-[#E9C349] hover:bg-[#d8b23c] text-black font-mono font-bold text-xs uppercase tracking-widest rounded-xl transition-all shadow-lg disabled:opacity-50 flex items-center justify-center gap-2"
+                className="w-full py-3.5 bg-[#D9A9FF] hover:bg-[#B87CFF] text-black font-mono font-bold text-xs uppercase tracking-widest rounded-xl transition-all shadow-lg disabled:opacity-50 flex items-center justify-center gap-2"
               >
                 {imageLoading ? (
                   <>
@@ -356,9 +356,9 @@ export default function AiStudioView() {
           <div className="lg:col-span-6 bg-[#1a1919] border border-white/10 p-6 rounded-2xl shadow-xl flex flex-col items-center justify-center min-h-[400px]">
             {imageLoading ? (
               <div className="flex flex-col items-center justify-center space-y-4 py-16 text-center">
-                <div className="w-12 h-12 rounded-full border-2 border-[#E9C349] border-t-transparent animate-spin" />
+                <div className="w-12 h-12 rounded-full border-2 border-[#D9A9FF] border-t-transparent animate-spin" />
                 <p className="text-sm font-mono text-slate-300 animate-pulse">
-                  Renderizando imagen con <code className="text-[#E9C349]">{selectedImageModel}</code> en proporción <span className="text-[#E9C349] font-bold">{aspectRatio}</span>...
+                  Renderizando imagen con <code className="text-[#D9A9FF]">{selectedImageModel}</code> en proporción <span className="text-[#D9A9FF] font-bold">{aspectRatio}</span>...
                 </p>
               </div>
             ) : generatedImageUrl ? (
@@ -375,7 +375,7 @@ export default function AiStudioView() {
                     download="waack-ai-artwork.png"
                     className="absolute bottom-4 right-4 bg-black/80 hover:bg-black text-white p-2.5 rounded-xl border border-white/20 shadow-lg flex items-center gap-1.5 text-xs font-mono transition-transform hover:scale-105"
                   >
-                    <Download className="w-4 h-4 text-[#E9C349]" />
+                    <Download className="w-4 h-4 text-[#D9A9FF]" />
                     Descargar
                   </a>
                 </div>

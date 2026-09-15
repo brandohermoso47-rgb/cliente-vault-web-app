@@ -296,12 +296,12 @@ export default function TasksView({ currentUser, language, lessons, onAddBonusPo
   return (
     <div className="space-y-6 pb-12">
       {/* Header Banner */}
-      <div className="bg-gradient-to-r from-[#1c1815] via-[#2a1e1b] to-[#17131a] p-6 sm:p-8 rounded-3xl border border-[#E9C349]/30 shadow-2xl relative overflow-hidden">
-        <div className="absolute -right-10 -bottom-10 w-64 h-64 bg-[#E9C349]/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="bg-gradient-to-r from-[#1c1815] via-[#2a1e1b] to-[#17131a] p-6 sm:p-8 rounded-3xl border border-[#D9A9FF]/30 shadow-2xl relative overflow-hidden">
+        <div className="absolute -right-10 -bottom-10 w-64 h-64 bg-[#D9A9FF]/10 rounded-full blur-3xl pointer-events-none" />
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
           <div>
             <div className="flex items-center gap-2 mb-2">
-              <span className="text-[10px] font-mono font-black text-[#E9C349] bg-[#E9C349]/10 border border-[#E9C349]/30 px-2.5 py-1 rounded-full uppercase tracking-widest flex items-center gap-1.5">
+              <span className="text-[10px] font-mono font-black text-[#D9A9FF] bg-[#D9A9FF]/10 border border-[#D9A9FF]/30 px-2.5 py-1 rounded-full uppercase tracking-widest flex items-center gap-1.5">
                 <Sparkles className="w-3 h-3" />
                 GOOGLE WORKSPACE INTEGRATION
               </span>
@@ -313,7 +313,7 @@ export default function TasksView({ currentUser, language, lessons, onAddBonusPo
               )}
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-white uppercase tracking-tight flex items-center gap-3">
-              <ListTodo className="w-8 h-8 text-[#E9C349] shrink-0" />
+              <ListTodo className="w-8 h-8 text-[#D9A9FF] shrink-0" />
               Metas & Google Tasks
             </h1>
             <p className="text-sm text-slate-300 mt-1 max-w-2xl font-medium">
@@ -355,7 +355,7 @@ export default function TasksView({ currentUser, language, lessons, onAddBonusPo
               <button
                 type="button"
                 onClick={() => setShowCreateTaskModal(true)}
-                className="px-5 py-2.5 rounded-xl bg-[#E9C349] hover:bg-[#d6b039] text-black border border-[#E9C349] text-xs font-extrabold uppercase transition-all shadow-lg hover:scale-105 flex items-center gap-2"
+                className="px-5 py-2.5 rounded-xl bg-[#D9A9FF] hover:bg-[#B87CFF] text-black border border-[#D9A9FF] text-xs font-extrabold uppercase transition-all shadow-lg hover:scale-105 flex items-center gap-2"
               >
                 <Plus className="w-4 h-4" />
                 Nueva Tarea
@@ -388,10 +388,10 @@ export default function TasksView({ currentUser, language, lessons, onAddBonusPo
 
       {/* Instructor Assigned Tasks Section */}
       {assignedInstructorTasks.length > 0 && (
-        <div className="bg-gradient-to-r from-[#1c1912] via-[#121212] to-[#121212] border-2 border-[#E9C349] rounded-3xl p-6 shadow-2xl space-y-4">
+        <div className="bg-gradient-to-r from-[#1c1912] via-[#121212] to-[#121212] border-2 border-[#D9A9FF] rounded-3xl p-6 shadow-2xl space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <span className="p-2 rounded-xl bg-[#E9C349]/20 text-[#E9C349]">
+              <span className="p-2 rounded-xl bg-[#D9A9FF]/20 text-[#D9A9FF]">
                 <Sparkles className="w-5 h-5 animate-pulse" />
               </span>
               <div>
@@ -399,7 +399,7 @@ export default function TasksView({ currentUser, language, lessons, onAddBonusPo
                 <p className="text-xs text-slate-400">Completa estas misiones para sumar puntos directos a tu ranking somático.</p>
               </div>
             </div>
-            <span className="text-xs font-mono font-bold text-[#E9C349] bg-[#E9C349]/10 px-3 py-1 rounded-full border border-[#E9C349]/30">
+            <span className="text-xs font-mono font-bold text-[#D9A9FF] bg-[#D9A9FF]/10 px-3 py-1 rounded-full border border-[#D9A9FF]/30">
               {(assignedInstructorTasks || []).filter(t => t.status !== 'completed').length} Pendientes
             </span>
           </div>
@@ -419,12 +419,12 @@ export default function TasksView({ currentUser, language, lessons, onAddBonusPo
                     className={`p-5 rounded-2xl border transition-all flex flex-col justify-between gap-4 ${
                       isCompleted
                         ? 'bg-black/30 border-white/5 opacity-70'
-                        : 'bg-black/50 border-[#E9C349]/40 hover:border-[#E9C349] shadow-lg'
+                        : 'bg-black/50 border-[#D9A9FF]/40 hover:border-[#D9A9FF] shadow-lg'
                     }`}
                   >
                     <div className="space-y-2">
                       <div className="flex items-center justify-between">
-                        <span className="text-[10px] font-mono font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-[#E9C349]/20 text-[#E9C349]">
+                        <span className="text-[10px] font-mono font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-[#D9A9FF]/20 text-[#D9A9FF]">
                           {task.category || 'Misión Técnica'}
                         </span>
                         <span className="text-xs font-mono font-bold text-amber-400">
@@ -439,7 +439,7 @@ export default function TasksView({ currentUser, language, lessons, onAddBonusPo
                         >
                           {task.title}
                           <motion.span
-                            className="absolute left-0 top-1/2 h-[2px] bg-[#E9C349] origin-left rounded-full pointer-events-none"
+                            className="absolute left-0 top-1/2 h-[2px] bg-[#D9A9FF] origin-left rounded-full pointer-events-none"
                             initial={{ scaleX: 0 }}
                             animate={{ scaleX: isCompleted ? 1 : 0 }}
                             transition={{ duration: 0.35, ease: 'easeInOut' }}
@@ -458,7 +458,7 @@ export default function TasksView({ currentUser, language, lessons, onAddBonusPo
                       {!isCompleted ? (
                         <button
                           onClick={() => handleCompleteInstructorTaskItem(task.id)}
-                          className="px-4 py-2 bg-[#E9C349] hover:bg-[#d8b33c] text-black text-xs font-black rounded-xl shadow transition-all hover:scale-105 uppercase tracking-wider flex items-center gap-1.5 cursor-pointer"
+                          className="px-4 py-2 bg-[#D9A9FF] hover:bg-[#B87CFF] text-black text-xs font-black rounded-xl shadow transition-all hover:scale-105 uppercase tracking-wider flex items-center gap-1.5 cursor-pointer"
                         >
                           <span>Completar (+{task.points || 50} pts)</span>
                           <CheckCircle2 className="w-4 h-4" />
@@ -484,7 +484,7 @@ export default function TasksView({ currentUser, language, lessons, onAddBonusPo
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <h2 className="text-sm font-black text-white uppercase tracking-wider flex items-center gap-2">
-                <ListTodo className="w-4 h-4 text-[#E9C349]" />
+                <ListTodo className="w-4 h-4 text-[#D9A9FF]" />
                 Mis Listas de Tareas ({taskLists.length})
               </h2>
               <button
@@ -506,21 +506,21 @@ export default function TasksView({ currentUser, language, lessons, onAddBonusPo
                     onClick={() => setSelectedListId(list.id)}
                     className={`w-full text-left p-4 rounded-2xl border transition-all flex items-center justify-between ${
                       isSelected
-                        ? 'bg-[#241c17] border-[#E9C349]/60 text-white shadow-xl'
+                        ? 'bg-[#241c17] border-[#D9A9FF]/60 text-white shadow-xl'
                         : 'bg-[#121021] border-white/10 text-slate-300 hover:border-white/20 hover:bg-[#18152e]'
                     }`}
                   >
                     <span className="text-xs font-extrabold uppercase truncate">{list.title}</span>
-                    {isSelected && <span className="w-2 h-2 rounded-full bg-[#E9C349] shrink-0" />}
+                    {isSelected && <span className="w-2 h-2 rounded-full bg-[#D9A9FF] shrink-0" />}
                   </button>
                 );
               })}
             </div>
 
             {/* Quick Presets Panel */}
-            <div className="p-5 bg-[#121021] border border-[#E9C349]/20 rounded-2xl space-y-3">
+            <div className="p-5 bg-[#121021] border border-[#D9A9FF]/20 rounded-2xl space-y-3">
               <div className="flex items-center gap-2">
-                <Target className="w-4 h-4 text-[#E9C349]" />
+                <Target className="w-4 h-4 text-[#D9A9FF]" />
                 <h3 className="text-xs font-black text-white uppercase">Sugerencias de Práctica</h3>
               </div>
               <p className="text-[11px] text-slate-400 leading-relaxed">
@@ -531,9 +531,9 @@ export default function TasksView({ currentUser, language, lessons, onAddBonusPo
                   <button
                     key={idx}
                     onClick={() => handleQuickAddPreset(preset)}
-                    className="w-full text-left p-2.5 bg-black/40 hover:bg-black/70 border border-white/5 hover:border-[#E9C349]/30 rounded-xl transition-all group"
+                    className="w-full text-left p-2.5 bg-black/40 hover:bg-black/70 border border-white/5 hover:border-[#D9A9FF]/30 rounded-xl transition-all group"
                   >
-                    <p className="text-xs font-bold text-white group-hover:text-[#E9C349] transition-colors">{preset.title}</p>
+                    <p className="text-xs font-bold text-white group-hover:text-[#D9A9FF] transition-colors">{preset.title}</p>
                     <p className="text-[10px] text-slate-400 truncate mt-0.5">{preset.notes}</p>
                   </button>
                 ))}
@@ -560,7 +560,7 @@ export default function TasksView({ currentUser, language, lessons, onAddBonusPo
                     type="button"
                     onClick={() => setFilter('pending')}
                     className={`px-3 py-1 text-xs font-bold rounded-lg transition-all ${
-                      filter === 'pending' ? 'bg-[#E9C349] text-black shadow-md' : 'text-slate-400 hover:text-white'
+                      filter === 'pending' ? 'bg-[#D9A9FF] text-black shadow-md' : 'text-slate-400 hover:text-white'
                     }`}
                   >
                     Pendientes
@@ -569,7 +569,7 @@ export default function TasksView({ currentUser, language, lessons, onAddBonusPo
                     type="button"
                     onClick={() => setFilter('completed')}
                     className={`px-3 py-1 text-xs font-bold rounded-lg transition-all ${
-                      filter === 'completed' ? 'bg-[#E9C349] text-black shadow-md' : 'text-slate-400 hover:text-white'
+                      filter === 'completed' ? 'bg-[#D9A9FF] text-black shadow-md' : 'text-slate-400 hover:text-white'
                     }`}
                   >
                     Completadas
@@ -578,7 +578,7 @@ export default function TasksView({ currentUser, language, lessons, onAddBonusPo
                     type="button"
                     onClick={() => setFilter('all')}
                     className={`px-3 py-1 text-xs font-bold rounded-lg transition-all ${
-                      filter === 'all' ? 'bg-[#E9C349] text-black shadow-md' : 'text-slate-400 hover:text-white'
+                      filter === 'all' ? 'bg-[#D9A9FF] text-black shadow-md' : 'text-slate-400 hover:text-white'
                     }`}
                   >
                     Todas
@@ -619,7 +619,7 @@ export default function TasksView({ currentUser, language, lessons, onAddBonusPo
                             <button
                               type="button"
                               onClick={() => handleToggleTask(task)}
-                              className="mt-0.5 text-slate-400 hover:text-[#E9C349] transition-colors shrink-0 cursor-pointer"
+                              className="mt-0.5 text-slate-400 hover:text-[#D9A9FF] transition-colors shrink-0 cursor-pointer"
                             >
                               <motion.div
                                 key={isDone ? 'done' : 'undone'}
@@ -684,7 +684,7 @@ export default function TasksView({ currentUser, language, lessons, onAddBonusPo
       ) : (
         /* Not logged in landing state */
         <div className="bg-[#121021] border border-white/10 rounded-3xl p-8 sm:p-12 text-center max-w-3xl mx-auto space-y-6">
-          <div className="w-16 h-16 rounded-3xl bg-[#E9C349]/20 border border-[#E9C349]/30 flex items-center justify-center mx-auto text-[#E9C349]">
+          <div className="w-16 h-16 rounded-3xl bg-[#D9A9FF]/20 border border-[#D9A9FF]/30 flex items-center justify-center mx-auto text-[#D9A9FF]">
             <ListTodo className="w-8 h-8" />
           </div>
           <div>
@@ -725,10 +725,10 @@ export default function TasksView({ currentUser, language, lessons, onAddBonusPo
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 15 }}
               transition={{ duration: 0.2, ease: 'easeOut' }}
-              className="bg-[#121021] border border-[#E9C349]/30 rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl text-white"
+              className="bg-[#121021] border border-[#D9A9FF]/30 rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl text-white"
             >
               <div className="flex items-center gap-3 border-b border-white/10 pb-3">
-                <div className="p-2 rounded-xl bg-[#E9C349]/20 text-[#E9C349]">
+                <div className="p-2 rounded-xl bg-[#D9A9FF]/20 text-[#D9A9FF]">
                   <ListTodo className="w-5 h-5" />
                 </div>
                 <div>
@@ -745,7 +745,7 @@ export default function TasksView({ currentUser, language, lessons, onAddBonusPo
                     value={newTaskTitle}
                     onChange={(e) => setNewTaskTitle(e.target.value)}
                     placeholder="Ej. Practicar Posing en 8 tiempos"
-                    className="w-full bg-black/50 border border-white/10 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#E9C349]"
+                    className="w-full bg-black/50 border border-white/10 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#D9A9FF]"
                   />
                 </div>
 
@@ -756,7 +756,7 @@ export default function TasksView({ currentUser, language, lessons, onAddBonusPo
                     value={newTaskNotes}
                     onChange={(e) => setNewTaskNotes(e.target.value)}
                     placeholder="Detalles del ejercicio o recordatorio..."
-                    className="w-full bg-black/50 border border-white/10 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#E9C349]"
+                    className="w-full bg-black/50 border border-white/10 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#D9A9FF]"
                   />
                 </div>
 
@@ -766,7 +766,7 @@ export default function TasksView({ currentUser, language, lessons, onAddBonusPo
                     type="date"
                     value={newTaskDueDate}
                     onChange={(e) => setNewTaskDueDate(e.target.value)}
-                    className="w-full bg-black/50 border border-white/10 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#E9C349]"
+                    className="w-full bg-black/50 border border-white/10 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#D9A9FF]"
                   />
                 </div>
               </div>
@@ -783,7 +783,7 @@ export default function TasksView({ currentUser, language, lessons, onAddBonusPo
                   type="button"
                   onClick={handleConfirmCreateTask}
                   disabled={loading}
-                  className="px-5 py-2 rounded-xl bg-[#E9C349] hover:bg-[#d6b039] text-black text-xs font-extrabold uppercase shadow-lg cursor-pointer"
+                  className="px-5 py-2 rounded-xl bg-[#D9A9FF] hover:bg-[#B87CFF] text-black text-xs font-extrabold uppercase shadow-lg cursor-pointer"
                 >
                   Añadir a Google Tasks
                 </button>
@@ -802,10 +802,10 @@ export default function TasksView({ currentUser, language, lessons, onAddBonusPo
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 15 }}
               transition={{ duration: 0.2, ease: 'easeOut' }}
-              className="bg-[#121021] border border-[#E9C349]/30 rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl text-white"
+              className="bg-[#121021] border border-[#D9A9FF]/30 rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl text-white"
             >
               <div className="flex items-center gap-3 border-b border-white/10 pb-3">
-                <div className="p-2 rounded-xl bg-[#E9C349]/20 text-[#E9C349]">
+                <div className="p-2 rounded-xl bg-[#D9A9FF]/20 text-[#D9A9FF]">
                   <FolderPlus className="w-5 h-5" />
                 </div>
                 <div>
@@ -822,7 +822,7 @@ export default function TasksView({ currentUser, language, lessons, onAddBonusPo
                     value={newListTitle}
                     onChange={(e) => setNewListTitle(e.target.value)}
                     placeholder="Ej. Objetivos del Trimestre"
-                    className="w-full bg-black/50 border border-white/10 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#E9C349]"
+                    className="w-full bg-black/50 border border-white/10 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#D9A9FF]"
                   />
                 </div>
               </div>
@@ -839,7 +839,7 @@ export default function TasksView({ currentUser, language, lessons, onAddBonusPo
                   type="button"
                   onClick={handleConfirmCreateList}
                   disabled={loading}
-                  className="px-5 py-2 rounded-xl bg-[#E9C349] hover:bg-[#d6b039] text-black text-xs font-extrabold uppercase shadow-lg cursor-pointer"
+                  className="px-5 py-2 rounded-xl bg-[#D9A9FF] hover:bg-[#B87CFF] text-black text-xs font-extrabold uppercase shadow-lg cursor-pointer"
                 >
                   Crear Lista
                 </button>

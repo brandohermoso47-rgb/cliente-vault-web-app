@@ -300,12 +300,12 @@ export default function PodcastUploaderModal({
         initial={{ opacity: 0, scale: 0.95, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 20 }}
-        className="relative w-full max-w-2xl bg-[#0d0e1b] border-2 border-[#E9C349]/40 rounded-3xl p-6 sm:p-8 shadow-[0_0_50px_rgba(233,195,73,0.15)] text-white my-8 max-h-[90vh] flex flex-col"
+        className="relative w-full max-w-2xl bg-[#0d0e1b] border-2 border-[#D9A9FF]/40 rounded-3xl p-6 sm:p-8 shadow-[0_0_50px_rgba(217, 169, 255,0.15)] text-white my-8 max-h-[90vh] flex flex-col"
       >
         {/* Modal Header */}
         <div className="flex items-start justify-between gap-4 border-b border-white/10 pb-5 shrink-0">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-2xl bg-[#E9C349]/20 border border-[#E9C349]/50 flex items-center justify-center text-[#E9C349]">
+            <div className="w-12 h-12 rounded-2xl bg-[#D9A9FF]/20 border border-[#D9A9FF]/50 flex items-center justify-center text-[#D9A9FF]">
               <Radio className="w-6 h-6" />
             </div>
             <div>
@@ -329,10 +329,10 @@ export default function PodcastUploaderModal({
         </div>
 
         {/* Informative Banner */}
-        <div className="mt-4 p-3.5 rounded-2xl bg-amber-500/10 border border-[#E9C349]/30 flex items-start gap-3 shrink-0">
-          <Sparkles className="w-5 h-5 text-[#E9C349] shrink-0 mt-0.5" />
+        <div className="mt-4 p-3.5 rounded-2xl bg-amber-500/10 border border-[#D9A9FF]/30 flex items-start gap-3 shrink-0">
+          <Sparkles className="w-5 h-5 text-[#D9A9FF] shrink-0 mt-0.5" />
           <div className="text-xs text-gray-300 leading-relaxed">
-            <strong className="text-[#E9C349] font-bold">Sin monetización individual:</strong> Los podcasts forman parte de tu paquete de contenidos exclusivo. Tus alumnos registrados que se suscriban a tu perfil tendrán acceso automático sin pagos adicionales.
+            <strong className="text-[#D9A9FF] font-bold">Sin monetización individual:</strong> Los podcasts forman parte de tu paquete de contenidos exclusivo. Tus alumnos registrados que se suscriban a tu perfil tendrán acceso automático sin pagos adicionales.
           </div>
         </div>
 
@@ -343,7 +343,7 @@ export default function PodcastUploaderModal({
               type="button"
               onClick={() => setCurrentMode('create_show')}
               className={`flex-1 py-2 px-3 rounded-xl font-mono text-xs font-bold transition-all ${
-                currentMode === 'create_show' ? 'bg-[#E9C349] text-black shadow-md' : 'text-gray-400 hover:text-white'
+                currentMode === 'create_show' ? 'bg-[#D9A9FF] text-black shadow-md' : 'text-gray-400 hover:text-white'
               }`}
             >
               Info del Show
@@ -352,7 +352,7 @@ export default function PodcastUploaderModal({
               type="button"
               onClick={() => setCurrentMode('add_episode')}
               className={`flex-1 py-2 px-3 rounded-xl font-mono text-xs font-bold transition-all ${
-                currentMode === 'add_episode' ? 'bg-[#E9C349] text-black shadow-md' : 'text-gray-400 hover:text-white'
+                currentMode === 'add_episode' ? 'bg-[#D9A9FF] text-black shadow-md' : 'text-gray-400 hover:text-white'
               }`}
             >
               + 1 Episodio
@@ -361,7 +361,7 @@ export default function PodcastUploaderModal({
               type="button"
               onClick={() => setCurrentMode('batch_upload')}
               className={`flex-1 py-2 px-3 rounded-xl font-mono text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${
-                currentMode === 'batch_upload' ? 'bg-[#E9C349] text-black shadow-md' : 'text-gray-400 hover:text-white'
+                currentMode === 'batch_upload' ? 'bg-[#D9A9FF] text-black shadow-md' : 'text-gray-400 hover:text-white'
               }`}
             >
               <Layers className="w-3.5 h-3.5" />
@@ -402,7 +402,7 @@ export default function PodcastUploaderModal({
                   value={showTitle}
                   onChange={(e) => setShowTitle(e.target.value)}
                   placeholder="Ej: Waack & Groove: Historias del Disco 1970s"
-                  className="w-full bg-[#121426] border border-white/15 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-[#E9C349] transition-all"
+                  className="w-full bg-[#121426] border border-white/15 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-[#D9A9FF] transition-all"
                   required
                 />
               </div>
@@ -417,7 +417,7 @@ export default function PodcastUploaderModal({
                   value={showDescription}
                   onChange={(e) => setShowDescription(e.target.value)}
                   placeholder="Explica de qué trata este programa, la temática de tu cátedra y qué aprenderán los alumnos..."
-                  className="w-full bg-[#121426] border border-white/15 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-[#E9C349] transition-all resize-none"
+                  className="w-full bg-[#121426] border border-white/15 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-[#D9A9FF] transition-all resize-none"
                   required
                 />
               </div>
@@ -430,7 +430,7 @@ export default function PodcastUploaderModal({
                 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 items-center">
                   {/* Image Preview Box */}
-                  <div className="relative aspect-square rounded-2xl overflow-hidden border-2 border-dashed border-[#E9C349]/50 bg-[#121426] flex items-center justify-center group">
+                  <div className="relative aspect-square rounded-2xl overflow-hidden border-2 border-dashed border-[#D9A9FF]/50 bg-[#121426] flex items-center justify-center group">
                     {coverImage ? (
                       <>
                         <img
@@ -440,13 +440,13 @@ export default function PodcastUploaderModal({
                           referrerPolicy="no-referrer"
                         />
                         <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-all flex flex-col items-center justify-center gap-1">
-                          <Upload className="w-5 h-5 text-[#E9C349]" />
+                          <Upload className="w-5 h-5 text-[#D9A9FF]" />
                           <span className="text-[10px] font-mono font-bold text-white">Cambiar Imagen</span>
                         </div>
                       </>
                     ) : (
                       <div className="flex flex-col items-center p-4 text-center">
-                        <ImageIcon className="w-8 h-8 text-[#E9C349] mb-1" />
+                        <ImageIcon className="w-8 h-8 text-[#D9A9FF] mb-1" />
                         <span className="text-[10px] text-gray-400">Sin cover seleccionado</span>
                       </div>
                     )}
@@ -467,11 +467,11 @@ export default function PodcastUploaderModal({
                       onClick={() => coverFileRef.current?.click()}
                       className={`p-5 rounded-2xl border-2 border-dashed transition-all cursor-pointer flex flex-col items-center justify-center text-center ${
                         coverDragging
-                          ? 'border-[#E9C349] bg-[#E9C349]/10'
-                          : 'border-white/20 bg-[#121426] hover:border-[#E9C349]/60 hover:bg-[#161933]'
+                          ? 'border-[#D9A9FF] bg-[#D9A9FF]/10'
+                          : 'border-white/20 bg-[#121426] hover:border-[#D9A9FF]/60 hover:bg-[#161933]'
                       }`}
                     >
-                      <Upload className="w-6 h-6 text-[#E9C349] mb-2" />
+                      <Upload className="w-6 h-6 text-[#D9A9FF] mb-2" />
                       <p className="text-xs font-bold text-white">
                         Arrastra tu imagen aquí o haz clic para examinar
                       </p>
@@ -503,7 +503,7 @@ export default function PodcastUploaderModal({
                   <select
                     value={showCategory}
                     onChange={(e) => setShowCategory(e.target.value)}
-                    className="w-full bg-[#121426] border border-white/15 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-[#E9C349] transition-all cursor-pointer"
+                    className="w-full bg-[#121426] border border-white/15 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-[#D9A9FF] transition-all cursor-pointer"
                   >
                     {CATEGORIES.map(cat => (
                       <option key={cat} value={cat} className="bg-[#121426] text-white">
@@ -520,7 +520,7 @@ export default function PodcastUploaderModal({
                   <select
                     value={showStatus}
                     onChange={(e) => setShowStatus(e.target.value as 'active' | 'archived')}
-                    className="w-full bg-[#121426] border border-white/15 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-[#E9C349] transition-all cursor-pointer"
+                    className="w-full bg-[#121426] border border-white/15 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-[#D9A9FF] transition-all cursor-pointer"
                   >
                     <option value="active" className="bg-[#121426] text-white">Activo (Visible para Alumnos)</option>
                     <option value="archived" className="bg-[#121426] text-white">Archivado (Oculto)</option>
@@ -539,7 +539,7 @@ export default function PodcastUploaderModal({
                 </button>
                 <button
                   type="submit"
-                  className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#E9C349] to-[#f3d775] text-black font-mono text-xs font-black uppercase tracking-wider shadow-lg hover:brightness-110 transition-all flex items-center gap-2 cursor-pointer"
+                  className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#D9A9FF] to-[#f3d775] text-black font-mono text-xs font-black uppercase tracking-wider shadow-lg hover:brightness-110 transition-all flex items-center gap-2 cursor-pointer"
                 >
                   <Check className="w-4 h-4" />
                   {existingPodcast ? 'Guardar Cambios' : 'Crear Podcast Show'}
@@ -558,7 +558,7 @@ export default function PodcastUploaderModal({
                   value={epTitle}
                   onChange={(e) => setEpTitle(e.target.value)}
                   placeholder="Ej: Episodio 1: Aislamiento de Codos y Velocidad"
-                  className="w-full bg-[#121426] border border-white/15 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-[#E9C349] transition-all"
+                  className="w-full bg-[#121426] border border-white/15 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-[#D9A9FF] transition-all"
                   required
                 />
               </div>
@@ -572,7 +572,7 @@ export default function PodcastUploaderModal({
                   value={epDescription}
                   onChange={(e) => setEpDescription(e.target.value)}
                   placeholder="Resumen del episodio, puntos clave analizados y ejercicios recomendados..."
-                  className="w-full bg-[#121426] border border-white/15 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-[#E9C349] transition-all resize-none"
+                  className="w-full bg-[#121426] border border-white/15 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-[#D9A9FF] transition-all resize-none"
                   required
                 />
               </div>
@@ -585,13 +585,13 @@ export default function PodcastUploaderModal({
 
                 <div
                   onClick={() => audioFileRef.current?.click()}
-                  className="p-5 rounded-2xl border-2 border-dashed border-[#E9C349]/50 bg-[#121426] hover:border-[#E9C349] transition-all cursor-pointer flex flex-col items-center justify-center text-center"
+                  className="p-5 rounded-2xl border-2 border-dashed border-[#D9A9FF]/50 bg-[#121426] hover:border-[#D9A9FF] transition-all cursor-pointer flex flex-col items-center justify-center text-center"
                 >
-                  <FileAudio className="w-8 h-8 text-[#E9C349] mb-2" />
+                  <FileAudio className="w-8 h-8 text-[#D9A9FF] mb-2" />
                   {epAudioName ? (
                     <div>
                       <p className="text-xs font-bold text-white flex items-center justify-center gap-1.5">
-                        <Check className="w-4 h-4 text-emerald-400" /> Archivo Seleccionado: <span className="text-[#E9C349]">{epAudioName}</span>
+                        <Check className="w-4 h-4 text-emerald-400" /> Archivo Seleccionado: <span className="text-[#D9A9FF]">{epAudioName}</span>
                       </p>
                       <p className="text-[10px] text-gray-400 mt-1">Haz clic para reemplazar el archivo de audio</p>
                     </div>
@@ -627,7 +627,7 @@ export default function PodcastUploaderModal({
                     min="1"
                     value={epSeason}
                     onChange={(e) => setEpSeason(parseInt(e.target.value) || 1)}
-                    className="w-full bg-[#121426] border border-white/15 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-[#E9C349]"
+                    className="w-full bg-[#121426] border border-white/15 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-[#D9A9FF]"
                   />
                 </div>
 
@@ -640,7 +640,7 @@ export default function PodcastUploaderModal({
                     min="1"
                     value={epNumber}
                     onChange={(e) => setEpNumber(parseInt(e.target.value) || 1)}
-                    className="w-full bg-[#121426] border border-white/15 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-[#E9C349]"
+                    className="w-full bg-[#121426] border border-white/15 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-[#D9A9FF]"
                   />
                 </div>
 
@@ -652,7 +652,7 @@ export default function PodcastUploaderModal({
                     type="date"
                     value={epPublishDate}
                     onChange={(e) => setEpPublishDate(e.target.value)}
-                    className="w-full bg-[#121426] border border-white/15 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-[#E9C349]"
+                    className="w-full bg-[#121426] border border-white/15 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-[#D9A9FF]"
                   />
                 </div>
               </div>
@@ -670,7 +670,7 @@ export default function PodcastUploaderModal({
                       value="published"
                       checked={epStatus === 'published'}
                       onChange={() => setEpStatus('published')}
-                      className="accent-[#E9C349]"
+                      className="accent-[#D9A9FF]"
                     />
                     <span>Publicado inmediatamente</span>
                   </label>
@@ -682,7 +682,7 @@ export default function PodcastUploaderModal({
                       value="draft"
                       checked={epStatus === 'draft'}
                       onChange={() => setEpStatus('draft')}
-                      className="accent-[#E9C349]"
+                      className="accent-[#D9A9FF]"
                     />
                     <span>Borrador (Oculto)</span>
                   </label>
@@ -700,7 +700,7 @@ export default function PodcastUploaderModal({
                 </button>
                 <button
                   type="submit"
-                  className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#E9C349] to-[#f3d775] text-black font-mono text-xs font-black uppercase tracking-wider shadow-lg hover:brightness-110 transition-all flex items-center gap-2 cursor-pointer"
+                  className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#D9A9FF] to-[#f3d775] text-black font-mono text-xs font-black uppercase tracking-wider shadow-lg hover:brightness-110 transition-all flex items-center gap-2 cursor-pointer"
                 >
                   <Upload className="w-4 h-4" />
                   Publicar Episodio
@@ -718,9 +718,9 @@ export default function PodcastUploaderModal({
 
                 <div
                   onClick={() => batchAudioFileRef.current?.click()}
-                  className="p-6 rounded-2xl border-2 border-dashed border-[#E9C349]/50 bg-[#121426] hover:border-[#E9C349] hover:bg-[#161933] transition-all cursor-pointer flex flex-col items-center justify-center text-center group"
+                  className="p-6 rounded-2xl border-2 border-dashed border-[#D9A9FF]/50 bg-[#121426] hover:border-[#D9A9FF] hover:bg-[#161933] transition-all cursor-pointer flex flex-col items-center justify-center text-center group"
                 >
-                  <div className="w-12 h-12 rounded-2xl bg-[#E9C349]/20 text-[#E9C349] flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
+                  <div className="w-12 h-12 rounded-2xl bg-[#D9A9FF]/20 text-[#D9A9FF] flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
                     <Layers className="w-6 h-6" />
                   </div>
                   <p className="text-xs font-bold text-white">
@@ -749,7 +749,7 @@ export default function PodcastUploaderModal({
               {batchItems.length > 0 ? (
                 <div className="space-y-4">
                   <div className="flex items-center justify-between border-b border-white/10 pb-2">
-                    <span className="text-xs font-mono font-bold text-[#E9C349] uppercase">
+                    <span className="text-xs font-mono font-bold text-[#D9A9FF] uppercase">
                       Archivos en Lote ({batchItems.length} episodios preparados)
                     </span>
                     <button
@@ -768,7 +768,7 @@ export default function PodcastUploaderModal({
                         className="p-3.5 rounded-2xl bg-[#121426] border border-white/10 space-y-3 relative group"
                       >
                         <div className="flex items-center justify-between gap-2 border-b border-white/5 pb-2">
-                          <span className="text-[10px] font-mono font-bold bg-[#E9C349]/20 border border-[#E9C349]/40 text-[#E9C349] px-2 py-0.5 rounded-md">
+                          <span className="text-[10px] font-mono font-bold bg-[#D9A9FF]/20 border border-[#D9A9FF]/40 text-[#D9A9FF] px-2 py-0.5 rounded-md">
                             Nº Episodio {item.episodeNumber}
                           </span>
                           <span className="text-[10px] font-mono text-gray-400 truncate max-w-[200px]">
@@ -793,7 +793,7 @@ export default function PodcastUploaderModal({
                               type="text"
                               value={item.title}
                               onChange={(e) => handleUpdateBatchItem(item.id, 'title', e.target.value)}
-                              className="w-full bg-black/40 border border-white/15 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-[#E9C349]"
+                              className="w-full bg-black/40 border border-white/15 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-[#D9A9FF]"
                             />
                           </div>
 
@@ -804,7 +804,7 @@ export default function PodcastUploaderModal({
                             <select
                               value={item.status}
                               onChange={(e) => handleUpdateBatchItem(item.id, 'status', e.target.value)}
-                              className="w-full bg-black/40 border border-white/15 rounded-lg px-2 py-1.5 text-xs text-white focus:outline-none focus:border-[#E9C349]"
+                              className="w-full bg-black/40 border border-white/15 rounded-lg px-2 py-1.5 text-xs text-white focus:outline-none focus:border-[#D9A9FF]"
                             >
                               <option value="published">Publicado</option>
                               <option value="draft">Borrador</option>
@@ -820,7 +820,7 @@ export default function PodcastUploaderModal({
                             type="text"
                             value={item.description}
                             onChange={(e) => handleUpdateBatchItem(item.id, 'description', e.target.value)}
-                            className="w-full bg-black/40 border border-white/15 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-[#E9C349]"
+                            className="w-full bg-black/40 border border-white/15 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-[#D9A9FF]"
                           />
                         </div>
                       </div>
@@ -849,7 +849,7 @@ export default function PodcastUploaderModal({
                   disabled={batchItems.length === 0}
                   className={`px-6 py-2.5 rounded-xl text-black font-mono text-xs font-black uppercase tracking-wider shadow-lg transition-all flex items-center gap-2 cursor-pointer ${
                     batchItems.length > 0
-                      ? 'bg-gradient-to-r from-[#E9C349] to-[#f3d775] hover:brightness-110'
+                      ? 'bg-gradient-to-r from-[#D9A9FF] to-[#f3d775] hover:brightness-110'
                       : 'bg-gray-600 opacity-50 cursor-not-allowed'
                   }`}
                 >

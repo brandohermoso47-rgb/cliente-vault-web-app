@@ -794,7 +794,7 @@ export default function EbooksView({ currentUser, language }: EbooksViewProps) {
   }, []);
 
   return (
-    <div className="flex-1 min-h-full w-full p-6 space-y-6 bg-background text-on-surface flex flex-col font-body-md select-none">
+    <div className="ebook-tactile-scope flex-1 min-h-full w-full p-6 space-y-6 bg-background text-on-surface flex flex-col font-body-md select-none">
 
       <div ref={sceneWrapRef} className="relative" style={{ perspective: '1800px' }}>
       {/* Ambient tactile backdrop: paper grain + warm lamp glow, contained to this screen */}

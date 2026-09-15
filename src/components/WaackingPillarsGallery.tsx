@@ -147,8 +147,8 @@ export const WaackingPillarsGallery: React.FC<{ onSelectPillar?: (pillar: Waacki
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/10 pb-4">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <span className="text-[10px] font-mono font-bold text-[#E9C349] bg-[#E9C349]/10 border border-[#E9C349]/30 px-2.5 py-0.5 rounded-full uppercase tracking-wider flex items-center gap-1">
-              <Sparkles className="w-3 h-3 text-[#E9C349]" /> FUNDAMENTOS TÉCNICOS
+            <span className="text-[10px] font-mono font-bold text-[#D9A9FF] bg-[#D9A9FF]/10 border border-[#D9A9FF]/30 px-2.5 py-0.5 rounded-full uppercase tracking-wider flex items-center gap-1">
+              <Sparkles className="w-3 h-3 text-[#D9A9FF]" /> FUNDAMENTOS TÉCNICOS
             </span>
             <span className="text-[10px] font-mono font-bold text-slate-400 uppercase">
               COLECCIÓN DE 5 BANNERS CONCEPTUALES
@@ -208,7 +208,7 @@ export const WaackingPillarsGallery: React.FC<{ onSelectPillar?: (pillar: Waacki
             {/* Bottom Footer Button */}
             <div className="p-3 bg-black/60 border-t border-white/10 backdrop-blur-md flex items-center justify-between text-xs font-mono font-bold text-slate-300 group-hover:text-white transition-colors">
               <span>Ver Análisis Biomecánico</span>
-              <ChevronRight className="w-4 h-4 text-[#E9C349] group-hover:translate-x-1 transition-transform" />
+              <ChevronRight className="w-4 h-4 text-[#D9A9FF] group-hover:translate-x-1 transition-transform" />
             </div>
           </motion.div>
         ))}
@@ -243,7 +243,7 @@ export const WaackingPillarsGallery: React.FC<{ onSelectPillar?: (pillar: Waacki
                   {selectedPillar.svgIcon}
                 </div>
                 <div>
-                  <span className="text-[10px] font-mono font-bold uppercase text-[#E9C349] bg-[#E9C349]/10 border border-[#E9C349]/20 px-2.5 py-0.5 rounded-md">
+                  <span className="text-[10px] font-mono font-bold uppercase text-[#D9A9FF] bg-[#D9A9FF]/10 border border-[#D9A9FF]/20 px-2.5 py-0.5 rounded-md">
                     {selectedPillar.category}
                   </span>
                   <h3 className="text-xl font-black uppercase text-white mt-1">
@@ -255,7 +255,7 @@ export const WaackingPillarsGallery: React.FC<{ onSelectPillar?: (pillar: Waacki
 
               <div className="space-y-4 text-xs leading-relaxed border-y border-white/10 py-4">
                 <div>
-                  <h4 className="font-mono font-bold text-[#E9C349] uppercase mb-1 flex items-center gap-1.5">
+                  <h4 className="font-mono font-bold text-[#D9A9FF] uppercase mb-1 flex items-center gap-1.5">
                     <BookOpen className="w-3.5 h-3.5" /> Concepto Clave:
                   </h4>
                   <p className="text-slate-200">{selectedPillar.description}</p>
@@ -283,7 +283,7 @@ export const WaackingPillarsGallery: React.FC<{ onSelectPillar?: (pillar: Waacki
 
                 <button
                   onClick={() => setSelectedPillar(null)}
-                  className="px-6 py-2.5 rounded-xl bg-[#E9C349] text-black font-extrabold text-xs uppercase shadow-lg hover:bg-yellow-300 transition-all"
+                  className="px-6 py-2.5 rounded-xl bg-[#D9A9FF] text-black font-extrabold text-xs uppercase shadow-lg hover:bg-yellow-300 transition-all"
                 >
                   Entendido
                 </button>
