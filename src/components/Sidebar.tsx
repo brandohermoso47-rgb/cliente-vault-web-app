@@ -216,7 +216,7 @@ export default function Sidebar({
           
           <Logo variant="full" className="w-40 h-auto relative z-10 transition-transform group-hover:scale-105 duration-300" />
           
-          <span className="text-[8px] font-mono tracking-[0.25em] text-[#E9C349] font-black mt-1 relative z-10 uppercase text-center">
+          <span className="text-[8px] font-mono tracking-[0.25em] text-[#D9A9FF] font-black mt-1 relative z-10 uppercase text-center">
             PLATAFORMA DE ENTRENAMIENTO
           </span>
         </div>
@@ -234,7 +234,7 @@ export default function Sidebar({
               src={currentUser.avatar} 
               alt={currentUser.name} 
               className={`w-9 h-9 rounded-xl border object-cover shrink-0 transition-colors ${
-                currentUser.role === 'studio' ? 'border-[#E9C349]' : currentUser.role === 'instructor' ? 'border-[#E9C349]' : 'border-[#E9C349]/50'
+                currentUser.role === 'studio' ? 'border-[#D9A9FF]' : currentUser.role === 'instructor' ? 'border-[#D9A9FF]' : 'border-[#D9A9FF]/50'
               }`}
               referrerPolicy="no-referrer"
             />
@@ -245,13 +245,13 @@ export default function Sidebar({
               <p className="text-[9px] font-mono text-slate-500 dark:text-slate-400 font-semibold flex items-center gap-1 mt-0.5">
                 {currentUser.role === 'studio' ? (
                   <>
-                    <Building2 className="w-2.5 h-2.5 text-[#E9C349] inline shrink-0" />
-                    <span className="capitalize text-[#E9C349] font-bold">Academia</span>
+                    <Building2 className="w-2.5 h-2.5 text-[#D9A9FF] inline shrink-0" />
+                    <span className="capitalize text-[#D9A9FF] font-bold">Academia</span>
                   </>
                 ) : currentUser.role === 'instructor' ? (
                   <>
-                    <ShieldCheck className="w-2.5 h-2.5 text-[#E9C349] inline shrink-0" />
-                    <span className="capitalize text-[#E9C349] font-bold">Docente</span>
+                    <ShieldCheck className="w-2.5 h-2.5 text-[#D9A9FF] inline shrink-0" />
+                    <span className="capitalize text-[#D9A9FF] font-bold">Docente</span>
                   </>
                 ) : (
                   <>
@@ -267,10 +267,10 @@ export default function Sidebar({
             onClick={toggleRole}
             className={`text-[9px] px-2 py-1 rounded-lg font-black tracking-wider uppercase transition-all shadow-md active:scale-95 shrink-0 border cursor-pointer ${
               currentUser.role === 'studio'
-                ? 'bg-[#E9C349] text-black border-[#E9C349] hover:bg-[#ffd700]'
+                ? 'bg-[#D9A9FF] text-black border-[#D9A9FF] hover:bg-[#E9B8FF]'
                 : currentUser.role === 'instructor'
-                ? 'bg-[#E9C349] text-black border-[#E9C349] hover:bg-[#ffd700]'
-                : 'bg-[#9A1B42] hover:bg-[#b01e4c] text-white border-transparent'
+                ? 'bg-[#D9A9FF] text-black border-[#D9A9FF] hover:bg-[#E9B8FF]'
+                : 'bg-[#9E1F86] hover:bg-[#BC2196] text-white border-transparent'
             }`}
             title={`Cambiar a modo ${currentUser.role === 'student' ? 'docente' : currentUser.role === 'instructor' ? 'academia / estudio' : 'estudiante'}`}
           >
@@ -313,11 +313,11 @@ export default function Sidebar({
                       {section.title}
                     </p>
                     {hasActiveItem && (
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#E9C349] animate-pulse shrink-0" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#D9A9FF] animate-pulse shrink-0" />
                     )}
                   </div>
                   <ChevronDown
-                    className={`w-3.5 h-3.5 text-[#E9C349] transition-transform duration-200 shrink-0 ${
+                    className={`w-3.5 h-3.5 text-[#D9A9FF] transition-transform duration-200 shrink-0 ${
                       isOpen ? 'rotate-180' : ''
                     }`}
                   />
@@ -382,9 +382,9 @@ export default function Sidebar({
                                       scale: [1, 1.18, 1],
                                       rotate: [0, 4, -4, 0],
                                       filter: [
-                                        'drop-shadow(0 0 0px rgba(233, 195, 73, 0))',
-                                        'drop-shadow(0 0 6px rgba(233, 195, 73, 0.8))',
-                                        'drop-shadow(0 0 0px rgba(233, 195, 73, 0))'
+                                        'drop-shadow(0 0 0px rgba(217, 169, 255, 0))',
+                                        'drop-shadow(0 0 6px rgba(217, 169, 255, 0.8))',
+                                        'drop-shadow(0 0 0px rgba(217, 169, 255, 0))'
                                       ]
                                     }}
                                     transition={{
@@ -406,7 +406,7 @@ export default function Sidebar({
 
                               <div className="flex items-center gap-1.5 shrink-0 ml-1 relative z-10">
                                 {item.badge && (
-                                  <span className="text-[8px] font-mono font-black text-[#E9C349] bg-[#E9C349]/15 border border-[#E9C349]/30 px-1.5 py-0.2 rounded">
+                                  <span className="text-[8px] font-mono font-black text-[#D9A9FF] bg-[#D9A9FF]/15 border border-[#D9A9FF]/30 px-1.5 py-0.2 rounded">
                                     {item.badge}
                                   </span>
                                 )}

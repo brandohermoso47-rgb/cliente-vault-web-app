@@ -94,7 +94,7 @@ const PlaylistsLabComponent: React.FC<PlaylistsLabProps> = ({
           onClick={() => setPlaylistMode('local')}
           className={`py-3 px-3 rounded-xl font-display-lg font-bold text-xs tracking-wider transition-all uppercase ${
             playlistMode === 'local'
-              ? 'bg-[#9A2B3C] text-white border border-[#9A2B3C] shadow-md'
+              ? 'bg-[#C23E9E] text-white border border-[#C23E9E] shadow-md'
               : 'text-on-surface-variant hover:text-tertiary'
           }`}
         >
@@ -168,7 +168,7 @@ const PlaylistsLabComponent: React.FC<PlaylistsLabProps> = ({
                         onClick={() => handleSelectTrack(track)}
                         className={`p-3 rounded-xl border transition-all cursor-pointer flex items-center justify-between gap-3 ${
                           activeTrack.id === track.id
-                            ? 'bg-[#9A2B3C]/10 border-[#9A2B3C] text-white font-bold shadow-md'
+                            ? 'bg-[#C23E9E]/10 border-[#C23E9E] text-white font-bold shadow-md'
                             : 'bg-black/30 border-tertiary/5 text-[#EDEFF4] hover:bg-black/40 hover:border-tertiary/15'
                         }`}
                       >
@@ -205,7 +205,7 @@ const PlaylistsLabComponent: React.FC<PlaylistsLabProps> = ({
                         onClick={() => handleSelectTrack(track)}
                         className={`p-3 rounded-xl border transition-all cursor-pointer flex items-center justify-between gap-3 ${
                           activeTrack.id === track.id
-                            ? 'bg-[#9A2B3C]/10 border-[#9A2B3C] text-white font-bold shadow-md'
+                            ? 'bg-[#C23E9E]/10 border-[#C23E9E] text-white font-bold shadow-md'
                             : 'bg-black/30 border-tertiary/5 text-[#EDEFF4] hover:bg-black/40 hover:border-tertiary/15'
                         }`}
                       >
@@ -249,7 +249,7 @@ const PlaylistsLabComponent: React.FC<PlaylistsLabProps> = ({
                     <div className="absolute inset-4 border border-gray-900/60 rounded-full" />
                     <div className="absolute inset-8 border border-gray-900/80 rounded-full" />
 
-                    <div className="w-10 h-10 rounded-full bg-[#9A2B3C] flex items-center justify-center text-[8px] font-bold text-white font-mono uppercase border border-tertiary/10">
+                    <div className="w-10 h-10 rounded-full bg-[#C23E9E] flex items-center justify-center text-[8px] font-bold text-white font-mono uppercase border border-tertiary/10">
                       BPM {activeTrack.bpm}
                     </div>
                   </motion.div>
@@ -279,7 +279,7 @@ const PlaylistsLabComponent: React.FC<PlaylistsLabProps> = ({
                   onClick={togglePlayPlaylist}
                   className={`w-full py-3.5 rounded-xl font-display-lg font-bold text-xs tracking-widest transition-all uppercase flex items-center justify-center gap-2 shadow-lg active:scale-95 ${
                     isPlayingPlaylist
-                      ? 'bg-[#9A2B3C] text-white border border-[#9A2B3C]'
+                      ? 'bg-[#C23E9E] text-white border border-[#C23E9E]'
                       : 'bg-tertiary text-black border border-tertiary'
                   }`}
                 >
@@ -295,7 +295,7 @@ const PlaylistsLabComponent: React.FC<PlaylistsLabProps> = ({
                 </button>
               </div>
 
-              <div className="bg-[#9A2B3C]/10 border border-[#9A2B3C]/20 p-3 rounded-xl flex items-center gap-3 text-xs text-on-surface-variant font-medium relative z-10 shadow-inner">
+              <div className="bg-[#C23E9E]/10 border border-[#C23E9E]/20 p-3 rounded-xl flex items-center gap-3 text-xs text-on-surface-variant font-medium relative z-10 shadow-inner">
                 <Volume2 className="w-4 h-4 text-[#ffb3b2] shrink-0" />
                 <p className="text-[11px] leading-snug">
                   Sintoniza los acentos de la percusión para marcar los cambios de nivel e impulsos.

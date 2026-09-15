@@ -1,6 +1,6 @@
 import { doc, setDoc, deleteDoc, collection, onSnapshot, query, where, getDocs } from 'firebase/firestore';
 import { ref, uploadBytesResumable, getDownloadURL, deleteObject } from 'firebase/storage';
-import { db, auth, storage, handleFirestoreError, OperationType } from './firebase';
+import { db, auth, storage, handleFirestoreError, OperationType, sanitizeFirestoreData } from './firebase';
 import { PlaylistItem } from '../types';
 
 export const INITIAL_DEFAULT_TRACKS: PlaylistItem[] = [
@@ -43,11 +43,12 @@ export const INITIAL_DEFAULT_TRACKS: PlaylistItem[] = [
  * Save user track to Firebase Firestore under user session
  */
 export async function saveUserTrackToFirebase(userId: string, track: PlaylistItem): Promise<void> {
-  if (!userId) return;
+  const activeUid = auth.currentUser?.uid || (userId && userId !== 'u-1' ? userId : null);
+  if (!activeUid || !auth.currentUser) return;
 
   const trackData = {
     id: track.id,
-    userId,
+    userId: activeUid,
     title: track.title,
     artist: track.artist || 'Artista Desconocido',
     bpm: track.bpm || 120,
@@ -60,14 +61,15 @@ export async function saveUserTrackToFirebase(userId: string, track: PlaylistIte
     createdAt: track.createdAt || new Date().toISOString()
   };
 
-  const userTrackRef = doc(db, 'users', userId, 'playlists', track.id);
+  const userTrackRef = doc(db, 'users', activeUid, 'playlists', track.id);
   const globalTrackRef = doc(db, 'user_playlists', track.id);
 
   try {
-    await setDoc(userTrackRef, trackData, { merge: true });
-    await setDoc(globalTrackRef, trackData, { merge: true });
+    const sanitized = sanitizeFirestoreData(trackData);
+    await setDoc(userTrackRef, sanitized, { merge: true });
+    await setDoc(globalTrackRef, sanitized, { merge: true });
   } catch (err) {
-    handleFirestoreError(err, OperationType.WRITE, `users/${userId}/playlists/${track.id}`);
+    handleFirestoreError(err, OperationType.WRITE, `users/${activeUid}/playlists/${track.id}`);
   }
 }
 
@@ -182,11 +184,13 @@ export async function uploadAudioFileToFirebase(
  * Delete a user track from Firestore and Firebase Storage
  */
 export async function deleteUserTrackFromFirebase(userId: string, track: PlaylistItem): Promise<void> {
-  if (!userId || !track.id) return;
+  if (!track.id) return;
+  const activeUid = auth.currentUser?.uid || (userId && userId !== 'u-1' ? userId : null);
+  if (!activeUid || !auth.currentUser) return;
 
   try {
     // Delete from Firestore
-    const userTrackRef = doc(db, 'users', userId, 'playlists', track.id);
+    const userTrackRef = doc(db, 'users', activeUid, 'playlists', track.id);
     const globalTrackRef = doc(db, 'user_playlists', track.id);
 
     await deleteDoc(userTrackRef).catch(() => {});
@@ -198,6 +202,6 @@ export async function deleteUserTrackFromFirebase(userId: string, track: Playlis
       await deleteObject(fileRef).catch((e) => console.warn('Storage delete notice:', e));
     }
   } catch (err) {
-    handleFirestoreError(err, OperationType.DELETE, `users/${userId}/playlists/${track.id}`);
+    handleFirestoreError(err, OperationType.DELETE, `users/${activeUid}/playlists/${track.id}`);
   }
 }

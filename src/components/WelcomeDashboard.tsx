@@ -476,7 +476,7 @@ export default function WelcomeDashboard({
             exit={{ opacity: 0, y: -20 }}
             className="fixed top-6 right-6 z-50 bg-white dark:bg-[#121212] border-2 border-[#E9C349] text-slate-900 dark:text-white px-5 py-3 rounded-2xl shadow-2xl flex items-center gap-3"
           >
-            <Sparkles className="w-5 h-5 text-[#E9C349] animate-spin" />
+            <Sparkles className="w-5 h-5 text-[#D9A9FF] animate-spin" />
             <span className="text-xs font-bold font-mono">{subscribedNotice}</span>
           </motion.div>
         )}
@@ -485,14 +485,14 @@ export default function WelcomeDashboard({
       {/* 1. HERO BANNER DE BIENVENIDA (Clean, Motivating, High-Impact) */}
       <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-amber-50 via-white to-white dark:from-[#1c1a12] dark:via-[#121212] dark:to-[#0A0A0A] border border-[#E9C349]/40 p-6 sm:p-8 md:p-10 shadow-2xl">
         {/* Background Ambient Glows */}
-        <div className="absolute top-0 right-0 w-96 h-96 bg-[#E9C349]/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 left-1/3 w-64 h-64 bg-[#9A2B3C]/15 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute top-0 right-0 w-96 h-96 bg-[#D9A9FF]/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 left-1/3 w-64 h-64 bg-[#C23E9E]/15 rounded-full blur-3xl pointer-events-none" />
 
         <div className="relative z-10 space-y-6">
           {/* Header Tag and Role Badge */}
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 dark:border-white/10 pb-4">
             <div className="flex items-center gap-2">
-              <span className="px-3 py-1 bg-[#E9C349] text-black text-[11px] font-mono font-black uppercase rounded-full shadow-md flex items-center gap-1.5">
+              <span className="px-3 py-1 bg-[#D9A9FF] text-black text-[11px] font-mono font-black uppercase rounded-full shadow-md flex items-center gap-1.5">
                 <Sparkles className="w-3.5 h-3.5 fill-black" />
                 <span>BIENVENIDO A WAACK ON</span>
               </span>
@@ -528,7 +528,7 @@ export default function WelcomeDashboard({
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.97 }}
                   onClick={() => setActiveTab('cursos')}
-                  className="px-5 py-3 bg-[#E9C349] hover:bg-[#d8b33c] text-black font-bold text-xs uppercase tracking-wider rounded-xl shadow-lg transition-all flex items-center gap-2 cursor-pointer"
+                  className="px-5 py-3 bg-[#D9A9FF] hover:bg-[#B87CFF] text-black font-bold text-xs uppercase tracking-wider rounded-xl shadow-lg transition-all flex items-center gap-2 cursor-pointer"
                 >
                   <Play className="w-4 h-4 fill-black" />
                   <span>Iniciar Primera Lección (Nivel 1)</span>
@@ -545,7 +545,7 @@ export default function WelcomeDashboard({
                   }}
                   className="px-5 py-3 bg-white dark:bg-[#1c1b1b] hover:bg-slate-100 dark:hover:bg-[#262626] text-slate-900 dark:text-white border border-slate-200 dark:border-white/20 font-bold text-xs uppercase tracking-wider rounded-xl shadow transition-all flex items-center gap-2 cursor-pointer"
                 >
-                  <Globe className="w-4 h-4 text-[#E9C349]" />
+                  <Globe className="w-4 h-4 text-[#D9A9FF]" />
                   <span>Explorar Profesores Globales</span>
                 </motion.button>
 
@@ -560,9 +560,9 @@ export default function WelcomeDashboard({
                       setActiveTab('planes');
                     }
                   }}
-                  className="px-5 py-3 bg-[#9A2B3C] hover:bg-[#81262c] text-white font-bold text-xs uppercase tracking-wider rounded-xl shadow transition-all flex items-center gap-2 cursor-pointer"
+                  className="px-5 py-3 bg-[#C23E9E] hover:bg-[#8F2C7A] text-white font-bold text-xs uppercase tracking-wider rounded-xl shadow transition-all flex items-center gap-2 cursor-pointer"
                 >
-                  <Award className="w-4 h-4 text-[#E9C349]" />
+                  <Award className="w-4 h-4 text-[#D9A9FF]" />
                   <span>Ver Planes & Membresías (Abajo)</span>
                 </motion.button>
               </div>
@@ -584,7 +584,7 @@ export default function WelcomeDashboard({
                 </div>
                 <div className="flex justify-between items-center text-slate-300">
                   <span className="text-slate-400 font-mono">Rol Actual:</span>
-                  <span className={`font-bold uppercase ${currentUser.role ? 'text-[#E9C349]' : 'text-slate-400'}`}>
+                  <span className={`font-bold uppercase ${currentUser.role ? 'text-[#D9A9FF]' : 'text-slate-400'}`}>
                     {currentUser.role 
                       ? (currentUser.role === 'student' ? 'Estudiante / Alumno' : currentUser.role === 'instructor' ? 'Docente / Instructor' : currentUser.role === 'studio' ? 'Academia / Estudio' : currentUser.role)
                       : 'Sin Rol (Requiere Suscripción a Instructor)'}
@@ -598,7 +598,7 @@ export default function WelcomeDashboard({
                 </div>
                 <div className="flex justify-between items-center text-slate-300">
                   <span className="text-slate-400 font-mono">Puntos Acumulados:</span>
-                  <span className="font-bold font-mono text-[#E9C349]">{currentUser.points || 0} PTS</span>
+                  <span className="font-bold font-mono text-[#D9A9FF]">{currentUser.points || 0} PTS</span>
                 </div>
               </div>
 
@@ -642,9 +642,9 @@ export default function WelcomeDashboard({
               <div className="flex items-center gap-3 bg-white dark:bg-[#0A0A0A] px-4 py-2 rounded-2xl border border-slate-200 dark:border-white/10 self-start sm:self-auto">
                 <div className="text-right">
                   <span className="text-[10px] font-mono text-slate-400 block uppercase">Progreso Inicial</span>
-                  <span className="text-xs font-mono font-bold text-[#E9C349]">{completedCount} de 4 completados ({percentage}%)</span>
+                  <span className="text-xs font-mono font-bold text-[#D9A9FF]">{completedCount} de 4 completados ({percentage}%)</span>
                 </div>
-                <div className="w-8 h-8 rounded-full bg-[#E9C349]/10 border border-[#E9C349]/40 flex items-center justify-center text-[#E9C349] font-mono font-bold text-xs">
+                <div className="w-8 h-8 rounded-full bg-[#D9A9FF]/10 border border-[#D9A9FF]/40 flex items-center justify-center text-[#D9A9FF] font-mono font-bold text-xs">
                   {completedCount}/4
                 </div>
               </div>
@@ -660,12 +660,12 @@ export default function WelcomeDashboard({
             className={`p-4 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between space-y-3 ${
               completedSteps.explore 
                 ? 'bg-emerald-950/20 border-emerald-500/50' 
-                : 'bg-[#0A0A0A] border-[#262626] hover:border-[#E9C349]/50'
+                : 'bg-[#0A0A0A] border-[#262626] hover:border-[#D9A9FF]/50'
             }`}
           >
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <span className="text-[10px] font-mono font-bold text-[#E9C349] bg-[#E9C349]/10 px-2 py-0.5 rounded border border-[#E9C349]/20">
+                <span className="text-[10px] font-mono font-bold text-[#D9A9FF] bg-[#D9A9FF]/10 px-2 py-0.5 rounded border border-[#D9A9FF]/20">
                   PASO 1
                 </span>
                 <div className={`w-5 h-5 rounded-md flex items-center justify-center border ${
@@ -686,7 +686,7 @@ export default function WelcomeDashboard({
                 const el = document.getElementById('directorio-profesores-seccion');
                 if (el) el.scrollIntoView({ behavior: 'smooth' });
               }}
-              className="text-[11px] font-mono font-bold text-[#E9C349] hover:underline flex items-center gap-1 pt-1"
+              className="text-[11px] font-mono font-bold text-[#D9A9FF] hover:underline flex items-center gap-1 pt-1"
             >
               <span>Ver Profesores</span>
               <ArrowRight className="w-3 h-3" />
@@ -699,12 +699,12 @@ export default function WelcomeDashboard({
             className={`p-4 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between space-y-3 ${
               completedSteps.drill 
                 ? 'bg-emerald-950/20 border-emerald-500/50' 
-                : 'bg-[#0A0A0A] border-[#262626] hover:border-[#E9C349]/50'
+                : 'bg-[#0A0A0A] border-[#262626] hover:border-[#D9A9FF]/50'
             }`}
           >
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <span className="text-[10px] font-mono font-bold text-[#E9C349] bg-[#E9C349]/10 px-2 py-0.5 rounded border border-[#E9C349]/20">
+                <span className="text-[10px] font-mono font-bold text-[#D9A9FF] bg-[#D9A9FF]/10 px-2 py-0.5 rounded border border-[#D9A9FF]/20">
                   PASO 2
                 </span>
                 <div className={`w-5 h-5 rounded-md flex items-center justify-center border ${
@@ -724,7 +724,7 @@ export default function WelcomeDashboard({
                 e.stopPropagation();
                 setActiveTab('entrenamiento');
               }}
-              className="text-[11px] font-mono font-bold text-[#E9C349] hover:underline flex items-center gap-1 pt-1"
+              className="text-[11px] font-mono font-bold text-[#D9A9FF] hover:underline flex items-center gap-1 pt-1"
             >
               <span>Ir al Lab</span>
               <ArrowRight className="w-3 h-3" />
@@ -737,12 +737,12 @@ export default function WelcomeDashboard({
             className={`p-4 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between space-y-3 ${
               completedSteps.goals 
                 ? 'bg-emerald-950/20 border-emerald-500/50' 
-                : 'bg-[#0A0A0A] border-[#262626] hover:border-[#E9C349]/50'
+                : 'bg-[#0A0A0A] border-[#262626] hover:border-[#D9A9FF]/50'
             }`}
           >
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <span className="text-[10px] font-mono font-bold text-[#E9C349] bg-[#E9C349]/10 px-2 py-0.5 rounded border border-[#E9C349]/20">
+                <span className="text-[10px] font-mono font-bold text-[#D9A9FF] bg-[#D9A9FF]/10 px-2 py-0.5 rounded border border-[#D9A9FF]/20">
                   PASO 3
                 </span>
                 <div className={`w-5 h-5 rounded-md flex items-center justify-center border ${
@@ -762,7 +762,7 @@ export default function WelcomeDashboard({
                 e.stopPropagation();
                 setActiveTab('recursos');
               }}
-              className="text-[11px] font-mono font-bold text-[#E9C349] hover:underline flex items-center gap-1 pt-1"
+              className="text-[11px] font-mono font-bold text-[#D9A9FF] hover:underline flex items-center gap-1 pt-1"
             >
               <span>Ir a Metas & Clases</span>
               <ArrowRight className="w-3 h-3" />
@@ -775,12 +775,12 @@ export default function WelcomeDashboard({
             className={`p-4 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between space-y-3 ${
               completedSteps.community 
                 ? 'bg-emerald-950/20 border-emerald-500/50' 
-                : 'bg-[#0A0A0A] border-[#262626] hover:border-[#E9C349]/50'
+                : 'bg-[#0A0A0A] border-[#262626] hover:border-[#D9A9FF]/50'
             }`}
           >
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <span className="text-[10px] font-mono font-bold text-[#E9C349] bg-[#E9C349]/10 px-2 py-0.5 rounded border border-[#E9C349]/20">
+                <span className="text-[10px] font-mono font-bold text-[#D9A9FF] bg-[#D9A9FF]/10 px-2 py-0.5 rounded border border-[#D9A9FF]/20">
                   PASO 4
                 </span>
                 <div className={`w-5 h-5 rounded-md flex items-center justify-center border ${
@@ -800,7 +800,7 @@ export default function WelcomeDashboard({
                 e.stopPropagation();
                 setActiveTab('comunidad');
               }}
-              className="text-[11px] font-mono font-bold text-[#E9C349] hover:underline flex items-center gap-1 pt-1"
+              className="text-[11px] font-mono font-bold text-[#D9A9FF] hover:underline flex items-center gap-1 pt-1"
             >
               <span>Abrir Comunidad</span>
               <ArrowRight className="w-3 h-3" />
@@ -823,15 +823,15 @@ export default function WelcomeDashboard({
               Un ecosistema integral diseñado para transformar tu danza a través del rigor técnico y la libertad expresiva.
             </p>
           </div>
-          <span className="text-[10px] font-mono text-[#E9C349] bg-[#E9C349]/10 border border-[#E9C349]/30 px-3 py-1 rounded-full uppercase self-start sm:self-auto">
+          <span className="text-[10px] font-mono text-[#D9A9FF] bg-[#D9A9FF]/10 border border-[#D9A9FF]/30 px-3 py-1 rounded-full uppercase self-start sm:self-auto">
             Metodología Certificada
           </span>
         </div>
 
         {/* 4 Pillars Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="bg-[#121212] border border-[#262626] hover:border-[#E9C349]/40 transition-all rounded-2xl p-5 space-y-3 relative overflow-hidden group shadow-lg">
-            <div className="w-10 h-10 rounded-xl bg-[#E9C349]/10 border border-[#E9C349]/20 flex items-center justify-center text-[#E9C349]">
+          <div className="bg-[#121212] border border-[#262626] hover:border-[#D9A9FF]/40 transition-all rounded-2xl p-5 space-y-3 relative overflow-hidden group shadow-lg">
+            <div className="w-10 h-10 rounded-xl bg-[#D9A9FF]/10 border border-[#D9A9FF]/20 flex items-center justify-center text-[#D9A9FF]">
               <Layers className="w-5 h-5" />
             </div>
             <h3 className="text-sm font-bold text-slate-900 dark:text-white group-hover:text-[#E9C349] transition-colors">
@@ -840,13 +840,13 @@ export default function WelcomeDashboard({
             <p className="text-xs text-slate-400 leading-relaxed">
               Comprende el control de hombros, codos y muñecas para ejecutar wrist rolls y overhands con máxima velocidad sin lesiones ni tensión.
             </p>
-            <div className="pt-1 text-[10px] font-mono font-bold text-[#E9C349]">
+            <div className="pt-1 text-[10px] font-mono font-bold text-[#D9A9FF]">
               ✓ Prevención y ergonomía
             </div>
           </div>
 
-          <div className="bg-[#121212] border border-[#262626] hover:border-[#E9C349]/40 transition-all rounded-2xl p-5 space-y-3 relative overflow-hidden group shadow-lg">
-            <div className="w-10 h-10 rounded-xl bg-[#9A2B3C]/20 border border-[#9A2B3C]/40 flex items-center justify-center text-[#E9C349]">
+          <div className="bg-[#121212] border border-[#262626] hover:border-[#D9A9FF]/40 transition-all rounded-2xl p-5 space-y-3 relative overflow-hidden group shadow-lg">
+            <div className="w-10 h-10 rounded-xl bg-[#C23E9E]/20 border border-[#C23E9E]/40 flex items-center justify-center text-[#D9A9FF]">
               <Music className="w-5 h-5" />
             </div>
             <h3 className="text-sm font-bold text-slate-900 dark:text-white group-hover:text-[#E9C349] transition-colors">
@@ -855,12 +855,12 @@ export default function WelcomeDashboard({
             <p className="text-xs text-slate-400 leading-relaxed">
               Entrena tu oído con metrónomo háptico y pistas clásicas de Disco/Funk de 100 a 135 BPM para clavar cada contratiempo con precisión.
             </p>
-            <div className="pt-1 text-[10px] font-mono font-bold text-[#E9C349]">
+            <div className="pt-1 text-[10px] font-mono font-bold text-[#D9A9FF]">
               ✓ Laboratorio de tempo
             </div>
           </div>
 
-          <div className="bg-[#121212] border border-[#262626] hover:border-[#E9C349]/40 transition-all rounded-2xl p-5 space-y-3 relative overflow-hidden group shadow-lg">
+          <div className="bg-[#121212] border border-[#262626] hover:border-[#D9A9FF]/40 transition-all rounded-2xl p-5 space-y-3 relative overflow-hidden group shadow-lg">
             <div className="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/30 flex items-center justify-center text-purple-300">
               <Sparkles className="w-5 h-5" />
             </div>
@@ -870,12 +870,12 @@ export default function WelcomeDashboard({
             <p className="text-xs text-slate-400 leading-relaxed">
               Aprende la esencia de la pasarela y la narrativa dramática. Convierte cada pose en una declaración de carácter y estilo personal.
             </p>
-            <div className="pt-1 text-[10px] font-mono font-bold text-[#E9C349]">
+            <div className="pt-1 text-[10px] font-mono font-bold text-[#D9A9FF]">
               ✓ Cultura y autenticidad
             </div>
           </div>
 
-          <div className="bg-[#121212] border border-[#262626] hover:border-[#E9C349]/40 transition-all rounded-2xl p-5 space-y-3 relative overflow-hidden group shadow-lg">
+          <div className="bg-[#121212] border border-[#262626] hover:border-[#D9A9FF]/40 transition-all rounded-2xl p-5 space-y-3 relative overflow-hidden group shadow-lg">
             <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
               <Users className="w-5 h-5" />
             </div>
@@ -885,7 +885,7 @@ export default function WelcomeDashboard({
             <p className="text-xs text-slate-400 leading-relaxed">
               Conéctate con bailarines de más de 20 países, comparte videos de práctica, recibe correcciones y participa en batallas virtuales.
             </p>
-            <div className="pt-1 text-[10px] font-mono font-bold text-[#E9C349]">
+            <div className="pt-1 text-[10px] font-mono font-bold text-[#D9A9FF]">
               ✓ Red internacional
             </div>
           </div>
@@ -910,11 +910,11 @@ export default function WelcomeDashboard({
             whileHover={{ scale: 1.02, y: -2 }}
             whileTap={{ scale: 0.98 }}
             onClick={() => setActiveTab('cursos')}
-            className="bg-[#121212] border border-[#262626] hover:border-[#E9C349] rounded-2xl p-5 flex flex-col justify-between cursor-pointer group shadow-xl transition-all relative overflow-hidden"
+            className="bg-[#121212] border border-[#262626] hover:border-[#D9A9FF] rounded-2xl p-5 flex flex-col justify-between cursor-pointer group shadow-xl transition-all relative overflow-hidden"
           >
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <div className="p-2.5 rounded-xl bg-[#E9C349]/10 text-[#E9C349] border border-[#E9C349]/30">
+                <div className="p-2.5 rounded-xl bg-[#D9A9FF]/10 text-[#D9A9FF] border border-[#D9A9FF]/30">
                   <GraduationCap className="w-5 h-5" />
                 </div>
                 <span className="text-[10px] font-mono font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/30">
@@ -939,11 +939,11 @@ export default function WelcomeDashboard({
             whileHover={{ scale: 1.02, y: -2 }}
             whileTap={{ scale: 0.98 }}
             onClick={() => setActiveTab('entrenamiento')}
-            className="bg-[#121212] border border-[#262626] hover:border-[#E9C349] rounded-2xl p-5 flex flex-col justify-between cursor-pointer group shadow-xl transition-all relative overflow-hidden"
+            className="bg-[#121212] border border-[#262626] hover:border-[#D9A9FF] rounded-2xl p-5 flex flex-col justify-between cursor-pointer group shadow-xl transition-all relative overflow-hidden"
           >
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <div className="p-2.5 rounded-xl bg-[#9A2B3C]/20 text-[#E9C349] border border-[#9A2B3C]/40">
+                <div className="p-2.5 rounded-xl bg-[#C23E9E]/20 text-[#D9A9FF] border border-[#C23E9E]/40">
                   <Zap className="w-5 h-5" />
                 </div>
                 <span className="text-[10px] font-mono font-bold text-cyan-400 bg-cyan-500/10 px-2 py-0.5 rounded-full border border-cyan-500/30">
@@ -968,7 +968,7 @@ export default function WelcomeDashboard({
             whileHover={{ scale: 1.02, y: -2 }}
             whileTap={{ scale: 0.98 }}
             onClick={() => setActiveTab('comunidad')}
-            className="bg-[#121212] border border-[#262626] hover:border-[#E9C349] rounded-2xl p-5 flex flex-col justify-between cursor-pointer group shadow-xl transition-all relative overflow-hidden"
+            className="bg-[#121212] border border-[#262626] hover:border-[#D9A9FF] rounded-2xl p-5 flex flex-col justify-between cursor-pointer group shadow-xl transition-all relative overflow-hidden"
           >
             <div className="space-y-3">
               <div className="flex items-center justify-between">
@@ -1070,7 +1070,7 @@ export default function WelcomeDashboard({
                     <span>✓ Tu Mentor Asignado</span>
                   </div>
                 ) : inst.featured ? (
-                  <div className="absolute -top-3 right-5 bg-[#E9C349] text-black text-[9px] font-mono font-black uppercase px-3 py-0.5 rounded-full shadow-lg flex items-center gap-1">
+                  <div className="absolute -top-3 right-5 bg-[#D9A9FF] text-black text-[9px] font-mono font-black uppercase px-3 py-0.5 rounded-full shadow-lg flex items-center gap-1">
                     <Star className="w-3 h-3 fill-black" />
                     <span>{inst.badge}</span>
                   </div>
@@ -1084,7 +1084,7 @@ export default function WelcomeDashboard({
                         src={inst.avatar}
                         alt={inst.name}
                         className={`w-16 h-16 rounded-2xl object-cover border-2 shadow-md group-hover:scale-105 transition-transform ${
-                          isAssigned ? 'border-emerald-400' : 'border-[#E9C349]'
+                          isAssigned ? 'border-emerald-400' : 'border-[#D9A9FF]'
                         }`}
                       />
                       <span className="absolute -bottom-1 -right-1 text-xs">
@@ -1096,7 +1096,7 @@ export default function WelcomeDashboard({
                       <h3 className="text-base font-bold text-slate-900 dark:text-white group-hover:text-[#E9C349] transition-colors truncate">
                         {inst.name}
                       </h3>
-                      <p className="text-[11px] font-mono text-[#E9C349] font-bold truncate">
+                      <p className="text-[11px] font-mono text-[#D9A9FF] font-bold truncate">
                         {inst.role}
                       </p>
                       <div className="flex items-center gap-2 mt-1 text-[10px] font-mono text-slate-400">
@@ -1145,7 +1145,7 @@ export default function WelcomeDashboard({
                   <div className="flex items-center justify-between">
                     <div>
                       <span className="text-[9px] font-mono text-slate-400 block uppercase">Pase Cátedra</span>
-                      <span className="text-base font-black font-mono text-white text-[#E9C349]">
+                      <span className="text-base font-black font-mono text-white text-[#D9A9FF]">
                         {inst.monthlyPrice}
                       </span>
                     </div>
@@ -1154,7 +1154,7 @@ export default function WelcomeDashboard({
                       onClick={() => setPreviewInstructor(inst)}
                       className="text-xs font-mono text-slate-400 hover:text-slate-900 dark:hover:text-white underline cursor-pointer flex items-center gap-1"
                     >
-                      <BookOpen className="w-3.5 h-3.5 text-[#E9C349]" />
+                      <BookOpen className="w-3.5 h-3.5 text-[#D9A9FF]" />
                       <span>Ver Programa 4 Semanas</span>
                     </button>
                   </div>
@@ -1168,7 +1168,7 @@ export default function WelcomeDashboard({
                           : 'bg-white dark:bg-[#1c1b1b] hover:bg-slate-100 dark:hover:bg-[#262626] text-slate-900 dark:text-white border-slate-200 dark:border-white/10'
                       }`}
                     >
-                      <UserCheck className="w-3.5 h-3.5 text-[#E9C349]" />
+                      <UserCheck className="w-3.5 h-3.5 text-[#D9A9FF]" />
                       <span>{isAssigned ? 'Asignado ✓' : 'Asignar Mentor'}</span>
                     </button>
 
@@ -1176,7 +1176,7 @@ export default function WelcomeDashboard({
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                       onClick={() => handleSubscribeClick(inst)}
-                      className="py-2 bg-[#E9C349] hover:bg-[#d8b33c] text-black font-bold text-xs uppercase tracking-wider rounded-xl shadow-md transition-all flex items-center justify-center gap-1 cursor-pointer"
+                      className="py-2 bg-[#D9A9FF] hover:bg-[#B87CFF] text-black font-bold text-xs uppercase tracking-wider rounded-xl shadow-md transition-all flex items-center justify-center gap-1 cursor-pointer"
                     >
                       <span>Suscribirse</span>
                       <ChevronRight className="w-3.5 h-3.5" />
@@ -1210,14 +1210,14 @@ export default function WelcomeDashboard({
                 <img
                   src={previewInstructor.avatar}
                   alt={previewInstructor.name}
-                  className="w-16 h-16 rounded-2xl object-cover border-2 border-[#E9C349] shadow-md"
+                  className="w-16 h-16 rounded-2xl object-cover border-2 border-[#D9A9FF] shadow-md"
                 />
                 <div>
                   <div className="flex items-center gap-2">
                     <h3 className="text-xl font-extrabold text-slate-900 dark:text-white">{previewInstructor.name}</h3>
                     <span className="text-xs">{previewInstructor.country}</span>
                   </div>
-                  <p className="text-xs font-mono font-bold text-[#E9C349]">{previewInstructor.role}</p>
+                  <p className="text-xs font-mono font-bold text-[#D9A9FF]">{previewInstructor.role}</p>
                   <p className="text-[11px] text-slate-400 mt-0.5">Cátedra Oficial • {previewInstructor.monthlyPrice}</p>
                 </div>
               </div>
@@ -1234,7 +1234,7 @@ export default function WelcomeDashboard({
                   {previewInstructor.syllabus.map((wk) => (
                     <div key={wk.week} className="bg-[#0A0A0A] border border-[#262626] rounded-2xl p-4 space-y-2">
                       <div className="flex items-center justify-between">
-                        <span className="text-xs font-bold text-[#E9C349] font-mono uppercase">
+                        <span className="text-xs font-bold text-[#D9A9FF] font-mono uppercase">
                           {wk.title}
                         </span>
                         <span className="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/30">
@@ -1257,7 +1257,7 @@ export default function WelcomeDashboard({
               <div className="pt-2 border-t border-white/10 flex flex-wrap items-center justify-between gap-3">
                 <div>
                   <span className="text-[10px] font-mono text-slate-400 block uppercase">Precio de la Cátedra</span>
-                  <span className="text-lg font-black font-mono text-[#E9C349]">{previewInstructor.monthlyPrice}</span>
+                  <span className="text-lg font-black font-mono text-[#D9A9FF]">{previewInstructor.monthlyPrice}</span>
                 </div>
 
                 <div className="flex items-center gap-2">
@@ -1265,7 +1265,7 @@ export default function WelcomeDashboard({
                     onClick={() => handleAssignInstructor(previewInstructor)}
                     className="px-4 py-2.5 bg-white dark:bg-[#1c1b1b] hover:bg-slate-100 dark:hover:bg-[#262626] text-slate-900 dark:text-white border border-slate-200 dark:border-white/10 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer flex items-center gap-1.5"
                   >
-                    <UserCheck className="w-4 h-4 text-[#E9C349]" />
+                    <UserCheck className="w-4 h-4 text-[#D9A9FF]" />
                     <span>Asignar como Mentor</span>
                   </button>
 
@@ -1273,7 +1273,7 @@ export default function WelcomeDashboard({
                     whileHover={{ scale: 1.03 }}
                     whileTap={{ scale: 0.97 }}
                     onClick={() => handleSubscribeClick(previewInstructor)}
-                    className="px-5 py-2.5 bg-[#E9C349] hover:bg-[#d8b33c] text-black font-black text-xs uppercase tracking-wider rounded-xl shadow-lg transition-all flex items-center gap-1.5 cursor-pointer"
+                    className="px-5 py-2.5 bg-[#D9A9FF] hover:bg-[#B87CFF] text-black font-black text-xs uppercase tracking-wider rounded-xl shadow-lg transition-all flex items-center gap-1.5 cursor-pointer"
                   >
                     <Sparkles className="w-4 h-4 fill-black" />
                     <span>Confirmar Suscripción</span>
@@ -1288,8 +1288,8 @@ export default function WelcomeDashboard({
       {/* 5. SELECCIÓN DE PLANES Y MEMBRESÍAS (Comprehensive Pricing & Action Cards) */}
       <div id="planes-suscripcion-seccion" className="space-y-6 pt-6 scroll-mt-10">
         <div className="text-center max-w-3xl mx-auto space-y-3">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#E9C349]/15 border border-[#E9C349]/40 text-[#E9C349] font-mono text-[11px] font-black uppercase tracking-widest">
-            <Crown className="w-3.5 h-3.5 text-[#E9C349]" />
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#D9A9FF]/15 border border-[#D9A9FF]/40 text-[#D9A9FF] font-mono text-[11px] font-black uppercase tracking-widest">
+            <Crown className="w-3.5 h-3.5 text-[#D9A9FF]" />
             <span>MEMBRESÍAS Y PLANES DE SUSCRIPCIÓN</span>
           </div>
           <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight font-mono uppercase">
@@ -1416,10 +1416,10 @@ export default function WelcomeDashboard({
 
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <span className="px-3 py-1 bg-[#E9C349]/20 border border-[#E9C349]/40 text-[#E9C349] text-[10px] font-mono font-black rounded-full uppercase tracking-wider">
+                <span className="px-3 py-1 bg-[#D9A9FF]/20 border border-[#D9A9FF]/40 text-[#D9A9FF] text-[10px] font-mono font-black rounded-full uppercase tracking-wider">
                   PASE CÁTEDRA
                 </span>
-                <GraduationCap className="w-5 h-5 text-[#E9C349]" />
+                <GraduationCap className="w-5 h-5 text-[#D9A9FF]" />
               </div>
 
               <div>
@@ -1431,9 +1431,9 @@ export default function WelcomeDashboard({
                 </p>
               </div>
 
-              <div className="pt-2 border-t border-[#E9C349]/30">
+              <div className="pt-2 border-t border-[#D9A9FF]/30">
                 <div className="flex items-baseline gap-1">
-                  <span className="text-3xl font-black text-[#E9C349] font-mono">$15.00</span>
+                  <span className="text-3xl font-black text-[#D9A9FF] font-mono">$15.00</span>
                   <span className="text-xs font-mono text-slate-300">USD / mes</span>
                 </div>
                 <div className="mt-1 px-2 py-0.5 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-[9px] font-mono font-bold flex items-center gap-1">
@@ -1444,15 +1444,15 @@ export default function WelcomeDashboard({
 
               <ul className="space-y-2 text-xs text-slate-300">
                 <li className="flex items-start gap-2">
-                  <Check className="w-4 h-4 text-[#E9C349] shrink-0 mt-0.5" />
+                  <Check className="w-4 h-4 text-[#D9A9FF] shrink-0 mt-0.5" />
                   <span><strong>Acceso Total Cursos HD</strong>: Del maestro</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <Check className="w-4 h-4 text-[#E9C349] shrink-0 mt-0.5" />
+                  <Check className="w-4 h-4 text-[#D9A9FF] shrink-0 mt-0.5" />
                   <span><strong>Feedback Biomecánico 1v1</strong>: En video</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <Check className="w-4 h-4 text-[#E9C349] shrink-0 mt-0.5" />
+                  <Check className="w-4 h-4 text-[#D9A9FF] shrink-0 mt-0.5" />
                   <span><strong>Google Meet & Classroom</strong>: Evaluaciones</span>
                 </li>
               </ul>
@@ -1462,7 +1462,7 @@ export default function WelcomeDashboard({
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               onClick={() => onOpenPlansModal ? onOpenPlansModal() : setActiveTab('planes')}
-              className="w-full py-3.5 bg-[#E9C349] hover:bg-yellow-300 text-black font-mono font-black text-xs rounded-2xl uppercase transition-all shadow-lg active:scale-95 flex items-center justify-center gap-2 cursor-pointer"
+              className="w-full py-3.5 bg-[#D9A9FF] hover:bg-yellow-300 text-black font-mono font-black text-xs rounded-2xl uppercase transition-all shadow-lg active:scale-95 flex items-center justify-center gap-2 cursor-pointer"
             >
               <Zap className="w-4 h-4 fill-black" />
               <span>Suscribirse ($15 USD)</span>
@@ -1530,7 +1530,7 @@ export default function WelcomeDashboard({
             onClick={() => setActiveTab('planes')}
             className="px-6 py-2.5 bg-white dark:bg-[#121212] hover:bg-slate-100 dark:hover:bg-[#1C1C1C] text-[#E9C349] border border-[#E9C349]/40 rounded-2xl text-xs font-mono font-bold transition-all flex items-center gap-2 cursor-pointer shadow-md hover:border-[#E9C349]"
           >
-            <ShieldCheck className="w-4 h-4 text-[#E9C349]" />
+            <ShieldCheck className="w-4 h-4 text-[#D9A9FF]" />
             <span>Ver Tabla Comparativa Completa de Beneficios & Planes</span>
             <ArrowRight className="w-4 h-4" />
           </button>
@@ -1562,7 +1562,7 @@ export default function WelcomeDashboard({
           >
             <div className="flex items-center justify-between mb-1">
               <span className="text-xs font-bold uppercase font-mono">💃 Estudiante / Bailarín</span>
-              {currentUser.role === 'student' && <CheckCircle2 className="w-4 h-4 text-[#E9C349]" />}
+              {currentUser.role === 'student' && <CheckCircle2 className="w-4 h-4 text-[#D9A9FF]" />}
             </div>
             <p className="text-[11px] text-slate-400">
               Quiero aprender técnica, entrenar con metrónomo y subir de nivel en la academia.
@@ -1579,7 +1579,7 @@ export default function WelcomeDashboard({
           >
             <div className="flex items-center justify-between mb-1">
               <span className="text-xs font-bold uppercase font-mono">🎓 Instructor / Docente</span>
-              {currentUser.role === 'instructor' && <CheckCircle2 className="w-4 h-4 text-[#E9C349]" />}
+              {currentUser.role === 'instructor' && <CheckCircle2 className="w-4 h-4 text-[#D9A9FF]" />}
             </div>
             <p className="text-[11px] text-slate-400">
               Quiero abrir mi cátedra, publicar anuncios, corregir tareas y gestionar alumnos.
@@ -1596,7 +1596,7 @@ export default function WelcomeDashboard({
           >
             <div className="flex items-center justify-between mb-1">
               <span className="text-xs font-bold uppercase font-mono">🏢 Estudio / Academia</span>
-              {currentUser.role === 'studio' && <CheckCircle2 className="w-4 h-4 text-[#E9C349]" />}
+              {currentUser.role === 'studio' && <CheckCircle2 className="w-4 h-4 text-[#D9A9FF]" />}
             </div>
             <p className="text-[11px] text-slate-400">
               Quiero administrar múltiples instructores, eventos y matrícula institucional.

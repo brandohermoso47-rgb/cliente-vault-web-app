@@ -7,6 +7,7 @@ import { signInWithPopup, signInWithEmailAndPassword, createUserWithEmailAndPass
 import { doc, setDoc } from 'firebase/firestore';
 import { Language, translations, languageNames } from '../lib/translations';
 import Logo from './Logo';
+import GlowField from './GlowField';
 
 // Zod Profile Schema Definition
 const createProfileSchema = (lang: Language) =>
@@ -287,7 +288,7 @@ export default function LoginView({ onGuestMode, onSuccess, language, onLanguage
         initial={{ opacity: 0, scale: 0.95, y: 10 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-        className="w-full max-w-[420px] z-10"
+        className="w-full max-w-[420px] z-[2]"
       >
         {/* Floating Glassmorphism Box */}
         <div className="bg-white/70 dark:bg-[#121622]/60 border border-slate-200 dark:border-white/20 rounded-[32px] p-8 sm:p-10 shadow-[0_25px_60px_rgba(0,0,0,0.12)] dark:shadow-[0_25px_60px_rgba(0,0,0,0.8)] backdrop-blur-2xl flex flex-col items-center space-y-6 relative overflow-hidden">
@@ -387,7 +388,7 @@ export default function LoginView({ onGuestMode, onSuccess, language, onLanguage
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full py-4 rounded-2xl bg-gradient-to-r from-[#FF6126] via-[#FF2E63] to-[#FF007A] text-white font-black text-sm uppercase tracking-wider shadow-[0_8px_25px_rgba(255,40,104,0.4)] hover:brightness-110 active:scale-[0.98] transition-all cursor-pointer disabled:opacity-50 mt-3 flex items-center justify-center gap-2"
+                  className="w-full py-4 rounded-2xl bg-gradient-to-r from-[#D9A9FF] via-[#C23E9E] to-[#7DD3FC] text-[#150a1d] font-black text-sm uppercase tracking-wider shadow-[0_8px_28px_-4px_hsla(var(--h),90%,65%,0.55)] hover:shadow-[0_10px_38px_-2px_hsla(var(--h),90%,65%,0.75)] active:scale-[0.98] transition-all cursor-pointer disabled:opacity-50 mt-3 flex items-center justify-center gap-2"
                 >
                   {loading ? (
                     <span className="animate-pulse">{language === 'es' ? 'Guardando Perfil...' : 'Saving Profile...'}</span>
@@ -513,7 +514,7 @@ export default function LoginView({ onGuestMode, onSuccess, language, onLanguage
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full py-4 rounded-2xl bg-gradient-to-r from-[#FF6126] via-[#FF2E63] to-[#FF007A] text-white font-black text-sm uppercase tracking-wider shadow-[0_8px_25px_rgba(255,40,104,0.4)] hover:brightness-110 active:scale-[0.98] transition-all cursor-pointer disabled:opacity-50 mt-2 flex items-center justify-center gap-2"
+                  className="w-full py-4 rounded-2xl bg-gradient-to-r from-[#D9A9FF] via-[#C23E9E] to-[#7DD3FC] text-[#150a1d] font-black text-sm uppercase tracking-wider shadow-[0_8px_28px_-4px_hsla(var(--h),90%,65%,0.55)] hover:shadow-[0_10px_38px_-2px_hsla(var(--h),90%,65%,0.75)] active:scale-[0.98] transition-all cursor-pointer disabled:opacity-50 mt-2 flex items-center justify-center gap-2"
                 >
                   {loading ? (
                     <span className="animate-pulse">{language === 'es' ? 'Cargando...' : 'Loading...'}</span>

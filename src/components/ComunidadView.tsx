@@ -346,9 +346,9 @@ export default function ComunidadView({
               : 'bg-amber-50/70 dark:bg-[#1b1424]/70 text-[#E9C349] border-[#E9C349]/30 hover:border-[#E9C349] hover:bg-[#E9C349]/10'
           }`}
         >
-          <Trophy className={`w-4 h-4 shrink-0 transition-transform duration-300 group-hover:scale-125 ${subTab === 'reto' ? 'text-black' : 'text-[#E9C349]'}`} />
+          <Trophy className={`w-4 h-4 shrink-0 transition-transform duration-300 group-hover:scale-125 ${subTab === 'reto' ? 'text-black' : 'text-[#D9A9FF]'}`} />
           🏆 RETO SEMANAL
-          <span className={`text-[9px] px-1.5 py-0.2 rounded-full font-mono font-bold ${subTab === 'reto' ? 'bg-black/20 text-black' : 'bg-[#E9C349]/20 text-[#E9C349]'}`}>
+          <span className={`text-[9px] px-1.5 py-0.2 rounded-full font-mono font-bold ${subTab === 'reto' ? 'bg-black/20 text-black' : 'bg-[#D9A9FF]/20 text-[#D9A9FF]'}`}>
             NEW
           </span>
         </button>
@@ -372,7 +372,7 @@ export default function ComunidadView({
         <div className="mb-6 p-4 bg-surface-container/90 border border-tertiary/20 rounded-2xl shadow-xl space-y-3 z-10">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-tertiary/10 pb-3">
             <div className="flex items-center gap-2 text-xs font-mono font-bold text-tertiary uppercase">
-              <SlidersHorizontal className="w-4 h-4 text-[#E9C349]" />
+              <SlidersHorizontal className="w-4 h-4 text-[#D9A9FF]" />
               <span>Filtros Dinámicos del Muro</span>
             </div>
 
@@ -401,7 +401,7 @@ export default function ComunidadView({
           {/* Quick Filter Pill Buttons */}
           <div className="flex flex-wrap items-center gap-2 pt-1">
             <span className="text-[10px] font-mono font-bold text-on-surface-variant/70 uppercase mr-1 flex items-center gap-1">
-              <Filter className="w-3 h-3 text-[#E9C349]" />
+              <Filter className="w-3 h-3 text-[#D9A9FF]" />
               Mostrar:
             </span>
 
@@ -461,7 +461,7 @@ export default function ComunidadView({
               onClick={() => setActiveFilter('important')}
               className={`px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all flex items-center gap-1.5 border cursor-pointer ${
                 activeFilter === 'important'
-                  ? 'bg-[#9A2B3C] text-white border-[#9A2B3C] shadow-md scale-105'
+                  ? 'bg-[#C23E9E] text-white border-[#C23E9E] shadow-md scale-105'
                   : 'bg-[#0D0D11] text-on-surface-variant border-tertiary/15 hover:border-red-500/40 hover:text-red-300'
               }`}
             >
@@ -569,7 +569,7 @@ export default function ComunidadView({
                       <p className="text-xs leading-relaxed font-semibold text-on-surface-variant">
                         {displayedText}
                         {isTranslated && (
-                          <span className="text-[9px] text-[#E9C349] font-mono block mt-1">
+                          <span className="text-[9px] text-[#D9A9FF] font-mono block mt-1">
                             * {translations[language].translatedByIA}
                           </span>
                         )}
@@ -670,12 +670,12 @@ export default function ComunidadView({
                 {/* Active Weekly Challenge Callout on Muro Feed */}
                 <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-amber-50 via-white to-white dark:from-[#21162B] dark:via-[#15121c] dark:to-[#0D0D11] border-2 border-tertiary/40 p-4 sm:p-5 shadow-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                   <div className="flex items-start sm:items-center gap-3.5">
-                    <div className="w-12 h-12 rounded-2xl bg-[#E9C349]/15 border border-[#E9C349]/40 flex items-center justify-center text-[#E9C349] shrink-0 shadow-md">
+                    <div className="w-12 h-12 rounded-2xl bg-[#D9A9FF]/15 border border-[#D9A9FF]/40 flex items-center justify-center text-[#D9A9FF] shrink-0 shadow-md">
                       <Trophy className="w-6 h-6 animate-bounce" />
                     </div>
                     <div>
                       <div className="flex items-center gap-2">
-                        <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#E9C349] bg-[#E9C349]/15 px-2 py-0.5 rounded-full border border-[#E9C349]/30">
+                        <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#D9A9FF] bg-[#D9A9FF]/15 px-2 py-0.5 rounded-full border border-[#D9A9FF]/30">
                           🏆 Reto Semanal Destacado
                         </span>
                         <span className="text-[11px] font-mono text-emerald-400 font-semibold">• Votaciones Abiertas</span>
@@ -688,7 +688,7 @@ export default function ComunidadView({
                   <button
                     id="btn-feed-goto-challenge"
                     onClick={() => setSubTab('reto')}
-                    className="shrink-0 bg-[#E9C349] hover:bg-[#d4af37] text-black font-extrabold text-xs px-4 py-2.5 rounded-xl shadow-lg flex items-center gap-1.5 transition-all hover:scale-105 active:scale-95 cursor-pointer font-mono uppercase tracking-wider"
+                    className="shrink-0 bg-[#D9A9FF] hover:bg-[#B87CFF] text-black font-extrabold text-xs px-4 py-2.5 rounded-xl shadow-lg flex items-center gap-1.5 transition-all hover:scale-105 active:scale-95 cursor-pointer font-mono uppercase tracking-wider"
                   >
                     <Trophy className="w-3.5 h-3.5 text-black" />
                     <span>Ver Reto & Leaderboard</span>
@@ -698,7 +698,7 @@ export default function ComunidadView({
                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 bg-surface-container/60 border border-tertiary/15 p-4 rounded-2xl">
                   <div>
                     <h3 className="text-xs font-mono font-bold text-tertiary uppercase tracking-wider flex items-center gap-2">
-                      <Sparkles className="w-4 h-4 text-[#E9C349]" />
+                      <Sparkles className="w-4 h-4 text-[#D9A9FF]" />
                       Muro Social Unificado
                     </h3>
                     <p className="text-[11px] text-on-surface-variant mt-0.5 font-semibold">
@@ -820,7 +820,7 @@ export default function ComunidadView({
                         onClick={() => setNewAnnCategory(c.id as any)}
                         className={`p-2 rounded-xl text-[10px] font-mono font-bold border transition-all text-center ${
                           newAnnCategory === c.id
-                            ? 'bg-[#E9C349] text-black border-[#E9C349]'
+                            ? 'bg-[#D9A9FF] text-black border-[#D9A9FF]'
                             : 'bg-[#0A0A0A] text-slate-300 border-[#262626] hover:border-white/20'
                         }`}
                       >
@@ -889,7 +889,7 @@ export default function ComunidadView({
                   <button
                     id="submit-ann-form"
                     type="submit"
-                    className="px-4 py-2 bg-[#E9C349] hover:bg-[#d8b33c] text-black text-xs font-black rounded-lg shadow-lg hover:scale-105 active:scale-95 uppercase transition-all"
+                    className="px-4 py-2 bg-[#D9A9FF] hover:bg-[#B87CFF] text-black text-xs font-black rounded-lg shadow-lg hover:scale-105 active:scale-95 uppercase transition-all"
                   >
                     Publicar Novedad Ahora
                   </button>
@@ -1001,7 +1001,7 @@ export default function ComunidadView({
                               alt={ann.title}
                               className="w-full h-full object-cover group-hover/img:scale-105 transition-transform duration-300"
                             />
-                            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center gap-1.5 text-[#E9C349] font-mono text-xs font-bold">
+                            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center gap-1.5 text-[#D9A9FF] font-mono text-xs font-bold">
                               <ZoomIn className="w-4 h-4" />
                               <span>Ampliar Afiche</span>
                             </div>
@@ -1016,7 +1016,7 @@ export default function ComunidadView({
                             href={ann.actionUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#E9C349] hover:bg-[#d8b33c] text-black text-xs font-black rounded-lg transition-all shadow-md"
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#D9A9FF] hover:bg-[#B87CFF] text-black text-xs font-black rounded-lg transition-all shadow-md"
                           >
                             {post.hasVideo ? <Play className="w-3.5 h-3.5 fill-black" /> : <ExternalLink className="w-3.5 h-3.5" />}
                             <span>{post.hasVideo ? 'Ver Video / Convocatoria' : 'Ver Enlace / Inscripción'}</span>
@@ -1069,12 +1069,12 @@ export default function ComunidadView({
                           <div className="mt-3.5 aspect-video rounded-xl border border-tertiary/10 overflow-hidden bg-[#08080a] relative shadow-lg group/vid cursor-pointer">
                             <img src={pres.videoUrl} alt="Presentation Media" className="w-full h-full object-cover opacity-80 group-hover/vid:scale-105 transition-transform duration-300" />
                             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-center justify-center">
-                              <div className="w-12 h-12 rounded-full bg-[#E9C349]/90 text-black flex items-center justify-center shadow-2xl group-hover/vid:scale-110 transition-transform">
+                              <div className="w-12 h-12 rounded-full bg-[#D9A9FF]/90 text-black flex items-center justify-center shadow-2xl group-hover/vid:scale-110 transition-transform">
                                 <Play className="w-6 h-6 fill-black ml-0.5" />
                               </div>
                             </div>
                             <div className="absolute bottom-2 left-2 right-2 flex justify-between items-center text-[10px] font-mono text-white font-bold bg-black/60 px-2.5 py-1 rounded-lg backdrop-blur-sm">
-                              <span className="flex items-center gap-1"><Video className="w-3 h-3 text-[#E9C349]" /> Video de Práctica / Demostración</span>
+                              <span className="flex items-center gap-1"><Video className="w-3 h-3 text-[#D9A9FF]" /> Video de Práctica / Demostración</span>
                               <span className="text-tertiary uppercase">Reproducir</span>
                             </div>
                           </div>
@@ -1158,7 +1158,7 @@ export default function ComunidadView({
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.9 }}
-                    className="relative max-w-4xl w-full bg-[#121212] border border-[#E9C349]/50 rounded-2xl overflow-hidden p-3 shadow-2xl"
+                    className="relative max-w-4xl w-full bg-[#121212] border border-[#D9A9FF]/50 rounded-2xl overflow-hidden p-3 shadow-2xl"
                   >
                     <button
                       type="button"

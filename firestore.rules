@@ -1,89 +1,122 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /{document=**} {
-      allow read, write: if true;
+    // 1. Helper Functions
+    function isSignedIn() {
+      return request.auth != null;
     }
 
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    // 2. User Profiles & Subcollections
     match /users/{userId} {
-      allow read, write: if true;
+      // Anyone can view public dancer profiles (name, avatar, role, level)
+      allow read: if true;
+      // Only the authenticated owner can write to their own profile
+      allow write: if isOwner(userId);
+
+      match /playlists/{playlistId} {
+        allow read, write: if isOwner(userId);
+      }
+
+      match /favoritos/{imageId} {
+        allow read, write: if isOwner(userId);
+      }
+
+      match /practice_logs/{logId} {
+        allow read, write: if isOwner(userId);
+      }
+
       match /{allSubcollections=**} {
-        allow read, write: if true;
+        allow read, write: if isOwner(userId);
       }
     }
 
+    // 3. Lessons & Academy Curriculum
     match /lessons/{lessonId} {
-      allow read, write: if true;
+      allow read: if true;
+      allow write: if isSignedIn();
     }
 
+    // 4. Announcements
     match /announcements/{annId} {
-      allow read, write: if true;
+      allow read: if true;
+      allow write: if isSignedIn();
     }
 
-    match /feedback_items/{feedbackId} {
-      allow read, write: if true;
+    // 5. Presentations
+    match /presentations/{presId} {
+      allow read: if true;
+      allow write: if isSignedIn();
     }
 
-    match /notifications/{notifId} {
-      allow read, write: if true;
+    // 6. Community & Chat Messages
+    match /community_messages/{messageId} {
+      allow read: if true;
+      allow write: if isSignedIn();
     }
 
     match /chat_messages/{messageId} {
-      allow read, write: if true;
-    }
-
-    match /presentations/{presId} {
-      allow read, write: if true;
-    }
-
-    match /community_messages/{messageId} {
-      allow read, write: if true;
+      allow read: if true;
+      allow write: if isSignedIn();
     }
 
     match /direct_messages/{messageId} {
-      allow read, write: if true;
+      allow read, write: if isSignedIn();
     }
 
+    // 7. Social & Battles
     match /friendships/{friendshipId} {
-      allow read, write: if true;
+      allow read, write: if isSignedIn();
     }
 
     match /battles/{battleId} {
-      allow read, write: if true;
+      allow read, write: if isSignedIn();
     }
 
+    // 8. Music & Playlists
     match /user_playlists/{playlistId} {
-      allow read, write: if true;
+      allow read, write: if isSignedIn();
     }
 
     match /instructor_playlists/{playlistId} {
-      allow read, write: if true;
+      allow read: if true;
+      allow write: if isSignedIn();
     }
 
     match /instructor_tracks/{trackId} {
-      allow read, write: if true;
+      allow read: if true;
+      allow write: if isSignedIn();
     }
 
     match /instructor_drive_tracks/{trackId} {
-      allow read, write: if true;
+      allow read: if true;
+      allow write: if isSignedIn();
+    }
+
+    // 9. Feedback & Practice Logs
+    match /feedback_items/{feedbackId} {
+      allow read, write: if isSignedIn();
+    }
+
+    match /notifications/{notifId} {
+      allow read, write: if isSignedIn();
     }
 
     match /practice_logs/{logId} {
-      allow read, write: if true;
+      allow read, write: if isSignedIn();
     }
 
     match /reels/{reelId} {
-      allow read, write: if true;
+      allow read: if true;
+      allow write: if isSignedIn();
     }
 
+    // 10. Connection Healthcheck
     match /test/{docId} {
       allow read, write: if true;
     }
   }
 }
-
-
-
-
-
-

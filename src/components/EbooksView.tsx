@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { 
-  BookOpen, 
+import {
+  BookOpen,
   BookOpenCheck,
-  Search, 
-  Save, 
-  Sparkles, 
-  Clock, 
-  ArrowRight, 
-  Check, 
+  Search,
+  Save,
+  Sparkles,
+  Clock,
+  ArrowRight,
+  Check,
   Award,
   AlertCircle,
   HelpCircle,
@@ -17,7 +17,8 @@ import {
   Notebook as NotebookIcon,
   ChevronRight,
   BrainCircuit,
-  MessageSquare
+  MessageSquare,
+  Cog
 } from 'lucide-react';
 import { User } from '../types';
 import { auth, db } from '../firebase';
@@ -750,16 +751,70 @@ export default function EbooksView({ currentUser, language }: EbooksViewProps) {
 
   const t = translations[language] || translations['es'];
 
+  // Tactile "scene tilt": a subtle 3D sway of the ebooks scene as the surrounding
+  // page scrolls, echoing the paper-grain mockup without touching shared chrome.
+  const sceneWrapRef = useRef<HTMLDivElement>(null);
+  const [sceneTilt, setSceneTilt] = useState(0);
+
+  useEffect(() => {
+    const wrap = sceneWrapRef.current;
+    if (!wrap) return;
+
+    let scrollParent: HTMLElement | null = wrap.parentElement;
+    while (scrollParent) {
+      const overflowY = getComputedStyle(scrollParent).overflowY;
+      if (overflowY === 'auto' || overflowY === 'scroll') break;
+      scrollParent = scrollParent.parentElement;
+    }
+    const scrollTarget: HTMLElement | Window = scrollParent || window;
+    const getScrollTop = () => (scrollParent ? scrollParent.scrollTop : window.scrollY);
+
+    let lastScrollTop = getScrollTop();
+    let rafId = 0;
+    let settleTimeout: ReturnType<typeof setTimeout>;
+
+    const onScroll = () => {
+      cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(() => {
+        const scrollTop = getScrollTop();
+        const delta = scrollTop - lastScrollTop;
+        lastScrollTop = scrollTop;
+        setSceneTilt(Math.max(-1.2, Math.min(1.2, delta * 0.5)));
+      });
+      clearTimeout(settleTimeout);
+      settleTimeout = setTimeout(() => setSceneTilt(0), 220);
+    };
+
+    scrollTarget.addEventListener('scroll', onScroll, { passive: true });
+    return () => {
+      scrollTarget.removeEventListener('scroll', onScroll);
+      cancelAnimationFrame(rafId);
+      clearTimeout(settleTimeout);
+    };
+  }, []);
+
   return (
-    <div className="flex-1 min-h-full w-full p-6 space-y-6 bg-background text-on-surface flex flex-col font-body-md select-none">
-      
+    <div className="ebook-tactile-scope flex-1 min-h-full w-full p-6 space-y-6 bg-background text-on-surface flex flex-col font-body-md select-none">
+
+      <div ref={sceneWrapRef} className="relative" style={{ perspective: '1800px' }}>
+      {/* Ambient tactile backdrop: paper grain + warm lamp glow, contained to this screen */}
+      <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden rounded-3xl">
+        <div className="absolute inset-0 opacity-[0.05] ebook-grain" />
+        <div className="ebook-lamp-glow absolute left-1/2 top-[-120px] h-[420px] w-[70%] -translate-x-1/2 rounded-full bg-[radial-gradient(ellipse_at_50%_0,rgba(233,195,73,.14),rgba(233,195,73,.03)_42%,transparent_70%)]" />
+      </div>
+
+      <div
+        className="transition-transform duration-300 ease-out will-change-transform"
+        style={{ transform: `rotateX(${sceneTilt}deg)`, transformOrigin: '50% 0%' }}
+      >
+
       {/* HEADER BANNER */}
       <div className="border-b border-tertiary/10 pb-4 mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4 z-10">
         <div className="text-left">
           <h2 className="text-2xl font-display-lg font-bold text-slate-900 dark:text-white tracking-tight uppercase">{t.ebooksTitle || 'RECURSOS Y LITERATURA'}</h2>
           <p className="text-xs text-on-surface-variant font-medium mt-1">{t.ebooksSubtitle || 'Explora la historia viva, la era disco de los 70s y las raíces expresivas del Punking. Toma notas y ponte a prueba.'}</p>
         </div>
-        
+
         <div className="flex items-center gap-2 self-start md:self-center">
           <span className="text-[10px] font-mono font-bold text-[#E9C349] border border-[#E9C349]/20 bg-[#E9C349]/10 px-2.5 py-0.5 rounded-full uppercase tracking-wider">
             {language === 'es' ? 'Historia & Cultura' : 'History & Culture'}
@@ -837,15 +892,20 @@ export default function EbooksView({ currentUser, language }: EbooksViewProps) {
                   </div>
 
                   {/* Ebooks Cards Grid */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6" style={{ perspective: '1400px' }}>
                     {filteredBooks.map((book) => {
                       const savedNote = notebookNotes[book.id];
                       return (
-                        <div 
+                        <div
                           key={book.id}
-                          className="bg-surface-container border border-tertiary/10 rounded-2xl p-5 flex flex-col justify-between min-h-[300px] shadow-2xl hover:border-[#E9C349]/20 hover:scale-[1.01] transition-all"
+                          className="group relative bg-gradient-to-br from-[#1a1720] via-[#141218] to-[#0f0e12] border border-tertiary/10 rounded-2xl p-5 flex flex-col justify-between min-h-[300px] shadow-2xl overflow-hidden transition-all duration-300 ease-out hover:border-[#E9C349]/30 hover:shadow-[0_34px_56px_-22px_rgba(0,0,0,1),0_0_0_1px_rgba(233,195,73,.22)] hover:[transform:translateY(-5px)_rotateX(1.6deg)]"
                         >
-                          <div className="space-y-3 text-left">
+                          {/* Tactile paper-grain wash, contained to the card */}
+                          <div className="pointer-events-none absolute inset-0 opacity-[0.05] ebook-grain" />
+                          {/* Leather-bound spine along the left edge */}
+                          <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-[9px] rounded-l-2xl bg-gradient-to-r from-[#2a2028] via-[#171319] to-black/60 shadow-[inset_-1px_0_0_rgba(233,195,73,.16)]" />
+
+                          <div className="relative z-10 space-y-3 text-left">
                             <div className="flex justify-between items-start">
                               <span className={`text-[8px] font-mono font-bold border px-2 py-0.5 rounded uppercase ${book.tagColor}`}>
                                 {book.category}
@@ -868,7 +928,7 @@ export default function EbooksView({ currentUser, language }: EbooksViewProps) {
                           </div>
 
                           {/* Bottom Actions */}
-                          <div className="mt-6 pt-4 border-t border-dashed border-tertiary/10 flex items-center justify-between">
+                          <div className="relative z-10 mt-6 pt-4 border-t border-dashed border-tertiary/10 flex items-center justify-between">
                             {savedNote ? (
                               <span className="text-[9px] font-mono font-bold text-[#E9C349] bg-[#E9C349]/10 px-2 py-1 rounded border border-[#E9C349]/20 flex items-center gap-1 uppercase">
                                 <Bookmark className="w-3 h-3 fill-[#E9C349]" /> Nota Guardada
@@ -877,17 +937,27 @@ export default function EbooksView({ currentUser, language }: EbooksViewProps) {
                               <span className="text-[9px] text-on-surface-variant/40 font-mono font-bold uppercase">Sin anotaciones</span>
                             )}
 
+                            {/* "Comenzar" rendered as a physical gold knob/lever */}
                             <button
                               onClick={() => {
                                 setSelectedBook(book);
                                 setActiveChapterIdx(0);
                               }}
-                              className="px-4 py-2 bg-on-primary-fixed-variant hover:bg-on-primary-container text-primary-fixed text-xs font-bold rounded-xl border border-primary/25 shadow-lg hover:scale-105 active:scale-95 transition-all uppercase flex items-center gap-1"
+                              className="flex items-center gap-1.5 px-4 py-2 rounded-xl border border-white/30 text-[#221a05] font-extrabold text-xs tracking-wide uppercase bg-[radial-gradient(circle_at_34%_26%,#f0dfa8,#c8a63f_46%,#8a6d1f)] shadow-[inset_0_1.5px_0_rgba(255,255,255,.55),inset_0_-2px_4px_rgba(0,0,0,.45),0_4px_10px_-2px_rgba(0,0,0,.85)] hover:brightness-110 hover:scale-105 active:scale-95 transition-all"
                             >
                               <span>Comenzar</span>
-                              <ArrowRight className="w-3.5 h-3.5" />
+                              <ArrowRight className="w-3.5 h-3.5" strokeWidth={2.4} />
                             </button>
                           </div>
+
+                          {/* Page corner that peels up on hover, tucked behind the card content */}
+                          <div
+                            className="pointer-events-none absolute right-0 bottom-0 z-0 h-[34px] w-[34px] shadow-[-3px_-3px_10px_rgba(0,0,0,.55)] transition-all duration-400 ease-out group-hover:h-[110px] group-hover:w-[110px] group-hover:shadow-[-16px_-16px_40px_rgba(0,0,0,.75)]"
+                            style={{
+                              background: 'linear-gradient(315deg, #efe6d2 0 46%, #c9bfa8 47%, transparent 48%)',
+                              clipPath: 'polygon(100% 0, 100% 100%, 0 100%)'
+                            }}
+                          />
                         </div>
                       );
                     })}
@@ -1187,22 +1257,37 @@ export default function EbooksView({ currentUser, language }: EbooksViewProps) {
                   exit={{ opacity: 0 }}
                   className="space-y-4 pt-2 text-center"
                 >
-                  <div className="w-16 h-16 bg-primary-container/10 border border-primary/20 rounded-full flex items-center justify-center mx-auto text-primary text-2xl shadow-xl">
-                    <BrainCircuit className="w-8 h-8 animate-pulse text-primary" />
+                  {/* Engraved brain, rotating slowly in a lamplit plaque */}
+                  <div
+                    className="w-20 h-20 mx-auto rounded-full flex items-center justify-center border border-primary/20 shadow-[inset_0_0_18px_rgba(0,0,0,.7)] bg-[radial-gradient(circle_at_50%_40%,rgba(233,195,73,.12),transparent_70%)]"
+                    style={{ perspective: '600px' }}
+                  >
+                    <BrainCircuit className="w-9 h-9 text-primary ebook-brain-spin drop-shadow-[0_0_6px_rgba(233,195,73,.5)]" />
                   </div>
                   <h4 className="text-xs font-bold uppercase text-slate-900 dark:text-white mt-2">¿Cuánto sabes sobre Waacking?</h4>
                   <p className="text-[10px] text-on-surface-variant font-medium leading-relaxed">
                     Responde estas {QUIZ_QUESTIONS.length} preguntas interactivas basadas en la historia subterránea de Los Ángeles y demuestra que dominas el plano cultural de tu danza.
                   </p>
-                  
+
+                  {/* "Empezar Test" rendered as a physical gear-driven lever switch */}
                   <button
                     onClick={() => {
                       setQuizActive(true);
                       handleRestartQuiz();
                     }}
-                    className="w-full py-2.5 bg-on-primary-fixed-variant hover:bg-on-primary-container text-primary-fixed border border-primary/25 text-xs font-bold rounded-xl transition-all uppercase focus:outline-none"
+                    className="group w-full flex items-center gap-3 px-3 py-2.5 rounded-xl border border-primary/25 bg-gradient-to-b from-[#26232a] to-[#15131a] shadow-[inset_0_1px_0_rgba(255,255,255,.12),inset_0_-2px_6px_rgba(0,0,0,.6),0_4px_12px_-4px_rgba(0,0,0,.9)] hover:border-[#E9C349]/50 transition-all focus:outline-none"
                   >
-                    EMPEZAR TEST
+                    <span className="relative w-6 h-6 shrink-0 text-[#E9C349]/70">
+                      <Cog className="w-6 h-6 absolute inset-0 ebook-gear-cw" />
+                      <Cog className="w-3.5 h-3.5 absolute -right-1 -bottom-1 ebook-gear-ccw" />
+                    </span>
+                    <span className="flex-1 min-w-0 flex flex-col items-start gap-0.5 text-left">
+                      <span className="text-[11.5px] font-extrabold tracking-wide uppercase text-[#f2e6c4]">Empezar Test</span>
+                      <span className="text-[8px] font-mono font-bold tracking-widest uppercase text-[#E9C349]/60">Palanca &middot; {QUIZ_QUESTIONS.length} preguntas</span>
+                    </span>
+                    <span className="w-11 h-[22px] shrink-0 rounded-full bg-gradient-to-b from-[#0d0c0f] to-[#1a181c] border border-black/80 shadow-[inset_0_2px_5px_rgba(0,0,0,.9)] relative">
+                      <span className="absolute left-0.5 top-0.5 w-4 h-4 rounded-full bg-[radial-gradient(circle_at_35%_28%,#f4e7bd,#c8a63f_50%,#7d6420)] shadow-[0_2px_5px_rgba(0,0,0,.85),inset_0_1px_0_rgba(255,255,255,.5)] transition-transform duration-300 group-hover:translate-x-5" />
+                    </span>
                   </button>
                 </motion.div>
               ) : quizFinished ? (
@@ -1368,6 +1453,9 @@ export default function EbooksView({ currentUser, language }: EbooksViewProps) {
 
         </div>
 
+      </div>
+
+      </div>
       </div>
 
     {/* Checkout Modal Overlay */}

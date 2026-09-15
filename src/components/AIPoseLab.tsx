@@ -355,7 +355,7 @@ export const AIPoseLab: React.FC<AIPoseLabProps> = ({
       particleCount: 80,
       spread: 70,
       origin: { y: 0.6 },
-      colors: ['#E9C349', '#9A2B3C', '#38BDF8', '#10B981', '#FFFFFF']
+      colors: ['#D9A9FF', '#C23E9E', '#38BDF8', '#10B981', '#FFFFFF']
     });
 
     // Sound effect
@@ -461,7 +461,7 @@ export const AIPoseLab: React.FC<AIPoseLabProps> = ({
 
             // Subtle neon stage grid lines
             overlayCtx.save();
-            overlayCtx.strokeStyle = 'rgba(233, 195, 73, 0.08)';
+            overlayCtx.strokeStyle = 'rgba(217, 169, 255, 0.08)';
             overlayCtx.lineWidth = 1;
             for (let x = 0; x < w; x += 40) {
               overlayCtx.beginPath();
@@ -478,8 +478,8 @@ export const AIPoseLab: React.FC<AIPoseLabProps> = ({
 
             // Radial spotlight
             const grad = overlayCtx.createRadialGradient(w / 2, h * 0.45, 20, w / 2, h * 0.45, w * 0.6);
-            grad.addColorStop(0, 'rgba(233, 195, 73, 0.12)');
-            grad.addColorStop(0.5, 'rgba(154, 43, 60, 0.06)');
+            grad.addColorStop(0, 'rgba(217, 169, 255, 0.12)');
+            grad.addColorStop(0.5, 'rgba(194, 62, 158, 0.06)');
             grad.addColorStop(1, 'transparent');
             overlayCtx.fillStyle = grad;
             overlayCtx.fillRect(0, 0, w, h);
@@ -570,7 +570,7 @@ export const AIPoseLab: React.FC<AIPoseLabProps> = ({
           // 1. Draw Target Ghost Silhouette if enabled
           if (showGhostGuide) {
             overlayCtx.save();
-            overlayCtx.strokeStyle = 'rgba(233, 195, 73, 0.35)';
+            overlayCtx.strokeStyle = 'rgba(217, 169, 255, 0.35)';
             overlayCtx.lineWidth = 4;
             overlayCtx.setLineDash([6, 6]);
 
@@ -598,7 +598,7 @@ export const AIPoseLab: React.FC<AIPoseLabProps> = ({
           // 2. Draw Live Skeletal Mesh Lines
           if (showSkeletonMesh) {
             overlayCtx.save();
-            const strokeColor = overallMatch >= 85 ? '#10B981' : overallMatch >= 70 ? '#E9C349' : '#38BDF8';
+            const strokeColor = overallMatch >= 85 ? '#10B981' : overallMatch >= 70 ? '#D9A9FF' : '#38BDF8';
             overlayCtx.strokeStyle = strokeColor;
             overlayCtx.lineWidth = 3.5;
             overlayCtx.shadowColor = strokeColor;
@@ -639,7 +639,7 @@ export const AIPoseLab: React.FC<AIPoseLabProps> = ({
               const { x, y } = toPx(pt);
               overlayCtx.beginPath();
               overlayCtx.arc(x, y, 6, 0, 2 * Math.PI);
-              overlayCtx.fillStyle = key.includes('Wrist') ? '#E9C349' : key.includes('Elbow') ? '#38BDF8' : '#FF6B00';
+              overlayCtx.fillStyle = key.includes('Wrist') ? '#D9A9FF' : key.includes('Elbow') ? '#38BDF8' : '#FF6B00';
               overlayCtx.fill();
               overlayCtx.strokeStyle = '#FFFFFF';
               overlayCtx.lineWidth = 2;
@@ -694,7 +694,7 @@ export const AIPoseLab: React.FC<AIPoseLabProps> = ({
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
-          className="fixed top-6 right-6 z-50 bg-[#E9C349] text-black px-4 py-3 rounded-2xl font-mono font-black text-xs shadow-2xl flex items-center gap-2 border border-black/20"
+          className="fixed top-6 right-6 z-50 bg-[#D9A9FF] text-black px-4 py-3 rounded-2xl font-mono font-black text-xs shadow-2xl flex items-center gap-2 border border-black/20"
         >
           <Sparkles className="w-4 h-4 shrink-0 text-black fill-current animate-spin" />
           <span>{feedbackToast}</span>
@@ -702,11 +702,11 @@ export const AIPoseLab: React.FC<AIPoseLabProps> = ({
       )}
 
       {/* HEADER BANNER */}
-      <div className={`p-5 sm:p-7 rounded-3xl border ${theme === 'light' ? 'bg-white border-zinc-200 shadow-lg' : 'bg-[#0E101D] border-[#E9C349]/40 shadow-[0_0_40px_rgba(233,195,73,0.1)]'} relative overflow-hidden`}>
+      <div className={`p-5 sm:p-7 rounded-3xl border ${theme === 'light' ? 'bg-white border-zinc-200 shadow-lg' : 'bg-[#0E101D] border-[#D9A9FF]/40 shadow-[0_0_40px_rgba(217, 169, 255,0.1)]'} relative overflow-hidden`}>
         <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 relative z-10">
           <div>
             <div className="flex items-center gap-2 flex-wrap mb-1">
-              <span className="px-2.5 py-0.5 rounded-full bg-[#E9C349] text-black font-mono font-black text-[10px] uppercase tracking-wider">
+              <span className="px-2.5 py-0.5 rounded-full bg-[#D9A9FF] text-black font-mono font-black text-[10px] uppercase tracking-wider">
                 WAACK ON AI POSE LAB
               </span>
               <span className="text-[10px] font-mono text-cyan-400 bg-cyan-500/20 px-2 py-0.5 rounded border border-cyan-500/30">
@@ -715,7 +715,7 @@ export const AIPoseLab: React.FC<AIPoseLabProps> = ({
             </div>
             <h2 className="text-xl sm:text-3xl font-black font-display tracking-tight text-slate-900 dark:text-white uppercase flex items-center gap-2">
               <span>{isEs ? 'Laboratorio de Poses IA' : 'AI Pose Laboratory'}</span>
-              <Activity className="w-6 h-6 text-[#E9C349] animate-pulse" />
+              <Activity className="w-6 h-6 text-[#D9A9FF] animate-pulse" />
             </h2>
             <p className="text-xs sm:text-sm text-slate-300 font-mono mt-1 max-w-3xl">
               {isEs 
@@ -732,7 +732,7 @@ export const AIPoseLab: React.FC<AIPoseLabProps> = ({
             </div>
             <div className="text-center px-3 border-r border-white/10">
               <span className="text-[10px] font-mono text-slate-400 uppercase block">Puntos Sesión</span>
-              <span className="text-xl font-black text-[#E9C349] font-mono">+{sessionPoints}</span>
+              <span className="text-xl font-black text-[#D9A9FF] font-mono">+{sessionPoints}</span>
             </div>
             <button
               onClick={handleSaveSession}
@@ -741,7 +741,7 @@ export const AIPoseLab: React.FC<AIPoseLabProps> = ({
                 sessionSaved 
                   ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 cursor-default' 
                   : sessionPoints > 0 
-                    ? 'bg-[#E9C349] hover:bg-[#ffdf6b] text-black shadow-lg active:scale-95' 
+                    ? 'bg-[#D9A9FF] hover:bg-[#F2CFFF] text-black shadow-lg active:scale-95' 
                     : 'bg-white/5 text-slate-500 border border-white/10 cursor-not-allowed'
               }`}
             >
@@ -755,7 +755,7 @@ export const AIPoseLab: React.FC<AIPoseLabProps> = ({
       {/* POSE SELECTOR PILLS */}
       <div className="flex items-center gap-2 overflow-x-auto pb-2 custom-scrollbar">
         <span className="text-xs font-mono font-bold text-slate-400 uppercase shrink-0 flex items-center gap-1">
-          <Target className="w-4 h-4 text-[#E9C349]" />
+          <Target className="w-4 h-4 text-[#D9A9FF]" />
           {isEs ? 'Objetivo:' : 'Target:'}
         </span>
         {WAACKING_TARGET_POSES.map((pose, idx) => {
@@ -788,12 +788,12 @@ export const AIPoseLab: React.FC<AIPoseLabProps> = ({
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
 
         {/* 1. MÓDULO EN VIVO: WEBCAM + CANVAS SUPERPUESTO (7 COLS) */}
-        <div className={`lg:col-span-7 p-4 sm:p-5 rounded-3xl border ${theme === 'light' ? 'bg-white border-zinc-200' : 'bg-[#0D0F1D] border-[#E9C349]/30'} flex flex-col justify-between space-y-4`}>
+        <div className={`lg:col-span-7 p-4 sm:p-5 rounded-3xl border ${theme === 'light' ? 'bg-white border-zinc-200' : 'bg-[#0D0F1D] border-[#D9A9FF]/30'} flex flex-col justify-between space-y-4`}>
           
           {/* Module Header */}
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between border-b border-white/10 pb-3 gap-3">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-xl bg-[#E9C349]/20 border border-[#E9C349]/40 flex items-center justify-center text-[#E9C349]">
+              <div className="w-8 h-8 rounded-xl bg-[#D9A9FF]/20 border border-[#D9A9FF]/40 flex items-center justify-center text-[#D9A9FF]">
                 {isSimulatorMode ? <MonitorPlay className="w-4 h-4" /> : <Camera className="w-4 h-4" />}
               </div>
               <div>
@@ -832,7 +832,7 @@ export const AIPoseLab: React.FC<AIPoseLabProps> = ({
                 className={`px-3 py-1.5 rounded-xl text-xs font-mono font-bold uppercase transition-all flex items-center gap-1.5 cursor-pointer shadow-md ${
                   isCameraActive
                     ? 'bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 border border-rose-500/40'
-                    : 'bg-[#E9C349] hover:bg-[#ffdf6b] text-black border border-[#E9C349]'
+                    : 'bg-[#D9A9FF] hover:bg-[#F2CFFF] text-black border border-[#D9A9FF]'
                 }`}
               >
                 {isCameraActive ? <CameraOff className="w-3.5 h-3.5" /> : <Camera className="w-3.5 h-3.5" />}
@@ -845,7 +845,7 @@ export const AIPoseLab: React.FC<AIPoseLabProps> = ({
           <div 
             className={`relative aspect-[4/3] rounded-2xl overflow-hidden bg-black flex items-center justify-center group shadow-2xl transition-all duration-300 ${
               (isCameraActive || isSimulatorMode)
-                ? 'animate-bpm-pulse border-2 border-[#E9C349]/80 shadow-[0_0_30px_rgba(233,195,73,0.3)]'
+                ? 'animate-bpm-pulse border-2 border-[#D9A9FF]/80 shadow-[0_0_30px_rgba(217, 169, 255,0.3)]'
                 : 'border-2 border-white/10'
             }`}
             style={{ '--bpm-pulse-duration': '0.5s' } as React.CSSProperties}
@@ -853,7 +853,7 @@ export const AIPoseLab: React.FC<AIPoseLabProps> = ({
             {/* Subtle Pulse Ring Overlay when practicing */}
             {(isCameraActive || isSimulatorMode) && (
               <div 
-                className="absolute inset-0 pointer-events-none rounded-2xl border-2 border-[#E9C349]/40 animate-bpm-ring z-20"
+                className="absolute inset-0 pointer-events-none rounded-2xl border-2 border-[#D9A9FF]/40 animate-bpm-ring z-20"
                 style={{ '--bpm-pulse-duration': '0.5s' } as React.CSSProperties}
               />
             )}
@@ -875,7 +875,7 @@ export const AIPoseLab: React.FC<AIPoseLabProps> = ({
             {/* Placeholder when neither Camera nor Simulator is Active */}
             {!isCameraActive && !isSimulatorMode && (
               <div className="p-6 text-center space-y-4 max-w-md">
-                <div className="w-16 h-16 rounded-full bg-[#E9C349]/10 border-2 border-[#E9C349]/40 flex items-center justify-center text-[#E9C349] mx-auto animate-pulse">
+                <div className="w-16 h-16 rounded-full bg-[#D9A9FF]/10 border-2 border-[#D9A9FF]/40 flex items-center justify-center text-[#D9A9FF] mx-auto animate-pulse">
                   <Camera className="w-8 h-8" />
                 </div>
                 <div className="space-y-1">
@@ -922,7 +922,7 @@ export const AIPoseLab: React.FC<AIPoseLabProps> = ({
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
                   <button
                     onClick={startCamera}
-                    className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-[#E9C349] hover:bg-[#ffdf6b] text-black font-mono font-black text-xs uppercase shadow-xl transition-all active:scale-95 cursor-pointer inline-flex items-center justify-center gap-2"
+                    className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-[#D9A9FF] hover:bg-[#F2CFFF] text-black font-mono font-black text-xs uppercase shadow-xl transition-all active:scale-95 cursor-pointer inline-flex items-center justify-center gap-2"
                   >
                     <Play className="w-4 h-4 fill-current" />
                     <span>{isEs ? 'Activar Cámara Web' : 'Start Webcam'}</span>
@@ -946,7 +946,7 @@ export const AIPoseLab: React.FC<AIPoseLabProps> = ({
                 <div className="absolute top-3 left-3 right-3 flex items-center justify-between gap-3 pointer-events-none">
                   <div className="bg-black/85 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/20 text-[11px] font-mono flex items-center gap-2">
                     <span className="text-slate-400 uppercase">{isEs ? 'Precisión:' : 'Match:'}</span>
-                    <span className={`font-black ${poseMatchPercentage >= 85 ? 'text-emerald-400' : poseMatchPercentage >= 70 ? 'text-[#E9C349]' : 'text-slate-300'}`}>
+                    <span className={`font-black ${poseMatchPercentage >= 85 ? 'text-emerald-400' : poseMatchPercentage >= 70 ? 'text-[#D9A9FF]' : 'text-slate-300'}`}>
                       {poseMatchPercentage}%
                     </span>
                   </div>
@@ -985,7 +985,7 @@ export const AIPoseLab: React.FC<AIPoseLabProps> = ({
                     <div className="bg-black/85 backdrop-blur-md px-2.5 py-1 rounded-lg border border-cyan-400/40 text-[9px] font-mono text-cyan-300">
                       Codo Der: <span className="font-bold">{userAngles.rightElbow}°</span> (Obj: {currentTarget.targetRightElbowAngle}°)
                     </div>
-                    <div className="bg-black/85 backdrop-blur-md px-2.5 py-1 rounded-lg border border-[#E9C349]/40 text-[9px] font-mono text-[#E9C349]">
+                    <div className="bg-black/85 backdrop-blur-md px-2.5 py-1 rounded-lg border border-[#D9A9FF]/40 text-[9px] font-mono text-[#D9A9FF]">
                       Hombros: <span className="font-bold">{userAngles.leftShoulder}° / {userAngles.rightShoulder}°</span>
                     </div>
                   </div>
@@ -1005,7 +1005,7 @@ export const AIPoseLab: React.FC<AIPoseLabProps> = ({
                   <motion.div 
                     animate={{ rotate: [0, 10, -10, 0], scale: [1, 1.15, 1] }}
                     transition={{ repeat: Infinity, duration: 1 }}
-                    className="w-20 h-20 rounded-full bg-[#E9C349] flex items-center justify-center text-black shadow-2xl mb-3"
+                    className="w-20 h-20 rounded-full bg-[#D9A9FF] flex items-center justify-center text-black shadow-2xl mb-3"
                   >
                     <Trophy className="w-10 h-10 fill-current" />
                   </motion.div>
@@ -1015,7 +1015,7 @@ export const AIPoseLab: React.FC<AIPoseLabProps> = ({
                   <p className="text-emerald-300 font-mono text-sm font-bold mt-1">
                     Precisión biomecánica lograda: {poseMatchPercentage}%
                   </p>
-                  <div className="mt-3 px-4 py-1.5 rounded-full bg-black/60 border border-[#E9C349] text-[#E9C349] font-mono font-black text-sm">
+                  <div className="mt-3 px-4 py-1.5 rounded-full bg-black/60 border border-[#D9A9FF] text-[#D9A9FF] font-mono font-black text-sm">
                     +50 PUNTOS WAACKING ACUMULADOS
                   </div>
                 </motion.div>
@@ -1042,7 +1042,7 @@ export const AIPoseLab: React.FC<AIPoseLabProps> = ({
                   type="checkbox" 
                   checked={showGhostGuide} 
                   onChange={(e) => setShowGhostGuide(e.target.checked)} 
-                  className="accent-[#E9C349] w-3.5 h-3.5"
+                  className="accent-[#D9A9FF] w-3.5 h-3.5"
                 />
                 <span>Guía Fantasma</span>
               </label>
@@ -1066,7 +1066,7 @@ export const AIPoseLab: React.FC<AIPoseLabProps> = ({
         </div>
 
         {/* 2. MÓDULO DE REFERENCIA: TARJETA FOTOGRÁFICA + TEMPORIZADOR CIRCULAR (5 COLS) */}
-        <div className={`lg:col-span-5 p-4 sm:p-5 rounded-3xl border ${theme === 'light' ? 'bg-white border-zinc-200' : 'bg-[#0D0F1D] border-[#E9C349]/30'} flex flex-col justify-between space-y-4`}>
+        <div className={`lg:col-span-5 p-4 sm:p-5 rounded-3xl border ${theme === 'light' ? 'bg-white border-zinc-200' : 'bg-[#0D0F1D] border-[#D9A9FF]/30'} flex flex-col justify-between space-y-4`}>
           
           {/* Module Header */}
           <div className="flex items-center justify-between border-b border-white/10 pb-3">
@@ -1084,7 +1084,7 @@ export const AIPoseLab: React.FC<AIPoseLabProps> = ({
               </div>
             </div>
 
-            <span className="text-[10px] font-mono text-[#E9C349] bg-[#E9C349]/10 px-2 py-0.5 rounded-lg border border-[#E9C349]/30">
+            <span className="text-[10px] font-mono text-[#D9A9FF] bg-[#D9A9FF]/10 px-2 py-0.5 rounded-lg border border-[#D9A9FF]/30">
               {selectedPoseIndex + 1} / {WAACKING_TARGET_POSES.length}
             </span>
           </div>
@@ -1110,7 +1110,7 @@ export const AIPoseLab: React.FC<AIPoseLabProps> = ({
                     d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
                   />
                   <path
-                    className="text-[#E9C349] transition-all duration-100"
+                    className="text-[#D9A9FF] transition-all duration-100"
                     strokeDasharray={`${holdProgress}, 100`}
                     strokeWidth="3.5"
                     strokeLinecap="round"
@@ -1128,7 +1128,7 @@ export const AIPoseLab: React.FC<AIPoseLabProps> = ({
             {/* Target Angle Specification Badges */}
             <div className="absolute bottom-3 left-3 right-3 p-3 bg-black/80 backdrop-blur-md rounded-xl border border-white/10 space-y-1.5">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-mono font-black text-[#E9C349] uppercase">
+                <span className="text-xs font-mono font-black text-[#D9A9FF] uppercase">
                   {currentTarget.name}
                 </span>
                 <span className="text-[10px] font-mono text-emerald-400 font-bold">
@@ -1158,7 +1158,7 @@ export const AIPoseLab: React.FC<AIPoseLabProps> = ({
             <ul className="space-y-1 text-[11px] font-mono text-slate-300">
               {currentTarget.tips.map((tip, i) => (
                 <li key={i} className="flex items-start gap-1.5">
-                  <span className="text-[#E9C349] font-bold">•</span>
+                  <span className="text-[#D9A9FF] font-bold">•</span>
                   <span>{tip}</span>
                 </li>
               ))}
@@ -1184,7 +1184,7 @@ export const AIPoseLab: React.FC<AIPoseLabProps> = ({
                 setHoldProgress(0);
                 setIsPoseValidated(false);
               }}
-              className="px-4 py-2 rounded-xl bg-[#E9C349] hover:bg-[#ffdf6b] text-black font-mono font-black text-xs uppercase transition-all flex items-center gap-1 cursor-pointer shadow-md"
+              className="px-4 py-2 rounded-xl bg-[#D9A9FF] hover:bg-[#F2CFFF] text-black font-mono font-black text-xs uppercase transition-all flex items-center gap-1 cursor-pointer shadow-md"
             >
               <span>{isEs ? 'Siguiente Pose →' : 'Next Pose →'}</span>
             </button>

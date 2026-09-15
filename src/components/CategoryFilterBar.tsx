@@ -107,13 +107,13 @@ export const CategoryFilterBar: React.FC<CategoryFilterBarProps> = ({
         {/* Title & Dimension Selector Tabs */}
         <div className="space-y-2">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-xl bg-[#E9C349]/20 border border-[#E9C349]/40 flex items-center justify-center text-[#E9C349] shrink-0">
+            <div className="w-8 h-8 rounded-xl bg-[#D9A9FF]/20 border border-[#D9A9FF]/40 flex items-center justify-center text-[#D9A9FF] shrink-0">
               <Filter className="w-4 h-4" />
             </div>
             <div>
               <h3 className="text-xs sm:text-sm font-black text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
                 Selector de Categorías de Waacking
-                <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-white/10 text-[#E9C349] border border-white/10">
+                <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-white/10 text-[#D9A9FF] border border-white/10">
                   {filteredLessonsCount} de {totalLessonsCount} lecciones
                 </span>
               </h3>

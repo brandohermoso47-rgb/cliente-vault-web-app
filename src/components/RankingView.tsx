@@ -219,7 +219,7 @@ export default function RankingView({
           <div className="bg-white/80 dark:bg-[#121212]/80 border border-slate-200 dark:border-[#262626] rounded-2xl p-5 shadow-xl flex flex-col md:flex-row items-center justify-between gap-4 relative overflow-hidden backdrop-blur-md">
             <div className="absolute top-0 right-0 w-32 h-32 bg-[#9A2B3C]/10 rounded-full blur-2xl pointer-events-none" />
             <div className="flex items-center gap-4">
-              <div className="p-4 bg-gradient-to-tr from-[#9A2B3C] to-[#E9C349] text-white rounded-2xl font-bold font-mono text-xl shadow-lg flex items-center justify-center min-w-[70px]">
+              <div className="p-4 bg-gradient-to-tr from-[#C23E9E] to-[#D9A9FF] text-white rounded-2xl font-bold font-mono text-xl shadow-lg flex items-center justify-center min-w-[70px]">
                 Lvl {Math.max(1, Math.floor(currentUser.points / 15))}
               </div>
               <div>
@@ -242,11 +242,11 @@ export default function RankingView({
             <div className="w-full md:w-96 shrink-0">
               <div className="flex justify-between text-[10px] font-mono font-bold text-[#C2C7D1] mb-1.5">
                 <span>{language === 'es' ? 'PROGRESO DE NIVEL' : 'LEVEL PROGRESS'}</span>
-                <span className="text-[#E9C349]">{Math.min(100, Math.round(((currentUser.points % 15) / 15) * 100))}%</span>
+                <span className="text-[#D9A9FF]">{Math.min(100, Math.round(((currentUser.points % 15) / 15) * 100))}%</span>
               </div>
               <div className="w-full bg-[#0A0A0A] border border-[#262626] h-3.5 rounded-full overflow-hidden p-0.5 flex items-center">
                 <div 
-                  className="bg-gradient-to-r from-[#9A2B3C] to-[#E9C349] h-full rounded-full transition-all duration-700 shadow-[0_0_8px_rgba(154,43,60,0.5)]"
+                  className="bg-gradient-to-r from-[#C23E9E] to-[#D9A9FF] h-full rounded-full transition-all duration-700 shadow-[0_0_8px_rgba(194, 62, 158,0.5)]"
                   style={{ width: `${Math.min(100, Math.round(((currentUser.points % 15) / 15) * 100))}%` }}
                 />
               </div>
@@ -261,23 +261,23 @@ export default function RankingView({
                 desc: language === 'es' ? 'Completa 1000 Poses en total' : 'Complete 1000 Poses',
                 requiredPoints: 50,
                 icon: Trophy,
-                color: 'from-[#9A2B3C]/30 to-[#E9C349]/30 border-[#9A2B3C]/50 text-[#E9C349]',
-                glow: 'shadow-[0_0_20px_rgba(154,43,60,0.3)]'
+                color: 'from-[#C23E9E]/30 to-[#D9A9FF]/30 border-[#C23E9E]/50 text-[#D9A9FF]',
+                glow: 'shadow-[0_0_20px_rgba(194, 62, 158,0.3)]'
               },
               {
                 title: language === 'es' ? 'Rhythm Warrior' : 'Rhythm Warrior',
                 desc: language === 'es' ? 'Completa 100 Drills rítmicos' : 'Complete 100 Medal Drills',
                 requiredPoints: 100,
                 icon: Zap,
-                color: 'from-[#E9C349]/30 to-[#9A2B3C]/30 border-[#E9C349]/50 text-[#E9C349]',
-                glow: 'shadow-[0_0_20px_rgba(233,195,73,0.3)]'
+                color: 'from-[#D9A9FF]/30 to-[#C23E9E]/30 border-[#D9A9FF]/50 text-[#D9A9FF]',
+                glow: 'shadow-[0_0_20px_rgba(217, 169, 255,0.3)]'
               },
               {
                 title: language === 'es' ? 'Stage Breaker' : 'Stage Breaker',
                 desc: language === 'es' ? 'Consigue destacar en el reflector' : 'Stage Spotlight Medal',
                 requiredPoints: 200,
                 icon: Award,
-                color: 'from-[#8A2BE2]/30 to-[#E9C349]/30 border-[#8A2BE2]/50 text-[#C77DFF]',
+                color: 'from-[#8A2BE2]/30 to-[#D9A9FF]/30 border-[#8A2BE2]/50 text-[#C77DFF]',
                 glow: 'shadow-[0_0_20px_rgba(138,43,226,0.3)]'
               },
               {
@@ -293,15 +293,15 @@ export default function RankingView({
                 desc: language === 'es' ? 'Completa 900 Drills rítmicos' : 'Complete 900 Medal Drills',
                 requiredPoints: 400,
                 icon: Music,
-                color: 'from-[#E9C349]/30 to-[#9A2B3C]/30 border-[#E9C349]/50 text-[#E9C349]',
-                glow: 'shadow-[0_0_20px_rgba(233,195,73,0.3)]'
+                color: 'from-[#D9A9FF]/30 to-[#C23E9E]/30 border-[#D9A9FF]/50 text-[#D9A9FF]',
+                glow: 'shadow-[0_0_20px_rgba(217, 169, 255,0.3)]'
               },
               {
                 title: language === 'es' ? 'Stage Breaker II' : 'Stage Breaker II',
                 desc: language === 'es' ? 'Completa 300 Poses dinámicas' : 'Complete 300 Dynamic Poses',
                 requiredPoints: 500,
                 icon: Mic,
-                color: 'from-[#8A2BE2]/30 to-[#E9C349]/30 border-[#8A2BE2]/50 text-[#C77DFF]',
+                color: 'from-[#8A2BE2]/30 to-[#D9A9FF]/30 border-[#8A2BE2]/50 text-[#C77DFF]',
                 glow: 'shadow-[0_0_20px_rgba(138,43,226,0.3)]'
               },
               {
@@ -309,17 +309,17 @@ export default function RankingView({
                 desc: language === 'es' ? 'Llega al nivel más alto de competencia' : 'Reach Highest Academy Tier',
                 requiredPoints: 600,
                 icon: Trophy,
-                color: 'from-[#E9C349]/30 to-[#00F5D4]/30 border-[#E9C349]/50 text-[#E9C349]',
-                glow: 'shadow-[0_0_20px_rgba(233,195,73,0.3)]',
-                glowStyle: 'shadow-[0_0_20px_rgba(233,195,73,0.3)]'
+                color: 'from-[#D9A9FF]/30 to-[#00F5D4]/30 border-[#D9A9FF]/50 text-[#D9A9FF]',
+                glow: 'shadow-[0_0_20px_rgba(217, 169, 255,0.3)]',
+                glowStyle: 'shadow-[0_0_20px_rgba(217, 169, 255,0.3)]'
               },
               {
                 title: language === 'es' ? 'Corona Waack On' : 'Waack On Crown',
                 desc: language === 'es' ? 'Gana el trofeo supremo Waack On Waack' : 'Earn Supreme Waack On Waack Trophy',
                 requiredPoints: 700,
                 icon: Sparkles,
-                color: 'from-[#9A2B3C]/40 to-[#00F5D4]/40 border-[#9A2B3C]/80 text-[#EDEFF4]',
-                glow: 'shadow-[0_0_20px_rgba(154,43,60,0.4)]'
+                color: 'from-[#C23E9E]/40 to-[#00F5D4]/40 border-[#C23E9E]/80 text-[#EDEFF4]',
+                glow: 'shadow-[0_0_20px_rgba(194, 62, 158,0.4)]'
               }
             ].map((medal, idx) => {
               const isUnlocked = currentUser.points >= medal.requiredPoints;
@@ -332,8 +332,8 @@ export default function RankingView({
                 >
                   {/* Outer glowing ring or lock state */}
                   {isUnlocked ? (
-                    <div className={`w-20 h-20 rounded-full border-2 border-[#E9C349] bg-gradient-to-tr ${medal.color} flex items-center justify-center relative ${medal.glow} group-hover:scale-105 transition-transform duration-300`}>
-                      <IconComp className="w-10 h-10 text-[#E9C349]" />
+                    <div className={`w-20 h-20 rounded-full border-2 border-[#D9A9FF] bg-gradient-to-tr ${medal.color} flex items-center justify-center relative ${medal.glow} group-hover:scale-105 transition-transform duration-300`}>
+                      <IconComp className="w-10 h-10 text-[#D9A9FF]" />
                       <div className="absolute -top-1 -right-1 bg-[#10b981] p-1 rounded-full border border-black shadow">
                         <Unlock className="w-2.5 h-2.5 text-white" />
                       </div>
@@ -390,11 +390,11 @@ export default function RankingView({
                 type="number" 
                 value={simulationBonus}
                 onChange={(e) => setSimulationBonus(Math.max(1, parseInt(e.target.value) || 10))}
-                className="w-20 bg-[#0A0A0A] border border-[#262626] rounded-xl text-center text-xs font-bold font-mono text-[#EDEFF4] py-2 focus:outline-none focus:border-[#9A2B3C]"
+                className="w-20 bg-[#0A0A0A] border border-[#262626] rounded-xl text-center text-xs font-bold font-mono text-[#EDEFF4] py-2 focus:outline-none focus:border-[#C23E9E]"
               />
               <button
                 onClick={() => onAddBonusPoints(simulationBonus)}
-                className="px-4 py-2 bg-[#9A2B3C] text-white hover:bg-[#b53448] text-xs font-bold font-mono uppercase tracking-wider rounded-xl transition-all shadow-[0_2px_10px_rgba(154,43,60,0.4)] flex items-center gap-1.5"
+                className="px-4 py-2 bg-[#C23E9E] text-white hover:bg-[#C846A3] text-xs font-bold font-mono uppercase tracking-wider rounded-xl transition-all shadow-[0_2px_10px_rgba(194, 62, 158,0.4)] flex items-center gap-1.5"
               >
                 <Plus className="w-3.5 h-3.5" /> {language === 'es' ? 'Añadir Puntos' : 'Add Points'}
               </button>

@@ -260,7 +260,7 @@ export default function DashboardView({
   const prevL2PercentRef = useRef<number>(0);
 
   const triggerCelebration = (message: string) => {
-    const colors = ['#E9C349', '#9A2B3C', '#ffffff', '#38bdf8', '#a855f7', '#34d399', '#f43f5e', '#fbbf24'];
+    const colors = ['#D9A9FF', '#C23E9E', '#ffffff', '#38bdf8', '#a855f7', '#34d399', '#f43f5e', '#fbbf24'];
     const shapes = ['circle', 'square', 'star'];
     const newParticles = Array.from({ length: 48 }).map((_, i) => {
       const angle = (Math.PI * 2 * i) / 48 + (Math.random() * 0.4 - 0.2);
@@ -757,8 +757,8 @@ export default function DashboardView({
   const chartData = getChartData(chartTimeRange);
 
   const ACTIVITY_CONFIG: Record<PracticeLog['activityType'], { label: string; color: string; icon: string }> = {
-    drill: { label: 'Drills & Técnica', color: '#E9C349', icon: '⚡' },
-    battle: { label: 'Batallas & Freestyle', color: '#9A2B3C', icon: '⚔️' },
+    drill: { label: 'Drills & Técnica', color: '#D9A9FF', icon: '⚡' },
+    battle: { label: 'Batallas & Freestyle', color: '#C23E9E', icon: '⚔️' },
     combo: { label: 'Combos & Rutinas', color: '#3B82F6', icon: '💃' },
     playlist: { label: 'Música & Ritmo', color: '#10B981', icon: '🎵' },
     sensorial: { label: 'Somático & Postura', color: '#8B5CF6', icon: '🧘' },
@@ -969,8 +969,8 @@ export default function DashboardView({
       {/* CENTRO DE ANUNCIOS & LIVES DE INSTRUCTORES */}
       <div className="bg-[#121212] border border-[#262626] rounded-3xl p-4 sm:p-6 shadow-2xl relative overflow-hidden space-y-5">
         {/* Glow ambient background effect */}
-        <div className="absolute top-0 right-0 w-96 h-96 bg-[#E9C349]/5 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-[#9A2B3C]/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute top-0 right-0 w-96 h-96 bg-[#D9A9FF]/5 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-[#C23E9E]/10 rounded-full blur-3xl pointer-events-none" />
 
         {/* Live notification toast popup */}
         <AnimatePresence>
@@ -982,7 +982,7 @@ export default function DashboardView({
               className="p-3.5 bg-gradient-to-r from-amber-50 via-rose-50 to-rose-50 dark:from-[#1c1a12] dark:via-[#241a15] dark:to-[#1c1214] border border-[#E9C349]/60 text-slate-900 dark:text-white text-xs font-mono font-bold rounded-2xl flex items-center justify-between gap-3 shadow-2xl relative z-30"
             >
               <div className="flex items-center gap-2.5">
-                <span className="p-1.5 bg-[#E9C349] text-black rounded-lg">
+                <span className="p-1.5 bg-[#D9A9FF] text-black rounded-lg">
                   <Bell className="w-3.5 h-3.5 fill-black" />
                 </span>
                 <span className="text-[#EDEFF4]">{liveToastNotice}</span>
@@ -1002,7 +1002,7 @@ export default function DashboardView({
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-white/10 pb-4 relative z-10">
           <div className="space-y-1">
             <div className="flex flex-wrap items-center gap-2.5">
-              <span className="px-3 py-1 bg-[#9A2B3C]/25 text-[#E9C349] border border-[#9A2B3C]/60 rounded-full text-[10px] font-mono font-black uppercase tracking-wider flex items-center gap-1.5 shadow-sm">
+              <span className="px-3 py-1 bg-[#C23E9E]/25 text-[#D9A9FF] border border-[#C23E9E]/60 rounded-full text-[10px] font-mono font-black uppercase tracking-wider flex items-center gap-1.5 shadow-sm">
                 <span className="w-2 h-2 rounded-full bg-red-500 animate-ping" />
                 <span>CENTRO DE ANUNCIOS & LIVES</span>
               </span>
@@ -1013,7 +1013,7 @@ export default function DashboardView({
             </div>
             <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight uppercase font-sans flex items-center gap-2">
               <span>Transmisiones en Vivo de los Instructores</span>
-              <Sparkles className="w-5 h-5 text-[#E9C349]" />
+              <Sparkles className="w-5 h-5 text-[#D9A9FF]" />
             </h2>
             <p className="text-xs sm:text-sm text-slate-300 max-w-3xl leading-relaxed">
               Conéctate en tiempo real a las cátedras en directo, recibe correcciones técnicas de postura y rolls, y entrena con el staff docente internacional de Waack On.
@@ -1030,7 +1030,7 @@ export default function DashboardView({
                   onClick={() => setShowAnnModal(true)}
                   className="px-3.5 py-2 bg-[#1c1a12] hover:bg-amber-100 dark:hover:bg-[#282415] text-[#E9C349] border border-[#E9C349]/40 text-xs font-mono font-bold rounded-xl transition-all flex items-center gap-1.5 shadow cursor-pointer uppercase"
                 >
-                  <Megaphone className="w-3.5 h-3.5 text-[#E9C349]" />
+                  <Megaphone className="w-3.5 h-3.5 text-[#D9A9FF]" />
                   <span>Publicar Anuncio de Live</span>
                 </motion.button>
                 <motion.button
@@ -1038,7 +1038,7 @@ export default function DashboardView({
                   whileTap={{ scale: 0.97 }}
                   type="button"
                   onClick={() => setActiveTab('live')}
-                  className="px-4 py-2 bg-gradient-to-r from-[#9A2B3C] to-[#bd2c44] hover:from-[#b12b40] hover:to-[#d6324d] text-white text-xs font-mono font-black rounded-xl border border-white/20 transition-all flex items-center gap-2 shadow-lg cursor-pointer uppercase tracking-wider"
+                  className="px-4 py-2 bg-gradient-to-r from-[#C23E9E] to-[#bd2c44] hover:from-[#b12b40] hover:to-[#d6324d] text-white text-xs font-mono font-black rounded-xl border border-white/20 transition-all flex items-center gap-2 shadow-lg cursor-pointer uppercase tracking-wider"
                 >
                   <Radio className="w-4 h-4 text-white animate-pulse" />
                   <span>Iniciar Mi Transmisión</span>
@@ -1053,7 +1053,7 @@ export default function DashboardView({
                   onClick={() => setActiveTab('calendario')}
                   className="px-3.5 py-2 bg-[#181818] hover:bg-slate-200 dark:hover:bg-[#222222] text-slate-300 hover:text-slate-900 dark:hover:text-white border border-white/10 text-xs font-mono font-bold rounded-xl transition-all flex items-center gap-1.5 shadow cursor-pointer"
                 >
-                  <Calendar className="w-3.5 h-3.5 text-[#E9C349]" />
+                  <Calendar className="w-3.5 h-3.5 text-[#D9A9FF]" />
                   <span>Ver Calendario</span>
                 </motion.button>
                 <motion.button
@@ -1061,7 +1061,7 @@ export default function DashboardView({
                   whileTap={{ scale: 0.97 }}
                   type="button"
                   onClick={() => setActiveTab('live')}
-                  className="px-4 py-2 bg-gradient-to-r from-[#E9C349] to-[#dfb430] hover:from-[#f5cf53] hover:to-[#e8bd3a] text-black text-xs font-mono font-black rounded-xl border border-[#E9C349] transition-all flex items-center gap-2 shadow-lg cursor-pointer uppercase tracking-wider"
+                  className="px-4 py-2 bg-gradient-to-r from-[#D9A9FF] to-[#dfb430] hover:from-[#f5cf53] hover:to-[#e8bd3a] text-black text-xs font-mono font-black rounded-xl border border-[#D9A9FF] transition-all flex items-center gap-2 shadow-lg cursor-pointer uppercase tracking-wider"
                 >
                   <Radio className="w-4 h-4 text-black animate-pulse" />
                   <span>Entrar al Live Room</span>
@@ -1115,13 +1115,13 @@ export default function DashboardView({
                     </span>
                   )}
 
-                  <span className="px-2.5 py-1 bg-black/60 backdrop-blur-md text-[#E9C349] font-mono text-[10px] font-bold rounded-full border border-white/10 flex items-center gap-1">
-                    <Eye className="w-3 h-3 text-[#E9C349]" />
+                  <span className="px-2.5 py-1 bg-black/60 backdrop-blur-md text-[#D9A9FF] font-mono text-[10px] font-bold rounded-full border border-white/10 flex items-center gap-1">
+                    <Eye className="w-3 h-3 text-[#D9A9FF]" />
                     <span>{activeSelectedLive.viewers || 84} bailarines</span>
                   </span>
 
                   <span className="px-2.5 py-1 bg-black/60 backdrop-blur-md text-slate-300 font-mono text-[10px] rounded-full border border-white/10 hidden sm:flex items-center gap-1">
-                    <Radio className="w-3 h-3 text-[#9A2B3C]" />
+                    <Radio className="w-3 h-3 text-[#C23E9E]" />
                     <span>{activeSelectedLive.roomName}</span>
                   </span>
                 </div>
@@ -1134,7 +1134,7 @@ export default function DashboardView({
                     title={heroVideoPlaying ? "Pausar stream preview" : "Reproducir stream"}
                     className="p-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white transition-all cursor-pointer"
                   >
-                    {heroVideoPlaying ? <Pause className="w-3.5 h-3.5 text-[#E9C349]" /> : <Play className="w-3.5 h-3.5 text-white fill-white" />}
+                    {heroVideoPlaying ? <Pause className="w-3.5 h-3.5 text-[#D9A9FF]" /> : <Play className="w-3.5 h-3.5 text-white fill-white" />}
                   </button>
 
                   <button
@@ -1143,7 +1143,7 @@ export default function DashboardView({
                     title={heroVideoMuted ? "Activar audio" : "Silenciar audio"}
                     className="p-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white transition-all cursor-pointer"
                   >
-                    {heroVideoMuted ? <VolumeX className="w-3.5 h-3.5 text-slate-400" /> : <Volume2 className="w-3.5 h-3.5 text-[#E9C349]" />}
+                    {heroVideoMuted ? <VolumeX className="w-3.5 h-3.5 text-slate-400" /> : <Volume2 className="w-3.5 h-3.5 text-[#D9A9FF]" />}
                   </button>
                 </div>
               </div>
@@ -1151,13 +1151,13 @@ export default function DashboardView({
               {/* Bottom Stream Badges */}
               <div className="absolute bottom-3 left-3.5 right-3.5 flex flex-wrap items-center justify-between gap-2 z-20">
                 <div className="flex items-center gap-2">
-                  <span className="px-2 py-0.5 bg-[#E9C349]/20 text-[#E9C349] border border-[#E9C349]/40 rounded-lg text-[10px] font-mono font-bold">
+                  <span className="px-2 py-0.5 bg-[#D9A9FF]/20 text-[#D9A9FF] border border-[#D9A9FF]/40 rounded-lg text-[10px] font-mono font-bold">
                     🎵 {activeSelectedLive.bpm} BPM
                   </span>
                   <span className="px-2 py-0.5 bg-white/10 text-white border border-white/15 rounded-lg text-[10px] font-mono font-bold">
                     🎯 {activeSelectedLive.level}
                   </span>
-                  <span className="px-2 py-0.5 bg-[#9A2B3C]/30 text-[#EDEFF4] border border-[#9A2B3C]/50 rounded-lg text-[10px] font-mono font-bold hidden sm:inline-block">
+                  <span className="px-2 py-0.5 bg-[#C23E9E]/30 text-[#EDEFF4] border border-[#C23E9E]/50 rounded-lg text-[10px] font-mono font-bold hidden sm:inline-block">
                     💎 {activeSelectedLive.category}
                   </span>
                 </div>
@@ -1176,7 +1176,7 @@ export default function DashboardView({
                       <img
                         src={activeSelectedLive.avatar}
                         alt={activeSelectedLive.instructor}
-                        className="w-11 h-11 rounded-2xl object-cover border-2 border-[#E9C349] shadow-md"
+                        className="w-11 h-11 rounded-2xl object-cover border-2 border-[#D9A9FF] shadow-md"
                         referrerPolicy="no-referrer"
                       />
                       <span className="absolute -bottom-1 -right-1 text-xs">
@@ -1188,7 +1188,7 @@ export default function DashboardView({
                         <h4 className="text-sm font-bold text-slate-900 dark:text-white truncate leading-tight">
                           {activeSelectedLive.instructor}
                         </h4>
-                        <span className="text-[9px] font-mono text-[#E9C349] bg-[#E9C349]/10 border border-[#E9C349]/30 px-1.5 py-0.2 rounded font-bold uppercase shrink-0">
+                        <span className="text-[9px] font-mono text-[#D9A9FF] bg-[#D9A9FF]/10 border border-[#D9A9FF]/30 px-1.5 py-0.2 rounded font-bold uppercase shrink-0">
                           DOCENTE OFICIAL
                         </span>
                       </div>
@@ -1238,7 +1238,7 @@ export default function DashboardView({
               {/* Main Action Bar for Selected Live */}
               <div className="pt-3 border-t border-slate-200 dark:border-white/5 flex flex-col sm:flex-row items-center justify-between gap-3">
                 <div className="text-[11px] font-mono text-slate-400 flex items-center gap-1.5 w-full sm:w-auto">
-                  <ShieldCheck className="w-4 h-4 text-[#E9C349] shrink-0" />
+                  <ShieldCheck className="w-4 h-4 text-[#D9A9FF] shrink-0" />
                   <span>Acceso incluido en tu plan o membresía de cátedra</span>
                 </div>
 
@@ -1246,7 +1246,7 @@ export default function DashboardView({
                   <button
                     type="button"
                     onClick={() => setActiveTab('live')}
-                    className="flex-1 sm:flex-initial px-5 py-2.5 bg-gradient-to-r from-[#E9C349] to-[#dfb430] hover:from-[#f5cf53] hover:to-[#e8bd3a] text-black font-mono text-xs font-black rounded-xl shadow-lg transition-all flex items-center justify-center gap-2 uppercase tracking-wider cursor-pointer hover:scale-105"
+                    className="flex-1 sm:flex-initial px-5 py-2.5 bg-gradient-to-r from-[#D9A9FF] to-[#dfb430] hover:from-[#f5cf53] hover:to-[#e8bd3a] text-black font-mono text-xs font-black rounded-xl shadow-lg transition-all flex items-center justify-center gap-2 uppercase tracking-wider cursor-pointer hover:scale-105"
                   >
                     <Radio className="w-4 h-4 text-black animate-pulse" />
                     <span>
@@ -1272,7 +1272,7 @@ export default function DashboardView({
                     Cartelera de Lives ({INSTRUCTOR_LIVES.length})
                   </h3>
                 </div>
-                <span className="text-[9px] font-mono font-bold text-[#E9C349] bg-[#E9C349]/10 px-2 py-0.5 rounded-full border border-[#E9C349]/20">
+                <span className="text-[9px] font-mono font-bold text-[#D9A9FF] bg-[#D9A9FF]/10 px-2 py-0.5 rounded-full border border-[#D9A9FF]/20">
                   Esta Semana
                 </span>
               </div>
@@ -1326,7 +1326,7 @@ export default function DashboardView({
                               src={item.avatar}
                               alt={item.instructor}
                               className={`w-9 h-9 rounded-xl object-cover border ${
-                                isSelected ? 'border-[#E9C349]' : 'border-white/20'
+                                isSelected ? 'border-[#D9A9FF]' : 'border-white/20'
                               }`}
                               referrerPolicy="no-referrer"
                             />
@@ -1365,7 +1365,7 @@ export default function DashboardView({
                           <span>{item.scheduledTime}</span>
                         </span>
 
-                        <span className={`font-bold ${isSelected ? 'text-[#E9C349]' : 'text-slate-500'}`}>
+                        <span className={`font-bold ${isSelected ? 'text-[#D9A9FF]' : 'text-slate-500'}`}>
                           {isSelected ? '▶ En Pantalla' : 'Ver Detalle'}
                         </span>
                       </div>
@@ -1377,8 +1377,8 @@ export default function DashboardView({
 
             {/* Quick Live Anuncio Ticker Banner */}
             <div className="p-2.5 bg-[#141414] border border-white/10 rounded-xl space-y-1">
-              <div className="flex items-center gap-1.5 text-[9px] font-mono font-bold text-[#E9C349] uppercase">
-                <Megaphone className="w-3 h-3 text-[#E9C349]" />
+              <div className="flex items-center gap-1.5 text-[9px] font-mono font-bold text-[#D9A9FF] uppercase">
+                <Megaphone className="w-3 h-3 text-[#D9A9FF]" />
                 <span>Aviso de Transmisión Oficial</span>
               </div>
               <p className="text-[10px] text-slate-300 leading-tight">
@@ -1393,7 +1393,7 @@ export default function DashboardView({
         {/* Ticker Bottom Strip de Anuncios de Instructores */}
         <div className="p-2.5 bg-[#0A0A0A] border border-slate-200 dark:border-white/5 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-3 text-xs font-mono text-slate-300">
           <div className="flex items-center gap-2 overflow-hidden text-ellipsis whitespace-nowrap">
-            <span className="px-2 py-0.5 bg-[#E9C349] text-black font-bold text-[9px] rounded uppercase shrink-0">
+            <span className="px-2 py-0.5 bg-[#D9A9FF] text-black font-bold text-[9px] rounded uppercase shrink-0">
               NOVEDADES
             </span>
             <span className="truncate text-slate-300 text-[11px]">
@@ -1405,7 +1405,7 @@ export default function DashboardView({
             <button
               type="button"
               onClick={() => setActiveTab('comunidad')}
-              className="text-[#E9C349] hover:underline font-bold text-[10px] flex items-center gap-1"
+              className="text-[#D9A9FF] hover:underline font-bold text-[10px] flex items-center gap-1"
             >
               <span>Ver Foro & Comunidad</span>
               <ArrowRight className="w-3 h-3" />
@@ -1421,7 +1421,7 @@ export default function DashboardView({
           <span className="w-2 h-2 rounded-full bg-[#E9C349] animate-pulse" />
           <span className="text-xs font-mono font-bold text-slate-900 dark:text-white uppercase tracking-wider">VISTA PRINCIPAL:</span>
           {showWelcomeDashboard && (
-            <span className="text-[10px] font-mono bg-[#E9C349]/10 text-[#E9C349] border border-[#E9C349]/30 px-2 py-0.5 rounded font-bold">
+            <span className="text-[10px] font-mono bg-[#D9A9FF]/10 text-[#D9A9FF] border border-[#D9A9FF]/30 px-2 py-0.5 rounded font-bold">
               ✨ Modo Exploración
             </span>
           )}
@@ -1480,12 +1480,12 @@ export default function DashboardView({
       <motion.div
         animate={isPointsGlowing ? {
           scale: [1, 1.025, 1.01, 1],
-          borderColor: ['#262626', '#E9C349', '#9A2B3C', '#262626'],
+          borderColor: ['#262626', '#D9A9FF', '#C23E9E', '#262626'],
           boxShadow: [
-            '0 0 0px rgba(233, 195, 73, 0)',
-            '0 0 30px rgba(233, 195, 73, 0.65)',
-            '0 0 45px rgba(154, 43, 60, 0.75)',
-            '0 0 0px rgba(233, 195, 73, 0)'
+            '0 0 0px rgba(217, 169, 255, 0)',
+            '0 0 30px rgba(217, 169, 255, 0.65)',
+            '0 0 45px rgba(194, 62, 158, 0.75)',
+            '0 0 0px rgba(217, 169, 255, 0)'
           ]
         } : {}}
         transition={{ duration: 1.5, ease: "easeOut" }}
@@ -1533,7 +1533,7 @@ export default function DashboardView({
               animate={{ opacity: 1, y: -45, scale: 1.15 }}
               exit={{ opacity: 0, y: -70, scale: 0.9 }}
               transition={{ duration: 1.6, ease: "easeOut" }}
-              className="absolute -top-6 left-1/2 -translate-x-1/2 px-5 py-2 bg-gradient-to-r from-[#E9C349] via-[#f59e0b] to-[#9A2B3C] text-black font-mono font-black text-xs md:text-sm rounded-full shadow-[0_0_35px_rgba(233,195,73,0.85)] border-2 border-white flex items-center gap-2 z-50 uppercase tracking-wider whitespace-nowrap"
+              className="absolute -top-6 left-1/2 -translate-x-1/2 px-5 py-2 bg-gradient-to-r from-[#D9A9FF] via-[#f59e0b] to-[#C23E9E] text-black font-mono font-black text-xs md:text-sm rounded-full shadow-[0_0_35px_rgba(217, 169, 255,0.85)] border-2 border-white flex items-center gap-2 z-50 uppercase tracking-wider whitespace-nowrap"
             >
               <Sparkles className="w-4 h-4 text-black animate-spin" />
               <span>{floatingBonusText}</span>
@@ -1552,23 +1552,23 @@ export default function DashboardView({
               <img 
                 src={currentUser.avatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=120'} 
                 alt={currentUser.name} 
-                className="w-14 h-14 rounded-2xl object-cover border-2 border-[#E9C349] shadow-lg"
+                className="w-14 h-14 rounded-2xl object-cover border-2 border-[#D9A9FF] shadow-lg"
               />
-              <span className="absolute -bottom-1 -right-1 w-6 h-6 bg-[#9A2B3C] text-[#E9C349] rounded-full border border-[#E9C349] flex items-center justify-center text-[10px] font-black shadow">
+              <span className="absolute -bottom-1 -right-1 w-6 h-6 bg-[#C23E9E] text-[#D9A9FF] rounded-full border border-[#D9A9FF] flex items-center justify-center text-[10px] font-black shadow">
                 ⚡
               </span>
             </motion.div>
 
             <div className="space-y-1">
               <div className="flex items-center gap-2">
-                <span className="text-xs font-mono font-bold text-[#E9C349] bg-[#E9C349]/10 border border-[#E9C349]/30 px-2.5 py-0.5 rounded-full uppercase tracking-wider flex items-center gap-1">
-                  <Trophy className="w-3 h-3 text-[#E9C349]" /> MI ESTADO ACADÉMICO
+                <span className="text-xs font-mono font-bold text-[#D9A9FF] bg-[#D9A9FF]/10 border border-[#D9A9FF]/30 px-2.5 py-0.5 rounded-full uppercase tracking-wider flex items-center gap-1">
+                  <Trophy className="w-3 h-3 text-[#D9A9FF]" /> MI ESTADO ACADÉMICO
                 </span>
                 {isPointsGlowing && (
                   <motion.span 
                     initial={{ opacity: 0, scale: 0.5 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    className="text-[10px] font-mono font-black text-white bg-[#9A2B3C] px-2 py-0.5 rounded-full animate-bounce"
+                    className="text-[10px] font-mono font-black text-white bg-[#C23E9E] px-2 py-0.5 rounded-full animate-bounce"
                   >
                     ¡PUNTOS ACTUALIZADOS!
                   </motion.span>
@@ -1588,8 +1588,8 @@ export default function DashboardView({
             {currentUser.role === 'instructor' ? (
               <>
                 {/* Instructor Stats 1: Total Students */}
-                <div className="px-4 py-3 bg-[#1c1a12] border border-[#E9C349]/50 rounded-2xl min-w-[140px] shadow-lg">
-                  <span className="text-[10px] font-mono font-bold text-[#E9C349] uppercase block tracking-wider">
+                <div className="px-4 py-3 bg-[#1c1a12] border border-[#D9A9FF]/50 rounded-2xl min-w-[140px] shadow-lg">
+                  <span className="text-[10px] font-mono font-bold text-[#D9A9FF] uppercase block tracking-wider">
                     Alumnos Cátedra
                   </span>
                   <span className="text-xl font-black font-mono text-slate-900 dark:text-white">
@@ -1612,7 +1612,7 @@ export default function DashboardView({
                   <span className="text-[10px] font-mono font-bold text-[#8A8A8A] uppercase block tracking-wider">
                     Tarifa Cátedra
                   </span>
-                  <span className="text-xl font-bold font-mono text-[#E9C349]">
+                  <span className="text-xl font-bold font-mono text-[#D9A9FF]">
                     {currentUser.monthlyPrice || '$35 USD/mes'}
                   </span>
                 </div>
@@ -1623,7 +1623,7 @@ export default function DashboardView({
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={() => setShowAnnModal(true)}
-                    className="px-3.5 py-2.5 bg-[#E9C349] hover:bg-[#d8b33c] text-black font-mono text-[11px] font-black rounded-xl border border-[#E9C349] transition-all flex items-center justify-center gap-1.5 shadow cursor-pointer uppercase"
+                    className="px-3.5 py-2.5 bg-[#D9A9FF] hover:bg-[#B87CFF] text-black font-mono text-[11px] font-black rounded-xl border border-[#D9A9FF] transition-all flex items-center justify-center gap-1.5 shadow cursor-pointer uppercase"
                   >
                     <Megaphone className="w-3.5 h-3.5 fill-black" />
                     <span>Publicar Anuncio</span>
@@ -1633,9 +1633,9 @@ export default function DashboardView({
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={() => setActiveTab('instructor')}
-                    className="px-3.5 py-2.5 bg-[#9A2B3C] hover:bg-[#81262c] text-white font-mono text-[11px] font-bold rounded-xl border border-[#9A2B3C] transition-all flex items-center justify-center gap-1.5 shadow cursor-pointer uppercase"
+                    className="px-3.5 py-2.5 bg-[#C23E9E] hover:bg-[#8F2C7A] text-white font-mono text-[11px] font-bold rounded-xl border border-[#C23E9E] transition-all flex items-center justify-center gap-1.5 shadow cursor-pointer uppercase"
                   >
-                    <Sparkles className="w-3.5 h-3.5 text-[#E9C349]" />
+                    <Sparkles className="w-3.5 h-3.5 text-[#D9A9FF]" />
                     <span>Panel Instructor</span>
                   </motion.button>
                 </div>
@@ -1643,8 +1643,8 @@ export default function DashboardView({
             ) : (currentUser.role === 'studio' || currentUser.role === 'academy') ? (
               <>
                 {/* Studio Stats 1: Instructors in Staff */}
-                <div className="px-4 py-3 bg-[#1c1a12] border border-[#E9C349]/50 rounded-2xl min-w-[140px] shadow-lg">
-                  <span className="text-[10px] font-mono font-bold text-[#E9C349] uppercase block tracking-wider">
+                <div className="px-4 py-3 bg-[#1c1a12] border border-[#D9A9FF]/50 rounded-2xl min-w-[140px] shadow-lg">
+                  <span className="text-[10px] font-mono font-bold text-[#D9A9FF] uppercase block tracking-wider">
                     Staff Instructores
                   </span>
                   <span className="text-xl font-black font-mono text-slate-900 dark:text-white">
@@ -1667,7 +1667,7 @@ export default function DashboardView({
                   <span className="text-[10px] font-mono font-bold text-[#8A8A8A] uppercase block tracking-wider">
                     Ingresos Mensuales
                   </span>
-                  <span className="text-xl font-bold font-mono text-[#E9C349]">
+                  <span className="text-xl font-bold font-mono text-[#D9A9FF]">
                     $4,250 USD
                   </span>
                 </div>
@@ -1678,7 +1678,7 @@ export default function DashboardView({
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={() => setActiveTab('studio')}
-                    className="px-3.5 py-2.5 bg-[#E9C349] hover:bg-[#d8b33c] text-black font-mono text-[11px] font-black rounded-xl border border-[#E9C349] transition-all flex items-center justify-center gap-1.5 shadow cursor-pointer uppercase"
+                    className="px-3.5 py-2.5 bg-[#D9A9FF] hover:bg-[#B87CFF] text-black font-mono text-[11px] font-black rounded-xl border border-[#D9A9FF] transition-all flex items-center justify-center gap-1.5 shadow cursor-pointer uppercase"
                   >
                     <Sliders className="w-3.5 h-3.5 text-black" />
                     <span>Gestión Studio</span>
@@ -1692,16 +1692,16 @@ export default function DashboardView({
                   animate={isPointsGlowing ? {
                     scale: [1, 1.15, 1],
                     backgroundColor: ['#1c1a12', '#3d2e08', '#1c1a12'],
-                    borderColor: ['#E9C349', '#ffffff', '#E9C349']
+                    borderColor: ['#D9A9FF', '#ffffff', '#D9A9FF']
                   } : {}}
                   transition={{ duration: 0.6 }}
-                  className="px-5 py-3 bg-[#1c1a12] border-2 border-[#E9C349] rounded-2xl flex items-center gap-3 relative overflow-hidden shadow-xl"
+                  className="px-5 py-3 bg-[#1c1a12] border-2 border-[#D9A9FF] rounded-2xl flex items-center gap-3 relative overflow-hidden shadow-xl"
                 >
-                  <div className="p-2 bg-[#E9C349] text-black rounded-xl font-bold">
+                  <div className="p-2 bg-[#D9A9FF] text-black rounded-xl font-bold">
                     <Trophy className="w-5 h-5" />
                   </div>
                   <div>
-                    <span className="text-[10px] font-mono font-bold text-[#E9C349] uppercase block tracking-wider">
+                    <span className="text-[10px] font-mono font-bold text-[#D9A9FF] uppercase block tracking-wider">
                       Puntos Totales
                     </span>
                     <span className="text-2xl font-black font-mono text-[#E9C349]">
@@ -1714,10 +1714,10 @@ export default function DashboardView({
                 <div className="px-4 py-3 bg-[#0A0A0A] border border-[#262626] rounded-2xl min-w-[140px]">
                   <div className="flex justify-between items-center text-[10px] font-mono text-[#8A8A8A] mb-1">
                     <span>NIVEL 1</span>
-                    <span className="text-[#E9C349] font-bold">{l1Percent}%</span>
+                    <span className="text-[#D9A9FF] font-bold">{l1Percent}%</span>
                   </div>
                   <div className="w-full bg-[#1c1b1b] h-2 rounded-full overflow-hidden">
-                    <div className="bg-[#E9C349] h-full transition-all duration-500" style={{ width: `${l1Percent}%` }} />
+                    <div className="bg-[#D9A9FF] h-full transition-all duration-500" style={{ width: `${l1Percent}%` }} />
                   </div>
                   <span className="text-[9px] font-mono text-[#8A8A8A] mt-1 block">
                     {l1CompletedCount}/{level1Lessons.length} Clases
@@ -1728,10 +1728,10 @@ export default function DashboardView({
                 <div className="px-4 py-3 bg-[#0A0A0A] border border-[#262626] rounded-2xl min-w-[140px]">
                   <div className="flex justify-between items-center text-[10px] font-mono text-[#8A8A8A] mb-1">
                     <span>NIVEL 2</span>
-                    <span className="text-[#9A2B3C] font-bold">{l2Percent}%</span>
+                    <span className="text-[#C23E9E] font-bold">{l2Percent}%</span>
                   </div>
                   <div className="w-full bg-[#1c1b1b] h-2 rounded-full overflow-hidden">
-                    <div className="bg-[#9A2B3C] h-full transition-all duration-500" style={{ width: `${l2Percent}%` }} />
+                    <div className="bg-[#C23E9E] h-full transition-all duration-500" style={{ width: `${l2Percent}%` }} />
                   </div>
                   <span className="text-[9px] font-mono text-[#8A8A8A] mt-1 block">
                     {l2CompletedCount}/{level2Lessons.length} Clases
@@ -1744,7 +1744,7 @@ export default function DashboardView({
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={() => handleSimulatePointsGain(50)}
-                    className="px-3 py-2 bg-[#E9C349] hover:bg-[#d8b33c] text-black font-mono text-[11px] font-black rounded-xl border border-[#E9C349] transition-all flex items-center justify-center gap-1.5 shadow cursor-pointer"
+                    className="px-3 py-2 bg-[#D9A9FF] hover:bg-[#B87CFF] text-black font-mono text-[11px] font-black rounded-xl border border-[#D9A9FF] transition-all flex items-center justify-center gap-1.5 shadow cursor-pointer"
                     title="Gana +50 Puntos y dispara la animación de confeti"
                   >
                     <Zap className="w-3.5 h-3.5 fill-black" />
@@ -1755,10 +1755,10 @@ export default function DashboardView({
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={handleSimulateLevelCompletion}
-                    className="px-3 py-2 bg-[#9A2B3C] hover:bg-[#81262c] text-white font-mono text-[11px] font-bold rounded-xl border border-[#9A2B3C] transition-all flex items-center justify-center gap-1.5 shadow cursor-pointer"
+                    className="px-3 py-2 bg-[#C23E9E] hover:bg-[#8F2C7A] text-white font-mono text-[11px] font-bold rounded-xl border border-[#C23E9E] transition-all flex items-center justify-center gap-1.5 shadow cursor-pointer"
                     title="Simula completar un nivel con confeti"
                   >
-                    <Sparkles className="w-3.5 h-3.5 text-[#E9C349]" />
+                    <Sparkles className="w-3.5 h-3.5 text-[#D9A9FF]" />
                     <span>Completar Nivel</span>
                   </motion.button>
                 </div>
@@ -1781,7 +1781,7 @@ export default function DashboardView({
           <div className="absolute right-0 top-0 w-64 h-64 bg-[#E9C349]/10 rounded-full blur-3xl pointer-events-none" />
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 relative z-10">
             <div className="space-y-2">
-              <span className="text-[10px] font-mono font-black text-black bg-[#E9C349] px-3 py-1 rounded-full uppercase tracking-wider">
+              <span className="text-[10px] font-mono font-black text-black bg-[#D9A9FF] px-3 py-1 rounded-full uppercase tracking-wider">
                 🎯 Tarea Asignada por el Instructor
               </span>
               <h3 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
@@ -1795,7 +1795,7 @@ export default function DashboardView({
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
               onClick={() => setActiveTab('tasks')}
-              className="px-6 py-3 bg-[#E9C349] hover:bg-[#d8b33c] text-black text-xs font-black rounded-xl shadow-lg transition-all flex items-center gap-2 uppercase tracking-wider shrink-0 hover:scale-105 cursor-pointer"
+              className="px-6 py-3 bg-[#D9A9FF] hover:bg-[#B87CFF] text-black text-xs font-black rounded-xl shadow-lg transition-all flex items-center gap-2 uppercase tracking-wider shrink-0 hover:scale-105 cursor-pointer"
             >
               <span>Ver Tareas y Completar</span>
               <span className="material-symbols-outlined text-sm">arrow_forward</span>
@@ -1813,7 +1813,7 @@ export default function DashboardView({
               </h3>
               <p className="text-xs text-[#8A8A8A]">Sugerencias basadas en tu historial real de práctica, gaps de categoría y progresión de BPM.</p>
             </div>
-            <span className="text-xs font-mono text-[#E9C349] bg-[#E9C349]/10 px-3 py-1 rounded-full border border-[#E9C349]/30">
+            <span className="text-xs font-mono text-[#D9A9FF] bg-[#D9A9FF]/10 px-3 py-1 rounded-full border border-[#D9A9FF]/30">
               {recommendations.length} Activas
             </span>
           </div>
@@ -1842,7 +1842,7 @@ export default function DashboardView({
                       : 'border border-[#262626] hover:border-[#E9C349]/50'
                   }`}
                 >
-                  <div className="absolute right-0 top-0 w-32 h-32 bg-[#E9C349]/5 rounded-full blur-2xl pointer-events-none" />
+                  <div className="absolute right-0 top-0 w-32 h-32 bg-[#D9A9FF]/5 rounded-full blur-2xl pointer-events-none" />
                   <div className="space-y-3 relative z-10">
                     <div className="flex items-center justify-between gap-2">
                       <span className={`text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full border uppercase flex items-center gap-1 ${badgeInfo.color}`}>
@@ -1850,7 +1850,7 @@ export default function DashboardView({
                         {badgeInfo.label}
                       </span>
                       {item.suggestedBpm && (
-                        <span className="text-[10px] font-mono text-[#E9C349] font-bold">
+                        <span className="text-[10px] font-mono text-[#D9A9FF] font-bold">
                           🎵 {item.suggestedBpm} BPM
                         </span>
                       )}
@@ -1882,16 +1882,16 @@ export default function DashboardView({
           {/* Section A: ZONA INTERACTIVA */}
           <div className="space-y-3">
             <div className="flex items-center gap-2 pl-1">
-              <span className="text-[#E9C349] text-lg">⚡</span>
-              <h3 className="text-xs font-mono font-bold tracking-widest text-[#E9C349] uppercase">ZONA INTERACTIVA</h3>
+              <span className="text-[#D9A9FF] text-lg">⚡</span>
+              <h3 className="text-xs font-mono font-bold tracking-widest text-[#D9A9FF] uppercase">ZONA INTERACTIVA</h3>
             </div>
             
             {/* 3-Column Bento Grid matching layout */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               
               {/* Card 1: LABORATORIO DE FREESTYLE */}
-              <div className="bg-[#121212] border border-[#262626] rounded-2xl p-5 flex flex-col justify-between h-auto md:h-[310px] min-h-[310px] relative overflow-hidden shadow-lg group hover:border-[#E9C349]/30 transition-all">
-                <div className="absolute right-[-10px] top-[-10px] w-20 h-20 bg-[#E9C349]/5 rounded-full blur-xl pointer-events-none" />
+              <div className="bg-[#121212] border border-[#262626] rounded-2xl p-5 flex flex-col justify-between h-auto md:h-[310px] min-h-[310px] relative overflow-hidden shadow-lg group hover:border-[#D9A9FF]/30 transition-all">
+                <div className="absolute right-[-10px] top-[-10px] w-20 h-20 bg-[#D9A9FF]/5 rounded-full blur-xl pointer-events-none" />
                 
                 <div>
                   <div className="flex items-center gap-2 mb-2">
@@ -1903,8 +1903,8 @@ export default function DashboardView({
                   </p>
                   
                   {/* Generated box with gold glow */}
-                  <div className="mt-3 p-3 bg-[#0A0A0A] rounded-xl border border-[#E9C349]/10 text-center flex items-center justify-center min-h-[110px]">
-                    <p className="text-[11px] text-[#E9C349] font-bold font-mono whitespace-pre-line leading-relaxed uppercase">
+                  <div className="mt-3 p-3 bg-[#0A0A0A] rounded-xl border border-[#D9A9FF]/10 text-center flex items-center justify-center min-h-[110px]">
+                    <p className="text-[11px] text-[#D9A9FF] font-bold font-mono whitespace-pre-line leading-relaxed uppercase">
                       {randomPrompt}
                     </p>
                   </div>
@@ -1915,21 +1915,21 @@ export default function DashboardView({
                   whileTap={{ scale: 0.98 }}
                   onClick={handleGeneratePrompt}
                   disabled={isGenerating}
-                  className="w-full mt-3 py-2 bg-[#9A2B3C] hover:bg-[#81262c] text-white text-xs font-bold rounded-xl border border-transparent transition-all uppercase tracking-wider"
+                  className="w-full mt-3 py-2 bg-[#C23E9E] hover:bg-[#8F2C7A] text-white text-xs font-bold rounded-xl border border-transparent transition-all uppercase tracking-wider"
                 >
                   {isGenerating ? 'Generando...' : 'GENERAR RETO'}
                 </motion.button>
               </div>
 
               {/* Card 2: HERRAMIENTAS DE PRÁCTICA (Includes Virtual Mirror) */}
-              <div className="bg-[#121212] border border-[#262626] rounded-2xl p-4 flex flex-col justify-between h-auto md:h-[310px] min-h-[310px] shadow-lg relative overflow-hidden hover:border-[#9A2B3C]/20 transition-all">
+              <div className="bg-[#121212] border border-[#262626] rounded-2xl p-4 flex flex-col justify-between h-auto md:h-[310px] min-h-[310px] shadow-lg relative overflow-hidden hover:border-[#C23E9E]/20 transition-all">
                 <div>
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-2">
                       <span className="text-base">🛠️</span>
                       <h4 className="text-xs font-mono font-bold tracking-tight text-[#EDEFF4] uppercase">HERRAMIENTAS</h4>
                     </div>
-                    <span className="text-[9px] font-mono text-[#E9C349] bg-[#E9C349]/10 px-2 py-0.5 rounded-lg border border-[#E9C349]/20 font-bold">
+                    <span className="text-[9px] font-mono text-[#D9A9FF] bg-[#D9A9FF]/10 px-2 py-0.5 rounded-lg border border-[#D9A9FF]/20 font-bold">
                       {activeTrack.bpm} BPM
                     </span>
                   </div>
@@ -1949,7 +1949,7 @@ export default function DashboardView({
                           muted 
                           className="w-full h-full object-cover scale-x-[-1]" 
                         />
-                        <div className="absolute top-1.5 left-1.5 text-[8px] bg-[#9A2B3C] text-white font-mono font-bold px-1.5 py-0.5 rounded uppercase flex items-center gap-1">
+                        <div className="absolute top-1.5 left-1.5 text-[8px] bg-[#C23E9E] text-white font-mono font-bold px-1.5 py-0.5 rounded uppercase flex items-center gap-1">
                           <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
                           Espejo ON
                         </div>
@@ -1958,19 +1958,19 @@ export default function DashboardView({
                       <div className="p-2 bg-[#0A0A0A] border border-[#262626] rounded-xl text-center space-y-1.5">
                         <div className="flex items-center justify-between gap-1">
                           <div className="min-w-0 text-left">
-                            <p className="text-[10px] font-bold text-[#E9C349] truncate uppercase">{activeTrack.title}</p>
+                            <p className="text-[10px] font-bold text-[#D9A9FF] truncate uppercase">{activeTrack.title}</p>
                             <p className="text-[9px] text-[#8A8A8A] font-bold truncate">{activeTrack.artist}</p>
                           </div>
                           <button
                             onClick={() => setIsPlaying(!isPlaying)}
-                            className="w-7 h-7 rounded-full bg-[#E9C349] text-black flex items-center justify-center hover:scale-105 transition-transform"
+                            className="w-7 h-7 rounded-full bg-[#D9A9FF] text-black flex items-center justify-center hover:scale-105 transition-transform"
                           >
                             {isPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5 fill-black ml-0.5" />}
                           </button>
                         </div>
                         {/* Progress */}
                         <div className="w-full bg-[#1c1b1b] h-1.5 rounded-full overflow-hidden">
-                          <div className="bg-[#E9C349] h-full" style={{ width: `${audioProgress}%` }} />
+                          <div className="bg-[#D9A9FF] h-full" style={{ width: `${audioProgress}%` }} />
                         </div>
                       </div>
                     )}
@@ -1998,7 +1998,7 @@ export default function DashboardView({
               </div>
 
               {/* Card 3: FEEDBACK Y RETOS */}
-              <div className="bg-[#121212] border border-[#262626] rounded-2xl p-4 flex flex-col justify-between h-auto md:h-[310px] min-h-[310px] shadow-lg hover:border-[#E9C349]/15 transition-all">
+              <div className="bg-[#121212] border border-[#262626] rounded-2xl p-4 flex flex-col justify-between h-auto md:h-[310px] min-h-[310px] shadow-lg hover:border-[#D9A9FF]/15 transition-all">
                 <div>
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-2">
@@ -2042,16 +2042,16 @@ export default function DashboardView({
                 <div className="grid grid-cols-1 gap-2 pt-2">
                   <button
                     onClick={() => setActiveTab('entrenamiento')}
-                    className="w-full py-1.5 bg-[#9A2B3C] hover:bg-[#81262c] text-white text-[10px] font-bold rounded-xl transition-all uppercase flex items-center justify-center gap-1.5 border border-[#E9C349]/30 shadow"
+                    className="w-full py-1.5 bg-[#C23E9E] hover:bg-[#8F2C7A] text-white text-[10px] font-bold rounded-xl transition-all uppercase flex items-center justify-center gap-1.5 border border-[#D9A9FF]/30 shadow"
                   >
-                    <Plus className="w-3 h-3 text-[#E9C349]" />
+                    <Plus className="w-3 h-3 text-[#D9A9FF]" />
                     <span>SUBIR FEEDBACK PARA ALUMNOS</span>
                   </button>
                   <button
                     onClick={() => setActiveTab('entrenamiento')}
                     className="w-full py-1.5 bg-[#1c1b1b] hover:bg-slate-100 dark:hover:bg-[#262626] text-[#E9C349] text-[10px] font-bold font-mono rounded-xl transition-all uppercase flex items-center justify-center gap-1.5 border border-[#E9C349]/20"
                   >
-                    <Sparkles className="w-3 h-3 text-[#E9C349]" />
+                    <Sparkles className="w-3 h-3 text-[#D9A9FF]" />
                     <span>LAB DE FREESTYLE</span>
                   </button>
                 </div>
@@ -2074,7 +2074,7 @@ export default function DashboardView({
           <div className="bg-[#121212] border border-[#262626] rounded-2xl p-5 shadow-lg text-[#EDEFF4] space-y-4">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-[#262626] pb-3">
               <div>
-                <span className="text-[9px] font-mono font-bold text-[#E9C349] bg-[#E9C349]/10 border border-[#E9C349]/30 px-2 py-0.5 rounded uppercase">
+                <span className="text-[9px] font-mono font-bold text-[#D9A9FF] bg-[#D9A9FF]/10 border border-[#D9A9FF]/30 px-2 py-0.5 rounded uppercase">
                   ESTADÍSTICAS DE BIOMECÁNICA
                 </span>
                 <h3 className="text-base font-display-lg italic text-[#EDEFF4] uppercase mt-2">
@@ -2090,7 +2090,7 @@ export default function DashboardView({
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={handleDownloadWeeklyLogsJSON}
-                  className="px-3.5 py-2.5 bg-[#E9C349] hover:bg-[#d8b33c] text-black text-xs font-black rounded-xl border border-[#E9C349] transition-all uppercase flex items-center gap-1.5 cursor-pointer shadow-md"
+                  className="px-3.5 py-2.5 bg-[#D9A9FF] hover:bg-[#B87CFF] text-black text-xs font-black rounded-xl border border-[#D9A9FF] transition-all uppercase flex items-center gap-1.5 cursor-pointer shadow-md"
                   title="Descargar historial semanal de práctica en formato JSON"
                 >
                   <Download className="w-4 h-4 fill-black" />
@@ -2114,7 +2114,7 @@ export default function DashboardView({
                   onClick={() => setShowLogForm(!showLogForm)}
                   className="px-4 py-2.5 bg-[#1c1b1b] hover:bg-slate-100 dark:hover:bg-[#262626] text-[#EDEFF4] text-xs font-bold rounded-xl border border-[#262626] transition-all uppercase flex items-center gap-1 shrink-0 cursor-pointer"
                 >
-                  <Plus className="w-4 h-4 text-[#E9C349]" />
+                  <Plus className="w-4 h-4 text-[#D9A9FF]" />
                   <span>{showLogForm ? 'Cerrar Registro' : 'Registrar Sesión'}</span>
                 </motion.button>
               </div>
@@ -2206,7 +2206,7 @@ export default function DashboardView({
                     </div>
                     <div className="bg-slate-100 dark:bg-[#121826] p-2.5 rounded-xl border border-slate-200 dark:border-white/5">
                       <span className="text-[9px] text-slate-400 block uppercase">Formato de Salida:</span>
-                      <span className="font-bold text-[#E9C349] text-xs block">.json (Standard)</span>
+                      <span className="font-bold text-[#D9A9FF] text-xs block">.json (Standard)</span>
                     </div>
                   </div>
 
@@ -2245,7 +2245,7 @@ export default function DashboardView({
                           handleDownloadWeeklyLogsJSON();
                           setShowJsonExportModal(false);
                         }}
-                        className="flex-1 sm:flex-none px-4 py-2 bg-[#E9C349] hover:bg-[#d8b33c] text-black text-xs font-black rounded-xl shadow-lg transition-all uppercase tracking-wider flex items-center justify-center gap-1.5 cursor-pointer"
+                        className="flex-1 sm:flex-none px-4 py-2 bg-[#D9A9FF] hover:bg-[#B87CFF] text-black text-xs font-black rounded-xl shadow-lg transition-all uppercase tracking-wider flex items-center justify-center gap-1.5 cursor-pointer"
                       >
                         <Download className="w-4 h-4 fill-black" />
                         <span>Descargar JSON (.json)</span>
@@ -2265,7 +2265,7 @@ export default function DashboardView({
                   exit={{ height: 0, opacity: 0 }}
                   className="overflow-hidden border border-[#262626] rounded-2xl bg-[#0A0A0A] p-4 space-y-3"
                 >
-                  <h4 className="text-xs font-mono font-bold text-[#E9C349] uppercase">
+                  <h4 className="text-xs font-mono font-bold text-[#D9A9FF] uppercase">
                     📝 REGISTRAR SESIÓN DE ENTRENAMIENTO FUERA DE LÍNEA
                   </h4>
                   
@@ -2322,7 +2322,7 @@ export default function DashboardView({
                         setLogDesc('');
                         setShowLogForm(false);
                       }}
-                      className="px-4 py-2 bg-[#9A2B3C] text-white text-xs font-bold rounded-xl border border-transparent transition-all uppercase cursor-pointer"
+                      className="px-4 py-2 bg-[#C23E9E] text-white text-xs font-bold rounded-xl border border-transparent transition-all uppercase cursor-pointer"
                     >
                       Guardar Sesión
                     </motion.button>
@@ -2337,11 +2337,11 @@ export default function DashboardView({
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                 <div className="p-3 bg-[#0A0A0A] border border-[#262626] rounded-xl text-center sm:text-left">
                   <span className="text-[9px] font-mono font-bold text-[#8A8A8A] uppercase block">Minutos Práctica Alumnos (Avg.)</span>
-                  <span className="text-xl font-bold text-[#EDEFF4]">48.5 <span className="text-xs font-medium text-[#E9C349]">min/alumno</span></span>
+                  <span className="text-xl font-bold text-[#EDEFF4]">48.5 <span className="text-xs font-medium text-[#D9A9FF]">min/alumno</span></span>
                 </div>
                 <div className="p-3 bg-[#0A0A0A] border border-[#262626] rounded-xl text-center sm:text-left">
                   <span className="text-[9px] font-mono font-bold text-[#8A8A8A] uppercase block">Tasa de Feedback Completado</span>
-                  <span className="text-xl font-bold text-[#E9C349]">92.4% <span className="text-xs font-medium text-emerald-400">✓ 385 rev.</span></span>
+                  <span className="text-xl font-bold text-[#D9A9FF]">92.4% <span className="text-xs font-medium text-emerald-400">✓ 385 rev.</span></span>
                 </div>
                 <div className="p-3 bg-[#0A0A0A] border border-[#262626] rounded-xl text-center sm:text-left">
                   <span className="text-[9px] font-mono font-bold text-[#8A8A8A] uppercase block">Sesiones Registradas</span>
@@ -2349,14 +2349,14 @@ export default function DashboardView({
                 </div>
                 <div className="p-3 bg-[#0A0A0A] border border-[#262626] rounded-xl text-center sm:text-left">
                   <span className="text-[9px] font-mono font-bold text-[#8A8A8A] uppercase block">Alumnos Activos esta Semana</span>
-                  <span className="text-xl font-bold text-[#E9C349]">128 <span className="text-xs font-medium text-emerald-400">alumnos</span></span>
+                  <span className="text-xl font-bold text-[#D9A9FF]">128 <span className="text-xs font-medium text-emerald-400">alumnos</span></span>
                 </div>
               </div>
             ) : (currentUser.role === 'studio' || currentUser.role === 'academy') ? (
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                 <div className="p-3 bg-[#0A0A0A] border border-[#262626] rounded-xl text-center sm:text-left">
                   <span className="text-[9px] font-mono font-bold text-[#8A8A8A] uppercase block">Instructores Activos Staff</span>
-                  <span className="text-xl font-bold text-[#EDEFF4]">12 <span className="text-xs font-medium text-[#E9C349]">docentes</span></span>
+                  <span className="text-xl font-bold text-[#EDEFF4]">12 <span className="text-xs font-medium text-[#D9A9FF]">docentes</span></span>
                 </div>
                 <div className="p-3 bg-[#0A0A0A] border border-[#262626] rounded-xl text-center sm:text-left">
                   <span className="text-[9px] font-mono font-bold text-[#8A8A8A] uppercase block">Matrícula General Academia</span>
@@ -2364,11 +2364,11 @@ export default function DashboardView({
                 </div>
                 <div className="p-3 bg-[#0A0A0A] border border-[#262626] rounded-xl text-center sm:text-left">
                   <span className="text-[9px] font-mono font-bold text-[#8A8A8A] uppercase block">Membresías & Suscripciones</span>
-                  <span className="text-xl font-bold text-[#E9C349]">$4,250 <span className="text-xs font-medium text-slate-400">USD/mes</span></span>
+                  <span className="text-xl font-bold text-[#D9A9FF]">$4,250 <span className="text-xs font-medium text-slate-400">USD/mes</span></span>
                 </div>
                 <div className="p-3 bg-[#0A0A0A] border border-[#262626] rounded-xl text-center sm:text-left">
                   <span className="text-[9px] font-mono font-bold text-[#8A8A8A] uppercase block">Eventos & Batallas Activas</span>
-                  <span className="text-xl font-bold text-[#E9C349]">8 <span className="text-xs font-medium text-purple-400">globales</span></span>
+                  <span className="text-xl font-bold text-[#D9A9FF]">8 <span className="text-xs font-medium text-purple-400">globales</span></span>
                 </div>
               </div>
             ) : (
@@ -2387,11 +2387,11 @@ export default function DashboardView({
 
                 <div className="p-3 bg-[#0A0A0A] border border-[#262626] rounded-xl text-center sm:text-left">
                   <span className="text-[9px] font-mono font-bold text-[#8A8A8A] uppercase block">Racha Activa</span>
-                  <span className="text-xl font-bold text-[#E9C349]">🔥 {getPracticeStreak()} <span className="text-xs font-medium">días</span></span>
+                  <span className="text-xl font-bold text-[#D9A9FF]">🔥 {getPracticeStreak()} <span className="text-xs font-medium">días</span></span>
                 </div>
                 <div className="p-3 bg-[#0A0A0A] border border-[#262626] rounded-xl text-center sm:text-left">
                   <span className="text-[9px] font-mono font-bold text-[#8A8A8A] uppercase block">Promedio Diario</span>
-                  <span className="text-xl font-bold text-[#E9C349]">
+                  <span className="text-xl font-bold text-[#D9A9FF]">
                     {Math.round(chartData.reduce((acc, curr) => acc + curr.minutos, 0) / chartTimeRange)} <span className="text-xs font-medium">min/día</span>
                   </span>
                 </div>
@@ -2404,7 +2404,7 @@ export default function DashboardView({
               <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-3 border-b border-[#262626] pb-3">
                 <div>
                   <h4 className="text-xs font-mono font-bold text-[#EDEFF4] uppercase tracking-wider flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-[#E9C349]" />
+                    <span className="w-2 h-2 rounded-full bg-[#D9A9FF]" />
                     {currentUser.role === 'instructor' 
                       ? 'TENDENCIA DE ENGAGEMENT SEMANAL' 
                       : 'Evolución del Tiempo de Entrenamiento Diario (Firestore)'}
@@ -2488,8 +2488,8 @@ export default function DashboardView({
                     >
                       <defs>
                         <linearGradient id="minutosGradient" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="5%" stopColor="#E9C349" stopOpacity={0.4} />
-                          <stop offset="95%" stopColor="#E9C349" stopOpacity={0.0} />
+                          <stop offset="5%" stopColor="#D9A9FF" stopOpacity={0.4} />
+                          <stop offset="95%" stopColor="#D9A9FF" stopOpacity={0.0} />
                         </linearGradient>
                       </defs>
                       <CartesianGrid strokeDasharray="3 3" stroke="#1c1b1b" vertical={false} />
@@ -2506,7 +2506,7 @@ export default function DashboardView({
                         unit="m"
                       />
                       <RechartsTooltip 
-                        cursor={{ stroke: 'rgba(233,195,73,0.3)', strokeWidth: 1, strokeDasharray: '2 2' }}
+                        cursor={{ stroke: 'rgba(217, 169, 255,0.3)', strokeWidth: 1, strokeDasharray: '2 2' }}
                         content={({ active, payload }) => {
                           if (active && payload && payload.length) {
                             const data = payload[0].payload;
@@ -2515,7 +2515,7 @@ export default function DashboardView({
                               <div className="bg-[#121212] border border-[#262626] p-3 rounded-xl text-xs text-[#EDEFF4] space-y-2 shadow-2xl min-w-[220px]">
                                 <div className="flex items-center justify-between border-b border-[#262626] pb-1.5">
                                   <p className="font-mono font-bold text-[10px] text-[#8A8A8A] uppercase">{data.dayName}</p>
-                                  <span className={`font-mono font-bold text-xs px-2 py-0.5 rounded ${isMet ? 'bg-[#E9C349]/20 text-[#E9C349]' : 'bg-rose-500/20 text-rose-300'}`}>
+                                  <span className={`font-mono font-bold text-xs px-2 py-0.5 rounded ${isMet ? 'bg-[#D9A9FF]/20 text-[#D9A9FF]' : 'bg-rose-500/20 text-rose-300'}`}>
                                     {data.minutos} min {isMet ? '✓ Logrado' : ''}
                                   </span>
                                 </div>
@@ -2524,17 +2524,17 @@ export default function DashboardView({
                                   {data.drill > 0 && (
                                     <div className="flex justify-between items-center text-[11px]">
                                       <span className="flex items-center gap-1.5 text-gray-300">
-                                        <span className="w-2 h-2 rounded-full bg-[#E9C349]" /> ⚡ Drills & Técnica
+                                        <span className="w-2 h-2 rounded-full bg-[#D9A9FF]" /> ⚡ Drills & Técnica
                                       </span>
-                                      <span className="font-mono font-bold text-[#E9C349]">{data.drill}m</span>
+                                      <span className="font-mono font-bold text-[#D9A9FF]">{data.drill}m</span>
                                     </div>
                                   )}
                                   {data.battle > 0 && (
                                     <div className="flex justify-between items-center text-[11px]">
                                       <span className="flex items-center gap-1.5 text-gray-300">
-                                        <span className="w-2 h-2 rounded-full bg-[#9A2B3C]" /> ⚔️ Batallas
+                                        <span className="w-2 h-2 rounded-full bg-[#C23E9E]" /> ⚔️ Batallas
                                       </span>
-                                      <span className="font-mono font-bold text-[#9A2B3C]">{data.battle}m</span>
+                                      <span className="font-mono font-bold text-[#C23E9E]">{data.battle}m</span>
                                     </div>
                                   )}
                                   {data.combo > 0 && (
@@ -2584,19 +2584,19 @@ export default function DashboardView({
                       />
                       <ReferenceLine 
                         y={currentUser.targetMinutes || 30} 
-                        stroke="#9A2B3C" 
+                        stroke="#C23E9E" 
                         strokeDasharray="4 4" 
-                        label={{ value: `Meta: ${currentUser.targetMinutes || 30}m`, fill: '#9A2B3C', fontSize: 10, position: 'insideTopRight' }} 
+                        label={{ value: `Meta: ${currentUser.targetMinutes || 30}m`, fill: '#C23E9E', fontSize: 10, position: 'insideTopRight' }} 
                       />
                       <Area 
                         type="monotone" 
                         dataKey="minutos" 
                         name="Minutos de Práctica" 
-                        stroke="#E9C349" 
+                        stroke="#D9A9FF" 
                         strokeWidth={3} 
                         fillOpacity={1} 
                         fill="url(#minutosGradient)" 
-                        activeDot={{ r: 7, fill: '#E9C349', stroke: '#0D0D12', strokeWidth: 3 }} 
+                        activeDot={{ r: 7, fill: '#D9A9FF', stroke: '#0D0D12', strokeWidth: 3 }} 
                       />
                     </AreaChart>
                   ) : (
@@ -2618,7 +2618,7 @@ export default function DashboardView({
                         unit="m"
                       />
                       <RechartsTooltip 
-                        cursor={{ fill: 'rgba(233,195,73,0.05)' }}
+                        cursor={{ fill: 'rgba(217, 169, 255,0.05)' }}
                         content={({ active, payload }) => {
                           if (active && payload && payload.length) {
                             const data = payload[0].payload;
@@ -2626,24 +2626,24 @@ export default function DashboardView({
                               <div className="bg-[#121212] border border-[#262626] p-3 rounded-xl text-xs text-[#EDEFF4] space-y-2 shadow-2xl min-w-[210px]">
                                 <div className="flex items-center justify-between border-b border-[#262626] pb-1.5">
                                   <p className="font-mono font-bold text-[10px] text-[#8A8A8A] uppercase">{data.dayName}</p>
-                                  <span className="font-mono font-bold text-[#E9C349] text-xs">{data.minutos} min total</span>
+                                  <span className="font-mono font-bold text-[#D9A9FF] text-xs">{data.minutos} min total</span>
                                 </div>
                                 
                                 <div className="space-y-1">
                                   {data.drill > 0 && (
                                     <div className="flex justify-between items-center text-[11px]">
                                       <span className="flex items-center gap-1.5 text-gray-300">
-                                        <span className="w-2 h-2 rounded-full bg-[#E9C349]" /> ⚡ Drills & Técnica
+                                        <span className="w-2 h-2 rounded-full bg-[#D9A9FF]" /> ⚡ Drills & Técnica
                                       </span>
-                                      <span className="font-mono font-bold text-[#E9C349]">{data.drill}m</span>
+                                      <span className="font-mono font-bold text-[#D9A9FF]">{data.drill}m</span>
                                     </div>
                                   )}
                                   {data.battle > 0 && (
                                     <div className="flex justify-between items-center text-[11px]">
                                       <span className="flex items-center gap-1.5 text-gray-300">
-                                        <span className="w-2 h-2 rounded-full bg-[#9A2B3C]" /> ⚔️ Batallas
+                                        <span className="w-2 h-2 rounded-full bg-[#C23E9E]" /> ⚔️ Batallas
                                       </span>
-                                      <span className="font-mono font-bold text-[#9A2B3C]">{data.battle}m</span>
+                                      <span className="font-mono font-bold text-[#C23E9E]">{data.battle}m</span>
                                     </div>
                                   )}
                                   {data.combo > 0 && (
@@ -2694,8 +2694,8 @@ export default function DashboardView({
                       
                       {chartViewMode === 'stacked' ? (
                         <>
-                          <Bar dataKey="drill" name="Drills & Técnica" stackId="a" fill="#E9C349" maxBarSize={45} />
-                          <Bar dataKey="battle" name="Batallas & Freestyle" stackId="a" fill="#9A2B3C" maxBarSize={45} />
+                          <Bar dataKey="drill" name="Drills & Técnica" stackId="a" fill="#D9A9FF" maxBarSize={45} />
+                          <Bar dataKey="battle" name="Batallas & Freestyle" stackId="a" fill="#C23E9E" maxBarSize={45} />
                           <Bar dataKey="combo" name="Combos & Rutinas" stackId="a" fill="#3B82F6" maxBarSize={45} />
                           <Bar dataKey="playlist" name="Música & Ritmo" stackId="a" fill="#10B981" maxBarSize={45} />
                           <Bar dataKey="sensorial" name="Somático & Postura" stackId="a" fill="#8B5CF6" radius={[4, 4, 0, 0]} maxBarSize={45} />
@@ -2707,7 +2707,7 @@ export default function DashboardView({
                             return (
                               <Cell 
                                 key={`cell-${index}`} 
-                                fill={isTargetMet ? '#E9C349' : '#9A2B3C'} 
+                                fill={isTargetMet ? '#D9A9FF' : '#C23E9E'} 
                               />
                             );
                           })}
@@ -2747,7 +2747,7 @@ export default function DashboardView({
           {/* Box 1: CLASES Y CURSOS */}
           <div className="bg-[#121212] border border-[#262626] rounded-2xl p-5 space-y-4 shadow-lg text-[#EDEFF4]">
             <div className="border-b border-[#262626] pb-3">
-              <span className="text-[9px] font-mono font-bold text-[#E9C349] bg-[#E9C349]/10 border border-[#E9C349]/30 px-2 py-0.5 rounded uppercase">
+              <span className="text-[9px] font-mono font-bold text-[#D9A9FF] bg-[#D9A9FF]/10 border border-[#D9A9FF]/30 px-2 py-0.5 rounded uppercase">
                 TU RUTA DE APRENDIZAJE
               </span>
               <h3 className="text-sm font-display-lg italic text-[#EDEFF4] uppercase mt-2">CLASES Y CURSOS</h3>
@@ -2759,14 +2759,14 @@ export default function DashboardView({
                   id: 'cursos-1', 
                   title: 'Nivel 1: Fundamentos del Waacking', 
                   progress: l1Percent, 
-                  color: 'bg-[#E9C349]', 
+                  color: 'bg-[#D9A9FF]', 
                   lessonsStr: `${l1CompletedCount} de ${level1Lessons.length} lecciones` 
                 },
                 { 
                   id: 'cursos-2', 
                   title: 'Coreografía Disco Funky', 
                   progress: 30, 
-                  color: 'bg-[#9A2B3C]', 
+                  color: 'bg-[#C23E9E]', 
                   lessonsStr: '1 de 3 lecciones' 
                 },
                 { 
@@ -2780,14 +2780,14 @@ export default function DashboardView({
                   id: 'cursos-4', 
                   title: 'Nivel 2: Coreografías y Styling', 
                   progress: l2Percent, 
-                  color: 'bg-[#E9C349]', 
+                  color: 'bg-[#D9A9FF]', 
                   lessonsStr: `${l2CompletedCount} de ${level2Lessons.length} lecciones` 
                 },
               ].map((course) => (
                 <div key={course.id} className="p-3 bg-[#0A0A0A] border border-[#262626] rounded-xl">
                   <div className="flex justify-between items-start gap-2 mb-1.5">
                     <p className="text-[11px] font-bold text-[#EDEFF4] uppercase leading-tight">{course.title}</p>
-                    <span className="text-[10px] font-mono font-bold text-[#E9C349] shrink-0">{course.progress}%</span>
+                    <span className="text-[10px] font-mono font-bold text-[#D9A9FF] shrink-0">{course.progress}%</span>
                   </div>
                   
                   {/* Custom progress bar */}
@@ -2809,7 +2809,7 @@ export default function DashboardView({
                         }
                         setActiveTab('cursos');
                       }}
-                      className="text-[#E9C349] hover:underline uppercase flex items-center gap-0.5 font-bold"
+                      className="text-[#D9A9FF] hover:underline uppercase flex items-center gap-0.5 font-bold"
                     >
                       Ver Lecciones &rarr;
                     </button>
@@ -2825,11 +2825,11 @@ export default function DashboardView({
             {/* Calendar Strip Header */}
             <div className="p-4 border-b border-[#262626] flex justify-between items-center bg-[#1c1b1b]">
               <h4 className="text-xs font-mono font-bold tracking-tight text-[#EDEFF4] uppercase flex items-center gap-1.5">
-                <Calendar className="w-3.5 h-3.5 text-[#E9C349]" /> CALENDARIO & LIVE
+                <Calendar className="w-3.5 h-3.5 text-[#D9A9FF]" /> CALENDARIO & LIVE
               </h4>
               <button 
                 onClick={() => setActiveTab('live')} 
-                className="text-[9px] text-[#E9C349] hover:underline font-bold uppercase"
+                className="text-[9px] text-[#D9A9FF] hover:underline font-bold uppercase"
               >
                 Ver Agenda &rarr;
               </button>
@@ -2839,13 +2839,13 @@ export default function DashboardView({
               {/* Prominent Live Class Join Container */}
               <div className="bg-rose-50 dark:bg-[#181214] border-2 border-[#9A2B3C] rounded-xl p-3 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-lg">
                 <div className="flex items-center gap-2.5 text-left">
-                  <div className="w-9 h-9 rounded-full bg-[#9A2B3C]/30 border border-[#9A2B3C] flex items-center justify-center shrink-0 text-[#E9C349]">
+                  <div className="w-9 h-9 rounded-full bg-[#C23E9E]/30 border border-[#C23E9E] flex items-center justify-center shrink-0 text-[#D9A9FF]">
                     <Video className="w-4 h-4 animate-pulse" />
                   </div>
                   <div>
                     <div className="flex items-center gap-1.5">
                       <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-                      <span className="text-[10px] font-mono font-bold text-[#E9C349] uppercase tracking-wider">Clase en Vivo Programada</span>
+                      <span className="text-[10px] font-mono font-bold text-[#D9A9FF] uppercase tracking-wider">Clase en Vivo Programada</span>
                     </div>
                     <h5 className="text-xs font-bold text-slate-900 dark:text-white uppercase">Gestión de Clases en Vivo</h5>
                     <p className="text-[10px] text-slate-400 font-mono">Sesión interactiva con Brando • Hoy 19:30</p>
@@ -2855,9 +2855,9 @@ export default function DashboardView({
                 <button
                   type="button"
                   onClick={() => setShowMeetModal(true)}
-                  className="w-full sm:w-auto px-4 py-2 bg-[#9A2B3C] hover:bg-[#b03246] text-white text-xs font-mono font-bold rounded-xl shadow-md transition-all flex items-center justify-center gap-2 uppercase tracking-wide cursor-pointer border border-[#E9C349]/40"
+                  className="w-full sm:w-auto px-4 py-2 bg-[#C23E9E] hover:bg-[#C13F9C] text-white text-xs font-mono font-bold rounded-xl shadow-md transition-all flex items-center justify-center gap-2 uppercase tracking-wide cursor-pointer border border-[#D9A9FF]/40"
                 >
-                  <Video className="w-3.5 h-3.5 text-[#E9C349]" />
+                  <Video className="w-3.5 h-3.5 text-[#D9A9FF]" />
                   <span>UNIRSE A CLASE EN VIVO - HOY 19:30</span>
                 </button>
               </div>
@@ -2879,7 +2879,7 @@ export default function DashboardView({
                       key={idx} 
                       className={`p-1 rounded-lg border ${
                         d.active 
-                          ? 'bg-[#9A2B3C] text-white border-[#9A2B3C] scale-[1.05]' 
+                          ? 'bg-[#C23E9E] text-white border-[#C23E9E] scale-[1.05]' 
                           : 'bg-[#121212] text-gray-500 border-[#262626] text-[9px]'
                       }`}
                       title={d.classText || 'Sin clases'}
@@ -2900,7 +2900,7 @@ export default function DashboardView({
                 />
                 
                 {/* Live tag */}
-                <div className="absolute top-2 left-2 bg-[#9A2B3C] text-white text-[8px] font-bold tracking-widest px-1.5 py-0.5 rounded-full flex items-center gap-1 animate-pulse">
+                <div className="absolute top-2 left-2 bg-[#C23E9E] text-white text-[8px] font-bold tracking-widest px-1.5 py-0.5 rounded-full flex items-center gap-1 animate-pulse">
                   <span className="w-1.5 h-1.5 rounded-full bg-white" />
                   LIVE NOW
                 </div>
@@ -2909,7 +2909,7 @@ export default function DashboardView({
                 <button
                   type="button"
                   onClick={() => setShowMeetModal(true)}
-                  className="absolute top-2 right-2 bg-[#E9C349] text-black text-[8px] font-bold px-2.5 py-1 rounded-full flex items-center gap-1 hover:scale-105 transition-all shadow-md"
+                  className="absolute top-2 right-2 bg-[#D9A9FF] text-black text-[8px] font-bold px-2.5 py-1 rounded-full flex items-center gap-1 hover:scale-105 transition-all shadow-md"
                   title="Unirse a Google Meet Integrado"
                 >
                   <Video className="w-3.5 h-3.5 text-black" /> Google Meet Integrado
@@ -2933,7 +2933,7 @@ export default function DashboardView({
               <div className="bg-[#0A0A0A] rounded-xl border border-[#262626] p-2.5 text-[#EDEFF4]">
                 <div className="text-[9px] text-[#8A8A8A] font-bold border-b border-[#262626] pb-1 flex justify-between uppercase">
                   <span>Chat del Directo</span>
-                  <span className="text-[#E9C349] font-bold text-[8px]">42 bailarines activos</span>
+                  <span className="text-[#D9A9FF] font-bold text-[8px]">42 bailarines activos</span>
                 </div>
                 
                 <div className="h-[90px] overflow-y-auto space-y-1.5 pr-1 pt-1.5 text-[10px] font-mono text-left">
@@ -2943,7 +2943,7 @@ export default function DashboardView({
                     const text = msgStr.substring(splitIdx + 1);
                     return (
                       <div key={index} className="leading-tight">
-                        <span className="text-[#E9C349] font-bold uppercase">{sender}:</span>
+                        <span className="text-[#D9A9FF] font-bold uppercase">{sender}:</span>
                         <span className="text-[#EDEFF4] font-medium"> {text}</span>
                       </div>
                     );
@@ -2960,7 +2960,7 @@ export default function DashboardView({
                   />
                   <button 
                     type="submit" 
-                    className="bg-[#9A2B3C] text-white text-[10px] font-bold px-2 py-0.5 rounded"
+                    className="bg-[#C23E9E] text-white text-[10px] font-bold px-2 py-0.5 rounded"
                   >
                     Enviar
                   </button>
@@ -2988,17 +2988,17 @@ export default function DashboardView({
 
         {/* 3. SECCIÓN: ANUNCIOS DE INSTRUCTORES */}
         <div className="bg-[#121212] border border-[#262626] rounded-2xl p-5 md:p-6 relative overflow-hidden shadow-2xl space-y-5">
-          <div className="absolute left-0 top-0 w-80 h-80 bg-[#9A2B3C]/10 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute left-0 top-0 w-80 h-80 bg-[#C23E9E]/10 rounded-full blur-3xl pointer-events-none" />
 
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-200 dark:border-white/5 pb-4">
             <div className="space-y-1">
               <div className="flex items-center gap-2">
-                <span className="p-2 bg-[#9A2B3C]/20 border border-[#9A2B3C]/40 rounded-xl text-[#E9C349]">
+                <span className="p-2 bg-[#C23E9E]/20 border border-[#C23E9E]/40 rounded-xl text-[#D9A9FF]">
                   <Megaphone className="w-5 h-5" />
                 </span>
                 <h3 className="text-sm md:text-base font-mono font-bold tracking-widest text-[#EDEFF4] uppercase flex flex-wrap items-center gap-2">
                   <span>ANUNCIOS</span>
-                  <span className="text-[9px] font-mono font-bold text-[#E9C349] bg-[#E9C349]/10 border border-[#E9C349]/30 px-2 py-0.5 rounded-full uppercase">
+                  <span className="text-[9px] font-mono font-bold text-[#D9A9FF] bg-[#D9A9FF]/10 border border-[#D9A9FF]/30 px-2 py-0.5 rounded-full uppercase">
                     Novedades Oficiales
                   </span>
                 </h3>
@@ -3018,7 +3018,7 @@ export default function DashboardView({
                 <button
                   type="button"
                   onClick={() => setShowAnnModal(true)}
-                  className="px-4 py-2 bg-[#E9C349] hover:bg-[#d8b33c] text-black text-xs font-black rounded-xl border border-transparent shadow-lg transition-all flex items-center gap-2 uppercase tracking-wide hover:scale-105"
+                  className="px-4 py-2 bg-[#D9A9FF] hover:bg-[#B87CFF] text-black text-xs font-black rounded-xl border border-transparent shadow-lg transition-all flex items-center gap-2 uppercase tracking-wide hover:scale-105"
                 >
                   <Plus className="w-4 h-4 stroke-[3]" />
                   <span>Publicar Anuncio (Gratis)</span>
@@ -3088,7 +3088,7 @@ export default function DashboardView({
                     <button
                       type="button"
                       onClick={() => setShowAnnModal(true)}
-                      className="mt-2 px-4 py-1.5 bg-[#E9C349]/10 text-[#E9C349] border border-[#E9C349]/30 rounded-xl text-xs font-bold hover:bg-[#E9C349] hover:text-black transition-all"
+                      className="mt-2 px-4 py-1.5 bg-[#D9A9FF]/10 text-[#D9A9FF] border border-[#D9A9FF]/30 rounded-xl text-xs font-bold hover:bg-[#D9A9FF] hover:text-black transition-all"
                     >
                       Publicar el primer anuncio
                     </button>
@@ -3103,9 +3103,9 @@ export default function DashboardView({
                   const getCategoryBadge = (cat?: string) => {
                     switch (cat) {
                       case 'competencias':
-                        return { label: '🏆 Competencia', bg: 'bg-[#E9C349]/20 text-[#E9C349] border-[#E9C349]/40' };
+                        return { label: '🏆 Competencia', bg: 'bg-[#D9A9FF]/20 text-[#D9A9FF] border-[#D9A9FF]/40' };
                       case 'sesiones':
-                        return { label: '⚡ Sesión / Jam', bg: 'bg-[#9A2B3C]/20 text-[#EDEFF4] border-[#9A2B3C]/40' };
+                        return { label: '⚡ Sesión / Jam', bg: 'bg-[#C23E9E]/20 text-[#EDEFF4] border-[#C23E9E]/40' };
                       case 'clases':
                         return { label: '💃 Clase Especial', bg: 'bg-purple-500/20 text-purple-300 border-purple-500/40' };
                       case 'comunicados':
@@ -3126,7 +3126,7 @@ export default function DashboardView({
                       }`}
                     >
                       {item.important && (
-                        <div className="absolute -top-2.5 right-4 bg-[#E9C349] text-black text-[8px] font-mono font-black uppercase px-2.5 py-0.5 rounded-full shadow-md flex items-center gap-1">
+                        <div className="absolute -top-2.5 right-4 bg-[#D9A9FF] text-black text-[8px] font-mono font-black uppercase px-2.5 py-0.5 rounded-full shadow-md flex items-center gap-1">
                           <Sparkles className="w-2.5 h-2.5 fill-black" />
                           <span>DESTACADO</span>
                         </div>
@@ -3138,7 +3138,7 @@ export default function DashboardView({
                             <img
                               src={item.authorAvatar || 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=120'}
                               alt={item.author}
-                              className="w-8 h-8 rounded-full object-cover border border-[#E9C349]/50 shrink-0"
+                              className="w-8 h-8 rounded-full object-cover border border-[#D9A9FF]/50 shrink-0"
                               referrerPolicy="no-referrer"
                             />
                             <div className="min-w-0">
@@ -3154,7 +3154,7 @@ export default function DashboardView({
                           </span>
                         </div>
 
-                        <h4 className="text-xs font-bold text-[#EDEFF4] group-hover:text-[#E9C349] transition-colors leading-snug">
+                        <h4 className="text-xs font-bold text-[#EDEFF4] group-hover:text-[#D9A9FF] transition-colors leading-snug">
                           {item.title}
                         </h4>
 
@@ -3174,7 +3174,7 @@ export default function DashboardView({
                               className="w-full h-full object-cover group-hover/img:scale-105 transition-transform duration-300"
                               referrerPolicy="no-referrer"
                             />
-                            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center gap-1.5 text-[#E9C349] font-mono text-[10px] font-bold">
+                            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center gap-1.5 text-[#D9A9FF] font-mono text-[10px] font-bold">
                               <ZoomIn className="w-4 h-4" />
                               <span>Ampliar Imagen del Anuncio</span>
                             </div>
@@ -3191,7 +3191,7 @@ export default function DashboardView({
                               href={item.actionUrl}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="px-2.5 py-1 bg-[#E9C349]/10 hover:bg-[#E9C349] text-[#E9C349] hover:text-black border border-[#E9C349]/30 font-bold rounded-lg transition-all flex items-center gap-1 text-[9px]"
+                              className="px-2.5 py-1 bg-[#D9A9FF]/10 hover:bg-[#D9A9FF] text-[#D9A9FF] hover:text-black border border-[#D9A9FF]/30 font-bold rounded-lg transition-all flex items-center gap-1 text-[9px]"
                             >
                               <span>Acceder</span>
                               <ExternalLink className="w-3 h-3" />
@@ -3341,13 +3341,13 @@ export default function DashboardView({
 
           return (
             <div className="bg-[#121212] border border-[#262626] rounded-2xl p-6 relative overflow-hidden shadow-2xl">
-              <div className="absolute right-0 bottom-0 w-64 h-64 bg-[#E9C349]/5 rounded-full blur-3xl pointer-events-none" />
+              <div className="absolute right-0 bottom-0 w-64 h-64 bg-[#D9A9FF]/5 rounded-full blur-3xl pointer-events-none" />
               
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 pb-4 border-b border-slate-200 dark:border-white/5">
                 <div>
                   <div className="flex items-center gap-2">
-                    <span className="text-[#E9C349] text-base">👑</span>
-                    <h3 className="text-sm font-mono font-bold tracking-widest text-[#E9C349] uppercase">
+                    <span className="text-[#D9A9FF] text-base">👑</span>
+                    <h3 className="text-sm font-mono font-bold tracking-widest text-[#D9A9FF] uppercase">
                       {language === 'es' ? 'DIRECTORIO DE PROFESORES GLOBALES' : 'GLOBAL INSTRUCTOR DIRECTORY'}
                     </h3>
                   </div>
@@ -3364,13 +3364,13 @@ export default function DashboardView({
                     placeholder={language === 'es' ? 'Filtrar por especialidad o país...' : 'Filter by specialty or country...'}
                     value={specialtyFilter}
                     onChange={(e) => setSpecialtyFilter(e.target.value)}
-                    className="bg-[#0A0A0A] border border-[#262626] rounded-xl px-3 py-1.5 text-xs text-[#EDEFF4] focus:border-[#E9C349]/50 outline-none w-44 md:w-56 font-medium transition-all"
+                    className="bg-[#0A0A0A] border border-[#262626] rounded-xl px-3 py-1.5 text-xs text-[#EDEFF4] focus:border-[#D9A9FF]/50 outline-none w-44 md:w-56 font-medium transition-all"
                   />
 
                   <button
                     type="button"
                     onClick={() => setShowInstructorPlatformEditor(!showInstructorPlatformEditor)}
-                    className="px-3.5 py-1.5 bg-gradient-to-r from-[#E9C349] via-[#f5d77f] to-[#E9C349] hover:opacity-95 text-black text-xs font-black rounded-xl transition-all shadow-md flex items-center gap-1.5 active:scale-95"
+                    className="px-3.5 py-1.5 bg-gradient-to-r from-[#D9A9FF] via-[#f5d77f] to-[#D9A9FF] hover:opacity-95 text-black text-xs font-black rounded-xl transition-all shadow-md flex items-center gap-1.5 active:scale-95"
                   >
                     <Sliders className="w-3.5 h-3.5 text-black" />
                     <span>
@@ -3383,7 +3383,7 @@ export default function DashboardView({
                   {currentUser.role === 'instructor' ? (
                     <button 
                       onClick={() => setActiveTab('instructor')}
-                      className="px-4 py-1.5 bg-[#E9C349] hover:bg-[#d8b33c] text-black text-xs font-black rounded-xl transition-all flex items-center gap-1.5"
+                      className="px-4 py-1.5 bg-[#D9A9FF] hover:bg-[#B87CFF] text-black text-xs font-black rounded-xl transition-all flex items-center gap-1.5"
                     >
                       <Sparkles className="w-3.5 h-3.5" />
                       <span>{currentUser.isFeaturedInstructor ? (language === 'es' ? 'Destacado Activo' : 'Featured Active') : (language === 'es' ? '¡Aparecer Arriba!' : 'Appear at Top!')}</span>
@@ -3407,7 +3407,7 @@ export default function DashboardView({
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: 'auto' }}
                   exit={{ opacity: 0, height: 0 }}
-                  className="mb-8 bg-[#0D0D11] border border-[#E9C349]/40 rounded-2xl p-5 sm:p-6 shadow-2xl relative overflow-hidden"
+                  className="mb-8 bg-[#0D0D11] border border-[#D9A9FF]/40 rounded-2xl p-5 sm:p-6 shadow-2xl relative overflow-hidden"
                 >
                   {platformSaveNotice && (
                     <div className="mb-4 p-3 bg-emerald-500/10 border border-emerald-500/30 rounded-xl text-emerald-400 text-xs font-bold flex items-center justify-between">
@@ -3424,7 +3424,7 @@ export default function DashboardView({
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/10 pb-4 mb-5">
                     <div>
                       <div className="flex items-center gap-2">
-                        <span className="px-2.5 py-0.5 rounded-full text-[9px] font-mono font-black uppercase bg-[#E9C349]/20 text-[#E9C349] border border-[#E9C349]/30">
+                        <span className="px-2.5 py-0.5 rounded-full text-[9px] font-mono font-black uppercase bg-[#D9A9FF]/20 text-[#D9A9FF] border border-[#D9A9FF]/30">
                           CONSOLA DE INSTRUCTOR
                         </span>
                         <h4 className="text-sm sm:text-base font-black text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
@@ -3443,7 +3443,7 @@ export default function DashboardView({
                       onClick={() => {
                         if (setActiveTab) setActiveTab('instructor');
                       }}
-                      className="px-3.5 py-2 bg-[#E9C349] hover:bg-[#d8b33c] text-black text-xs font-black rounded-xl transition-all flex items-center gap-1.5 shrink-0 active:scale-95 shadow-md"
+                      className="px-3.5 py-2 bg-[#D9A9FF] hover:bg-[#B87CFF] text-black text-xs font-black rounded-xl transition-all flex items-center gap-1.5 shrink-0 active:scale-95 shadow-md"
                     >
                       <Sparkles className="w-3.5 h-3.5" />
                       <span>{language === 'es' ? 'Ir a Cátedra Completa' : 'Go to Full Platform'}</span>
@@ -3514,7 +3514,7 @@ export default function DashboardView({
                               setPlatformSaveNotice(language === 'es' ? '¡Precio de membresía actualizado en tu plataforma!' : 'Membership fee updated on your platform!');
                               setTimeout(() => setPlatformSaveNotice(null), 3500);
                             }}
-                            className="px-5 py-2 bg-[#E9C349] hover:bg-[#d8b33c] text-black text-xs font-black rounded-xl uppercase tracking-wider transition-all shrink-0 active:scale-95"
+                            className="px-5 py-2 bg-[#D9A9FF] hover:bg-[#B87CFF] text-black text-xs font-black rounded-xl uppercase tracking-wider transition-all shrink-0 active:scale-95"
                           >
                             {language === 'es' ? 'Guardar Precio' : 'Save Price'}
                           </button>
@@ -3599,7 +3599,7 @@ export default function DashboardView({
                             setPlatformSaveNotice(language === 'es' ? '¡Perfil de instructor guardado exitosamente!' : 'Instructor profile saved successfully!');
                             setTimeout(() => setPlatformSaveNotice(null), 3500);
                           }}
-                          className="px-6 py-2 bg-[#E9C349] hover:bg-[#d8b33c] text-black text-xs font-black rounded-xl uppercase tracking-wider transition-all shrink-0 active:scale-95"
+                          className="px-6 py-2 bg-[#D9A9FF] hover:bg-[#B87CFF] text-black text-xs font-black rounded-xl uppercase tracking-wider transition-all shrink-0 active:scale-95"
                         >
                           {language === 'es' ? 'Guardar Perfil' : 'Save Profile'}
                         </button>
@@ -3654,7 +3654,7 @@ export default function DashboardView({
                             <Video className="w-4 h-4 text-[#E9C349]" />
                             {language === 'es' ? 'Publicar Nueva Clase / Módulo en tu Plataforma' : 'Publish New Class / Module on Your Platform'}
                           </h5>
-                          <span className="text-[10px] font-mono text-[#E9C349] font-bold">HD VIDEO / STREAM</span>
+                          <span className="text-[10px] font-mono text-[#D9A9FF] font-bold">HD VIDEO / STREAM</span>
                         </div>
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -3679,7 +3679,7 @@ export default function DashboardView({
                               setPlatformSaveNotice(language === 'es' ? '¡Nueva clase publicada en tu plataforma!' : 'New class published on your platform!');
                               setTimeout(() => setPlatformSaveNotice(null), 3500);
                             }}
-                            className="px-4 py-2 bg-[#E9C349] text-black font-black text-xs rounded-xl hover:bg-[#d8b33c] transition-all"
+                            className="px-4 py-2 bg-[#D9A9FF] text-black font-black text-xs rounded-xl hover:bg-[#B87CFF] transition-all"
                           >
                             {language === 'es' ? 'Publicar Clase' : 'Publish Class'}
                           </button>
@@ -3704,8 +3704,8 @@ export default function DashboardView({
                     title={language === 'es' ? `Haz clic para ver el Plan de Membresía de ${inst.name}` : `Click to view Membership Plan for ${inst.name}`}
                   >
                     {inst.isFeaturedInstructor && (
-                      <div className="absolute top-2 right-2 flex items-center gap-1 bg-[#E9C349]/10 text-[#E9C349] border border-[#E9C349]/30 text-[8px] font-mono font-bold px-2 py-0.5 rounded-full uppercase shrink-0">
-                        <Sparkles className="w-2.5 h-2.5 text-[#E9C349]" />
+                      <div className="absolute top-2 right-2 flex items-center gap-1 bg-[#D9A9FF]/10 text-[#D9A9FF] border border-[#D9A9FF]/30 text-[8px] font-mono font-bold px-2 py-0.5 rounded-full uppercase shrink-0">
+                        <Sparkles className="w-2.5 h-2.5 text-[#D9A9FF]" />
                         <span>{language === 'es' ? 'DESTACADO' : 'FEATURED'}</span>
                       </div>
                     )}
@@ -3716,7 +3716,7 @@ export default function DashboardView({
                           <img 
                             src={inst.avatar} 
                             alt={inst.name} 
-                            className={`w-10 h-10 rounded-full object-cover border-2 ${inst.isFeaturedInstructor ? 'border-[#E9C349]' : 'border-[#262626]'}`}
+                            className={`w-10 h-10 rounded-full object-cover border-2 ${inst.isFeaturedInstructor ? 'border-[#D9A9FF]' : 'border-[#262626]'}`}
                             referrerPolicy="no-referrer"
                           />
                           <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-black rounded-full flex items-center justify-center text-[9px]">
@@ -3731,7 +3731,7 @@ export default function DashboardView({
                           </div>
                           <div className="flex items-center justify-between gap-1 mt-0.5">
                             <p className="text-[9px] text-[#8A8A8A] font-mono uppercase">{(inst.country || 'GLOBAL').split(' ')[0]}</p>
-                            <span className="text-[9px] font-mono font-black text-[#E9C349] bg-[#E9C349]/10 border border-[#E9C349]/25 px-1.5 py-0.2 rounded shrink-0">
+                            <span className="text-[9px] font-mono font-black text-[#D9A9FF] bg-[#D9A9FF]/10 border border-[#D9A9FF]/25 px-1.5 py-0.2 rounded shrink-0">
                               {inst.monthlyPrice || '$35 USD/mes'}
                             </span>
                           </div>
@@ -3767,7 +3767,7 @@ export default function DashboardView({
                           target="_blank" 
                           rel="noopener noreferrer" 
                           onClick={(e) => e.stopPropagation()}
-                          className="text-[9px] text-[#8A8A8A] hover:text-[#E9C349] font-mono transition-colors"
+                          className="text-[9px] text-[#8A8A8A] hover:text-[#D9A9FF] font-mono transition-colors"
                         >
                           {inst.instagram}
                         </a>
@@ -3779,7 +3779,7 @@ export default function DashboardView({
                           e.stopPropagation();
                           setSelectedInstructorForPlan(inst);
                         }}
-                        className="w-full py-1.5 px-2 bg-[#E9C349]/10 group-hover:bg-[#E9C349] text-[#E9C349] group-hover:text-black border border-[#E9C349]/30 font-mono text-[10px] font-bold rounded-lg transition-all flex items-center justify-center gap-1.5 shadow-sm"
+                        className="w-full py-1.5 px-2 bg-[#D9A9FF]/10 group-hover:bg-[#D9A9FF] text-[#D9A9FF] group-hover:text-black border border-[#D9A9FF]/30 font-mono text-[10px] font-bold rounded-lg transition-all flex items-center justify-center gap-1.5 shadow-sm"
                       >
                         <Zap className="w-3 h-3 shrink-0" />
                         <span>{language === 'es' ? 'Ver Plan Mensual' : 'View Monthly Plan'}</span>
@@ -3798,7 +3798,7 @@ export default function DashboardView({
           <div className="flex items-center justify-between pl-1">
             <div className="flex items-center gap-2">
               <span className="text-lg">💬</span>
-              <h3 className="text-xs font-mono font-bold tracking-widest text-[#9A2B3C] uppercase">
+              <h3 className="text-xs font-mono font-bold tracking-widest text-[#C23E9E] uppercase">
                 {currentUser.role === 'instructor' 
                   ? 'CANAL DE COMUNICACIÓN Y FEEDBACK DOCENTE'
                   : (currentUser.role === 'studio' || currentUser.role === 'academy')
@@ -3806,7 +3806,7 @@ export default function DashboardView({
                   : 'COMUNIDAD Y CHAT DE ALUMNOS'}
               </h3>
             </div>
-            <span className="text-[9px] font-mono text-[#E9C349] font-bold px-2 py-0.5 bg-[#121212] border border-[#262626] rounded-md">
+            <span className="text-[9px] font-mono text-[#D9A9FF] font-bold px-2 py-0.5 bg-[#121212] border border-[#262626] rounded-md">
               ROL: {currentUser.role?.toUpperCase() || 'STUDENT'}
             </span>
           </div>
@@ -3816,7 +3816,7 @@ export default function DashboardView({
             <div className="bg-[#121212] border border-[#262626] rounded-2xl p-4 h-auto md:h-[250px] min-h-[250px] flex flex-col justify-between shadow-lg">
               <div>
                 <div className="flex items-center justify-between mb-2 border-b border-[#262626] pb-1.5">
-                  <span className="text-[10px] font-mono font-bold text-[#9A2B3C] uppercase">FORO GENERAL</span>
+                  <span className="text-[10px] font-mono font-bold text-[#C23E9E] uppercase">FORO GENERAL</span>
                   <span className="text-[8px] text-[#8A8A8A] font-mono">Último Post</span>
                 </div>
                 
@@ -3826,7 +3826,7 @@ export default function DashboardView({
                       <div className="w-4 h-4 rounded-full bg-[#121212] border border-[#262626] overflow-hidden shrink-0">
                         <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=120" className="w-full h-full object-cover" />
                       </div>
-                      <span className="text-[9px] font-bold uppercase text-[#E9C349]">Marilyn</span>
+                      <span className="text-[9px] font-bold uppercase text-[#D9A9FF]">Marilyn</span>
                     </div>
                     <p className="text-[10px] text-[#EDEFF4] font-medium italic">"¿Alguien probó el reto de rolls dobles a 130 BPM? ¡Es una locura para los hombros!"</p>
                   </div>
@@ -3835,7 +3835,7 @@ export default function DashboardView({
 
               <button
                 onClick={() => setActiveTab('comunidad')}
-                className="w-full py-1.5 text-center text-[10px] font-bold text-[#9A2B3C] border border-[#9A2B3C]/30 bg-[#9A2B3C]/10 rounded-xl hover:bg-[#9A2B3C] hover:text-white transition-colors uppercase"
+                className="w-full py-1.5 text-center text-[10px] font-bold text-[#C23E9E] border border-[#C23E9E]/30 bg-[#C23E9E]/10 rounded-xl hover:bg-[#C23E9E] hover:text-white transition-colors uppercase"
               >
                 Ir al Foro
               </button>
@@ -3845,7 +3845,7 @@ export default function DashboardView({
             <div className="bg-[#121212] border border-[#262626] rounded-2xl p-4 h-auto md:h-[250px] min-h-[250px] flex flex-col justify-between shadow-lg">
               <div>
                 <div className="flex items-center justify-between mb-2 border-b border-[#262626] pb-1.5">
-                  <span className="text-[10px] font-mono font-bold text-[#E9C349] uppercase">SALAS DE PRÁCTICA</span>
+                  <span className="text-[10px] font-mono font-bold text-[#D9A9FF] uppercase">SALAS DE PRÁCTICA</span>
                   <span className="text-[8px] text-[#8A8A8A] font-mono">Activas</span>
                 </div>
                 
@@ -3856,7 +3856,7 @@ export default function DashboardView({
                         <p className="font-bold text-[#EDEFF4] uppercase truncate">{group.title}</p>
                         <span className="text-[8px] text-[#8A8A8A] font-mono font-bold">{group.participants} activos</span>
                       </div>
-                      <span className="text-[8px] bg-[#121212] border border-[#262626] px-1.5 py-0.5 rounded font-bold font-mono shrink-0 text-[#E9C349]">{group.category}</span>
+                      <span className="text-[8px] bg-[#121212] border border-[#262626] px-1.5 py-0.5 rounded font-bold font-mono shrink-0 text-[#D9A9FF]">{group.category}</span>
                     </div>
                   ))}
                 </div>
@@ -3864,7 +3864,7 @@ export default function DashboardView({
 
               <button
                 onClick={() => setActiveTab('comunidad')}
-                className="w-full py-1.5 text-center text-[10px] font-bold text-[#E9C349] border border-[#E9C349]/30 bg-[#E9C349]/10 rounded-xl hover:bg-[#E9C349] hover:text-black transition-colors uppercase"
+                className="w-full py-1.5 text-center text-[10px] font-bold text-[#D9A9FF] border border-[#D9A9FF]/30 bg-[#D9A9FF]/10 rounded-xl hover:bg-[#D9A9FF] hover:text-black transition-colors uppercase"
               >
                 Unirse a Sala
               </button>
@@ -3874,15 +3874,15 @@ export default function DashboardView({
             <div className="bg-[#121212] border border-[#262626] rounded-2xl p-4 h-auto md:h-[250px] min-h-[250px] flex flex-col justify-between shadow-lg">
               <div>
                 <div className="flex items-center justify-between mb-1.5 border-b border-[#262626] pb-1.5">
-                  <span className="text-[10px] font-mono font-bold text-[#E9C349] uppercase">LOBBY CHAT</span>
-                  <span className="text-[8px] text-[#E9C349] font-mono font-bold animate-pulse">• ONLINE</span>
+                  <span className="text-[10px] font-mono font-bold text-[#D9A9FF] uppercase">LOBBY CHAT</span>
+                  <span className="text-[8px] text-[#D9A9FF] font-mono font-bold animate-pulse">• ONLINE</span>
                 </div>
                 
                 <div className="h-[125px] overflow-y-auto space-y-2 pr-1 pt-1 text-[10px] font-mono text-left">
                   {(chatMessages || []).slice(-3).map((msg, idx) => (
                     <div key={msg.id || `msg-${idx}`} className="p-2 bg-[#0A0A0A] rounded-lg border border-[#262626]">
                       <div className="flex justify-between items-center mb-1">
-                        <span className="font-bold text-[#E9C349] uppercase text-[9px]">{msg.user}</span>
+                        <span className="font-bold text-[#D9A9FF] uppercase text-[9px]">{msg.user}</span>
                         <span className="text-[8px] text-[#8A8A8A]">{msg.time}</span>
                       </div>
                       <p className="text-[#EDEFF4] font-medium leading-tight">{msg.text}</p>
@@ -3922,7 +3922,7 @@ export default function DashboardView({
                 />
                 <button
                   type="submit"
-                  className="p-1.5 bg-[#9A2B3C] text-white rounded-lg hover:bg-[#81262c] cursor-pointer"
+                  className="p-1.5 bg-[#C23E9E] text-white rounded-lg hover:bg-[#8F2C7A] cursor-pointer"
                 >
                   <Send className="w-3.5 h-3.5" />
                 </button>
@@ -3935,9 +3935,9 @@ export default function DashboardView({
         <div className="bg-[#121212] border border-[#262626] rounded-2xl overflow-hidden shadow-2xl text-[#EDEFF4]">
           <div className="p-4 border-b border-[#262626] flex justify-between items-center bg-[#1c1b1b]">
             <h4 className="text-xs font-mono font-bold tracking-tight text-[#EDEFF4] uppercase flex items-center gap-1.5">
-              <Trophy className="w-4 h-4 text-[#E9C349]" /> CLASIFICACIÓN & RANKING DE LA ACADEMIA
+              <Trophy className="w-4 h-4 text-[#D9A9FF]" /> CLASIFICACIÓN & RANKING DE LA ACADEMIA
             </h4>
-            <span className="text-[9px] bg-[#121212] border border-[#262626] px-2.5 py-0.5 rounded font-mono font-bold text-[#E9C349]">
+            <span className="text-[9px] bg-[#121212] border border-[#262626] px-2.5 py-0.5 rounded font-mono font-bold text-[#D9A9FF]">
               PUNTOS & LOGROS
             </span>
           </div>
@@ -3965,7 +3965,7 @@ export default function DashboardView({
                   <div 
                     key={`lb-${user.id || idx}-${idx}`} 
                     className={`p-3.5 flex items-center justify-between text-xs ${
-                      isMe ? 'bg-[#9A2B3C]/10' : 'bg-[#121212]'
+                      isMe ? 'bg-[#C23E9E]/10' : 'bg-[#121212]'
                     }`}
                   >
                     <div className="flex items-center gap-2.5 min-w-0">
@@ -3976,13 +3976,13 @@ export default function DashboardView({
                         className="w-8 h-8 rounded-full object-cover border border-[#262626]" 
                       />
                       <div className="min-w-0">
-                        <span className={`font-bold truncate uppercase text-[11px] block ${isMe ? 'text-[#E9C349]' : 'text-[#EDEFF4]'}`}>
+                        <span className={`font-bold truncate uppercase text-[11px] block ${isMe ? 'text-[#D9A9FF]' : 'text-[#EDEFF4]'}`}>
                           {user.name}
                         </span>
                         <span className="text-[9px] text-[#8A8A8A] font-mono">Nivel {Math.floor(user.points / 100) + 1}</span>
                       </div>
                     </div>
-                    <span className="font-mono font-bold bg-[#0A0A0A] border border-[#262626] px-2 py-1 rounded text-[11px] text-[#E9C349] shrink-0">
+                    <span className="font-mono font-bold bg-[#0A0A0A] border border-[#262626] px-2 py-1 rounded text-[11px] text-[#D9A9FF] shrink-0">
                       {user.points} pts
                     </span>
                   </div>
@@ -3994,7 +3994,7 @@ export default function DashboardView({
           <div className="p-3 bg-[#0A0A0A] text-center border-t border-[#262626]">
             <button
               onClick={() => setActiveTab('ranking')}
-              className="w-full py-2 bg-[#9A2B3C] text-white border border-transparent text-xs font-bold rounded-xl hover:bg-[#81262c] transition-all flex items-center justify-center gap-1.5 uppercase tracking-wider shadow-md"
+              className="w-full py-2 bg-[#C23E9E] text-white border border-transparent text-xs font-bold rounded-xl hover:bg-[#8F2C7A] transition-all flex items-center justify-center gap-1.5 uppercase tracking-wider shadow-md"
             >
               <span>VER RANKING COMPLETO Y LOGROS</span>
               <ArrowRight className="w-4 h-4" />
@@ -4009,18 +4009,18 @@ export default function DashboardView({
       {/* FOOTER BAR matching the mock image bottom footer */}
       <footer className="mt-8 pt-6 border-t border-[#262626] bg-[#121212] rounded-2xl p-4 flex flex-col md:flex-row items-center justify-between gap-4 shadow-lg">
         <div className="flex flex-wrap items-center gap-4 justify-center md:justify-start text-xs font-bold">
-          <span className="text-[#E9C349] font-mono tracking-widest text-[10px] uppercase mr-2">© 2026 WAACK ON</span>
+          <span className="text-[#D9A9FF] font-mono tracking-widest text-[10px] uppercase mr-2">© 2026 WAACK ON</span>
           <span className="text-[#262626] hidden md:inline">|</span>
           <button 
             onClick={() => setActiveTab('support')}
-            className="text-[#8A8A8A] hover:text-[#E9C349] uppercase tracking-tight transition-colors"
+            className="text-[#8A8A8A] hover:text-[#D9A9FF] uppercase tracking-tight transition-colors"
           >
             AYUDA & SOPORTE
           </button>
           <span className="text-[#262626]">|</span>
           <button 
             onClick={() => setActiveTab('profile')}
-            className="text-[#8A8A8A] hover:text-[#E9C349] uppercase tracking-tight transition-colors"
+            className="text-[#8A8A8A] hover:text-[#D9A9FF] uppercase tracking-tight transition-colors"
           >
             MI CUENTA
           </button>
@@ -4070,7 +4070,7 @@ export default function DashboardView({
               </button>
 
               <div className="space-y-1">
-                <div className="flex items-center gap-2 text-[#E9C349]">
+                <div className="flex items-center gap-2 text-[#D9A9FF]">
                   <Megaphone className="w-5 h-5" />
                   <h3 className="text-sm font-mono font-bold uppercase tracking-wider">
                     Publicar Anuncio de Instructor
@@ -4120,7 +4120,7 @@ export default function DashboardView({
                         onClick={() => setAnnCategory(c.id as any)}
                         className={`p-2 rounded-xl text-[10px] font-mono font-bold border transition-all text-left ${
                           annCategory === c.id
-                            ? 'bg-[#E9C349] text-black border-[#E9C349]'
+                            ? 'bg-[#D9A9FF] text-black border-[#D9A9FF]'
                             : 'bg-[#0A0A0A] text-slate-300 border-[#262626] hover:border-white/20'
                         }`}
                       >
@@ -4141,7 +4141,7 @@ export default function DashboardView({
                     placeholder="Ej: Gran Batalla Waack On 2026 - Inscripciones Abiertas"
                     value={annTitle}
                     onChange={(e) => setAnnTitle(e.target.value)}
-                    className="w-full bg-[#0A0A0A] border border-[#262626] rounded-xl px-3 py-2 text-xs text-[#EDEFF4] focus:border-[#E9C349] outline-none"
+                    className="w-full bg-[#0A0A0A] border border-[#262626] rounded-xl px-3 py-2 text-xs text-[#EDEFF4] focus:border-[#D9A9FF] outline-none"
                   />
                 </div>
 
@@ -4156,7 +4156,7 @@ export default function DashboardView({
                     placeholder="Describe las fechas, horarios, reglas de la batalla o detalles de la clase..."
                     value={annContent}
                     onChange={(e) => setAnnContent(e.target.value)}
-                    className="w-full bg-[#0A0A0A] border border-[#262626] rounded-xl p-3 text-xs text-[#EDEFF4] focus:border-[#E9C349] outline-none resize-none"
+                    className="w-full bg-[#0A0A0A] border border-[#262626] rounded-xl p-3 text-xs text-[#EDEFF4] focus:border-[#D9A9FF] outline-none resize-none"
                   />
                 </div>
 
@@ -4170,7 +4170,7 @@ export default function DashboardView({
                     placeholder="https://meet.google.com/xyz-abc o link a formulario"
                     value={annActionUrl}
                     onChange={(e) => setAnnActionUrl(e.target.value)}
-                    className="w-full bg-[#0A0A0A] border border-[#262626] rounded-xl px-3 py-2 text-xs text-[#EDEFF4] focus:border-[#E9C349] outline-none"
+                    className="w-full bg-[#0A0A0A] border border-[#262626] rounded-xl px-3 py-2 text-xs text-[#EDEFF4] focus:border-[#D9A9FF] outline-none"
                   />
                 </div>
 
@@ -4187,7 +4187,7 @@ export default function DashboardView({
                     type="checkbox"
                     checked={annImportant}
                     onChange={(e) => setAnnImportant(e.target.checked)}
-                    className="rounded accent-[#E9C349]"
+                    className="rounded accent-[#D9A9FF]"
                   />
                   <span className="text-[11px] font-mono font-bold text-slate-700 dark:text-slate-200">
                     Marcar como Destacado / Urgente (Aparecerá resaltado en dorado)
@@ -4211,7 +4211,7 @@ export default function DashboardView({
                   </button>
                   <button
                     type="submit"
-                    className="px-5 py-2 bg-[#E9C349] hover:bg-[#d8b33c] text-black text-xs font-mono font-black rounded-xl shadow-lg transition-all uppercase"
+                    className="px-5 py-2 bg-[#D9A9FF] hover:bg-[#B87CFF] text-black text-xs font-mono font-black rounded-xl shadow-lg transition-all uppercase"
                   >
                     Publicar Anuncio Ahora
                   </button>

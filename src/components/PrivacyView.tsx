@@ -197,16 +197,16 @@ export default function PrivacyView({ currentUser, language }: PrivacyViewProps)
           <button
             type="button"
             onClick={handlePrintLegalNotice}
-            className="px-3 py-1.5 rounded-xl bg-[#181818] hover:bg-[#252525] border border-[#333] text-xs font-mono font-bold text-[#E9C349] flex items-center gap-1.5 transition-all shadow-md"
+            className="px-3 py-1.5 rounded-xl bg-[#181818] hover:bg-[#252525] border border-[#333] text-xs font-mono font-bold text-[#D9A9FF] flex items-center gap-1.5 transition-all shadow-md"
             title="Imprimir o guardar como PDF"
           >
             <Printer className="w-3.5 h-3.5" />
             <span className="hidden sm:inline">Imprimir / PDF</span>
           </button>
-          <span className="text-[10px] font-mono font-bold text-[#E9C349] border border-[#E9C349]/30 bg-[#E9C349]/10 px-2.5 py-1 rounded-full uppercase tracking-wider">
+          <span className="text-[10px] font-mono font-bold text-[#D9A9FF] border border-[#D9A9FF]/30 bg-[#D9A9FF]/10 px-2.5 py-1 rounded-full uppercase tracking-wider">
             TERMS v2.4 (2026)
           </span>
-          <span className="text-[10px] font-mono font-bold text-[#9A2B3C] border border-[#9A2B3C]/30 bg-[#9A2B3C]/10 px-2.5 py-1 rounded-full uppercase tracking-wider">
+          <span className="text-[10px] font-mono font-bold text-[#C23E9E] border border-[#C23E9E]/30 bg-[#C23E9E]/10 px-2.5 py-1 rounded-full uppercase tracking-wider">
             GDPR & IP PROTECTED
           </span>
         </div>
@@ -289,9 +289,9 @@ export default function PrivacyView({ currentUser, language }: PrivacyViewProps)
             initial={{ opacity: 0, y: 50, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
-            className="fixed bottom-6 right-6 z-50 bg-[#121212] border border-[#E9C349]/40 text-[#EDEFF4] text-xs font-mono py-3 px-5 rounded-xl shadow-2xl flex items-center gap-3"
+            className="fixed bottom-6 right-6 z-50 bg-[#121212] border border-[#D9A9FF]/40 text-[#EDEFF4] text-xs font-mono py-3 px-5 rounded-xl shadow-2xl flex items-center gap-3"
           >
-            <ShieldCheck className="w-4 h-4 text-[#E9C349]" />
+            <ShieldCheck className="w-4 h-4 text-[#D9A9FF]" />
             <span>{notification}</span>
           </motion.div>
         )}
@@ -310,15 +310,15 @@ export default function PrivacyView({ currentUser, language }: PrivacyViewProps)
               animate={{ opacity: 1, y: 0 }}
               className="bg-[#121212] border border-[#262626] rounded-2xl p-6 shadow-2xl space-y-5 text-left relative overflow-hidden"
             >
-              <div className="absolute top-0 right-0 w-32 h-32 bg-[#E9C349]/5 rounded-bl-full pointer-events-none" />
+              <div className="absolute top-0 right-0 w-32 h-32 bg-[#D9A9FF]/5 rounded-bl-full pointer-events-none" />
               
               <div className="flex items-center justify-between border-b border-[#262626] pb-3">
                 <div className="flex items-center gap-2.5">
-                  <div className="p-2 bg-[#E9C349]/10 rounded-xl border border-[#E9C349]/30">
-                    <CreditCard className="w-5 h-5 text-[#E9C349]" />
+                  <div className="p-2 bg-[#D9A9FF]/10 rounded-xl border border-[#D9A9FF]/30">
+                    <CreditCard className="w-5 h-5 text-[#D9A9FF]" />
                   </div>
                   <div>
-                    <h3 className="text-sm font-mono font-bold text-[#E9C349] uppercase tracking-wider">
+                    <h3 className="text-sm font-mono font-bold text-[#D9A9FF] uppercase tracking-wider">
                       1. TÉRMINOS DE USO Y SUSCRIPCIÓN
                     </h3>
                     <p className="text-[10px] text-[#8A8A8A] font-medium">Políticas de pagos recurrentes, cancelaciones y licencias de acceso</p>
@@ -339,7 +339,7 @@ export default function PrivacyView({ currentUser, language }: PrivacyViewProps)
                   <p className="text-[11px] text-[#8A8A8A] leading-relaxed">
                     Al suscribirte a los planes <strong>PRO ($29.99 USD/mes)</strong> o <strong>VIP Instructor ($59.99 USD/mes)</strong> de Waack On Academy, autorizas expresamente el cobro automático recurrente operado a través de la entidad legal <strong>Monroe Dance Group LLC</strong> a la tarjeta de crédito/débito o cuenta de PayPal registrada. Los cobros se procesarán el mismo día de cada período (mensual o anual). Recibirás un comprobante digital por cada transacción reflejado a nombre de <strong>Monroe Dance Group LLC</strong>.
                   </p>
-                  <div className="flex items-center gap-2 pt-1 text-[10px] text-[#E9C349] font-mono">
+                  <div className="flex items-center gap-2 pt-1 text-[10px] text-[#D9A9FF] font-mono">
                     <CheckCircle className="w-3.5 h-3.5" />
                     <span>Notificación previa de 30 días en caso de modificaciones de tarifa.</span>
                   </div>
@@ -366,7 +366,7 @@ export default function PrivacyView({ currentUser, language }: PrivacyViewProps)
                     <Calendar className="w-4 h-4 text-[#E9C349]" /> 1.3 Garantía de Devolución de 7 Días
                   </h4>
                   <p className="text-[11px] text-[#8A8A8A] leading-relaxed">
-                    Ofrecemos una garantía de satisfacción de <strong>7 días consecutivos</strong> para nuevos usuarios contados a partir del primer pago. Si durante este lapso consideras que la plataforma no cumple tus expectativas y has consumido menos del 20% del contenido de las clases, puedes solicitar la devolución del 100% de tu dinero escribiendo a <span className="text-[#E9C349] font-mono">pagos@prowaacker.com</span>. Las renovaciones automáticas posteriores no son reembolsables.
+                    Ofrecemos una garantía de satisfacción de <strong>7 días consecutivos</strong> para nuevos usuarios contados a partir del primer pago. Si durante este lapso consideras que la plataforma no cumple tus expectativas y has consumido menos del 20% del contenido de las clases, puedes solicitar la devolución del 100% de tu dinero escribiendo a <span className="text-[#D9A9FF] font-mono">pagos@prowaacker.com</span>. Las renovaciones automáticas posteriores no son reembolsables.
                   </p>
                 </div>
 
@@ -391,15 +391,15 @@ export default function PrivacyView({ currentUser, language }: PrivacyViewProps)
               animate={{ opacity: 1, y: 0 }}
               className="bg-[#121212] border border-[#262626] rounded-2xl p-6 shadow-2xl space-y-5 text-left relative overflow-hidden"
             >
-              <div className="absolute top-0 right-0 w-32 h-32 bg-[#9A2B3C]/10 rounded-bl-full pointer-events-none" />
+              <div className="absolute top-0 right-0 w-32 h-32 bg-[#C23E9E]/10 rounded-bl-full pointer-events-none" />
 
               <div className="flex items-center justify-between border-b border-[#262626] pb-3">
                 <div className="flex items-center gap-2.5">
-                  <div className="p-2 bg-[#9A2B3C]/10 rounded-xl border border-[#9A2B3C]/30">
-                    <Copyright className="w-5 h-5 text-[#9A2B3C]" />
+                  <div className="p-2 bg-[#C23E9E]/10 rounded-xl border border-[#C23E9E]/30">
+                    <Copyright className="w-5 h-5 text-[#C23E9E]" />
                   </div>
                   <div>
-                    <h3 className="text-sm font-mono font-bold text-[#9A2B3C] uppercase tracking-wider">
+                    <h3 className="text-sm font-mono font-bold text-[#C23E9E] uppercase tracking-wider">
                       2. PROTECCIÓN DE PROPIEDAD INTELECTUAL
                     </h3>
                     <p className="text-[10px] text-[#8A8A8A] font-medium">Currículo pedagógico, metodologías de baile, producciones y marcas registradas</p>
@@ -469,11 +469,11 @@ export default function PrivacyView({ currentUser, language }: PrivacyViewProps)
             >
               <div className="flex items-center justify-between border-b border-[#262626] pb-3">
                 <div className="flex items-center gap-2.5">
-                  <div className="p-2 bg-[#E9C349]/10 rounded-xl border border-[#E9C349]/30">
-                    <Shield className="w-5 h-5 text-[#E9C349]" />
+                  <div className="p-2 bg-[#D9A9FF]/10 rounded-xl border border-[#D9A9FF]/30">
+                    <Shield className="w-5 h-5 text-[#D9A9FF]" />
                   </div>
                   <div>
-                    <h3 className="text-sm font-mono font-bold text-[#E9C349] uppercase tracking-wider">
+                    <h3 className="text-sm font-mono font-bold text-[#D9A9FF] uppercase tracking-wider">
                       3. POLÍTICA DE PRIVACIDAD Y PROTECCIÓN DE DATOS
                     </h3>
                     <p className="text-[10px] text-[#8A8A8A] font-medium">Cumplimiento con normativas de privacidad GDPR, CCPA y derechos ARCO</p>
@@ -520,7 +520,7 @@ export default function PrivacyView({ currentUser, language }: PrivacyViewProps)
 
               <div className="border-t border-[#262626] pt-4 text-[10px] text-[#8A8A8A] font-mono leading-tight space-y-1">
                 <p>Waack On Academy garantiza que no comercializa bases de datos personales con anunciantes o brokers.</p>
-                <p>Oficial de Protección de Datos (DPO): <span className="text-[#E9C349]">privacidad@prowaacker.com</span></p>
+                <p>Oficial de Protección de Datos (DPO): <span className="text-[#D9A9FF]">privacidad@prowaacker.com</span></p>
               </div>
             </motion.div>
           )}
@@ -532,8 +532,8 @@ export default function PrivacyView({ currentUser, language }: PrivacyViewProps)
           
           {/* Interactive Consent Toggles Panel */}
           <div className="bg-[#121212] border border-[#262626] rounded-2xl p-5 shadow-2xl space-y-4 text-left">
-            <h3 className="text-xs font-mono font-bold text-[#E9C349] uppercase tracking-widest border-b border-[#262626] pb-2 flex items-center gap-2">
-              <Lock className="w-4 h-4 text-[#E9C349]" /> CENTRO DE CONTROL DE CONSENTIMIENTO
+            <h3 className="text-xs font-mono font-bold text-[#D9A9FF] uppercase tracking-widest border-b border-[#262626] pb-2 flex items-center gap-2">
+              <Lock className="w-4 h-4 text-[#D9A9FF]" /> CENTRO DE CONTROL DE CONSENTIMIENTO
             </h3>
             
             <p className="text-[10px] text-[#8A8A8A] font-medium leading-relaxed mb-4">
@@ -543,7 +543,7 @@ export default function PrivacyView({ currentUser, language }: PrivacyViewProps)
             <div className="space-y-3">
               
               {/* Push Notifications (Web Push API) */}
-              <div className="flex items-start justify-between gap-4 p-3 bg-[#0A0A0A] border border-[#E9C349]/40 rounded-xl hover:border-[#E9C349] transition-colors shadow-sm">
+              <div className="flex items-start justify-between gap-4 p-3 bg-[#0A0A0A] border border-[#D9A9FF]/40 rounded-xl hover:border-[#D9A9FF] transition-colors shadow-sm">
                 <div className="space-y-1">
                   <p className="text-xs font-bold text-slate-900 dark:text-white uppercase flex items-center gap-1.5">
                     <Bell className="w-3.5 h-3.5 text-[#E9C349] animate-pulse" /> Notificaciones Push del Navegador
@@ -561,7 +561,7 @@ export default function PrivacyView({ currentUser, language }: PrivacyViewProps)
                 <button
                   type="button"
                   onClick={handleTogglePushNotifications}
-                  className="px-3 py-1.5 bg-[#E9C349] hover:bg-[#d4ae36] text-black font-mono text-[10px] font-bold uppercase rounded-lg transition-all shadow-md shrink-0 cursor-pointer"
+                  className="px-3 py-1.5 bg-[#D9A9FF] hover:bg-[#B478F0] text-black font-mono text-[10px] font-bold uppercase rounded-lg transition-all shadow-md shrink-0 cursor-pointer"
                 >
                   {pushStatus.permission === 'granted' ? 'Reactivar' : 'Activar Push'}
                 </button>
@@ -583,7 +583,7 @@ export default function PrivacyView({ currentUser, language }: PrivacyViewProps)
                   className="text-white shrink-0 focus:outline-none transition-transform hover:scale-105"
                 >
                   {consents.telemetry ? (
-                    <ToggleRight className="w-9 h-9 text-[#9A2B3C]" />
+                    <ToggleRight className="w-9 h-9 text-[#C23E9E]" />
                   ) : (
                     <ToggleLeft className="w-9 h-9 text-[#3A3A3A]" />
                   )}
@@ -606,7 +606,7 @@ export default function PrivacyView({ currentUser, language }: PrivacyViewProps)
                   className="text-white shrink-0 focus:outline-none transition-transform hover:scale-105"
                 >
                   {consents.ranking ? (
-                    <ToggleRight className="w-9 h-9 text-[#9A2B3C]" />
+                    <ToggleRight className="w-9 h-9 text-[#C23E9E]" />
                   ) : (
                     <ToggleLeft className="w-9 h-9 text-[#3A3A3A]" />
                   )}
@@ -629,7 +629,7 @@ export default function PrivacyView({ currentUser, language }: PrivacyViewProps)
                   className="text-white shrink-0 focus:outline-none transition-transform hover:scale-105"
                 >
                   {consents.videoCache ? (
-                    <ToggleRight className="w-9 h-9 text-[#9A2B3C]" />
+                    <ToggleRight className="w-9 h-9 text-[#C23E9E]" />
                   ) : (
                     <ToggleLeft className="w-9 h-9 text-[#3A3A3A]" />
                   )}
@@ -652,7 +652,7 @@ export default function PrivacyView({ currentUser, language }: PrivacyViewProps)
                   className="text-white shrink-0 focus:outline-none transition-transform hover:scale-105"
                 >
                   {consents.instructorAccess ? (
-                    <ToggleRight className="w-9 h-9 text-[#9A2B3C]" />
+                    <ToggleRight className="w-9 h-9 text-[#C23E9E]" />
                   ) : (
                     <ToggleLeft className="w-9 h-9 text-[#3A3A3A]" />
                   )}
@@ -664,8 +664,8 @@ export default function PrivacyView({ currentUser, language }: PrivacyViewProps)
 
           {/* Data Export & ARCO Rights Panel */}
           <div className="bg-[#121212] border border-[#262626] rounded-2xl p-5 shadow-2xl space-y-4 text-left">
-            <h3 className="text-xs font-mono font-bold text-[#E9C349] uppercase tracking-widest border-b border-[#262626] pb-2 flex items-center gap-2">
-              <Download className="w-4 h-4 text-[#E9C349]" /> TUS DERECHOS ARCO (GDPR / CCPA)
+            <h3 className="text-xs font-mono font-bold text-[#D9A9FF] uppercase tracking-widest border-b border-[#262626] pb-2 flex items-center gap-2">
+              <Download className="w-4 h-4 text-[#D9A9FF]" /> TUS DERECHOS ARCO (GDPR / CCPA)
             </h3>
             
             <p className="text-[10px] text-[#8A8A8A] font-medium leading-relaxed">
@@ -682,9 +682,9 @@ export default function PrivacyView({ currentUser, language }: PrivacyViewProps)
                 className="py-2.5 px-3 bg-slate-100 hover:bg-slate-200 dark:bg-[#1c1e22] dark:hover:bg-[#2c2f35] border border-slate-300 hover:border-slate-400 dark:border-[#3A3A3A] dark:hover:border-[#5A5A5A] text-slate-900 dark:text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 focus:outline-none disabled:opacity-50"
               >
                 {downloadingData ? (
-                  <RefreshCw className="w-3.5 h-3.5 animate-spin text-[#E9C349]" />
+                  <RefreshCw className="w-3.5 h-3.5 animate-spin text-[#D9A9FF]" />
                 ) : (
-                  <Download className="w-3.5 h-3.5 text-[#E9C349]" />
+                  <Download className="w-3.5 h-3.5 text-[#D9A9FF]" />
                 )}
                 <span>Exportar JSON</span>
               </button>
@@ -718,7 +718,7 @@ export default function PrivacyView({ currentUser, language }: PrivacyViewProps)
           {/* Legal Support Contact Card */}
           <div className="bg-[#121212] border border-[#262626] rounded-2xl p-5 shadow-2xl space-y-3 text-left">
             <h3 className="text-xs font-mono font-bold text-[#EDEFF4] uppercase tracking-wider flex items-center gap-2 border-b border-[#262626] pb-2">
-              <Scale className="w-4 h-4 text-[#E9C349]" /> ENTIDAD LEGAL & CONTACTO
+              <Scale className="w-4 h-4 text-[#D9A9FF]" /> ENTIDAD LEGAL & CONTACTO
             </h3>
             <p className="text-[11px] text-[#8A8A8A] font-medium leading-relaxed">
               Titular legal de derechos, registros de marca y operaciones comerciales: <strong>Monroe Dance Group LLC</strong>.
@@ -730,11 +730,11 @@ export default function PrivacyView({ currentUser, language }: PrivacyViewProps)
               </div>
               <div className="flex items-center justify-between text-gray-300">
                 <span className="text-[#8A8A8A]">E-mail Legal:</span>
-                <a href="mailto:legal@prowaacker.com" className="text-[#E9C349] font-bold hover:underline">legal@prowaacker.com</a>
+                <a href="mailto:legal@prowaacker.com" className="text-[#D9A9FF] font-bold hover:underline">legal@prowaacker.com</a>
               </div>
               <div className="flex items-center justify-between text-gray-300">
                 <span className="text-[#8A8A8A]">Protección Datos:</span>
-                <a href="mailto:privacidad@prowaacker.com" className="text-[#E9C349] font-bold hover:underline">privacidad@prowaacker.com</a>
+                <a href="mailto:privacidad@prowaacker.com" className="text-[#D9A9FF] font-bold hover:underline">privacidad@prowaacker.com</a>
               </div>
               <div className="flex items-center justify-between text-gray-300">
                 <span className="text-[#8A8A8A]">Tiempo Respuesta:</span>

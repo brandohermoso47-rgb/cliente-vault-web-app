@@ -113,13 +113,13 @@ export default function AppInstallModal({
         className="w-full max-w-2xl bg-white dark:bg-[#0E0E10] border border-slate-200 dark:border-[#262626] rounded-3xl shadow-2xl flex flex-col overflow-hidden relative"
       >
         {/* Glow ambient background effect */}
-        <div className="absolute top-0 right-0 w-80 h-80 bg-[#E9C349]/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-80 h-80 bg-[#9A2B3C]/15 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute top-0 right-0 w-80 h-80 bg-[#D9A9FF]/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-80 h-80 bg-[#C23E9E]/15 rounded-full blur-3xl pointer-events-none" />
 
         {/* Header */}
         <div className="p-4 sm:p-5 border-b border-slate-200 dark:border-white/10 flex items-center justify-between gap-3 bg-slate-50 dark:bg-[#121215] shrink-0 relative z-10">
           <div className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-2xl bg-white border-2 border-[#E9C349] p-1 flex items-center justify-center shadow-lg shrink-0">
+            <div className="w-11 h-11 rounded-2xl bg-white border-2 border-[#D9A9FF] p-1 flex items-center justify-center shadow-lg shrink-0">
               <WaackOnLogo className="w-8 h-8 text-black" />
             </div>
             <div>
@@ -127,7 +127,7 @@ export default function AppInstallModal({
                 <h2 className="text-base sm:text-lg font-black text-slate-900 dark:text-white uppercase tracking-wider font-sans">
                   Instalar Aplicación Oficial Waack On
                 </h2>
-                <span className="text-[10px] font-mono text-black bg-[#E9C349] px-2 py-0.5 rounded-full font-black">
+                <span className="text-[10px] font-mono text-black bg-[#D9A9FF] px-2 py-0.5 rounded-full font-black">
                   PWA v2.4
                 </span>
               </div>
@@ -187,7 +187,7 @@ export default function AppInstallModal({
               whileTap={{ scale: 0.96 }}
               type="button"
               onClick={handleInstallClick}
-              className="px-5 py-3 bg-gradient-to-r from-[#E9C349] to-[#dfb430] hover:from-[#f5cf53] hover:to-[#e8bd3a] text-black font-mono text-xs font-black rounded-2xl shadow-xl transition-all flex items-center gap-2 shrink-0 uppercase tracking-wider cursor-pointer border border-[#E9C349]"
+              className="px-5 py-3 bg-gradient-to-r from-[#D9A9FF] to-[#dfb430] hover:from-[#f5cf53] hover:to-[#e8bd3a] text-black font-mono text-xs font-black rounded-2xl shadow-xl transition-all flex items-center gap-2 shrink-0 uppercase tracking-wider cursor-pointer border border-[#D9A9FF]"
             >
               <Download className="w-4 h-4 stroke-[3]" />
               <span>{isInstalled ? 'App Ya Instalada' : 'Instalar Aplicación'}</span>
@@ -197,7 +197,7 @@ export default function AppInstallModal({
           {/* App Core Capabilities Grid */}
           <div className="space-y-2">
             <h4 className="text-xs font-mono font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
-              <Zap className="w-3.5 h-3.5 text-[#E9C349]" />
+              <Zap className="w-3.5 h-3.5 text-[#D9A9FF]" />
               <span>Ventajas de la Aplicación Instalada</span>
             </h4>
 
@@ -331,7 +331,7 @@ export default function AppInstallModal({
           {/* Push Notifications Quick Connection inside App */}
           <div className="p-4 rounded-2xl bg-amber-50 dark:bg-[#141418] border border-[#E9C349]/30 flex flex-col sm:flex-row items-center justify-between gap-3">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-xl bg-[#E9C349]/10 text-[#E9C349] border border-[#E9C349]/30">
+              <div className="p-2 rounded-xl bg-[#D9A9FF]/10 text-[#D9A9FF] border border-[#D9A9FF]/30">
                 <Bell className="w-4 h-4" />
               </div>
               <div>
@@ -347,7 +347,7 @@ export default function AppInstallModal({
                 <button
                   type="button"
                   onClick={handleEnablePushInApp}
-                  className="px-3.5 py-1.5 bg-[#E9C349] hover:bg-[#ffdf6b] text-black font-mono text-xs font-black rounded-xl shadow cursor-pointer uppercase"
+                  className="px-3.5 py-1.5 bg-[#D9A9FF] hover:bg-[#F2CFFF] text-black font-mono text-xs font-black rounded-xl shadow cursor-pointer uppercase"
                 >
                   Activar Push
                 </button>
@@ -376,7 +376,7 @@ export default function AppInstallModal({
                   onClose();
                   onOpenNotifications();
                 }}
-                className="px-3 py-1.5 text-xs text-[#E9C349] hover:underline font-bold"
+                className="px-3 py-1.5 text-xs text-[#D9A9FF] hover:underline font-bold"
               >
                 Ver Notificaciones
               </button>

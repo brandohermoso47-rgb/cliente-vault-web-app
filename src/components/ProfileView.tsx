@@ -402,7 +402,7 @@ export default function ProfileView({
 
   // Highlights / Story circles data
   const storyHighlights = [
-    { id: 'h1', title: 'Elite Waacker', icon: '👑', color: 'from-[#E9C349] to-amber-600', desc: 'Rango alcanzado por completar más de 15 lecciones avanzadas.' },
+    { id: 'h1', title: 'Elite Waacker', icon: '👑', color: 'from-[#D9A9FF] to-amber-600', desc: 'Rango alcanzado por completar más de 15 lecciones avanzadas.' },
     { id: 'h2', title: '7d Racha', icon: '🔥', color: 'from-[#FF6126] to-[#FF2E63]', desc: '¡Has practicado 7 días consecutivos esta semana!' },
     { id: 'h3', title: 'Arm Control', icon: '⚡', color: 'from-amber-400 to-yellow-500', desc: 'Insignia por perfeccionar la técnica de rolls y poses en ángulo recto.' },
     { id: 'h4', title: 'Battle Winner', icon: '🏆', color: 'from-[#FF007A] to-purple-600', desc: 'Ganador del reto comunitario de freestyle del mes.' },
@@ -724,7 +724,7 @@ export default function ProfileView({
             initial={{ opacity: 0, y: -20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -20 }}
-            className="fixed top-5 left-1/2 -translate-x-1/2 z-50 bg-[#E9C349] text-black font-extrabold text-xs px-5 py-3 rounded-full shadow-[0_10px_30px_rgba(233,195,73,0.4)] flex items-center gap-2 border border-black/20"
+            className="fixed top-5 left-1/2 -translate-x-1/2 z-50 bg-[#D9A9FF] text-black font-extrabold text-xs px-5 py-3 rounded-full shadow-[0_10px_30px_rgba(217, 169, 255,0.4)] flex items-center gap-2 border border-black/20"
           >
             <Sparkles className="w-4 h-4 text-black" />
             <span>{profileToast}</span>
@@ -742,7 +742,7 @@ export default function ProfileView({
             <h1 className="text-sm sm:text-base font-black tracking-wider uppercase font-mono text-slate-900 dark:text-white truncate max-w-[160px] sm:max-w-none">
               {nickname || `@${currentUser.name.toLowerCase().replace(/\s+/g, '')}`}
             </h1>
-            <span className="w-2 h-2 rounded-full bg-[#E9C349] animate-pulse" title="Bailarín Verificado" />
+            <span className="w-2 h-2 rounded-full bg-[#D9A9FF] animate-pulse" title="Bailarín Verificado" />
           </div>
         </div>
 
@@ -768,7 +768,7 @@ export default function ProfileView({
             className="px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/15 text-slate-900 dark:text-white font-mono font-bold text-xs uppercase tracking-wider transition-all flex items-center gap-1.5 cursor-pointer"
             title="Vista previa de Tarjeta Oficial de Bailarín"
           >
-            <QrCode className="w-4 h-4 text-[#E9C349]" />
+            <QrCode className="w-4 h-4 text-[#D9A9FF]" />
             <span className="hidden sm:inline">{language === 'es' ? 'Perfil' : 'Profile Card'}</span>
           </button>
 
@@ -813,7 +813,7 @@ export default function ProfileView({
             
             {/* Glowing Circular Avatar */}
             <div className="relative group shrink-0">
-              <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full p-1 bg-gradient-to-tr from-[#FF2E63] via-[#E9C349] to-amber-500 shadow-[0_0_25px_rgba(255,46,99,0.5)] flex items-center justify-center">
+              <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full p-1 bg-gradient-to-tr from-[#FF2E63] via-[#D9A9FF] to-amber-500 shadow-[0_0_25px_rgba(255,46,99,0.5)] flex items-center justify-center">
                 <img 
                   src={currentUser.avatar || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=600"} 
                   alt={currentUser.name} 
@@ -838,12 +838,12 @@ export default function ProfileView({
                   {currentUser.name}
                 </h2>
                 {currentUser.role === 'instructor' ? (
-                  <span className="px-3 py-1 rounded-full bg-[#E9C349]/20 border border-[#E9C349]/40 text-[#E9C349] text-[10px] font-mono font-black uppercase tracking-wider flex items-center gap-1.5">
-                    <ShieldCheck className="w-3.5 h-3.5 text-[#E9C349]" />
+                  <span className="px-3 py-1 rounded-full bg-[#D9A9FF]/20 border border-[#D9A9FF]/40 text-[#D9A9FF] text-[10px] font-mono font-black uppercase tracking-wider flex items-center gap-1.5">
+                    <ShieldCheck className="w-3.5 h-3.5 text-[#D9A9FF]" />
                     <span>INSTRUCTOR SENIOR</span>
                   </span>
                 ) : (
-                  <span className="px-3 py-1 rounded-full bg-[#E9C349]/20 border border-[#E9C349]/40 text-[#E9C349] text-[10px] font-mono font-black uppercase tracking-wider">
+                  <span className="px-3 py-1 rounded-full bg-[#D9A9FF]/20 border border-[#D9A9FF]/40 text-[#D9A9FF] text-[10px] font-mono font-black uppercase tracking-wider">
                     {level === 'advanced' ? 'Elite Pro 🌟' : level === 'intermediate' ? 'Rhythm Master ⚡' : 'Iniciado 🌱'}
                   </span>
                 )}
@@ -873,7 +873,7 @@ export default function ProfileView({
                 <div className="pt-2 p-3 bg-amber-50 dark:bg-[#181822] border border-[#E9C349]/30 rounded-xl space-y-1 max-w-md shadow-lg">
                   <div className="flex items-center justify-between text-[10px] font-mono font-bold text-[#E9C349] uppercase">
                     <span className="flex items-center gap-1.5">
-                      <Users className="w-3.5 h-3.5 text-[#E9C349]" />
+                      <Users className="w-3.5 h-3.5 text-[#D9A9FF]" />
                       <span>MODO DOCENTE & MÉTRICAS DE ACADEMIA</span>
                     </span>
                     <span className="text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">DOCENTE ACTIVO</span>
@@ -886,17 +886,17 @@ export default function ProfileView({
                 <div className="pt-2 space-y-1.5 max-w-md">
                   <div className="flex justify-between text-[10px] font-mono font-bold text-slate-600 dark:text-slate-300 uppercase">
                     <span className="flex items-center gap-1">
-                      <Sparkles className="w-3 h-3 text-[#E9C349]" />
+                      <Sparkles className="w-3 h-3 text-[#D9A9FF]" />
                       <span>Rango & Nivel {currentLevelNumber}</span>
                     </span>
-                    <span className="text-[#E9C349] font-black">{progressPercent}% ({completedLessonsCount}/{targetLessonsForLevel} Clases)</span>
+                    <span className="text-[#D9A9FF] font-black">{progressPercent}% ({completedLessonsCount}/{targetLessonsForLevel} Clases)</span>
                   </div>
                   <div className="h-3 w-full bg-slate-200 dark:bg-black/60 rounded-full overflow-hidden p-0.5 border border-slate-300 dark:border-white/20 shadow-inner relative">
                     <motion.div 
                       initial={{ width: '0%' }}
                       animate={{ width: `${progressPercent}%` }}
                       transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
-                      className="h-full bg-gradient-to-r from-[#FF6126] via-[#FF2E63] to-[#E9C349] rounded-full relative overflow-hidden shadow-[0_0_15px_rgba(233,195,73,0.6)]"
+                      className="h-full bg-gradient-to-r from-[#FF6126] via-[#FF2E63] to-[#D9A9FF] rounded-full relative overflow-hidden shadow-[0_0_15px_rgba(217, 169, 255,0.6)]"
                     >
                       <motion.div
                         animate={{ x: ['-100%', '200%'] }}
@@ -915,8 +915,8 @@ export default function ProfileView({
           {/* COMPACT METRICS ROW: DYNAMIC ACCORDING TO ROLE */}
           {currentUser.role === 'instructor' ? (
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4 pt-4 border-t border-white/10 text-center font-mono">
-              <div className="bg-white/5 hover:bg-white/10 p-2.5 sm:p-3 rounded-2xl border border-[#E9C349]/30 transition-all">
-                <p className="text-lg sm:text-2xl font-black text-[#E9C349]">128</p>
+              <div className="bg-white/5 hover:bg-white/10 p-2.5 sm:p-3 rounded-2xl border border-[#D9A9FF]/30 transition-all">
+                <p className="text-lg sm:text-2xl font-black text-[#D9A9FF]">128</p>
                 <p className="text-[9px] sm:text-[11px] text-slate-300 font-bold uppercase truncate">Alumnos Activos</p>
               </div>
 
@@ -995,19 +995,19 @@ export default function ProfileView({
         {/* ========================================================================= */}
         {/* PANEL DE CONFIGURACIÓN DE ENTRENAMIENTO */}
         {/* ========================================================================= */}
-        <section className="bg-[#121218] border border-[#E9C349]/30 rounded-3xl p-5 sm:p-6 shadow-2xl space-y-5 relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-48 h-48 bg-gradient-to-bl from-[#E9C349]/10 via-amber-500/5 to-transparent rounded-full blur-2xl pointer-events-none" />
+        <section className="bg-[#121218] border border-[#D9A9FF]/30 rounded-3xl p-5 sm:p-6 shadow-2xl space-y-5 relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-48 h-48 bg-gradient-to-bl from-[#D9A9FF]/10 via-amber-500/5 to-transparent rounded-full blur-2xl pointer-events-none" />
 
           {/* Panel Header */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/10 pb-4 z-10 relative">
             <div className="flex items-center gap-3">
-              <div className="p-3 rounded-2xl bg-gradient-to-tr from-[#E9C349] to-amber-600 text-black shadow-lg shadow-amber-500/20">
+              <div className="p-3 rounded-2xl bg-gradient-to-tr from-[#D9A9FF] to-amber-600 text-black shadow-lg shadow-amber-500/20">
                 <Target className="w-6 h-6 stroke-[2.5]" />
               </div>
               <div>
                 <h3 className="text-base sm:text-lg font-black text-slate-900 dark:text-white uppercase font-mono tracking-wider flex items-center gap-2">
                   <span>Configuración de Entrenamiento</span>
-                  <span className="text-[10px] bg-[#E9C349]/20 text-[#E9C349] px-2 py-0.5 rounded-full border border-[#E9C349]/40 font-mono font-bold">
+                  <span className="text-[10px] bg-[#D9A9FF]/20 text-[#D9A9FF] px-2 py-0.5 rounded-full border border-[#D9A9FF]/40 font-mono font-bold">
                     ACTIVO
                   </span>
                 </h3>
@@ -1027,11 +1027,11 @@ export default function ProfileView({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1 z-10 relative">
             
             {/* 1. Meta de Minutos Diarios (Número) */}
-            <div className="bg-white/5 border border-white/10 rounded-2xl p-4 space-y-3 flex flex-col justify-between hover:border-[#E9C349]/40 transition-colors">
+            <div className="bg-white/5 border border-white/10 rounded-2xl p-4 space-y-3 flex flex-col justify-between hover:border-[#D9A9FF]/40 transition-colors">
               <div>
                 <div className="flex items-center justify-between mb-1">
-                  <label className="text-xs font-mono font-bold text-[#E9C349] uppercase flex items-center gap-1.5">
-                    <Clock className="w-4 h-4 text-[#E9C349]" />
+                  <label className="text-xs font-mono font-bold text-[#D9A9FF] uppercase flex items-center gap-1.5">
+                    <Clock className="w-4 h-4 text-[#D9A9FF]" />
                     <span>Meta de Minutos Diarios</span>
                   </label>
                   <span className="text-xs font-mono font-black text-slate-900 dark:text-white bg-slate-900/10 dark:bg-black/50 px-2.5 py-0.5 rounded-lg border border-white/15">
@@ -1082,7 +1082,7 @@ export default function ProfileView({
             </div>
 
             {/* 2. Toggles: Hidratación & Lecciones */}
-            <div className="bg-white/5 border border-white/10 rounded-2xl p-4 space-y-4 flex flex-col justify-between hover:border-[#E9C349]/40 transition-colors">
+            <div className="bg-white/5 border border-white/10 rounded-2xl p-4 space-y-4 flex flex-col justify-between hover:border-[#D9A9FF]/40 transition-colors">
               
               {/* Toggle 1: Recordatorios de Hidratación */}
               <div className="flex items-center justify-between gap-3 border-b border-white/10 pb-3">
@@ -1149,10 +1149,10 @@ export default function ProfileView({
             </div>
 
             {/* 3. Exportar Historial de Práctica (Logs CSV) */}
-            <div className="md:col-span-2 bg-gradient-to-r from-amber-500/10 via-amber-500/5 to-transparent border border-[#E9C349]/30 rounded-2xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 hover:border-[#E9C349]/60 transition-colors">
+            <div className="md:col-span-2 bg-gradient-to-r from-amber-500/10 via-amber-500/5 to-transparent border border-[#D9A9FF]/30 rounded-2xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 hover:border-[#D9A9FF]/60 transition-colors">
               <div className="space-y-1">
-                <div className="flex items-center gap-2 text-xs font-mono font-bold text-[#E9C349] uppercase">
-                  <Download className="w-4 h-4 text-[#E9C349]" />
+                <div className="flex items-center gap-2 text-xs font-mono font-bold text-[#D9A9FF] uppercase">
+                  <Download className="w-4 h-4 text-[#D9A9FF]" />
                   <span>Exportar Historial de Práctica (CSV)</span>
                   <span className="text-[10px] bg-white/10 text-slate-700 dark:text-slate-200 px-2 py-0.5 rounded-full font-mono font-bold">
                     {practiceLogs.length} registros
@@ -1166,7 +1166,7 @@ export default function ProfileView({
               <button
                 type="button"
                 onClick={exportPracticeLogsCSV}
-                className="px-4 py-2.5 rounded-xl bg-[#E9C349] hover:bg-[#ffdf6b] text-black font-mono font-black text-xs uppercase tracking-wider transition-all shadow-lg hover:shadow-amber-500/20 active:scale-95 flex items-center gap-2 shrink-0 cursor-pointer"
+                className="px-4 py-2.5 rounded-xl bg-[#D9A9FF] hover:bg-[#F2CFFF] text-black font-mono font-black text-xs uppercase tracking-wider transition-all shadow-lg hover:shadow-amber-500/20 active:scale-95 flex items-center gap-2 shrink-0 cursor-pointer"
               >
                 <Download className="w-4 h-4" />
                 <span>Descargar CSV</span>
@@ -1256,7 +1256,7 @@ export default function ProfileView({
               <div
                 key={item.id}
                 onClick={() => setLightboxItem(item)}
-                className="group relative aspect-square bg-[#121218] rounded-xl overflow-hidden border border-white/10 cursor-pointer shadow-md hover:border-[#E9C349]/60 transition-all"
+                className="group relative aspect-square bg-[#121218] rounded-xl overflow-hidden border border-white/10 cursor-pointer shadow-md hover:border-[#D9A9FF]/60 transition-all"
               >
                 {/* Media Preview Thumbnail */}
                 {item.type === 'video' ? (
@@ -1315,7 +1315,7 @@ export default function ProfileView({
             >
               <div className="flex items-center justify-between border-b border-white/10 pb-4">
                 <div className="flex items-center gap-3">
-                  <div className="p-2.5 rounded-2xl bg-white/10 text-[#E9C349]">
+                  <div className="p-2.5 rounded-2xl bg-white/10 text-[#D9A9FF]">
                     <Settings className="w-5 h-5" />
                   </div>
                   <div>
@@ -1340,7 +1340,7 @@ export default function ProfileView({
                   type="button"
                   onClick={() => setSettingsTab('expediente')}
                   className={`px-3 py-2 rounded-xl font-bold uppercase transition-all cursor-pointer ${
-                    settingsTab === 'expediente' ? 'bg-[#E9C349] text-black' : 'bg-white/5 text-slate-300 hover:bg-white/10'
+                    settingsTab === 'expediente' ? 'bg-[#D9A9FF] text-black' : 'bg-white/5 text-slate-300 hover:bg-white/10'
                   }`}
                 >
                   Expediente
@@ -1349,7 +1349,7 @@ export default function ProfileView({
                   type="button"
                   onClick={() => setSettingsTab('entrenamiento')}
                   className={`px-3 py-2 rounded-xl font-bold uppercase transition-all cursor-pointer flex items-center gap-1.5 ${
-                    settingsTab === 'entrenamiento' ? 'bg-[#E9C349] text-black' : 'bg-white/5 text-slate-300 hover:bg-white/10'
+                    settingsTab === 'entrenamiento' ? 'bg-[#D9A9FF] text-black' : 'bg-white/5 text-slate-300 hover:bg-white/10'
                   }`}
                 >
                   <Target className="w-3.5 h-3.5" />
@@ -1478,7 +1478,7 @@ export default function ProfileView({
                 <div className="space-y-4">
                   <div className="p-4 bg-white/5 border border-white/10 rounded-2xl space-y-4">
                     <div>
-                      <label className="text-xs font-mono font-bold text-[#E9C349] uppercase block mb-1">
+                      <label className="text-xs font-mono font-bold text-[#D9A9FF] uppercase block mb-1">
                         Meta de Minutos Diarios (Número)
                       </label>
                       <div className="flex items-center gap-3">
@@ -1528,13 +1528,13 @@ export default function ProfileView({
 
                     <div className="border-t border-white/10 pt-3 flex items-center justify-between gap-3">
                       <div>
-                        <p className="text-xs font-mono font-bold text-[#E9C349] uppercase">Exportar Historial (Logs CSV)</p>
+                        <p className="text-xs font-mono font-bold text-[#D9A9FF] uppercase">Exportar Historial (Logs CSV)</p>
                         <p className="text-[11px] text-slate-400">Descarga tu historial completo en formato CSV.</p>
                       </div>
                       <button
                         type="button"
                         onClick={exportPracticeLogsCSV}
-                        className="px-3.5 py-2 bg-[#E9C349] hover:bg-[#ffdf6b] text-black font-mono font-bold text-xs rounded-xl transition-all uppercase flex items-center gap-1.5 cursor-pointer shrink-0"
+                        className="px-3.5 py-2 bg-[#D9A9FF] hover:bg-[#F2CFFF] text-black font-mono font-bold text-xs rounded-xl transition-all uppercase flex items-center gap-1.5 cursor-pointer shrink-0"
                       >
                         <Download className="w-3.5 h-3.5" />
                         <span>CSV</span>
@@ -1646,7 +1646,7 @@ export default function ProfileView({
                           disabled={invoiceDownloadingId === inv}
                           className="px-3 py-1.5 bg-white/10 hover:bg-white/20 text-xs font-mono font-bold text-slate-900 dark:text-white rounded-lg flex items-center gap-1.5 transition-all"
                         >
-                          <Download className="w-3.5 h-3.5 text-[#E9C349]" />
+                          <Download className="w-3.5 h-3.5 text-[#D9A9FF]" />
                           <span>{invoiceDownloadingId === inv ? `${invoiceDownloadProgress}%` : 'PDF'}</span>
                         </button>
                       </div>
@@ -1696,7 +1696,7 @@ export default function ProfileView({
               <form onSubmit={handlePerformUpload} className="space-y-4">
                 
                 {/* File Dropzone Input */}
-                <div className="border-2 border-dashed border-white/20 hover:border-[#E9C349] rounded-2xl p-6 text-center cursor-pointer transition-all bg-white/5 relative overflow-hidden group">
+                <div className="border-2 border-dashed border-white/20 hover:border-[#D9A9FF] rounded-2xl p-6 text-center cursor-pointer transition-all bg-white/5 relative overflow-hidden group">
                   <input
                     type="file"
                     accept="image/*,video/*"
@@ -1710,7 +1710,7 @@ export default function ProfileView({
                       ) : (
                         <img src={uploadPreviewUrl} alt="Preview" className="max-h-40 mx-auto rounded-xl object-cover" />
                       )}
-                      <p className="text-xs font-mono text-[#E9C349] font-bold">Haz clic para cambiar archivo</p>
+                      <p className="text-xs font-mono text-[#D9A9FF] font-bold">Haz clic para cambiar archivo</p>
                     </div>
                   ) : (
                     <div className="space-y-2">
@@ -1774,11 +1774,11 @@ export default function ProfileView({
                   <div className="space-y-1.5 pt-2">
                     <div className="flex justify-between text-[10px] font-mono font-bold text-slate-300">
                       <span>Subiendo a Firebase Storage...</span>
-                      <span className="text-[#E9C349]">{uploadProgress}%</span>
+                      <span className="text-[#D9A9FF]">{uploadProgress}%</span>
                     </div>
                     <div className="h-2 w-full bg-white/10 rounded-full overflow-hidden">
                       <div 
-                        className="h-full bg-gradient-to-r from-[#FF6126] to-[#E9C349] transition-all duration-300" 
+                        className="h-full bg-gradient-to-r from-[#FF6126] to-[#D9A9FF] transition-all duration-300" 
                         style={{ width: `${uploadProgress}%` }}
                       />
                     </div>
@@ -1809,7 +1809,7 @@ export default function ProfileView({
               initial={{ opacity: 0, scale: 0.9, rotateY: 10 }}
               animate={{ opacity: 1, scale: 1, rotateY: 0 }}
               exit={{ opacity: 0, scale: 0.9 }}
-              className="bg-gradient-to-b from-[#181824] via-[#0D0D14] to-black border-2 border-[#E9C349]/50 rounded-3xl w-full max-w-sm p-6 shadow-[0_0_50px_rgba(233,195,73,0.3)] space-y-6 text-center relative overflow-hidden"
+              className="bg-gradient-to-b from-[#181824] via-[#0D0D14] to-black border-2 border-[#D9A9FF]/50 rounded-3xl w-full max-w-sm p-6 shadow-[0_0_50px_rgba(217, 169, 255,0.3)] space-y-6 text-center relative overflow-hidden"
             >
               <button
                 type="button"
@@ -1820,7 +1820,7 @@ export default function ProfileView({
               </button>
 
               <div className="space-y-1">
-                <span className="px-3 py-1 rounded-full bg-[#E9C349]/20 text-[#E9C349] text-[9px] font-mono font-bold uppercase tracking-widest border border-[#E9C349]/40">
+                <span className="px-3 py-1 rounded-full bg-[#D9A9FF]/20 text-[#D9A9FF] text-[9px] font-mono font-bold uppercase tracking-widest border border-[#D9A9FF]/40">
                   TARJETA OFICIAL DE BAILARÍN
                 </span>
                 <h3 className="text-xl font-black text-white uppercase tracking-wider font-mono pt-2">
@@ -1830,7 +1830,7 @@ export default function ProfileView({
 
               {/* Card Main Body */}
               <div className="p-4 bg-white/5 rounded-2xl border border-white/10 space-y-4">
-                <div className="w-24 h-24 mx-auto rounded-full p-1 bg-gradient-to-tr from-[#FF2E63] to-[#E9C349] shadow-xl">
+                <div className="w-24 h-24 mx-auto rounded-full p-1 bg-gradient-to-tr from-[#FF2E63] to-[#D9A9FF] shadow-xl">
                   <img
                     src={currentUser.avatar}
                     alt={currentUser.name}
@@ -1840,7 +1840,7 @@ export default function ProfileView({
 
                 <div>
                   <p className="text-lg font-black text-white">{currentUser.name}</p>
-                  <p className="text-xs font-mono text-[#E9C349] font-bold">{nickname}</p>
+                  <p className="text-xs font-mono text-[#D9A9FF] font-bold">{nickname}</p>
                   <p className="text-[10px] text-slate-400 mt-1">ID Estudiante: #9842 • Rango Elite</p>
                 </div>
 
@@ -1858,7 +1858,7 @@ export default function ProfileView({
                 }}
                 className="w-full py-3 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-mono font-bold text-xs uppercase flex items-center justify-center gap-2 cursor-pointer transition-all"
               >
-                <Copy className="w-4 h-4 text-[#E9C349]" />
+                <Copy className="w-4 h-4 text-[#D9A9FF]" />
                 <span>Copiar Enlace de Perfil</span>
               </button>
             </motion.div>
@@ -1898,7 +1898,7 @@ export default function ProfileView({
               {/* Details & Actions */}
               <div className="w-full md:w-1/2 p-5 flex flex-col justify-between space-y-4 font-mono">
                 <div className="space-y-3">
-                  <div className="flex items-center gap-2 text-xs text-[#E9C349] font-bold">
+                  <div className="flex items-center gap-2 text-xs text-[#D9A9FF] font-bold">
                     <span>{lightboxItem.category || 'Publicación'}</span>
                   </div>
                   <h3 className="text-base font-black text-slate-900 dark:text-white">{lightboxItem.title}</h3>

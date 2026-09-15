@@ -52,8 +52,8 @@ const LEVEL_MILESTONES: LevelMilestone[] = [
     targetLessonsCount: 6,
     perksEs: ['Técnica de Rolls bimanual', 'Rutinas a 115 BPM', 'Estrategias de Espejo Virtual'],
     perksEn: ['Bimanual roll technique', '115 BPM routines', 'Virtual Mirror strategies'],
-    color: '#E9C349',
-    badgeBg: 'from-[#E9C349]/20 to-[#E9C349]/5'
+    color: '#D9A9FF',
+    badgeBg: 'from-[#D9A9FF]/20 to-[#D9A9FF]/5'
   },
   {
     levelNum: 2,
@@ -156,7 +156,7 @@ export default function StudentLevelProgressBar({
 
   return (
     <div className={`border rounded-3xl p-5 sm:p-6 shadow-xl relative overflow-hidden transition-all group ${
-      isDark ? 'bg-[#121218] border-white/15 text-white hover:border-[#E9C349]/40' : 'bg-white border-slate-200 text-slate-900 hover:border-amber-400/60 shadow-md'
+      isDark ? 'bg-[#121218] border-white/15 text-white hover:border-[#D9A9FF]/40' : 'bg-white border-slate-200 text-slate-900 hover:border-amber-400/60 shadow-md'
     }`}>
       
       {/* Background ambient lighting */}
@@ -164,7 +164,7 @@ export default function StudentLevelProgressBar({
         className="absolute -top-24 -right-24 w-72 h-72 rounded-full blur-3xl pointer-events-none opacity-20 transition-all duration-700 group-hover:opacity-30"
         style={{ backgroundColor: currentMilestone.color }}
       />
-      <div className="absolute top-0 right-0 w-full h-full bg-[radial-gradient(ellipse_at_top_right,rgba(233,195,73,0.06)_0%,transparent_65%)] pointer-events-none" />
+      <div className="absolute top-0 right-0 w-full h-full bg-[radial-gradient(ellipse_at_top_right,rgba(217, 169, 255,0.06)_0%,transparent_65%)] pointer-events-none" />
 
       {/* Main Content Header */}
       <div className="relative z-10 space-y-5">
@@ -181,8 +181,8 @@ export default function StudentLevelProgressBar({
 
             <div>
               <div className="flex items-center gap-2 flex-wrap">
-                <span className="text-[10px] font-mono font-bold text-[#E9C349] bg-[#E9C349]/10 border border-[#E9C349]/30 px-2.5 py-0.5 rounded-full uppercase tracking-wider flex items-center gap-1">
-                  <Award className="w-3 h-3 text-[#E9C349]" />
+                <span className="text-[10px] font-mono font-bold text-[#D9A9FF] bg-[#D9A9FF]/10 border border-[#D9A9FF]/30 px-2.5 py-0.5 rounded-full uppercase tracking-wider flex items-center gap-1">
+                  <Award className="w-3 h-3 text-[#D9A9FF]" />
                   {isEs ? currentMilestone.rankEs : currentMilestone.rankEn}
                 </span>
 
@@ -193,7 +193,7 @@ export default function StudentLevelProgressBar({
 
               <h3 className="text-base sm:text-lg font-black text-slate-900 dark:text-white uppercase font-mono tracking-wide mt-1 flex items-center gap-2">
                 <span>{isEs ? currentMilestone.titleEs : currentMilestone.titleEn}</span>
-                {isMaxLevel && <Sparkles className="w-4 h-4 text-[#E9C349] animate-bounce" />}
+                {isMaxLevel && <Sparkles className="w-4 h-4 text-[#D9A9FF] animate-bounce" />}
               </h3>
             </div>
           </div>
@@ -206,7 +206,7 @@ export default function StudentLevelProgressBar({
                   ? (isEs ? 'Nivel Máximo Alcanzado' : 'Max Level Achieved') 
                   : (isEs ? 'Avance al Próximo Nivel' : 'Next Level Progress')}
               </span>
-              <span className="text-2xl font-black font-mono text-[#E9C349]">
+              <span className="text-2xl font-black font-mono text-[#D9A9FF]">
                 {overallProgressPercent}%
               </span>
             </div>
@@ -217,7 +217,7 @@ export default function StudentLevelProgressBar({
               className="p-2.5 rounded-xl bg-white/5 hover:bg-slate-200 dark:hover:bg-white/15 border border-white/10 text-slate-300 hover:text-slate-900 dark:hover:text-white transition-all cursor-pointer flex items-center justify-center"
               title={isEs ? 'Ver mapa de niveles y requisitos' : 'View level roadmap & requirements'}
             >
-              {isExpanded ? <ChevronUp className="w-4 h-4 text-[#E9C349]" /> : <ChevronDown className="w-4 h-4" />}
+              {isExpanded ? <ChevronUp className="w-4 h-4 text-[#D9A9FF]" /> : <ChevronDown className="w-4 h-4" />}
             </button>
           </div>
         </div>
@@ -226,7 +226,7 @@ export default function StudentLevelProgressBar({
         <div className="space-y-2">
           <div className="flex justify-between items-center text-xs font-mono">
             <span className="text-slate-300 font-bold flex items-center gap-1.5">
-              <Zap className="w-3.5 h-3.5 text-[#E9C349]" />
+              <Zap className="w-3.5 h-3.5 text-[#D9A9FF]" />
               <span>
                 {isMaxLevel 
                   ? (isEs ? '¡Has alcanzado la cima académica de Waack ON!' : 'You reached the academic peak!') 
@@ -246,9 +246,9 @@ export default function StudentLevelProgressBar({
               initial={{ width: 0 }}
               animate={{ width: `${overallProgressPercent}%` }}
               transition={{ duration: 1.2, ease: "easeOut" }}
-              className="h-full rounded-full relative overflow-hidden shadow-[0_0_15px_rgba(233,195,73,0.6)]"
+              className="h-full rounded-full relative overflow-hidden shadow-[0_0_15px_rgba(217, 169, 255,0.6)]"
               style={{
-                background: `linear-gradient(90deg, #E9C349 0%, ${currentMilestone.color} 50%, #f59e0b 100%)`
+                background: `linear-gradient(90deg, #D9A9FF 0%, ${currentMilestone.color} 50%, #f59e0b 100%)`
               }}
             >
               {/* Moving shine ray */}
@@ -290,12 +290,12 @@ export default function StudentLevelProgressBar({
             </div>
 
             <div className="text-right">
-              <span className="text-xs font-mono font-bold text-[#E9C349]">
+              <span className="text-xs font-mono font-bold text-[#D9A9FF]">
                 {lessonPercent}%
               </span>
               <div className="w-16 bg-white/10 h-1.5 rounded-full overflow-hidden mt-1">
                 <div 
-                  className="bg-[#E9C349] h-full transition-all duration-500" 
+                  className="bg-[#D9A9FF] h-full transition-all duration-500" 
                   style={{ width: `${lessonPercent}%` }} 
                 />
               </div>
@@ -359,7 +359,7 @@ export default function StudentLevelProgressBar({
               <button
                 type="button"
                 onClick={onNavigateToLessons}
-                className="px-4 py-2 rounded-xl bg-[#E9C349] hover:bg-[#ffda5c] text-black font-mono font-black text-xs uppercase tracking-wider flex items-center gap-1.5 transition-all shadow-md hover:scale-105 active:scale-95 cursor-pointer shrink-0"
+                className="px-4 py-2 rounded-xl bg-[#D9A9FF] hover:bg-[#EFC7FF] text-black font-mono font-black text-xs uppercase tracking-wider flex items-center gap-1.5 transition-all shadow-md hover:scale-105 active:scale-95 cursor-pointer shrink-0"
               >
                 <span>{isEs ? 'Ver Lecciones' : 'Go to Lessons'}</span>
                 <ArrowRight className="w-3.5 h-3.5" />
@@ -443,7 +443,7 @@ export default function StudentLevelProgressBar({
                         </span>
                         {(isEs ? m.perksEs : m.perksEn).map((perk, idx) => (
                           <p key={idx} className="text-[10px] text-slate-300 font-mono flex items-center gap-1">
-                            <CheckCircle2 className="w-3 h-3 text-[#E9C349] shrink-0" />
+                            <CheckCircle2 className="w-3 h-3 text-[#D9A9FF] shrink-0" />
                             <span className="truncate">{perk}</span>
                           </p>
                         ))}

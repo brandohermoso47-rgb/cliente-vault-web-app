@@ -301,7 +301,7 @@ export default function TasksView({ currentUser, language, lessons, onAddBonusPo
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
           <div>
             <div className="flex items-center gap-2 mb-2">
-              <span className="text-[10px] font-mono font-black text-[#E9C349] bg-[#E9C349]/10 border border-[#E9C349]/30 px-2.5 py-1 rounded-full uppercase tracking-widest flex items-center gap-1.5">
+              <span className="text-[10px] font-mono font-black text-[#D9A9FF] bg-[#D9A9FF]/10 border border-[#D9A9FF]/30 px-2.5 py-1 rounded-full uppercase tracking-widest flex items-center gap-1.5">
                 <Sparkles className="w-3 h-3" />
                 GOOGLE WORKSPACE INTEGRATION
               </span>
@@ -355,7 +355,7 @@ export default function TasksView({ currentUser, language, lessons, onAddBonusPo
               <button
                 type="button"
                 onClick={() => setShowCreateTaskModal(true)}
-                className="px-5 py-2.5 rounded-xl bg-[#E9C349] hover:bg-[#d6b039] text-black border border-[#E9C349] text-xs font-extrabold uppercase transition-all shadow-lg hover:scale-105 flex items-center gap-2"
+                className="px-5 py-2.5 rounded-xl bg-[#D9A9FF] hover:bg-[#B87CFF] text-black border border-[#D9A9FF] text-xs font-extrabold uppercase transition-all shadow-lg hover:scale-105 flex items-center gap-2"
               >
                 <Plus className="w-4 h-4" />
                 Nueva Tarea
@@ -391,7 +391,7 @@ export default function TasksView({ currentUser, language, lessons, onAddBonusPo
         <div className="bg-gradient-to-r from-amber-50 via-white to-white dark:from-[#1c1912] dark:via-[#121212] dark:to-[#121212] border-2 border-[#E9C349] rounded-3xl p-6 shadow-2xl space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <span className="p-2 rounded-xl bg-[#E9C349]/20 text-[#E9C349]">
+              <span className="p-2 rounded-xl bg-[#D9A9FF]/20 text-[#D9A9FF]">
                 <Sparkles className="w-5 h-5 animate-pulse" />
               </span>
               <div>
@@ -399,7 +399,7 @@ export default function TasksView({ currentUser, language, lessons, onAddBonusPo
                 <p className="text-xs text-slate-500 dark:text-slate-400">Completa estas misiones para sumar puntos directos a tu ranking somático.</p>
               </div>
             </div>
-            <span className="text-xs font-mono font-bold text-[#E9C349] bg-[#E9C349]/10 px-3 py-1 rounded-full border border-[#E9C349]/30">
+            <span className="text-xs font-mono font-bold text-[#D9A9FF] bg-[#D9A9FF]/10 px-3 py-1 rounded-full border border-[#D9A9FF]/30">
               {(assignedInstructorTasks || []).filter(t => t.status !== 'completed').length} Pendientes
             </span>
           </div>
@@ -424,7 +424,7 @@ export default function TasksView({ currentUser, language, lessons, onAddBonusPo
                   >
                     <div className="space-y-2">
                       <div className="flex items-center justify-between">
-                        <span className="text-[10px] font-mono font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-[#E9C349]/20 text-[#E9C349]">
+                        <span className="text-[10px] font-mono font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-[#D9A9FF]/20 text-[#D9A9FF]">
                           {task.category || 'Misión Técnica'}
                         </span>
                         <span className="text-xs font-mono font-bold text-amber-400">
@@ -439,7 +439,7 @@ export default function TasksView({ currentUser, language, lessons, onAddBonusPo
                         >
                           {task.title}
                           <motion.span
-                            className="absolute left-0 top-1/2 h-[2px] bg-[#E9C349] origin-left rounded-full pointer-events-none"
+                            className="absolute left-0 top-1/2 h-[2px] bg-[#D9A9FF] origin-left rounded-full pointer-events-none"
                             initial={{ scaleX: 0 }}
                             animate={{ scaleX: isCompleted ? 1 : 0 }}
                             transition={{ duration: 0.35, ease: 'easeInOut' }}
@@ -458,7 +458,7 @@ export default function TasksView({ currentUser, language, lessons, onAddBonusPo
                       {!isCompleted ? (
                         <button
                           onClick={() => handleCompleteInstructorTaskItem(task.id)}
-                          className="px-4 py-2 bg-[#E9C349] hover:bg-[#d8b33c] text-black text-xs font-black rounded-xl shadow transition-all hover:scale-105 uppercase tracking-wider flex items-center gap-1.5 cursor-pointer"
+                          className="px-4 py-2 bg-[#D9A9FF] hover:bg-[#B87CFF] text-black text-xs font-black rounded-xl shadow transition-all hover:scale-105 uppercase tracking-wider flex items-center gap-1.5 cursor-pointer"
                         >
                           <span>Completar (+{task.points || 50} pts)</span>
                           <CheckCircle2 className="w-4 h-4" />
@@ -511,7 +511,7 @@ export default function TasksView({ currentUser, language, lessons, onAddBonusPo
                     }`}
                   >
                     <span className="text-xs font-extrabold uppercase truncate">{list.title}</span>
-                    {isSelected && <span className="w-2 h-2 rounded-full bg-[#E9C349] shrink-0" />}
+                    {isSelected && <span className="w-2 h-2 rounded-full bg-[#D9A9FF] shrink-0" />}
                   </button>
                 );
               })}
@@ -783,7 +783,7 @@ export default function TasksView({ currentUser, language, lessons, onAddBonusPo
                   type="button"
                   onClick={handleConfirmCreateTask}
                   disabled={loading}
-                  className="px-5 py-2 rounded-xl bg-[#E9C349] hover:bg-[#d6b039] text-black text-xs font-extrabold uppercase shadow-lg cursor-pointer"
+                  className="px-5 py-2 rounded-xl bg-[#D9A9FF] hover:bg-[#B87CFF] text-black text-xs font-extrabold uppercase shadow-lg cursor-pointer"
                 >
                   Añadir a Google Tasks
                 </button>
@@ -839,7 +839,7 @@ export default function TasksView({ currentUser, language, lessons, onAddBonusPo
                   type="button"
                   onClick={handleConfirmCreateList}
                   disabled={loading}
-                  className="px-5 py-2 rounded-xl bg-[#E9C349] hover:bg-[#d6b039] text-black text-xs font-extrabold uppercase shadow-lg cursor-pointer"
+                  className="px-5 py-2 rounded-xl bg-[#D9A9FF] hover:bg-[#B87CFF] text-black text-xs font-extrabold uppercase shadow-lg cursor-pointer"
                 >
                   Crear Lista
                 </button>

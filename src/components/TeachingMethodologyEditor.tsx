@@ -127,18 +127,18 @@ export default function TeachingMethodologyEditor({
 
   return (
     <div className="bg-[#100D18] border border-[#312340] rounded-3xl p-6 md:p-8 space-y-6 shadow-2xl relative overflow-hidden text-slate-200">
-      <div className="absolute top-0 right-0 w-72 h-72 bg-[#9A2B3C]/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-0 right-0 w-72 h-72 bg-[#C23E9E]/10 rounded-full blur-3xl pointer-events-none" />
 
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[#2B1E37] pb-5">
         <div className="flex items-center gap-3.5">
-          <div className="p-3 rounded-2xl bg-[#9A2B3C]/20 border border-[#9A2B3C]/40 text-[#E9C349] shrink-0">
+          <div className="p-3 rounded-2xl bg-[#C23E9E]/20 border border-[#C23E9E]/40 text-[#D9A9FF] shrink-0">
             <Compass className="w-6 h-6 animate-pulse" />
           </div>
           <div>
-            <div className="text-[10px] font-mono font-bold text-[#E9C349] uppercase tracking-widest flex items-center gap-1.5">
+            <div className="text-[10px] font-mono font-bold text-[#D9A9FF] uppercase tracking-widest flex items-center gap-1.5">
               <span>EXPEDIENTE DEL INSTRUCTOR</span>
-              <span className="px-2 py-0.5 rounded-full bg-[#9A2B3C]/30 text-white text-[9px]">FREESTYLE LAB</span>
+              <span className="px-2 py-0.5 rounded-full bg-[#C23E9E]/30 text-white text-[9px]">FREESTYLE LAB</span>
             </div>
             <h3 className="text-lg font-black text-white tracking-wide mt-0.5">
               Metodología Pedagógica & Herramientas de Cátedra
@@ -152,16 +152,16 @@ export default function TeachingMethodologyEditor({
         <button
           onClick={handleSave}
           disabled={loading}
-          className="px-5 py-2.5 rounded-2xl bg-gradient-to-r from-[#9A2B3C] via-[#B8344B] to-[#E9C349] text-white text-xs font-mono font-bold uppercase tracking-wider shadow-lg hover:brightness-110 active:scale-95 transition-all flex items-center justify-center gap-2 shrink-0 self-start md:self-auto"
+          className="px-5 py-2.5 rounded-2xl bg-gradient-to-r from-[#C23E9E] via-[#C23FA0] to-[#D9A9FF] text-white text-xs font-mono font-bold uppercase tracking-wider shadow-lg hover:brightness-110 active:scale-95 transition-all flex items-center justify-center gap-2 shrink-0 self-start md:self-auto"
         >
           {loading ? (
             <>
-              <Loader2 className="w-4 h-4 animate-spin text-[#E9C349]" />
+              <Loader2 className="w-4 h-4 animate-spin text-[#D9A9FF]" />
               <span>Guardando en Servidor...</span>
             </>
           ) : (
             <>
-              <Check className="w-4 h-4 text-[#E9C349]" />
+              <Check className="w-4 h-4 text-[#D9A9FF]" />
               <span>Guardar Metodología</span>
             </>
           )}
@@ -186,7 +186,7 @@ export default function TeachingMethodologyEditor({
       <div className="space-y-3 bg-[#161220] p-5 rounded-2xl border border-[#2B1F38]">
         <div className="flex items-center justify-between">
           <h4 className="text-xs font-mono font-bold text-white uppercase tracking-wider flex items-center gap-2">
-            <Dumbbell className="w-4 h-4 text-[#E9C349]" />
+            <Dumbbell className="w-4 h-4 text-[#D9A9FF]" />
             Herramientas del Freestyle Lab Asociadas a tu Cátedra
           </h4>
           <span className="text-[10px] font-mono text-slate-400">
@@ -208,11 +208,11 @@ export default function TeachingMethodologyEditor({
                 onClick={() => toggleTool(tool.id)}
                 className={`p-3 rounded-2xl border text-left transition-all flex items-start gap-2.5 ${
                   isSelected
-                    ? 'bg-[#1E122A] border-[#E9C349]/60 shadow-md text-white'
+                    ? 'bg-[#1E122A] border-[#D9A9FF]/60 shadow-md text-white'
                     : 'bg-[#120F1B] border-[#2B2036] hover:border-[#3D2C4D] text-slate-400'
                 }`}
               >
-                <div className={`mt-0.5 p-1 rounded-lg shrink-0 ${isSelected ? 'bg-[#E9C349] text-black' : 'bg-slate-800 text-slate-500'}`}>
+                <div className={`mt-0.5 p-1 rounded-lg shrink-0 ${isSelected ? 'bg-[#D9A9FF] text-black' : 'bg-slate-800 text-slate-500'}`}>
                   <Check className="w-3 h-3" />
                 </div>
                 <div className="min-w-0">
@@ -229,7 +229,7 @@ export default function TeachingMethodologyEditor({
       <div className="space-y-3 bg-[#161220] p-5 rounded-2xl border border-[#2B1F38]">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <h4 className="text-xs font-mono font-bold text-white uppercase tracking-wider flex items-center gap-2">
-            <FileText className="w-4 h-4 text-[#E9C349]" />
+            <FileText className="w-4 h-4 text-[#D9A9FF]" />
             Módulo de Edición de Texto Enriquecido (Rich Text / Markdown)
           </h4>
 
@@ -240,7 +240,7 @@ export default function TeachingMethodologyEditor({
               onClick={() => setActiveTab('editor')}
               className={`px-3 py-1.5 rounded-lg text-xs font-mono font-bold flex items-center gap-1.5 transition-all ${
                 activeTab === 'editor'
-                  ? 'bg-[#9A2B3C] text-white shadow-md'
+                  ? 'bg-[#C23E9E] text-white shadow-md'
                   : 'text-slate-400 hover:text-white'
               }`}
             >
@@ -252,7 +252,7 @@ export default function TeachingMethodologyEditor({
               onClick={() => setActiveTab('preview')}
               className={`px-3 py-1.5 rounded-lg text-xs font-mono font-bold flex items-center gap-1.5 transition-all ${
                 activeTab === 'preview'
-                  ? 'bg-[#E9C349] text-black shadow-md'
+                  ? 'bg-[#D9A9FF] text-black shadow-md'
                   : 'text-slate-400 hover:text-white'
               }`}
             >
@@ -330,9 +330,9 @@ export default function TeachingMethodologyEditor({
                 <button
                   type="button"
                   onClick={() => setMethodologyText(DEFAULT_METHODOLOGY_TEMPLATE)}
-                  className="px-2.5 py-1 rounded-lg bg-[#271B33] hover:bg-[#362547] text-[#E9C349] text-[10px] font-mono font-bold flex items-center gap-1 transition-all"
+                  className="px-2.5 py-1 rounded-lg bg-[#271B33] hover:bg-[#362547] text-[#D9A9FF] text-[10px] font-mono font-bold flex items-center gap-1 transition-all"
                 >
-                  <Zap className="w-3 h-3 text-[#E9C349]" />
+                  <Zap className="w-3 h-3 text-[#D9A9FF]" />
                   <span>Cargar Plantilla Oficial</span>
                 </button>
                 <button
@@ -351,15 +351,15 @@ export default function TeachingMethodologyEditor({
               value={methodologyText}
               onChange={e => setMethodologyText(e.target.value)}
               placeholder="Escribe en detalle tu enfoque metodológico, ejercicios de arm-rolls, uso del Espejo Ciego y DramaLab..."
-              className="w-full h-64 p-4 rounded-2xl bg-[#0F0C16] border border-[#2B1E37] focus:border-[#E9C349] focus:outline-none text-xs font-mono text-slate-200 placeholder-slate-600 transition-colors resize-y leading-relaxed"
+              className="w-full h-64 p-4 rounded-2xl bg-[#0F0C16] border border-[#2B1E37] focus:border-[#D9A9FF] focus:outline-none text-xs font-mono text-slate-200 placeholder-slate-600 transition-colors resize-y leading-relaxed"
             />
           </div>
         ) : (
           /* Rendered Formatted Preview */
           <div className="p-5 rounded-2xl bg-[#0F0C16] border border-[#2B1E37] space-y-4 min-h-[260px] text-xs leading-relaxed text-slate-200">
-            <div className="text-[10px] font-mono text-[#E9C349] font-bold uppercase tracking-widest border-b border-[#291D34] pb-2 flex items-center justify-between">
+            <div className="text-[10px] font-mono text-[#D9A9FF] font-bold uppercase tracking-widest border-b border-[#291D34] pb-2 flex items-center justify-between">
               <span>VISTA PREVIA PUBLICADA PARA ALUMNOS</span>
-              <span className="px-2 py-0.5 rounded bg-[#E9C349]/20 text-[#E9C349]">DIRECTORIO GLOBAL</span>
+              <span className="px-2 py-0.5 rounded bg-[#D9A9FF]/20 text-[#D9A9FF]">DIRECTORIO GLOBAL</span>
             </div>
 
             <div className="prose prose-invert max-w-none space-y-3">
@@ -367,7 +367,7 @@ export default function TeachingMethodologyEditor({
                 const trimmed = paragraph.trim();
                 if (trimmed.startsWith('## ')) {
                   return (
-                    <h2 key={pIdx} className="text-base font-black text-white uppercase tracking-wide border-b border-[#2B1F38] pb-1.5 text-[#E9C349]">
+                    <h2 key={pIdx} className="text-base font-black text-white uppercase tracking-wide border-b border-[#2B1F38] pb-1.5 text-[#D9A9FF]">
                       {trimmed.replace('## ', '')}
                     </h2>
                   );
@@ -381,7 +381,7 @@ export default function TeachingMethodologyEditor({
                 }
                 if (trimmed.startsWith('> ')) {
                   return (
-                    <blockquote key={pIdx} className="p-3.5 rounded-xl bg-[#1A1125] border-l-4 border-[#E9C349] italic text-slate-300 text-xs my-2">
+                    <blockquote key={pIdx} className="p-3.5 rounded-xl bg-[#1A1125] border-l-4 border-[#D9A9FF] italic text-slate-300 text-xs my-2">
                       {trimmed.replace('> ', '')}
                     </blockquote>
                   );
@@ -391,7 +391,7 @@ export default function TeachingMethodologyEditor({
                     <ul key={pIdx} className="space-y-1.5 pl-2 my-2">
                       {trimmed.split('\n').map((line, lIdx) => (
                         <li key={lIdx} className="text-xs text-slate-300 flex items-start gap-2">
-                          <span className="text-[#E9C349] font-bold">•</span>
+                          <span className="text-[#D9A9FF] font-bold">•</span>
                           <span>{line.replace(/^[0-9]+\.\s*/, '').replace(/^-\s*/, '')}</span>
                         </li>
                       ))}
@@ -413,8 +413,8 @@ export default function TeachingMethodologyEditor({
               </span>
               <div className="flex flex-wrap gap-1.5">
                 {selectedTools.map(t => (
-                  <span key={t} className="px-2.5 py-1 rounded-xl bg-[#9A2B3C]/20 border border-[#9A2B3C]/40 text-[#E9C349] text-[10px] font-mono font-bold flex items-center gap-1">
-                    <Zap className="w-3 h-3 text-[#E9C349]" />
+                  <span key={t} className="px-2.5 py-1 rounded-xl bg-[#C23E9E]/20 border border-[#C23E9E]/40 text-[#D9A9FF] text-[10px] font-mono font-bold flex items-center gap-1">
+                    <Zap className="w-3 h-3 text-[#D9A9FF]" />
                     <span>{t}</span>
                   </span>
                 ))}

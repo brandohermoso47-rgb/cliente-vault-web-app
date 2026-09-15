@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion'; // Using standard framer-motion as pre-configured in project
+import { motion } from 'motion/react';
 import { Crown, CheckCircle2, ShieldCheck, Sparkles, GraduationCap, BookOpen, Camera, Brain, Lock } from 'lucide-react';
 import { Language } from '../lib/translations';
 
@@ -130,10 +130,10 @@ export default function PremiumGate({ language, onSubscribe, sectionName = 'defa
   const getSectionIcon = () => {
     switch (sectionName) {
       case 'classes': return <GraduationCap className="w-10 h-10 text-primary animate-pulse" />;
-      case 'resources': return <BookOpen className="w-10 h-10 text-[#E9C349] animate-pulse" />;
+      case 'resources': return <BookOpen className="w-10 h-10 text-[#D9A9FF] animate-pulse" />;
       case 'lab': return <Camera className="w-10 h-10 text-tertiary animate-pulse" />;
       case 'diary': return <Brain className="w-10 h-10 text-primary-fixed-variant animate-pulse" />;
-      default: return <Crown className="w-10 h-10 text-[#E9C349] animate-pulse" />;
+      default: return <Crown className="w-10 h-10 text-[#D9A9FF] animate-pulse" />;
     }
   };
 
@@ -149,12 +149,12 @@ export default function PremiumGate({ language, onSubscribe, sectionName = 'defa
 
         {/* Top visual Badge */}
         <div className="mx-auto mb-4 w-16 h-16 rounded-full bg-primary-container/20 border border-primary/20 flex items-center justify-center relative shadow-inner">
-          <div className="absolute inset-0 rounded-full border border-[#E9C349]/10 animate-ping" />
+          <div className="absolute inset-0 rounded-full border border-[#D9A9FF]/10 animate-ping" />
           {getSectionIcon()}
         </div>
 
         {/* Tagline */}
-        <span className="inline-block bg-[#9A2B3C]/10 border border-[#9A2B3C]/30 text-primary font-mono text-[9px] tracking-[0.25em] font-bold px-3 py-1 rounded-full uppercase mb-4 shadow-sm">
+        <span className="inline-block bg-[#C23E9E]/10 border border-[#C23E9E]/30 text-primary font-mono text-[9px] tracking-[0.25em] font-bold px-3 py-1 rounded-full uppercase mb-4 shadow-sm">
           🌟 {t.tagline}
         </span>
 
@@ -221,7 +221,7 @@ export default function PremiumGate({ language, onSubscribe, sectionName = 'defa
                 className={`w-full py-3.5 px-6 rounded-xl font-bold uppercase text-xs tracking-wider transition-all duration-150 flex items-center justify-center gap-2 shadow-xl active:scale-95 ${
                   loading
                     ? 'bg-primary-container/40 border border-primary/20 text-[#EDEFF4] cursor-wait'
-                    : 'bg-primary hover:bg-primary-container text-white border border-[#9A2B3C] hover:border-primary-fixed-variant'
+                    : 'bg-primary hover:bg-primary-container text-white border border-[#C23E9E] hover:border-primary-fixed-variant'
                 }`}
               >
                 {loading ? (
@@ -234,7 +234,7 @@ export default function PremiumGate({ language, onSubscribe, sectionName = 'defa
                   </>
                 ) : (
                   <>
-                    <Crown className="w-4 h-4 text-[#E9C349] fill-[#E9C349]" />
+                    <Crown className="w-4 h-4 text-[#D9A9FF] fill-[#D9A9FF]" />
                     {t.btnText}
                   </>
                 )}

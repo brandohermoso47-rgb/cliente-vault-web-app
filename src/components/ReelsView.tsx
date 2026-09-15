@@ -655,7 +655,7 @@ export default function ReelsView({
               onClick={() => setActiveCategory(cat)}
               className={`px-3 py-1 rounded-full text-xs font-bold transition-all whitespace-nowrap shrink-0 border ${
                 activeCategory === cat
-                  ? 'bg-[#E9C349] text-slate-950 border-[#E9C349] font-black shadow-md'
+                  ? 'bg-[#D9A9FF] text-slate-950 border-[#D9A9FF] font-black shadow-md'
                   : 'bg-black/40 text-slate-300 border-white/10 hover:text-white hover:bg-white/10'
               }`}
             >
@@ -668,7 +668,7 @@ export default function ReelsView({
         <div className="flex items-center gap-1.5 shrink-0">
           <button
             onClick={() => setShowCreateModal(true)}
-            className="px-3 py-1.5 rounded-full bg-[#E9C349] hover:bg-[#f3d362] text-slate-950 font-black text-xs uppercase flex items-center gap-1.5 shadow-lg shadow-[#E9C349]/20 hover:scale-105 transition-all"
+            className="px-3 py-1.5 rounded-full bg-[#D9A9FF] hover:bg-[#E4B8FF] text-slate-950 font-black text-xs uppercase flex items-center gap-1.5 shadow-lg shadow-[#D9A9FF]/20 hover:scale-105 transition-all"
             title="Publicar tu video en Waack Reels"
           >
             <Camera className="w-3.5 h-3.5 stroke-[3]" />
@@ -680,7 +680,7 @@ export default function ReelsView({
             className="p-2 rounded-full bg-black/50 border border-white/20 text-white hover:bg-white/20 transition-all"
             title="Buscar Bailes o Hashtags"
           >
-            <Search className="w-4 h-4 text-[#E9C349]" />
+            <Search className="w-4 h-4 text-[#D9A9FF]" />
           </button>
         </div>
       </div>
@@ -692,9 +692,9 @@ export default function ReelsView({
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="absolute top-16 left-4 right-4 z-40 bg-[#141414]/95 border border-[#E9C349]/40 p-3 rounded-2xl shadow-2xl backdrop-blur-md flex items-center gap-2"
+            className="absolute top-16 left-4 right-4 z-40 bg-[#141414]/95 border border-[#D9A9FF]/40 p-3 rounded-2xl shadow-2xl backdrop-blur-md flex items-center gap-2"
           >
-            <Search className="w-4 h-4 text-[#E9C349]" />
+            <Search className="w-4 h-4 text-[#D9A9FF]" />
             <input
               type="text"
               placeholder="Buscar #Waacking, #ArmControl, @usuario..."
@@ -750,7 +750,7 @@ export default function ReelsView({
                   onClick={() => togglePlayPause(idx)}
                   className="absolute inset-0 flex items-center justify-center bg-black/30 pointer-events-auto"
                 >
-                  <div className="w-16 h-16 rounded-full bg-black/70 border border-[#E9C349]/50 flex items-center justify-center text-[#E9C349] shadow-2xl backdrop-blur-sm">
+                  <div className="w-16 h-16 rounded-full bg-black/70 border border-[#D9A9FF]/50 flex items-center justify-center text-[#D9A9FF] shadow-2xl backdrop-blur-sm">
                     <Play className="w-8 h-8 pl-1 fill-current" />
                   </div>
                 </div>
@@ -765,7 +765,7 @@ export default function ReelsView({
                 className="absolute top-16 right-4 z-20 p-2.5 bg-black/60 backdrop-blur-md rounded-full border border-white/20 text-white hover:bg-black/80 transition-all shadow-xl"
                 aria-label="Silenciar o activar audio"
               >
-                {isMuted ? <VolumeX className="w-4 h-4 text-rose-400" /> : <Volume2 className="w-4 h-4 text-[#E9C349]" />}
+                {isMuted ? <VolumeX className="w-4 h-4 text-rose-400" /> : <Volume2 className="w-4 h-4 text-[#D9A9FF]" />}
               </button>
 
               {/* RIGHT ACTION RAIL */}
@@ -776,7 +776,7 @@ export default function ReelsView({
                   <img
                     src={reel.creatorAvatar}
                     alt={reel.creatorName}
-                    className="w-12 h-12 rounded-full object-cover border-2 border-[#E9C349] shadow-2xl"
+                    className="w-12 h-12 rounded-full object-cover border-2 border-[#D9A9FF] shadow-2xl"
                   />
                   {!reel.isFollowing ? (
                     <button
@@ -832,7 +832,7 @@ export default function ReelsView({
                     }}
                     className="p-3 rounded-full bg-black/50 text-white border border-white/20 hover:bg-white/20 backdrop-blur-md transition-all shadow-xl active:scale-75"
                   >
-                    <MessageCircle className="w-6 h-6 text-[#E9C349]" />
+                    <MessageCircle className="w-6 h-6 text-[#D9A9FF]" />
                   </button>
                   <span className="text-[11px] font-mono font-bold text-white mt-1 drop-shadow-md">
                     {reel.commentsCount}
@@ -848,11 +848,11 @@ export default function ReelsView({
                     }}
                     className={`p-3 rounded-full backdrop-blur-md transition-all shadow-xl active:scale-75 ${
                       reel.isSaved 
-                        ? 'bg-[#E9C349]/30 text-[#E9C349] border border-[#E9C349]/50' 
+                        ? 'bg-[#D9A9FF]/30 text-[#D9A9FF] border border-[#D9A9FF]/50' 
                         : 'bg-black/50 text-white border border-white/20 hover:bg-white/20'
                     }`}
                   >
-                    <Bookmark className={`w-6 h-6 ${reel.isSaved ? 'fill-current text-[#E9C349]' : ''}`} />
+                    <Bookmark className={`w-6 h-6 ${reel.isSaved ? 'fill-current text-[#D9A9FF]' : ''}`} />
                   </button>
                   <span className="text-[11px] font-mono font-bold text-white mt-1 drop-shadow-md">
                     {reel.savedCount}
@@ -877,7 +877,7 @@ export default function ReelsView({
 
                 {/* Spinning Audio Music Disc */}
                 <div className="pt-2 flex flex-col items-center">
-                  <div className="relative w-10 h-10 rounded-full bg-gradient-to-tr from-slate-900 to-black p-1 border-2 border-[#E9C349] shadow-2xl animate-spin-slow">
+                  <div className="relative w-10 h-10 rounded-full bg-gradient-to-tr from-slate-900 to-black p-1 border-2 border-[#D9A9FF] shadow-2xl animate-spin-slow">
                     <img
                       src={reel.creatorAvatar}
                       alt="Music Track"
@@ -885,7 +885,7 @@ export default function ReelsView({
                     />
                     <div className="absolute inset-0 rounded-full border border-white/20 pointer-events-none" />
                   </div>
-                  <Music className="w-3.5 h-3.5 text-[#E9C349] animate-bounce mt-1" />
+                  <Music className="w-3.5 h-3.5 text-[#D9A9FF] animate-bounce mt-1" />
                 </div>
 
               </div>
@@ -897,17 +897,17 @@ export default function ReelsView({
                 <div className="flex items-center gap-2">
                   <h3 
                     onClick={() => onNavigateTab('profile')}
-                    className="text-sm sm:text-base font-black text-white hover:text-[#E9C349] cursor-pointer transition-colors flex items-center gap-1.5 drop-shadow-lg"
+                    className="text-sm sm:text-base font-black text-white hover:text-[#D9A9FF] cursor-pointer transition-colors flex items-center gap-1.5 drop-shadow-lg"
                   >
                     @{reel.creatorHandle}
                     {reel.isVerified && (
-                      <span className="p-0.5 bg-[#E9C349] text-slate-950 rounded-full" title="Bailarín Verificado">
+                      <span className="p-0.5 bg-[#D9A9FF] text-slate-950 rounded-full" title="Bailarín Verificado">
                         <Check className="w-3 h-3 stroke-[3]" />
                       </span>
                     )}
                   </h3>
 
-                  <span className="px-2 py-0.5 rounded-full bg-white/10 text-[10px] font-mono font-bold text-[#E9C349] border border-[#E9C349]/30">
+                  <span className="px-2 py-0.5 rounded-full bg-white/10 text-[10px] font-mono font-bold text-[#D9A9FF] border border-[#D9A9FF]/30">
                     {reel.category}
                   </span>
                 </div>
@@ -923,7 +923,7 @@ export default function ReelsView({
                         setSearchQuery(`#${tag}`);
                         setShowSearch(true);
                       }}
-                      className="font-extrabold text-[#E9C349] hover:underline cursor-pointer mr-1"
+                      className="font-extrabold text-[#D9A9FF] hover:underline cursor-pointer mr-1"
                     >
                       #{tag}
                     </span>
@@ -931,11 +931,11 @@ export default function ReelsView({
                 </p>
 
                 {/* Subtitles & AI Transcription Banner */}
-                <div className="bg-black/75 border border-[#E9C349]/40 p-2.5 rounded-xl backdrop-blur-md max-w-md shadow-xl flex items-start gap-2.5">
-                  <Languages className="w-4 h-4 text-[#E9C349] shrink-0 mt-0.5 animate-pulse" />
+                <div className="bg-black/75 border border-[#D9A9FF]/40 p-2.5 rounded-xl backdrop-blur-md max-w-md shadow-xl flex items-start gap-2.5">
+                  <Languages className="w-4 h-4 text-[#D9A9FF] shrink-0 mt-0.5 animate-pulse" />
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between gap-1 mb-0.5">
-                      <span className="text-[9px] font-mono font-black text-[#E9C349] uppercase tracking-wider">
+                      <span className="text-[9px] font-mono font-black text-[#D9A9FF] uppercase tracking-wider">
                         🎤 Subtítulos IA Sincronizados
                       </span>
                       <button
@@ -953,7 +953,7 @@ export default function ReelsView({
 
                 {/* Audio Ticker Track */}
                 <div className="flex items-center gap-2 bg-black/60 border border-white/10 px-3 py-1.5 rounded-full w-fit backdrop-blur-md">
-                  <Music className="w-3.5 h-3.5 text-[#E9C349] shrink-0" />
+                  <Music className="w-3.5 h-3.5 text-[#D9A9FF] shrink-0" />
                   <p className="text-[11px] font-mono font-bold text-slate-200 truncate max-w-[200px] sm:max-w-[280px]">
                     {reel.songTitle} — {reel.songArtist}
                   </p>
@@ -991,7 +991,7 @@ export default function ReelsView({
         {/* Central Plus Create Button */}
         <button
           onClick={() => setShowCreateModal(true)}
-          className="w-12 h-10 rounded-2xl bg-gradient-to-r from-[#E9C349] via-amber-400 to-[#9A2B3C] text-slate-950 flex items-center justify-center font-black shadow-lg shadow-[#E9C349]/30 hover:scale-105 active:scale-95 transition-all -mt-3 border border-white/30"
+          className="w-12 h-10 rounded-2xl bg-gradient-to-r from-[#D9A9FF] via-amber-400 to-[#C23E9E] text-slate-950 flex items-center justify-center font-black shadow-lg shadow-[#D9A9FF]/30 hover:scale-105 active:scale-95 transition-all -mt-3 border border-white/30"
           title="Grabar o Subir Waack Reel"
         >
           <Plus className="w-6 h-6 stroke-[3]" />
@@ -1003,7 +1003,7 @@ export default function ReelsView({
           className="flex flex-col items-center text-slate-400 hover:text-white transition-colors relative"
         >
           <MessageSquare className="w-5 h-5" />
-          <span className="absolute -top-1 -right-1 px-1 rounded-full bg-[#E9C349] text-slate-950 font-mono text-[8px] font-black">
+          <span className="absolute -top-1 -right-1 px-1 rounded-full bg-[#D9A9FF] text-slate-950 font-mono text-[8px] font-black">
             2
           </span>
           <span className="text-[9px] font-mono font-bold uppercase mt-1">Mensajes</span>
@@ -1026,7 +1026,7 @@ export default function ReelsView({
             initial={{ opacity: 0, y: 100 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 100 }}
-            className="absolute inset-x-0 bottom-0 top-1/4 z-50 bg-[#141414] border-t border-[#E9C349]/40 rounded-t-3xl p-4 sm:p-6 flex flex-col shadow-2xl backdrop-blur-xl"
+            className="absolute inset-x-0 bottom-0 top-1/4 z-50 bg-[#141414] border-t border-[#D9A9FF]/40 rounded-t-3xl p-4 sm:p-6 flex flex-col shadow-2xl backdrop-blur-xl"
           >
             {/* Header */}
             <div className="flex items-center justify-between pb-3 border-b border-white/10">
@@ -1044,7 +1044,7 @@ export default function ReelsView({
             </div>
 
             {/* Comments List */}
-            <div className="flex-1 overflow-y-auto space-y-4 py-4 scrollbar-thin scrollbar-thumb-[#9A2B3C]">
+            <div className="flex-1 overflow-y-auto space-y-4 py-4 scrollbar-thin scrollbar-thumb-[#C23E9E]">
               {(reels.find(r => r.id === activeCommentsReelId)?.comments || []).map((c) => (
                 <div key={c.id} className="flex items-start gap-3 text-xs">
                   <img src={c.avatar} alt={c.user} className="w-8 h-8 rounded-full object-cover border border-[#E9C349]" />
@@ -1071,7 +1071,7 @@ export default function ReelsView({
               <button
                 type="submit"
                 disabled={!newCommentText.trim()}
-                className="px-5 py-2.5 bg-[#E9C349] text-slate-950 font-black text-xs rounded-xl hover:bg-[#f3d362] disabled:opacity-40 transition-all shadow-md"
+                className="px-5 py-2.5 bg-[#D9A9FF] text-slate-950 font-black text-xs rounded-xl hover:bg-[#E4B8FF] disabled:opacity-40 transition-all shadow-md"
               >
                 <Send className="w-4 h-4" />
               </button>
@@ -1089,7 +1089,7 @@ export default function ReelsView({
             exit={{ opacity: 0, scale: 0.95 }}
             className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4"
           >
-            <div className="bg-[#141414] border border-[#E9C349]/40 p-6 rounded-3xl max-w-sm w-full space-y-5 shadow-2xl">
+            <div className="bg-[#141414] border border-[#D9A9FF]/40 p-6 rounded-3xl max-w-sm w-full space-y-5 shadow-2xl">
               <div className="flex items-center justify-between">
                 <h3 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
                   <Share2 className="w-4 h-4 text-blue-400" /> COMPARTIR REEL
@@ -1116,7 +1116,7 @@ export default function ReelsView({
                   }}
                   className="p-3 bg-white/5 hover:bg-white/10 rounded-2xl border border-white/10 text-xs font-bold text-slate-900 dark:text-white flex items-center justify-center gap-2 transition-all"
                 >
-                  {copiedLink ? <CheckCircle2 className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4 text-[#E9C349]" />}
+                  {copiedLink ? <CheckCircle2 className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4 text-[#D9A9FF]" />}
                   {copiedLink ? '¡Enlace Copiado!' : 'Copiar Enlace'}
                 </button>
 
@@ -1145,7 +1145,7 @@ export default function ReelsView({
           >
             <form 
               onSubmit={handleCreateReelSubmit}
-              className="bg-[#141414] border border-[#E9C349]/40 p-6 rounded-3xl max-w-md w-full space-y-4 shadow-2xl max-h-[90vh] overflow-y-auto scrollbar-thin scrollbar-thumb-[#E9C349]"
+              className="bg-[#141414] border border-[#D9A9FF]/40 p-6 rounded-3xl max-w-md w-full space-y-4 shadow-2xl max-h-[90vh] overflow-y-auto scrollbar-thin scrollbar-thumb-[#D9A9FF]"
             >
               <div className="flex items-center justify-between pb-3 border-b border-white/10">
                 <h3 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
@@ -1166,7 +1166,7 @@ export default function ReelsView({
                 <label className="text-xs font-bold text-slate-300 block mb-1">
                   Video de Danza (Selecciona archivo local para Firebase Storage)
                 </label>
-                <div className="p-4 bg-white/5 border border-dashed border-[#E9C349]/50 rounded-2xl text-center space-y-2 relative hover:bg-white/10 transition-colors cursor-pointer">
+                <div className="p-4 bg-white/5 border border-dashed border-[#D9A9FF]/50 rounded-2xl text-center space-y-2 relative hover:bg-white/10 transition-colors cursor-pointer">
                   <input
                     type="file"
                     accept="video/*"
@@ -1183,7 +1183,7 @@ export default function ReelsView({
 
                 {/* Local Video Preview */}
                 {filePreviewUrl && (
-                  <div className="mt-2 relative rounded-xl overflow-hidden border border-[#E9C349]/40 aspect-[9/12] max-h-48 mx-auto bg-black flex items-center justify-center">
+                  <div className="mt-2 relative rounded-xl overflow-hidden border border-[#D9A9FF]/40 aspect-[9/12] max-h-48 mx-auto bg-black flex items-center justify-center">
                     <video src={filePreviewUrl} controls className="w-full h-full object-cover" />
                   </div>
                 )}
@@ -1203,8 +1203,8 @@ export default function ReelsView({
 
               {/* Upload Progress Bar */}
               {isUploading && (
-                <div className="p-3 bg-[#E9C349]/10 border border-[#E9C349]/30 rounded-2xl space-y-2">
-                  <div className="flex items-center justify-between text-xs font-mono font-bold text-[#E9C349]">
+                <div className="p-3 bg-[#D9A9FF]/10 border border-[#D9A9FF]/30 rounded-2xl space-y-2">
+                  <div className="flex items-center justify-between text-xs font-mono font-bold text-[#D9A9FF]">
                     <span className="flex items-center gap-1.5">
                       <Loader2 className="w-3.5 h-3.5 animate-spin" />
                       {uploadStatusMsg}
@@ -1213,7 +1213,7 @@ export default function ReelsView({
                   </div>
                   <div className="w-full h-2 bg-slate-200 dark:bg-black/50 rounded-full overflow-hidden border border-white/10">
                     <div 
-                      className="h-full bg-gradient-to-r from-[#E9C349] to-amber-400 transition-all duration-300"
+                      className="h-full bg-gradient-to-r from-[#D9A9FF] to-amber-400 transition-all duration-300"
                       style={{ width: `${uploadProgress}%` }}
                     />
                   </div>
@@ -1296,7 +1296,7 @@ export default function ReelsView({
                 <button
                   type="submit"
                   disabled={isUploading || (!selectedFile && !uploadVideoUrlInput && !uploadCaption)}
-                  className="px-6 py-2 bg-[#E9C349] text-slate-950 font-black text-xs rounded-xl hover:bg-[#f3d362] shadow-lg flex items-center gap-1.5 disabled:opacity-40 cursor-pointer"
+                  className="px-6 py-2 bg-[#D9A9FF] text-slate-950 font-black text-xs rounded-xl hover:bg-[#E4B8FF] shadow-lg flex items-center gap-1.5 disabled:opacity-40 cursor-pointer"
                 >
                   {isUploading ? (
                     <>
