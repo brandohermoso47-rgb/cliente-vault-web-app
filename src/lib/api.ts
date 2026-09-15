@@ -1,19 +1,31 @@
 import { User } from '../types';
+import { auth } from '../firebase';
 
 /**
- * Helper to construct headers with RBAC credentials (x-user-role & x-user-id)
+ * Helper to construct headers carrying a verified Firebase ID token.
+ *
+ * SEGURIDAD (arreglo urgente): esto antes mandaba `x-user-role`/`x-user-id`
+ * armados por el propio cliente, y el backend los aceptaba tal cual — un
+ * bypass total de autorización (cualquiera podía declararse "instructor" con
+ * suscripción activa). Ahora el backend verifica un ID token real de Firebase
+ * y resuelve el rol/estado de suscripción él mismo desde los custom claims
+ * (ver src/server/rbac.ts y el webhook de Stripe en server.ts), así que aquí
+ * solo hace falta mandar el token — el servidor es la única fuente de verdad
+ * sobre quién es el usuario.
  */
-function getAuthHeaders(currentUser?: User): Record<string, string> {
+async function getAuthHeaders(_currentUser?: User): Promise<Record<string, string>> {
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
   };
 
-  if (currentUser) {
-    headers['x-user-role'] = currentUser.role || 'student';
-    headers['x-user-id'] = currentUser.id || 'anonymous';
-  } else {
-    headers['x-user-role'] = 'student';
-    headers['x-user-id'] = 'anonymous';
+  const firebaseUser = auth.currentUser;
+  if (firebaseUser) {
+    try {
+      const idToken = await firebaseUser.getIdToken();
+      headers['Authorization'] = `Bearer ${idToken}`;
+    } catch (err) {
+      console.warn('No se pudo obtener el token de Firebase para autenticar la solicitud:', err);
+    }
   }
 
   return headers;
@@ -25,7 +37,7 @@ function getAuthHeaders(currentUser?: User): Record<string, string> {
 export async function fetchInstructorMetrics(currentUser: User) {
   const res = await fetch('/api/instructor/metrics', {
     method: 'GET',
-    headers: getAuthHeaders(currentUser)
+    headers: await getAuthHeaders(currentUser)
   });
 
   const data = await res.json();
@@ -41,7 +53,7 @@ export async function fetchInstructorMetrics(currentUser: User) {
 export async function fetchStudentRoster(currentUser: User) {
   const res = await fetch('/api/instructor/students', {
     method: 'GET',
-    headers: getAuthHeaders(currentUser)
+    headers: await getAuthHeaders(currentUser)
   });
 
   const data = await res.json();
@@ -67,7 +79,7 @@ export async function createBackendAnnouncement(
 ) {
   const res = await fetch('/api/instructor/announcements', {
     method: 'POST',
-    headers: getAuthHeaders(currentUser),
+    headers: await getAuthHeaders(currentUser),
     body: JSON.stringify({
       title: payload.title,
       content: payload.content,
@@ -105,7 +117,7 @@ export async function postCommunityMessage(
 ) {
   const res = await fetch('/api/community/messages', {
     method: 'POST',
-    headers: getAuthHeaders(currentUser),
+    headers: await getAuthHeaders(currentUser),
     body: JSON.stringify({
       content: payload.content,
       channel: payload.channel || 'lobby',
@@ -142,7 +154,7 @@ export async function createInstructorTask(
 ) {
   const res = await fetch('/api/instructor/tasks', {
     method: 'POST',
-    headers: getAuthHeaders(currentUser),
+    headers: await getAuthHeaders(currentUser),
     body: JSON.stringify({
       title: payload.title,
       description: payload.description,
@@ -172,7 +184,7 @@ export async function updateProfileBackend(
 ) {
   const res = await fetch('/api/profile/update', {
     method: 'POST',
-    headers: getAuthHeaders(currentUser),
+    headers: await getAuthHeaders(currentUser),
     body: JSON.stringify({
       uid: currentUser.id,
       name: profileData.name || currentUser.name,
@@ -215,7 +227,7 @@ export async function generateOnboardingPlanBackend(
 ) {
   const res = await fetch('/api/gemini/onboarding-plan', {
     method: 'POST',
-    headers: getAuthHeaders(currentUser),
+    headers: await getAuthHeaders(currentUser),
     body: JSON.stringify(answers)
   });
 
@@ -246,7 +258,7 @@ export async function updateInstructorPricingMethodologyBackend(
 ) {
   const res = await fetch('/api/instructor/pricing-methodology', {
     method: 'PUT',
-    headers: getAuthHeaders(currentUser),
+    headers: await getAuthHeaders(currentUser),
     body: JSON.stringify(payload)
   });
 
@@ -281,7 +293,7 @@ export interface BankAccountInput {
 export async function fetchInstructorFinances(currentUser: User) {
   const res = await fetch('/api/instructor/finances', {
     method: 'GET',
-    headers: getAuthHeaders(currentUser)
+    headers: await getAuthHeaders(currentUser)
   });
 
   const data = await res.json();
@@ -300,7 +312,7 @@ export async function requestInstructorPayoutBackend(
 ) {
   const res = await fetch('/api/instructor/payout', {
     method: 'POST',
-    headers: getAuthHeaders(currentUser),
+    headers: await getAuthHeaders(currentUser),
     body: JSON.stringify(payload)
   });
 
@@ -324,7 +336,7 @@ export async function saveInstructorBankAccountBackend(
 ) {
   const res = await fetch('/api/instructor/bank-account', {
     method: 'POST',
-    headers: getAuthHeaders(currentUser),
+    headers: await getAuthHeaders(currentUser),
     body: JSON.stringify(payload)
   });
 
@@ -364,7 +376,7 @@ export async function simulateInstructorSaleBackend(
 ) {
   const res = await fetch('/api/instructor/simulate-sale', {
     method: 'POST',
-    headers: getAuthHeaders(currentUser),
+    headers: await getAuthHeaders(currentUser),
     body: JSON.stringify(payload || {})
   });
 

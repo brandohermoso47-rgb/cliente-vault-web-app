@@ -7,6 +7,7 @@ import { signInWithPopup, signInWithEmailAndPassword, createUserWithEmailAndPass
 import { doc, setDoc } from 'firebase/firestore';
 import { Language, translations, languageNames } from '../lib/translations';
 import Logo from './Logo';
+import GlowField from './GlowField';
 
 // Zod Profile Schema Definition
 const createProfileSchema = (lang: Language) =>
@@ -263,16 +264,15 @@ export default function LoginView({ onGuestMode, onSuccess, language, onLanguage
   };
 
   return (
-    <div className="min-h-screen bg-[#070A10] text-white font-sans flex flex-col justify-center items-center p-4 relative overflow-hidden select-none">
-      {/* Soft Ambient Background Radial Glows */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-gradient-to-tr from-pink-600/10 via-purple-600/10 to-orange-500/10 rounded-full blur-[120px] pointer-events-none" />
+    <div className="min-h-screen bg-[#08060d] text-white font-sans flex flex-col justify-center items-center p-4 relative overflow-hidden select-none">
+      <GlowField />
 
       {/* Main Container Card */}
       <motion.div
         initial={{ opacity: 0, scale: 0.95, y: 10 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-        className="w-full max-w-[420px] z-10"
+        className="w-full max-w-[420px] z-[2]"
       >
         {/* Floating Glassmorphism Box */}
         <div className="bg-[#121622]/60 border border-white/20 rounded-[32px] p-8 sm:p-10 shadow-[0_25px_60px_rgba(0,0,0,0.8)] backdrop-blur-2xl flex flex-col items-center space-y-6 relative overflow-hidden">
@@ -297,7 +297,7 @@ export default function LoginView({ onGuestMode, onSuccess, language, onLanguage
                 className="w-full space-y-4"
               >
                 <div className="text-center space-y-1 pb-2 border-b border-white/10">
-                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#E9C349]/20 border border-[#E9C349]/40 text-[#E9C349] text-[10px] font-mono font-black uppercase">
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#D9A9FF]/20 border border-[#D9A9FF]/40 text-[#D9A9FF] text-[10px] font-mono font-black uppercase">
                     <Sparkles className="w-3.5 h-3.5" />
                     <span>{language === 'es' ? 'Crear Perfil de Bailarín' : 'Create Dancer Profile'}</span>
                   </div>
@@ -312,7 +312,7 @@ export default function LoginView({ onGuestMode, onSuccess, language, onLanguage
                 {/* Nombre */}
                 <div>
                   <label className="text-[10px] font-mono font-bold text-slate-300 block mb-1 uppercase flex items-center gap-1">
-                    <User className="w-3 h-3 text-[#E9C349]" />
+                    <User className="w-3 h-3 text-[#D9A9FF]" />
                     {language === 'es' ? 'Nombre *' : 'First Name *'}
                   </label>
                   <input
@@ -321,14 +321,14 @@ export default function LoginView({ onGuestMode, onSuccess, language, onLanguage
                     onChange={(e) => setFirstName(e.target.value)}
                     placeholder={language === 'es' ? 'Ej. Marilyn' : 'e.g. Marilyn'}
                     required
-                    className="w-full bg-white/10 hover:bg-white/15 focus:bg-white/20 border border-white/20 focus:border-[#E9C349]/60 rounded-2xl px-4 py-3 text-sm text-white placeholder-slate-400 outline-none transition-all shadow-inner"
+                    className="w-full bg-white/10 hover:bg-white/15 focus:bg-white/20 border border-white/20 focus:border-[#D9A9FF]/60 rounded-2xl px-4 py-3 text-sm text-white placeholder-slate-400 outline-none transition-all shadow-inner"
                   />
                 </div>
 
                 {/* Apellido */}
                 <div>
                   <label className="text-[10px] font-mono font-bold text-slate-300 block mb-1 uppercase flex items-center gap-1">
-                    <UserCheck className="w-3 h-3 text-[#E9C349]" />
+                    <UserCheck className="w-3 h-3 text-[#D9A9FF]" />
                     {language === 'es' ? 'Apellido *' : 'Last Name *'}
                   </label>
                   <input
@@ -337,7 +337,7 @@ export default function LoginView({ onGuestMode, onSuccess, language, onLanguage
                     onChange={(e) => setLastName(e.target.value)}
                     placeholder={language === 'es' ? 'Ej. Monroe' : 'e.g. Monroe'}
                     required
-                    className="w-full bg-white/10 hover:bg-white/15 focus:bg-white/20 border border-white/20 focus:border-[#E9C349]/60 rounded-2xl px-4 py-3 text-sm text-white placeholder-slate-400 outline-none transition-all shadow-inner"
+                    className="w-full bg-white/10 hover:bg-white/15 focus:bg-white/20 border border-white/20 focus:border-[#D9A9FF]/60 rounded-2xl px-4 py-3 text-sm text-white placeholder-slate-400 outline-none transition-all shadow-inner"
                   />
                 </div>
 
@@ -372,7 +372,7 @@ export default function LoginView({ onGuestMode, onSuccess, language, onLanguage
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full py-4 rounded-2xl bg-gradient-to-r from-[#FF6126] via-[#FF2E63] to-[#FF007A] text-white font-black text-sm uppercase tracking-wider shadow-[0_8px_25px_rgba(255,40,104,0.4)] hover:brightness-110 active:scale-[0.98] transition-all cursor-pointer disabled:opacity-50 mt-3 flex items-center justify-center gap-2"
+                  className="w-full py-4 rounded-2xl bg-gradient-to-r from-[#D9A9FF] via-[#C23E9E] to-[#7DD3FC] text-[#150a1d] font-black text-sm uppercase tracking-wider shadow-[0_8px_28px_-4px_hsla(var(--h),90%,65%,0.55)] hover:shadow-[0_10px_38px_-2px_hsla(var(--h),90%,65%,0.75)] active:scale-[0.98] transition-all cursor-pointer disabled:opacity-50 mt-3 flex items-center justify-center gap-2"
                 >
                   {loading ? (
                     <span className="animate-pulse">{language === 'es' ? 'Guardando Perfil...' : 'Saving Profile...'}</span>
@@ -498,7 +498,7 @@ export default function LoginView({ onGuestMode, onSuccess, language, onLanguage
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full py-4 rounded-2xl bg-gradient-to-r from-[#FF6126] via-[#FF2E63] to-[#FF007A] text-white font-black text-sm uppercase tracking-wider shadow-[0_8px_25px_rgba(255,40,104,0.4)] hover:brightness-110 active:scale-[0.98] transition-all cursor-pointer disabled:opacity-50 mt-2 flex items-center justify-center gap-2"
+                  className="w-full py-4 rounded-2xl bg-gradient-to-r from-[#D9A9FF] via-[#C23E9E] to-[#7DD3FC] text-[#150a1d] font-black text-sm uppercase tracking-wider shadow-[0_8px_28px_-4px_hsla(var(--h),90%,65%,0.55)] hover:shadow-[0_10px_38px_-2px_hsla(var(--h),90%,65%,0.75)] active:scale-[0.98] transition-all cursor-pointer disabled:opacity-50 mt-2 flex items-center justify-center gap-2"
                 >
                   {loading ? (
                     <span className="animate-pulse">{language === 'es' ? 'Cargando...' : 'Loading...'}</span>

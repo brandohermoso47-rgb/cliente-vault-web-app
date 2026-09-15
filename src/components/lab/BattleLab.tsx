@@ -112,7 +112,7 @@ const BattleLabComponent: React.FC<BattleLabProps> = ({
         {/* HEADER */}
         <div className="flex flex-col md:flex-row md:items-center justify-between border-b border-white/10 pb-6 mb-6 gap-6 relative z-10">
           <div>
-            <span className="font-mono text-[10px] font-black text-[#E9C349] bg-[#E9C349]/10 border border-[#E9C349]/30 px-3 py-1 rounded-full uppercase tracking-wider shadow-sm">
+            <span className="font-mono text-[10px] font-black text-[#D9A9FF] bg-[#D9A9FF]/10 border border-[#D9A9FF]/30 px-3 py-1 rounded-full uppercase tracking-wider shadow-sm">
               {language === 'es' ? 'RETO TÉCNICO CON RITMO' : 'RHYTHM TECHNICAL CHALLENGE'}
             </span>
             <h3 className="text-2xl sm:text-3xl font-display-lg italic tracking-tight uppercase mt-3 text-white">
@@ -125,8 +125,8 @@ const BattleLabComponent: React.FC<BattleLabProps> = ({
             </p>
           </div>
           {/* Score and Points Reward */}
-          <div className="bg-[#9A2B3C]/15 border border-[#9A2B3C]/30 p-4 rounded-2xl text-center shrink-0 min-w-[160px] shadow-lg">
-            <div className="text-[10px] font-mono text-[#E9C349] uppercase tracking-widest font-black">
+          <div className="bg-[#C23E9E]/15 border border-[#C23E9E]/30 p-4 rounded-2xl text-center shrink-0 min-w-[160px] shadow-lg">
+            <div className="text-[10px] font-mono text-[#D9A9FF] uppercase tracking-widest font-black">
               {language === 'es' ? 'RECOMPENSA MÁXIMA' : 'MAX REWARD'}
             </div>
             <div className="text-base font-black text-white mt-1">
@@ -140,7 +140,7 @@ const BattleLabComponent: React.FC<BattleLabProps> = ({
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 relative z-10">
             {/* Select Theme Section (8 Cols) */}
             <div className="lg:col-span-8 space-y-5">
-              <h4 className="text-xs font-mono font-bold uppercase text-[#E9C349] tracking-widest border-b border-white/10 pb-2">
+              <h4 className="text-xs font-mono font-bold uppercase text-[#D9A9FF] tracking-widest border-b border-white/10 pb-2">
                 🧠 {language === 'es' ? 'Selecciona una Rutina / Enfoque Técnico:' : 'Select a Routine / Technical Focus:'}
               </h4>
 
@@ -155,8 +155,8 @@ const BattleLabComponent: React.FC<BattleLabProps> = ({
                     }}
                     className={`p-4 rounded-xl border cursor-pointer transition-all flex flex-col justify-between text-left ${
                       selectedThemeId === theme.id
-                        ? 'bg-[#9A2B3C]/10 border-[#9A2B3C] shadow-[0_0_15px_rgba(154,43,60,0.2)]'
-                        : 'bg-[#121212] border-[#262626] hover:border-[#9A2B3C]/40 hover:bg-[#121212]/70'
+                        ? 'bg-[#C23E9E]/10 border-[#C23E9E] shadow-[0_0_15px_rgba(194, 62, 158,0.2)]'
+                        : 'bg-[#121212] border-[#262626] hover:border-[#C23E9E]/40 hover:bg-[#121212]/70'
                     }`}
                   >
                     <div>
@@ -173,7 +173,7 @@ const BattleLabComponent: React.FC<BattleLabProps> = ({
                     <span
                       className={`text-[9px] font-mono border px-2 py-0.5 rounded mt-4 inline-block self-start font-bold uppercase tracking-wider ${
                         selectedThemeId === theme.id
-                          ? 'bg-[#9A2B3C] text-white border-[#9A2B3C]'
+                          ? 'bg-[#C23E9E] text-white border-[#C23E9E]'
                           : 'bg-black/30 text-[#8A8A8A] border-[#262626]'
                       }`}
                     >
@@ -204,7 +204,7 @@ const BattleLabComponent: React.FC<BattleLabProps> = ({
                           <span className="text-[11px] font-bold text-white leading-tight">
                             {obj.text}
                           </span>
-                          <span className="text-[9px] font-mono text-[#E9C349] font-black whitespace-nowrap">
+                          <span className="text-[9px] font-mono text-[#D9A9FF] font-black whitespace-nowrap">
                             +{obj.points} Pts
                           </span>
                         </div>
@@ -230,7 +230,7 @@ const BattleLabComponent: React.FC<BattleLabProps> = ({
                     <button
                       onClick={() => setMusicSource('synth')}
                       className={`flex-1 py-1.5 rounded text-[9px] font-mono font-bold uppercase transition-all ${
-                        musicSource === 'synth' ? 'bg-[#9A2B3C] text-white shadow-sm' : 'text-[#8A8A8A] hover:text-white'
+                        musicSource === 'synth' ? 'bg-[#C23E9E] text-white shadow-sm' : 'text-[#8A8A8A] hover:text-white'
                       }`}
                     >
                       🔊 {language === 'es' ? 'Sintetizador' : 'Synth'}
@@ -366,9 +366,9 @@ const BattleLabComponent: React.FC<BattleLabProps> = ({
 
               <button
                 onClick={startBattle}
-                className="w-full bg-[#E9C349] hover:bg-[#ffe088] text-black font-display-lg font-bold py-3 rounded-xl transition-all uppercase tracking-widest text-xs flex items-center justify-center gap-2 active:scale-95 shadow-md mt-4"
+                className="w-full bg-[#D9A9FF] hover:bg-[#ffe088] text-black font-display-lg font-bold py-3 rounded-xl transition-all uppercase tracking-widest text-xs flex items-center justify-center gap-2 active:scale-95 shadow-md mt-4"
               >
-                <Swords className="w-4 h-4 text-[#9A2B3C]" />
+                <Swords className="w-4 h-4 text-[#C23E9E]" />
                 {language === 'es' ? '¡INICIAR RETO DE OBJETIVOS!' : 'START OBJECTIVES CHALLENGE!'}
               </button>
             </div>
@@ -408,7 +408,7 @@ const BattleLabComponent: React.FC<BattleLabProps> = ({
                           ? 'bg-green-500'
                           : musicSource === 'soundcloud'
                           ? 'bg-[#ff5500]'
-                          : 'bg-[#9A2B3C]'
+                          : 'bg-[#C23E9E]'
                       } pointer-events-none`}
                     />
                     <div
@@ -417,7 +417,7 @@ const BattleLabComponent: React.FC<BattleLabProps> = ({
                           ? 'border-[#1DB954] bg-[#1DB954]/10 shadow-[0_0_15px_rgba(29,185,84,0.3)]'
                           : musicSource === 'soundcloud'
                           ? 'border-[#ff5500] bg-[#ff5500]/10 shadow-[0_0_15px_rgba(255,85,0,0.3)]'
-                          : 'border-[#9A2B3C] bg-[#9A2B3C]/10 shadow-[0_0_15px_rgba(154,43,60,0.3)]'
+                          : 'border-[#C23E9E] bg-[#C23E9E]/10 shadow-[0_0_15px_rgba(194, 62, 158,0.3)]'
                       }`}
                     >
                       <Activity
@@ -441,7 +441,7 @@ const BattleLabComponent: React.FC<BattleLabProps> = ({
                       {Array.from({ length: 20 }).map((_, i) => (
                         <div
                           key={i}
-                          className="w-1.5 rounded-t bg-gradient-to-t from-[#9A2B3C] via-[#E9C349] to-cyan-400 opacity-85 transition-all duration-75"
+                          className="w-1.5 rounded-t bg-gradient-to-t from-[#C23E9E] via-[#D9A9FF] to-cyan-400 opacity-85 transition-all duration-75"
                           style={{ height: '20%' }}
                         />
                       ))}
@@ -451,7 +451,7 @@ const BattleLabComponent: React.FC<BattleLabProps> = ({
                     <div className="space-y-1 text-left">
                       <div className="flex justify-between items-center text-[8px] font-mono font-bold text-[#8A8A8A]">
                         <span>{language === 'es' ? '🔊 INTENSIDAD DEL RITMO / BAJOS:' : '🔊 RHYTHM & BASS INTENSITY:'}</span>
-                        <span className="text-white bg-[#9A2B3C]/40 px-1 py-0.5 rounded text-[8px]">{bassIntensity}x</span>
+                        <span className="text-white bg-[#C23E9E]/40 px-1 py-0.5 rounded text-[8px]">{bassIntensity}x</span>
                       </div>
                       <input
                         type="range"
@@ -463,7 +463,7 @@ const BattleLabComponent: React.FC<BattleLabProps> = ({
                           setBassIntensity(Number(e.target.value));
                           playSynthBeep(400 + Number(e.target.value) * 100, 0.05);
                         }}
-                        className="w-full accent-[#E9C349] bg-white/10 h-1 rounded-lg appearance-none cursor-pointer"
+                        className="w-full accent-[#D9A9FF] bg-white/10 h-1 rounded-lg appearance-none cursor-pointer"
                       />
                     </div>
                   </div>
@@ -569,7 +569,7 @@ const BattleLabComponent: React.FC<BattleLabProps> = ({
 
                 <button
                   onClick={stopBattle}
-                  className="w-full bg-[#9A2B3C]/10 hover:bg-[#9A2B3C]/25 text-[#ffb3b2] border border-[#9A2B3C]/30 font-bold py-2.5 rounded-xl text-xs transition-all uppercase tracking-widest mt-2"
+                  className="w-full bg-[#C23E9E]/10 hover:bg-[#C23E9E]/25 text-[#ffb3b2] border border-[#C23E9E]/30 font-bold py-2.5 rounded-xl text-xs transition-all uppercase tracking-widest mt-2"
                 >
                   🏳️ {language === 'es' ? 'DETENER RETO Y VOLVER' : 'STOP CHALLENGE & EXIT'}
                 </button>
@@ -616,14 +616,14 @@ const BattleLabComponent: React.FC<BattleLabProps> = ({
                         hasSavedPoints ? 'cursor-not-allowed opacity-80' : 'cursor-pointer'
                       } ${
                         isChecked
-                          ? 'bg-[#9A2B3C]/10 border-[#9A2B3C]/50 text-white'
+                          ? 'bg-[#C23E9E]/10 border-[#C23E9E]/50 text-white'
                           : 'bg-black/30 border-[#262626] text-on-surface-variant hover:border-white/10'
                       }`}
                     >
                       <div className="pt-0.5 shrink-0">
                         <div
                           className={`w-5 h-5 rounded border flex items-center justify-center transition-all ${
-                            isChecked ? 'bg-[#9A2B3C] border-[#9A2B3C] text-white' : 'border-white/30 bg-transparent'
+                            isChecked ? 'bg-[#C23E9E] border-[#C23E9E] text-white' : 'border-white/30 bg-transparent'
                           }`}
                         >
                           {isChecked && <span className="text-[11px] font-black">✔</span>}
@@ -651,8 +651,8 @@ const BattleLabComponent: React.FC<BattleLabProps> = ({
               {(selectedTheme.objectives || []).length > 0 &&
                 (selectedTheme.objectives || []).every((obj: any) => checkedObjectives[obj.id]) &&
                 !hasSavedPoints && (
-                  <div className="bg-[#E9C349]/10 border border-[#E9C349]/20 p-3 rounded-xl text-center">
-                    <span className="text-[10px] font-mono text-[#E9C349] font-black uppercase tracking-wider">
+                  <div className="bg-[#D9A9FF]/10 border border-[#D9A9FF]/20 p-3 rounded-xl text-center">
+                    <span className="text-[10px] font-mono text-[#D9A9FF] font-black uppercase tracking-wider">
                       🌟 ¡Rendimiento Perfecto! +20 Puntos de Consistencia Extra por completar todo.
                     </span>
                   </div>
@@ -676,7 +676,7 @@ const BattleLabComponent: React.FC<BattleLabProps> = ({
                     total += 20;
                   }
                   return (
-                    <div className="text-3xl font-display-lg italic text-[#E9C349] tracking-tight animate-pulse">
+                    <div className="text-3xl font-display-lg italic text-[#D9A9FF] tracking-tight animate-pulse">
                       +{total} Pts
                     </div>
                   );
@@ -689,9 +689,9 @@ const BattleLabComponent: React.FC<BattleLabProps> = ({
               {!hasSavedPoints ? (
                 <button
                   onClick={handleSaveChallengeScore}
-                  className="w-full bg-[#E9C349] hover:bg-[#ffe088] text-black font-display-lg font-bold py-3.5 rounded-xl transition-all uppercase tracking-widest text-xs flex items-center justify-center gap-2 active:scale-95 shadow-md"
+                  className="w-full bg-[#D9A9FF] hover:bg-[#ffe088] text-black font-display-lg font-bold py-3.5 rounded-xl transition-all uppercase tracking-widest text-xs flex items-center justify-center gap-2 active:scale-95 shadow-md"
                 >
-                  <Swords className="w-4 h-4 text-[#9A2B3C]" />
+                  <Swords className="w-4 h-4 text-[#C23E9E]" />
                   {language === 'es' ? 'CONFIRMAR Y GUARDAR SESIÓN' : 'CONFIRM & SAVE SESSION'}
                 </button>
               ) : (

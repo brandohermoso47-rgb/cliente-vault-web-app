@@ -48,11 +48,11 @@ export function PracticeDuelsModal({ currentUser, onClose, onAwardPoints }: Prac
         initial={{ scale: 0.9, opacity: 0, y: 20 }}
         animate={{ scale: 1, opacity: 1, y: 0 }}
         exit={{ scale: 0.9, opacity: 0, y: 20 }}
-        className="bg-gradient-to-br from-[#1c1b1b] via-[#141414] to-[#1c1b1b] border-2 border-[#E9C349] rounded-3xl p-6 sm:p-8 max-w-xl w-full shadow-[0_0_60px_rgba(233,195,73,0.3)] text-center relative z-10 space-y-6"
+        className="bg-gradient-to-br from-[#1c1b1b] via-[#141414] to-[#1c1b1b] border-2 border-[#D9A9FF] rounded-3xl p-6 sm:p-8 max-w-xl w-full shadow-[0_0_60px_rgba(217, 169, 255,0.3)] text-center relative z-10 space-y-6"
       >
         {/* Header */}
         <div className="space-y-2">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#E9C349]/20 text-[#E9C349] text-xs font-mono font-bold uppercase border border-[#E9C349]/40">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#D9A9FF]/20 text-[#D9A9FF] text-xs font-mono font-bold uppercase border border-[#D9A9FF]/40">
             <Swords className="w-4 h-4 animate-pulse" /> Duelos de Práctica Diaria (Waack Battle)
           </div>
           <h2 className="text-2xl font-black text-white font-serif tracking-tight">
@@ -81,14 +81,14 @@ export function PracticeDuelsModal({ currentUser, onClose, onAwardPoints }: Prac
                     }}
                     className={`p-3 rounded-xl border text-left transition-all flex items-center gap-3 ${
                       rivalName === r.name
-                        ? 'border-[#E9C349] bg-[#E9C349]/15 text-white font-bold shadow-md'
+                        ? 'border-[#D9A9FF] bg-[#D9A9FF]/15 text-white font-bold shadow-md'
                         : 'border-white/10 bg-[#121212] text-slate-400 hover:border-white/30'
                     }`}
                   >
                     <span className="text-2xl">{r.avatar}</span>
                     <div>
                       <p className="text-xs font-bold text-white line-clamp-1">{r.name}</p>
-                      <p className="text-[10px] font-mono text-[#E9C349]">Meta: {r.minutes} min hoy</p>
+                      <p className="text-[10px] font-mono text-[#D9A9FF]">Meta: {r.minutes} min hoy</p>
                     </div>
                   </button>
                 ))}
@@ -104,12 +104,12 @@ export function PracticeDuelsModal({ currentUser, onClose, onAwardPoints }: Prac
                   max="300"
                   value={userMinutes}
                   onChange={(e) => setUserMinutes(Number(e.target.value))}
-                  className="w-full bg-[#1c1b1b] border border-white/20 rounded-xl p-2.5 text-white font-mono text-center font-bold focus:outline-none focus:border-[#E9C349]"
+                  className="w-full bg-[#1c1b1b] border border-white/20 rounded-xl p-2.5 text-white font-mono text-center font-bold focus:outline-none focus:border-[#D9A9FF]"
                 />
               </div>
               <div>
                 <label className="block text-[11px] font-mono text-slate-300 mb-1">Minutos del Rival ({(rivalName || 'Rival').split(' ')[0]}):</label>
-                <div className="w-full bg-[#1c1b1b] border border-white/10 rounded-xl p-2.5 text-[#E9C349] font-mono text-center font-bold flex items-center justify-center">
+                <div className="w-full bg-[#1c1b1b] border border-white/10 rounded-xl p-2.5 text-[#D9A9FF] font-mono text-center font-bold flex items-center justify-center">
                   {rivalMinutes} min
                 </div>
               </div>
@@ -117,7 +117,7 @@ export function PracticeDuelsModal({ currentUser, onClose, onAwardPoints }: Prac
 
             <button
               onClick={handleStartDuel}
-              className="w-full py-4 bg-gradient-to-r from-[#E9C349] to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black font-extrabold text-xs rounded-xl shadow-[0_0_20px_rgba(233,195,73,0.4)] transition-all uppercase tracking-widest cursor-pointer flex items-center justify-center gap-2"
+              className="w-full py-4 bg-gradient-to-r from-[#D9A9FF] to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black font-extrabold text-xs rounded-xl shadow-[0_0_20px_rgba(217, 169, 255,0.4)] transition-all uppercase tracking-widest cursor-pointer flex items-center justify-center gap-2"
             >
               <Swords className="w-4 h-4" /> Iniciar Duelo de Práctica ⚡
             </button>
@@ -127,12 +127,12 @@ export function PracticeDuelsModal({ currentUser, onClose, onAwardPoints }: Prac
         {/* Fighting State */}
         {isFighting && (
           <div className="py-16 flex flex-col items-center justify-center space-y-6">
-            <div className="relative w-20 h-20 rounded-full bg-[#E9C349]/20 border-2 border-[#E9C349] flex items-center justify-center animate-spin">
-              <Swords className="w-10 h-10 text-[#E9C349]" />
+            <div className="relative w-20 h-20 rounded-full bg-[#D9A9FF]/20 border-2 border-[#D9A9FF] flex items-center justify-center animate-spin">
+              <Swords className="w-10 h-10 text-[#D9A9FF]" />
             </div>
             <div className="space-y-1">
               <p className="text-lg font-serif font-bold text-white">Comparando registros de entrenamiento...</p>
-              <p className="text-xs font-mono text-[#E9C349] animate-pulse">Analizando velocidad de brazos, consistencia y minutos con {rivalName}...</p>
+              <p className="text-xs font-mono text-[#D9A9FF] animate-pulse">Analizando velocidad de brazos, consistencia y minutos con {rivalName}...</p>
             </div>
           </div>
         )}
@@ -145,13 +145,13 @@ export function PracticeDuelsModal({ currentUser, onClose, onAwardPoints }: Prac
               animate={{ scale: 1, opacity: 1 }}
               className="relative"
             >
-              <div className="w-24 h-24 mx-auto rounded-full bg-gradient-to-br from-[#E9C349] to-amber-700 flex items-center justify-center shadow-2xl border-4 border-[#141414]">
+              <div className="w-24 h-24 mx-auto rounded-full bg-gradient-to-br from-[#D9A9FF] to-amber-700 flex items-center justify-center shadow-2xl border-4 border-[#141414]">
                 <Trophy className="w-12 h-12 text-black" />
               </div>
             </motion.div>
 
             <div className="space-y-2">
-              <span className="px-3 py-1 rounded-full text-xs font-mono uppercase font-bold bg-[#E9C349]/20 text-[#E9C349] border border-[#E9C349]/30">
+              <span className="px-3 py-1 rounded-full text-xs font-mono uppercase font-bold bg-[#D9A9FF]/20 text-[#D9A9FF] border border-[#D9A9FF]/30">
                 {duelResult === 'win' ? '🎉 ¡Victoria Rotunda!' : duelResult === 'loss' ? '💪 ¡Buen Combate!' : '🤝 ¡Empate Técnico!'}
               </span>
               <h3 className="text-2xl font-black text-white font-serif">
@@ -169,7 +169,7 @@ export function PracticeDuelsModal({ currentUser, onClose, onAwardPoints }: Prac
             <div className="bg-black/50 border border-white/10 rounded-2xl p-4 flex items-center justify-around">
               <div>
                 <p className="text-[10px] font-mono text-slate-400 uppercase">Recompensa</p>
-                <p className="text-xl font-black text-[#E9C349]">+{duelResult === 'win' ? 100 : duelResult === 'tie' ? 50 : 20} XP</p>
+                <p className="text-xl font-black text-[#D9A9FF]">+{duelResult === 'win' ? 100 : duelResult === 'tie' ? 50 : 20} XP</p>
               </div>
               <div className="h-8 w-px bg-white/10" />
               <div>
@@ -187,7 +187,7 @@ export function PracticeDuelsModal({ currentUser, onClose, onAwardPoints }: Prac
               </button>
               <button
                 onClick={onClose}
-                className="flex-1 py-3 bg-[#E9C349] hover:bg-[#d8b23c] text-black font-extrabold text-xs rounded-xl shadow-[0_0_20px_rgba(233,195,73,0.4)] transition-all uppercase tracking-wider cursor-pointer"
+                className="flex-1 py-3 bg-[#D9A9FF] hover:bg-[#B87CFF] text-black font-extrabold text-xs rounded-xl shadow-[0_0_20px_rgba(217, 169, 255,0.4)] transition-all uppercase tracking-wider cursor-pointer"
               >
                 Cerrar y Celebrar
               </button>

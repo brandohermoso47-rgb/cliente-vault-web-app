@@ -70,15 +70,15 @@ export const TrainingSummaryModal: React.FC<TrainingSummaryModalProps> = ({
   const getCategoryIcon = () => {
     switch (summary.category) {
       case 'drill':
-        return <Zap className="w-5 h-5 text-[#E9C349]" />;
+        return <Zap className="w-5 h-5 text-[#D9A9FF]" />;
       case 'drama':
-        return <Sparkles className="w-5 h-5 text-[#E9C349]" />;
+        return <Sparkles className="w-5 h-5 text-[#D9A9FF]" />;
       case 'battle':
-        return <Trophy className="w-5 h-5 text-[#E9C349]" />;
+        return <Trophy className="w-5 h-5 text-[#D9A9FF]" />;
       case 'fisico':
-        return <Dumbbell className="w-5 h-5 text-[#E9C349]" />;
+        return <Dumbbell className="w-5 h-5 text-[#D9A9FF]" />;
       default:
-        return <Flame className="w-5 h-5 text-[#E9C349]" />;
+        return <Flame className="w-5 h-5 text-[#D9A9FF]" />;
     }
   };
 
@@ -151,10 +151,10 @@ export const TrainingSummaryModal: React.FC<TrainingSummaryModalProps> = ({
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.88, y: 20 }}
           transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-          className="relative z-10 w-full max-w-md bg-[#121216] border border-[#E9C349]/50 rounded-3xl p-6 sm:p-7 shadow-2xl shadow-[#E9C349]/10 text-white overflow-hidden"
+          className="relative z-10 w-full max-w-md bg-[#121216] border border-[#D9A9FF]/50 rounded-3xl p-6 sm:p-7 shadow-2xl shadow-[#D9A9FF]/10 text-white overflow-hidden"
         >
           {/* Glowing Top Ambient Effect */}
-          <div className="absolute -top-24 left-1/2 -translate-x-1/2 w-48 h-48 bg-gradient-to-br from-[#E9C349]/30 via-[#9A2B3C]/20 to-transparent rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute -top-24 left-1/2 -translate-x-1/2 w-48 h-48 bg-gradient-to-br from-[#D9A9FF]/30 via-[#C23E9E]/20 to-transparent rounded-full blur-3xl pointer-events-none" />
 
           {/* Close button */}
           <button
@@ -168,12 +168,12 @@ export const TrainingSummaryModal: React.FC<TrainingSummaryModalProps> = ({
           {/* Trophy Header Icon */}
           <div className="flex flex-col items-center text-center space-y-3 pt-2">
             <div className="relative">
-              <div className="w-20 h-20 rounded-2xl bg-gradient-to-tr from-[#9A2B3C] via-[#E9C349]/40 to-[#E9C349] p-0.5 shadow-xl flex items-center justify-center animate-pulse">
-                <div className="w-full h-full rounded-[14px] bg-[#0d0d12] flex items-center justify-center text-[#E9C349]">
-                  <Trophy className="w-10 h-10 text-[#E9C349]" />
+              <div className="w-20 h-20 rounded-2xl bg-gradient-to-tr from-[#C23E9E] via-[#D9A9FF]/40 to-[#D9A9FF] p-0.5 shadow-xl flex items-center justify-center animate-pulse">
+                <div className="w-full h-full rounded-[14px] bg-[#0d0d12] flex items-center justify-center text-[#D9A9FF]">
+                  <Trophy className="w-10 h-10 text-[#D9A9FF]" />
                 </div>
               </div>
-              <span className="absolute -bottom-2 -right-2 px-2 py-0.5 rounded-full bg-[#E9C349] text-slate-950 font-mono font-black text-[10px] uppercase shadow-lg">
+              <span className="absolute -bottom-2 -right-2 px-2 py-0.5 rounded-full bg-[#D9A9FF] text-slate-950 font-mono font-black text-[10px] uppercase shadow-lg">
                 ¡ÉXITO!
               </span>
             </div>
@@ -192,7 +192,7 @@ export const TrainingSummaryModal: React.FC<TrainingSummaryModalProps> = ({
           <div className="mt-6 space-y-3">
             {/* 1. Activity Type */}
             <div className="bg-white/5 border border-white/10 p-3.5 rounded-2xl flex items-center gap-3.5 shadow-inner">
-              <div className="p-2.5 rounded-xl bg-[#E9C349]/15 border border-[#E9C349]/30 shrink-0">
+              <div className="p-2.5 rounded-xl bg-[#D9A9FF]/15 border border-[#D9A9FF]/30 shrink-0">
                 {getCategoryIcon()}
               </div>
               <div className="min-w-0 flex-1">
@@ -234,14 +234,14 @@ export const TrainingSummaryModal: React.FC<TrainingSummaryModalProps> = ({
               </div>
 
               {/* Points Earned */}
-              <div className="bg-[#E9C349]/10 border border-[#E9C349]/40 p-3 rounded-2xl flex flex-col justify-between">
-                <div className="flex items-center gap-1 text-[#E9C349] mb-1">
-                  <Award className="w-3.5 h-3.5 text-[#E9C349] shrink-0" />
+              <div className="bg-[#D9A9FF]/10 border border-[#D9A9FF]/40 p-3 rounded-2xl flex flex-col justify-between">
+                <div className="flex items-center gap-1 text-[#D9A9FF] mb-1">
+                  <Award className="w-3.5 h-3.5 text-[#D9A9FF] shrink-0" />
                   <span className="text-[9px] font-mono font-black uppercase tracking-wide">
                     PUNTOS
                   </span>
                 </div>
-                <p className="text-base font-black text-[#E9C349] font-mono">
+                <p className="text-base font-black text-[#D9A9FF] font-mono">
                   +{summary.pointsEarned} <span className="text-[10px]">PTS</span>
                 </p>
               </div>
@@ -250,7 +250,7 @@ export const TrainingSummaryModal: React.FC<TrainingSummaryModalProps> = ({
             {/* Optional Details or Notes */}
             {summary.details && (
               <div className="bg-white/5 border border-white/5 p-3 rounded-xl flex items-start gap-2 text-xs text-slate-300">
-                <Sparkles className="w-4 h-4 text-[#E9C349] shrink-0 mt-0.5" />
+                <Sparkles className="w-4 h-4 text-[#D9A9FF] shrink-0 mt-0.5" />
                 <p className="leading-relaxed">{summary.details}</p>
               </div>
             )}
@@ -307,7 +307,7 @@ export const TrainingSummaryModal: React.FC<TrainingSummaryModalProps> = ({
                 </>
               ) : (
                 <>
-                  <Copy className="w-4 h-4 text-[#E9C349]" />
+                  <Copy className="w-4 h-4 text-[#D9A9FF]" />
                   <span>Compartir</span>
                 </>
               )}
@@ -315,7 +315,7 @@ export const TrainingSummaryModal: React.FC<TrainingSummaryModalProps> = ({
 
             <button
               onClick={onClose}
-              className="w-full flex-1 py-3 bg-gradient-to-r from-[#E9C349] via-amber-400 to-[#E9C349] text-slate-950 font-black text-xs uppercase tracking-wider rounded-xl shadow-lg shadow-[#E9C349]/20 hover:brightness-110 active:scale-98 transition-all flex items-center justify-center gap-2 cursor-pointer"
+              className="w-full flex-1 py-3 bg-gradient-to-r from-[#D9A9FF] via-amber-400 to-[#D9A9FF] text-slate-950 font-black text-xs uppercase tracking-wider rounded-xl shadow-lg shadow-[#D9A9FF]/20 hover:brightness-110 active:scale-98 transition-all flex items-center justify-center gap-2 cursor-pointer"
             >
               <RotateCcw className="w-4 h-4" />
               <span>Continuar Entrenando</span>

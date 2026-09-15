@@ -576,7 +576,7 @@ const VISUAL_STIMULI = [
     videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-dancing-woman-in-a-nightclub-with-sparkles-and-lights-34283-large.mp4',
     pioneerQuote: '"Bailamos porque nos amamos. Bailamos porque somos libres. Que tu rostro irradie la luz de una supernova de felicidad." — Studio 54 Legends',
     intensity: 'Media',
-    badgeColor: 'bg-yellow-500/10 text-[#E9C349] border-[#E9C349]/20'
+    badgeColor: 'bg-yellow-500/10 text-[#D9A9FF] border-[#D9A9FF]/20'
   }
 ];
 
@@ -2668,12 +2668,12 @@ export default function EntrenamientoView({
         <div className="absolute -top-24 -right-24 w-72 h-72 bg-purple-600/15 rounded-full blur-3xl pointer-events-none" />
         <div className="relative z-10">
           <div className="flex items-center gap-2 mb-2">
-            <span className="text-[10px] font-mono font-black text-[#E9C349] bg-white/10 border border-[#E9C349]/40 px-3 py-1 rounded-full uppercase tracking-widest shadow-sm">
+            <span className="text-[10px] font-mono font-black text-[#D9A9FF] bg-white/10 border border-[#D9A9FF]/40 px-3 py-1 rounded-full uppercase tracking-widest shadow-sm">
               LABORATORIO DE FREESTYLES
             </span>
           </div>
           <h2 className="text-2xl sm:text-3xl font-display-lg italic text-white tracking-tight uppercase">
-            <span className="bg-gradient-to-r from-white via-[#FFF8E7] to-[#E9C349] bg-clip-text text-transparent drop-shadow-sm">
+            <span className="bg-gradient-to-r from-white via-[#FFF8E7] to-[#D9A9FF] bg-clip-text text-transparent drop-shadow-sm">
               {lt.title}
             </span>
           </h2>
@@ -2681,9 +2681,9 @@ export default function EntrenamientoView({
         </div>
         <button
           onClick={() => setShowDuelsModal(true)}
-          className="relative z-10 px-5 py-3 bg-[#E9C349]/20 hover:bg-[#E9C349]/30 border border-[#E9C349]/50 rounded-2xl text-[#E9C349] font-mono text-xs font-bold uppercase tracking-wider flex items-center gap-2.5 transition-all shadow-xl hover:scale-105 active:scale-95 cursor-pointer shrink-0 self-start sm:self-auto"
+          className="relative z-10 px-5 py-3 bg-[#D9A9FF]/20 hover:bg-[#D9A9FF]/30 border border-[#D9A9FF]/50 rounded-2xl text-[#D9A9FF] font-mono text-xs font-bold uppercase tracking-wider flex items-center gap-2.5 transition-all shadow-xl hover:scale-105 active:scale-95 cursor-pointer shrink-0 self-start sm:self-auto"
         >
-          <Swords className="w-4 h-4 text-[#E9C349] animate-bounce" />
+          <Swords className="w-4 h-4 text-[#D9A9FF] animate-bounce" />
           <span>⚔️ Duelos de Práctica</span>
         </button>
       </div>
@@ -2695,8 +2695,8 @@ export default function EntrenamientoView({
           onClick={() => setSubTab('musicality')}
           className={`group h-11 min-w-[210px] px-4 py-2 text-xs font-mono font-bold tracking-wider transition-all flex items-center justify-center gap-2 border rounded-xl shrink-0 focus:outline-none ${
             subTab === 'musicality' 
-              ? 'bg-[#E9C349] text-black border-[#E9C349] shadow-xl font-black' 
-              : 'bg-[#121212] text-[#E9C349] border-[#E9C349]/40 hover:bg-[#E9C349]/10'
+              ? 'bg-[#D9A9FF] text-black border-[#D9A9FF] shadow-xl font-black' 
+              : 'bg-[#121212] text-[#D9A9FF] border-[#D9A9FF]/40 hover:bg-[#D9A9FF]/10'
           }`}
         >
           <Radio className="w-4 h-4 shrink-0 transition-transform duration-300 group-hover:scale-125 animate-pulse" />
@@ -2707,11 +2707,11 @@ export default function EntrenamientoView({
           onClick={() => setSubTab('drill')}
           className={`group h-11 min-w-[150px] px-4 py-2 text-xs font-mono font-bold tracking-wider transition-all flex items-center justify-center gap-2 border rounded-xl shrink-0 focus:outline-none ${
             subTab === 'drill' 
-              ? 'bg-[#9A2B3C] text-white border-[#9A2B3C] shadow-lg' 
-              : 'bg-[#121212] text-[#8A8A8A] border-[#262626] hover:text-white hover:border-[#E9C349]/30'
+              ? 'bg-[#C23E9E] text-white border-[#C23E9E] shadow-lg' 
+              : 'bg-[#121212] text-[#8A8A8A] border-[#262626] hover:text-white hover:border-[#D9A9FF]/30'
           }`}
         >
-          <Timer className="w-4 h-4 text-[#E9C349] shrink-0 transition-transform duration-300 group-hover:scale-125 group-hover:rotate-12 group-active:scale-90" />
+          <Timer className="w-4 h-4 text-[#D9A9FF] shrink-0 transition-transform duration-300 group-hover:scale-125 group-hover:rotate-12 group-active:scale-90" />
           {lt.drillTab}
         </button>
         <button
@@ -2719,11 +2719,11 @@ export default function EntrenamientoView({
           onClick={() => setSubTab('battle')}
           className={`group h-11 min-w-[150px] px-4 py-2 text-xs font-mono font-bold tracking-wider transition-all flex items-center justify-center gap-2 border rounded-xl shrink-0 focus:outline-none ${
             subTab === 'battle' 
-              ? 'bg-[#9A2B3C] text-white border-[#9A2B3C] shadow-lg' 
-              : 'bg-[#121212] text-[#8A8A8A] border-[#262626] hover:text-white hover:border-[#E9C349]/30'
+              ? 'bg-[#C23E9E] text-white border-[#C23E9E] shadow-lg' 
+              : 'bg-[#121212] text-[#8A8A8A] border-[#262626] hover:text-white hover:border-[#D9A9FF]/30'
           }`}
         >
-          <Swords className="w-4 h-4 text-[#E9C349] shrink-0 transition-transform duration-300 group-hover:scale-125 group-hover:-rotate-12 group-active:scale-90" />
+          <Swords className="w-4 h-4 text-[#D9A9FF] shrink-0 transition-transform duration-300 group-hover:scale-125 group-hover:-rotate-12 group-active:scale-90" />
           {lt.battleTab}
         </button>
         <button
@@ -2731,11 +2731,11 @@ export default function EntrenamientoView({
           onClick={() => setSubTab('combos')}
           className={`group h-11 min-w-[150px] px-4 py-2 text-xs font-mono font-bold tracking-wider transition-all flex items-center justify-center gap-2 border rounded-xl shrink-0 focus:outline-none ${
             subTab === 'combos' 
-              ? 'bg-[#9A2B3C] text-white border-[#9A2B3C] shadow-lg' 
-              : 'bg-[#121212] text-[#8A8A8A] border-[#262626] hover:text-white hover:border-[#E9C349]/30'
+              ? 'bg-[#C23E9E] text-white border-[#C23E9E] shadow-lg' 
+              : 'bg-[#121212] text-[#8A8A8A] border-[#262626] hover:text-white hover:border-[#D9A9FF]/30'
           }`}
         >
-          <Shuffle className="w-4 h-4 text-[#E9C349] shrink-0 transition-transform duration-300 group-hover:scale-125 group-hover:rotate-180 group-active:scale-90" />
+          <Shuffle className="w-4 h-4 text-[#D9A9FF] shrink-0 transition-transform duration-300 group-hover:scale-125 group-hover:rotate-180 group-active:scale-90" />
           {lt.combosTab}
         </button>
         <button
@@ -2743,11 +2743,11 @@ export default function EntrenamientoView({
           onClick={() => setSubTab('sensorial')}
           className={`group h-11 min-w-[150px] px-4 py-2 text-xs font-mono font-bold tracking-wider transition-all flex items-center justify-center gap-2 border rounded-xl shrink-0 focus:outline-none ${
             subTab === 'sensorial' 
-              ? 'bg-[#9A2B3C] text-white border-[#9A2B3C] shadow-lg' 
-              : 'bg-[#121212] text-[#8A8A8A] border-[#262626] hover:text-white hover:border-[#E9C349]/30'
+              ? 'bg-[#C23E9E] text-white border-[#C23E9E] shadow-lg' 
+              : 'bg-[#121212] text-[#8A8A8A] border-[#262626] hover:text-white hover:border-[#D9A9FF]/30'
           }`}
         >
-          <EyeOff className="w-4 h-4 text-[#E9C349] shrink-0 transition-transform duration-300 group-hover:scale-125 group-hover:rotate-12 group-active:scale-90" />
+          <EyeOff className="w-4 h-4 text-[#D9A9FF] shrink-0 transition-transform duration-300 group-hover:scale-125 group-hover:rotate-12 group-active:scale-90" />
           {lt.sensorialTab}
         </button>
         <button
@@ -2755,11 +2755,11 @@ export default function EntrenamientoView({
           onClick={() => setSubTab('somatic')}
           className={`group h-11 min-w-[150px] px-4 py-2 text-xs font-mono font-bold tracking-wider transition-all flex items-center justify-center gap-2 border rounded-xl shrink-0 focus:outline-none ${
             subTab === 'somatic' 
-              ? 'bg-[#9A2B3C] text-white border-[#9A2B3C] shadow-lg' 
-              : 'bg-[#121212] text-[#8A8A8A] border-[#262626] hover:text-white hover:border-[#E9C349]/30'
+              ? 'bg-[#C23E9E] text-white border-[#C23E9E] shadow-lg' 
+              : 'bg-[#121212] text-[#8A8A8A] border-[#262626] hover:text-white hover:border-[#D9A9FF]/30'
           }`}
         >
-          <Activity className="w-4 h-4 text-[#E9C349] shrink-0 transition-transform duration-300 group-hover:scale-125 group-hover:rotate-12 group-active:scale-90" />
+          <Activity className="w-4 h-4 text-[#D9A9FF] shrink-0 transition-transform duration-300 group-hover:scale-125 group-hover:rotate-12 group-active:scale-90" />
           {lt.somaticTab}
           {currentUser.billingStatus !== 'active' && <Lock className="w-3.5 h-3.5 text-primary ml-1 shrink-0 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12" />}
         </button>
@@ -2768,11 +2768,11 @@ export default function EntrenamientoView({
           onClick={() => setSubTab('trazos')}
           className={`group h-11 min-w-[180px] px-4 py-2 text-xs font-mono font-bold tracking-wider transition-all flex items-center justify-center gap-2 border rounded-xl shrink-0 focus:outline-none ${
             subTab === 'trazos'
-              ? 'bg-[#9A2B3C] text-white border-[#9A2B3C] shadow-lg'
-              : 'bg-[#121212] text-[#8A8A8A] border-[#262626] hover:text-white hover:border-[#E9C349]/30'
+              ? 'bg-[#C23E9E] text-white border-[#C23E9E] shadow-lg'
+              : 'bg-[#121212] text-[#8A8A8A] border-[#262626] hover:text-white hover:border-[#D9A9FF]/30'
           }`}
         >
-          <Camera className="w-4 h-4 text-[#E9C349] shrink-0 transition-transform duration-300 group-hover:scale-125 group-hover:rotate-12 group-active:scale-90" />
+          <Camera className="w-4 h-4 text-[#D9A9FF] shrink-0 transition-transform duration-300 group-hover:scale-125 group-hover:rotate-12 group-active:scale-90" />
           {language === 'es' ? 'TRAZOS DE MOVIMIENTO' : 'MOVEMENT TRAILS'}
           {currentUser.billingStatus !== 'active' && <Lock className="w-3.5 h-3.5 text-primary ml-1 shrink-0 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12" />}
         </button>
@@ -2781,11 +2781,11 @@ export default function EntrenamientoView({
           onClick={() => setSubTab('drama')}
           className={`group h-11 min-w-[180px] px-4 py-2 text-xs font-mono font-bold tracking-wider transition-all flex items-center justify-center gap-2 border rounded-xl shrink-0 focus:outline-none ${
             subTab === 'drama' 
-              ? 'bg-[#9A2B3C] text-white border-[#9A2B3C] shadow-lg' 
-              : 'bg-[#121212] text-[#8A8A8A] border-[#262626] hover:text-white hover:border-[#E9C349]/30'
+              ? 'bg-[#C23E9E] text-white border-[#C23E9E] shadow-lg' 
+              : 'bg-[#121212] text-[#8A8A8A] border-[#262626] hover:text-white hover:border-[#D9A9FF]/30'
           }`}
         >
-          <Smile className="w-4 h-4 text-[#E9C349] shrink-0 transition-transform duration-300 group-hover:scale-125 group-hover:rotate-12 group-active:scale-90" />
+          <Smile className="w-4 h-4 text-[#D9A9FF] shrink-0 transition-transform duration-300 group-hover:scale-125 group-hover:rotate-12 group-active:scale-90" />
           {DRAMA_TRANSLATIONS[language]?.tab || '🎭 LAB DE EXPRESIÓN'}
           {currentUser.billingStatus !== 'active' && <Lock className="w-3.5 h-3.5 text-primary ml-1 shrink-0 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12" />}
         </button>
@@ -2794,11 +2794,11 @@ export default function EntrenamientoView({
           onClick={() => setSubTab('playlists')}
           className={`group h-11 min-w-[150px] px-4 py-2 text-xs font-mono font-bold tracking-wider transition-all flex items-center justify-center gap-2 border rounded-xl shrink-0 focus:outline-none ${
             subTab === 'playlists' 
-              ? 'bg-[#9A2B3C] text-white border-[#9A2B3C] shadow-lg' 
-              : 'bg-[#121212] text-[#8A8A8A] border-[#262626] hover:text-white hover:border-[#E9C349]/30'
+              ? 'bg-[#C23E9E] text-white border-[#C23E9E] shadow-lg' 
+              : 'bg-[#121212] text-[#8A8A8A] border-[#262626] hover:text-white hover:border-[#D9A9FF]/30'
           }`}
         >
-          <Music className="w-4 h-4 text-[#E9C349] shrink-0 transition-transform duration-300 group-hover:scale-125 group-hover:-rotate-12 group-active:scale-90" />
+          <Music className="w-4 h-4 text-[#D9A9FF] shrink-0 transition-transform duration-300 group-hover:scale-125 group-hover:-rotate-12 group-active:scale-90" />
           {lt.playlistsTab}
         </button>
         <button
@@ -2806,11 +2806,11 @@ export default function EntrenamientoView({
           onClick={() => setSubTab('feedback')}
           className={`group h-11 min-w-[150px] px-4 py-2 text-xs font-mono font-bold tracking-wider transition-all flex items-center justify-center gap-2 border rounded-xl shrink-0 focus:outline-none ${
             subTab === 'feedback' 
-              ? 'bg-[#9A2B3C] text-white border-[#9A2B3C] shadow-lg' 
-              : 'bg-[#121212] text-[#8A8A8A] border-[#262626] hover:text-white hover:border-[#E9C349]/30'
+              ? 'bg-[#C23E9E] text-white border-[#C23E9E] shadow-lg' 
+              : 'bg-[#121212] text-[#8A8A8A] border-[#262626] hover:text-white hover:border-[#D9A9FF]/30'
           }`}
         >
-          <MessageSquare className="w-4 h-4 text-[#E9C349] shrink-0 transition-transform duration-300 group-hover:scale-125 group-hover:rotate-12 group-active:scale-90" />
+          <MessageSquare className="w-4 h-4 text-[#D9A9FF] shrink-0 transition-transform duration-300 group-hover:scale-125 group-hover:rotate-12 group-active:scale-90" />
           {lt.feedbackTab}
         </button>
         <button
@@ -2818,11 +2818,11 @@ export default function EntrenamientoView({
           onClick={() => setSubTab('rhythm')}
           className={`group h-11 min-w-[170px] px-4 py-2 text-xs font-mono font-bold tracking-wider transition-all flex items-center justify-center gap-2 border rounded-xl shrink-0 focus:outline-none ${
             subTab === 'rhythm' 
-              ? 'bg-[#9A2B3C] text-white border-[#9A2B3C] shadow-lg' 
-              : 'bg-[#121212] text-[#8A8A8A] border-[#262626] hover:text-white hover:border-[#E9C349]/30'
+              ? 'bg-[#C23E9E] text-white border-[#C23E9E] shadow-lg' 
+              : 'bg-[#121212] text-[#8A8A8A] border-[#262626] hover:text-white hover:border-[#D9A9FF]/30'
           }`}
         >
-          <Zap className="w-4 h-4 text-[#E9C349] shrink-0 transition-transform duration-300 group-hover:scale-125 group-hover:rotate-12 group-active:scale-90 animate-pulse" />
+          <Zap className="w-4 h-4 text-[#D9A9FF] shrink-0 transition-transform duration-300 group-hover:scale-125 group-hover:rotate-12 group-active:scale-90 animate-pulse" />
           🎮 BEAT TRAINER
         </button>
         <button
@@ -2830,11 +2830,11 @@ export default function EntrenamientoView({
           onClick={() => setSubTab('spectrum')}
           className={`group h-11 min-w-[180px] px-4 py-2 text-xs font-mono font-bold tracking-wider transition-all flex items-center justify-center gap-2 border rounded-xl shrink-0 focus:outline-none ${
             subTab === 'spectrum' 
-              ? 'bg-[#9A2B3C] text-white border-[#9A2B3C] shadow-lg' 
-              : 'bg-[#121212] text-[#8A8A8A] border-[#262626] hover:text-white hover:border-[#E9C349]/30'
+              ? 'bg-[#C23E9E] text-white border-[#C23E9E] shadow-lg' 
+              : 'bg-[#121212] text-[#8A8A8A] border-[#262626] hover:text-white hover:border-[#D9A9FF]/30'
           }`}
         >
-          <BarChart2 className="w-4 h-4 text-[#E9C349] shrink-0 transition-transform duration-300 group-hover:scale-125 group-hover:-rotate-12 group-active:scale-90" />
+          <BarChart2 className="w-4 h-4 text-[#D9A9FF] shrink-0 transition-transform duration-300 group-hover:scale-125 group-hover:-rotate-12 group-active:scale-90" />
           📊 ESPECTRO AUDIO
         </button>
 
@@ -3257,7 +3257,7 @@ Right Arm Extension: ${rightUserAngle.toFixed(1)}°
                         onClick={() => setSomaticReferenceVideo(somaticUploadedVideo)}
                         className={`px-3 py-2 rounded-xl text-[10px] font-semibold tracking-wide transition-all border ${
                           somaticReferenceVideo === somaticUploadedVideo
-                            ? 'bg-[#9A2B3C] text-white border-[#9A2B3C] font-bold shadow-md'
+                            ? 'bg-[#C23E9E] text-white border-[#C23E9E] font-bold shadow-md'
                             : 'bg-black/30 text-red-300 border-red-500/10 hover:border-red-500/30'
                         }`}
                       >
@@ -3285,7 +3285,7 @@ Right Arm Extension: ${rightUserAngle.toFixed(1)}°
                       ref={containerRef}
                       className={`relative aspect-[4/3] w-full bg-[#08080a] border rounded-2xl overflow-hidden shadow-2xl transition-all duration-300 ${
                         somaticCameraActive 
-                          ? 'animate-bpm-pulse border-[#E9C349]/60 shadow-[0_0_25px_rgba(233,195,73,0.2)]' 
+                          ? 'animate-bpm-pulse border-[#D9A9FF]/60 shadow-[0_0_25px_rgba(217, 169, 255,0.2)]' 
                           : 'border-tertiary/10'
                       }`}
                       style={{ '--bpm-pulse-duration': `${(60 / (trainingBpm || scBpm || drillBpm || 120)).toFixed(3)}s` } as React.CSSProperties}
@@ -3366,7 +3366,7 @@ Right Arm Extension: ${rightUserAngle.toFixed(1)}°
                             className={`absolute w-3.5 h-3.5 rounded-full border border-white cursor-pointer -translate-x-1/2 -translate-y-1/2 z-30 transition-shadow ${
                               activeDragJoint === key 
                                 ? 'bg-red-500 scale-125 shadow-[0_0_12px_#ef4444]' 
-                                : 'bg-tertiary shadow-[0_0_8px_#e9c349]'
+                                : 'bg-tertiary shadow-[0_0_8px_#d9a9ff]'
                             }`}
                             style={{ left: `${joint.x}%`, top: `${joint.y}%` }}
                             title={`Arrastra para calibrar referencia: ${key}`}
@@ -3452,7 +3452,7 @@ Right Arm Extension: ${rightUserAngle.toFixed(1)}°
                       ref={userCameraContainerRef}
                       className={`relative aspect-[4/3] w-full bg-[#08080a] border rounded-2xl overflow-hidden shadow-2xl flex items-center justify-center text-center transition-all duration-300 ${
                         somaticCameraActive 
-                          ? 'animate-bpm-pulse border-[#E9C349]/80 shadow-[0_0_30px_rgba(233,195,73,0.3)]' 
+                          ? 'animate-bpm-pulse border-[#D9A9FF]/80 shadow-[0_0_30px_rgba(217, 169, 255,0.3)]' 
                           : 'border-tertiary/10'
                       }`}
                       style={{ '--bpm-pulse-duration': `${(60 / (trainingBpm || scBpm || drillBpm || 120)).toFixed(3)}s` } as React.CSSProperties}
@@ -3462,7 +3462,7 @@ Right Arm Extension: ${rightUserAngle.toFixed(1)}°
                         <>
                           {/* Inner BPM Rhythm Ring */}
                           <div 
-                            className="absolute inset-0 pointer-events-none rounded-2xl border-2 border-[#E9C349]/40 animate-bpm-ring z-15"
+                            className="absolute inset-0 pointer-events-none rounded-2xl border-2 border-[#D9A9FF]/40 animate-bpm-ring z-15"
                             style={{ '--bpm-pulse-duration': `${(60 / (trainingBpm || scBpm || drillBpm || 120)).toFixed(3)}s` } as React.CSSProperties}
                           />
 

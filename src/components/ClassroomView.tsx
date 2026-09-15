@@ -382,7 +382,7 @@ export default function ClassroomView({ currentUser, language, lessons }: Classr
             {/* Waack On Quick Sync Module Panel */}
             <div className="p-5 bg-[#121021] border border-blue-500/20 rounded-2xl space-y-3">
               <div className="flex items-center gap-2">
-                <Layers className="w-4 h-4 text-[#E9C349]" />
+                <Layers className="w-4 h-4 text-[#D9A9FF]" />
                 <h3 className="text-xs font-black text-white uppercase">Sincronización Rápida Waack On</h3>
               </div>
               <p className="text-[11px] text-slate-400 leading-relaxed">
