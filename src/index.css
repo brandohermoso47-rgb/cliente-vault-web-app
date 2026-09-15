@@ -32,6 +32,7 @@
 /* ---- Light theme (default) ---- */
 :root {
   --bg: #F5F5F7;
+  --void: #ECEEF3;
   --surface: #FFFFFF;
   --ink: #16171C;
   --ink-secondary: #52565E;
@@ -79,7 +80,7 @@ html.dark {
 }
 
 body {
-  background-color: var(--void);
+  background-color: var(--bg);
   color: var(--ink);
   font-family: 'Geist', sans-serif;
   overflow-x: hidden;
