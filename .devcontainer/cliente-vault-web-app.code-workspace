@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		},
+		{
+			"path": "../.."
+		}
+	],
+	"settings": {
+		"github.copilot.chat.agentDebugLog.fileLogging.enabled": true
+	}
+}
