@@ -1,42 +1,80 @@
 @import "tailwindcss";
 
-/* ============================================================================
-   WAACK ON — Liquid Glass Design System
-   Palette: void black ground, frosted glass panels, violet -> rose -> cyan
-   glow that drives both the animated background (see GlowField.tsx) and
-   every card / button surface via the shared --h (hue) custom property.
-   ============================================================================ */
+/* Class-based dark mode: toggled on <html> by the theme system in App.tsx (persisted to
+   localStorage under 'waacking_theme'). Light mode is the default (no .dark class). */
+@custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
   --font-sans: "Geist", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "Geist Mono", ui-monospace, monospace;
   --font-display: "Syne", sans-serif;
 
-  --color-bg: #0A0A0C;
-  --color-surface: #141418;
-  --color-ink: #F0F2F7;
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
   --color-accent: #D9A9FF;
-  --color-accent-dim: rgba(217, 169, 255, 0.15);
+  --color-accent-dim: var(--accent-dim);
 
-  --color-brand-bg: #0A0A0C;
-  --color-brand-dark: #F0F2F7;
+  --color-brand-bg: var(--bg);
+  --color-brand-dark: var(--ink);
   --color-brand-pink: #C23E9E;
-  --color-brand-cyan: #7DD3FC;
+  --color-brand-cyan: #D9A9FF;
+
+  /* Material-style semantic surface tokens referenced across several views
+     (bg-surface-container*, text-on-surface, border-tertiary) */
+  --color-surface-container: var(--surface-container);
+  --color-surface-container-high: var(--surface-container-high);
+  --color-surface-container-low: var(--surface-container-low);
+  --color-on-surface: var(--on-surface);
+  --color-tertiary: #C23E9E;
 }
 
+/* ---- Light theme (default) ---- */
 :root {
+  --bg: #F5F5F7;
+  --void: #ECEEF3;
+  --surface: #FFFFFF;
+  --ink: #16171C;
+  --ink-secondary: #52565E;
+  --accent: #D9A9FF;
+  --accent-dim: rgba(217, 169, 255, 0.15);
+  --border-light: 1px solid rgba(20, 21, 26, 0.12);
+
+  --surface-container: #EEEFF2;
+  --surface-container-high: #E4E5EA;
+  --surface-container-low: #F7F7F9;
+  --on-surface: #16171C;
+
+  /* Waack On logo metallic gradient — dark graphite reads on light surfaces */
+  --logo-metal-fill: url(#waack-metal-light);
+
+  /* Liquid-glass hue driver (see GlowField.tsx). Light theme keeps this static —
+     the ambient animated glow only runs in dark mode — but every glass surface
+     below still reads its tint from --h so light and dark share one system. */
+  --h: 285;
+  --glass-fill: linear-gradient(160deg, rgba(255,255,255,.65), rgba(255,255,255,.28));
+  --glass-border: rgba(20, 21, 26, 0.10);
+  --glass-glow: hsla(var(--h), 70%, 55%, .22);
+}
+
+/* ---- Dark theme ---- */
+:root.dark {
   --bg: #0A0A0C;
   --void: #08060d;
   --surface: #141418;
   --ink: #F0F2F7;
+  --ink-secondary: #B0B7C3;
   --accent: #D9A9FF;
   --accent-dim: rgba(217, 169, 255, 0.15);
   --border-light: 1px solid rgba(240, 242, 247, 0.16);
 
-  /* Liquid-glass hue driver. GlowField.tsx animates this every frame between
-     ~250 (violet) and ~335 (rose), sweeping through the accent's own range so
-     the background glow and every glass card/button stay in the same light. */
-  --h: 285;
+  --surface-container: #1C1C22;
+  --surface-container-high: #242430;
+  --surface-container-low: #16161B;
+  --on-surface: #F0F2F7;
+
+  /* Waack On logo metallic gradient — silver/chrome reads on dark surfaces */
+  --logo-metal-fill: url(#waack-metal-dark);
 
   --glass-fill: linear-gradient(160deg, rgba(255,255,255,.09), rgba(255,255,255,.02));
   --glass-border: rgba(255,255,255,.16);
@@ -45,13 +83,20 @@
 
 html {
   scroll-behavior: smooth;
+  background-color: var(--bg);
+  color-scheme: light;
+}
+
+html.dark {
+  color-scheme: dark;
 }
 
 body {
-  background-color: var(--void);
+  background-color: var(--bg);
   color: var(--ink);
   font-family: 'Geist', sans-serif;
   overflow-x: hidden;
+  transition: background-color 0.25s ease, color 0.25s ease;
 }
 
 /* ---------------------------------------------------------------------------
@@ -135,7 +180,7 @@ button:focus-visible {
 }
 
 /* Enhanced subtle border and depth for dark containers */
-.bg-\[\#0A0A0A\], [class*="bg-[#0A0A0A]"] {
+.dark .bg-\[\#0A0A0A\], .dark [class*="bg-[#0A0A0A]"] {
   box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.07);
 }
 
@@ -154,17 +199,163 @@ button:focus-visible {
   color: #9AA2B2 !important;
 }
 
+/* Light-mode readability pass for the same secondary-text utilities, and for the
+   literal near-black hex tokens used pervasively across the app as page/card
+   surfaces, borders and primary/secondary text. These hex values are the actual
+   dark-theme design tokens (see --bg/--surface/--ink above) used as Tailwind
+   arbitrary values instead of the semantic classes, so remapping them here gives
+   consistent, low-risk light-mode coverage across components that haven't been
+   individually converted to `dark:` variants yet. */
+:root:not(.dark) {
+  --text-primary-override: #16171C;
+  --text-secondary-override: #4B4F58;
+}
+
+:root:not(.dark) .text-zinc-400,
+:root:not(.dark) .text-gray-400,
+:root:not(.dark) .text-slate-400,
+:root:not(.dark) .text-neutral-400,
+:root:not(.dark) .text-zinc-300,
+:root:not(.dark) .text-gray-300,
+:root:not(.dark) .text-slate-300,
+:root:not(.dark) .text-neutral-300,
+:root:not(.dark) .text-\[\#8A8A8A\],
+:root:not(.dark) .text-\[\#A0A5B1\],
+:root:not(.dark) .text-\[\#C2C7D1\] {
+  color: var(--text-secondary-override) !important;
+}
+
+:root:not(.dark) .text-zinc-500,
+:root:not(.dark) .text-gray-500,
+:root:not(.dark) .text-slate-500,
+:root:not(.dark) .text-neutral-500 {
+  color: #6B6F78 !important;
+}
+
+:root:not(.dark) .text-\[\#EDEFF4\] {
+  color: var(--text-primary-override);
+}
+
+/* Known page/card background surfaces (near-black neutrals only — brand accent
+   colors like gold, pink, spotify-green etc. are left untouched since they read
+   fine on both themes). */
+:root:not(.dark) .bg-\[\#0A0A0A\],
+:root:not(.dark) .bg-\[\#0a0a0a\],
+:root:not(.dark) .bg-\[\#0A0A0C\],
+:root:not(.dark) .bg-\[\#0a0a0c\],
+:root:not(.dark) .bg-\[\#0A0A0E\],
+:root:not(.dark) .bg-\[\#0c0c0e\],
+:root:not(.dark) .bg-\[\#090a14\],
+:root:not(.dark) .bg-\[\#0c0d1e\],
+:root:not(.dark) .bg-\[\#0d0d11\],
+:root:not(.dark) .bg-\[\#0D0D11\],
+:root:not(.dark) .bg-\[\#0e0e0e\],
+:root:not(.dark) .bg-\[\#0E0E0E\],
+:root:not(.dark) .bg-\[\#08080A\],
+:root:not(.dark) .bg-\[\#101010\],
+:root:not(.dark) .bg-\[\#121212\],
+:root:not(.dark) .bg-\[\#141414\],
+:root:not(.dark) .bg-\[\#141418\],
+:root:not(.dark) .bg-\[\#141419\],
+:root:not(.dark) .bg-\[\#161616\],
+:root:not(.dark) .bg-\[\#181818\],
+:root:not(.dark) .bg-\[\#1a1a1a\],
+:root:not(.dark) .bg-\[\#1A1A1A\],
+:root:not(.dark) .bg-\[\#1A1818\],
+:root:not(.dark) .bg-\[\#1A1919\],
+:root:not(.dark) .bg-\[\#1c1b1b\],
+:root:not(.dark) .bg-\[\#1C1B1B\],
+:root:not(.dark) .bg-\[\#1C1C1C\],
+:root:not(.dark) .bg-\[\#1D1D1D\],
+:root:not(.dark) .bg-\[\#1e1e1e\],
+:root:not(.dark) .bg-\[\#1E1E1E\],
+:root:not(.dark) .bg-\[\#1F1F1F\],
+:root:not(.dark) .bg-\[\#202020\],
+:root:not(.dark) .bg-\[\#222222\],
+:root:not(.dark) .bg-\[\#242424\],
+:root:not(.dark) .bg-\[\#252525\],
+:root:not(.dark) .bg-\[\#262626\],
+:root:not(.dark) .bg-\[\#090a0c\],
+:root:not(.dark) .bg-\[\#060609\] {
+  background-color: #FFFFFF;
+  background-image: linear-gradient(160deg, rgba(255,255,255,.7), hsla(var(--h), 60%, 92%, .55));
+  backdrop-filter: blur(13px) saturate(150%);
+  -webkit-backdrop-filter: blur(13px) saturate(150%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.6), 0 12px 30px -18px hsla(var(--h), 60%, 45%, .28);
+}
+
+/* Purple/navy-tinted dark surfaces (instructor & lab panels) — map to a soft
+   neutral light card instead of pure white so their intentional accent tint
+   still reads as a distinct section in light mode. */
+:root:not(.dark) .bg-\[\#0A0814\],
+:root:not(.dark) .bg-\[\#121426\],
+:root:not(.dark) .bg-\[\#120F20\],
+:root:not(.dark) .bg-\[\#121218\],
+:root:not(.dark) .bg-\[\#121021\],
+:root:not(.dark) .bg-\[\#12101F\],
+:root:not(.dark) .bg-\[\#120F21\],
+:root:not(.dark) .bg-\[\#14182E\],
+:root:not(.dark) .bg-\[\#0D0F1D\],
+:root:not(.dark) .bg-\[\#1D1728\],
+:root:not(.dark) .bg-\[\#18142A\],
+:root:not(.dark) .bg-\[\#17132A\],
+:root:not(.dark) .bg-\[\#2B213B\],
+:root:not(.dark) .bg-\[\#121118\],
+:root:not(.dark) .bg-\[\#0C0E1A\],
+:root:not(.dark) .bg-\[\#130F21\],
+:root:not(.dark) .bg-\[\#121826\],
+:root:not(.dark) .bg-\[\#1c1a12\],
+:root:not(.dark) .bg-\[\#1C1A12\] {
+  background-color: #F1EEF9;
+  background-image: linear-gradient(160deg, hsla(var(--h), 70%, 96%, .8), hsla(var(--h), 65%, 90%, .5));
+  backdrop-filter: blur(13px) saturate(150%);
+  -webkit-backdrop-filter: blur(13px) saturate(150%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.6), 0 12px 30px -18px hsla(var(--h), 60%, 45%, .3);
+}
+
+:root:not(.dark) .border-\[\#262626\],
+:root:not(.dark) .border-\[\#282828\],
+:root:not(.dark) .border-\[\#2B2B2B\],
+:root:not(.dark) .border-\[\#242424\],
+:root:not(.dark) .border-\[\#2E2E2E\],
+:root:not(.dark) .border-\[\#333\],
+:root:not(.dark) .border-\[\#333333\],
+:root:not(.dark) .border-\[\#222\],
+:root:not(.dark) .border-\[\#222222\] {
+  border-color: color-mix(in srgb, rgba(20, 21, 26, 0.14) 70%, hsl(var(--h)) 30%);
+}
+
+/* Translucent white overlays/dividers (hover states, subtle panel tints,
+   dividers) read as near-invisible white-on-white in light mode — remap them
+   to an equivalent dark-tinted translucency so hover/active states and
+   dividers stay visible on both themes. */
+:root:not(.dark) .bg-white\/5 { background-color: rgba(20, 21, 26, 0.04); }
+:root:not(.dark) .bg-white\/10 { background-color: rgba(20, 21, 26, 0.06); }
+:root:not(.dark) .bg-white\/15 { background-color: rgba(20, 21, 26, 0.08); }
+:root:not(.dark) .bg-white\/20 { background-color: rgba(20, 21, 26, 0.1); }
+:root:not(.dark) .bg-white\/30 { background-color: rgba(20, 21, 26, 0.14); }
+:root:not(.dark) .bg-white\/40 { background-color: rgba(20, 21, 26, 0.18); }
+:root:not(.dark) .hover\:bg-white\/5:hover { background-color: rgba(20, 21, 26, 0.04); }
+:root:not(.dark) .hover\:bg-white\/10:hover { background-color: rgba(20, 21, 26, 0.06); }
+:root:not(.dark) .hover\:bg-white\/20:hover { background-color: rgba(20, 21, 26, 0.1); }
+:root:not(.dark) .border-white\/10 { border-color: rgba(20, 21, 26, 0.12); }
+:root:not(.dark) .border-white\/15 { border-color: rgba(20, 21, 26, 0.14); }
+:root:not(.dark) .border-white\/20 { border-color: rgba(20, 21, 26, 0.16); }
+
 /* Custom & Global Scrollbars */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: #0A0A0C;
+  background: var(--bg);
 }
 ::-webkit-scrollbar-thumb {
   background: hsla(var(--h), 85%, 70%, 0.35);
   border-radius: 4px;
+  border: 1px solid rgba(20, 21, 26, 0.08);
+}
+.dark ::-webkit-scrollbar-thumb {
   border: 1px solid rgba(255, 255, 255, 0.08);
 }
 ::-webkit-scrollbar-thumb:hover {
@@ -173,7 +364,7 @@ button:focus-visible {
 
 .custom-scrollbar {
   scrollbar-width: thin;
-  scrollbar-color: hsla(var(--h), 85%, 70%, 0.4) #0A0A0C;
+  scrollbar-color: hsla(var(--h), 85%, 70%, 0.4) var(--bg);
 }
 
 @keyframes headerGlowBreathe {
@@ -238,262 +429,323 @@ button:focus-visible {
   animation: bpmRingGlow var(--bpm-pulse-duration, 0.5s) cubic-bezier(0.2, 0.8, 0.2, 1) infinite;
 }
 
+/* Recursos y Literatura — tactile paper-grain treatment */
+@keyframes ebookLampGlow {
+  0%, 100% { opacity: .5; }
+  50% { opacity: .85; }
+}
+
+@keyframes ebookBrainSpin {
+  from { transform: rotateY(0deg); }
+  to { transform: rotateY(360deg); }
+}
+
+@keyframes ebookGearCW {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes ebookGearCCW {
+  from { transform: rotate(360deg); }
+  to { transform: rotate(0deg); }
+}
+
+.ebook-grain {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 140px;
+  mix-blend-mode: overlay;
+}
+
+.ebook-lamp-glow {
+  animation: ebookLampGlow 7s ease-in-out infinite;
+}
+
+.ebook-brain-spin {
+  animation: ebookBrainSpin 9s linear infinite;
+  transform-style: preserve-3d;
+}
+
+.ebook-gear-cw {
+  animation: ebookGearCW 6s linear infinite;
+}
+
+.ebook-gear-ccw {
+  animation: ebookGearCCW 5s linear infinite;
+}
+
+/* This screen is a deliberate exception to the liquid-glass sweep below: it
+   keeps its own lamp-lit paper/leather surfaces rather than becoming frosted
+   glass. Scoped to .ebook-tactile-scope (the EbooksView root) and only for
+   the literal dark backgrounds this file actually uses; revert-layer hands
+   background-color back to Tailwind's own utility so opacity modifiers like
+   /80 or /40 still come out correct without hardcoding every variant here. */
+.ebook-tactile-scope [class*="bg-[#0d0d11]"],
+.ebook-tactile-scope [class*="bg-[#121212]"],
+.ebook-tactile-scope [class*="bg-[#1c1b1b]"],
+.ebook-tactile-scope [class*="bg-[#5e0b15]"] {
+  background-image: none !important;
+  background-color: revert-layer !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: revert-layer !important;
+}
+
 /* ============================================================================
    Auto-generated liquid-glass sweep — every dark panel background used across
    the 70+ view components becomes a frosted glass surface, and every dark
    border becomes a soft glass edge, without editing each component by hand.
    ============================================================================ */
-[class*="bg-[#000000]"],
-[class*="bg-[#03050B]"],
-[class*="bg-[#050505]"],
-[class*="bg-[#05070D]"],
-[class*="bg-[#060609]"],
-[class*="bg-[#07050e]"],
-[class*="bg-[#07060c]"],
-[class*="bg-[#070913]"],
-[class*="bg-[#070A10]"],
-[class*="bg-[#08080a]"],
-[class*="bg-[#090712]"],
-[class*="bg-[#09080d]"],
-[class*="bg-[#09090d]"],
-[class*="bg-[#090B15]"],
-[class*="bg-[#090a14]"],
-[class*="bg-[#0A0814]"],
-[class*="bg-[#0A0A0A]"],
-[class*="bg-[#0A0A0C]"],
-[class*="bg-[#0A0A0D]"],
-[class*="bg-[#0A0A0E]"],
-[class*="bg-[#0A120E]"],
-[class*="bg-[#0B0B0B]"],
-[class*="bg-[#0B0F19]"],
-[class*="bg-[#0D0A14]"],
-[class*="bg-[#0D0B18]"],
-[class*="bg-[#0D0D11]"],
-[class*="bg-[#0D0D12]"],
-[class*="bg-[#0D0F1D]"],
-[class*="bg-[#0E0B12]"],
-[class*="bg-[#0E0C14]"],
-[class*="bg-[#0E0E0E]"],
-[class*="bg-[#0E0E10]"],
-[class*="bg-[#0E101D]"],
-[class*="bg-[#0F0B1E]"],
-[class*="bg-[#0F0C16]"],
-[class*="bg-[#0F0D1A]"],
-[class*="bg-[#0F0F12]"],
-[class*="bg-[#0F0F13]"],
-[class*="bg-[#0a0814]"],
-[class*="bg-[#0a0815]"],
-[class*="bg-[#0a0a0a]"],
-[class*="bg-[#0a0a0c]"],
-[class*="bg-[#0a0a0f]"],
-[class*="bg-[#0b0816]"],
-[class*="bg-[#0b0914]"],
-[class*="bg-[#0b0a12]"],
-[class*="bg-[#0b0b0e]"],
-[class*="bg-[#0b0e1a]"],
-[class*="bg-[#0b0e1b]"],
-[class*="bg-[#0b0f19]"],
-[class*="bg-[#0c0a12]"],
-[class*="bg-[#0c0d1e]"],
-[class*="bg-[#0c0e1a]"],
-[class*="bg-[#0d0918]"],
-[class*="bg-[#0d091a]"],
-[class*="bg-[#0d0b18]"],
-[class*="bg-[#0d0d11]"],
-[class*="bg-[#0d0d12]"],
-[class*="bg-[#0d0e1b]"],
-[class*="bg-[#0e0a1b]"],
-[class*="bg-[#0e0a1f]"],
-[class*="bg-[#0e0c18]"],
-[class*="bg-[#0e0e0e]"],
-[class*="bg-[#0e0e10]"],
-[class*="bg-[#0e0e11]"],
-[class*="bg-[#0e0e12]"],
-[class*="bg-[#0e1122]"],
-[class*="bg-[#0e1224]"],
-[class*="bg-[#0f1122]"],
-[class*="bg-[#0f1224]"],
-[class*="bg-[#100D18]"],
-[class*="bg-[#100D20]"],
-[class*="bg-[#100d1a]"],
-[class*="bg-[#101010]"],
-[class*="bg-[#101014]"],
-[class*="bg-[#101224]"],
-[class*="bg-[#101322]"],
-[class*="bg-[#110e1d]"],
-[class*="bg-[#120D1F]"],
-[class*="bg-[#120E24]"],
-[class*="bg-[#120F18]"],
-[class*="bg-[#120F1A]"],
-[class*="bg-[#120F1B]"],
-[class*="bg-[#120F20]"],
-[class*="bg-[#120F22]"],
-[class*="bg-[#120f1d]"],
-[class*="bg-[#120f1e]"],
-[class*="bg-[#120f20]"],
-[class*="bg-[#120f21]"],
-[class*="bg-[#12100B]"],
-[class*="bg-[#12101F]"],
-[class*="bg-[#12101a]"],
-[class*="bg-[#12101c]"],
-[class*="bg-[#12101f]"],
-[class*="bg-[#121021]"],
-[class*="bg-[#121118]"],
-[class*="bg-[#12111A]"],
-[class*="bg-[#121212]"],
-[class*="bg-[#121215]"],
-[class*="bg-[#121216]"],
-[class*="bg-[#121217]"],
-[class*="bg-[#121218]"],
-[class*="bg-[#12121a]"],
-[class*="bg-[#121226]"],
-[class*="bg-[#121426]"],
-[class*="bg-[#121528]"],
-[class*="bg-[#121622]"],
-[class*="bg-[#12162a]"],
-[class*="bg-[#12162b]"],
-[class*="bg-[#121826]"],
-[class*="bg-[#121828]"],
-[class*="bg-[#130f21]"],
-[class*="bg-[#130f24]"],
-[class*="bg-[#13101A]"],
-[class*="bg-[#131022]"],
-[class*="bg-[#131024]"],
-[class*="bg-[#13111c]"],
-[class*="bg-[#131124]"],
-[class*="bg-[#13131a]"],
-[class*="bg-[#13172e]"],
-[class*="bg-[#131926]"],
-[class*="bg-[#140E20]"],
-[class*="bg-[#140e26]"],
-[class*="bg-[#140f26]"],
-[class*="bg-[#141022]"],
-[class*="bg-[#141026]"],
-[class*="bg-[#14121A]"],
-[class*="bg-[#141222]"],
-[class*="bg-[#141414]"],
-[class*="bg-[#141418]"],
-[class*="bg-[#141419]"],
-[class*="bg-[#141829]"],
-[class*="bg-[#14182e]"],
-[class*="bg-[#15111E]"],
-[class*="bg-[#15120C]"],
-[class*="bg-[#15121E]"],
-[class*="bg-[#15131a]"],
-[class*="bg-[#151515]"],
-[class*="bg-[#15151a]"],
-[class*="bg-[#151930]"],
-[class*="bg-[#16120A]"],
-[class*="bg-[#161220]"],
-[class*="bg-[#161224]"],
-[class*="bg-[#161227]"],
-[class*="bg-[#161229]"],
-[class*="bg-[#16131D]"],
-[class*="bg-[#161328]"],
-[class*="bg-[#161414]"],
-[class*="bg-[#161616]"],
-[class*="bg-[#16161f]"],
-[class*="bg-[#161933]"],
-[class*="bg-[#161a33]"],
-[class*="bg-[#17122e]"],
-[class*="bg-[#171329]"],
-[class*="bg-[#17132a]"],
-[class*="bg-[#171526]"],
-[class*="bg-[#171717]"],
-[class*="bg-[#17171d]"],
-[class*="bg-[#180f2b]"],
-[class*="bg-[#181214]"],
-[class*="bg-[#181222]"],
-[class*="bg-[#181224]"],
-[class*="bg-[#181321]"],
-[class*="bg-[#18140B]"],
-[class*="bg-[#181424]"],
-[class*="bg-[#18142A]"],
-[class*="bg-[#18152e]"],
-[class*="bg-[#181624]"],
-[class*="bg-[#18171B]"],
-[class*="bg-[#181818]"],
-[class*="bg-[#18181c]"],
-[class*="bg-[#181822]"],
-[class*="bg-[#181a33]"],
-[class*="bg-[#181d38]"],
-[class*="bg-[#182033]"],
-[class*="bg-[#182348]"],
-[class*="bg-[#1A1125]"],
-[class*="bg-[#1A1622]"],
-[class*="bg-[#1A1812]"],
-[class*="bg-[#1A1813]"],
-[class*="bg-[#1A1A1A]"],
-[class*="bg-[#1A1A22]"],
-[class*="bg-[#1B1624]"],
-[class*="bg-[#1C1811]"],
-[class*="bg-[#1C1B1B]"],
-[class*="bg-[#1C1C1C]"],
-[class*="bg-[#1D1728]"],
-[class*="bg-[#1D172E]"],
-[class*="bg-[#1D1730]"],
-[class*="bg-[#1E122A]"],
-[class*="bg-[#1E1E1E]"],
-[class*="bg-[#1F190E]"],
-[class*="bg-[#1F1F1F]"],
-[class*="bg-[#1F1F24]"],
-[class*="bg-[#1a1528]"],
-[class*="bg-[#1a1818]"],
-[class*="bg-[#1a1829]"],
-[class*="bg-[#1a1919]"],
-[class*="bg-[#1a1a1a]"],
-[class*="bg-[#1a2336]"],
-[class*="bg-[#1b1222]"],
-[class*="bg-[#1b122b]"],
-[class*="bg-[#1b1424]"],
-[class*="bg-[#1b1530]"],
-[class*="bg-[#1b1912]"],
-[class*="bg-[#1c1315]"],
-[class*="bg-[#1c1417]"],
-[class*="bg-[#1c1a12]"],
-[class*="bg-[#1c1a1a]"],
-[class*="bg-[#1c1b1b]"],
-[class*="bg-[#1c1c1c]"],
-[class*="bg-[#1c1e22]"],
-[class*="bg-[#1e1735]"],
-[class*="bg-[#1e1910]"],
-[class*="bg-[#1e1a38]"],
-[class*="bg-[#1e1c1c]"],
-[class*="bg-[#1e1e1e]"],
-[class*="bg-[#1f1a12]"],
-[class*="bg-[#1f1f1f]"],
-[class*="bg-[#1f1f23]"],
-[class*="bg-[#202020]"],
-[class*="bg-[#222222]"],
-[class*="bg-[#222]"],
-[class*="bg-[#241c17]"],
-[class*="bg-[#242424]"],
-[class*="bg-[#251D30]"],
-[class*="bg-[#25223a]"],
-[class*="bg-[#25223c]"],
-[class*="bg-[#252525]"],
-[class*="bg-[#261516]"],
-[class*="bg-[#261E2E]"],
-[class*="bg-[#262626]"],
-[class*="bg-[#271B33]"],
-[class*="bg-[#28203E]"],
-[class*="bg-[#282415]"],
-[class*="bg-[#28282d]"],
-[class*="bg-[#291E35]"],
-[class*="bg-[#2A2238]"],
-[class*="bg-[#2A2A2A]"],
-[class*="bg-[#2A2A32]"],
-[class*="bg-[#2B213B]"],
-[class*="bg-[#2F2F2F]"],
-[class*="bg-[#2a2214]"],
-[class*="bg-[#2b2719]"],
-[class*="bg-[#2c2f35]"],
-[class*="bg-[#333333]"],
-[class*="bg-[#333]"],
-[class*="bg-[#342740]"],
-[class*="bg-[#362547]"],
-[class*="bg-[#3d1a1c]"],
-[class*="bg-[#5e0b15]"] {
+.dark [class*="bg-[#000000]"],
+.dark [class*="bg-[#03050B]"],
+.dark [class*="bg-[#050505]"],
+.dark [class*="bg-[#05070D]"],
+.dark [class*="bg-[#060609]"],
+.dark [class*="bg-[#07050e]"],
+.dark [class*="bg-[#07060c]"],
+.dark [class*="bg-[#070913]"],
+.dark [class*="bg-[#070A10]"],
+.dark [class*="bg-[#08080a]"],
+.dark [class*="bg-[#090712]"],
+.dark [class*="bg-[#09080d]"],
+.dark [class*="bg-[#09090d]"],
+.dark [class*="bg-[#090B15]"],
+.dark [class*="bg-[#090a14]"],
+.dark [class*="bg-[#0A0814]"],
+.dark [class*="bg-[#0A0A0A]"],
+.dark [class*="bg-[#0A0A0C]"],
+.dark [class*="bg-[#0A0A0D]"],
+.dark [class*="bg-[#0A0A0E]"],
+.dark [class*="bg-[#0A120E]"],
+.dark [class*="bg-[#0B0B0B]"],
+.dark [class*="bg-[#0B0F19]"],
+.dark [class*="bg-[#0D0A14]"],
+.dark [class*="bg-[#0D0B18]"],
+.dark [class*="bg-[#0D0D11]"],
+.dark [class*="bg-[#0D0D12]"],
+.dark [class*="bg-[#0D0F1D]"],
+.dark [class*="bg-[#0E0B12]"],
+.dark [class*="bg-[#0E0C14]"],
+.dark [class*="bg-[#0E0E0E]"],
+.dark [class*="bg-[#0E0E10]"],
+.dark [class*="bg-[#0E101D]"],
+.dark [class*="bg-[#0F0B1E]"],
+.dark [class*="bg-[#0F0C16]"],
+.dark [class*="bg-[#0F0D1A]"],
+.dark [class*="bg-[#0F0F12]"],
+.dark [class*="bg-[#0F0F13]"],
+.dark [class*="bg-[#0a0814]"],
+.dark [class*="bg-[#0a0815]"],
+.dark [class*="bg-[#0a0a0a]"],
+.dark [class*="bg-[#0a0a0c]"],
+.dark [class*="bg-[#0a0a0f]"],
+.dark [class*="bg-[#0b0816]"],
+.dark [class*="bg-[#0b0914]"],
+.dark [class*="bg-[#0b0a12]"],
+.dark [class*="bg-[#0b0b0e]"],
+.dark [class*="bg-[#0b0e1a]"],
+.dark [class*="bg-[#0b0e1b]"],
+.dark [class*="bg-[#0b0f19]"],
+.dark [class*="bg-[#0c0a12]"],
+.dark [class*="bg-[#0c0d1e]"],
+.dark [class*="bg-[#0c0e1a]"],
+.dark [class*="bg-[#0d0918]"],
+.dark [class*="bg-[#0d091a]"],
+.dark [class*="bg-[#0d0b18]"],
+.dark [class*="bg-[#0d0d11]"],
+.dark [class*="bg-[#0d0d12]"],
+.dark [class*="bg-[#0d0e1b]"],
+.dark [class*="bg-[#0e0a1b]"],
+.dark [class*="bg-[#0e0a1f]"],
+.dark [class*="bg-[#0e0c18]"],
+.dark [class*="bg-[#0e0e0e]"],
+.dark [class*="bg-[#0e0e10]"],
+.dark [class*="bg-[#0e0e11]"],
+.dark [class*="bg-[#0e0e12]"],
+.dark [class*="bg-[#0e1122]"],
+.dark [class*="bg-[#0e1224]"],
+.dark [class*="bg-[#0f1122]"],
+.dark [class*="bg-[#0f1224]"],
+.dark [class*="bg-[#100D18]"],
+.dark [class*="bg-[#100D20]"],
+.dark [class*="bg-[#100d1a]"],
+.dark [class*="bg-[#101010]"],
+.dark [class*="bg-[#101014]"],
+.dark [class*="bg-[#101224]"],
+.dark [class*="bg-[#101322]"],
+.dark [class*="bg-[#110e1d]"],
+.dark [class*="bg-[#120D1F]"],
+.dark [class*="bg-[#120E24]"],
+.dark [class*="bg-[#120F18]"],
+.dark [class*="bg-[#120F1A]"],
+.dark [class*="bg-[#120F1B]"],
+.dark [class*="bg-[#120F20]"],
+.dark [class*="bg-[#120F22]"],
+.dark [class*="bg-[#120f1d]"],
+.dark [class*="bg-[#120f1e]"],
+.dark [class*="bg-[#120f20]"],
+.dark [class*="bg-[#120f21]"],
+.dark [class*="bg-[#12100B]"],
+.dark [class*="bg-[#12101F]"],
+.dark [class*="bg-[#12101a]"],
+.dark [class*="bg-[#12101c]"],
+.dark [class*="bg-[#12101f]"],
+.dark [class*="bg-[#121021]"],
+.dark [class*="bg-[#121118]"],
+.dark [class*="bg-[#12111A]"],
+.dark [class*="bg-[#121212]"],
+.dark [class*="bg-[#121215]"],
+.dark [class*="bg-[#121216]"],
+.dark [class*="bg-[#121217]"],
+.dark [class*="bg-[#121218]"],
+.dark [class*="bg-[#12121a]"],
+.dark [class*="bg-[#121226]"],
+.dark [class*="bg-[#121426]"],
+.dark [class*="bg-[#121528]"],
+.dark [class*="bg-[#121622]"],
+.dark [class*="bg-[#12162a]"],
+.dark [class*="bg-[#12162b]"],
+.dark [class*="bg-[#121826]"],
+.dark [class*="bg-[#121828]"],
+.dark [class*="bg-[#130f21]"],
+.dark [class*="bg-[#130f24]"],
+.dark [class*="bg-[#13101A]"],
+.dark [class*="bg-[#131022]"],
+.dark [class*="bg-[#131024]"],
+.dark [class*="bg-[#13111c]"],
+.dark [class*="bg-[#131124]"],
+.dark [class*="bg-[#13131a]"],
+.dark [class*="bg-[#13172e]"],
+.dark [class*="bg-[#131926]"],
+.dark [class*="bg-[#140E20]"],
+.dark [class*="bg-[#140e26]"],
+.dark [class*="bg-[#140f26]"],
+.dark [class*="bg-[#141022]"],
+.dark [class*="bg-[#141026]"],
+.dark [class*="bg-[#14121A]"],
+.dark [class*="bg-[#141222]"],
+.dark [class*="bg-[#141414]"],
+.dark [class*="bg-[#141418]"],
+.dark [class*="bg-[#141419]"],
+.dark [class*="bg-[#141829]"],
+.dark [class*="bg-[#14182e]"],
+.dark [class*="bg-[#15111E]"],
+.dark [class*="bg-[#15120C]"],
+.dark [class*="bg-[#15121E]"],
+.dark [class*="bg-[#15131a]"],
+.dark [class*="bg-[#151515]"],
+.dark [class*="bg-[#15151a]"],
+.dark [class*="bg-[#151930]"],
+.dark [class*="bg-[#16120A]"],
+.dark [class*="bg-[#161220]"],
+.dark [class*="bg-[#161224]"],
+.dark [class*="bg-[#161227]"],
+.dark [class*="bg-[#161229]"],
+.dark [class*="bg-[#16131D]"],
+.dark [class*="bg-[#161328]"],
+.dark [class*="bg-[#161414]"],
+.dark [class*="bg-[#161616]"],
+.dark [class*="bg-[#16161f]"],
+.dark [class*="bg-[#161933]"],
+.dark [class*="bg-[#161a33]"],
+.dark [class*="bg-[#17122e]"],
+.dark [class*="bg-[#171329]"],
+.dark [class*="bg-[#17132a]"],
+.dark [class*="bg-[#171526]"],
+.dark [class*="bg-[#171717]"],
+.dark [class*="bg-[#17171d]"],
+.dark [class*="bg-[#180f2b]"],
+.dark [class*="bg-[#181214]"],
+.dark [class*="bg-[#181222]"],
+.dark [class*="bg-[#181224]"],
+.dark [class*="bg-[#181321]"],
+.dark [class*="bg-[#18140B]"],
+.dark [class*="bg-[#181424]"],
+.dark [class*="bg-[#18142A]"],
+.dark [class*="bg-[#18152e]"],
+.dark [class*="bg-[#181624]"],
+.dark [class*="bg-[#18171B]"],
+.dark [class*="bg-[#181818]"],
+.dark [class*="bg-[#18181c]"],
+.dark [class*="bg-[#181822]"],
+.dark [class*="bg-[#181a33]"],
+.dark [class*="bg-[#181d38]"],
+.dark [class*="bg-[#182033]"],
+.dark [class*="bg-[#182348]"],
+.dark [class*="bg-[#1A1125]"],
+.dark [class*="bg-[#1A1622]"],
+.dark [class*="bg-[#1A1812]"],
+.dark [class*="bg-[#1A1813]"],
+.dark [class*="bg-[#1A1A1A]"],
+.dark [class*="bg-[#1A1A22]"],
+.dark [class*="bg-[#1B1624]"],
+.dark [class*="bg-[#1C1811]"],
+.dark [class*="bg-[#1C1B1B]"],
+.dark [class*="bg-[#1C1C1C]"],
+.dark [class*="bg-[#1D1728]"],
+.dark [class*="bg-[#1D172E]"],
+.dark [class*="bg-[#1D1730]"],
+.dark [class*="bg-[#1E122A]"],
+.dark [class*="bg-[#1E1E1E]"],
+.dark [class*="bg-[#1F190E]"],
+.dark [class*="bg-[#1F1F1F]"],
+.dark [class*="bg-[#1F1F24]"],
+.dark [class*="bg-[#1a1528]"],
+.dark [class*="bg-[#1a1818]"],
+.dark [class*="bg-[#1a1829]"],
+.dark [class*="bg-[#1a1919]"],
+.dark [class*="bg-[#1a1a1a]"],
+.dark [class*="bg-[#1a2336]"],
+.dark [class*="bg-[#1b1222]"],
+.dark [class*="bg-[#1b122b]"],
+.dark [class*="bg-[#1b1424]"],
+.dark [class*="bg-[#1b1530]"],
+.dark [class*="bg-[#1b1912]"],
+.dark [class*="bg-[#1c1315]"],
+.dark [class*="bg-[#1c1417]"],
+.dark [class*="bg-[#1c1a12]"],
+.dark [class*="bg-[#1c1a1a]"],
+.dark [class*="bg-[#1c1b1b]"],
+.dark [class*="bg-[#1c1c1c]"],
+.dark [class*="bg-[#1c1e22]"],
+.dark [class*="bg-[#1e1735]"],
+.dark [class*="bg-[#1e1910]"],
+.dark [class*="bg-[#1e1a38]"],
+.dark [class*="bg-[#1e1c1c]"],
+.dark [class*="bg-[#1e1e1e]"],
+.dark [class*="bg-[#1f1a12]"],
+.dark [class*="bg-[#1f1f1f]"],
+.dark [class*="bg-[#1f1f23]"],
+.dark [class*="bg-[#202020]"],
+.dark [class*="bg-[#222222]"],
+.dark [class*="bg-[#222]"],
+.dark [class*="bg-[#241c17]"],
+.dark [class*="bg-[#242424]"],
+.dark [class*="bg-[#251D30]"],
+.dark [class*="bg-[#25223a]"],
+.dark [class*="bg-[#25223c]"],
+.dark [class*="bg-[#252525]"],
+.dark [class*="bg-[#261516]"],
+.dark [class*="bg-[#261E2E]"],
+.dark [class*="bg-[#262626]"],
+.dark [class*="bg-[#271B33]"],
+.dark [class*="bg-[#28203E]"],
+.dark [class*="bg-[#282415]"],
+.dark [class*="bg-[#28282d]"],
+.dark [class*="bg-[#291E35]"],
+.dark [class*="bg-[#2A2238]"],
+.dark [class*="bg-[#2A2A2A]"],
+.dark [class*="bg-[#2A2A32]"],
+.dark [class*="bg-[#2B213B]"],
+.dark [class*="bg-[#2F2F2F]"],
+.dark [class*="bg-[#2a2214]"],
+.dark [class*="bg-[#2b2719]"],
+.dark [class*="bg-[#2c2f35]"],
+.dark [class*="bg-[#333333]"],
+.dark [class*="bg-[#333]"],
+.dark [class*="bg-[#342740]"],
+.dark [class*="bg-[#362547]"],
+.dark [class*="bg-[#3d1a1c]"],
+.dark [class*="bg-[#5e0b15]"] {
   background-image: linear-gradient(160deg, rgba(255,255,255,.075), rgba(255,255,255,.015)) !important;
   background-color: color-mix(in srgb, var(--void) 88%, hsl(var(--h)) 12%) !important;
   backdrop-filter: blur(13px) saturate(150%);
@@ -501,54 +753,54 @@ button:focus-visible {
   box-shadow: inset 0 1px 0 rgba(255,255,255,.10);
 }
 
-[class*="border-[#0A0A0A]"],
-[class*="border-[#0E0E10]"],
-[class*="border-[#121212]"],
-[class*="border-[#121218]"],
-[class*="border-[#141414]"],
-[class*="border-[#181818]"],
-[class*="border-[#1A1A1A]"],
-[class*="border-[#1C1C1C]"],
-[class*="border-[#1F1F1F]"],
-[class*="border-[#1F1F24]"],
-[class*="border-[#1a1818]"],
-[class*="border-[#1a1a1a]"],
-[class*="border-[#222222]"],
-[class*="border-[#222]"],
-[class*="border-[#231A2E]"],
-[class*="border-[#241C10]"],
-[class*="border-[#242424]"],
-[class*="border-[#262626]"],
-[class*="border-[#282828]"],
-[class*="border-[#291D34]"],
-[class*="border-[#291E35]"],
-[class*="border-[#2A1E35]"],
-[class*="border-[#2A2418]"],
-[class*="border-[#2B1B33]"],
-[class*="border-[#2B1E37]"],
-[class*="border-[#2B1F33]"],
-[class*="border-[#2B1F38]"],
-[class*="border-[#2B2036]"],
-[class*="border-[#2B2B2B]"],
-[class*="border-[#2D2335]"],
-[class*="border-[#2E2416]"],
-[class*="border-[#2E2E2E]"],
-[class*="border-[#2a2a2a]"],
-[class*="border-[#312340]"],
-[class*="border-[#31253E]"],
-[class*="border-[#33243F]"],
-[class*="border-[#33273D]"],
-[class*="border-[#332A1C]"],
-[class*="border-[#333333]"],
-[class*="border-[#333]"],
-[class*="border-[#383838]"],
-[class*="border-[#3A223B]"],
-[class*="border-[#3A2542]"],
-[class*="border-[#3A2A47]"],
-[class*="border-[#3A3A3A]"],
-[class*="border-[#3D2948]"],
-[class*="border-[#3D2C4D]"],
-[class*="border-[#3D304A]"],
-[class*="border-[#5c1c1f]"] {
+.dark [class*="border-[#0A0A0A]"],
+.dark [class*="border-[#0E0E10]"],
+.dark [class*="border-[#121212]"],
+.dark [class*="border-[#121218]"],
+.dark [class*="border-[#141414]"],
+.dark [class*="border-[#181818]"],
+.dark [class*="border-[#1A1A1A]"],
+.dark [class*="border-[#1C1C1C]"],
+.dark [class*="border-[#1F1F1F]"],
+.dark [class*="border-[#1F1F24]"],
+.dark [class*="border-[#1a1818]"],
+.dark [class*="border-[#1a1a1a]"],
+.dark [class*="border-[#222222]"],
+.dark [class*="border-[#222]"],
+.dark [class*="border-[#231A2E]"],
+.dark [class*="border-[#241C10]"],
+.dark [class*="border-[#242424]"],
+.dark [class*="border-[#262626]"],
+.dark [class*="border-[#282828]"],
+.dark [class*="border-[#291D34]"],
+.dark [class*="border-[#291E35]"],
+.dark [class*="border-[#2A1E35]"],
+.dark [class*="border-[#2A2418]"],
+.dark [class*="border-[#2B1B33]"],
+.dark [class*="border-[#2B1E37]"],
+.dark [class*="border-[#2B1F33]"],
+.dark [class*="border-[#2B1F38]"],
+.dark [class*="border-[#2B2036]"],
+.dark [class*="border-[#2B2B2B]"],
+.dark [class*="border-[#2D2335]"],
+.dark [class*="border-[#2E2416]"],
+.dark [class*="border-[#2E2E2E]"],
+.dark [class*="border-[#2a2a2a]"],
+.dark [class*="border-[#312340]"],
+.dark [class*="border-[#31253E]"],
+.dark [class*="border-[#33243F]"],
+.dark [class*="border-[#33273D]"],
+.dark [class*="border-[#332A1C]"],
+.dark [class*="border-[#333333]"],
+.dark [class*="border-[#333]"],
+.dark [class*="border-[#383838]"],
+.dark [class*="border-[#3A223B]"],
+.dark [class*="border-[#3A2542]"],
+.dark [class*="border-[#3A2A47]"],
+.dark [class*="border-[#3A3A3A]"],
+.dark [class*="border-[#3D2948]"],
+.dark [class*="border-[#3D2C4D]"],
+.dark [class*="border-[#3D304A]"],
+.dark [class*="border-[#5c1c1f]"] {
   border-color: color-mix(in srgb, white 16%, hsl(var(--h)) 20%) !important;
 }
