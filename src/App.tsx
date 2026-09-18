@@ -1639,7 +1639,6 @@ export default function App() {
             onOpenDocsModal={() => setShowDocsModal(true)}
           />
         );
-      case 'planes':
       case 'plans':
         return (
           <PlansView

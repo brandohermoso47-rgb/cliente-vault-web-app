@@ -1,0 +1,21 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "sqlproj: Build BASEDE DATOS",
+			"type": "process",
+			"command": "dotnet",
+			"args": [
+				"build",
+				"c:/Users/brando/OneDrive/Documents/waack.on.com.worktrees/cliente-vault-web-app/BASEDE DATOS/BASEDE DATOS.sqlproj"
+			],
+			"problemMatcher": "$sqlproj-problem-matcher",
+			"isBackground": true,
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"detail": "Compile el proyecto BASEDE DATOS de SQL"
+		}
+	]
+}

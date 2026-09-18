@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import express from 'express';
 import path from 'path';
 import crypto from 'crypto';
@@ -56,9 +57,10 @@ function getStripeClient(): Stripe | null {
   if (!stripeClient) {
     const key = process.env.STRIPE_SECRET_KEY;
     if (key && key.trim() !== '') {
-      stripeClient = new Stripe(key, {
-        apiVersion: '2025-02-24.acacia' as any,
-      });
+      // No se fija apiVersion explícitamente: se usa la versión fijada por
+      // el SDK instalado, evitando el `as any` que ocultaba desalineaciones
+      // de tipos entre la versión configurada y la del paquete `stripe`.
+      stripeClient = new Stripe(key);
     }
   }
   return stripeClient;
@@ -201,8 +203,52 @@ let inMemoryBankAccount: any = {
   country: 'USD'
 };
 
-function getInstructorFinancesSummary(instructorUid: string) {
-  const userTx = inMemoryTransactions;
+// SEGURIDAD: antes ignoraba `instructorUid` y usaba los arrays globales en
+// memoria completos, por lo que cualquier instructor veía/retiraba el saldo
+// de TODOS los instructores. Ahora filtra siempre por instructorUid y, si hay
+// Postgres configurado, usa las tablas Drizzle dedicadas (instructor_transactions,
+// instructor_payouts, instructor_bank_accounts) en vez del estado en memoria.
+async function getInstructorFinancesSummary(instructorUid: string) {
+  let userTx: any[] = inMemoryTransactions.filter(tx => tx.instructorUid === instructorUid);
+  let userPayouts: any[] = inMemoryPayouts.filter(p => p.instructorUid === instructorUid);
+  let bankAccount: any = null;
+
+  if (process.env.SQL_HOST) {
+    try {
+      const dbTx = await drizzleDb.select().from(instructorTransactionsTable)
+        .where(eq(instructorTransactionsTable.instructorUid, instructorUid));
+      userTx = dbTx.map(tx => ({
+        id: String(tx.id),
+        instructorUid: tx.instructorUid,
+        studentName: tx.studentName,
+        itemType: tx.itemType,
+        itemTitle: tx.itemTitle,
+        grossAmountUSD: tx.grossAmountUSD / 100,
+        platformFeeUSD: tx.platformFeeUSD / 100,
+        netAmountUSD: tx.netAmountUSD / 100,
+        createdAt: tx.createdAt
+      }));
+
+      const dbPayouts = await drizzleDb.select().from(instructorPayoutsTable)
+        .where(eq(instructorPayoutsTable.instructorUid, instructorUid));
+      userPayouts = dbPayouts.map(p => ({
+        id: String(p.id),
+        instructorUid: p.instructorUid,
+        amountUSD: p.amountUSD / 100,
+        status: p.status,
+        bankSummary: p.bankSummary,
+        notes: p.notes,
+        createdAt: p.createdAt
+      }));
+
+      const dbBank = await drizzleDb.select().from(instructorBankAccountsTable)
+        .where(eq(instructorBankAccountsTable.instructorUid, instructorUid));
+      if (dbBank.length > 0) bankAccount = dbBank[0];
+    } catch (err: any) {
+      console.warn('[Finances Postgres Fallback to InMemory]:', err?.message || err);
+    }
+  }
+
   let grossUSD = 0;
   let platformFeeUSD = 0;
   let netUSD = 0;
@@ -235,7 +281,7 @@ function getInstructorFinancesSummary(instructorUid: string) {
     };
   });
 
-  const totalPaidOutUSD = inMemoryPayouts.reduce((sum, p) => sum + p.amountUSD, 0);
+  const totalPaidOutUSD = userPayouts.reduce((sum, p) => sum + p.amountUSD, 0);
   const currentAvailableBalanceUSD = Math.max(0, availableMaturedNetUSD - totalPaidOutUSD);
 
   return {
@@ -248,8 +294,8 @@ function getInstructorFinancesSummary(instructorUid: string) {
     payoutMinimumUSD: 20.00,
     canRequestPayout: currentAvailableBalanceUSD >= 20.00,
     transactions: formattedTransactions,
-    payouts: inMemoryPayouts,
-    bankAccount: inMemoryBankAccount
+    payouts: userPayouts,
+    bankAccount: bankAccount || inMemoryBankAccount
   };
 }
 
@@ -258,8 +304,35 @@ async function startServer() {
   const app = express();
   const PORT = 3000;
 
-  app.use(express.json({ limit: '50mb' }));
+  // Guarda el buffer crudo del body: requerido por stripe.webhooks.constructEvent
+  // para verificar la firma HMAC del webhook (el body ya parseado no sirve).
+  app.use(express.json({
+    limit: '50mb',
+    verify: (req, _res, buf) => {
+      (req as any).rawBody = buf;
+    }
+  }));
   app.use(express.urlencoded({ limit: '50mb', extended: true }));
+
+  // Rate limiting simple en memoria para rutas sensibles (pagos/webhooks),
+  // ante la ausencia de un paquete dedicado (express-rate-limit) en el proyecto.
+  const rateLimitBuckets = new Map<string, { count: number; resetAt: number }>();
+  function simpleRateLimit(maxRequests: number, windowMs: number) {
+    return (req: express.Request, res: express.Response, next: express.NextFunction) => {
+      const key = `${req.ip}:${req.path}`;
+      const now = Date.now();
+      const bucket = rateLimitBuckets.get(key);
+      if (!bucket || bucket.resetAt <= now) {
+        rateLimitBuckets.set(key, { count: 1, resetAt: now + windowMs });
+        return next();
+      }
+      if (bucket.count >= maxRequests) {
+        return res.status(429).json({ success: false, error: 'Demasiadas solicitudes, intenta de nuevo más tarde.' });
+      }
+      bucket.count += 1;
+      next();
+    };
+  }
 
   // Log incoming API requests for auditing
   app.use('/api', (req, res, next) => {
@@ -366,14 +439,42 @@ async function startServer() {
     // 2. Update PostgreSQL database if process.env.SQL_HOST is present
     if (process.env.SQL_HOST && userId) {
       try {
-        await drizzleDb.update(profilesTable)
-          .set({ 
-            role: assignedRole,
-            planType: canonicalPlanType,
-            subscriptionStatus: subscriptionStatus,
-            stripeCustomerId: stripeCustomer || `cus_${userId}`,
-            currentPeriodEnd: new Date(currentPeriodEnd)
+        // Resuelve el id interno (serial) del usuario a partir de su uid de
+        // Firebase antes de actualizar; sin este WHERE explícito el UPDATE
+        // afectaba a TODAS las filas de `profiles` (bug crítico corregido).
+        let userRecords = await drizzleDb.select().from(usersTable).where(eq(usersTable.uid, userId));
+        let internalUserId = userRecords[0]?.id;
+
+        if (!internalUserId) {
+          const inserted = await drizzleDb.insert(usersTable).values({
+            uid: userId,
+            email: userEmail || `${userId}@waackon.com`
+          }).returning();
+          internalUserId = inserted[0].id;
+        }
+
+        const profileFields = {
+          role: assignedRole,
+          planType: canonicalPlanType,
+          subscriptionStatus: subscriptionStatus,
+          stripeCustomerId: stripeCustomer || `cus_${userId}`,
+          currentPeriodEnd: new Date(currentPeriodEnd)
+        };
+
+        const existingProfile = await drizzleDb.select().from(profilesTable).where(eq(profilesTable.userId, internalUserId));
+
+        if (existingProfile.length > 0) {
+          await drizzleDb.update(profilesTable)
+            .set(profileFields)
+            .where(eq(profilesTable.userId, internalUserId));
+        } else {
+          await drizzleDb.insert(profilesTable).values({
+            userId: internalUserId,
+            name: userEmail || userId,
+            ...profileFields
           });
+        }
+
         dbUpdated = true;
         console.log(`[PostgreSQL Webhook Success]: Updated SQL profile '${userId}' to role '${assignedRole}'`);
       } catch (err: any) {
@@ -405,7 +506,7 @@ async function startServer() {
     });
   });
 
-  app.post('/api/stripe/create-checkout-session', validateInput(checkoutSessionSchema), async (req, res) => {
+  app.post('/api/stripe/create-checkout-session', simpleRateLimit(20, 60_000), validateInput(checkoutSessionSchema), async (req, res) => {
     try {
       const { tier, planType, successUrl, cancelUrl, userEmail, userId } = req.body;
       const stripe = getStripeClient();
@@ -507,13 +608,38 @@ async function startServer() {
   });
 
   // Stripe Webhook Endpoint
-  app.post('/api/stripe/webhook', async (req, res) => {
+  // SEGURIDAD: la firma se verifica SIEMPRE con stripe.webhooks.constructEvent
+  // contra STRIPE_WEBHOOK_SECRET. Sin esto, cualquiera podía enviar un POST
+  // falso simulando `checkout.session.completed` y auto-asignarse un rol
+  // pagado (instructor/vip_student) sin haber pagado nada.
+  app.post('/api/stripe/webhook', simpleRateLimit(60, 60_000), async (req, res) => {
     try {
-      const event = req.body;
-      console.log('[Stripe Webhook Received]:', event?.type);
+      const stripe = getStripeClient();
+      const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+      const signature = req.headers['stripe-signature'];
 
-      if (event?.type === 'checkout.session.completed' || event?.type === 'payment_intent.succeeded') {
-        const session = event.data?.object || {};
+      if (!stripe || !webhookSecret) {
+        console.error('[Stripe Webhook Error]: STRIPE_SECRET_KEY o STRIPE_WEBHOOK_SECRET no configurados; webhook rechazado.');
+        return res.status(503).json({ error: 'Stripe webhook no configurado en el servidor.' });
+      }
+
+      const rawBody = (req as any).rawBody;
+      if (!rawBody || !signature || typeof signature !== 'string') {
+        return res.status(400).json({ error: 'Falta la firma del webhook de Stripe.' });
+      }
+
+      let event: Stripe.Event;
+      try {
+        event = stripe.webhooks.constructEvent(rawBody, signature, webhookSecret);
+      } catch (sigErr: any) {
+        console.error('[Stripe Webhook Signature Verification Failed]:', sigErr?.message || sigErr);
+        return res.status(400).json({ error: 'Firma de webhook inválida.' });
+      }
+
+      console.log('[Stripe Webhook Received]:', event.type);
+
+      if (event.type === 'checkout.session.completed' || event.type === 'payment_intent.succeeded') {
+        const session: any = event.data.object || {};
         const userId = session.client_reference_id || session.metadata?.userId;
         const userEmail = session.customer_email || session.customer_details?.email;
         const planType = session.metadata?.planType || session.metadata?.tier || 'clase_profesor';
@@ -534,8 +660,28 @@ async function startServer() {
   });
 
   // Generic Payment Webhook Endpoint (For Stripe, Shopify, Mercado Pago)
-  app.post('/api/webhook/payment', validateInput(webhookPaymentSchema), async (req, res) => {
+  // SEGURIDAD: este endpoint puede asignar roles pagados (instructor/vip_student)
+  // a cualquier userId del body. Como no es un webhook de Stripe (no hay firma
+  // HMAC disponible para Shopify/Mercado Pago aquí), se exige un secreto
+  // compartido `x-webhook-secret` validado contra PAYMENT_WEBHOOK_SECRET;
+  // sin esa variable configurada el endpoint queda deshabilitado (fail closed).
+  app.post('/api/webhook/payment', simpleRateLimit(30, 60_000), validateInput(webhookPaymentSchema), async (req, res) => {
     try {
+      const expectedSecret = process.env.PAYMENT_WEBHOOK_SECRET;
+      const providedSecret = req.headers['x-webhook-secret'];
+
+      if (!expectedSecret) {
+        console.error('[Universal Payment Webhook Error]: PAYMENT_WEBHOOK_SECRET no configurado; endpoint deshabilitado.');
+        return res.status(503).json({ error: 'Webhook de pagos no configurado en el servidor.' });
+      }
+
+      const providedBuf = Buffer.from(typeof providedSecret === 'string' ? providedSecret : '');
+      const expectedBuf = Buffer.from(expectedSecret);
+      const secretsMatch = providedBuf.length === expectedBuf.length && crypto.timingSafeEqual(providedBuf, expectedBuf);
+      if (!secretsMatch) {
+        return res.status(401).json({ error: 'Secreto de webhook inválido.' });
+      }
+
       const { userId, userEmail, planType, gateway, transactionId, amountUSD } = req.body;
 
       console.log(`[Universal Webhook - ${gateway.toUpperCase()}]: Processing payment transaction ${transactionId} ($${amountUSD} USD)`);
@@ -563,11 +709,15 @@ async function startServer() {
   });
 
   // Payment Simulator Webhook Endpoint (For live interactive testing)
-  app.post('/api/webhook/simulate-payment', validateInput(webhookPaymentSchema), async (req, res) => {
+  // SEGURIDAD: solo puede simular un pago para la propia cuenta autenticada
+  // (req.user.id) — nunca para un `userId` arbitrario tomado del body, que
+  // permitía a cualquiera auto-asignarse el rol 'instructor' sin autenticarse.
+  app.post('/api/webhook/simulate-payment', simpleRateLimit(20, 60_000), requireVerifiedUser, validateInput(webhookPaymentSchema), async (req, res) => {
     try {
-      const { userId, userEmail, planType, gateway } = req.body;
+      const { planType, gateway } = req.body;
+      const user = (req as any).user;
 
-      const result = await updateUserRoleAndSubscriptionInDB(userId, userEmail, planType);
+      const result = await updateUserRoleAndSubscriptionInDB(user.id, undefined, planType);
 
       return res.json({
         success: true,
@@ -665,9 +815,11 @@ async function startServer() {
   });
 
   // Start 4-Day VIP Trial endpoint
-  app.post('/api/subscription/start-trial', async (req, res) => {
-    const { userId, userEmail } = req.body;
-    const result = await updateUserRoleAndSubscriptionInDB(userId, userEmail, 'app_vip', undefined, true);
+  // SEGURIDAD: requiere sesión autenticada y opera únicamente sobre el uid
+  // verificado del caller, nunca sobre un `userId` arbitrario del body.
+  app.post('/api/subscription/start-trial', requireVerifiedUser, async (req, res) => {
+    const user = (req as any).user;
+    const result = await updateUserRoleAndSubscriptionInDB(user.id, undefined, 'app_vip', undefined, true);
     return res.json({
       success: true,
       message: '¡Prueba VIP de 4 días activada exitosamente! Tienes acceso ilimitado a la librería y herramientas somáticas.',
@@ -1330,31 +1482,50 @@ Semana 3-4 (Progresión): [Cómo escalar la dificultad en el Lab basándose en s
   });
 
   // Complete student task and award points
-  app.patch('/api/student/tasks/:id/complete', async (req, res) => {
+  // SEGURIDAD: requiere sesión autenticada; el punto de la tarea solo se
+  // adjudica al perfil del propio caller (nunca "el primer perfil de la
+  // tabla"), y solo si la tarea le pertenece o no tiene estudiante asignado.
+  app.patch('/api/student/tasks/:id/complete', requireVerifiedUser, async (req, res) => {
     try {
       const { id } = req.params;
       const taskIdNum = Number(id);
+      const user = (req as any).user;
 
       if (process.env.SQL_HOST) {
+        const tasks = await drizzleDb.select().from(instructorTasksTable).where(eq(instructorTasksTable.id, taskIdNum));
+        const taskObj = tasks[0];
+
+        if (!taskObj) {
+          return res.status(404).json({ success: false, error: 'Tarea no encontrada.' });
+        }
+        if (taskObj.studentUid && taskObj.studentUid !== user.id) {
+          return res.status(403).json({ success: false, error: 'No puedes completar una tarea asignada a otro estudiante.' });
+        }
+
         await drizzleDb.update(instructorTasksTable)
           .set({ status: 'completed' })
           .where(eq(instructorTasksTable.id, taskIdNum));
 
-        const tasks = await drizzleDb.select().from(instructorTasksTable).where(eq(instructorTasksTable.id, taskIdNum));
-        const taskObj = tasks[0];
-        const pointsToAdd = taskObj?.points || 50;
+        const pointsToAdd = taskObj.points || 50;
 
-        const profileRows = await drizzleDb.select().from(profilesTable).limit(1);
-        if (profileRows.length > 0) {
-          const currentPoints = profileRows[0].points || 0;
-          await drizzleDb.update(profilesTable)
-            .set({ points: currentPoints + pointsToAdd })
-            .where(eq(profilesTable.userId, profileRows[0].userId));
+        const userRecords = await drizzleDb.select().from(usersTable).where(eq(usersTable.uid, user.id));
+        const internalUserId = userRecords[0]?.id;
+        if (internalUserId) {
+          const profileRows = await drizzleDb.select().from(profilesTable).where(eq(profilesTable.userId, internalUserId));
+          if (profileRows.length > 0) {
+            const currentPoints = profileRows[0].points || 0;
+            await drizzleDb.update(profilesTable)
+              .set({ points: currentPoints + pointsToAdd })
+              .where(eq(profilesTable.userId, internalUserId));
+          }
         }
 
         return res.json({ success: true, message: 'Tarea completada exitosamente.', awardedPoints: pointsToAdd });
       } else {
         const t = inMemoryInstructorTasks.find(item => item.id === id);
+        if (t && t.studentUid && t.studentUid !== user.id) {
+          return res.status(403).json({ success: false, error: 'No puedes completar una tarea asignada a otro estudiante.' });
+        }
         if (t) {
           t.status = 'completed';
         }
@@ -1402,7 +1573,7 @@ Semana 3-4 (Progresión): [Cómo escalar la dificultad en el Lab basándose en s
   app.get('/api/instructor/finances', requireRole(['instructor']), async (req, res) => {
     try {
       const user = (req as any).user;
-      const fin = getInstructorFinancesSummary(user.id);
+      const fin = await getInstructorFinancesSummary(user.id);
       return res.json({
         success: true,
         ...fin
@@ -1419,7 +1590,7 @@ Semana 3-4 (Progresión): [Cómo escalar la dificultad en el Lab basándose en s
       const user = (req as any).user;
       const { amountUSD, payoutMethod, notes } = req.body;
 
-      const fin = getInstructorFinancesSummary(user.id);
+      const fin = await getInstructorFinancesSummary(user.id);
 
       // Business Rule 1: Check minimum threshold ($20.00 USD)
       if (fin.availableBalanceUSD < 20.00) {
@@ -1435,26 +1606,40 @@ Semana 3-4 (Progresión): [Cómo escalar la dificultad en el Lab basándose en s
         });
       }
 
+      const bankSummary = fin.bankAccount
+        ? `${fin.bankAccount.bankName} (${fin.bankAccount.accountNumber})`
+        : `${inMemoryBankAccount.bankName} (${inMemoryBankAccount.accountNumber})`;
+
       const newPayout = {
         id: `po-${Date.now()}`,
         instructorUid: user.id,
         amountUSD: Number(amountUSD),
         status: 'completed',
         payoutMethod: payoutMethod || 'bank_transfer',
-        bankSummary: `${inMemoryBankAccount.bankName} (${inMemoryBankAccount.accountNumber})`,
+        bankSummary,
         notes: notes || '',
         createdAt: new Date().toISOString()
       };
 
-      inMemoryPayouts.unshift(newPayout);
+      if (process.env.SQL_HOST) {
+        await drizzleDb.insert(instructorPayoutsTable).values({
+          instructorUid: user.id,
+          amountUSD: Math.round(Number(amountUSD) * 100),
+          status: 'completed',
+          bankSummary,
+          notes: notes || ''
+        });
+      } else {
+        inMemoryPayouts.unshift(newPayout);
+      }
 
-      const updatedFin = getInstructorFinancesSummary(user.id);
+      const updatedFin = await getInstructorFinancesSummary(user.id);
 
       console.log(`[Payout Processed]: Instructor '${user.id}' withdrew $${Number(amountUSD).toFixed(2)} USD. Remaining available balance: $${updatedFin.availableBalanceUSD.toFixed(2)} USD`);
 
       return res.json({
         success: true,
-        message: `¡Retiro de $${Number(amountUSD).toFixed(2)} USD procesado exitosamente! Depósito enviado a ${inMemoryBankAccount.bankName}.`,
+        message: `¡Retiro de $${Number(amountUSD).toFixed(2)} USD procesado exitosamente! Depósito enviado a ${bankSummary}.`,
         payout: newPayout,
         finances: updatedFin
       });
@@ -1470,7 +1655,7 @@ Semana 3-4 (Progresión): [Cómo escalar la dificultad en el Lab basándose en s
       const user = (req as any).user;
       const { bankName, accountHolder, accountNumber, routingNumber, country } = req.body;
 
-      inMemoryBankAccount = {
+      const updatedBankAccount = {
         bankName,
         accountHolder,
         accountNumber,
@@ -1479,12 +1664,35 @@ Semana 3-4 (Progresión): [Cómo escalar la dificultad en el Lab basándose en s
         updatedAt: new Date().toISOString()
       };
 
-      console.log(`[Bank Account Configured]: Instructor '${user.id}' linked bank account '${bankName}' (${accountNumber})`);
+      if (process.env.SQL_HOST) {
+        const existing = await drizzleDb.select().from(instructorBankAccountsTable)
+          .where(eq(instructorBankAccountsTable.instructorUid, user.id));
+
+        if (existing.length > 0) {
+          await drizzleDb.update(instructorBankAccountsTable)
+            .set({ bankName, accountHolder, accountNumber, routingNumber: routingNumber || '', country: country || 'USD' })
+            .where(eq(instructorBankAccountsTable.instructorUid, user.id));
+        } else {
+          await drizzleDb.insert(instructorBankAccountsTable).values({
+            instructorUid: user.id,
+            bankName,
+            accountHolder,
+            accountNumber,
+            routingNumber: routingNumber || '',
+            country: country || 'USD'
+          });
+        }
+      } else {
+        inMemoryBankAccount = updatedBankAccount;
+      }
+
+      // No se loguea el número de cuenta completo en texto plano.
+      console.log(`[Bank Account Configured]: Instructor '${user.id}' linked bank account '${bankName}'`);
 
       return res.json({
         success: true,
         message: '¡Cuenta bancaria vinculada exitosamente para depósitos directos!',
-        bankAccount: inMemoryBankAccount
+        bankAccount: updatedBankAccount
       });
     } catch (err: any) {
       console.error('[Bank Account Error]:', err);
@@ -1515,9 +1723,21 @@ Semana 3-4 (Progresión): [Cómo escalar la dificultad en el Lab basándose en s
         createdAt: new Date().toISOString() // starts in 21-day pending window
       };
 
-      inMemoryTransactions.unshift(newTx);
+      if (process.env.SQL_HOST) {
+        await drizzleDb.insert(instructorTransactionsTable).values({
+          instructorUid: user.id,
+          studentName: newTx.studentName,
+          itemType: newTx.itemType,
+          itemTitle: newTx.itemTitle,
+          grossAmountUSD: Math.round(gross * 100),
+          platformFeeUSD: Math.round(platformFee * 100),
+          netAmountUSD: Math.round(net * 100)
+        });
+      } else {
+        inMemoryTransactions.unshift(newTx);
+      }
 
-      const updatedFin = getInstructorFinancesSummary(user.id);
+      const updatedFin = await getInstructorFinancesSummary(user.id);
 
       return res.json({
         success: true,
@@ -1588,25 +1808,40 @@ Semana 3-4 (Progresión): [Cómo escalar la dificultad en el Lab basándose en s
   });
 
   // Delete community message (RBAC Check: Author or Instructor)
+  // SEGURIDAD: la verificación de autoría ahora consulta Postgres cuando hay
+  // SQL_HOST configurado (antes solo miraba el array en memoria, permitiendo
+  // borrar mensajes ajenos en cuanto la app usaba la base de datos real).
   app.delete('/api/community/messages/:id', requireVerifiedUser, async (req, res) => {
     try {
       const { id } = req.params;
       const user = (req as any).user;
 
-      // Instructors can delete any message; students can only delete if authorized
-      if (user.role !== 'instructor') {
-        const msg = inMemoryCommunityMessages.find(m => m.id === id);
-        if (msg && msg.authorUid !== user.id) {
+      if (process.env.SQL_HOST) {
+        const numericId = Number(id) || 0;
+        const rows = await drizzleDb.select().from(communityMessagesTable).where(eq(communityMessagesTable.id, numericId));
+        const msg = rows[0];
+
+        if (!msg) {
+          return res.status(404).json({ success: false, error: 'Mensaje no encontrado.' });
+        }
+        if (user.role !== 'instructor' && msg.authorUid !== user.id) {
           return res.status(403).json({
             success: false,
             error: 'No tienes permisos para eliminar mensajes creados por otros bailarines.'
           });
         }
-      }
 
-      if (process.env.SQL_HOST) {
-        await drizzleDb.delete(communityMessagesTable).where(eq(communityMessagesTable.id, Number(id) || 0));
+        await drizzleDb.delete(communityMessagesTable).where(eq(communityMessagesTable.id, numericId));
       } else {
+        if (user.role !== 'instructor') {
+          const msg = inMemoryCommunityMessages.find(m => m.id === id);
+          if (msg && msg.authorUid !== user.id) {
+            return res.status(403).json({
+              success: false,
+              error: 'No tienes permisos para eliminar mensajes creados por otros bailarines.'
+            });
+          }
+        }
         const idx = inMemoryCommunityMessages.findIndex(m => m.id === id);
         if (idx !== -1) inMemoryCommunityMessages.splice(idx, 1);
       }
@@ -1619,38 +1854,52 @@ Semana 3-4 (Progresión): [Cómo escalar la dificultad en el Lab basándose en s
 
   // --- 5. USER PROFILE UPDATES (Validated with Zod) ---
 
-  app.post('/api/profile/update', validateInput(profileUpdateSchema), async (req, res) => {
+  // SEGURIDAD (IDOR corregido): requiere sesión autenticada y siempre opera
+  // sobre el uid verificado del caller (req.user.id), ignorando cualquier
+  // `uid` enviado en el body. El `role` tampoco se acepta del cliente — solo
+  // se asigna a través del flujo de pago verificado por webhook — y ahora
+  // hace UPDATE si el perfil ya existe en vez de duplicarlo con INSERT.
+  app.post('/api/profile/update', requireVerifiedUser, validateInput(profileUpdateSchema), async (req, res) => {
     try {
       const data = req.body;
+      const user = (req as any).user;
 
       if (process.env.SQL_HOST) {
-        let userRecords = await drizzleDb.select().from(usersTable).where(eq(usersTable.uid, data.uid));
+        let userRecords = await drizzleDb.select().from(usersTable).where(eq(usersTable.uid, user.id));
         let userId = userRecords[0]?.id;
 
         if (!userId) {
           const inserted = await drizzleDb.insert(usersTable).values({
-            uid: data.uid,
-            email: `${data.uid}@waackon.com`
+            uid: user.id,
+            email: `${user.id}@waackon.com`
           }).returning();
           userId = inserted[0].id;
         }
 
-        await drizzleDb.insert(profilesTable).values({
-          userId,
+        const profileFields = {
           name: data.name,
-          role: data.role,
           bio: data.bio || '',
           avatarUrl: data.avatarUrl || null,
           instagram: data.instagram || '',
           tiktok: data.tiktok || '',
           youtube: data.youtube || ''
-        });
+        };
+
+        const existingProfile = await drizzleDb.select().from(profilesTable).where(eq(profilesTable.userId, userId));
+
+        if (existingProfile.length > 0) {
+          await drizzleDb.update(profilesTable)
+            .set(profileFields)
+            .where(eq(profilesTable.userId, userId));
+        } else {
+          await drizzleDb.insert(profilesTable).values({ userId, role: user.role, ...profileFields });
+        }
       }
 
       return res.json({
         success: true,
         message: 'Perfil sanitizado y actualizado correctamente.',
-        profile: data
+        profile: { ...data, uid: user.id, role: user.role }
       });
     } catch (err: any) {
       return res.status(500).json({ error: 'Error updating profile', details: err.message });
