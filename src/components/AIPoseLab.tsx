@@ -771,7 +771,7 @@ export const AIPoseLab: React.FC<AIPoseLabProps> = ({
               }}
               className={`px-3 py-1.5 rounded-xl text-xs font-mono font-bold uppercase transition-all shrink-0 border flex items-center gap-1.5 cursor-pointer ${
                 isSelected
-                  ? 'bg-[#E9C349] text-black border-[#E9C349] shadow-md shadow-[#E9C349]/20 font-black'
+                  ? 'bg-[#D9A9FF] text-black border-[#D9A9FF] shadow-md shadow-[#D9A9FF]/20 font-black'
                   : 'bg-white text-slate-600 border-slate-200 hover:border-slate-400 dark:bg-[#0E101D] dark:text-slate-300 dark:border-white/10 dark:hover:border-white/30'
               }`}
             >
@@ -1151,7 +1151,7 @@ export const AIPoseLab: React.FC<AIPoseLabProps> = ({
 
           {/* Technical Validation Tips */}
           <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-black/40 border border-white/10 space-y-2">
-            <span className="text-[10px] font-mono font-bold text-[#E9C349] uppercase flex items-center gap-1.5">
+            <span className="text-[10px] font-mono font-bold text-[#D9A9FF] uppercase flex items-center gap-1.5">
               <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
               {isEs ? 'Recomendaciones Técnicas del Maestro:' : 'Master Technical Tips:'}
             </span>

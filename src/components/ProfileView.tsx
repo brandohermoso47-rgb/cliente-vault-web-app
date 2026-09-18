@@ -806,7 +806,7 @@ export default function ProfileView({
         {/* 2. CABECERA DE PERFIL E IDENTIDAD */}
         {/* ========================================================================= */}
         <section className="bg-[#121218] border border-slate-200 dark:border-white/10 rounded-3xl p-5 sm:p-7 shadow-2xl space-y-6 relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-[#FF2E63]/10 via-[#E9C349]/5 to-transparent rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-[#FF2E63]/10 via-[#D9A9FF]/5 to-transparent rounded-full blur-3xl pointer-events-none" />
 
           {/* Profile Row: Avatar + Info */}
           <div className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-6 z-10 relative">
@@ -870,8 +870,8 @@ export default function ProfileView({
 
               {/* Progress Bar towards Next Level or Instructor Academy Status */}
               {currentUser.role === 'instructor' ? (
-                <div className="pt-2 p-3 bg-amber-50 dark:bg-[#181822] border border-[#E9C349]/30 rounded-xl space-y-1 max-w-md shadow-lg">
-                  <div className="flex items-center justify-between text-[10px] font-mono font-bold text-[#E9C349] uppercase">
+                <div className="pt-2 p-3 bg-amber-50 dark:bg-[#181822] border border-[#D9A9FF]/30 rounded-xl space-y-1 max-w-md shadow-lg">
+                  <div className="flex items-center justify-between text-[10px] font-mono font-bold text-[#D9A9FF] uppercase">
                     <span className="flex items-center gap-1.5">
                       <Users className="w-3.5 h-3.5 text-[#D9A9FF]" />
                       <span>MODO DOCENTE & MÉTRICAS DE ACADEMIA</span>
@@ -1056,7 +1056,7 @@ export default function ProfileView({
                       const val = Math.max(5, Math.min(300, Number(e.target.value) || 5));
                       updateUserAndPersist(val, hydrationReminders, lessonNotifications);
                     }}
-                    className="w-full bg-white dark:bg-black/60 border border-white/20 rounded-xl px-4 py-2 text-sm font-mono font-bold text-slate-900 dark:text-white outline-none focus:border-[#E9C349] transition-colors"
+                    className="w-full bg-white dark:bg-black/60 border border-white/20 rounded-xl px-4 py-2 text-sm font-mono font-bold text-slate-900 dark:text-white outline-none focus:border-[#D9A9FF] transition-colors"
                   />
                   <span className="text-xs font-mono text-slate-500 dark:text-slate-400 font-bold">min</span>
                 </div>
@@ -1070,7 +1070,7 @@ export default function ProfileView({
                       onClick={() => updateUserAndPersist(mins, hydrationReminders, lessonNotifications)}
                       className={`px-2.5 py-1 rounded-lg text-[10px] font-mono font-bold transition-all cursor-pointer ${
                         targetMinutes === mins
-                          ? 'bg-[#E9C349] text-black font-black shadow-md'
+                          ? 'bg-[#D9A9FF] text-black font-black shadow-md'
                           : 'bg-white/10 text-slate-600 dark:text-slate-300 hover:bg-white/20 hover:text-slate-900 dark:hover:text-white'
                       }`}
                     >
@@ -1214,7 +1214,7 @@ export default function ProfileView({
               onClick={() => setActiveGridTab('all')}
               className={`flex items-center gap-2 px-4 py-2 rounded-xl transition-all cursor-pointer ${
                 activeGridTab === 'all'
-                  ? 'bg-white/10 text-[#E9C349] border border-[#E9C349]/40 shadow-md'
+                  ? 'bg-white/10 text-[#D9A9FF] border border-[#D9A9FF]/40 shadow-md'
                   : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
@@ -1407,7 +1407,7 @@ export default function ProfileView({
                         type="text"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
-                        className="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-2.5 text-xs text-slate-900 dark:text-white outline-none focus:border-[#E9C349]"
+                        className="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-2.5 text-xs text-slate-900 dark:text-white outline-none focus:border-[#D9A9FF]"
                         required
                       />
                     </div>
@@ -1420,7 +1420,7 @@ export default function ProfileView({
                         type="text"
                         value={nickname}
                         onChange={(e) => setNickname(e.target.value)}
-                        className="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-2.5 text-xs text-slate-900 dark:text-white outline-none focus:border-[#E9C349]"
+                        className="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-2.5 text-xs text-slate-900 dark:text-white outline-none focus:border-[#D9A9FF]"
                       />
                     </div>
                   </div>
@@ -1433,7 +1433,7 @@ export default function ProfileView({
                       rows={3}
                       value={bio}
                       onChange={(e) => setBio(e.target.value)}
-                      className="w-full bg-white/10 border border-white/20 rounded-xl p-3 text-xs text-slate-900 dark:text-white outline-none focus:border-[#E9C349]"
+                      className="w-full bg-white/10 border border-white/20 rounded-xl p-3 text-xs text-slate-900 dark:text-white outline-none focus:border-[#D9A9FF]"
                     />
                   </div>
 
@@ -1446,7 +1446,7 @@ export default function ProfileView({
                         type="text"
                         value={instagram}
                         onChange={(e) => setInstagram(e.target.value)}
-                        className="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-2.5 text-xs text-slate-900 dark:text-white outline-none focus:border-[#E9C349]"
+                        className="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-2.5 text-xs text-slate-900 dark:text-white outline-none focus:border-[#D9A9FF]"
                       />
                     </div>
 
@@ -1458,7 +1458,7 @@ export default function ProfileView({
                         type="number"
                         value={targetMinutes}
                         onChange={(e) => setTargetMinutes(Number(e.target.value))}
-                        className="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-2.5 text-xs text-slate-900 dark:text-white outline-none focus:border-[#E9C349]"
+                        className="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-2.5 text-xs text-slate-900 dark:text-white outline-none focus:border-[#D9A9FF]"
                       />
                     </div>
                   </div>
@@ -1492,7 +1492,7 @@ export default function ProfileView({
                             const val = Math.max(5, Math.min(300, Number(e.target.value) || 5));
                             updateUserAndPersist(val, hydrationReminders, lessonNotifications);
                           }}
-                          className="w-full bg-white dark:bg-black/60 border border-white/20 rounded-xl px-4 py-2.5 text-xs text-slate-900 dark:text-white outline-none focus:border-[#E9C349]"
+                          className="w-full bg-white dark:bg-black/60 border border-white/20 rounded-xl px-4 py-2.5 text-xs text-slate-900 dark:text-white outline-none focus:border-[#D9A9FF]"
                         />
                         <span className="text-xs font-mono font-bold text-slate-400">min/día</span>
                       </div>
@@ -1714,7 +1714,7 @@ export default function ProfileView({
                     </div>
                   ) : (
                     <div className="space-y-2">
-                      <Camera className="w-8 h-8 text-[#E9C349] mx-auto group-hover:scale-110 transition-transform" />
+                      <Camera className="w-8 h-8 text-[#D9A9FF] mx-auto group-hover:scale-110 transition-transform" />
                       <p className="text-xs font-mono font-bold text-slate-900 dark:text-white uppercase">
                         Selecciona o arrastra video/foto
                       </p>
@@ -1733,7 +1733,7 @@ export default function ProfileView({
                     value={uploadTitle}
                     onChange={(e) => setUploadTitle(e.target.value)}
                     placeholder="Ej. Práctica de Rolls 128 BPM"
-                    className="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-2.5 text-xs text-slate-900 dark:text-white outline-none focus:border-[#E9C349]"
+                    className="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-2.5 text-xs text-slate-900 dark:text-white outline-none focus:border-[#D9A9FF]"
                     required
                   />
                 </div>
@@ -1748,7 +1748,7 @@ export default function ProfileView({
                     value={uploadCaption}
                     onChange={(e) => setUploadCaption(e.target.value)}
                     placeholder="Agrega notas de tu entrenamiento o hashtags #WaackON"
-                    className="w-full bg-white/10 border border-white/20 rounded-xl p-3 text-xs text-slate-900 dark:text-white outline-none focus:border-[#E9C349]"
+                    className="w-full bg-white/10 border border-white/20 rounded-xl p-3 text-xs text-slate-900 dark:text-white outline-none focus:border-[#D9A9FF]"
                   />
                 </div>
 
@@ -1760,7 +1760,7 @@ export default function ProfileView({
                   <select
                     value={uploadCategory}
                     onChange={(e) => setUploadCategory(e.target.value)}
-                    className="w-full bg-white dark:bg-[#1A1A22] border border-white/20 rounded-xl px-4 py-2.5 text-xs text-slate-900 dark:text-white outline-none focus:border-[#E9C349]"
+                    className="w-full bg-white dark:bg-[#1A1A22] border border-white/20 rounded-xl px-4 py-2.5 text-xs text-slate-900 dark:text-white outline-none focus:border-[#D9A9FF]"
                   >
                     <option value="Práctica">Práctica & Técnica</option>
                     <option value="Reels">Reels & Freestyle</option>

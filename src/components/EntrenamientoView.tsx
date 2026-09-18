@@ -2673,7 +2673,7 @@ export default function EntrenamientoView({
             </span>
           </div>
           <h2 className="text-2xl sm:text-3xl font-display-lg italic text-slate-900 dark:text-white tracking-tight uppercase">
-            <span className="bg-gradient-to-r from-slate-900 via-slate-700 to-[#E9C349] dark:from-white dark:via-[#FFF8E7] dark:to-[#E9C349] bg-clip-text text-transparent drop-shadow-sm">
+            <span className="bg-gradient-to-r from-slate-900 via-slate-700 to-[#D9A9FF] dark:from-white dark:via-[#FFF8E7] dark:to-[#D9A9FF] bg-clip-text text-transparent drop-shadow-sm">
               {lt.title}
             </span>
           </h2>
@@ -2707,8 +2707,8 @@ export default function EntrenamientoView({
           onClick={() => setSubTab('drill')}
           className={`group h-11 min-w-[150px] px-4 py-2 text-xs font-mono font-bold tracking-wider transition-all flex items-center justify-center gap-2 border rounded-xl shrink-0 focus:outline-none ${
             subTab === 'drill' 
-              ? 'bg-[#9A2B3C] text-white border-[#9A2B3C] shadow-lg' 
-              : 'bg-[#121212] text-[#8A8A8A] border-[#262626] hover:text-slate-900 dark:hover:text-white hover:border-[#E9C349]/30'
+              ? 'bg-[#C23E9E] text-white border-[#C23E9E] shadow-lg' 
+              : 'bg-[#121212] text-[#8A8A8A] border-[#262626] hover:text-slate-900 dark:hover:text-white hover:border-[#D9A9FF]/30'
           }`}
         >
           <Timer className="w-4 h-4 text-[#D9A9FF] shrink-0 transition-transform duration-300 group-hover:scale-125 group-hover:rotate-12 group-active:scale-90" />
@@ -2719,8 +2719,8 @@ export default function EntrenamientoView({
           onClick={() => setSubTab('battle')}
           className={`group h-11 min-w-[150px] px-4 py-2 text-xs font-mono font-bold tracking-wider transition-all flex items-center justify-center gap-2 border rounded-xl shrink-0 focus:outline-none ${
             subTab === 'battle' 
-              ? 'bg-[#9A2B3C] text-white border-[#9A2B3C] shadow-lg' 
-              : 'bg-[#121212] text-[#8A8A8A] border-[#262626] hover:text-slate-900 dark:hover:text-white hover:border-[#E9C349]/30'
+              ? 'bg-[#C23E9E] text-white border-[#C23E9E] shadow-lg' 
+              : 'bg-[#121212] text-[#8A8A8A] border-[#262626] hover:text-slate-900 dark:hover:text-white hover:border-[#D9A9FF]/30'
           }`}
         >
           <Swords className="w-4 h-4 text-[#D9A9FF] shrink-0 transition-transform duration-300 group-hover:scale-125 group-hover:-rotate-12 group-active:scale-90" />
@@ -2731,8 +2731,8 @@ export default function EntrenamientoView({
           onClick={() => setSubTab('combos')}
           className={`group h-11 min-w-[150px] px-4 py-2 text-xs font-mono font-bold tracking-wider transition-all flex items-center justify-center gap-2 border rounded-xl shrink-0 focus:outline-none ${
             subTab === 'combos' 
-              ? 'bg-[#9A2B3C] text-white border-[#9A2B3C] shadow-lg' 
-              : 'bg-[#121212] text-[#8A8A8A] border-[#262626] hover:text-slate-900 dark:hover:text-white hover:border-[#E9C349]/30'
+              ? 'bg-[#C23E9E] text-white border-[#C23E9E] shadow-lg' 
+              : 'bg-[#121212] text-[#8A8A8A] border-[#262626] hover:text-slate-900 dark:hover:text-white hover:border-[#D9A9FF]/30'
           }`}
         >
           <Shuffle className="w-4 h-4 text-[#D9A9FF] shrink-0 transition-transform duration-300 group-hover:scale-125 group-hover:rotate-180 group-active:scale-90" />
@@ -2743,8 +2743,8 @@ export default function EntrenamientoView({
           onClick={() => setSubTab('sensorial')}
           className={`group h-11 min-w-[150px] px-4 py-2 text-xs font-mono font-bold tracking-wider transition-all flex items-center justify-center gap-2 border rounded-xl shrink-0 focus:outline-none ${
             subTab === 'sensorial' 
-              ? 'bg-[#9A2B3C] text-white border-[#9A2B3C] shadow-lg' 
-              : 'bg-[#121212] text-[#8A8A8A] border-[#262626] hover:text-slate-900 dark:hover:text-white hover:border-[#E9C349]/30'
+              ? 'bg-[#C23E9E] text-white border-[#C23E9E] shadow-lg' 
+              : 'bg-[#121212] text-[#8A8A8A] border-[#262626] hover:text-slate-900 dark:hover:text-white hover:border-[#D9A9FF]/30'
           }`}
         >
           <EyeOff className="w-4 h-4 text-[#D9A9FF] shrink-0 transition-transform duration-300 group-hover:scale-125 group-hover:rotate-12 group-active:scale-90" />
@@ -2755,8 +2755,8 @@ export default function EntrenamientoView({
           onClick={() => setSubTab('somatic')}
           className={`group h-11 min-w-[150px] px-4 py-2 text-xs font-mono font-bold tracking-wider transition-all flex items-center justify-center gap-2 border rounded-xl shrink-0 focus:outline-none ${
             subTab === 'somatic' 
-              ? 'bg-[#9A2B3C] text-white border-[#9A2B3C] shadow-lg' 
-              : 'bg-[#121212] text-[#8A8A8A] border-[#262626] hover:text-slate-900 dark:hover:text-white hover:border-[#E9C349]/30'
+              ? 'bg-[#C23E9E] text-white border-[#C23E9E] shadow-lg' 
+              : 'bg-[#121212] text-[#8A8A8A] border-[#262626] hover:text-slate-900 dark:hover:text-white hover:border-[#D9A9FF]/30'
           }`}
         >
           <Activity className="w-4 h-4 text-[#D9A9FF] shrink-0 transition-transform duration-300 group-hover:scale-125 group-hover:rotate-12 group-active:scale-90" />
@@ -2781,8 +2781,8 @@ export default function EntrenamientoView({
           onClick={() => setSubTab('drama')}
           className={`group h-11 min-w-[180px] px-4 py-2 text-xs font-mono font-bold tracking-wider transition-all flex items-center justify-center gap-2 border rounded-xl shrink-0 focus:outline-none ${
             subTab === 'drama' 
-              ? 'bg-[#9A2B3C] text-white border-[#9A2B3C] shadow-lg' 
-              : 'bg-[#121212] text-[#8A8A8A] border-[#262626] hover:text-slate-900 dark:hover:text-white hover:border-[#E9C349]/30'
+              ? 'bg-[#C23E9E] text-white border-[#C23E9E] shadow-lg' 
+              : 'bg-[#121212] text-[#8A8A8A] border-[#262626] hover:text-slate-900 dark:hover:text-white hover:border-[#D9A9FF]/30'
           }`}
         >
           <Smile className="w-4 h-4 text-[#D9A9FF] shrink-0 transition-transform duration-300 group-hover:scale-125 group-hover:rotate-12 group-active:scale-90" />
@@ -2794,8 +2794,8 @@ export default function EntrenamientoView({
           onClick={() => setSubTab('playlists')}
           className={`group h-11 min-w-[150px] px-4 py-2 text-xs font-mono font-bold tracking-wider transition-all flex items-center justify-center gap-2 border rounded-xl shrink-0 focus:outline-none ${
             subTab === 'playlists' 
-              ? 'bg-[#9A2B3C] text-white border-[#9A2B3C] shadow-lg' 
-              : 'bg-[#121212] text-[#8A8A8A] border-[#262626] hover:text-slate-900 dark:hover:text-white hover:border-[#E9C349]/30'
+              ? 'bg-[#C23E9E] text-white border-[#C23E9E] shadow-lg' 
+              : 'bg-[#121212] text-[#8A8A8A] border-[#262626] hover:text-slate-900 dark:hover:text-white hover:border-[#D9A9FF]/30'
           }`}
         >
           <Music className="w-4 h-4 text-[#D9A9FF] shrink-0 transition-transform duration-300 group-hover:scale-125 group-hover:-rotate-12 group-active:scale-90" />
@@ -2806,8 +2806,8 @@ export default function EntrenamientoView({
           onClick={() => setSubTab('feedback')}
           className={`group h-11 min-w-[150px] px-4 py-2 text-xs font-mono font-bold tracking-wider transition-all flex items-center justify-center gap-2 border rounded-xl shrink-0 focus:outline-none ${
             subTab === 'feedback' 
-              ? 'bg-[#9A2B3C] text-white border-[#9A2B3C] shadow-lg' 
-              : 'bg-[#121212] text-[#8A8A8A] border-[#262626] hover:text-slate-900 dark:hover:text-white hover:border-[#E9C349]/30'
+              ? 'bg-[#C23E9E] text-white border-[#C23E9E] shadow-lg' 
+              : 'bg-[#121212] text-[#8A8A8A] border-[#262626] hover:text-slate-900 dark:hover:text-white hover:border-[#D9A9FF]/30'
           }`}
         >
           <MessageSquare className="w-4 h-4 text-[#D9A9FF] shrink-0 transition-transform duration-300 group-hover:scale-125 group-hover:rotate-12 group-active:scale-90" />
@@ -2818,8 +2818,8 @@ export default function EntrenamientoView({
           onClick={() => setSubTab('rhythm')}
           className={`group h-11 min-w-[170px] px-4 py-2 text-xs font-mono font-bold tracking-wider transition-all flex items-center justify-center gap-2 border rounded-xl shrink-0 focus:outline-none ${
             subTab === 'rhythm' 
-              ? 'bg-[#9A2B3C] text-white border-[#9A2B3C] shadow-lg' 
-              : 'bg-[#121212] text-[#8A8A8A] border-[#262626] hover:text-slate-900 dark:hover:text-white hover:border-[#E9C349]/30'
+              ? 'bg-[#C23E9E] text-white border-[#C23E9E] shadow-lg' 
+              : 'bg-[#121212] text-[#8A8A8A] border-[#262626] hover:text-slate-900 dark:hover:text-white hover:border-[#D9A9FF]/30'
           }`}
         >
           <Zap className="w-4 h-4 text-[#D9A9FF] shrink-0 transition-transform duration-300 group-hover:scale-125 group-hover:rotate-12 group-active:scale-90 animate-pulse" />
@@ -2830,8 +2830,8 @@ export default function EntrenamientoView({
           onClick={() => setSubTab('spectrum')}
           className={`group h-11 min-w-[180px] px-4 py-2 text-xs font-mono font-bold tracking-wider transition-all flex items-center justify-center gap-2 border rounded-xl shrink-0 focus:outline-none ${
             subTab === 'spectrum' 
-              ? 'bg-[#9A2B3C] text-white border-[#9A2B3C] shadow-lg' 
-              : 'bg-[#121212] text-[#8A8A8A] border-[#262626] hover:text-slate-900 dark:hover:text-white hover:border-[#E9C349]/30'
+              ? 'bg-[#C23E9E] text-white border-[#C23E9E] shadow-lg' 
+              : 'bg-[#121212] text-[#8A8A8A] border-[#262626] hover:text-slate-900 dark:hover:text-white hover:border-[#D9A9FF]/30'
           }`}
         >
           <BarChart2 className="w-4 h-4 text-[#D9A9FF] shrink-0 transition-transform duration-300 group-hover:scale-125 group-hover:-rotate-12 group-active:scale-90" />

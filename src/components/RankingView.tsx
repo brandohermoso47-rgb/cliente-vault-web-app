@@ -195,7 +195,7 @@ export default function RankingView({
           onClick={() => setSubTab('achievements')}
           className={`px-4 py-2 text-[11px] font-mono font-bold uppercase tracking-wider rounded-lg transition-all ${
             subTab === 'achievements'
-              ? 'bg-[#9A2B3C] text-white shadow-[0_2px_10px_rgba(154,43,60,0.4)] border border-[#9A2B3C]/50'
+              ? 'bg-[#C23E9E] text-white shadow-[0_2px_10px_rgba(194, 62, 158,0.4)] border border-[#C23E9E]/50'
               : 'text-[#8A8A8A] hover:text-slate-900 dark:hover:text-white hover:bg-[#1A1A1A]'
           }`}
         >
@@ -205,7 +205,7 @@ export default function RankingView({
           onClick={() => setSubTab('ranking')}
           className={`px-4 py-2 text-[11px] font-mono font-bold uppercase tracking-wider rounded-lg transition-all ${
             subTab === 'ranking'
-              ? 'bg-[#9A2B3C] text-white shadow-[0_2px_10px_rgba(154,43,60,0.4)] border border-[#9A2B3C]/50'
+              ? 'bg-[#C23E9E] text-white shadow-[0_2px_10px_rgba(194, 62, 158,0.4)] border border-[#C23E9E]/50'
               : 'text-[#8A8A8A] hover:text-slate-900 dark:hover:text-white hover:bg-[#1A1A1A]'
           }`}
         >
@@ -217,7 +217,7 @@ export default function RankingView({
         <div className="space-y-6 z-10 w-full">
           {/* Level Progress Banner */}
           <div className="bg-white/80 dark:bg-[#121212]/80 border border-slate-200 dark:border-[#262626] rounded-2xl p-5 shadow-xl flex flex-col md:flex-row items-center justify-between gap-4 relative overflow-hidden backdrop-blur-md">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-[#9A2B3C]/10 rounded-full blur-2xl pointer-events-none" />
+            <div className="absolute top-0 right-0 w-32 h-32 bg-[#C23E9E]/10 rounded-full blur-2xl pointer-events-none" />
             <div className="flex items-center gap-4">
               <div className="p-4 bg-gradient-to-tr from-[#C23E9E] to-[#D9A9FF] text-white rounded-2xl font-bold font-mono text-xl shadow-lg flex items-center justify-center min-w-[70px]">
                 Lvl {Math.max(1, Math.floor(currentUser.points / 15))}
@@ -328,7 +328,7 @@ export default function RankingView({
               return (
                 <div 
                   key={idx}
-                  className="bg-white/60 dark:bg-[#121212]/40 backdrop-blur-md border border-slate-200 dark:border-[#262626] rounded-2xl p-6 flex flex-col items-center justify-between text-center relative overflow-hidden h-[260px] group hover:border-[#9A2B3C]/50 transition-all duration-300"
+                  className="bg-white/60 dark:bg-[#121212]/40 backdrop-blur-md border border-slate-200 dark:border-[#262626] rounded-2xl p-6 flex flex-col items-center justify-between text-center relative overflow-hidden h-[260px] group hover:border-[#C23E9E]/50 transition-all duration-300"
                 >
                   {/* Outer glowing ring or lock state */}
                   {isUnlocked ? (
@@ -376,7 +376,7 @@ export default function RankingView({
           <div className="bg-white/80 dark:bg-[#121212]/80 border border-slate-200 dark:border-[#262626] rounded-2xl p-5 shadow-xl flex flex-col sm:flex-row items-center justify-between gap-4 backdrop-blur-md">
             <div>
               <h4 className="text-slate-900 dark:text-white font-bold text-xs uppercase tracking-wider flex items-center gap-1.5">
-                <Sparkles className="w-4 h-4 text-[#E9C349]" /> {language === 'es' ? 'Simulador de Puntos de Práctica' : 'Practice Points Simulator'}
+                <Sparkles className="w-4 h-4 text-[#D9A9FF]" /> {language === 'es' ? 'Simulador de Puntos de Práctica' : 'Practice Points Simulator'}
               </h4>
               <p className="text-[#8A8A8A] text-[10px] font-medium mt-1 max-w-xl">
                 {language === 'es' 

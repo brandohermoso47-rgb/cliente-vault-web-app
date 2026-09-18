@@ -379,7 +379,7 @@ export default function LiveView({
             onClick={() => setSubTab('go-live')}
             className={`px-4 py-2 text-xs font-black rounded-xl transition-all flex items-center gap-2 border ${
               subTab === 'go-live' 
-                ? 'bg-[#E9C349] text-slate-950 border-[#E9C349] shadow-lg shadow-[#E9C349]/20' 
+                ? 'bg-[#D9A9FF] text-slate-950 border-[#D9A9FF] shadow-lg shadow-[#D9A9FF]/20' 
                 : 'text-slate-400 border-transparent hover:text-slate-900 dark:hover:text-white hover:bg-white/5'
             }`}
           >
@@ -391,7 +391,7 @@ export default function LiveView({
             onClick={() => setSubTab('spectators')}
             className={`px-4 py-2 text-xs font-black rounded-xl transition-all flex items-center gap-2 border ${
               subTab === 'spectators' 
-                ? 'bg-[#9A2B3C] text-white border-[#9A2B3C] shadow-lg' 
+                ? 'bg-[#C23E9E] text-white border-[#C23E9E] shadow-lg' 
                 : 'text-slate-400 border-transparent hover:text-slate-900 dark:hover:text-white hover:bg-white/5'
             }`}
           >
@@ -593,7 +593,7 @@ export default function LiveView({
                   onClick={() => setIsWebcamOn(!isWebcamOn)}
                   className={`px-4 py-2 rounded-xl text-xs font-extrabold transition-all flex items-center gap-2 border ${
                     isWebcamOn 
-                      ? 'bg-[#E9C349] text-slate-950 border-[#E9C349]' 
+                      ? 'bg-[#D9A9FF] text-slate-950 border-[#D9A9FF]' 
                       : 'bg-white/5 border-white/10 text-slate-300 hover:text-slate-900 dark:hover:text-white'
                   }`}
                 >
@@ -607,7 +607,7 @@ export default function LiveView({
 
               {/* Subtitles CC Toggle */}
               <div className="flex items-center gap-2 bg-white/5 border border-white/10 px-3 py-1.5 rounded-xl">
-                <Languages className="w-4 h-4 text-[#E9C349]" />
+                <Languages className="w-4 h-4 text-[#D9A9FF]" />
                 <span className="text-[10px] font-bold text-slate-900 dark:text-white uppercase">SUBTÍTULOS:</span>
                 <button
                   onClick={() => setSubtitlesEnabled(!subtitlesEnabled)}
@@ -696,7 +696,7 @@ export default function LiveView({
             <div className="p-4 bg-[#1a1a1a] border-b border-white/10 flex items-center justify-between">
               <div>
                 <h4 className="text-xs font-black uppercase text-slate-900 dark:text-white tracking-wider flex items-center gap-1.5">
-                  <MessageSquare className="w-4 h-4 text-[#E9C349]" /> CHAT EN VIVO DE LA SALA
+                  <MessageSquare className="w-4 h-4 text-[#D9A9FF]" /> CHAT EN VIVO DE LA SALA
                 </h4>
                 <p className="text-[10px] text-slate-400">Sé constructivo y apoya a los compañeros</p>
               </div>
@@ -769,7 +769,7 @@ export default function LiveView({
                   placeholder="Escribe un mensaje en la transmisión..."
                   value={chatInput}
                   onChange={(e) => setChatInput(e.target.value)}
-                  className="flex-1 bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white placeholder-slate-500 focus:outline-none focus:border-[#E9C349]"
+                  className="flex-1 bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white placeholder-slate-500 focus:outline-none focus:border-[#D9A9FF]"
                 />
                 <button 
                   type="submit"
@@ -793,7 +793,7 @@ export default function LiveView({
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-white/10">
               <div>
                 <div className="flex items-center gap-2">
-                  <Tv className="w-5 h-5 text-[#E9C349]" />
+                  <Tv className="w-5 h-5 text-[#D9A9FF]" />
                   <h3 className="text-lg font-black text-slate-900 dark:text-white uppercase tracking-wide">
                     ESTUDIO DE TRANSMISIÓN EN VIVO
                   </h3>
@@ -917,7 +917,7 @@ export default function LiveView({
                     type="text"
                     value={broadcastTitle}
                     onChange={(e) => setBroadcastTitle(e.target.value)}
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-[#E9C349]"
+                    className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-[#D9A9FF]"
                   />
                 </div>
 
@@ -928,7 +928,7 @@ export default function LiveView({
                   <select 
                     value={broadcastCategory}
                     onChange={(e) => setBroadcastCategory(e.target.value)}
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-[#E9C349]"
+                    className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-[#D9A9FF]"
                   >
                     <option value="Waacking">Waacking (Arm Control & Rolls)</option>
                     <option value="Posing">Expressive Posing & Character</option>
@@ -945,7 +945,7 @@ export default function LiveView({
                     type="text"
                     value={broadcastMusic}
                     onChange={(e) => setBroadcastMusic(e.target.value)}
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-[#E9C349]"
+                    className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-[#D9A9FF]"
                   />
                 </div>
 

@@ -199,7 +199,7 @@ export const CategoryFilterBar: React.FC<CategoryFilterBarProps> = ({
               placeholder="Buscar clase, drill, BPM..."
               value={filters.searchQuery}
               onChange={(e) => onFilterChange({ searchQuery: e.target.value })}
-              className="w-full pl-9 pr-8 py-2 bg-slate-100 dark:bg-black/60 border border-slate-200 dark:border-white/10 focus:border-[#E9C349] rounded-xl text-xs text-slate-900 dark:text-white placeholder-slate-500 outline-none transition-all"
+              className="w-full pl-9 pr-8 py-2 bg-slate-100 dark:bg-black/60 border border-slate-200 dark:border-white/10 focus:border-[#D9A9FF] rounded-xl text-xs text-slate-900 dark:text-white placeholder-slate-500 outline-none transition-all"
             />
             {filters.searchQuery && (
               <button
@@ -219,7 +219,7 @@ export const CategoryFilterBar: React.FC<CategoryFilterBarProps> = ({
               onClick={() => setViewMode('catedras')}
               className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
                 viewMode === 'catedras'
-                  ? 'bg-[#E9C349] text-black shadow-md font-black'
+                  ? 'bg-[#D9A9FF] text-black shadow-md font-black'
                   : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
               }`}
               title="Ver agrupado por Cátedras de Profesores"
@@ -232,7 +232,7 @@ export const CategoryFilterBar: React.FC<CategoryFilterBarProps> = ({
               onClick={() => setViewMode('catalog')}
               className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
                 viewMode === 'catalog'
-                  ? 'bg-[#E9C349] text-black shadow-md font-black'
+                  ? 'bg-[#D9A9FF] text-black shadow-md font-black'
                   : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
               }`}
               title="Ver Catálogo Unificado de Lecciones"

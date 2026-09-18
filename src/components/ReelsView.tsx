@@ -1031,7 +1031,7 @@ export default function ReelsView({
             {/* Header */}
             <div className="flex items-center justify-between pb-3 border-b border-white/10">
               <h3 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
-                <MessageCircle className="w-4 h-4 text-[#E9C349]" />
+                <MessageCircle className="w-4 h-4 text-[#D9A9FF]" />
                 COMENTARIOS DE LA COMUNIDAD (
                 {reels.find(r => r.id === activeCommentsReelId)?.commentsCount || 0})
               </h3>
@@ -1047,7 +1047,7 @@ export default function ReelsView({
             <div className="flex-1 overflow-y-auto space-y-4 py-4 scrollbar-thin scrollbar-thumb-[#C23E9E]">
               {(reels.find(r => r.id === activeCommentsReelId)?.comments || []).map((c) => (
                 <div key={c.id} className="flex items-start gap-3 text-xs">
-                  <img src={c.avatar} alt={c.user} className="w-8 h-8 rounded-full object-cover border border-[#E9C349]" />
+                  <img src={c.avatar} alt={c.user} className="w-8 h-8 rounded-full object-cover border border-[#D9A9FF]" />
                   <div className="flex-1 bg-white/5 p-3 rounded-2xl border border-slate-200 dark:border-white/5">
                     <div className="flex items-center justify-between mb-1">
                       <span className="font-bold text-slate-900 dark:text-white">{c.user}</span>
@@ -1066,7 +1066,7 @@ export default function ReelsView({
                 placeholder="Escribe un comentario o pregunta sobre la técnica..."
                 value={newCommentText}
                 onChange={(e) => setNewCommentText(e.target.value)}
-                className="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-xs text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-[#E9C349]"
+                className="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-xs text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-[#D9A9FF]"
               />
               <button
                 type="submit"
@@ -1149,7 +1149,7 @@ export default function ReelsView({
             >
               <div className="flex items-center justify-between pb-3 border-b border-white/10">
                 <h3 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
-                  <Camera className="w-4 h-4 text-[#E9C349]" /> PUBLICAR NUEVO REEL EN FIREBASE
+                  <Camera className="w-4 h-4 text-[#D9A9FF]" /> PUBLICAR NUEVO REEL EN FIREBASE
                 </h3>
                 <button
                   type="button"
@@ -1174,7 +1174,7 @@ export default function ReelsView({
                     onChange={handleVideoFileChange}
                     className="absolute inset-0 opacity-0 cursor-pointer w-full h-full z-10 disabled:cursor-not-allowed"
                   />
-                  <Upload className="w-8 h-8 text-[#E9C349] mx-auto animate-bounce" />
+                  <Upload className="w-8 h-8 text-[#D9A9FF] mx-auto animate-bounce" />
                   <p className="text-xs font-bold text-slate-900 dark:text-white">
                     {selectedFile ? `🎥 Archivo seleccionado: ${selectedFile.name}` : 'Haz clic para seleccionar tu video (.mp4, .mov, .webm)'}
                   </p>
@@ -1196,7 +1196,7 @@ export default function ReelsView({
                     placeholder="https://assets.mixkit.co/.../video.mp4"
                     value={uploadVideoUrlInput}
                     onChange={(e) => setUploadVideoUrlInput(e.target.value)}
-                    className="w-full bg-white/5 border border-white/10 rounded-xl p-2.5 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-[#E9C349] disabled:opacity-50"
+                    className="w-full bg-white/5 border border-white/10 rounded-xl p-2.5 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-[#D9A9FF] disabled:opacity-50"
                   />
                 </div>
               </div>
@@ -1229,7 +1229,7 @@ export default function ReelsView({
                   disabled={isUploading}
                   value={uploadCategory}
                   onChange={(e) => setUploadCategory(e.target.value)}
-                  className="w-full bg-[#1e1e1e] border border-white/10 rounded-xl p-3 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-[#E9C349] disabled:opacity-50"
+                  className="w-full bg-[#1e1e1e] border border-white/10 rounded-xl p-3 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-[#D9A9FF] disabled:opacity-50"
                 >
                   <option value="Para ti">Para ti</option>
                   <option value="Comunidad">Comunidad</option>
@@ -1250,7 +1250,7 @@ export default function ReelsView({
                   value={uploadCaption}
                   onChange={(e) => setUploadCaption(e.target.value)}
                   placeholder="Describe tu rutina, velocidad de brazos o técnica ejecutada..."
-                  className="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-[#E9C349] disabled:opacity-50"
+                  className="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-[#D9A9FF] disabled:opacity-50"
                   required
                 />
               </div>
@@ -1266,7 +1266,7 @@ export default function ReelsView({
                   value={uploadHashtags}
                   onChange={(e) => setUploadHashtags(e.target.value)}
                   placeholder="#Waacking #ArmControl #WaackON"
-                  className="w-full bg-white/5 border border-white/10 rounded-xl p-2.5 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-[#E9C349] disabled:opacity-50"
+                  className="w-full bg-white/5 border border-white/10 rounded-xl p-2.5 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-[#D9A9FF] disabled:opacity-50"
                 />
               </div>
 
@@ -1280,7 +1280,7 @@ export default function ReelsView({
                   disabled={isUploading}
                   value={uploadSong}
                   onChange={(e) => setUploadSong(e.target.value)}
-                  className="w-full bg-white/5 border border-white/10 rounded-xl p-2.5 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-[#E9C349] disabled:opacity-50"
+                  className="w-full bg-white/5 border border-white/10 rounded-xl p-2.5 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-[#D9A9FF] disabled:opacity-50"
                 />
               </div>
 

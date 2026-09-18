@@ -212,7 +212,7 @@ export default function Sidebar({
       <div className="flex flex-col min-h-full">
         {/* Logo / Brand Header */}
         <div className="p-4 border-b border-slate-200 dark:border-white/10 bg-slate-50/80 dark:bg-[#0c0d1e]/80 flex flex-col items-center justify-center relative overflow-hidden group shrink-0">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(233,195,73,0.12)_0%,transparent_70%)] pointer-events-none" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(217, 169, 255,0.12)_0%,transparent_70%)] pointer-events-none" />
           
           <Logo variant="full" className="w-40 h-auto relative z-10 transition-transform group-hover:scale-105 duration-300" />
           
@@ -224,9 +224,9 @@ export default function Sidebar({
         {/* User Role Card Box */}
         <div className={`mx-3 my-3 p-3 border rounded-2xl flex items-center justify-between shadow-inner shrink-0 transition-all ${
           currentUser.role === 'studio'
-            ? 'bg-amber-50 dark:bg-[#180f2b] border-[#E9C349]/60 shadow-[0_0_12px_rgba(233,195,73,0.15)] dark:shadow-[0_0_12px_rgba(233,195,73,0.25)]'
+            ? 'bg-amber-50 dark:bg-[#180f2b] border-[#D9A9FF]/60 shadow-[0_0_12px_rgba(217, 169, 255,0.15)] dark:shadow-[0_0_12px_rgba(217, 169, 255,0.25)]'
             : currentUser.role === 'instructor'
-            ? 'bg-amber-50 dark:bg-[#1b1222] border-[#E9C349]/40 shadow-[0_0_12px_rgba(233,195,73,0.1)] dark:shadow-[0_0_12px_rgba(233,195,73,0.15)]'
+            ? 'bg-amber-50 dark:bg-[#1b1222] border-[#D9A9FF]/40 shadow-[0_0_12px_rgba(217, 169, 255,0.1)] dark:shadow-[0_0_12px_rgba(217, 169, 255,0.15)]'
             : 'bg-slate-100 dark:bg-[#1e1e1e] border-slate-200 dark:border-white/10'
         }`}>
           <div className="flex items-center gap-2.5 min-w-0">
@@ -309,7 +309,7 @@ export default function Sidebar({
                   className="w-full px-3 py-1.5 flex items-center justify-between group text-left cursor-pointer hover:bg-slate-100 dark:hover:bg-white/5 rounded-xl transition-colors"
                 >
                   <div className="flex items-center gap-1.5 min-w-0">
-                    <p className="text-[9px] font-black text-[#E9C349] tracking-widest uppercase truncate group-hover:text-slate-900 dark:group-hover:text-white transition-colors">
+                    <p className="text-[9px] font-black text-[#D9A9FF] tracking-widest uppercase truncate group-hover:text-slate-900 dark:group-hover:text-white transition-colors">
                       {section.title}
                     </p>
                     {hasActiveItem && (
@@ -369,7 +369,7 @@ export default function Sidebar({
                             {isActive && (
                               <motion.div
                                 layoutId="activeNavBackground"
-                                className="absolute inset-0 bg-amber-50 dark:bg-[#1e1735] border border-[#E9C349]/40 rounded-xl pointer-events-none"
+                                className="absolute inset-0 bg-amber-50 dark:bg-[#1e1735] border border-[#D9A9FF]/40 rounded-xl pointer-events-none"
                                 transition={{ type: "spring", stiffness: 500, damping: 35 }}
                               />
                             )}
@@ -394,10 +394,10 @@ export default function Sidebar({
                                     }}
                                     className="shrink-0"
                                   >
-                                    <Icon className={`w-4 h-4 ${isActive ? 'text-[#E9C349]' : 'text-slate-500 dark:text-slate-400'}`} />
+                                    <Icon className={`w-4 h-4 ${isActive ? 'text-[#D9A9FF]' : 'text-slate-500 dark:text-slate-400'}`} />
                                   </motion.div>
                                 ) : (
-                                  <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-[#E9C349]' : 'text-slate-500 dark:text-slate-400'}`} />
+                                  <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-[#D9A9FF]' : 'text-slate-500 dark:text-slate-400'}`} />
                                 )}
                                 <span className="text-[11px] tracking-wider uppercase truncate">
                                   {item.label}

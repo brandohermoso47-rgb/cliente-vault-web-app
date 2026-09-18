@@ -593,7 +593,7 @@ export default function CursosView({
                 <button
                   onClick={() => setCurrentTab('catedras')}
                   className={`px-4 py-2 text-xs font-extrabold rounded-xl transition-all flex items-center gap-1.5 ${
-                    currentTab === 'catedras' ? 'bg-[#E9C349] text-black shadow-lg' : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
+                    currentTab === 'catedras' ? 'bg-[#D9A9FF] text-black shadow-lg' : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
                   }`}
                 >
                   <Users className="w-3.5 h-3.5" />
@@ -602,7 +602,7 @@ export default function CursosView({
                 <button
                   onClick={() => setCurrentTab('metas')}
                   className={`px-4 py-2 text-xs font-extrabold rounded-xl transition-all flex items-center gap-1.5 ${
-                    currentTab === 'metas' ? 'bg-[#E9C349] text-black shadow-lg' : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
+                    currentTab === 'metas' ? 'bg-[#D9A9FF] text-black shadow-lg' : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
                   }`}
                 >
                   <Target className="w-3.5 h-3.5" />
@@ -611,7 +611,7 @@ export default function CursosView({
                 <button
                   onClick={() => setCurrentTab('workbook')}
                   className={`px-4 py-2 text-xs font-extrabold rounded-xl transition-all flex items-center gap-1.5 ${
-                    currentTab === 'workbook' ? 'bg-[#E9C349] text-black shadow-lg' : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
+                    currentTab === 'workbook' ? 'bg-[#D9A9FF] text-black shadow-lg' : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
                   }`}
                 >
                   <BookOpen className="w-3.5 h-3.5" />
@@ -620,7 +620,7 @@ export default function CursosView({
                 <button
                   onClick={() => setCurrentTab('feedback')}
                   className={`px-4 py-2 text-xs font-extrabold rounded-xl transition-all flex items-center gap-1.5 ${
-                    currentTab === 'feedback' ? 'bg-[#E9C349] text-black shadow-lg' : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
+                    currentTab === 'feedback' ? 'bg-[#D9A9FF] text-black shadow-lg' : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
                   }`}
                 >
                   <Video className="w-3.5 h-3.5" />
@@ -670,7 +670,7 @@ export default function CursosView({
                     onClick={() => setSelectedInstructorFilter(inst.id)}
                     className={`px-3.5 py-1.5 rounded-xl text-xs font-extrabold border transition-all shrink-0 flex items-center gap-2 ${
                       isSel
-                        ? 'bg-[#E9C349] text-black border-[#E9C349] shadow-lg'
+                        ? 'bg-[#D9A9FF] text-black border-[#D9A9FF] shadow-lg'
                         : 'bg-slate-100 dark:bg-black/40 text-slate-700 dark:text-slate-200 border-slate-200 dark:border-white/10 hover:border-slate-400 dark:hover:border-white/30'
                     }`}
                   >
@@ -713,7 +713,7 @@ export default function CursosView({
             onClick={() => setViewLayout('catedras')}
             className={`px-3.5 py-1.5 rounded-lg text-xs font-extrabold transition-all flex items-center gap-1.5 cursor-pointer ${
               viewLayout === 'catedras'
-                ? 'bg-[#E9C349] text-black shadow-md'
+                ? 'bg-[#D9A9FF] text-black shadow-md'
                 : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
             }`}
           >
@@ -726,7 +726,7 @@ export default function CursosView({
             onClick={() => setViewLayout('catalog')}
             className={`px-3.5 py-1.5 rounded-lg text-xs font-extrabold transition-all flex items-center gap-1.5 cursor-pointer ${
               viewLayout === 'catalog'
-                ? 'bg-[#E9C349] text-black shadow-md'
+                ? 'bg-[#D9A9FF] text-black shadow-md'
                 : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
             }`}
           >
@@ -753,7 +753,7 @@ export default function CursosView({
               </div>
               <div className="w-full bg-slate-200 dark:bg-black/60 h-3 rounded-full overflow-hidden border border-white/10">
                 <div
-                  className="bg-gradient-to-r from-[#E9C349] via-amber-400 to-purple-500 h-full transition-all duration-700"
+                  className="bg-gradient-to-r from-[#D9A9FF] via-amber-400 to-purple-500 h-full transition-all duration-700"
                   style={{ width: `${progressPercent}%` }}
                 />
               </div>
@@ -838,7 +838,7 @@ export default function CursosView({
                     <div>
                       <div className="flex items-center justify-between mb-4 border-b border-white/10 pb-2">
                         <h3 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
-                          <Award className="w-4 h-4 text-[#E9C349]" />
+                          <Award className="w-4 h-4 text-[#D9A9FF]" />
                           Programas & Cursos Intensivos de {instructor.name}
                         </h3>
                         <span className="text-[10px] font-mono text-slate-400">
@@ -850,7 +850,7 @@ export default function CursosView({
                         {(instructor.courses || []).map((course) => (
                           <div 
                             key={course.id}
-                            className="bg-white dark:bg-[#0b0a12] border border-white/10 rounded-2xl overflow-hidden flex flex-col justify-between hover:border-[#E9C349]/40 transition-all shadow-lg group"
+                            className="bg-white dark:bg-[#0b0a12] border border-white/10 rounded-2xl overflow-hidden flex flex-col justify-between hover:border-[#D9A9FF]/40 transition-all shadow-lg group"
                           >
                             <div className="relative aspect-video overflow-hidden">
                               <img 
@@ -960,7 +960,7 @@ export default function CursosView({
                                   <div className="flex items-start justify-between gap-3 flex-wrap">
                                     <div>
                                       <h4 className="text-base font-black text-slate-900 dark:text-white uppercase">{curL.title}</h4>
-                                      <p className="text-[10px] text-[#E9C349] font-mono uppercase mt-0.5">
+                                      <p className="text-[10px] text-[#D9A9FF] font-mono uppercase mt-0.5">
                                         {instructor.name} • DURACIÓN: {curL.duration}
                                       </p>
                                     </div>
@@ -1054,7 +1054,7 @@ export default function CursosView({
                                     {/* Loading State */}
                                     {isSummarizing && (
                                       <div className="p-4 rounded-xl bg-purple-50 dark:bg-purple-950/40 border border-purple-500/30 text-purple-700 dark:text-purple-200 flex items-center gap-3 animate-pulse">
-                                        <Sparkles className="w-5 h-5 text-[#E9C349] animate-spin shrink-0" />
+                                        <Sparkles className="w-5 h-5 text-[#D9A9FF] animate-spin shrink-0" />
                                         <div>
                                           <p className="text-xs font-bold text-slate-900 dark:text-white">Generando Resumen Ejecutivo con Gemini IA...</p>
                                           <p className="text-[10px] text-purple-600 dark:text-purple-300 font-mono">Procesando transcripción limpia para extraer objetivos, pilares técnicos y ejercicios somáticos.</p>
@@ -1067,7 +1067,7 @@ export default function CursosView({
                                       <motion.div
                                         initial={{ opacity: 0, y: 10 }}
                                         animate={{ opacity: 1, y: 0 }}
-                                        className="p-4 rounded-xl bg-white dark:bg-slate-900/90 border border-[#E9C349]/40 space-y-3 shadow-2xl relative overflow-hidden"
+                                        className="p-4 rounded-xl bg-white dark:bg-slate-900/90 border border-[#D9A9FF]/40 space-y-3 shadow-2xl relative overflow-hidden"
                                       >
                                         <div className="absolute top-0 right-0 w-32 h-32 bg-[#D9A9FF]/5 rounded-full blur-2xl pointer-events-none" />
                                         <div className="flex items-center justify-between pb-2 border-b border-white/10">
@@ -1077,7 +1077,7 @@ export default function CursosView({
                                             </div>
                                             <div>
                                               <h5 className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-wider">RESUMEN EJECUTIVO (GEMINI IA)</h5>
-                                              <p className="text-[10px] text-[#E9C349] font-mono">Análisis inteligente basado en la transcripción limpia de la clase</p>
+                                              <p className="text-[10px] text-[#D9A9FF] font-mono">Análisis inteligente basado en la transcripción limpia de la clase</p>
                                             </div>
                                           </div>
 
@@ -1154,7 +1154,7 @@ export default function CursosView({
                                     onClick={() => handleLessonSelect(l)}
                                     className={`p-3 rounded-xl border transition-all cursor-pointer flex items-center justify-between gap-2 ${
                                       isAct
-                                        ? 'bg-[#E9C349]/15 border-[#E9C349] text-slate-900 dark:text-white shadow-md'
+                                        ? 'bg-[#D9A9FF]/15 border-[#D9A9FF] text-slate-900 dark:text-white shadow-md'
                                         : 'bg-slate-100 dark:bg-black/40 border-white/5 hover:border-white/20 text-slate-600 dark:text-slate-300'
                                     }`}
                                   >
@@ -1245,7 +1245,7 @@ export default function CursosView({
           <div className="bg-white dark:bg-[#12101f] border border-white/10 p-5 rounded-3xl flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-xl">
             <div>
               <h2 className="text-lg font-black text-slate-900 dark:text-white uppercase flex items-center gap-2">
-                <LayoutGrid className="w-5 h-5 text-[#E9C349]" />
+                <LayoutGrid className="w-5 h-5 text-[#D9A9FF]" />
                 Catálogo Unificado de Clases de Waacking
               </h2>
               <p className="text-xs text-slate-400 mt-0.5">
@@ -1312,8 +1312,8 @@ export default function CursosView({
                 return (
                   <div
                     key={lesson.id}
-                    className={`bg-white dark:bg-[#120f1d] border rounded-2xl overflow-hidden flex flex-col justify-between transition-all group hover:border-[#E9C349]/50 shadow-xl ${
-                      isAct ? 'border-[#E9C349] ring-1 ring-[#E9C349]/40' : 'border-white/10'
+                    className={`bg-white dark:bg-[#120f1d] border rounded-2xl overflow-hidden flex flex-col justify-between transition-all group hover:border-[#D9A9FF]/50 shadow-xl ${
+                      isAct ? 'border-[#D9A9FF] ring-1 ring-[#D9A9FF]/40' : 'border-white/10'
                     }`}
                   >
                     {/* Thumbnail & Badges */}
@@ -1502,8 +1502,8 @@ export default function CursosView({
       {/* WORKBOOK MODE */}
       {currentTab === 'workbook' && (
         <div className="flex-1 flex flex-col items-center justify-center w-full py-4 space-y-6">
-          <div className="bg-white dark:bg-[#12101f] border border-[#E9C349]/30 p-6 rounded-3xl text-center w-full relative overflow-hidden shadow-2xl text-white">
-            <Book className="w-10 h-10 text-[#E9C349] mx-auto mb-3 animate-pulse" />
+          <div className="bg-white dark:bg-[#12101f] border border-[#D9A9FF]/30 p-6 rounded-3xl text-center w-full relative overflow-hidden shadow-2xl text-white">
+            <Book className="w-10 h-10 text-[#D9A9FF] mx-auto mb-3 animate-pulse" />
             <h3 className="text-xl font-black text-white uppercase tracking-tight">BITÁCORA TEÓRICA UNIFICADA v2.1</h3>
             <p className="text-xs text-slate-300 font-medium max-w-xl mx-auto mt-2 leading-relaxed">
               Recopilación teórica que integra las cátedras de Brando Hermoso y Elena Rostova: terminología, historia de los años 70 y plantillas de práctica.

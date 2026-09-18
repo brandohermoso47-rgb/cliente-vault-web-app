@@ -1579,7 +1579,7 @@ export default function FisicoView({ currentUser, language, onAddBonusPoints }: 
                   </div>
 
                   {/* Terminal de observaciones IA */}
-                  <div className="bg-white dark:bg-black/90 border border-[#81262c]/20 p-3 rounded-2xl flex-1 flex flex-col justify-between min-h-[140px] max-h-[180px] lg:max-h-none overflow-hidden relative">
+                  <div className="bg-white dark:bg-black/90 border border-[#8F2C7A]/20 p-3 rounded-2xl flex-1 flex flex-col justify-between min-h-[140px] max-h-[180px] lg:max-h-none overflow-hidden relative">
                     <div className="absolute top-2 right-2 flex items-center gap-1 pointer-events-none">
                       <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
                       <span className="text-[7px] font-mono text-[#8F2C7A] font-bold uppercase">SEC_LOG_OK</span>

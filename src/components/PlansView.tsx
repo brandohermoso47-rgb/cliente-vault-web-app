@@ -77,7 +77,7 @@ export default function PlansView({ currentUser, onUserChange, language, onOpenP
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-purple-600/10 rounded-full blur-3xl pointer-events-none" />
 
       {/* Main Banner Header */}
-      <div className="bg-gradient-to-r from-amber-50 via-orange-50 to-white dark:from-[#1A1528] dark:via-[#221835] dark:to-[#120F1D] border border-[#E9C349]/30 rounded-3xl p-6 sm:p-10 shadow-2xl relative overflow-hidden flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+      <div className="bg-gradient-to-r from-amber-50 via-orange-50 to-white dark:from-[#1A1528] dark:via-[#221835] dark:to-[#120F1D] border border-[#D9A9FF]/30 rounded-3xl p-6 sm:p-10 shadow-2xl relative overflow-hidden flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
         <div className="space-y-3 max-w-2xl relative z-10">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#D9A9FF]/15 border border-[#D9A9FF]/40 text-[#D9A9FF] font-mono text-[10px] font-black uppercase tracking-widest">
             <Crown className="w-3.5 h-3.5 text-[#D9A9FF]" />
@@ -113,7 +113,7 @@ export default function PlansView({ currentUser, onUserChange, language, onOpenP
             onClick={() => setFilterCategory('all')}
             className={`px-4 py-2 text-xs font-mono font-bold uppercase rounded-xl transition-all flex items-center gap-2 ${
               filterCategory === 'all'
-                ? 'bg-[#E9C349] text-black shadow-md'
+                ? 'bg-[#D9A9FF] text-black shadow-md'
                 : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
             }`}
           >
@@ -124,7 +124,7 @@ export default function PlansView({ currentUser, onUserChange, language, onOpenP
             onClick={() => setFilterCategory('alumnos')}
             className={`px-4 py-2 text-xs font-mono font-bold uppercase rounded-xl transition-all flex items-center gap-2 ${
               filterCategory === 'alumnos'
-                ? 'bg-[#E9C349] text-black shadow-md'
+                ? 'bg-[#D9A9FF] text-black shadow-md'
                 : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
             }`}
           >
@@ -135,7 +135,7 @@ export default function PlansView({ currentUser, onUserChange, language, onOpenP
             onClick={() => setFilterCategory('instructores')}
             className={`px-4 py-2 text-xs font-mono font-bold uppercase rounded-xl transition-all flex items-center gap-2 ${
               filterCategory === 'instructores'
-                ? 'bg-[#E9C349] text-black shadow-md'
+                ? 'bg-[#D9A9FF] text-black shadow-md'
                 : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
             }`}
           >
@@ -146,7 +146,7 @@ export default function PlansView({ currentUser, onUserChange, language, onOpenP
             onClick={() => setFilterCategory('estudios')}
             className={`px-4 py-2 text-xs font-mono font-bold uppercase rounded-xl transition-all flex items-center gap-2 ${
               filterCategory === 'estudios'
-                ? 'bg-[#E9C349] text-black shadow-md'
+                ? 'bg-[#D9A9FF] text-black shadow-md'
                 : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
             }`}
           >
@@ -157,7 +157,7 @@ export default function PlansView({ currentUser, onUserChange, language, onOpenP
 
         <div className="flex items-center gap-2 bg-slate-100 dark:bg-[#0A0A0A] px-3 py-1.5 rounded-xl border border-slate-200 dark:border-[#262626] text-xs font-mono">
           <span className="text-slate-500 dark:text-slate-400">{isEs ? 'Formato de Facturación:' : 'Billing Format:'}</span>
-          <span className="text-[#E9C349] font-bold uppercase">{isEs ? 'Mensual sin Permanencia' : 'Monthly No Contract'}</span>
+          <span className="text-[#D9A9FF] font-bold uppercase">{isEs ? 'Mensual sin Permanencia' : 'Monthly No Contract'}</span>
         </div>
       </div>
 
@@ -289,8 +289,8 @@ export default function PlansView({ currentUser, onUserChange, language, onOpenP
 
         {/* PLAN 3: MEMBRESÍA DE INSTRUCTOR ($15 USD) */}
         {(filterCategory === 'all' || filterCategory === 'alumnos') && (
-          <div className="bg-gradient-to-b from-amber-50 to-white dark:from-[#1E172E] dark:to-[#120E1E] border-2 border-[#E9C349] rounded-3xl p-6 flex flex-col justify-between space-y-6 relative overflow-hidden shadow-[0_0_35px_rgba(233,195,73,0.25)] hover:border-yellow-300 transition-all">
-            <div className="absolute top-0 right-0 bg-[#E9C349] text-black text-[9px] font-mono font-black uppercase px-3 py-1 rounded-bl-2xl shadow-md">
+          <div className="bg-gradient-to-b from-amber-50 to-white dark:from-[#1E172E] dark:to-[#120E1E] border-2 border-[#D9A9FF] rounded-3xl p-6 flex flex-col justify-between space-y-6 relative overflow-hidden shadow-[0_0_35px_rgba(217, 169, 255,0.25)] hover:border-yellow-300 transition-all">
+            <div className="absolute top-0 right-0 bg-[#D9A9FF] text-black text-[9px] font-mono font-black uppercase px-3 py-1 rounded-bl-2xl shadow-md">
               {isEs ? 'MÁS POPULAR ALUMNOS' : 'MOST POPULAR'}
             </div>
 

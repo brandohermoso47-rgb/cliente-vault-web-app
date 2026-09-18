@@ -279,7 +279,7 @@ export default function LoginView({ onGuestMode, onSuccess, language, onLanguage
           aria-label={theme === 'dark' ? 'Activar modo claro' : 'Activar modo oscuro'}
           title={theme === 'dark' ? 'Activar modo claro' : 'Activar modo oscuro'}
         >
-          {theme === 'dark' ? <Sun className="w-4 h-4 text-[#E9C349]" /> : <Moon className="w-4 h-4 text-amber-700" />}
+          {theme === 'dark' ? <Sun className="w-4 h-4 text-[#D9A9FF]" /> : <Moon className="w-4 h-4 text-amber-700" />}
         </button>
       )}
 
@@ -313,7 +313,7 @@ export default function LoginView({ onGuestMode, onSuccess, language, onLanguage
                 className="w-full space-y-4"
               >
                 <div className="text-center space-y-1 pb-2 border-b border-slate-200 dark:border-white/10">
-                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#E9C349]/20 border border-[#E9C349]/40 text-[#E9C349] text-[10px] font-mono font-black uppercase">
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#D9A9FF]/20 border border-[#D9A9FF]/40 text-[#D9A9FF] text-[10px] font-mono font-black uppercase">
                     <Sparkles className="w-3.5 h-3.5" />
                     <span>{language === 'es' ? 'Crear Perfil de Bailarín' : 'Create Dancer Profile'}</span>
                   </div>
@@ -328,7 +328,7 @@ export default function LoginView({ onGuestMode, onSuccess, language, onLanguage
                 {/* Nombre */}
                 <div>
                   <label className="text-[10px] font-mono font-bold text-slate-600 dark:text-slate-300 block mb-1 uppercase flex items-center gap-1">
-                    <User className="w-3 h-3 text-[#E9C349]" />
+                    <User className="w-3 h-3 text-[#D9A9FF]" />
                     {language === 'es' ? 'Nombre *' : 'First Name *'}
                   </label>
                   <input
@@ -337,14 +337,14 @@ export default function LoginView({ onGuestMode, onSuccess, language, onLanguage
                     onChange={(e) => setFirstName(e.target.value)}
                     placeholder={language === 'es' ? 'Ej. Marilyn' : 'e.g. Marilyn'}
                     required
-                    className="w-full bg-black/5 hover:bg-black/10 focus:bg-black/10 dark:bg-white/10 dark:hover:bg-white/15 dark:focus:bg-white/20 border border-slate-300 dark:border-white/20 focus:border-[#E9C349]/60 rounded-2xl px-4 py-3 text-sm text-slate-900 dark:text-white placeholder-slate-400 outline-none transition-all shadow-inner"
+                    className="w-full bg-black/5 hover:bg-black/10 focus:bg-black/10 dark:bg-white/10 dark:hover:bg-white/15 dark:focus:bg-white/20 border border-slate-300 dark:border-white/20 focus:border-[#D9A9FF]/60 rounded-2xl px-4 py-3 text-sm text-slate-900 dark:text-white placeholder-slate-400 outline-none transition-all shadow-inner"
                   />
                 </div>
 
                 {/* Apellido */}
                 <div>
                   <label className="text-[10px] font-mono font-bold text-slate-600 dark:text-slate-300 block mb-1 uppercase flex items-center gap-1">
-                    <UserCheck className="w-3 h-3 text-[#E9C349]" />
+                    <UserCheck className="w-3 h-3 text-[#D9A9FF]" />
                     {language === 'es' ? 'Apellido *' : 'Last Name *'}
                   </label>
                   <input
@@ -353,7 +353,7 @@ export default function LoginView({ onGuestMode, onSuccess, language, onLanguage
                     onChange={(e) => setLastName(e.target.value)}
                     placeholder={language === 'es' ? 'Ej. Monroe' : 'e.g. Monroe'}
                     required
-                    className="w-full bg-black/5 hover:bg-black/10 focus:bg-black/10 dark:bg-white/10 dark:hover:bg-white/15 dark:focus:bg-white/20 border border-slate-300 dark:border-white/20 focus:border-[#E9C349]/60 rounded-2xl px-4 py-3 text-sm text-slate-900 dark:text-white placeholder-slate-400 outline-none transition-all shadow-inner"
+                    className="w-full bg-black/5 hover:bg-black/10 focus:bg-black/10 dark:bg-white/10 dark:hover:bg-white/15 dark:focus:bg-white/20 border border-slate-300 dark:border-white/20 focus:border-[#D9A9FF]/60 rounded-2xl px-4 py-3 text-sm text-slate-900 dark:text-white placeholder-slate-400 outline-none transition-all shadow-inner"
                   />
                 </div>
 

@@ -342,8 +342,8 @@ export default function ComunidadView({
           onClick={() => setSubTab('reto')}
           className={`group h-11 min-w-[190px] px-4 py-2.5 text-xs font-bold tracking-wider transition-all flex items-center justify-center gap-2 border rounded-xl shrink-0 focus:outline-none cursor-pointer ${
             subTab === 'reto' 
-              ? 'bg-[#E9C349] text-black border-[#E9C349] shadow-lg scale-105 font-extrabold' 
-              : 'bg-amber-50/70 dark:bg-[#1b1424]/70 text-[#E9C349] border-[#E9C349]/30 hover:border-[#E9C349] hover:bg-[#E9C349]/10'
+              ? 'bg-[#D9A9FF] text-black border-[#D9A9FF] shadow-lg scale-105 font-extrabold' 
+              : 'bg-amber-50/70 dark:bg-[#1b1424]/70 text-[#D9A9FF] border-[#D9A9FF]/30 hover:border-[#D9A9FF] hover:bg-[#D9A9FF]/10'
           }`}
         >
           <Trophy className={`w-4 h-4 shrink-0 transition-transform duration-300 group-hover:scale-125 ${subTab === 'reto' ? 'text-black' : 'text-[#D9A9FF]'}`} />
@@ -411,7 +411,7 @@ export default function ComunidadView({
               onClick={() => setActiveFilter('all')}
               className={`px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all flex items-center gap-1.5 border cursor-pointer ${
                 activeFilter === 'all'
-                  ? 'bg-[#E9C349] text-black border-[#E9C349] shadow-md scale-105'
+                  ? 'bg-[#D9A9FF] text-black border-[#D9A9FF] shadow-md scale-105'
                   : 'bg-[#0D0D11] text-on-surface-variant border-tertiary/15 hover:border-tertiary/40 hover:text-slate-900 dark:hover:text-white'
               }`}
             >

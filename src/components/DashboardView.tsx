@@ -979,7 +979,7 @@ export default function DashboardView({
               initial={{ opacity: 0, y: -15, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -15, scale: 0.95 }}
-              className="p-3.5 bg-gradient-to-r from-amber-50 via-rose-50 to-rose-50 dark:from-[#1c1a12] dark:via-[#241a15] dark:to-[#1c1214] border border-[#E9C349]/60 text-slate-900 dark:text-white text-xs font-mono font-bold rounded-2xl flex items-center justify-between gap-3 shadow-2xl relative z-30"
+              className="p-3.5 bg-gradient-to-r from-amber-50 via-rose-50 to-rose-50 dark:from-[#1c1a12] dark:via-[#241a15] dark:to-[#1c1214] border border-[#D9A9FF]/60 text-slate-900 dark:text-white text-xs font-mono font-bold rounded-2xl flex items-center justify-between gap-3 shadow-2xl relative z-30"
             >
               <div className="flex items-center gap-2.5">
                 <span className="p-1.5 bg-[#D9A9FF] text-black rounded-lg">
@@ -1028,7 +1028,7 @@ export default function DashboardView({
                   whileTap={{ scale: 0.97 }}
                   type="button"
                   onClick={() => setShowAnnModal(true)}
-                  className="px-3.5 py-2 bg-[#1c1a12] hover:bg-amber-100 dark:hover:bg-[#282415] text-[#E9C349] border border-[#E9C349]/40 text-xs font-mono font-bold rounded-xl transition-all flex items-center gap-1.5 shadow cursor-pointer uppercase"
+                  className="px-3.5 py-2 bg-[#1c1a12] hover:bg-amber-100 dark:hover:bg-[#282415] text-[#D9A9FF] border border-[#D9A9FF]/40 text-xs font-mono font-bold rounded-xl transition-all flex items-center gap-1.5 shadow cursor-pointer uppercase"
                 >
                   <Megaphone className="w-3.5 h-3.5 text-[#D9A9FF]" />
                   <span>Publicar Anuncio de Live</span>
@@ -1204,7 +1204,7 @@ export default function DashboardView({
                       onClick={() => handleToggleLiveReminder(activeSelectedLive.id, activeSelectedLive.instructor, activeSelectedLive.scheduledTime)}
                       className={`px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all flex items-center gap-1.5 border cursor-pointer ${
                         liveReminders[activeSelectedLive.id]
-                          ? 'bg-[#E9C349] text-black border-[#E9C349] shadow-md'
+                          ? 'bg-[#D9A9FF] text-black border-[#D9A9FF] shadow-md'
                           : 'bg-[#181818] text-[#8A8A8A] hover:text-slate-900 dark:hover:text-white border-white/10 hover:border-white/20'
                       }`}
                       title="Activar o desactivar recordatorio"
@@ -1267,7 +1267,7 @@ export default function DashboardView({
             <div className="space-y-3">
               <div className="flex items-center justify-between border-b border-white/10 pb-2.5">
                 <div className="flex items-center gap-2">
-                  <Radio className="w-4 h-4 text-[#E9C349]" />
+                  <Radio className="w-4 h-4 text-[#D9A9FF]" />
                   <h3 className="text-xs font-mono font-bold tracking-wider text-slate-900 dark:text-white uppercase">
                     Cartelera de Lives ({INSTRUCTOR_LIVES.length})
                   </h3>
@@ -1291,7 +1291,7 @@ export default function DashboardView({
                     onClick={() => setLiveFilterTab(tab.id as any)}
                     className={`px-2.5 py-1 rounded-lg text-[10px] font-mono font-bold transition-all shrink-0 border ${
                       liveFilterTab === tab.id
-                        ? 'bg-[#E9C349] text-black border-[#E9C349] shadow-sm'
+                        ? 'bg-[#D9A9FF] text-black border-[#D9A9FF] shadow-sm'
                         : 'bg-[#141414] text-[#8A8A8A] hover:text-slate-900 dark:hover:text-white border-slate-200 dark:border-white/5'
                     }`}
                   >
@@ -1315,7 +1315,7 @@ export default function DashboardView({
                       onClick={() => setSelectedLiveId(item.id)}
                       className={`p-3 rounded-xl border transition-all cursor-pointer relative overflow-hidden flex flex-col justify-between gap-2 ${
                         isSelected
-                          ? 'bg-[#1c1a12] border-[#E9C349] shadow-[0_0_15px_rgba(233,195,73,0.15)]'
+                          ? 'bg-[#1c1a12] border-[#D9A9FF] shadow-[0_0_15px_rgba(217, 169, 255,0.15)]'
                           : 'bg-[#141414] border-slate-200 dark:border-white/5 hover:border-white/20 hover:bg-[#181818]'
                       }`}
                     >
@@ -1335,7 +1335,7 @@ export default function DashboardView({
                             </span>
                           </div>
                           <div className="min-w-0">
-                            <h5 className={`text-xs font-bold truncate leading-tight ${isSelected ? 'text-[#E9C349]' : 'text-slate-900 dark:text-white'}`}>
+                            <h5 className={`text-xs font-bold truncate leading-tight ${isSelected ? 'text-[#D9A9FF]' : 'text-slate-900 dark:text-white'}`}>
                               {item.instructor}
                             </h5>
                             <span className="text-[9px] font-mono text-slate-400 block truncate">
@@ -1360,7 +1360,7 @@ export default function DashboardView({
                       </p>
 
                       <div className="flex items-center justify-between text-[9px] font-mono text-slate-400 pt-1 border-t border-slate-200 dark:border-white/5">
-                        <span className="flex items-center gap-1 text-[#E9C349]">
+                        <span className="flex items-center gap-1 text-[#D9A9FF]">
                           <Clock className="w-2.5 h-2.5" />
                           <span>{item.scheduledTime}</span>
                         </span>
@@ -1418,7 +1418,7 @@ export default function DashboardView({
       {/* Switcher de Modo de Vista: Panel de Bienvenida vs Dashboard de Entrenamiento */}
       <div className="flex flex-wrap items-center justify-between gap-3 bg-[#121212] border border-[#262626] p-2.5 rounded-2xl shadow-xl">
         <div className="flex items-center gap-2 px-2">
-          <span className="w-2 h-2 rounded-full bg-[#E9C349] animate-pulse" />
+          <span className="w-2 h-2 rounded-full bg-[#D9A9FF] animate-pulse" />
           <span className="text-xs font-mono font-bold text-slate-900 dark:text-white uppercase tracking-wider">VISTA PRINCIPAL:</span>
           {showWelcomeDashboard && (
             <span className="text-[10px] font-mono bg-[#D9A9FF]/10 text-[#D9A9FF] border border-[#D9A9FF]/30 px-2 py-0.5 rounded font-bold">
@@ -1432,7 +1432,7 @@ export default function DashboardView({
             onClick={() => handleToggleWelcomeMode(true)}
             className={`px-3.5 py-1.5 text-xs font-mono font-bold rounded-lg transition-all flex items-center gap-1.5 cursor-pointer ${
               showWelcomeDashboard
-                ? 'bg-[#E9C349] text-black shadow-md'
+                ? 'bg-[#D9A9FF] text-black shadow-md'
                 : 'text-[#8A8A8A] hover:text-slate-900 dark:hover:text-white'
             }`}
           >
@@ -1444,7 +1444,7 @@ export default function DashboardView({
             onClick={() => handleToggleWelcomeMode(false)}
             className={`px-3.5 py-1.5 text-xs font-mono font-bold rounded-lg transition-all flex items-center gap-1.5 cursor-pointer ${
               !showWelcomeDashboard
-                ? 'bg-[#9A2B3C] text-white shadow-md'
+                ? 'bg-[#C23E9E] text-white shadow-md'
                 : 'text-[#8A8A8A] hover:text-slate-900 dark:hover:text-white'
             }`}
           >
@@ -1593,7 +1593,7 @@ export default function DashboardView({
                     Alumnos Cátedra
                   </span>
                   <span className="text-xl font-black font-mono text-slate-900 dark:text-white">
-                    154 <span className="text-xs font-bold text-[#E9C349]">alumnos</span>
+                    154 <span className="text-xs font-bold text-[#D9A9FF]">alumnos</span>
                   </span>
                 </div>
 
@@ -1648,7 +1648,7 @@ export default function DashboardView({
                     Staff Instructores
                   </span>
                   <span className="text-xl font-black font-mono text-slate-900 dark:text-white">
-                    12 <span className="text-xs font-bold text-[#E9C349]">docentes</span>
+                    12 <span className="text-xs font-bold text-[#D9A9FF]">docentes</span>
                   </span>
                 </div>
 
@@ -1704,7 +1704,7 @@ export default function DashboardView({
                     <span className="text-[10px] font-mono font-bold text-[#D9A9FF] uppercase block tracking-wider">
                       Puntos Totales
                     </span>
-                    <span className="text-2xl font-black font-mono text-[#E9C349]">
+                    <span className="text-2xl font-black font-mono text-[#D9A9FF]">
                       {currentUser.points || 0} <span className="text-xs font-bold text-slate-900 dark:text-white">PTS</span>
                     </span>
                   </div>
@@ -1777,8 +1777,8 @@ export default function DashboardView({
       />
 
       {instructorTaskRec && (
-        <div className="bg-gradient-to-r from-rose-50 via-white to-white dark:from-[#9A2B3C]/30 dark:via-[#121212] dark:to-[#121212] border-2 border-[#E9C349] rounded-2xl p-6 relative overflow-hidden shadow-2xl animate-pulse">
-          <div className="absolute right-0 top-0 w-64 h-64 bg-[#E9C349]/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="bg-gradient-to-r from-rose-50 via-white to-white dark:from-[#C23E9E]/30 dark:via-[#121212] dark:to-[#121212] border-2 border-[#D9A9FF] rounded-2xl p-6 relative overflow-hidden shadow-2xl animate-pulse">
+          <div className="absolute right-0 top-0 w-64 h-64 bg-[#D9A9FF]/10 rounded-full blur-3xl pointer-events-none" />
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 relative z-10">
             <div className="space-y-2">
               <span className="text-[10px] font-mono font-black text-black bg-[#D9A9FF] px-3 py-1 rounded-full uppercase tracking-wider">
@@ -1838,8 +1838,8 @@ export default function DashboardView({
                   onClick={() => setActiveTab(item.ctaTab)}
                   className={`p-5 bg-[#121212] rounded-2xl flex flex-col justify-between transition-all group cursor-pointer shadow-xl relative overflow-hidden ${
                     item.type === 'instructor_task'
-                      ? 'border-2 border-[#E9C349] bg-gradient-to-br from-amber-50 to-white dark:from-[#1c1a12] dark:to-[#121212]'
-                      : 'border border-[#262626] hover:border-[#E9C349]/50'
+                      ? 'border-2 border-[#D9A9FF] bg-gradient-to-br from-amber-50 to-white dark:from-[#1c1a12] dark:to-[#121212]'
+                      : 'border border-[#262626] hover:border-[#D9A9FF]/50'
                   }`}
                 >
                   <div className="absolute right-0 top-0 w-32 h-32 bg-[#D9A9FF]/5 rounded-full blur-2xl pointer-events-none" />
@@ -1855,14 +1855,14 @@ export default function DashboardView({
                         </span>
                       )}
                     </div>
-                    <h4 className="text-sm font-bold text-slate-900 dark:text-white group-hover:text-[#E9C349] transition-colors leading-snug">
+                    <h4 className="text-sm font-bold text-slate-900 dark:text-white group-hover:text-[#D9A9FF] transition-colors leading-snug">
                       {item.title}
                     </h4>
                     <p className="text-xs text-slate-400 leading-relaxed line-clamp-2">
                       {item.description}
                     </p>
                   </div>
-                  <div className="mt-4 pt-3 border-t border-slate-200 dark:border-white/5 flex items-center justify-between text-xs font-mono text-[#E9C349] group-hover:translate-x-1 transition-transform">
+                  <div className="mt-4 pt-3 border-t border-slate-200 dark:border-white/5 flex items-center justify-between text-xs font-mono text-[#D9A9FF] group-hover:translate-x-1 transition-transform">
                     <span>{item.type === 'instructor_task' ? 'Resolver Tarea' : 'Acceder ahora'}</span>
                     <span className="material-symbols-outlined text-sm">arrow_forward</span>
                   </div>
@@ -1979,7 +1979,7 @@ export default function DashboardView({
                       onClick={toggleVirtualMirror}
                       className={`w-full py-1.5 border border-[#262626] rounded-xl text-[10px] font-bold uppercase flex items-center justify-center gap-1.5 transition-all ${
                         isMirrorOn 
-                          ? 'bg-[#9A2B3C]/20 border-[#9A2B3C] text-slate-900 dark:text-white shadow' 
+                          ? 'bg-[#C23E9E]/20 border-[#C23E9E] text-slate-900 dark:text-white shadow' 
                           : 'bg-[#1c1b1b] hover:bg-slate-100 dark:hover:bg-[#262626] text-[#EDEFF4] border-[#262626]'
                       }`}
                     >
@@ -2049,7 +2049,7 @@ export default function DashboardView({
                   </button>
                   <button
                     onClick={() => setActiveTab('entrenamiento')}
-                    className="w-full py-1.5 bg-[#1c1b1b] hover:bg-slate-100 dark:hover:bg-[#262626] text-[#E9C349] text-[10px] font-bold font-mono rounded-xl transition-all uppercase flex items-center justify-center gap-1.5 border border-[#E9C349]/20"
+                    className="w-full py-1.5 bg-[#1c1b1b] hover:bg-slate-100 dark:hover:bg-[#262626] text-[#D9A9FF] text-[10px] font-bold font-mono rounded-xl transition-all uppercase flex items-center justify-center gap-1.5 border border-[#D9A9FF]/20"
                   >
                     <Sparkles className="w-3 h-3 text-[#D9A9FF]" />
                     <span>LAB DE FREESTYLE</span>
@@ -2430,7 +2430,7 @@ export default function DashboardView({
                         onClick={() => setChartTimeRange(days as 7 | 14 | 30)}
                         className={`px-2 py-1 text-[10px] font-mono font-bold rounded-lg transition-all cursor-pointer ${
                           chartTimeRange === days
-                            ? 'bg-[#9A2B3C] text-white shadow-md'
+                            ? 'bg-[#C23E9E] text-white shadow-md'
                             : 'text-[#8A8A8A] hover:text-slate-900 dark:hover:text-white'
                         }`}
                       >
@@ -2446,7 +2446,7 @@ export default function DashboardView({
                       onClick={() => setChartViewMode('line')}
                       className={`px-2.5 py-1 text-[10px] font-mono font-bold rounded-lg transition-all cursor-pointer ${
                         chartViewMode === 'line'
-                          ? 'bg-[#E9C349] text-slate-950 shadow-md'
+                          ? 'bg-[#D9A9FF] text-slate-950 shadow-md'
                           : 'text-[#8A8A8A] hover:text-slate-900 dark:hover:text-white'
                       }`}
                     >
@@ -2457,7 +2457,7 @@ export default function DashboardView({
                       onClick={() => setChartViewMode('stacked')}
                       className={`px-2.5 py-1 text-[10px] font-mono font-bold rounded-lg transition-all cursor-pointer ${
                         chartViewMode === 'stacked'
-                          ? 'bg-[#E9C349] text-slate-950 shadow-md'
+                          ? 'bg-[#D9A9FF] text-slate-950 shadow-md'
                           : 'text-[#8A8A8A] hover:text-slate-900 dark:hover:text-white'
                       }`}
                     >
@@ -2468,7 +2468,7 @@ export default function DashboardView({
                       onClick={() => setChartViewMode('total')}
                       className={`px-2.5 py-1 text-[10px] font-mono font-bold rounded-lg transition-all cursor-pointer ${
                         chartViewMode === 'total'
-                          ? 'bg-[#E9C349] text-slate-950 shadow-md'
+                          ? 'bg-[#D9A9FF] text-slate-950 shadow-md'
                           : 'text-[#8A8A8A] hover:text-slate-900 dark:hover:text-white'
                       }`}
                     >
@@ -2837,7 +2837,7 @@ export default function DashboardView({
 
             <div className="p-4 space-y-4 bg-[#121212]">
               {/* Prominent Live Class Join Container */}
-              <div className="bg-rose-50 dark:bg-[#181214] border-2 border-[#9A2B3C] rounded-xl p-3 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-lg">
+              <div className="bg-rose-50 dark:bg-[#181214] border-2 border-[#C23E9E] rounded-xl p-3 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-lg">
                 <div className="flex items-center gap-2.5 text-left">
                   <div className="w-9 h-9 rounded-full bg-[#C23E9E]/30 border border-[#C23E9E] flex items-center justify-center shrink-0 text-[#D9A9FF]">
                     <Video className="w-4 h-4 animate-pulse" />
@@ -3060,7 +3060,7 @@ export default function DashboardView({
                   onClick={() => setSelectedAnnCat(cat.id as any)}
                   className={`px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all shrink-0 flex items-center gap-2 border ${
                     isSelected
-                      ? 'bg-[#E9C349] text-black border-[#E9C349] shadow-md'
+                      ? 'bg-[#D9A9FF] text-black border-[#D9A9FF] shadow-md'
                       : 'bg-[#181818] text-[#8A8A8A] hover:text-slate-900 dark:hover:text-white border-slate-200 dark:border-white/5 hover:border-white/15'
                   }`}
                 >
@@ -3121,7 +3121,7 @@ export default function DashboardView({
                       key={`ann-${item.id || idx}-${idx}`}
                       className={`bg-white/90 dark:bg-[#181818]/90 rounded-2xl p-5 border transition-all flex flex-col justify-between relative group ${
                         item.important
-                          ? 'border-[#E9C349]/60 bg-gradient-to-b from-amber-50 to-white dark:from-[#1e1b12] dark:to-[#121212] shadow-[0_4px_20px_rgba(233,195,73,0.08)]'
+                          ? 'border-[#D9A9FF]/60 bg-gradient-to-b from-amber-50 to-white dark:from-[#1e1b12] dark:to-[#121212] shadow-[0_4px_20px_rgba(217, 169, 255,0.08)]'
                           : 'border-white/10 hover:border-white/20'
                       }`}
                     >
@@ -3143,7 +3143,7 @@ export default function DashboardView({
                             />
                             <div className="min-w-0">
                               <h4 className="text-xs font-bold text-slate-900 dark:text-white truncate leading-tight">{item.author}</h4>
-                              <span className="text-[8px] font-mono text-[#E9C349] uppercase font-bold block">
+                              <span className="text-[8px] font-mono text-[#D9A9FF] uppercase font-bold block">
                                 Instructor Oficial
                               </span>
                             </div>
@@ -3428,7 +3428,7 @@ export default function DashboardView({
                           CONSOLA DE INSTRUCTOR
                         </span>
                         <h4 className="text-sm sm:text-base font-black text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
-                          <Sliders className="w-4 h-4 text-[#E9C349]" />
+                          <Sliders className="w-4 h-4 text-[#D9A9FF]" />
                           {language === 'es' ? 'GESTIONAR MI PLATAFORMA & PRECIO DE CÁTEDRA' : 'MANAGE MY PLATFORM & MEMBERSHIP FEE'}
                         </h4>
                       </div>
@@ -3462,7 +3462,7 @@ export default function DashboardView({
                         onClick={() => setEditPlatformSubTab(tab.id as any)}
                         className={`px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all whitespace-nowrap flex items-center gap-1.5 ${
                           editPlatformSubTab === tab.id
-                            ? 'bg-[#E9C349] text-black font-black shadow-md'
+                            ? 'bg-[#D9A9FF] text-black font-black shadow-md'
                             : 'bg-white/5 text-[#8A8A8A] hover:bg-white/10 hover:text-slate-900 dark:hover:text-white border border-slate-200 dark:border-white/5'
                         }`}
                       >
@@ -3485,7 +3485,7 @@ export default function DashboardView({
                             value={editPriceInput}
                             onChange={(e) => setEditPriceInput(e.target.value)}
                             placeholder="$35.00 USD/mes"
-                            className="bg-[#0A0A0A] border border-white/15 rounded-xl px-4 py-2 text-xs font-mono font-bold text-slate-900 dark:text-white outline-none focus:border-[#E9C349] flex-1"
+                            className="bg-[#0A0A0A] border border-white/15 rounded-xl px-4 py-2 text-xs font-mono font-bold text-slate-900 dark:text-white outline-none focus:border-[#D9A9FF] flex-1"
                           />
                           <div className="flex items-center gap-1.5">
                             {['$25 USD/mes', '$35 USD/mes', '$45 USD/mes', '$55 USD/mes'].map((preset) => (
@@ -3495,7 +3495,7 @@ export default function DashboardView({
                                 onClick={() => setEditPriceInput(preset)}
                                 className={`px-2.5 py-1.5 rounded-lg text-[10px] font-mono font-bold border transition-all ${
                                   editPriceInput === preset
-                                    ? 'bg-[#E9C349]/20 text-[#E9C349] border-[#E9C349]'
+                                    ? 'bg-[#D9A9FF]/20 text-[#D9A9FF] border-[#D9A9FF]'
                                     : 'bg-white/5 text-[#8A8A8A] border-slate-200 dark:border-white/5 hover:text-slate-900 dark:hover:text-white'
                                 }`}
                               >
@@ -3534,7 +3534,7 @@ export default function DashboardView({
                           type="text"
                           value={editNameInput}
                           onChange={(e) => setEditNameInput(e.target.value)}
-                          className="w-full bg-[#0A0A0A] border border-white/10 rounded-xl px-3.5 py-2 text-xs text-slate-900 dark:text-white outline-none focus:border-[#E9C349] font-medium"
+                          className="w-full bg-[#0A0A0A] border border-white/10 rounded-xl px-3.5 py-2 text-xs text-slate-900 dark:text-white outline-none focus:border-[#D9A9FF] font-medium"
                         />
                       </div>
 
@@ -3546,7 +3546,7 @@ export default function DashboardView({
                           type="text"
                           value={editInstaInput}
                           onChange={(e) => setEditInstaInput(e.target.value)}
-                          className="w-full bg-[#0A0A0A] border border-white/10 rounded-xl px-3.5 py-2 text-xs text-slate-900 dark:text-white outline-none focus:border-[#E9C349] font-medium"
+                          className="w-full bg-[#0A0A0A] border border-white/10 rounded-xl px-3.5 py-2 text-xs text-slate-900 dark:text-white outline-none focus:border-[#D9A9FF] font-medium"
                         />
                       </div>
 
@@ -3558,7 +3558,7 @@ export default function DashboardView({
                           type="text"
                           value={editSpecialtyInput}
                           onChange={(e) => setEditSpecialtyInput(e.target.value)}
-                          className="w-full bg-[#0A0A0A] border border-white/10 rounded-xl px-3.5 py-2 text-xs text-slate-900 dark:text-white outline-none focus:border-[#E9C349] font-medium"
+                          className="w-full bg-[#0A0A0A] border border-white/10 rounded-xl px-3.5 py-2 text-xs text-slate-900 dark:text-white outline-none focus:border-[#D9A9FF] font-medium"
                         />
                       </div>
 
@@ -3570,7 +3570,7 @@ export default function DashboardView({
                           type="text"
                           value={editCountryInput}
                           onChange={(e) => setEditCountryInput(e.target.value)}
-                          className="w-full bg-[#0A0A0A] border border-white/10 rounded-xl px-3.5 py-2 text-xs text-slate-900 dark:text-white outline-none focus:border-[#E9C349] font-medium"
+                          className="w-full bg-[#0A0A0A] border border-white/10 rounded-xl px-3.5 py-2 text-xs text-slate-900 dark:text-white outline-none focus:border-[#D9A9FF] font-medium"
                         />
                       </div>
 
@@ -3582,7 +3582,7 @@ export default function DashboardView({
                           rows={2}
                           value={editBioInput}
                           onChange={(e) => setEditBioInput(e.target.value)}
-                          className="w-full bg-[#0A0A0A] border border-white/10 rounded-xl p-3 text-xs text-slate-900 dark:text-white outline-none focus:border-[#E9C349] font-medium resize-none"
+                          className="w-full bg-[#0A0A0A] border border-white/10 rounded-xl p-3 text-xs text-slate-900 dark:text-white outline-none focus:border-[#D9A9FF] font-medium resize-none"
                         />
                       </div>
 
@@ -3635,7 +3635,7 @@ export default function DashboardView({
                           }}
                           className={`px-4 py-2 rounded-xl text-xs font-mono font-bold border transition-all ${
                             currentUser.isFeaturedInstructor
-                              ? 'bg-[#E9C349] text-black border-[#E9C349]'
+                              ? 'bg-[#D9A9FF] text-black border-[#D9A9FF]'
                               : 'bg-white/5 text-slate-900 dark:text-white border-white/10 hover:bg-white/10'
                           }`}
                         >
@@ -3651,7 +3651,7 @@ export default function DashboardView({
                       <div className="bg-[#141419] border border-white/10 rounded-xl p-4 space-y-3">
                         <div className="flex items-center justify-between">
                           <h5 className="text-xs font-bold text-slate-900 dark:text-white uppercase flex items-center gap-1.5">
-                            <Video className="w-4 h-4 text-[#E9C349]" />
+                            <Video className="w-4 h-4 text-[#D9A9FF]" />
                             {language === 'es' ? 'Publicar Nueva Clase / Módulo en tu Plataforma' : 'Publish New Class / Module on Your Platform'}
                           </h5>
                           <span className="text-[10px] font-mono text-[#D9A9FF] font-bold">HD VIDEO / STREAM</span>
@@ -3661,12 +3661,12 @@ export default function DashboardView({
                           <input
                             type="text"
                             placeholder={language === 'es' ? 'Título de la Clase (ej: Wrist Rolls Avanzados)' : 'Class Title'}
-                            className="bg-[#0A0A0A] border border-white/10 rounded-xl px-3.5 py-2 text-xs text-slate-900 dark:text-white outline-none focus:border-[#E9C349]"
+                            className="bg-[#0A0A0A] border border-white/10 rounded-xl px-3.5 py-2 text-xs text-slate-900 dark:text-white outline-none focus:border-[#D9A9FF]"
                           />
                           <input
                             type="text"
                             placeholder={language === 'es' ? 'URL del Video (YouTube / Vimeo / MP4)' : 'Video URL'}
-                            className="bg-[#0A0A0A] border border-white/10 rounded-xl px-3.5 py-2 text-xs text-slate-900 dark:text-white outline-none focus:border-[#E9C349]"
+                            className="bg-[#0A0A0A] border border-white/10 rounded-xl px-3.5 py-2 text-xs text-slate-900 dark:text-white outline-none focus:border-[#D9A9FF]"
                           />
                         </div>
 
@@ -3698,7 +3698,7 @@ export default function DashboardView({
                     onClick={() => setSelectedInstructorForPlan(inst)}
                     className={`bg-white/80 dark:bg-[#181818]/80 rounded-xl p-4 border transition-all flex flex-col justify-between relative overflow-hidden group cursor-pointer hover:scale-[1.015] ${
                       inst.isFeaturedInstructor 
-                        ? 'border-[#E9C349]/40 bg-gradient-to-b from-amber-50 to-white dark:from-[#1c1a15] dark:to-[#121212] shadow-[0_4px_20px_rgba(233,195,73,0.05)] hover:border-[#E9C349]/70' 
+                        ? 'border-[#D9A9FF]/40 bg-gradient-to-b from-amber-50 to-white dark:from-[#1c1a15] dark:to-[#121212] shadow-[0_4px_20px_rgba(217, 169, 255,0.05)] hover:border-[#D9A9FF]/70' 
                         : 'border-slate-200 dark:border-white/5 hover:border-white/25'
                     }`}
                     title={language === 'es' ? `Haz clic para ver el Plan de Membresía de ${inst.name}` : `Click to view Membership Plan for ${inst.name}`}
@@ -3725,7 +3725,7 @@ export default function DashboardView({
                         </div>
                         <div className="min-w-0 flex-1">
                           <div className="flex items-center justify-between gap-1">
-                            <h4 className="text-xs font-bold text-slate-900 dark:text-white truncate leading-tight group-hover:text-[#E9C349] transition-colors">
+                            <h4 className="text-xs font-bold text-slate-900 dark:text-white truncate leading-tight group-hover:text-[#D9A9FF] transition-colors">
                               {inst.name}
                             </h4>
                           </div>
@@ -3758,7 +3758,7 @@ export default function DashboardView({
                     <div className="space-y-2 mt-4 pt-3 border-t border-slate-200 dark:border-white/5">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-1 font-mono text-[9px] text-slate-900 dark:text-white">
-                          <span className="text-[#E9C349]">★</span>
+                          <span className="text-[#D9A9FF]">★</span>
                           <span>{inst.rating.toFixed(1)}</span>
                           <span className="text-[#8A8A8A]">({inst.students})</span>
                         </div>
@@ -4027,16 +4027,16 @@ export default function DashboardView({
         </div>
 
         <div className="flex items-center gap-3">
-          <a href="#facebook" className="p-1.5 bg-[#0A0A0A] hover:bg-slate-100 dark:hover:bg-[#121212] border border-[#262626] text-[#E9C349] rounded-lg transition-all" title="Facebook">
+          <a href="#facebook" className="p-1.5 bg-[#0A0A0A] hover:bg-slate-100 dark:hover:bg-[#121212] border border-[#262626] text-[#D9A9FF] rounded-lg transition-all" title="Facebook">
             <Facebook className="w-4 h-4" />
           </a>
-          <a href="#instagram" className="p-1.5 bg-[#0A0A0A] hover:bg-slate-100 dark:hover:bg-[#121212] border border-[#262626] text-[#E9C349] rounded-lg transition-all" title="Instagram">
+          <a href="#instagram" className="p-1.5 bg-[#0A0A0A] hover:bg-slate-100 dark:hover:bg-[#121212] border border-[#262626] text-[#D9A9FF] rounded-lg transition-all" title="Instagram">
             <Instagram className="w-4 h-4" />
           </a>
-          <a href="#twitter" className="p-1.5 bg-[#0A0A0A] hover:bg-slate-100 dark:hover:bg-[#121212] border border-[#262626] text-[#E9C349] rounded-lg transition-all" title="Twitter">
+          <a href="#twitter" className="p-1.5 bg-[#0A0A0A] hover:bg-slate-100 dark:hover:bg-[#121212] border border-[#262626] text-[#D9A9FF] rounded-lg transition-all" title="Twitter">
             <Twitter className="w-4 h-4" />
           </a>
-          <a href="#youtube" className="p-1.5 bg-[#0A0A0A] hover:bg-slate-100 dark:hover:bg-[#121212] border border-[#262626] text-[#E9C349] rounded-lg transition-all" title="YouTube">
+          <a href="#youtube" className="p-1.5 bg-[#0A0A0A] hover:bg-slate-100 dark:hover:bg-[#121212] border border-[#262626] text-[#D9A9FF] rounded-lg transition-all" title="YouTube">
             <Youtube className="w-4 h-4" />
           </a>
         </div>

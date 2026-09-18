@@ -335,21 +335,21 @@ export default function StudentLevelProgressBar({
 
         {/* Motivational Status & Gap Notice */}
         {!isMaxLevel ? (
-          <div className="p-3.5 rounded-2xl bg-gradient-to-r from-[#E9C349]/10 via-amber-950/20 to-transparent border border-[#E9C349]/25 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+          <div className="p-3.5 rounded-2xl bg-gradient-to-r from-[#D9A9FF]/10 via-amber-950/20 to-transparent border border-[#D9A9FF]/25 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
             <div className="flex items-center gap-2.5 text-xs font-mono text-slate-700 dark:text-slate-200">
-              <Target className="w-4 h-4 text-[#E9C349] shrink-0" />
+              <Target className="w-4 h-4 text-[#D9A9FF] shrink-0" />
               <span>
                 {isEs ? (
                   <>
                     Para ascender al <strong className="text-slate-900 dark:text-white">{nextMilestone.titleEs}</strong> te faltan{' '}
-                    <strong className="text-[#E9C349]">{remainingLessons} lecciones</strong> y{' '}
-                    <strong className="text-[#E9C349]">{remainingPoints} PTS</strong>.
+                    <strong className="text-[#D9A9FF]">{remainingLessons} lecciones</strong> y{' '}
+                    <strong className="text-[#D9A9FF]">{remainingPoints} PTS</strong>.
                   </>
                 ) : (
                   <>
                     To reach <strong className="text-slate-900 dark:text-white">{nextMilestone.titleEn}</strong> you need{' '}
-                    <strong className="text-[#E9C349]">{remainingLessons} lessons</strong> and{' '}
-                    <strong className="text-[#E9C349]">{remainingPoints} PTS</strong>.
+                    <strong className="text-[#D9A9FF]">{remainingLessons} lessons</strong> and{' '}
+                    <strong className="text-[#D9A9FF]">{remainingPoints} PTS</strong>.
                   </>
                 )}
               </span>
@@ -388,7 +388,7 @@ export default function StudentLevelProgressBar({
             >
               <div className="flex items-center justify-between">
                 <h4 className="text-xs font-mono font-black text-slate-900 dark:text-white uppercase tracking-widest flex items-center gap-2">
-                  <Compass className="w-4 h-4 text-[#E9C349]" />
+                  <Compass className="w-4 h-4 text-[#D9A9FF]" />
                   <span>{isEs ? 'Mapa de Ruta & Beneficios de Nivel' : 'Academic Level Roadmap'}</span>
                 </h4>
                 <span className="text-[10px] font-mono text-slate-400">
@@ -407,7 +407,7 @@ export default function StudentLevelProgressBar({
                       key={`milestone-card-${m.levelNum}`}
                       className={`p-3.5 rounded-2xl border transition-all space-y-2.5 ${
                         isCurrent 
-                          ? 'bg-[#E9C349]/15 border-[#E9C349] shadow-[0_0_20px_rgba(233,195,73,0.2)]' 
+                          ? 'bg-[#D9A9FF]/15 border-[#D9A9FF] shadow-[0_0_20px_rgba(217, 169, 255,0.2)]' 
                           : isUnlocked
                             ? 'bg-white/5 border-emerald-500/30'
                             : 'bg-slate-100 dark:bg-black/40 border-white/10 opacity-70'

@@ -1863,7 +1863,7 @@ export default function App() {
               {/* Close Button overlay inside the sliding drawer */}
               <button
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="absolute top-4 right-4 p-2 rounded-lg bg-white dark:bg-[#121212] border border-slate-300 dark:border-[#262626] text-slate-900 dark:text-[#EDEFF4] hover:bg-[#9A2B3C] hover:text-white transition-all z-20 focus:outline-none"
+                className="absolute top-4 right-4 p-2 rounded-lg bg-white dark:bg-[#121212] border border-slate-300 dark:border-[#262626] text-slate-900 dark:text-[#EDEFF4] hover:bg-[#C23E9E] hover:text-white transition-all z-20 focus:outline-none"
                 title="Cerrar menú"
               >
                 <X className="w-4 h-4" />
@@ -2235,7 +2235,7 @@ export default function App() {
 
         {/* Tactile Bottom Navigation for Mobile Devices */}
         {!isFocusMode && (
-          <div id="mobile-bottom-nav" className={`lg:hidden fixed bottom-0 left-0 right-0 h-16 border-t-2 border-[#E9C349] flex items-center justify-around px-2 shrink-0 select-none z-40 pb-safe shadow-[0_-4px_20px_rgba(0,0,0,0.15)] dark:shadow-[0_-4px_20px_rgba(0,0,0,0.9)] ${theme === 'light' ? 'bg-white' : 'bg-black'}`}>
+          <div id="mobile-bottom-nav" className={`lg:hidden fixed bottom-0 left-0 right-0 h-16 border-t-2 border-[#D9A9FF] flex items-center justify-around px-2 shrink-0 select-none z-40 pb-safe shadow-[0_-4px_20px_rgba(0,0,0,0.15)] dark:shadow-[0_-4px_20px_rgba(0,0,0,0.9)] ${theme === 'light' ? 'bg-white' : 'bg-black'}`}>
             <button
               onClick={() => setActiveTab('dashboard')}
               className={`flex flex-col items-center justify-center flex-1 h-full py-1 text-[9px] sm:text-[10px] font-black transition-all focus:outline-none ${
