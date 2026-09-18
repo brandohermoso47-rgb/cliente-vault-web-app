@@ -214,22 +214,22 @@ export default function InstructorStudentClassFilterBanner({
   return (
     <div className="space-y-4">
       {/* 1. EXECUTIVE HEADER BANNER */}
-      <div className="bg-gradient-to-r from-[#170f2b] via-[#211538] to-[#120d20] border-2 border-[#E9C349]/40 p-6 rounded-3xl backdrop-blur-xl shadow-2xl flex flex-col lg:flex-row lg:items-center justify-between gap-6 relative overflow-hidden">
+      <div className="bg-gradient-to-r from-[#170f2b] via-[#211538] to-[#120d20] border-2 border-[#D9A9FF]/40 p-6 rounded-3xl backdrop-blur-xl shadow-2xl flex flex-col lg:flex-row lg:items-center justify-between gap-6 relative overflow-hidden">
         {/* Glow ambient decoration */}
-        <div className="absolute top-0 right-1/4 w-80 h-40 bg-[#E9C349]/10 blur-3xl pointer-events-none rounded-full" />
+        <div className="absolute top-0 right-1/4 w-80 h-40 bg-[#D9A9FF]/10 blur-3xl pointer-events-none rounded-full" />
         <div className="absolute -bottom-10 -left-10 w-60 h-60 bg-purple-600/10 blur-3xl pointer-events-none rounded-full" />
 
         <div className="flex flex-col sm:flex-row sm:items-center gap-5 relative z-10">
           <div className="relative shrink-0">
             <Logo variant="full" className="w-36 h-auto" />
-            <span className="absolute -bottom-2 -right-2 bg-gradient-to-r from-[#E9C349] to-amber-500 text-black text-[9px] font-mono font-extrabold px-2 py-0.5 rounded-full shadow-lg border border-black/30">
+            <span className="absolute -bottom-2 -right-2 bg-gradient-to-r from-[#D9A9FF] to-amber-500 text-black text-[9px] font-mono font-extrabold px-2 py-0.5 rounded-full shadow-lg border border-black/30">
               DOCENTE / ACADEMIA
             </span>
           </div>
 
           <div>
             <div className="flex items-center gap-2 mb-1.5 flex-wrap">
-              <span className="text-[10px] font-mono font-extrabold text-black bg-[#E9C349] px-2.5 py-0.5 rounded-full uppercase tracking-wider flex items-center gap-1 shadow-md">
+              <span className="text-[10px] font-mono font-extrabold text-black bg-[#D9A9FF] px-2.5 py-0.5 rounded-full uppercase tracking-wider flex items-center gap-1 shadow-md">
                 <GraduationCap className="w-3.5 h-3.5" /> GESTIÓN DE CLASES POR ALUMNO
               </span>
               <span className="text-[10px] font-mono font-bold text-cyan-300 bg-cyan-500/10 border border-cyan-500/30 px-2.5 py-0.5 rounded-full uppercase">
@@ -255,7 +255,7 @@ export default function InstructorStudentClassFilterBanner({
           <button
             type="button"
             onClick={() => setIsAddStudentModalOpen(true)}
-            className="px-4 py-2 text-xs font-black rounded-2xl bg-[#E9C349] hover:bg-[#ffdf6b] text-black transition-all flex items-center gap-1.5 shadow-lg active:scale-95 cursor-pointer uppercase tracking-wider"
+            className="px-4 py-2 text-xs font-black rounded-2xl bg-[#D9A9FF] hover:bg-[#F2CFFF] text-black transition-all flex items-center gap-1.5 shadow-lg active:scale-95 cursor-pointer uppercase tracking-wider"
             title="Inscribir nueva alumna o alumno en la plataforma"
           >
             <UserPlus className="w-4 h-4 text-black" />
@@ -298,7 +298,7 @@ export default function InstructorStudentClassFilterBanner({
             <button
               onClick={() => setCurrentTab('catedras')}
               className={`px-3.5 py-1.5 text-xs font-extrabold rounded-xl transition-all flex items-center gap-1.5 ${
-                currentTab === 'catedras' ? 'bg-[#E9C349] text-black shadow-lg' : 'text-slate-300 hover:text-white'
+                currentTab === 'catedras' ? 'bg-[#D9A9FF] text-black shadow-lg' : 'text-slate-300 hover:text-white'
               }`}
             >
               <Users className="w-3.5 h-3.5" />
@@ -307,7 +307,7 @@ export default function InstructorStudentClassFilterBanner({
             <button
               onClick={() => setCurrentTab('metas')}
               className={`px-3.5 py-1.5 text-xs font-extrabold rounded-xl transition-all flex items-center gap-1.5 ${
-                currentTab === 'metas' ? 'bg-[#E9C349] text-black shadow-lg' : 'text-slate-300 hover:text-white'
+                currentTab === 'metas' ? 'bg-[#D9A9FF] text-black shadow-lg' : 'text-slate-300 hover:text-white'
               }`}
             >
               <Target className="w-3.5 h-3.5" />
@@ -316,7 +316,7 @@ export default function InstructorStudentClassFilterBanner({
             <button
               onClick={() => setCurrentTab('workbook')}
               className={`px-3.5 py-1.5 text-xs font-extrabold rounded-xl transition-all flex items-center gap-1.5 ${
-                currentTab === 'workbook' ? 'bg-[#E9C349] text-black shadow-lg' : 'text-slate-300 hover:text-white'
+                currentTab === 'workbook' ? 'bg-[#D9A9FF] text-black shadow-lg' : 'text-slate-300 hover:text-white'
               }`}
             >
               <BookOpen className="w-3.5 h-3.5" />
@@ -325,7 +325,7 @@ export default function InstructorStudentClassFilterBanner({
             <button
               onClick={() => setCurrentTab('feedback')}
               className={`px-3.5 py-1.5 text-xs font-extrabold rounded-xl transition-all flex items-center gap-1.5 ${
-                currentTab === 'feedback' ? 'bg-[#E9C349] text-black shadow-lg' : 'text-slate-300 hover:text-white'
+                currentTab === 'feedback' ? 'bg-[#D9A9FF] text-black shadow-lg' : 'text-slate-300 hover:text-white'
               }`}
             >
               <Video className="w-3.5 h-3.5" />
@@ -339,7 +339,7 @@ export default function InstructorStudentClassFilterBanner({
       <div className="bg-[#130f24] border border-white/15 rounded-3xl p-5 shadow-2xl space-y-4">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-white/10 pb-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-[#E9C349]/20 border border-[#E9C349]/40 flex items-center justify-center text-[#E9C349] shrink-0 shadow-md">
+            <div className="w-10 h-10 rounded-2xl bg-[#D9A9FF]/20 border border-[#D9A9FF]/40 flex items-center justify-center text-[#D9A9FF] shrink-0 shadow-md">
               <Users className="w-5 h-5" />
             </div>
             <div>
@@ -364,7 +364,7 @@ export default function InstructorStudentClassFilterBanner({
                 value={searchStudentQuery}
                 onChange={(e) => setSearchStudentQuery(e.target.value)}
                 placeholder="Buscar alumno..."
-                className="w-full pl-9 pr-3 py-1.5 bg-black/60 border border-white/15 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#E9C349] transition-all"
+                className="w-full pl-9 pr-3 py-1.5 bg-black/60 border border-white/15 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#D9A9FF] transition-all"
               />
               {searchStudentQuery && (
                 <button
@@ -385,7 +385,7 @@ export default function InstructorStudentClassFilterBanner({
                   onClick={() => setStudentLevelFilter(lvl)}
                   className={`px-2.5 py-1 rounded-lg text-[10px] font-mono font-bold transition-all ${
                     studentLevelFilter === lvl
-                      ? 'bg-[#E9C349] text-black shadow-md'
+                      ? 'bg-[#D9A9FF] text-black shadow-md'
                       : 'text-slate-400 hover:text-white'
                   }`}
                 >
@@ -451,12 +451,12 @@ export default function InstructorStudentClassFilterBanner({
                 onClick={() => onSelectStudent(student.id)}
                 className={`p-3.5 rounded-2xl border transition-all shrink-0 flex flex-col justify-between w-56 text-left cursor-pointer relative group ${
                   isSelected
-                    ? 'bg-gradient-to-br from-[#E9C349]/20 via-[#231d36] to-[#120f21] border-[#E9C349] text-white shadow-2xl ring-2 ring-[#E9C349]/40'
-                    : 'bg-black/40 border-white/10 hover:border-[#E9C349]/40 text-slate-300'
+                    ? 'bg-gradient-to-br from-[#D9A9FF]/20 via-[#231d36] to-[#120f21] border-[#D9A9FF] text-white shadow-2xl ring-2 ring-[#D9A9FF]/40'
+                    : 'bg-black/40 border-white/10 hover:border-[#D9A9FF]/40 text-slate-300'
                 }`}
               >
                 {isSelected && (
-                  <span className="absolute top-2.5 right-2.5 w-4 h-4 rounded-full bg-[#E9C349] text-black flex items-center justify-center text-[10px] font-black shadow-md">
+                  <span className="absolute top-2.5 right-2.5 w-4 h-4 rounded-full bg-[#D9A9FF] text-black flex items-center justify-center text-[10px] font-black shadow-md">
                     <Check className="w-2.5 h-2.5 stroke-[3]" />
                   </span>
                 )}
@@ -475,7 +475,7 @@ export default function InstructorStudentClassFilterBanner({
                     <span className={`text-[8px] font-mono font-extrabold uppercase px-1.5 py-0.2 rounded border inline-block mb-0.5 ${levelColor}`}>
                       {student.level}
                     </span>
-                    <h4 className="text-xs font-black text-white truncate group-hover:text-[#E9C349] transition-colors">
+                    <h4 className="text-xs font-black text-white truncate group-hover:text-[#D9A9FF] transition-colors">
                       {student.name}
                     </h4>
                   </div>
@@ -485,11 +485,11 @@ export default function InstructorStudentClassFilterBanner({
                 <div className="space-y-1 mt-1">
                   <div className="flex items-center justify-between text-[9px] font-mono text-slate-400">
                     <span>Avance: {completedCount}/{totalClassesCount} ({percent}%)</span>
-                    <span className="text-[#E9C349] font-bold">{assignedCount} Asignadas</span>
+                    <span className="text-[#D9A9FF] font-bold">{assignedCount} Asignadas</span>
                   </div>
                   <div className="w-full bg-black/60 h-1.5 rounded-full overflow-hidden border border-white/10">
                     <div
-                      className="bg-gradient-to-r from-[#E9C349] to-emerald-400 h-full rounded-full transition-all duration-500"
+                      className="bg-gradient-to-r from-[#D9A9FF] to-emerald-400 h-full rounded-full transition-all duration-500"
                       style={{ width: `${percent}%` }}
                     />
                   </div>
@@ -509,21 +509,21 @@ export default function InstructorStudentClassFilterBanner({
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-[#1b1530] border border-[#E9C349]/40 rounded-2xl p-4 flex flex-col lg:flex-row lg:items-center justify-between gap-4 shadow-xl"
+            className="bg-[#1b1530] border border-[#D9A9FF]/40 rounded-2xl p-4 flex flex-col lg:flex-row lg:items-center justify-between gap-4 shadow-xl"
           >
             {/* Student quick info */}
             <div className="flex items-center gap-3">
               <img
                 src={selectedStudent.avatar}
                 alt={selectedStudent.name}
-                className="w-12 h-12 rounded-2xl object-cover border-2 border-[#E9C349] shadow-md shrink-0"
+                className="w-12 h-12 rounded-2xl object-cover border-2 border-[#D9A9FF] shadow-md shrink-0"
               />
               <div>
                 <div className="flex items-center gap-2 flex-wrap">
                   <h3 className="text-sm font-black text-white uppercase tracking-tight">
                     {selectedStudent.name}
                   </h3>
-                  <span className="text-[9px] font-mono font-extrabold uppercase px-2 py-0.5 rounded-full bg-[#E9C349] text-black">
+                  <span className="text-[9px] font-mono font-extrabold uppercase px-2 py-0.5 rounded-full bg-[#D9A9FF] text-black">
                     NIVEL {selectedStudent.level.toUpperCase()}
                   </span>
                   <span className="text-[9px] font-mono text-slate-400">
@@ -531,7 +531,7 @@ export default function InstructorStudentClassFilterBanner({
                   </span>
                 </div>
                 <p className="text-xs text-slate-300 mt-0.5">
-                  <span className="font-bold text-[#E9C349]">{studentCompletedCount} de {totalClassesCount}</span> clases completadas ({studentProgressPercent}%) • <span className="font-bold text-purple-300">{studentAssignedCount} clases asignadas</span> en su syllabus.
+                  <span className="font-bold text-[#D9A9FF]">{studentCompletedCount} de {totalClassesCount}</span> clases completadas ({studentProgressPercent}%) • <span className="font-bold text-purple-300">{studentAssignedCount} clases asignadas</span> en su syllabus.
                 </p>
               </div>
             </div>
@@ -559,8 +559,8 @@ export default function InstructorStudentClassFilterBanner({
                 onClick={() => onStudentClassFilterChange('assigned')}
                 className={`px-3 py-1.5 rounded-lg text-xs font-extrabold transition-all flex items-center gap-1 cursor-pointer ${
                   studentClassFilter === 'assigned'
-                    ? 'bg-[#E9C349] text-black shadow-md'
-                    : 'text-[#E9C349] hover:bg-[#E9C349]/10'
+                    ? 'bg-[#D9A9FF] text-black shadow-md'
+                    : 'text-[#D9A9FF] hover:bg-[#D9A9FF]/10'
                 }`}
               >
                 <span>📌 Asignadas ({studentAssignedCount})</span>
@@ -596,7 +596,7 @@ export default function InstructorStudentClassFilterBanner({
               <button
                 type="button"
                 onClick={() => onBatchAssignLevel(selectedStudent.id, selectedStudent.level)}
-                className="px-3 py-1.5 rounded-xl bg-[#E9C349]/20 hover:bg-[#E9C349]/30 text-[#E9C349] border border-[#E9C349]/40 text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-md"
+                className="px-3 py-1.5 rounded-xl bg-[#D9A9FF]/20 hover:bg-[#D9A9FF]/30 text-[#D9A9FF] border border-[#D9A9FF]/40 text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-md"
                 title={`Asignar todas las lecciones del nivel ${selectedStudent.level} a esta alumna`}
               >
                 <Zap className="w-3.5 h-3.5" />
@@ -625,11 +625,11 @@ export default function InstructorStudentClassFilterBanner({
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="bg-[#161229] border-2 border-[#E9C349] rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-2xl space-y-5"
+              className="bg-[#161229] border-2 border-[#D9A9FF] rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-2xl space-y-5"
             >
               <div className="flex items-center justify-between border-b border-white/10 pb-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-2xl bg-[#E9C349] text-black flex items-center justify-center">
+                  <div className="w-10 h-10 rounded-2xl bg-[#D9A9FF] text-black flex items-center justify-center">
                     <UserPlus className="w-5 h-5" />
                   </div>
                   <div>
@@ -661,7 +661,7 @@ export default function InstructorStudentClassFilterBanner({
                     value={newStudentName}
                     onChange={(e) => setNewStudentName(e.target.value)}
                     placeholder="Ej. Sofia 'Disco Fire' López"
-                    className="w-full px-4 py-2.5 bg-black/60 border border-white/20 rounded-xl text-sm text-white placeholder-slate-500 focus:outline-none focus:border-[#E9C349]"
+                    className="w-full px-4 py-2.5 bg-black/60 border border-white/20 rounded-xl text-sm text-white placeholder-slate-500 focus:outline-none focus:border-[#D9A9FF]"
                   />
                 </div>
 
@@ -675,7 +675,7 @@ export default function InstructorStudentClassFilterBanner({
                     value={newStudentEmail}
                     onChange={(e) => setNewStudentEmail(e.target.value)}
                     placeholder="sofia@waack.com"
-                    className="w-full px-4 py-2.5 bg-black/60 border border-white/20 rounded-xl text-sm text-white placeholder-slate-500 focus:outline-none focus:border-[#E9C349]"
+                    className="w-full px-4 py-2.5 bg-black/60 border border-white/20 rounded-xl text-sm text-white placeholder-slate-500 focus:outline-none focus:border-[#D9A9FF]"
                   />
                 </div>
 
@@ -691,7 +691,7 @@ export default function InstructorStudentClassFilterBanner({
                         onClick={() => setNewStudentLevel(lvl)}
                         className={`py-2 rounded-xl text-xs font-bold border transition-all ${
                           newStudentLevel === lvl
-                            ? 'bg-[#E9C349] text-black border-[#E9C349] shadow-md'
+                            ? 'bg-[#D9A9FF] text-black border-[#D9A9FF] shadow-md'
                             : 'bg-black/40 text-slate-300 border-white/10 hover:border-white/30'
                         }`}
                       >
@@ -710,7 +710,7 @@ export default function InstructorStudentClassFilterBanner({
                     value={newStudentNotes}
                     onChange={(e) => setNewStudentNotes(e.target.value)}
                     placeholder="Ej. Trabajar la extensión de hombros y el bloqueo en BPM 120."
-                    className="w-full px-4 py-2 bg-black/60 border border-white/20 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#E9C349]"
+                    className="w-full px-4 py-2 bg-black/60 border border-white/20 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#D9A9FF]"
                   />
                 </div>
 
@@ -724,7 +724,7 @@ export default function InstructorStudentClassFilterBanner({
                   </button>
                   <button
                     type="submit"
-                    className="px-6 py-2.5 bg-[#E9C349] hover:bg-[#ffdf6b] text-black font-black text-xs uppercase rounded-xl shadow-xl transition-all cursor-pointer"
+                    className="px-6 py-2.5 bg-[#D9A9FF] hover:bg-[#F2CFFF] text-black font-black text-xs uppercase rounded-xl shadow-xl transition-all cursor-pointer"
                   >
                     Registrar e Inscribir
                   </button>
@@ -750,14 +750,14 @@ export default function InstructorStudentClassFilterBanner({
                   <img
                     src={selectedStudent.avatar}
                     alt={selectedStudent.name}
-                    className="w-14 h-14 rounded-2xl object-cover border-2 border-[#E9C349] shadow-lg"
+                    className="w-14 h-14 rounded-2xl object-cover border-2 border-[#D9A9FF] shadow-lg"
                   />
                   <div>
                     <div className="flex items-center gap-2">
                       <h3 className="text-lg font-black text-white uppercase">
                         {selectedStudent.name}
                       </h3>
-                      <span className="text-[10px] font-mono font-black uppercase px-2.5 py-0.5 rounded-full bg-[#E9C349] text-black">
+                      <span className="text-[10px] font-mono font-black uppercase px-2.5 py-0.5 rounded-full bg-[#D9A9FF] text-black">
                         {selectedStudent.level}
                       </span>
                     </div>
@@ -781,7 +781,7 @@ export default function InstructorStudentClassFilterBanner({
                 </div>
                 <div className="bg-black/50 border border-white/10 p-3 rounded-2xl">
                   <span className="text-xs text-slate-400 font-mono block uppercase">Clases Asignadas</span>
-                  <span className="text-xl font-black text-[#E9C349]">{studentAssignedCount}</span>
+                  <span className="text-xl font-black text-[#D9A9FF]">{studentAssignedCount}</span>
                 </div>
                 <div className="bg-black/50 border border-white/10 p-3 rounded-2xl">
                   <span className="text-xs text-slate-400 font-mono block uppercase">Puntos Ganados</span>
@@ -793,14 +793,14 @@ export default function InstructorStudentClassFilterBanner({
               <div className="space-y-2">
                 <label className="text-xs font-mono font-bold text-slate-300 uppercase flex items-center justify-between">
                   <span>Bitácora de Observaciones & Correcciones:</span>
-                  <span className="text-[10px] text-[#E9C349]">Visible para instructores</span>
+                  <span className="text-[10px] text-[#D9A9FF]">Visible para instructores</span>
                 </label>
                 <textarea
                   rows={4}
                   defaultValue={selectedStudent.notes || ''}
                   onBlur={(e) => onUpdateStudentNotes(selectedStudent.id, e.target.value)}
                   placeholder="Escribe observaciones de postura, ritmo o asignaciones para este alumno..."
-                  className="w-full p-3.5 bg-black/60 border border-white/20 rounded-2xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#E9C349] leading-relaxed"
+                  className="w-full p-3.5 bg-black/60 border border-white/20 rounded-2xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#D9A9FF] leading-relaxed"
                 />
                 <p className="text-[10px] text-slate-400">
                   Las notas se guardan automáticamente al salir del campo de texto.
@@ -822,7 +822,7 @@ export default function InstructorStudentClassFilterBanner({
                 <button
                   type="button"
                   onClick={() => setIsStudentDetailModalOpen(false)}
-                  className="px-6 py-2 bg-[#E9C349] text-black font-black text-xs uppercase rounded-xl shadow-lg"
+                  className="px-6 py-2 bg-[#D9A9FF] text-black font-black text-xs uppercase rounded-xl shadow-lg"
                 >
                   Listo
                 </button>

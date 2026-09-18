@@ -1,0 +1,808 @@
+extend type Block {
+  """
+  Implicit metadata field that cannot be written. It provides extra information about query results.
+  """
+  _metadata: _Metadata @fdc_generated(from: "Block", purpose: METADATA_FIELD)
+  """
+  ✨ Count the number of rows in the `Block` table.
+  """
+  _count: Int! @fdc_generated(from: "Block.", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Block` table where the `blockedId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  blockedId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Block.blockedId", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Block` table where the `blockerId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  blockerId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Block.blockerId", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Block` table where the `createdAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  createdAt_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Block.createdAt", purpose: QUERY_COUNT)
+  """
+  ✨ Minimum of the `createdAt` field in the `Block` table.
+  """
+  createdAt_min: Timestamp @fdc_generated(from: "Block.createdAt", purpose: QUERY_MIN)
+  """
+  ✨ Maximum of the `createdAt` field in the `Block` table.
+  """
+  createdAt_max: Timestamp @fdc_generated(from: "Block.createdAt", purpose: QUERY_MAX)
+  """
+  A generated field that is used for caching results in SDKs.
+  """
+  _id: ID! @fdc_generated(from: "Block.blockerId,blockedId", purpose: ENTITY_ID)
+}
+extend type Comment {
+  """
+  Implicit metadata field that cannot be written. It provides extra information about query results.
+  """
+  _metadata: _Metadata @fdc_generated(from: "Comment", purpose: METADATA_FIELD)
+  """
+  ✨ Count the number of rows in the `Comment` table.
+  """
+  _count: Int! @fdc_generated(from: "Comment.", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Comment` table where the `authorId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  authorId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Comment.authorId", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Comment` table where the `createdAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  createdAt_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Comment.createdAt", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Comment` table where the `id` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  id_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Comment.id", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Comment` table where the `postId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  postId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Comment.postId", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Comment` table where the `text` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  text_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Comment.text", purpose: QUERY_COUNT)
+  """
+  ✨ Minimum of the `createdAt` field in the `Comment` table.
+  """
+  createdAt_min: Timestamp @fdc_generated(from: "Comment.createdAt", purpose: QUERY_MIN)
+  """
+  ✨ Maximum of the `createdAt` field in the `Comment` table.
+  """
+  createdAt_max: Timestamp @fdc_generated(from: "Comment.createdAt", purpose: QUERY_MAX)
+  """
+  A generated field that is used for caching results in SDKs.
+  """
+  _id: ID! @fdc_generated(from: "Comment.id", purpose: ENTITY_ID)
+}
+extend type Follow {
+  """
+  Implicit metadata field that cannot be written. It provides extra information about query results.
+  """
+  _metadata: _Metadata @fdc_generated(from: "Follow", purpose: METADATA_FIELD)
+  """
+  ✨ Count the number of rows in the `Follow` table.
+  """
+  _count: Int! @fdc_generated(from: "Follow.", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Follow` table where the `createdAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  createdAt_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Follow.createdAt", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Follow` table where the `followedId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  followedId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Follow.followedId", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Follow` table where the `followerId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  followerId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Follow.followerId", purpose: QUERY_COUNT)
+  """
+  ✨ Minimum of the `createdAt` field in the `Follow` table.
+  """
+  createdAt_min: Timestamp @fdc_generated(from: "Follow.createdAt", purpose: QUERY_MIN)
+  """
+  ✨ Maximum of the `createdAt` field in the `Follow` table.
+  """
+  createdAt_max: Timestamp @fdc_generated(from: "Follow.createdAt", purpose: QUERY_MAX)
+  """
+  A generated field that is used for caching results in SDKs.
+  """
+  _id: ID! @fdc_generated(from: "Follow.followerId,followedId", purpose: ENTITY_ID)
+}
+extend type Like {
+  """
+  Implicit metadata field that cannot be written. It provides extra information about query results.
+  """
+  _metadata: _Metadata @fdc_generated(from: "Like", purpose: METADATA_FIELD)
+  """
+  ✨ Count the number of rows in the `Like` table.
+  """
+  _count: Int! @fdc_generated(from: "Like.", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Like` table where the `createdAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  createdAt_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Like.createdAt", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Like` table where the `id` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  id_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Like.id", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Like` table where the `postId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  postId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Like.postId", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Like` table where the `userId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  userId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Like.userId", purpose: QUERY_COUNT)
+  """
+  ✨ Minimum of the `createdAt` field in the `Like` table.
+  """
+  createdAt_min: Timestamp @fdc_generated(from: "Like.createdAt", purpose: QUERY_MIN)
+  """
+  ✨ Maximum of the `createdAt` field in the `Like` table.
+  """
+  createdAt_max: Timestamp @fdc_generated(from: "Like.createdAt", purpose: QUERY_MAX)
+  """
+  A generated field that is used for caching results in SDKs.
+  """
+  _id: ID! @fdc_generated(from: "Like.id", purpose: ENTITY_ID)
+}
+extend type Post {
+  """
+  ✨ List `Comment` objects in a one-to-many relationship (where `Comment`.`post` is this object).
+  """
+  comments_on_post(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: Comment_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [Comment_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: Comment_Having
+  ): [Comment!]! @fdc_generated(from: "Comment.post", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  """
+  ✨ List `Like` objects in a one-to-many relationship (where `Like`.`post` is this object).
+  """
+  likes_on_post(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: Like_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [Like_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: Like_Having
+  ): [Like!]! @fdc_generated(from: "Like.post", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  """
+  Implicit metadata field that cannot be written. It provides extra information about query results.
+  """
+  _metadata: _Metadata @fdc_generated(from: "Post", purpose: METADATA_FIELD)
+  """
+  ✨ Count the number of rows in the `Post` table.
+  """
+  _count: Int! @fdc_generated(from: "Post.", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Post` table where the `authorId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  authorId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Post.authorId", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Post` table where the `caption` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  caption_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Post.caption", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Post` table where the `createdAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  createdAt_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Post.createdAt", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Post` table where the `id` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  id_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Post.id", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Post` table where the `mediaUrl` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  mediaUrl_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Post.mediaUrl", purpose: QUERY_COUNT)
+  """
+  ✨ Minimum of the `createdAt` field in the `Post` table.
+  """
+  createdAt_min: Timestamp @fdc_generated(from: "Post.createdAt", purpose: QUERY_MIN)
+  """
+  ✨ Maximum of the `createdAt` field in the `Post` table.
+  """
+  createdAt_max: Timestamp @fdc_generated(from: "Post.createdAt", purpose: QUERY_MAX)
+  """
+  A generated field that is used for caching results in SDKs.
+  """
+  _id: ID! @fdc_generated(from: "Post.id", purpose: ENTITY_ID)
+}
+extend type User {
+  """
+  ✨ List `Block` objects in a one-to-many relationship (where `Block`.`blocked` is this object).
+  """
+  blocks_on_blocked(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: Block_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [Block_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: Block_Having
+  ): [Block!]! @fdc_generated(from: "Block.blocked", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  """
+  ✨ List `Block` objects in a one-to-many relationship (where `Block`.`blocker` is this object).
+  """
+  blocks_on_blocker(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: Block_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [Block_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: Block_Having
+  ): [Block!]! @fdc_generated(from: "Block.blocker", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  """
+  ✨ List `Comment` objects in a one-to-many relationship (where `Comment`.`author` is this object).
+  """
+  comments_on_author(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: Comment_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [Comment_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: Comment_Having
+  ): [Comment!]! @fdc_generated(from: "Comment.author", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  """
+  ✨ List `Follow` objects in a one-to-many relationship (where `Follow`.`followed` is this object).
+  """
+  follows_on_followed(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: Follow_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [Follow_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: Follow_Having
+  ): [Follow!]! @fdc_generated(from: "Follow.followed", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  """
+  ✨ List `Follow` objects in a one-to-many relationship (where `Follow`.`follower` is this object).
+  """
+  follows_on_follower(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: Follow_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [Follow_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: Follow_Having
+  ): [Follow!]! @fdc_generated(from: "Follow.follower", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  """
+  ✨ List `Like` objects in a one-to-many relationship (where `Like`.`user` is this object).
+  """
+  likes_on_user(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: Like_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [Like_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: Like_Having
+  ): [Like!]! @fdc_generated(from: "Like.user", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  """
+  ✨ List `Post` objects in a one-to-many relationship (where `Post`.`author` is this object).
+  """
+  posts_on_author(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: Post_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [Post_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: Post_Having
+  ): [Post!]! @fdc_generated(from: "Post.author", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  """
+  ✨ List `User` objects using `Block` as the join table (a `Block` object exists where its `blocker` is this and its `blocked` is that).
+  """
+  users_via_Block_on_blocked(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: Block_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [Block_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: Block_Having
+  ): [User!]! @fdc_generated(from: "Block", purpose: QUERY_MULTIPLE_MANY_TO_MANY)
+  """
+  ✨ List `User` objects using `Block` as the join table (a `Block` object exists where its `blocked` is this and its `blocker` is that).
+  """
+  users_via_Block_on_blocker(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: Block_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [Block_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: Block_Having
+  ): [User!]! @fdc_generated(from: "Block", purpose: QUERY_MULTIPLE_MANY_TO_MANY)
+  """
+  ✨ List `User` objects using `Follow` as the join table (a `Follow` object exists where its `follower` is this and its `followed` is that).
+  """
+  users_via_Follow_on_followed(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: Follow_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [Follow_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: Follow_Having
+  ): [User!]! @fdc_generated(from: "Follow", purpose: QUERY_MULTIPLE_MANY_TO_MANY)
+  """
+  ✨ List `User` objects using `Follow` as the join table (a `Follow` object exists where its `followed` is this and its `follower` is that).
+  """
+  users_via_Follow_on_follower(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: Follow_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [Follow_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: Follow_Having
+  ): [User!]! @fdc_generated(from: "Follow", purpose: QUERY_MULTIPLE_MANY_TO_MANY)
+  """
+  Implicit metadata field that cannot be written. It provides extra information about query results.
+  """
+  _metadata: _Metadata @fdc_generated(from: "User", purpose: METADATA_FIELD)
+  """
+  ✨ Count the number of rows in the `User` table.
+  """
+  _count: Int! @fdc_generated(from: "User.", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `User` table where the `bio` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  bio_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "User.bio", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `User` table where the `createdAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  createdAt_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "User.createdAt", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `User` table where the `email` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  email_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "User.email", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `User` table where the `id` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  id_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "User.id", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `User` table where the `profileImageUrl` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  profileImageUrl_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "User.profileImageUrl", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `User` table where the `username` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  username_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "User.username", purpose: QUERY_COUNT)
+  """
+  ✨ Minimum of the `createdAt` field in the `User` table.
+  """
+  createdAt_min: Timestamp @fdc_generated(from: "User.createdAt", purpose: QUERY_MIN)
+  """
+  ✨ Maximum of the `createdAt` field in the `User` table.
+  """
+  createdAt_max: Timestamp @fdc_generated(from: "User.createdAt", purpose: QUERY_MAX)
+  """
+  A generated field that is used for caching results in SDKs.
+  """
+  _id: ID! @fdc_generated(from: "User.id", purpose: ENTITY_ID)
+}

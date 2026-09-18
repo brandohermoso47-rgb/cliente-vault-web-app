@@ -52,7 +52,7 @@ export const MUSCLE_GROUPS_CATALOG: Record<string, MuscleGroupInfo> = {
     id: 'brazos',
     name: 'Brazos & Hombros',
     icon: '💪',
-    color: '#E9C349',
+    color: '#D9A9FF',
     keywords: ['brazo', 'roll', 'hombro', 'muñeca', 'whack', 'codo', 'tríceps', 'deltoide'],
     description: 'Deltoides, manguito rotador, codos y flexores de muñeca.',
     whyImportant: 'Indispensable para ejecutar rolls limpios a alta velocidad sin sobrecargar los hombros.',
@@ -176,7 +176,7 @@ export const MUSCLE_GROUPS_CATALOG: Record<string, MuscleGroupInfo> = {
     id: 'cardio',
     name: 'Cardio & Resistencia',
     icon: '🔥',
-    color: '#9A2B3C',
+    color: '#C23E9E',
     keywords: ['cardio', 'resistencia', 'hiit', 'batalla', 'pulsación', 'estamina', 'respiración'],
     description: 'Capacidad aeróbica, acondicionamiento de alta intensidad e intervalos HIIT.',
     whyImportant: 'Esencial para sostener rondas intensas de batallas de 2 minutos sin perder precisión.',
@@ -438,20 +438,20 @@ export default function WeeklyMuscleRecommendationPanel({
       isDark ? 'bg-[#121212] border-[#262626] text-[#EDEFF4]' : 'bg-white border-slate-200 text-slate-900'
     }`}>
       {/* Glow background highlight */}
-      <div className="absolute right-0 top-0 w-80 h-80 bg-[#E9C349]/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute right-0 top-0 w-80 h-80 bg-[#D9A9FF]/10 rounded-full blur-3xl pointer-events-none" />
 
       {/* Header section */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/5 pb-4 relative z-10">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
-            <span className="p-2 bg-[#E9C349]/15 border border-[#E9C349]/30 rounded-xl text-[#E9C349]">
+            <span className="p-2 bg-[#D9A9FF]/15 border border-[#D9A9FF]/30 rounded-xl text-[#D9A9FF]">
               <Dumbbell className="w-5 h-5" />
             </span>
             <h3 className={`text-sm md:text-base font-mono font-bold tracking-widest uppercase flex flex-wrap items-center gap-2 ${
               isDark ? 'text-[#EDEFF4]' : 'text-slate-900'
             }`}>
               <span>SUGERENCIAS DE ACONDICIONAMIENTO & FISIOLOGÍA</span>
-              <span className="text-[9px] font-mono font-bold text-black bg-[#E9C349] px-2.5 py-0.5 rounded-full uppercase">
+              <span className="text-[9px] font-mono font-bold text-black bg-[#D9A9FF] px-2.5 py-0.5 rounded-full uppercase">
                 Análisis Semanal
               </span>
             </h3>
@@ -465,7 +465,7 @@ export default function WeeklyMuscleRecommendationPanel({
           <button
             type="button"
             onClick={handleExportJSON}
-            className="px-3.5 py-2 bg-[#E9C349] hover:bg-[#d8b33c] text-black border border-[#E9C349] text-xs font-mono font-black rounded-xl transition-all flex items-center justify-center gap-1.5 uppercase tracking-wide hover:scale-105 shrink-0 shadow-md cursor-pointer"
+            className="px-3.5 py-2 bg-[#D9A9FF] hover:bg-[#B87CFF] text-black border border-[#D9A9FF] text-xs font-mono font-black rounded-xl transition-all flex items-center justify-center gap-1.5 uppercase tracking-wide hover:scale-105 shrink-0 shadow-md cursor-pointer"
             title="Descargar historial semanal de la última semana como JSON"
           >
             <Download className="w-4 h-4 fill-black" />
@@ -476,10 +476,10 @@ export default function WeeklyMuscleRecommendationPanel({
             type="button"
             onClick={() => setActiveTab('fisico')}
             className={`px-4 py-2 text-xs font-mono font-bold rounded-xl transition-all flex items-center justify-center gap-2 uppercase tracking-wide hover:scale-105 shrink-0 cursor-pointer ${
-              isDark ? 'bg-[#1c1a12] hover:bg-[#2b2719] text-[#E9C349] border border-[#E9C349]/40' : 'bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-300'
+              isDark ? 'bg-[#1c1a12] hover:bg-[#2b2719] text-[#D9A9FF] border border-[#D9A9FF]/40' : 'bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-300'
             }`}
           >
-            <Activity className="w-4 h-4 text-[#E9C349]" />
+            <Activity className="w-4 h-4 text-[#D9A9FF]" />
             <span>Ver Módulo Físico Completo</span>
             <ChevronRight className="w-3.5 h-3.5" />
           </button>
@@ -492,7 +492,7 @@ export default function WeeklyMuscleRecommendationPanel({
       }`}>
         <div className="flex items-center justify-between text-xs font-mono">
           <span className={`font-bold uppercase flex items-center gap-1.5 ${isDark ? 'text-[#8A8A8A]' : 'text-slate-600'}`}>
-            <Target className="w-3.5 h-3.5 text-[#E9C349]" /> Balance de Carga Muscular (Últimos 7 Días)
+            <Target className="w-3.5 h-3.5 text-[#D9A9FF]" /> Balance de Carga Muscular (Últimos 7 Días)
           </span>
           <span className={isDark ? 'text-slate-400 font-bold' : 'text-slate-600 font-bold'}>{muscleStats.totalMinutesWeek} minutos totales</span>
         </div>
@@ -536,17 +536,17 @@ export default function WeeklyMuscleRecommendationPanel({
       {leastWorkedGroup && (
         <div className={`border-2 rounded-2xl p-5 relative overflow-hidden shadow-xl space-y-4 transition-colors ${
           isDark 
-            ? 'bg-gradient-to-br from-[#1c1813] via-[#121212] to-[#121212] border-[#E9C349]/60 text-white' 
+            ? 'bg-gradient-to-br from-[#1c1813] via-[#121212] to-[#121212] border-[#D9A9FF]/60 text-white' 
             : 'bg-gradient-to-br from-amber-500/10 via-white to-amber-500/5 border-amber-400/80 text-slate-900'
         }`}>
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/10 pb-3">
             <div className="flex items-center gap-3">
-              <div className="p-2.5 bg-[#9A2B3C]/20 border border-[#9A2B3C] text-[#E9C349] rounded-2xl text-xl shrink-0">
+              <div className="p-2.5 bg-[#C23E9E]/20 border border-[#C23E9E] text-[#D9A9FF] rounded-2xl text-xl shrink-0">
                 {leastWorkedGroup.icon}
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <span className="text-[9px] font-mono font-black text-black bg-[#E9C349] px-2.5 py-0.5 rounded-full uppercase">
+                  <span className="text-[9px] font-mono font-black text-black bg-[#D9A9FF] px-2.5 py-0.5 rounded-full uppercase">
                     ⚠️ ÁREA CON MENOR TRABAJO DETECTADA
                   </span>
                   <span className="text-xs font-mono font-bold text-rose-400">
@@ -561,7 +561,7 @@ export default function WeeklyMuscleRecommendationPanel({
 
             <div className="text-left sm:text-right">
               <span className={`text-[10px] font-mono block ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Efecto en tu Baile:</span>
-              <span className="text-xs text-[#E9C349] font-bold max-w-xs block leading-tight">
+              <span className="text-xs text-[#D9A9FF] font-bold max-w-xs block leading-tight">
                 {leastWorkedGroup.whyImportant}
               </span>
             </div>
@@ -572,14 +572,14 @@ export default function WeeklyMuscleRecommendationPanel({
             
             {/* Recommendation 1: Calentamiento Especifico */}
             <div className={`border rounded-2xl p-4 flex flex-col justify-between space-y-3 transition-colors ${
-              isDark ? 'bg-[#0A0A0A] border-white/10 hover:border-[#E9C349]/40' : 'bg-white border-slate-200 hover:border-amber-400/60 shadow-sm'
+              isDark ? 'bg-[#0A0A0A] border-white/10 hover:border-[#D9A9FF]/40' : 'bg-white border-slate-200 hover:border-amber-400/60 shadow-sm'
             }`}>
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
                   <span className="text-[9px] font-mono font-bold text-cyan-400 bg-cyan-500/10 border border-cyan-500/30 px-2 py-0.5 rounded uppercase flex items-center gap-1">
                     <Sparkles className="w-3 h-3 text-cyan-400" /> CALENTAMIENTO ESPECÍFICO
                   </span>
-                  <span className="text-xs font-mono font-bold text-[#E9C349] flex items-center gap-1">
+                  <span className="text-xs font-mono font-bold text-[#D9A9FF] flex items-center gap-1">
                     <Clock className="w-3.5 h-3.5" /> {leastWorkedGroup.warmup.durationMinutes} min
                   </span>
                 </div>
@@ -596,7 +596,7 @@ export default function WeeklyMuscleRecommendationPanel({
                   <p className="text-[9px] font-mono font-bold text-[#8A8A8A] uppercase">Pasos de la rutina:</p>
                   {leastWorkedGroup.warmup.steps.map((step, sidx) => (
                     <p key={sidx} className="text-[10px] text-slate-300 leading-tight flex items-start gap-1">
-                      <span className="text-[#E9C349] font-bold">•</span>
+                      <span className="text-[#D9A9FF] font-bold">•</span>
                       <span>{step}</span>
                     </p>
                   ))}
@@ -608,7 +608,7 @@ export default function WeeklyMuscleRecommendationPanel({
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={() => openGuidedWorkout(leastWorkedGroup, 'warmup')}
-                  className="flex-1 py-2 bg-[#E9C349] hover:bg-[#d8b33c] text-black text-xs font-black rounded-xl shadow transition-all uppercase tracking-wider flex items-center justify-center gap-1.5 cursor-pointer"
+                  className="flex-1 py-2 bg-[#D9A9FF] hover:bg-[#B87CFF] text-black text-xs font-black rounded-xl shadow transition-all uppercase tracking-wider flex items-center justify-center gap-1.5 cursor-pointer"
                 >
                   <Play className="w-3.5 h-3.5 fill-black" />
                   <span>Iniciar Calentamiento Guiado</span>
@@ -628,7 +628,7 @@ export default function WeeklyMuscleRecommendationPanel({
                       onUserChange(prev => ({ ...prev, points: (prev.points || 0) + 50 }));
                     }
                   }}
-                  className="px-3 py-2 bg-[#1c1b1b] hover:bg-[#262626] text-[#E9C349] border border-[#E9C349]/30 text-xs font-bold rounded-xl transition-all uppercase flex items-center justify-center gap-1 cursor-pointer"
+                  className="px-3 py-2 bg-[#1c1b1b] hover:bg-[#262626] text-[#D9A9FF] border border-[#D9A9FF]/30 text-xs font-bold rounded-xl transition-all uppercase flex items-center justify-center gap-1 cursor-pointer"
                   title="Registrar directamente sin abrir el cronómetro"
                 >
                   <CheckCircle2 className="w-3.5 h-3.5" />
@@ -638,13 +638,13 @@ export default function WeeklyMuscleRecommendationPanel({
             </div>
 
             {/* Recommendation 2: Rutina de Físico Encapuchada */}
-            <div className="bg-[#0A0A0A] border border-white/10 rounded-2xl p-4 flex flex-col justify-between space-y-3 hover:border-[#9A2B3C]/50 transition-all">
+            <div className="bg-[#0A0A0A] border border-white/10 rounded-2xl p-4 flex flex-col justify-between space-y-3 hover:border-[#C23E9E]/50 transition-all">
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
                   <span className="text-[9px] font-mono font-bold text-rose-400 bg-rose-500/10 border border-rose-500/30 px-2 py-0.5 rounded uppercase flex items-center gap-1">
                     <Flame className="w-3 h-3 text-rose-400" /> RUTINA DE 'FÍSICO' RECOMENDADA
                   </span>
-                  <span className="text-xs font-mono font-bold text-[#E9C349] flex items-center gap-1">
+                  <span className="text-xs font-mono font-bold text-[#D9A9FF] flex items-center gap-1">
                     <Clock className="w-3.5 h-3.5" /> {leastWorkedGroup.physical.durationMinutes} min
                   </span>
                 </div>
@@ -661,7 +661,7 @@ export default function WeeklyMuscleRecommendationPanel({
                   <p className="text-[9px] font-mono font-bold text-[#8A8A8A] uppercase">Ejercicios incluidos:</p>
                   {leastWorkedGroup.physical.steps.map((step, sidx) => (
                     <p key={sidx} className="text-[10px] text-slate-300 leading-tight flex items-start gap-1">
-                      <span className="text-[#9A2B3C] font-bold">•</span>
+                      <span className="text-[#C23E9E] font-bold">•</span>
                       <span>{step}</span>
                     </p>
                   ))}
@@ -673,7 +673,7 @@ export default function WeeklyMuscleRecommendationPanel({
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={() => openGuidedWorkout(leastWorkedGroup, 'physical')}
-                  className="flex-1 py-2 bg-[#9A2B3C] hover:bg-[#81262c] text-white text-xs font-bold rounded-xl shadow transition-all uppercase tracking-wider flex items-center justify-center gap-1.5 cursor-pointer border border-[#E9C349]/30"
+                  className="flex-1 py-2 bg-[#C23E9E] hover:bg-[#8F2C7A] text-white text-xs font-bold rounded-xl shadow transition-all uppercase tracking-wider flex items-center justify-center gap-1.5 cursor-pointer border border-[#D9A9FF]/30"
                 >
                   <Play className="w-3.5 h-3.5 fill-white" />
                   <span>Iniciar Físico Guiado</span>
@@ -693,7 +693,7 @@ export default function WeeklyMuscleRecommendationPanel({
                       onUserChange(prev => ({ ...prev, points: (prev.points || 0) + 100 }));
                     }
                   }}
-                  className="px-3 py-2 bg-[#1c1b1b] hover:bg-[#262626] text-[#E9C349] border border-[#E9C349]/30 text-xs font-bold rounded-xl transition-all uppercase flex items-center justify-center gap-1 cursor-pointer"
+                  className="px-3 py-2 bg-[#1c1b1b] hover:bg-[#262626] text-[#D9A9FF] border border-[#D9A9FF]/30 text-xs font-bold rounded-xl transition-all uppercase flex items-center justify-center gap-1 cursor-pointer"
                   title="Registrar directamente sin abrir el cronómetro"
                 >
                   <CheckCircle2 className="w-3.5 h-3.5" />
@@ -714,16 +714,16 @@ export default function WeeklyMuscleRecommendationPanel({
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-[#121212] border-2 border-[#E9C349] rounded-2xl p-6 max-w-lg w-full space-y-5 shadow-2xl relative overflow-hidden"
+              className="bg-[#121212] border-2 border-[#D9A9FF] rounded-2xl p-6 max-w-lg w-full space-y-5 shadow-2xl relative overflow-hidden"
             >
               {/* Header */}
               <div className="flex items-center justify-between border-b border-white/10 pb-3">
                 <div className="flex items-center gap-2">
-                  <span className="p-2 bg-[#E9C349]/20 text-[#E9C349] rounded-xl font-bold">
+                  <span className="p-2 bg-[#D9A9FF]/20 text-[#D9A9FF] rounded-xl font-bold">
                     {activeGuidedModal.group.icon}
                   </span>
                   <div>
-                    <span className="text-[9px] font-mono font-bold text-[#E9C349] uppercase block">
+                    <span className="text-[9px] font-mono font-bold text-[#D9A9FF] uppercase block">
                       ENTRENAMIENTO GUIADO LASSEN
                     </span>
                     <h4 className="text-base font-bold text-white">
@@ -754,7 +754,7 @@ export default function WeeklyMuscleRecommendationPanel({
 
               {/* Timer Display */}
               <div className="bg-[#0A0A0A] border border-[#262626] rounded-2xl p-6 text-center space-y-3 relative overflow-hidden">
-                <div className="text-4xl md:text-5xl font-mono font-black text-[#E9C349] tracking-wider">
+                <div className="text-4xl md:text-5xl font-mono font-black text-[#D9A9FF] tracking-wider">
                   {formatTimer(timerSeconds)}
                 </div>
 
@@ -764,7 +764,7 @@ export default function WeeklyMuscleRecommendationPanel({
                     whileTap={{ scale: 0.95 }}
                     type="button"
                     onClick={() => setIsTimerRunning(!isTimerRunning)}
-                    className="px-5 py-2 bg-[#E9C349] text-black text-xs font-black rounded-xl uppercase flex items-center gap-2 shadow cursor-pointer"
+                    className="px-5 py-2 bg-[#D9A9FF] text-black text-xs font-black rounded-xl uppercase flex items-center gap-2 shadow cursor-pointer"
                   >
                     {isTimerRunning ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4 fill-black" />}
                     <span>{isTimerRunning ? 'Pausar' : 'Reanudar'}</span>
@@ -799,13 +799,13 @@ export default function WeeklyMuscleRecommendationPanel({
                       onClick={() => setCurrentStepIndex(idx)}
                       className={`p-2.5 rounded-xl border text-xs cursor-pointer transition-all ${
                         currentStepIndex === idx 
-                          ? 'bg-[#1c1a12] border-[#E9C349] text-white font-bold' 
+                          ? 'bg-[#1c1a12] border-[#D9A9FF] text-white font-bold' 
                           : 'bg-[#0A0A0A] border-white/5 text-slate-400 hover:border-white/15'
                       }`}
                     >
                       <div className="flex items-center justify-between">
                         <span>{step}</span>
-                        {currentStepIndex === idx && <span className="text-[10px] text-[#E9C349] font-mono uppercase">En ejecución</span>}
+                        {currentStepIndex === idx && <span className="text-[10px] text-[#D9A9FF] font-mono uppercase">En ejecución</span>}
                       </div>
                     </div>
                   ))}
@@ -830,7 +830,7 @@ export default function WeeklyMuscleRecommendationPanel({
                   whileTap={{ scale: 0.97 }}
                   type="button"
                   onClick={handleRegisterGuidedWorkout}
-                  className="px-5 py-2 bg-gradient-to-r from-[#E9C349] to-[#f59e0b] text-black text-xs font-black rounded-xl uppercase tracking-wider shadow-lg flex items-center gap-2 cursor-pointer"
+                  className="px-5 py-2 bg-gradient-to-r from-[#D9A9FF] to-[#f59e0b] text-black text-xs font-black rounded-xl uppercase tracking-wider shadow-lg flex items-center gap-2 cursor-pointer"
                 >
                   <CheckCircle2 className="w-4 h-4" />
                   <span>Completar y Ganar +100 PTS</span>

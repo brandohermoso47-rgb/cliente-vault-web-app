@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Play, Square, Trophy, Zap, RefreshCw, Volume2, VolumeX, Sparkles, Flame, CheckCircle2, Music, Keyboard } from 'lucide-react';
 import { User } from '../../types';
-import { db, handleFirestoreError, OperationType } from '../../firebase';
+import { db, auth, sanitizeFirestoreData, handleFirestoreError, OperationType } from '../../firebase';
 import { doc, setDoc } from 'firebase/firestore';
 
 interface WaackingRhythmGameProps {
@@ -485,14 +485,15 @@ export const WaackingRhythmGame: React.FC<WaackingRhythmGameProps> = ({
       });
     }
 
-    // Sync to Firestore if user ID exists
-    if (db && currentUser.id) {
-      setDoc(doc(db, 'users', currentUser.id), {
+    // Sync to Firestore if user is authenticated with Firebase Auth
+    const activeAuthUid = auth?.currentUser?.uid;
+    if (db && activeAuthUid) {
+      setDoc(doc(db, 'users', activeAuthUid), sanitizeFirestoreData({
         points: (currentUser.points || 0) + bonusPointsEarned,
         lastRhythmGameScore: score,
         lastRhythmGameDate: new Date().toISOString()
-      }, { merge: true }).catch(err => {
-        handleFirestoreError(err, OperationType.WRITE, `users/${currentUser.id}`);
+      }), { merge: true }).catch(err => {
+        handleFirestoreError(err, OperationType.WRITE, `users/${activeAuthUid}`);
       });
     }
 
@@ -516,12 +517,12 @@ export const WaackingRhythmGame: React.FC<WaackingRhythmGameProps> = ({
   return (
     <div className="space-y-6">
       {/* HEADER: BEAT TRAINER INTRO */}
-      <div className="bg-[#121212] border border-[#E9C349]/40 rounded-2xl p-6 shadow-2xl relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-[#E9C349]/5 rounded-full blur-3xl pointer-events-none" />
+      <div className="bg-[#121212] border border-[#D9A9FF]/40 rounded-2xl p-6 shadow-2xl relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-[#D9A9FF]/5 rounded-full blur-3xl pointer-events-none" />
         
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 relative z-10 border-b border-[#262626] pb-4">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-2xl bg-[#9A2B3C]/20 border border-[#9A2B3C]/50 flex items-center justify-center text-[#E9C349] shrink-0 shadow-lg">
+            <div className="w-12 h-12 rounded-2xl bg-[#C23E9E]/20 border border-[#C23E9E]/50 flex items-center justify-center text-[#D9A9FF] shrink-0 shadow-lg">
               <Zap className="w-6 h-6 animate-pulse" />
             </div>
             <div>
@@ -529,7 +530,7 @@ export const WaackingRhythmGame: React.FC<WaackingRhythmGameProps> = ({
                 <h2 className="text-base font-display-lg font-bold text-white uppercase tracking-wider">
                   Waacking Beat Trainer & Rhythm Game
                 </h2>
-                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-[#E9C349]/20 text-[#E9C349] border border-[#E9C349]/40">
+                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-[#D9A9FF]/20 text-[#D9A9FF] border border-[#D9A9FF]/40">
                   ENTRENAMIENTO LÚDICO 🎮
                 </span>
               </div>
@@ -542,7 +543,7 @@ export const WaackingRhythmGame: React.FC<WaackingRhythmGameProps> = ({
           {/* High Score & Quick Stats */}
           <div className="flex items-center gap-3 bg-[#0A0A0A] p-2 rounded-xl border border-[#262626] shrink-0">
             <div className="flex items-center gap-2 px-3 py-1 border-r border-[#262626]">
-              <Trophy className="w-4 h-4 text-[#E9C349]" />
+              <Trophy className="w-4 h-4 text-[#D9A9FF]" />
               <div>
                 <span className="text-[9px] font-mono text-[#8A8A8A] uppercase block">Récord Máximo</span>
                 <span className="text-xs font-mono font-bold text-white">{highScore} PTS</span>
@@ -555,7 +556,7 @@ export const WaackingRhythmGame: React.FC<WaackingRhythmGameProps> = ({
               className="p-2 text-[#8A8A8A] hover:text-white transition-colors"
               title={isMuted ? "Activar Sonido" : "Silenciar"}
             >
-              {isMuted ? <VolumeX className="w-4 h-4 text-red-400" /> : <Volume2 className="w-4 h-4 text-[#E9C349]" />}
+              {isMuted ? <VolumeX className="w-4 h-4 text-red-400" /> : <Volume2 className="w-4 h-4 text-[#D9A9FF]" />}
             </button>
           </div>
         </div>
@@ -567,7 +568,7 @@ export const WaackingRhythmGame: React.FC<WaackingRhythmGameProps> = ({
             <div className="bg-[#0A0A0A] p-3.5 rounded-xl border border-[#262626] space-y-2">
               <label className="text-[10px] font-mono font-bold text-[#8A8A8A] uppercase flex justify-between">
                 <span>Tempo de Waacking (BPM)</span>
-                <span className="text-[#E9C349] font-bold">{bpm} BPM</span>
+                <span className="text-[#D9A9FF] font-bold">{bpm} BPM</span>
               </label>
               <div className="flex gap-2">
                 {[115, 125, 130, 135].map(preset => (
@@ -577,7 +578,7 @@ export const WaackingRhythmGame: React.FC<WaackingRhythmGameProps> = ({
                     onClick={() => setBpm(preset)}
                     className={`flex-1 py-1.5 text-xs font-mono font-bold rounded-lg border transition-all ${
                       bpm === preset 
-                        ? 'bg-[#E9C349] text-black border-[#E9C349]' 
+                        ? 'bg-[#D9A9FF] text-black border-[#D9A9FF]' 
                         : 'bg-[#121212] text-gray-400 border-[#262626] hover:text-white'
                     }`}
                   >
@@ -591,7 +592,7 @@ export const WaackingRhythmGame: React.FC<WaackingRhythmGameProps> = ({
             <div className="bg-[#0A0A0A] p-3.5 rounded-xl border border-[#262626] space-y-2">
               <label className="text-[10px] font-mono font-bold text-[#8A8A8A] uppercase flex justify-between">
                 <span>Duración de la Ronda</span>
-                <span className="text-[#E9C349] font-bold">{gameDuration} Segundos</span>
+                <span className="text-[#D9A9FF] font-bold">{gameDuration} Segundos</span>
               </label>
               <div className="flex gap-2">
                 {[30, 45, 60].map(dur => (
@@ -604,7 +605,7 @@ export const WaackingRhythmGame: React.FC<WaackingRhythmGameProps> = ({
                     }}
                     className={`flex-1 py-1.5 text-xs font-mono font-bold rounded-lg border transition-all ${
                       gameDuration === dur 
-                        ? 'bg-[#E9C349] text-black border-[#E9C349]' 
+                        ? 'bg-[#D9A9FF] text-black border-[#D9A9FF]' 
                         : 'bg-[#121212] text-gray-400 border-[#262626] hover:text-white'
                     }`}
                   >
@@ -620,7 +621,7 @@ export const WaackingRhythmGame: React.FC<WaackingRhythmGameProps> = ({
                 id="start-rhythm-game-btn"
                 type="button"
                 onClick={startGame}
-                className="w-full h-11 bg-gradient-to-r from-[#9A2B3C] to-[#E9C349] hover:brightness-110 text-white font-mono font-bold text-xs uppercase rounded-xl transition-all shadow-[0_0_20px_rgba(233,195,73,0.3)] flex items-center justify-center gap-2 cursor-pointer active:scale-95"
+                className="w-full h-11 bg-gradient-to-r from-[#C23E9E] to-[#D9A9FF] hover:brightness-110 text-white font-mono font-bold text-xs uppercase rounded-xl transition-all shadow-[0_0_20px_rgba(217, 169, 255,0.3)] flex items-center justify-center gap-2 cursor-pointer active:scale-95"
               >
                 <Play className="w-4 h-4 fill-white" /> ¡Iniciar Entrenamiento Rítmico!
               </button>
@@ -631,14 +632,14 @@ export const WaackingRhythmGame: React.FC<WaackingRhythmGameProps> = ({
 
       {/* ÁREA DEL JUEGO ACTIVO (STAGE RÍTMICO) */}
       {isPlaying && (
-        <div className="bg-[#0A0A0A] border-2 border-[#E9C349]/50 rounded-2xl p-6 shadow-[0_0_40px_rgba(233,195,73,0.15)] relative overflow-hidden space-y-6">
+        <div className="bg-[#0A0A0A] border-2 border-[#D9A9FF]/50 rounded-2xl p-6 shadow-[0_0_40px_rgba(217, 169, 255,0.15)] relative overflow-hidden space-y-6">
           {/* HUD superior: Tiempo, Puntaje, Multiplicador, Beat */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 bg-[#121212] p-4 rounded-xl border border-[#262626]">
             {/* Puntos */}
             <div className="space-y-0.5">
               <span className="text-[9px] font-mono font-bold text-[#8A8A8A] uppercase">PUNTAJE ACUMULADO</span>
-              <div className="text-xl font-mono font-bold text-[#E9C349] flex items-center gap-1">
-                <Sparkles className="w-5 h-5 text-[#E9C349]" /> {score}
+              <div className="text-xl font-mono font-bold text-[#D9A9FF] flex items-center gap-1">
+                <Sparkles className="w-5 h-5 text-[#D9A9FF]" /> {score}
               </div>
             </div>
 
@@ -663,8 +664,8 @@ export const WaackingRhythmGame: React.FC<WaackingRhythmGameProps> = ({
             {/* Conteo 8-Counts */}
             <div className="space-y-0.5">
               <span className="text-[9px] font-mono font-bold text-[#8A8A8A] uppercase">CONTEO MUSICAL</span>
-              <div className="text-xl font-mono font-bold text-[#9A2B3C] flex items-center gap-2">
-                <Music className="w-5 h-5 text-[#9A2B3C]" /> BEAT #{currentBeatCount}
+              <div className="text-xl font-mono font-bold text-[#C23E9E] flex items-center gap-2">
+                <Music className="w-5 h-5 text-[#C23E9E]" /> BEAT #{currentBeatCount}
               </div>
             </div>
           </div>
@@ -672,7 +673,7 @@ export const WaackingRhythmGame: React.FC<WaackingRhythmGameProps> = ({
           {/* CANVAS VISUAL DEL RITMO (BEAT RUNWAY) */}
           <div className="relative h-48 bg-[#121212] border border-[#262626] rounded-2xl overflow-hidden flex flex-col justify-between p-4 shadow-inner">
             {/* Fondo pulsante en tiempo real */}
-            <div className="absolute inset-0 bg-gradient-to-r from-[#9A2B3C]/10 via-transparent to-[#E9C349]/10 pointer-events-none" />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#C23E9E]/10 via-transparent to-[#D9A9FF]/10 pointer-events-none" />
 
             {/* 4-Counts Grid Visual Markers */}
             <div className="absolute inset-x-8 top-4 flex justify-between text-[10px] font-mono text-[#8A8A8A] border-b border-[#262626] pb-2">
@@ -697,7 +698,7 @@ export const WaackingRhythmGame: React.FC<WaackingRhythmGameProps> = ({
                   >
                     <span className={`text-base font-mono font-extrabold px-3 py-1 rounded-full shadow-2xl border uppercase tracking-wider ${
                       fb.rating === 'PERFECT'
-                        ? 'bg-[#E9C349] text-black border-amber-300 shadow-[0_0_20px_rgba(233,195,73,0.8)]'
+                        ? 'bg-[#D9A9FF] text-black border-amber-300 shadow-[0_0_20px_rgba(217, 169, 255,0.8)]'
                         : fb.rating === 'GREAT'
                         ? 'bg-emerald-500 text-black border-emerald-300'
                         : fb.rating === 'GOOD'
@@ -718,17 +719,17 @@ export const WaackingRhythmGame: React.FC<WaackingRhythmGameProps> = ({
 
             {/* HIT TARGET ZONE LINE */}
             <div className="relative w-full h-24 flex items-center my-auto">
-              <div className="absolute left-1/2 -translate-x-1/2 w-20 h-full border-2 border-dashed border-[#E9C349] bg-[#E9C349]/10 rounded-xl flex items-center justify-center pointer-events-none z-10 shadow-[0_0_15px_rgba(233,195,73,0.3)]">
-                <span className="text-[10px] font-mono font-bold text-[#E9C349] uppercase tracking-widest">HIT ZONE</span>
+              <div className="absolute left-1/2 -translate-x-1/2 w-20 h-full border-2 border-dashed border-[#D9A9FF] bg-[#D9A9FF]/10 rounded-xl flex items-center justify-center pointer-events-none z-10 shadow-[0_0_15px_rgba(217, 169, 255,0.3)]">
+                <span className="text-[10px] font-mono font-bold text-[#D9A9FF] uppercase tracking-widest">HIT ZONE</span>
               </div>
             </div>
 
             {/* Guía en pantalla */}
             <div className="flex justify-between items-center text-[10px] font-mono text-[#8A8A8A] relative z-10">
               <span className="flex items-center gap-1">
-                <Keyboard className="w-3.5 h-3.5 text-[#E9C349]" /> Presiona <strong>TECLA ESPACIO</strong> o <strong>ENTER</strong> en cada acento rítmico.
+                <Keyboard className="w-3.5 h-3.5 text-[#D9A9FF]" /> Presiona <strong>TECLA ESPACIO</strong> o <strong>ENTER</strong> en cada acento rítmico.
               </span>
-              <span className="text-[#E9C349] font-bold">PRECISIÓN: {accuracyPct}%</span>
+              <span className="text-[#D9A9FF] font-bold">PRECISIÓN: {accuracyPct}%</span>
             </div>
           </div>
 
@@ -738,7 +739,7 @@ export const WaackingRhythmGame: React.FC<WaackingRhythmGameProps> = ({
               id="rhythm-hit-pad-button"
               type="button"
               onClick={handleHit}
-              className={`w-full sm:flex-1 h-20 bg-gradient-to-r from-[#9A2B3C] via-[#E9C349] to-[#9A2B3C] text-black font-mono font-extrabold text-base uppercase rounded-2xl transition-all shadow-[0_0_30px_rgba(233,195,73,0.4)] flex items-center justify-center gap-3 cursor-pointer select-none active:scale-95 ${
+              className={`w-full sm:flex-1 h-20 bg-gradient-to-r from-[#C23E9E] via-[#D9A9FF] to-[#C23E9E] text-black font-mono font-extrabold text-base uppercase rounded-2xl transition-all shadow-[0_0_30px_rgba(217, 169, 255,0.4)] flex items-center justify-center gap-3 cursor-pointer select-none active:scale-95 ${
                 keyPulse ? 'brightness-150 scale-105' : 'hover:brightness-110'
               }`}
             >
@@ -762,9 +763,9 @@ export const WaackingRhythmGame: React.FC<WaackingRhythmGameProps> = ({
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="bg-[#121212] border-2 border-[#E9C349] rounded-2xl p-6 shadow-[0_0_50px_rgba(233,195,73,0.3)] space-y-6 text-center relative overflow-hidden"
+          className="bg-[#121212] border-2 border-[#D9A9FF] rounded-2xl p-6 shadow-[0_0_50px_rgba(217, 169, 255,0.3)] space-y-6 text-center relative overflow-hidden"
         >
-          <div className="w-16 h-16 bg-[#E9C349]/20 border border-[#E9C349] rounded-3xl flex items-center justify-center mx-auto text-[#E9C349]">
+          <div className="w-16 h-16 bg-[#D9A9FF]/20 border border-[#D9A9FF] rounded-3xl flex items-center justify-center mx-auto text-[#D9A9FF]">
             <Trophy className="w-8 h-8 animate-bounce" />
           </div>
 
@@ -781,7 +782,7 @@ export const WaackingRhythmGame: React.FC<WaackingRhythmGameProps> = ({
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-[#0A0A0A] p-4 rounded-xl border border-[#262626]">
             <div className="space-y-0.5">
               <span className="text-[9px] font-mono text-[#8A8A8A] uppercase block">Puntaje Final</span>
-              <span className="text-lg font-mono font-bold text-[#E9C349]">{score}</span>
+              <span className="text-lg font-mono font-bold text-[#D9A9FF]">{score}</span>
             </div>
             <div className="space-y-0.5">
               <span className="text-[9px] font-mono text-[#8A8A8A] uppercase block">Máximo Combo</span>
@@ -798,10 +799,10 @@ export const WaackingRhythmGame: React.FC<WaackingRhythmGameProps> = ({
           </div>
 
           {/* Reclamo de Puntos Extras */}
-          <div className="bg-[#0A0A0A] p-4 rounded-xl border border-[#E9C349]/30 flex flex-col sm:flex-row justify-between items-center gap-4 text-left">
+          <div className="bg-[#0A0A0A] p-4 rounded-xl border border-[#D9A9FF]/30 flex flex-col sm:flex-row justify-between items-center gap-4 text-left">
             <div>
               <h4 className="text-xs font-mono font-bold text-white uppercase flex items-center gap-1.5">
-                <Sparkles className="w-4 h-4 text-[#E9C349]" /> Recompensa de Puntos Waack
+                <Sparkles className="w-4 h-4 text-[#D9A9FF]" /> Recompensa de Puntos Waack
               </h4>
               <p className="text-[11px] text-[#8A8A8A] font-medium mt-0.5">
                 Por tu desempeño obtienes <strong>+{Math.max(10, Math.floor(score / 50))} Puntos Extras</strong> para subir en el Ranking.
@@ -816,7 +817,7 @@ export const WaackingRhythmGame: React.FC<WaackingRhythmGameProps> = ({
               className={`px-5 py-2.5 font-mono font-bold text-xs uppercase rounded-xl transition-all flex items-center gap-2 shrink-0 cursor-pointer ${
                 pointsClaimed
                   ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40'
-                  : 'bg-[#E9C349] hover:bg-[#d4ae36] text-black shadow-lg active:scale-95'
+                  : 'bg-[#D9A9FF] hover:bg-[#B478F0] text-black shadow-lg active:scale-95'
               }`}
             >
               {pointsClaimed ? (
@@ -837,7 +838,7 @@ export const WaackingRhythmGame: React.FC<WaackingRhythmGameProps> = ({
               id="play-again-rhythm-game-btn"
               type="button"
               onClick={startGame}
-              className="px-6 py-2.5 bg-[#9A2B3C] hover:bg-[#802230] text-white font-mono font-bold text-xs uppercase rounded-xl transition-all shadow-md flex items-center gap-2 cursor-pointer"
+              className="px-6 py-2.5 bg-[#C23E9E] hover:bg-[#802230] text-white font-mono font-bold text-xs uppercase rounded-xl transition-all shadow-md flex items-center gap-2 cursor-pointer"
             >
               <RefreshCw className="w-4 h-4" /> Jugar Otra Ronda
             </button>

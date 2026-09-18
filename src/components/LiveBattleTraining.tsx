@@ -286,13 +286,13 @@ export default function LiveBattleTraining({ currentUser, language }: LiveBattle
     <div className="flex-1 overflow-y-auto p-4 sm:p-6 bg-[#09080d] text-white flex flex-col font-body-md space-y-6">
       
       {/* HEADER BANNER */}
-      <div className="bg-gradient-to-r from-[#1c122c] via-[#2d1838] to-[#141221] p-6 rounded-3xl border border-[#E9C349]/30 shadow-2xl relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-80 h-80 bg-[#E9C349]/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="bg-gradient-to-r from-[#1c122c] via-[#2d1838] to-[#141221] p-6 rounded-3xl border border-[#D9A9FF]/30 shadow-2xl relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-80 h-80 bg-[#D9A9FF]/10 rounded-full blur-3xl pointer-events-none" />
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 relative z-10">
           <div>
             <div className="flex items-center gap-2 mb-2 flex-wrap">
-              <span className="text-[10px] font-mono font-black text-[#E9C349] bg-[#E9C349]/10 border border-[#E9C349]/30 px-3 py-1 rounded-full uppercase tracking-widest flex items-center gap-1.5 shadow-sm">
-                <Radio className="w-3.5 h-3.5 text-[#E9C349] animate-pulse" />
+              <span className="text-[10px] font-mono font-black text-[#D9A9FF] bg-[#D9A9FF]/10 border border-[#D9A9FF]/30 px-3 py-1 rounded-full uppercase tracking-widest flex items-center gap-1.5 shadow-sm">
+                <Radio className="w-3.5 h-3.5 text-[#D9A9FF] animate-pulse" />
                 TRANSMISIÓN PRIVADA 1VS1
               </span>
               <span className="text-[10px] font-mono font-extrabold text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 px-2.5 py-1 rounded-full flex items-center gap-1">
@@ -304,7 +304,7 @@ export default function LiveBattleTraining({ currentUser, language }: LiveBattle
               </span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-white uppercase tracking-tight flex items-center gap-3">
-              <Sparkles className="w-8 h-8 text-[#E9C349] shrink-0" />
+              <Sparkles className="w-8 h-8 text-[#D9A9FF] shrink-0" />
               Live Battles: Entrenamiento Libre
             </h1>
             <p className="text-xs sm:text-sm text-slate-300 mt-1 max-w-2xl font-medium leading-relaxed">
@@ -318,7 +318,7 @@ export default function LiveBattleTraining({ currentUser, language }: LiveBattle
               <button
                 type="button"
                 onClick={handleStartTraining}
-                className="px-6 py-3 rounded-2xl bg-gradient-to-r from-[#E9C349] to-[#d4aa29] text-black font-extrabold text-xs uppercase tracking-wider shadow-2xl hover:scale-105 active:scale-95 transition-all flex items-center gap-2"
+                className="px-6 py-3 rounded-2xl bg-gradient-to-r from-[#D9A9FF] to-[#B073E8] text-black font-extrabold text-xs uppercase tracking-wider shadow-2xl hover:scale-105 active:scale-95 transition-all flex items-center gap-2"
               >
                 <Play className="w-4 h-4 fill-current" />
                 Iniciar Sesión de Entrenamiento (3,2,1)
@@ -340,7 +340,7 @@ export default function LiveBattleTraining({ currentUser, language }: LiveBattle
               onClick={() => setShowInviteModal(true)}
               className="px-4 py-3 rounded-2xl bg-white/5 hover:bg-white/10 text-slate-200 border border-white/15 font-bold text-xs uppercase transition-all flex items-center gap-2"
             >
-              <UserPlus className="w-4 h-4 text-[#E9C349]" />
+              <UserPlus className="w-4 h-4 text-[#D9A9FF]" />
               Cambiar / Invitar Pareja
             </button>
           </div>
@@ -350,19 +350,19 @@ export default function LiveBattleTraining({ currentUser, language }: LiveBattle
       {/* DISCO / FUNK INTEGRATED PLAYER BAR */}
       <div className="bg-[#13111c] border border-white/10 rounded-2xl p-4 flex flex-col md:flex-row items-center justify-between gap-4 shadow-xl">
         <div className="flex items-center gap-3.5 w-full md:w-auto">
-          <div className="relative w-12 h-12 rounded-xl overflow-hidden border border-[#E9C349]/40 shrink-0 shadow-lg group">
+          <div className="relative w-12 h-12 rounded-xl overflow-hidden border border-[#D9A9FF]/40 shrink-0 shadow-lg group">
             <img 
               src={selectedTrack.cover} 
               alt={selectedTrack.title}
               className={`w-full h-full object-cover ${isPlayingMusic ? 'animate-spin-slow' : ''}`} 
             />
             <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-              <Disc3 className={`w-6 h-6 text-[#E9C349] ${isPlayingMusic ? 'animate-spin' : ''}`} />
+              <Disc3 className={`w-6 h-6 text-[#D9A9FF] ${isPlayingMusic ? 'animate-spin' : ''}`} />
             </div>
           </div>
           <div className="min-w-0">
             <div className="flex items-center gap-2">
-              <span className="text-[9px] font-mono font-bold text-[#E9C349] bg-[#E9C349]/15 px-2 py-0.5 rounded uppercase">
+              <span className="text-[9px] font-mono font-bold text-[#D9A9FF] bg-[#D9A9FF]/15 px-2 py-0.5 rounded uppercase">
                 {selectedTrack.genre} • {selectedTrack.bpm} BPM
               </span>
               <span className="text-[9px] text-slate-400 font-mono">Pista Oficial Disco/Funk</span>
@@ -380,14 +380,14 @@ export default function LiveBattleTraining({ currentUser, language }: LiveBattle
             className="px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 border border-white/10 text-xs font-bold transition-all flex items-center gap-1.5"
             title="Seleccionar otra canción Disco/Funk al azar"
           >
-            <Music className="w-3.5 h-3.5 text-[#E9C349]" />
+            <Music className="w-3.5 h-3.5 text-[#D9A9FF]" />
             Cambiar Tema
           </button>
 
           <button
             type="button"
             onClick={() => setIsPlayingMusic(!isPlayingMusic)}
-            className="px-4 py-1.5 rounded-xl bg-[#E9C349]/20 hover:bg-[#E9C349]/30 text-[#E9C349] border border-[#E9C349]/40 text-xs font-bold transition-all flex items-center gap-1.5"
+            className="px-4 py-1.5 rounded-xl bg-[#D9A9FF]/20 hover:bg-[#D9A9FF]/30 text-[#D9A9FF] border border-[#D9A9FF]/40 text-xs font-bold transition-all flex items-center gap-1.5"
           >
             {isPlayingMusic ? (
               <>
@@ -414,13 +414,13 @@ export default function LiveBattleTraining({ currentUser, language }: LiveBattle
 
       {/* Embedded Audio Streamer or Background Disco Sound Synthesizer */}
       {isPlayingMusic && (
-        <div className="bg-[#181424] border border-[#E9C349]/20 rounded-xl p-3 flex items-center justify-between text-xs text-[#E9C349] font-mono">
+        <div className="bg-[#181424] border border-[#D9A9FF]/20 rounded-xl p-3 flex items-center justify-between text-xs text-[#D9A9FF] font-mono">
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
             <span>Reproduciendo en Sync: "{selectedTrack.title}" por {selectedTrack.artist} ({selectedTrack.genre})</span>
           </div>
           <div className="flex items-center gap-1 text-[10px] text-slate-400">
-            <Zap className="w-3 h-3 text-[#E9C349]" />
+            <Zap className="w-3 h-3 text-[#D9A9FF]" />
             <span>Ecualización Disco Optimizada para Waacking</span>
           </div>
         </div>
@@ -428,20 +428,20 @@ export default function LiveBattleTraining({ currentUser, language }: LiveBattle
 
       {/* TURN & ROUND STATUS HUD PANEL (When Battle in progress) */}
       {battleState === 'in_progress' && (
-        <div className="bg-gradient-to-r from-[#1f172b] via-[#2b1e38] to-[#1a1526] border-2 border-[#E9C349]/60 rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-2xl relative">
+        <div className="bg-gradient-to-r from-[#1f172b] via-[#2b1e38] to-[#1a1526] border-2 border-[#D9A9FF]/60 rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-2xl relative">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-2xl bg-[#E9C349] text-black font-black text-xl flex items-center justify-center shadow-lg">
+            <div className="w-12 h-12 rounded-2xl bg-[#D9A9FF] text-black font-black text-xl flex items-center justify-center shadow-lg">
               R{currentRound}
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-[10px] font-mono font-bold text-[#E9C349] uppercase tracking-wider">
+                <span className="text-[10px] font-mono font-bold text-[#D9A9FF] uppercase tracking-wider">
                   RONDA {currentRound} DE 2 • TURNO 1 MINUTO
                 </span>
               </div>
               <h3 className="text-base font-black text-white uppercase flex items-center gap-2 mt-0.5">
                 EN PISTA:
-                <span className="text-[#E9C349] underline decoration-wavy">
+                <span className="text-[#D9A9FF] underline decoration-wavy">
                   {activeDancer === 'user' ? currentUser.name : selectedGuest.name}
                 </span>
               </h3>
@@ -450,7 +450,7 @@ export default function LiveBattleTraining({ currentUser, language }: LiveBattle
 
           {/* Prominent 60-second Timer */}
           <div className="flex items-center gap-4 bg-black/60 border border-white/15 px-6 py-2.5 rounded-2xl">
-            <Clock className="w-6 h-6 text-[#E9C349] animate-spin-slow" />
+            <Clock className="w-6 h-6 text-[#D9A9FF] animate-spin-slow" />
             <div className="text-center">
               <p className="text-[9px] font-mono font-bold text-slate-400 uppercase">Tiempo Restante</p>
               <p className="text-2xl font-black font-mono text-white tracking-widest">
@@ -492,7 +492,7 @@ export default function LiveBattleTraining({ currentUser, language }: LiveBattle
               exit={{ opacity: 0, scale: 1.2 }}
               className="absolute inset-0 z-40 bg-black/90 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center space-y-4"
             >
-              <div className="w-20 h-20 rounded-full bg-[#E9C349]/20 border-2 border-[#E9C349] flex items-center justify-center text-[#E9C349]">
+              <div className="w-20 h-20 rounded-full bg-[#D9A9FF]/20 border-2 border-[#D9A9FF] flex items-center justify-center text-[#D9A9FF]">
                 <Radio className="w-10 h-10 animate-ping" />
               </div>
               <h2 className="text-xl font-black text-white uppercase tracking-wider">
@@ -506,7 +506,7 @@ export default function LiveBattleTraining({ currentUser, language }: LiveBattle
                 initial={{ scale: 0.3, opacity: 0 }}
                 animate={{ scale: 1.5, opacity: 1 }}
                 exit={{ scale: 2, opacity: 0 }}
-                className="text-7xl sm:text-8xl font-black font-mono text-[#E9C349] drop-shadow-[0_0_25px_rgba(233,195,73,0.8)] my-2"
+                className="text-7xl sm:text-8xl font-black font-mono text-[#D9A9FF] drop-shadow-[0_0_25px_rgba(217, 169, 255,0.8)] my-2"
               >
                 {countdownValue}
               </motion.div>
@@ -549,7 +549,7 @@ export default function LiveBattleTraining({ currentUser, language }: LiveBattle
                 </div>
                 <div className="bg-white/5 border border-white/10 p-3.5 rounded-2xl">
                   <p className="text-[10px] text-slate-400 font-mono uppercase">Tema Bailado</p>
-                  <p className="text-xs font-bold text-[#E9C349] mt-0.5 truncate">{selectedTrack.title}</p>
+                  <p className="text-xs font-bold text-[#D9A9FF] mt-0.5 truncate">{selectedTrack.title}</p>
                 </div>
                 <div className="bg-white/5 border border-white/10 p-3.5 rounded-2xl col-span-2 sm:col-span-1">
                   <p className="text-[10px] text-slate-400 font-mono uppercase">Interacción</p>
@@ -561,7 +561,7 @@ export default function LiveBattleTraining({ currentUser, language }: LiveBattle
                 <button
                   type="button"
                   onClick={handleStartTraining}
-                  className="px-6 py-3 rounded-2xl bg-[#E9C349] hover:bg-[#d4aa29] text-black text-xs font-black uppercase tracking-wider transition-all shadow-xl hover:scale-105"
+                  className="px-6 py-3 rounded-2xl bg-[#D9A9FF] hover:bg-[#B073E8] text-black text-xs font-black uppercase tracking-wider transition-all shadow-xl hover:scale-105"
                 >
                   Repetir Entrenamiento (3,2,1)
                 </button>
@@ -594,12 +594,12 @@ export default function LiveBattleTraining({ currentUser, language }: LiveBattle
         {/* LEFT PART: PRINCIPAL USER (50% SPLIT) */}
         <div className={`relative rounded-2xl overflow-hidden border-2 transition-all flex flex-col justify-between p-4 min-h-[360px] ${
           battleState === 'in_progress' && activeDancer === 'user'
-            ? 'border-[#E9C349] shadow-[0_0_30px_rgba(233,195,73,0.3)] bg-gradient-to-b from-[#281e33] to-black'
+            ? 'border-[#D9A9FF] shadow-[0_0_30px_rgba(217, 169, 255,0.3)] bg-gradient-to-b from-[#281e33] to-black'
             : 'border-white/15 bg-[#12101a]'
         }`}>
           {/* Active Turn Highlight Ribbon */}
           {battleState === 'in_progress' && activeDancer === 'user' && (
-            <div className="absolute top-0 left-0 right-0 bg-[#E9C349] text-black text-[10px] font-black uppercase font-mono tracking-widest py-1 px-3 text-center z-10 shadow-md">
+            <div className="absolute top-0 left-0 right-0 bg-[#D9A9FF] text-black text-[10px] font-black uppercase font-mono tracking-widest py-1 px-3 text-center z-10 shadow-md">
               🔴 TU TURNO EN PISTA (RONDA {currentRound}) - ¡A BAILAR!
             </div>
           )}
@@ -616,7 +616,7 @@ export default function LiveBattleTraining({ currentUser, language }: LiveBattle
               />
             ) : (
               <div className="text-center p-6 space-y-2">
-                <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-[#E9C349] mx-auto shadow-xl">
+                <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-[#D9A9FF] mx-auto shadow-xl">
                   <img src={currentUser.avatar} alt={currentUser.name} className="w-full h-full object-cover" />
                 </div>
                 <p className="text-xs font-bold text-slate-300">Cámara desactivada</p>
@@ -628,11 +628,11 @@ export default function LiveBattleTraining({ currentUser, language }: LiveBattle
           {/* Header Info */}
           <div className="relative z-10 flex items-center justify-between mt-4">
             <div className="flex items-center gap-2 bg-black/70 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/10">
-              <div className="w-7 h-7 rounded-full overflow-hidden border border-[#E9C349] shrink-0">
+              <div className="w-7 h-7 rounded-full overflow-hidden border border-[#D9A9FF] shrink-0">
                 <img src={currentUser.avatar} alt={currentUser.name} className="w-full h-full object-cover" />
               </div>
               <div>
-                <p className="text-[9px] font-mono text-[#E9C349] font-bold uppercase">USUARIO PRINCIPAL</p>
+                <p className="text-[9px] font-mono text-[#D9A9FF] font-bold uppercase">USUARIO PRINCIPAL</p>
                 <h4 className="text-xs font-extrabold text-white leading-tight">{currentUser.name}</h4>
               </div>
             </div>
@@ -650,7 +650,7 @@ export default function LiveBattleTraining({ currentUser, language }: LiveBattle
           {/* Bottom Watermark */}
           <div className="relative z-10 flex items-center justify-between bg-black/80 backdrop-blur-md p-2.5 rounded-xl border border-white/10 text-xs">
             <span className="text-[10px] font-mono text-slate-300 font-bold flex items-center gap-1">
-              <ShieldCheck className="w-3.5 h-3.5 text-[#E9C349]" /> Transmisión Segura
+              <ShieldCheck className="w-3.5 h-3.5 text-[#D9A9FF]" /> Transmisión Segura
             </span>
             <span className="text-[10px] font-mono text-slate-400">Audio Muteado Local</span>
           </div>
@@ -659,12 +659,12 @@ export default function LiveBattleTraining({ currentUser, language }: LiveBattle
         {/* RIGHT PART: INVITED GUEST (50% SPLIT) */}
         <div className={`relative rounded-2xl overflow-hidden border-2 transition-all flex flex-col justify-between p-4 min-h-[360px] ${
           battleState === 'in_progress' && activeDancer === 'guest'
-            ? 'border-[#E9C349] shadow-[0_0_30px_rgba(233,195,73,0.3)] bg-gradient-to-b from-[#281e33] to-black'
+            ? 'border-[#D9A9FF] shadow-[0_0_30px_rgba(217, 169, 255,0.3)] bg-gradient-to-b from-[#281e33] to-black'
             : 'border-white/15 bg-[#12101a]'
         }`}>
           {/* Active Turn Highlight Ribbon */}
           {battleState === 'in_progress' && activeDancer === 'guest' && (
-            <div className="absolute top-0 left-0 right-0 bg-[#E9C349] text-black text-[10px] font-black uppercase font-mono tracking-widest py-1 px-3 text-center z-10 shadow-md">
+            <div className="absolute top-0 left-0 right-0 bg-[#D9A9FF] text-black text-[10px] font-black uppercase font-mono tracking-widest py-1 px-3 text-center z-10 shadow-md">
               🔴 TURNO DE {selectedGuest.name.toUpperCase()} (RONDA {currentRound})
             </div>
           )}

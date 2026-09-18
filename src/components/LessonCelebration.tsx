@@ -26,7 +26,7 @@ export function LessonCelebration({ lesson, currentUser, onClose }: LessonCelebr
           const randomDelay = Math.random() * 0.4;
           const randomDuration = 1.2 + Math.random() * 1.8;
           const size = 6 + Math.random() * 14;
-          const color = ['#E9C349', '#FFB3B2', '#B3C5FF', '#FFD700', '#FFA07A', '#10B981'][i % 6];
+          const color = ['#D9A9FF', '#FFB3B2', '#B3C5FF', '#E9B8FF', '#FFA07A', '#10B981'][i % 6];
 
           return (
             <motion.div
@@ -60,14 +60,14 @@ export function LessonCelebration({ lesson, currentUser, onClose }: LessonCelebr
         initial={{ scale: 0.8, opacity: 0, y: 30 }}
         animate={{ scale: 1, opacity: 1, y: 0 }}
         exit={{ scale: 0.8, opacity: 0, y: 30 }}
-        className="bg-gradient-to-br from-[#1c1b1b] via-[#141414] to-[#1c1b1b] border-2 border-[#E9C349] rounded-3xl p-8 max-w-md w-full shadow-[0_0_60px_rgba(233,195,73,0.35)] text-center relative z-10 space-y-6"
+        className="bg-gradient-to-br from-[#1c1b1b] via-[#141414] to-[#1c1b1b] border-2 border-[#D9A9FF] rounded-3xl p-8 max-w-md w-full shadow-[0_0_60px_rgba(217, 169, 255,0.35)] text-center relative z-10 space-y-6"
       >
-        <div className="absolute -top-12 left-1/2 -translate-x-1/2 w-24 h-24 rounded-full bg-gradient-to-br from-[#E9C349] to-amber-700 flex items-center justify-center shadow-2xl border-4 border-[#141414]">
+        <div className="absolute -top-12 left-1/2 -translate-x-1/2 w-24 h-24 rounded-full bg-gradient-to-br from-[#D9A9FF] to-amber-700 flex items-center justify-center shadow-2xl border-4 border-[#141414]">
           <Trophy className="w-12 h-12 text-black" />
         </div>
 
         <div className="pt-6 space-y-2">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#E9C349]/20 text-[#E9C349] text-xs font-mono font-bold uppercase border border-[#E9C349]/40">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#D9A9FF]/20 text-[#D9A9FF] text-xs font-mono font-bold uppercase border border-[#D9A9FF]/40">
             <Sparkles className="w-3.5 h-3.5 animate-pulse" /> ¡Lección Completada!
           </div>
           <h3 className="text-xl font-black text-white uppercase tracking-tight line-clamp-2">
@@ -81,7 +81,7 @@ export function LessonCelebration({ lesson, currentUser, onClose }: LessonCelebr
         <div className="bg-black/50 border border-white/10 rounded-2xl p-4 flex items-center justify-around">
           <div>
             <p className="text-[10px] font-mono text-slate-400 uppercase">Puntos Ganados</p>
-            <p className="text-xl font-black text-[#E9C349]">+{points} XP</p>
+            <p className="text-xl font-black text-[#D9A9FF]">+{points} XP</p>
           </div>
           <div className="h-8 w-px bg-white/10" />
           <div>
@@ -93,7 +93,7 @@ export function LessonCelebration({ lesson, currentUser, onClose }: LessonCelebr
         <div className="space-y-3 pt-2">
           <button
             onClick={onClose}
-            className="w-full py-3.5 bg-gradient-to-r from-[#E9C349] to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black font-extrabold text-xs rounded-xl shadow-[0_0_20px_rgba(233,195,73,0.4)] transition-all uppercase tracking-wider cursor-pointer"
+            className="w-full py-3.5 bg-gradient-to-r from-[#D9A9FF] to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black font-extrabold text-xs rounded-xl shadow-[0_0_20px_rgba(217, 169, 255,0.4)] transition-all uppercase tracking-wider cursor-pointer"
           >
             ¡Excelente, Continuar Entrenando! 💃
           </button>

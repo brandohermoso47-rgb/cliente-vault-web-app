@@ -40,16 +40,16 @@ export default function MultiSourceMusicEngine({
       {/* Encabezado e Indicador de Fuente */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#262626] pb-3">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-[#9A2B3C]/20 border border-[#9A2B3C] flex items-center justify-center text-[#E9C349]">
+          <div className="w-10 h-10 rounded-xl bg-[#C23E9E]/20 border border-[#C23E9E] flex items-center justify-center text-[#D9A9FF]">
             {currentSource.provider === 'soundcloud' && <Radio className="w-5 h-5 text-[#FF5500]" />}
             {currentSource.provider === 'youtube' && <Youtube className="w-5 h-5 text-[#FF0000]" />}
             {currentSource.provider === 'spotify' && <Music className="w-5 h-5 text-[#1DB954]" />}
-            {currentSource.provider === 'unknown' && <Music className="w-5 h-5 text-[#E9C349]" />}
+            {currentSource.provider === 'unknown' && <Music className="w-5 h-5 text-[#D9A9FF]" />}
           </div>
           <div>
             <h3 className="text-xs font-bold uppercase tracking-wider text-white">Música de Entrenamiento</h3>
             <p className="text-[10px] font-mono text-[#8A8A8A] uppercase">
-              Fuente: <span className="text-[#E9C349] font-bold">{currentSource.provider}</span>
+              Fuente: <span className="text-[#D9A9FF] font-bold">{currentSource.provider}</span>
             </p>
           </div>
         </div>
@@ -59,7 +59,7 @@ export default function MultiSourceMusicEngine({
           onClick={() => setIsEditing(!isEditing)}
           className="px-3 py-1.5 bg-[#1A1A1A] hover:bg-[#262626] border border-[#262626] rounded-xl text-[10px] font-mono font-bold text-[#EDEFF4] flex items-center gap-1.5 self-start sm:self-auto transition-all"
         >
-          <LinkIcon className="w-3.5 h-3.5 text-[#E9C349]" />
+          <LinkIcon className="w-3.5 h-3.5 text-[#D9A9FF]" />
           <span>{isInstructor ? 'Asignar Canción/Playlist' : 'Cargar mi SoundCloud/Link'}</span>
         </button>
       </div>
@@ -76,11 +76,11 @@ export default function MultiSourceMusicEngine({
               placeholder="https://soundcloud.com/tu-usuario/mi-playlist..."
               value={inputUrl}
               onChange={(e) => setInputUrl(e.target.value)}
-              className="flex-1 bg-[#121212] border border-[#262626] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#9A2B3C]"
+              className="flex-1 bg-[#121212] border border-[#262626] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#C23E9E]"
             />
             <button
               type="submit"
-              className="px-4 py-2 bg-[#9A2B3C] hover:bg-[#b53247] text-white text-xs font-bold rounded-xl transition-all uppercase flex items-center gap-1"
+              className="px-4 py-2 bg-[#C23E9E] hover:bg-[#C742A1] text-white text-xs font-bold rounded-xl transition-all uppercase flex items-center gap-1"
             >
               <Check className="w-3.5 h-3.5" /> Cargado
             </button>

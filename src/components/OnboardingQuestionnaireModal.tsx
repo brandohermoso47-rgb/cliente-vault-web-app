@@ -148,11 +148,11 @@ Lab Preferido: ${answersPayload.preferredLab} | Banda BPM: ${answersPayload.bpmB
         {/* Header Bar */}
         <div className="px-6 py-5 bg-gradient-to-r from-[#1A0C18] via-[#120814] to-[#0D0A14] border-b border-[#2D2335] flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-2xl bg-[#9A2B3C]/20 border border-[#9A2B3C]/40 text-[#E9C349]">
+            <div className="p-2.5 rounded-2xl bg-[#C23E9E]/20 border border-[#C23E9E]/40 text-[#D9A9FF]">
               <Sparkles className="w-5 h-5 animate-pulse" />
             </div>
             <div>
-              <div className="text-[10px] font-mono font-bold uppercase tracking-widest text-[#E9C349] flex items-center gap-1.5">
+              <div className="text-[10px] font-mono font-bold uppercase tracking-widest text-[#D9A9FF] flex items-center gap-1.5">
                 <span>IA PEDAGÓGICA WAACK ON</span>
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
               </div>
@@ -176,7 +176,7 @@ Lab Preferido: ${answersPayload.preferredLab} | Banda BPM: ${answersPayload.bpmB
           {[1, 2, 3, 4, 5].map(s => (
             <div key={s} className="flex flex-col gap-1">
               <div className="flex items-center justify-between text-[9px] font-mono text-slate-400">
-                <span className={step === s ? 'text-[#E9C349] font-bold' : step > s ? 'text-emerald-400' : ''}>
+                <span className={step === s ? 'text-[#D9A9FF] font-bold' : step > s ? 'text-emerald-400' : ''}>
                   Paso {s}
                 </span>
                 {step > s && <CheckCircle2 className="w-3 h-3 text-emerald-400" />}
@@ -184,7 +184,7 @@ Lab Preferido: ${answersPayload.preferredLab} | Banda BPM: ${answersPayload.bpmB
               <div className="h-1.5 w-full bg-[#261E2E] rounded-full overflow-hidden">
                 <div
                   className={`h-full transition-all duration-300 ${
-                    step > s ? 'bg-emerald-400' : step === s ? 'bg-gradient-to-r from-[#9A2B3C] to-[#E9C349]' : 'bg-transparent'
+                    step > s ? 'bg-emerald-400' : step === s ? 'bg-gradient-to-r from-[#C23E9E] to-[#D9A9FF]' : 'bg-transparent'
                   }`}
                   style={{ width: step >= s ? '100%' : '0%' }}
                 />
@@ -205,7 +205,7 @@ Lab Preferido: ${answersPayload.preferredLab} | Banda BPM: ${answersPayload.bpmB
           {step === 1 && (
             <div className="space-y-4 animate-fadeIn">
               <div className="flex items-start gap-3">
-                <div className="p-2 rounded-xl bg-[#9A2B3C]/10 border border-[#9A2B3C]/30 text-[#E9C349] shrink-0 mt-0.5">
+                <div className="p-2 rounded-xl bg-[#C23E9E]/10 border border-[#C23E9E]/30 text-[#D9A9FF] shrink-0 mt-0.5">
                   <Compass className="w-5 h-5" />
                 </div>
                 <div>
@@ -223,9 +223,9 @@ Lab Preferido: ${answersPayload.preferredLab} | Banda BPM: ${answersPayload.bpmB
                   <button
                     key={i}
                     onClick={() => setGeneralGoals(prev => prev ? `${prev}. ${pill}` : pill)}
-                    className="text-[11px] px-3 py-1.5 rounded-xl bg-[#1A1622] hover:bg-[#2A2238] border border-[#33273D] hover:border-[#E9C349]/40 text-slate-300 hover:text-white transition-all text-left flex items-center gap-1.5"
+                    className="text-[11px] px-3 py-1.5 rounded-xl bg-[#1A1622] hover:bg-[#2A2238] border border-[#33273D] hover:border-[#D9A9FF]/40 text-slate-300 hover:text-white transition-all text-left flex items-center gap-1.5"
                   >
-                    <Zap className="w-3 h-3 text-[#E9C349] shrink-0" />
+                    <Zap className="w-3 h-3 text-[#D9A9FF] shrink-0" />
                     <span>{pill}</span>
                   </button>
                 ))}
@@ -235,7 +235,7 @@ Lab Preferido: ${answersPayload.preferredLab} | Banda BPM: ${answersPayload.bpmB
                 value={generalGoals}
                 onChange={e => setGeneralGoals(e.target.value)}
                 placeholder="Ejemplo: Quiero bailar con confianza en eventos sociales, mejorar mi postura corporal..."
-                className="w-full h-32 p-4 rounded-2xl bg-[#13101A] border border-[#2D2335] focus:border-[#E9C349] focus:outline-none text-xs text-white placeholder-slate-500 transition-colors resize-none"
+                className="w-full h-32 p-4 rounded-2xl bg-[#13101A] border border-[#2D2335] focus:border-[#D9A9FF] focus:outline-none text-xs text-white placeholder-slate-500 transition-colors resize-none"
               />
             </div>
           )}
@@ -243,7 +243,7 @@ Lab Preferido: ${answersPayload.preferredLab} | Banda BPM: ${answersPayload.bpmB
           {step === 2 && (
             <div className="space-y-4 animate-fadeIn">
               <div className="flex items-start gap-3">
-                <div className="p-2 rounded-xl bg-[#9A2B3C]/10 border border-[#9A2B3C]/30 text-[#E9C349] shrink-0 mt-0.5">
+                <div className="p-2 rounded-xl bg-[#C23E9E]/10 border border-[#C23E9E]/30 text-[#D9A9FF] shrink-0 mt-0.5">
                   <Target className="w-5 h-5" />
                 </div>
                 <div>
@@ -261,9 +261,9 @@ Lab Preferido: ${answersPayload.preferredLab} | Banda BPM: ${answersPayload.bpmB
                   <button
                     key={i}
                     onClick={() => setWaackingObjective(prev => prev ? `${prev}. ${pill}` : pill)}
-                    className="text-[11px] px-3 py-1.5 rounded-xl bg-[#1A1622] hover:bg-[#2A2238] border border-[#33273D] hover:border-[#E9C349]/40 text-slate-300 hover:text-white transition-all text-left flex items-center gap-1.5"
+                    className="text-[11px] px-3 py-1.5 rounded-xl bg-[#1A1622] hover:bg-[#2A2238] border border-[#33273D] hover:border-[#D9A9FF]/40 text-slate-300 hover:text-white transition-all text-left flex items-center gap-1.5"
                   >
-                    <Zap className="w-3 h-3 text-[#E9C349] shrink-0" />
+                    <Zap className="w-3 h-3 text-[#D9A9FF] shrink-0" />
                     <span>{pill}</span>
                   </button>
                 ))}
@@ -273,7 +273,7 @@ Lab Preferido: ${answersPayload.preferredLab} | Banda BPM: ${answersPayload.bpmB
                 value={waackingObjective}
                 onChange={e => setWaackingObjective(e.target.value)}
                 placeholder="Ejemplo: Busco dominar el freestyle en batallas 1v1 y tener suficiente vocabulario de arm-rolls..."
-                className="w-full h-32 p-4 rounded-2xl bg-[#13101A] border border-[#2D2335] focus:border-[#E9C349] focus:outline-none text-xs text-white placeholder-slate-500 transition-colors resize-none"
+                className="w-full h-32 p-4 rounded-2xl bg-[#13101A] border border-[#2D2335] focus:border-[#D9A9FF] focus:outline-none text-xs text-white placeholder-slate-500 transition-colors resize-none"
               />
             </div>
           )}
@@ -281,7 +281,7 @@ Lab Preferido: ${answersPayload.preferredLab} | Banda BPM: ${answersPayload.bpmB
           {step === 3 && (
             <div className="space-y-4 animate-fadeIn">
               <div className="flex items-start gap-3">
-                <div className="p-2 rounded-xl bg-[#9A2B3C]/10 border border-[#9A2B3C]/30 text-[#E9C349] shrink-0 mt-0.5">
+                <div className="p-2 rounded-xl bg-[#C23E9E]/10 border border-[#C23E9E]/30 text-[#D9A9FF] shrink-0 mt-0.5">
                   <Dumbbell className="w-5 h-5" />
                 </div>
                 <div>
@@ -299,9 +299,9 @@ Lab Preferido: ${answersPayload.preferredLab} | Banda BPM: ${answersPayload.bpmB
                   <button
                     key={i}
                     onClick={() => setImprovementAreas(prev => prev ? `${prev}. ${pill}` : pill)}
-                    className="text-[11px] px-3 py-1.5 rounded-xl bg-[#1A1622] hover:bg-[#2A2238] border border-[#33273D] hover:border-[#E9C349]/40 text-slate-300 hover:text-white transition-all text-left flex items-center gap-1.5"
+                    className="text-[11px] px-3 py-1.5 rounded-xl bg-[#1A1622] hover:bg-[#2A2238] border border-[#33273D] hover:border-[#D9A9FF]/40 text-slate-300 hover:text-white transition-all text-left flex items-center gap-1.5"
                   >
-                    <Zap className="w-3 h-3 text-[#E9C349] shrink-0" />
+                    <Zap className="w-3 h-3 text-[#D9A9FF] shrink-0" />
                     <span>{pill}</span>
                   </button>
                 ))}
@@ -311,7 +311,7 @@ Lab Preferido: ${answersPayload.preferredLab} | Banda BPM: ${answersPayload.bpmB
                 value={improvementAreas}
                 onChange={e => setImprovementAreas(e.target.value)}
                 placeholder="Ejemplo: Necesito mejorar la extensión simétrica de mis codos y ganar teatralidad dramática..."
-                className="w-full h-32 p-4 rounded-2xl bg-[#13101A] border border-[#2D2335] focus:border-[#E9C349] focus:outline-none text-xs text-white placeholder-slate-500 transition-colors resize-none"
+                className="w-full h-32 p-4 rounded-2xl bg-[#13101A] border border-[#2D2335] focus:border-[#D9A9FF] focus:outline-none text-xs text-white placeholder-slate-500 transition-colors resize-none"
               />
             </div>
           )}
@@ -319,7 +319,7 @@ Lab Preferido: ${answersPayload.preferredLab} | Banda BPM: ${answersPayload.bpmB
           {step === 4 && (
             <div className="space-y-4 animate-fadeIn">
               <div className="flex items-start gap-3">
-                <div className="p-2 rounded-xl bg-[#9A2B3C]/10 border border-[#9A2B3C]/30 text-[#E9C349] shrink-0 mt-0.5">
+                <div className="p-2 rounded-xl bg-[#C23E9E]/10 border border-[#C23E9E]/30 text-[#D9A9FF] shrink-0 mt-0.5">
                   <ShieldCheck className="w-5 h-5" />
                 </div>
                 <div>
@@ -337,9 +337,9 @@ Lab Preferido: ${answersPayload.preferredLab} | Banda BPM: ${answersPayload.bpmB
                   <button
                     key={i}
                     onClick={() => setCurrentChallenges(prev => prev ? `${prev}. ${pill}` : pill)}
-                    className="text-[11px] px-3 py-1.5 rounded-xl bg-[#1A1622] hover:bg-[#2A2238] border border-[#33273D] hover:border-[#E9C349]/40 text-slate-300 hover:text-white transition-all text-left flex items-center gap-1.5"
+                    className="text-[11px] px-3 py-1.5 rounded-xl bg-[#1A1622] hover:bg-[#2A2238] border border-[#33273D] hover:border-[#D9A9FF]/40 text-slate-300 hover:text-white transition-all text-left flex items-center gap-1.5"
                   >
-                    <Zap className="w-3 h-3 text-[#E9C349] shrink-0" />
+                    <Zap className="w-3 h-3 text-[#D9A9FF] shrink-0" />
                     <span>{pill}</span>
                   </button>
                 ))}
@@ -349,7 +349,7 @@ Lab Preferido: ${answersPayload.preferredLab} | Banda BPM: ${answersPayload.bpmB
                 value={currentChallenges}
                 onChange={e => setCurrentChallenges(e.target.value)}
                 placeholder="Ejemplo: Siento que repito las mismas secuencias, me pongo nervios@ frente a público..."
-                className="w-full h-32 p-4 rounded-2xl bg-[#13101A] border border-[#2D2335] focus:border-[#E9C349] focus:outline-none text-xs text-white placeholder-slate-500 transition-colors resize-none"
+                className="w-full h-32 p-4 rounded-2xl bg-[#13101A] border border-[#2D2335] focus:border-[#D9A9FF] focus:outline-none text-xs text-white placeholder-slate-500 transition-colors resize-none"
               />
             </div>
           )}
@@ -358,7 +358,7 @@ Lab Preferido: ${answersPayload.preferredLab} | Banda BPM: ${answersPayload.bpmB
           {step === 5 && (
             <div className="space-y-6 animate-fadeIn">
               <div className="flex items-start gap-3">
-                <div className="p-2 rounded-xl bg-[#9A2B3C]/10 border border-[#9A2B3C]/30 text-[#E9C349] shrink-0 mt-0.5">
+                <div className="p-2 rounded-xl bg-[#C23E9E]/10 border border-[#C23E9E]/30 text-[#D9A9FF] shrink-0 mt-0.5">
                   <Activity className="w-5 h-5" />
                 </div>
                 <div>
@@ -382,12 +382,12 @@ Lab Preferido: ${answersPayload.preferredLab} | Banda BPM: ${answersPayload.bpmB
                       onClick={() => setPreferredLab(lab.name)}
                       className={`p-3 rounded-2xl border text-xs text-left transition-all flex items-center justify-between ${
                         preferredLab === lab.name
-                          ? 'bg-[#9A2B3C]/20 border-[#E9C349] text-white shadow-md'
+                          ? 'bg-[#C23E9E]/20 border-[#D9A9FF] text-white shadow-md'
                           : 'bg-[#16131D] border-[#2D2335] text-slate-300 hover:border-slate-500'
                       }`}
                     >
                       <span className="font-medium">{lab.name}</span>
-                      {preferredLab === lab.name && <CheckCircle2 className="w-4 h-4 text-[#E9C349] shrink-0" />}
+                      {preferredLab === lab.name && <CheckCircle2 className="w-4 h-4 text-[#D9A9FF] shrink-0" />}
                     </button>
                   ))}
                 </div>
@@ -404,12 +404,12 @@ Lab Preferido: ${answersPayload.preferredLab} | Banda BPM: ${answersPayload.bpmB
                       onClick={() => setBpmBand(bpm)}
                       className={`w-full p-3 rounded-2xl border text-xs text-left transition-all flex items-center justify-between ${
                         bpmBand === bpm
-                          ? 'bg-[#9A2B3C]/20 border-[#E9C349] text-white shadow-md'
+                          ? 'bg-[#C23E9E]/20 border-[#D9A9FF] text-white shadow-md'
                           : 'bg-[#16131D] border-[#2D2335] text-slate-300 hover:border-slate-500'
                       }`}
                     >
                       <span className="font-mono font-bold">{bpm}</span>
-                      {bpmBand === bpm && <CheckCircle2 className="w-4 h-4 text-[#E9C349] shrink-0" />}
+                      {bpmBand === bpm && <CheckCircle2 className="w-4 h-4 text-[#D9A9FF] shrink-0" />}
                     </button>
                   ))}
                 </div>
@@ -426,7 +426,7 @@ Lab Preferido: ${answersPayload.preferredLab} | Banda BPM: ${answersPayload.bpmB
             className={`px-4 py-2.5 rounded-xl border text-xs font-mono font-bold flex items-center gap-2 transition-all ${
               step === 1 || loading
                 ? 'opacity-30 border-[#2D2335] text-slate-600 cursor-not-allowed'
-                : 'border-[#3D304A] bg-[#1B1624] text-slate-300 hover:text-white hover:border-[#E9C349]/40'
+                : 'border-[#3D304A] bg-[#1B1624] text-slate-300 hover:text-white hover:border-[#D9A9FF]/40'
             }`}
           >
             <ArrowLeft className="w-4 h-4" />
@@ -436,7 +436,7 @@ Lab Preferido: ${answersPayload.preferredLab} | Banda BPM: ${answersPayload.bpmB
           <button
             onClick={handleNext}
             disabled={loading}
-            className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#9A2B3C] via-[#B8344B] to-[#E9C349] text-white font-mono text-xs font-bold uppercase tracking-wider shadow-lg hover:brightness-110 active:scale-95 transition-all flex items-center gap-2"
+            className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#C23E9E] via-[#C23FA0] to-[#D9A9FF] text-white font-mono text-xs font-bold uppercase tracking-wider shadow-lg hover:brightness-110 active:scale-95 transition-all flex items-center gap-2"
           >
             {loading ? (
               <>
@@ -450,7 +450,7 @@ Lab Preferido: ${answersPayload.preferredLab} | Banda BPM: ${answersPayload.bpmB
               </>
             ) : (
               <>
-                <Sparkles className="w-4 h-4 text-[#E9C349]" />
+                <Sparkles className="w-4 h-4 text-[#D9A9FF]" />
                 <span>Generar Plan Pedagógico</span>
               </>
             )}

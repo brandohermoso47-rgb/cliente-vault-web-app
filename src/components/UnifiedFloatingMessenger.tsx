@@ -402,18 +402,18 @@ export const UnifiedFloatingMessenger: React.FC<UnifiedFloatingMessengerProps> =
                 setIsOpen(true);
                 setIsMinimized(false);
               }}
-              className="bg-[#121212]/95 backdrop-blur-md border border-[#E9C349]/60 px-4 py-2.5 rounded-2xl shadow-[0_8px_30px_rgba(233,195,73,0.25)] text-white flex items-center gap-3 cursor-pointer hover:border-[#E9C349] transition-all group"
+              className="bg-[#121212]/95 backdrop-blur-md border border-[#D9A9FF]/60 px-4 py-2.5 rounded-2xl shadow-[0_8px_30px_rgba(217, 169, 255,0.25)] text-white flex items-center gap-3 cursor-pointer hover:border-[#D9A9FF] transition-all group"
             >
-              <div className="w-2.5 h-2.5 rounded-full bg-[#E9C349] animate-ping shrink-0" />
+              <div className="w-2.5 h-2.5 rounded-full bg-[#D9A9FF] animate-ping shrink-0" />
               <div className="text-xs">
-                <span className="font-bold text-[#E9C349] font-mono block uppercase text-[10px] tracking-wider">
+                <span className="font-bold text-[#D9A9FF] font-mono block uppercase text-[10px] tracking-wider">
                   {unreadTotal} {unreadTotal === 1 ? 'Mensaje Nuevo' : 'Mensajes Nuevos'}
                 </span>
                 <span className="text-gray-300 text-[11px] truncate max-w-[170px] block">
                   Instructores & amigos en línea
                 </span>
               </div>
-              <ArrowRight className="w-3.5 h-3.5 text-[#E9C349] group-hover:translate-x-0.5 transition-transform" />
+              <ArrowRight className="w-3.5 h-3.5 text-[#D9A9FF] group-hover:translate-x-0.5 transition-transform" />
             </motion.div>
           )}
         </AnimatePresence>
@@ -432,8 +432,8 @@ export const UnifiedFloatingMessenger: React.FC<UnifiedFloatingMessengerProps> =
           }}
           className={`relative p-3.5 sm:p-4 rounded-full shadow-[0_10px_35px_rgba(0,0,0,0.6)] border transition-all flex items-center justify-center cursor-pointer ${
             isOpen 
-              ? 'bg-[#9A2B3C] text-white border-[#E9C349]' 
-              : 'bg-gradient-to-br from-[#1E1E1E] to-[#121212] text-[#E9C349] border-[#E9C349]/60 hover:border-[#E9C349] shadow-[0_0_25px_rgba(233,195,73,0.2)]'
+              ? 'bg-[#C23E9E] text-white border-[#D9A9FF]' 
+              : 'bg-gradient-to-br from-[#1E1E1E] to-[#121212] text-[#D9A9FF] border-[#D9A9FF]/60 hover:border-[#D9A9FF] shadow-[0_0_25px_rgba(217, 169, 255,0.2)]'
           }`}
           title="Abrir Mensajería Unificada Waack On"
         >
@@ -441,9 +441,9 @@ export const UnifiedFloatingMessenger: React.FC<UnifiedFloatingMessengerProps> =
             <X className="w-6 h-6 text-white" />
           ) : (
             <>
-              <MessageSquare className="w-6 h-6 text-[#E9C349]" />
+              <MessageSquare className="w-6 h-6 text-[#D9A9FF]" />
               {unreadTotal > 0 && (
-                <span className="absolute -top-1 -right-1 w-5 h-5 bg-[#9A2B3C] border-2 border-black text-white text-[10px] font-bold font-mono rounded-full flex items-center justify-center shadow-lg animate-pulse">
+                <span className="absolute -top-1 -right-1 w-5 h-5 bg-[#C23E9E] border-2 border-black text-white text-[10px] font-bold font-mono rounded-full flex items-center justify-center shadow-lg animate-pulse">
                   {unreadTotal > 9 ? '+9' : unreadTotal}
                 </span>
               )}
@@ -490,7 +490,7 @@ export const UnifiedFloatingMessenger: React.FC<UnifiedFloatingMessengerProps> =
                     <img 
                       src={activeContact.avatar} 
                       alt={activeContact.name} 
-                      className="w-8 h-8 rounded-xl object-cover border border-[#E9C349]/40" 
+                      className="w-8 h-8 rounded-xl object-cover border border-[#D9A9FF]/40" 
                     />
                     <span className={`absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border border-[#121212] ${
                       activeContact.status === 'in_battle' 
@@ -506,7 +506,7 @@ export const UnifiedFloatingMessenger: React.FC<UnifiedFloatingMessengerProps> =
                         {activeContact.displayName || activeContact.name}
                       </h4>
                       {activeContact.role === 'instructor' && (
-                        <span className="px-1.5 py-0.5 bg-[#E9C349]/20 border border-[#E9C349]/50 text-[#E9C349] text-[9px] font-mono font-bold rounded-md flex items-center gap-0.5">
+                        <span className="px-1.5 py-0.5 bg-[#D9A9FF]/20 border border-[#D9A9FF]/50 text-[#D9A9FF] text-[9px] font-mono font-bold rounded-md flex items-center gap-0.5">
                           <Crown className="w-2.5 h-2.5" /> DOCENTE
                         </span>
                       )}
@@ -524,11 +524,11 @@ export const UnifiedFloatingMessenger: React.FC<UnifiedFloatingMessengerProps> =
               ) : (
                 /* Header in Contacts / Inbox View */
                 <div className="flex items-center gap-2.5">
-                  <div className="w-7 h-7 rounded-xl bg-[#E9C349]/20 border border-[#E9C349]/50 flex items-center justify-center text-[#E9C349]">
+                  <div className="w-7 h-7 rounded-xl bg-[#D9A9FF]/20 border border-[#D9A9FF]/50 flex items-center justify-center text-[#D9A9FF]">
                     <MessageSquare className="w-4 h-4" />
                   </div>
                   <div>
-                    <h3 className="font-mono font-bold text-xs uppercase tracking-wider text-[#E9C349] flex items-center gap-1.5">
+                    <h3 className="font-mono font-bold text-xs uppercase tracking-wider text-[#D9A9FF] flex items-center gap-1.5">
                       Mensajería Waack On
                     </h3>
                     <p className="text-[10px] text-gray-400 leading-tight">
@@ -554,10 +554,10 @@ export const UnifiedFloatingMessenger: React.FC<UnifiedFloatingMessengerProps> =
                         });
                       }
                     }}
-                    className="p-1.5 rounded-lg hover:bg-[#242424] hover:text-[#E9C349] transition-colors cursor-pointer text-xs flex items-center gap-1 font-mono mr-1"
+                    className="p-1.5 rounded-lg hover:bg-[#242424] hover:text-[#D9A9FF] transition-colors cursor-pointer text-xs flex items-center gap-1 font-mono mr-1"
                     title="Desafiar a Duelo de Waacking"
                   >
-                    <Swords className="w-3.5 h-3.5 text-[#E9C349]" />
+                    <Swords className="w-3.5 h-3.5 text-[#D9A9FF]" />
                     <span className="hidden sm:inline text-[10px]">Duelo</span>
                   </button>
                 )}
@@ -578,7 +578,7 @@ export const UnifiedFloatingMessenger: React.FC<UnifiedFloatingMessengerProps> =
                 </button>
                 <button
                   onClick={() => setIsOpen(false)}
-                  className="p-1.5 rounded-lg hover:bg-[#9A2B3C] hover:text-white transition-colors cursor-pointer"
+                  className="p-1.5 rounded-lg hover:bg-[#C23E9E] hover:text-white transition-colors cursor-pointer"
                   title="Cerrar mensajería"
                 >
                   <X className="w-3.5 h-3.5" />
@@ -599,7 +599,7 @@ export const UnifiedFloatingMessenger: React.FC<UnifiedFloatingMessengerProps> =
                         <img 
                           src={activeContact.avatar} 
                           alt={activeContact.name} 
-                          className="w-14 h-14 rounded-2xl mx-auto object-cover border-2 border-[#E9C349]/40 mb-2 shadow-lg" 
+                          className="w-14 h-14 rounded-2xl mx-auto object-cover border-2 border-[#D9A9FF]/40 mb-2 shadow-lg" 
                         />
                         <h4 className="font-bold text-sm text-white">
                           {activeContact.displayName || activeContact.name}
@@ -617,7 +617,7 @@ export const UnifiedFloatingMessenger: React.FC<UnifiedFloatingMessengerProps> =
                       {/* Messages Stream */}
                       {activeMessages.length === 0 ? (
                         <div className="text-center py-8 text-gray-500 text-xs">
-                          <Sparkles className="w-6 h-6 mx-auto mb-2 text-[#E9C349]/60 animate-pulse" />
+                          <Sparkles className="w-6 h-6 mx-auto mb-2 text-[#D9A9FF]/60 animate-pulse" />
                           <p>No hay mensajes previos con {activeContact.name}.</p>
                           <p className="text-[11px] text-gray-400 mt-1">¡Inicia la conversación o envíale una duda técnica!</p>
                         </div>
@@ -641,7 +641,7 @@ export const UnifiedFloatingMessenger: React.FC<UnifiedFloatingMessengerProps> =
                                 <div 
                                   className={`p-3 rounded-2xl text-xs leading-relaxed ${
                                     isMe 
-                                      ? 'bg-gradient-to-br from-[#1E1E1E] to-[#181818] border border-[#E9C349]/60 text-white rounded-br-none shadow-[0_4px_15px_rgba(0,0,0,0.4)]' 
+                                      ? 'bg-gradient-to-br from-[#1E1E1E] to-[#181818] border border-[#D9A9FF]/60 text-white rounded-br-none shadow-[0_4px_15px_rgba(0,0,0,0.4)]' 
                                       : 'bg-[#1C1C1C] border border-[#2B2B2B] text-gray-100 rounded-bl-none shadow-[0_4px_15px_rgba(0,0,0,0.3)]'
                                   }`}
                                 >
@@ -650,13 +650,13 @@ export const UnifiedFloatingMessenger: React.FC<UnifiedFloatingMessengerProps> =
                                     <div className="flex items-center gap-2.5 py-1">
                                       <button 
                                         onClick={() => setPlayingAudioId(playingAudioId === msg.id ? null : msg.id)}
-                                        className="w-7 h-7 rounded-full bg-[#E9C349] text-black flex items-center justify-center shrink-0 cursor-pointer shadow"
+                                        className="w-7 h-7 rounded-full bg-[#D9A9FF] text-black flex items-center justify-center shrink-0 cursor-pointer shadow"
                                       >
                                         {playingAudioId === msg.id ? <Pause className="w-3.5 h-3.5 fill-black" /> : <Play className="w-3.5 h-3.5 fill-black ml-0.5" />}
                                       </button>
                                       <div className="flex-1">
                                         <div className="h-2 w-28 bg-[#333333] rounded-full overflow-hidden flex items-center">
-                                          <div className={`h-full bg-[#E9C349] ${playingAudioId === msg.id ? 'w-full animate-pulse transition-all duration-3000' : 'w-1/3'}`} />
+                                          <div className={`h-full bg-[#D9A9FF] ${playingAudioId === msg.id ? 'w-full animate-pulse transition-all duration-3000' : 'w-1/3'}`} />
                                         </div>
                                         <span className="text-[10px] font-mono text-gray-400 mt-1 block">
                                           Nota de voz ({msg.audioDuration || '0:15'})
@@ -668,14 +668,14 @@ export const UnifiedFloatingMessenger: React.FC<UnifiedFloatingMessengerProps> =
                                   )}
 
                                   {/* Message status & time */}
-                                  <div className={`flex items-center gap-1 mt-1 text-[9px] font-mono ${isMe ? 'text-[#E9C349]/80 justify-end' : 'text-gray-500 justify-start'}`}>
+                                  <div className={`flex items-center gap-1 mt-1 text-[9px] font-mono ${isMe ? 'text-[#D9A9FF]/80 justify-end' : 'text-gray-500 justify-start'}`}>
                                     <span>
                                       {new Date(msg.timestamp || msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                     </span>
                                     {isMe && (
                                       <span>
                                         {msg.status === 'read' || msg.isRead ? (
-                                          <CheckCheck className="w-3 h-3 text-[#E9C349]" />
+                                          <CheckCheck className="w-3 h-3 text-[#D9A9FF]" />
                                         ) : (
                                           <Check className="w-3 h-3 text-gray-400" />
                                         )}
@@ -706,7 +706,7 @@ export const UnifiedFloatingMessenger: React.FC<UnifiedFloatingMessengerProps> =
 
                     {/* Voice Recording Active Bar */}
                     {isRecordingVoice && (
-                      <div className="bg-[#9A2B3C]/90 px-4 py-2 flex items-center justify-between text-white border-t border-[#9A2B3C]">
+                      <div className="bg-[#C23E9E]/90 px-4 py-2 flex items-center justify-between text-white border-t border-[#C23E9E]">
                         <div className="flex items-center gap-2">
                           <div className="w-3 h-3 rounded-full bg-red-400 animate-ping" />
                           <span className="font-mono text-xs font-bold">
@@ -752,8 +752,8 @@ export const UnifiedFloatingMessenger: React.FC<UnifiedFloatingMessengerProps> =
                     <div className="p-3 bg-[#161616] border-t border-[#242424] flex items-center gap-2">
                       <button
                         onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-                        className={`p-2 rounded-xl text-gray-400 hover:text-[#E9C349] hover:bg-[#222222] transition-colors cursor-pointer ${
-                          showEmojiPicker ? 'text-[#E9C349] bg-[#222222]' : ''
+                        className={`p-2 rounded-xl text-gray-400 hover:text-[#D9A9FF] hover:bg-[#222222] transition-colors cursor-pointer ${
+                          showEmojiPicker ? 'text-[#D9A9FF] bg-[#222222]' : ''
                         }`}
                         title="Añadir emojis"
                       >
@@ -768,7 +768,7 @@ export const UnifiedFloatingMessenger: React.FC<UnifiedFloatingMessengerProps> =
                             setIsRecordingVoice(true);
                           }
                         }}
-                        className={`p-2 rounded-xl text-gray-400 hover:text-[#E9C349] hover:bg-[#222222] transition-colors cursor-pointer ${
+                        className={`p-2 rounded-xl text-gray-400 hover:text-[#D9A9FF] hover:bg-[#222222] transition-colors cursor-pointer ${
                           isRecordingVoice ? 'text-red-400 bg-red-950/40 animate-pulse' : ''
                         }`}
                         title="Grabar nota de voz"
@@ -788,13 +788,13 @@ export const UnifiedFloatingMessenger: React.FC<UnifiedFloatingMessengerProps> =
                           }
                         }}
                         placeholder={`Escribe a ${activeContact.displayName || activeContact.name}...`}
-                        className="flex-1 bg-[#202020] border border-[#2E2E2E] focus:border-[#E9C349] rounded-xl px-3.5 py-2 text-xs text-white placeholder-gray-500 focus:outline-none transition-all"
+                        className="flex-1 bg-[#202020] border border-[#2E2E2E] focus:border-[#D9A9FF] rounded-xl px-3.5 py-2 text-xs text-white placeholder-gray-500 focus:outline-none transition-all"
                       />
 
                       <button
                         disabled={!inputText.trim()}
                         onClick={() => handleSendMessage()}
-                        className="p-2.5 rounded-xl bg-[#E9C349] hover:bg-[#d4ae36] disabled:opacity-40 disabled:hover:bg-[#E9C349] text-black font-bold transition-all shadow-md cursor-pointer flex items-center justify-center"
+                        className="p-2.5 rounded-xl bg-[#D9A9FF] hover:bg-[#B478F0] disabled:opacity-40 disabled:hover:bg-[#D9A9FF] text-black font-bold transition-all shadow-md cursor-pointer flex items-center justify-center"
                         title="Enviar mensaje"
                       >
                         <Send className="w-4 h-4" />
@@ -806,7 +806,7 @@ export const UnifiedFloatingMessenger: React.FC<UnifiedFloatingMessengerProps> =
                   <div className="flex-1 flex flex-col overflow-hidden">
                     <div className="px-4 py-2 bg-[#1A1A1A] border-b border-[#242424] flex items-center justify-between text-xs">
                       <div className="flex items-center gap-2 text-gray-300">
-                        <Globe className="w-3.5 h-3.5 text-[#E9C349]" />
+                        <Globe className="w-3.5 h-3.5 text-[#D9A9FF]" />
                         <span className="font-bold text-white">Sala Global de la Academia</span>
                       </div>
                       <span className="text-[10px] font-mono text-emerald-400 flex items-center gap-1">
@@ -827,7 +827,7 @@ export const UnifiedFloatingMessenger: React.FC<UnifiedFloatingMessengerProps> =
                               <div className="flex items-center gap-1.5">
                                 <span className="font-bold text-xs text-white">{msg.user}</span>
                                 {msg.role === 'instructor' && (
-                                  <span className="px-1 py-0.2 bg-[#E9C349]/20 text-[#E9C349] text-[8px] font-mono font-bold rounded">
+                                  <span className="px-1 py-0.2 bg-[#D9A9FF]/20 text-[#D9A9FF] text-[8px] font-mono font-bold rounded">
                                     DOCENTE
                                   </span>
                                 )}
@@ -854,12 +854,12 @@ export const UnifiedFloatingMessenger: React.FC<UnifiedFloatingMessengerProps> =
                           }
                         }}
                         placeholder="Escribe en el chat global de la academia..."
-                        className="flex-1 bg-[#202020] border border-[#2E2E2E] focus:border-[#E9C349] rounded-xl px-3.5 py-2 text-xs text-white placeholder-gray-500 focus:outline-none transition-all"
+                        className="flex-1 bg-[#202020] border border-[#2E2E2E] focus:border-[#D9A9FF] rounded-xl px-3.5 py-2 text-xs text-white placeholder-gray-500 focus:outline-none transition-all"
                       />
                       <button
                         disabled={!globalInputText.trim()}
                         onClick={handleSendGlobalMessage}
-                        className="p-2.5 rounded-xl bg-[#E9C349] hover:bg-[#d4ae36] disabled:opacity-40 text-black font-bold transition-all cursor-pointer"
+                        className="p-2.5 rounded-xl bg-[#D9A9FF] hover:bg-[#B478F0] disabled:opacity-40 text-black font-bold transition-all cursor-pointer"
                       >
                         <Send className="w-4 h-4" />
                       </button>
@@ -874,7 +874,7 @@ export const UnifiedFloatingMessenger: React.FC<UnifiedFloatingMessengerProps> =
                         onClick={() => setActiveCategory('all')}
                         className={`px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer shrink-0 ${
                           activeCategory === 'all' 
-                            ? 'bg-[#E9C349] text-black shadow-sm' 
+                            ? 'bg-[#D9A9FF] text-black shadow-sm' 
                             : 'bg-[#202020] text-gray-400 hover:text-white'
                         }`}
                       >
@@ -885,7 +885,7 @@ export const UnifiedFloatingMessenger: React.FC<UnifiedFloatingMessengerProps> =
                         onClick={() => setActiveCategory('instructors')}
                         className={`px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer shrink-0 flex items-center gap-1 ${
                           activeCategory === 'instructors' 
-                            ? 'bg-[#E9C349] text-black shadow-sm' 
+                            ? 'bg-[#D9A9FF] text-black shadow-sm' 
                             : 'bg-[#202020] text-gray-400 hover:text-white'
                         }`}
                       >
@@ -896,7 +896,7 @@ export const UnifiedFloatingMessenger: React.FC<UnifiedFloatingMessengerProps> =
                         onClick={() => setActiveCategory('friends')}
                         className={`px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer shrink-0 flex items-center gap-1 ${
                           activeCategory === 'friends' 
-                            ? 'bg-[#E9C349] text-black shadow-sm' 
+                            ? 'bg-[#D9A9FF] text-black shadow-sm' 
                             : 'bg-[#202020] text-gray-400 hover:text-white'
                         }`}
                       >
@@ -907,7 +907,7 @@ export const UnifiedFloatingMessenger: React.FC<UnifiedFloatingMessengerProps> =
                         onClick={() => setActiveCategory('students')}
                         className={`px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer shrink-0 flex items-center gap-1 ${
                           activeCategory === 'students' 
-                            ? 'bg-[#E9C349] text-black shadow-sm' 
+                            ? 'bg-[#D9A9FF] text-black shadow-sm' 
                             : 'bg-[#202020] text-gray-400 hover:text-white'
                         }`}
                       >
@@ -918,7 +918,7 @@ export const UnifiedFloatingMessenger: React.FC<UnifiedFloatingMessengerProps> =
                         onClick={() => setActiveCategory('global')}
                         className={`px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer shrink-0 flex items-center gap-1 ${
                           activeCategory === 'global' 
-                            ? 'bg-[#9A2B3C] text-white shadow-sm' 
+                            ? 'bg-[#C23E9E] text-white shadow-sm' 
                             : 'bg-[#202020] text-gray-400 hover:text-white'
                         }`}
                       >
@@ -935,7 +935,7 @@ export const UnifiedFloatingMessenger: React.FC<UnifiedFloatingMessengerProps> =
                           value={searchQuery}
                           onChange={(e) => setSearchQuery(e.target.value)}
                           placeholder="Buscar instructor, amigo o compañero..."
-                          className="w-full bg-[#1C1C1C] border border-[#2B2B2B] focus:border-[#E9C349] rounded-xl pl-9 pr-8 py-2 text-xs text-white placeholder-gray-500 focus:outline-none transition-all"
+                          className="w-full bg-[#1C1C1C] border border-[#2B2B2B] focus:border-[#D9A9FF] rounded-xl pl-9 pr-8 py-2 text-xs text-white placeholder-gray-500 focus:outline-none transition-all"
                         />
                         {searchQuery && (
                           <button
@@ -963,7 +963,7 @@ export const UnifiedFloatingMessenger: React.FC<UnifiedFloatingMessengerProps> =
                           <div
                             key={contact.id}
                             onClick={() => setActiveContact(contact)}
-                            className="p-2.5 rounded-2xl bg-[#181818] hover:bg-[#202020] border border-[#242424] hover:border-[#E9C349]/40 transition-all flex items-center gap-3 cursor-pointer group"
+                            className="p-2.5 rounded-2xl bg-[#181818] hover:bg-[#202020] border border-[#242424] hover:border-[#D9A9FF]/40 transition-all flex items-center gap-3 cursor-pointer group"
                           >
                             {/* Avatar & Online indicator */}
                             <div className="relative shrink-0">
@@ -985,11 +985,11 @@ export const UnifiedFloatingMessenger: React.FC<UnifiedFloatingMessengerProps> =
                             <div className="flex-1 min-w-0">
                               <div className="flex items-center justify-between gap-1 mb-0.5">
                                 <div className="flex items-center gap-1.5 min-w-0">
-                                  <h4 className="font-bold text-xs text-white group-hover:text-[#E9C349] transition-colors truncate">
+                                  <h4 className="font-bold text-xs text-white group-hover:text-[#D9A9FF] transition-colors truncate">
                                     {contact.displayName || contact.name}
                                   </h4>
                                   {contact.role === 'instructor' && (
-                                    <Crown className="w-3 h-3 text-[#E9C349] shrink-0" />
+                                    <Crown className="w-3 h-3 text-[#D9A9FF] shrink-0" />
                                   )}
                                   {contact.category === 'friend' && (
                                     <UserCheck className="w-3 h-3 text-purple-400 shrink-0" />
@@ -1013,7 +1013,7 @@ export const UnifiedFloatingMessenger: React.FC<UnifiedFloatingMessengerProps> =
 
                             {/* Unread count badge */}
                             {(contact.unreadCount || 0) > 0 && (
-                              <span className="w-5 h-5 rounded-full bg-[#E9C349] text-black font-bold font-mono text-[10px] flex items-center justify-center shrink-0 shadow-md">
+                              <span className="w-5 h-5 rounded-full bg-[#D9A9FF] text-black font-bold font-mono text-[10px] flex items-center justify-center shrink-0 shadow-md">
                                 {contact.unreadCount}
                               </span>
                             )}
@@ -1028,7 +1028,7 @@ export const UnifiedFloatingMessenger: React.FC<UnifiedFloatingMessengerProps> =
                         <span className="w-2 h-2 rounded-full bg-emerald-400" />
                         <span>{filteredContacts.length} contactos disponibles</span>
                       </div>
-                      <span className="text-[10px] font-mono text-[#E9C349]">
+                      <span className="text-[10px] font-mono text-[#D9A9FF]">
                         Waack On Hub v3.0
                       </span>
                     </div>

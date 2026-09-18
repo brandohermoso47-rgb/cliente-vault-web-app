@@ -4,7 +4,7 @@
  * Web Push notification dispatches, and Firebase Firestore synchronization.
  */
 
-import { db, handleFirestoreError, OperationType } from '../firebase';
+import { db, auth, sanitizeFirestoreData, handleFirestoreError, OperationType } from '../firebase';
 import { collection, doc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { NotificationItem, PushSubscriptionData, InstructorPushPreference } from '../types';
 
@@ -129,12 +129,31 @@ export async function saveStudentInstructorPushSubscription({
     lastPushPreferencesUpdated: new Date().toISOString()
   };
 
+  // 1. Always persist to localStorage for instant local and offline access
+  if (typeof window !== 'undefined') {
+    try {
+      localStorage.setItem('waackon_push_subscription', JSON.stringify(payloadToUpdate));
+      localStorage.setItem(`waackon_push_prefs_${userId}`, JSON.stringify(payloadToUpdate));
+    } catch (e) {
+      // safe fallback if storage quota exceeded
+    }
+  }
+
+  // 2. Only sync to Firestore if user is authenticated with Firebase Auth
+  const currentAuthUid = auth?.currentUser?.uid;
+  const targetUid = currentAuthUid || (userId && userId !== 'u-1' && !userId.startsWith('u-') ? userId : null);
+
+  if (!targetUid || !db || !currentAuthUid) {
+    console.log('[WebPush] Preferencias guardadas localmente (sesión sin autenticar o modo invitado):', userId);
+    return;
+  }
+
   try {
-    const userDocRef = doc(db, 'users', userId);
-    await setDoc(userDocRef, payloadToUpdate, { merge: true });
-    console.log('[WebPush] Preferencias y Endpoint guardados exitosamente en Firestore para el usuario:', userId);
+    const userDocRef = doc(db, 'users', targetUid);
+    await setDoc(userDocRef, sanitizeFirestoreData(payloadToUpdate), { merge: true });
+    console.log('[WebPush] Preferencias y Endpoint guardados exitosamente en Firestore para el usuario:', targetUid);
   } catch (err) {
-    handleFirestoreError(err, OperationType.WRITE, `users/${userId}`);
+    handleFirestoreError(err, OperationType.WRITE, `users/${targetUid}`);
     throw err;
   }
 }
@@ -182,14 +201,24 @@ export async function requestWebPushPermission(userId?: string): Promise<boolean
       // Register Service Worker in background
       const swReg = await registerServiceWorker();
 
-      // Store Web Push status in user document in Firestore if userId exists
-      if (userId && db) {
-        setDoc(doc(db, 'users', userId), {
+      // Store Web Push status locally
+      if (typeof window !== 'undefined') {
+        try {
+          localStorage.setItem('waackon_push_enabled', 'true');
+        } catch (e) {}
+      }
+
+      // Store Web Push status in user document in Firestore if user is authenticated with Firebase Auth
+      const currentAuthUid = auth?.currentUser?.uid;
+      const targetUid = currentAuthUid || (userId && userId !== 'u-1' && !userId.startsWith('u-') ? userId : null);
+
+      if (targetUid && db && currentAuthUid) {
+        setDoc(doc(db, 'users', targetUid), sanitizeFirestoreData({
           pushEnabled: true,
           pushPermission: 'granted',
           lastPushEnabledAt: new Date().toISOString()
-        }, { merge: true }).catch(err => {
-          handleFirestoreError(err, OperationType.WRITE, `users/${userId}`);
+        }), { merge: true }).catch(err => {
+          handleFirestoreError(err, OperationType.WRITE, `users/${targetUid}`);
         });
       }
 
@@ -205,11 +234,18 @@ export async function requestWebPushPermission(userId?: string): Promise<boolean
 
       return true;
     } else {
-      if (userId && db) {
-        setDoc(doc(db, 'users', userId), {
+      if (typeof window !== 'undefined') {
+        try {
+          localStorage.setItem('waackon_push_enabled', 'false');
+        } catch (e) {}
+      }
+      const currentAuthUid = auth?.currentUser?.uid;
+      const targetUid = currentAuthUid || (userId && userId !== 'u-1' && !userId.startsWith('u-') ? userId : null);
+      if (targetUid && db && currentAuthUid) {
+        setDoc(doc(db, 'users', targetUid), sanitizeFirestoreData({
           pushEnabled: false,
           pushPermission: permission
-        }, { merge: true }).catch(() => {});
+        }), { merge: true }).catch(() => {});
       }
       return false;
     }

@@ -35,7 +35,7 @@ const PRESET_POSTERS = [
     url: 'https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&q=80&w=1200'
   },
   {
-    id: 'preset-[#E9C349]',
+    id: 'preset-[#D9A9FF]',
     title: 'Afiche - Jamming & Freestyle Disco',
     category: 'Sesión',
     url: 'https://images.unsplash.com/photo-1535525153412-5a42439e2b0d?auto=format&fit=crop&q=80&w=1200'
@@ -162,12 +162,12 @@ export default function AnnouncementImagePicker({
       {/* Header Label */}
       <div className="flex items-center justify-between border-b border-white/10 pb-2.5">
         <div className="flex items-center gap-2">
-          <ImageIcon className="w-4 h-4 text-[#E9C349]" />
+          <ImageIcon className="w-4 h-4 text-[#D9A9FF]" />
           <span className="font-mono font-bold text-white uppercase tracking-wider text-[11px]">
             {language === 'es' ? 'Imagen del Anuncio / Afiche Oficial' : 'Announcement Image / Official Flyer'}
           </span>
         </div>
-        <span className="text-[9px] font-mono font-semibold text-[#E9C349] bg-[#E9C349]/10 px-2 py-0.5 rounded border border-[#E9C349]/20">
+        <span className="text-[9px] font-mono font-semibold text-[#D9A9FF] bg-[#D9A9FF]/10 px-2 py-0.5 rounded border border-[#D9A9FF]/20">
           HD VISUAL
         </span>
       </div>
@@ -175,7 +175,7 @@ export default function AnnouncementImagePicker({
       {/* IF IMAGE IS SELECTED: SHOW RICH PREVIEW */}
       {selectedImage ? (
         <div className="space-y-2">
-          <div className="relative rounded-xl overflow-hidden border-2 border-[#E9C349]/60 bg-black group shadow-xl">
+          <div className="relative rounded-xl overflow-hidden border-2 border-[#D9A9FF]/60 bg-black group shadow-xl">
             <img
               src={selectedImage}
               alt="Vista previa del anuncio"
@@ -183,7 +183,7 @@ export default function AnnouncementImagePicker({
             />
 
             {/* Top Source Badge */}
-            <div className="absolute top-2.5 left-2.5 bg-black/85 backdrop-blur-md px-2.5 py-1 rounded-lg border border-white/15 text-[10px] font-mono text-[#E9C349] font-bold flex items-center gap-1.5 shadow-lg">
+            <div className="absolute top-2.5 left-2.5 bg-black/85 backdrop-blur-md px-2.5 py-1 rounded-lg border border-white/15 text-[10px] font-mono text-[#D9A9FF] font-bold flex items-center gap-1.5 shadow-lg">
               <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
               <span>{imageSourceLabel}</span>
             </div>
@@ -193,7 +193,7 @@ export default function AnnouncementImagePicker({
               <button
                 type="button"
                 onClick={() => setLightboxPreview(selectedImage)}
-                className="p-2 bg-black/80 hover:bg-[#E9C349] hover:text-black text-white rounded-lg transition-all border border-white/20 shadow-lg flex items-center gap-1"
+                className="p-2 bg-black/80 hover:bg-[#D9A9FF] hover:text-black text-white rounded-lg transition-all border border-white/20 shadow-lg flex items-center gap-1"
                 title={language === 'es' ? 'Ampliar Vista Previa' : 'Expand Preview'}
               >
                 <ZoomIn className="w-3.5 h-3.5" />
@@ -219,7 +219,7 @@ export default function AnnouncementImagePicker({
               <button
                 type="button"
                 onClick={() => onImageChange(null)}
-                className="text-[10px] text-[#E9C349] underline hover:text-white font-mono font-bold"
+                className="text-[10px] text-[#D9A9FF] underline hover:text-white font-mono font-bold"
               >
                 {language === 'es' ? 'Cambiar Imagen' : 'Change Image'}
               </button>
@@ -248,7 +248,7 @@ export default function AnnouncementImagePicker({
                   }}
                   className={`py-1.5 px-2 rounded-lg text-[10px] font-mono font-bold transition-all flex items-center justify-center gap-1.5 ${
                     activeSourceTab === tab.id
-                      ? 'bg-[#E9C349] text-black font-black shadow-md'
+                      ? 'bg-[#D9A9FF] text-black font-black shadow-md'
                       : 'text-slate-400 hover:text-white hover:bg-white/5'
                   }`}
                 >
@@ -266,11 +266,11 @@ export default function AnnouncementImagePicker({
               onDrop={handleDrop}
               className={`border-2 border-dashed rounded-xl p-5 text-center flex flex-col items-center justify-center gap-2 cursor-pointer transition-all ${
                 isDragging
-                  ? 'border-[#E9C349] bg-[#E9C349]/10'
-                  : 'border-[#262626] hover:border-[#E9C349]/50 bg-[#121216] hover:bg-[#17171d]'
+                  ? 'border-[#D9A9FF] bg-[#D9A9FF]/10'
+                  : 'border-[#262626] hover:border-[#D9A9FF]/50 bg-[#121216] hover:bg-[#17171d]'
               }`}
             >
-              <div className="p-3 bg-[#E9C349]/10 border border-[#E9C349]/30 rounded-full text-[#E9C349]">
+              <div className="p-3 bg-[#D9A9FF]/10 border border-[#D9A9FF]/30 rounded-full text-[#D9A9FF]">
                 <Upload className="w-5 h-5" />
               </div>
               <div className="space-y-0.5">
@@ -313,11 +313,11 @@ export default function AnnouncementImagePicker({
                   placeholder="https://images.unsplash.com/photo-..."
                   value={urlInput}
                   onChange={(e) => setUrlInput(e.target.value)}
-                  className="flex-1 bg-[#0A0A0D] border border-white/10 rounded-xl px-3 py-2 text-xs text-white outline-none focus:border-[#E9C349] font-mono"
+                  className="flex-1 bg-[#0A0A0D] border border-white/10 rounded-xl px-3 py-2 text-xs text-white outline-none focus:border-[#D9A9FF] font-mono"
                 />
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-[#E9C349] hover:bg-[#d8b33c] text-black font-mono font-black text-xs rounded-xl uppercase transition-all shrink-0"
+                  className="px-4 py-2 bg-[#D9A9FF] hover:bg-[#B87CFF] text-black font-mono font-black text-xs rounded-xl uppercase transition-all shrink-0"
                 >
                   {language === 'es' ? 'Cargar' : 'Load'}
                 </button>
@@ -346,7 +346,7 @@ export default function AnnouncementImagePicker({
                       onImageChange(preset.url);
                       setImageSourceLabel(`🖼️ ${preset.title}`);
                     }}
-                    className="relative rounded-lg overflow-hidden border border-white/10 hover:border-[#E9C349] group text-left transition-all bg-black/60 aspect-video"
+                    className="relative rounded-lg overflow-hidden border border-white/10 hover:border-[#D9A9FF] group text-left transition-all bg-black/60 aspect-video"
                   >
                     <img
                       src={preset.url}
@@ -354,7 +354,7 @@ export default function AnnouncementImagePicker({
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent p-1.5 flex flex-col justify-end">
-                      <span className="text-[8px] font-mono font-bold text-[#E9C349] uppercase bg-black/80 px-1 rounded w-max">
+                      <span className="text-[8px] font-mono font-bold text-[#D9A9FF] uppercase bg-black/80 px-1 rounded w-max">
                         {preset.category}
                       </span>
                       <span className="text-[9px] font-extrabold text-white truncate leading-tight mt-0.5">
@@ -370,7 +370,7 @@ export default function AnnouncementImagePicker({
           {/* TAB 4: CLIPBOARD PASTE INSTRUCTIONS */}
           {activeSourceTab === 'paste' && (
             <div className="p-4 bg-[#121216] border border-white/10 rounded-xl text-center space-y-2">
-              <div className="p-2.5 bg-[#E9C349]/10 border border-[#E9C349]/30 rounded-full w-max mx-auto text-[#E9C349]">
+              <div className="p-2.5 bg-[#D9A9FF]/10 border border-[#D9A9FF]/30 rounded-full w-max mx-auto text-[#D9A9FF]">
                 <Clipboard className="w-5 h-5" />
               </div>
               <h5 className="text-xs font-mono font-bold text-white uppercase">
@@ -389,7 +389,7 @@ export default function AnnouncementImagePicker({
       {/* LIGHTBOX MODAL FOR IMAGE PREVIEW */}
       {lightboxPreview && (
         <div className="fixed inset-0 bg-black/90 backdrop-blur-md z-50 flex items-center justify-center p-4">
-          <div className="relative max-w-3xl w-full bg-[#121212] border border-[#E9C349]/50 rounded-2xl overflow-hidden p-3 shadow-2xl">
+          <div className="relative max-w-3xl w-full bg-[#121212] border border-[#D9A9FF]/50 rounded-2xl overflow-hidden p-3 shadow-2xl">
             <button
               type="button"
               onClick={() => setLightboxPreview(null)}
@@ -407,7 +407,7 @@ export default function AnnouncementImagePicker({
               <button
                 type="button"
                 onClick={() => setLightboxPreview(null)}
-                className="text-[#E9C349] font-bold underline"
+                className="text-[#D9A9FF] font-bold underline"
               >
                 {language === 'es' ? 'Cerrar Vista Previa' : 'Close Preview'}
               </button>

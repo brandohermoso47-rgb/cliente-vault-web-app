@@ -64,11 +64,11 @@ export default function MovementTrailStudio({ language, onAddBonusPoints, onLogP
             onClick={() => setTab(id)}
             className={`group flex h-10 min-w-[120px] items-center justify-center gap-2 rounded-xl border px-4 text-xs font-mono font-bold uppercase tracking-wider transition-all ${
               tab === id
-                ? 'bg-[#9A2B3C] text-white border-[#9A2B3C] shadow-lg'
-                : 'bg-[#121212] text-[#8A8A8A] border-[#262626] hover:text-white hover:border-[#E9C349]/30'
+                ? 'bg-[#C23E9E] text-white border-[#C23E9E] shadow-lg'
+                : 'bg-[#121212] text-[#8A8A8A] border-[#262626] hover:text-white hover:border-[#D9A9FF]/30'
             }`}
           >
-            <Icon className="h-4 w-4 text-[#E9C349]" />
+            <Icon className="h-4 w-4 text-[#D9A9FF]" />
             {isEs ? es : en}
           </button>
         ))}

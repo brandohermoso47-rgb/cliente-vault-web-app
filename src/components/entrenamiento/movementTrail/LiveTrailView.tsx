@@ -62,7 +62,7 @@ export default function LiveTrailView({ language, onSaved }: LiveTrailViewProps)
       durationMs: duration,
       mirrored: mirrorOnRef.current,
       mirrorAxisX: mirrorAxisRef.current,
-      color: '#9A2B3C',
+      color: '#C23E9E',
       strokeWidth: 4,
       createdAt: Date.now(),
       updatedAt: Date.now(),
@@ -104,14 +104,14 @@ export default function LiveTrailView({ language, onSaved }: LiveTrailViewProps)
         globalAlpha: 0.5,
       });
       drawTrail(ctx, penTrailRef.current, canvas.width, canvas.height, {
-        color: '#E9C349',
+        color: '#D9A9FF',
         strokeWidth: 4,
         nowT: now,
         fadeMs: LIVE_FADE_MS,
       });
       if (mirrorOnRef.current) {
         drawTrail(ctx, mirrorPoints(penTrailRef.current, mirrorAxisRef.current), canvas.width, canvas.height, {
-          color: '#9A2B3C',
+          color: '#C23E9E',
           strokeWidth: 4,
           nowT: now,
           fadeMs: LIVE_FADE_MS,
@@ -212,7 +212,7 @@ export default function LiveTrailView({ language, onSaved }: LiveTrailViewProps)
         onClick={recordState === 'recording' ? finishRecording : startRecording}
         disabled={status !== 'ready'}
         className={`flex max-w-md items-center justify-center gap-2 rounded-2xl px-6 py-3 font-mono text-xs uppercase tracking-wider transition disabled:opacity-40 ${
-          recordState === 'recording' ? 'bg-rose-500/90 text-white hover:bg-rose-500' : 'bg-[#9A2B3C] text-white hover:bg-[#9A2B3C]/80'
+          recordState === 'recording' ? 'bg-rose-500/90 text-white hover:bg-rose-500' : 'bg-[#C23E9E] text-white hover:bg-[#C23E9E]/80'
         }`}
       >
         {recordState === 'recording' ? (

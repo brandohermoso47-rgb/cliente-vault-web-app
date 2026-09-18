@@ -98,7 +98,7 @@ export default function ComboPractice({ language, comboId, onExit, onAddBonusPoi
         });
         if (figure.mirrored) {
           drawGhostReveal(ctx, mirrorPoints(figure.points, figure.mirrorAxisX), canvas.width, canvas.height, revealElapsed, {
-            color: '#E9C349',
+            color: '#D9A9FF',
             strokeWidth: figure.strokeWidth,
           });
         }
@@ -183,19 +183,19 @@ export default function ComboPractice({ language, comboId, onExit, onAddBonusPoi
 
           <div
             className={`relative aspect-[4/3] w-full max-w-md overflow-hidden rounded-3xl border shadow-2xl transition-colors ${
-              beatFlash ? 'border-[#E9C349]' : 'border-[#262626]'
+              beatFlash ? 'border-[#D9A9FF]' : 'border-[#262626]'
             } bg-[#0d0b18]`}
           >
             {cameraOn && <CameraGhostLayer isEs={isEs} />}
             <TrailCanvas ref={canvasRef} className="pointer-events-none absolute inset-0 h-full w-full" />
 
-            <div className="absolute left-4 top-4 rounded-full bg-black/50 px-3 py-1 font-mono text-xs uppercase tracking-widest text-[#E9C349]">
+            <div className="absolute left-4 top-4 rounded-full bg-black/50 px-3 py-1 font-mono text-xs uppercase tracking-widest text-[#D9A9FF]">
               {currentFigure ? currentFigure.name : '—'} · {figureIndex + 1}/{sequence.length || 1}
             </div>
           </div>
 
           <label className="flex items-center gap-2 self-start text-sm text-[#8A8A8A]">
-            <input type="checkbox" checked={cameraOn} onChange={(e) => setCameraOn(e.target.checked)} className="h-4 w-4 accent-[#E9C349]" />
+            <input type="checkbox" checked={cameraOn} onChange={(e) => setCameraOn(e.target.checked)} className="h-4 w-4 accent-[#D9A9FF]" />
             <Camera className="h-4 w-4" /> {isEs ? 'Practicar con cámara' : 'Practice with camera'}
           </label>
 

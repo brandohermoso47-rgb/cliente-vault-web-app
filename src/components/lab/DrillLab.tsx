@@ -133,7 +133,7 @@ const DrillLabComponent: React.FC<DrillLabProps> = ({
                     animate={{ scale: 1.2, opacity: 0 }}
                     exit={{ opacity: 0 }}
                     className={`absolute w-36 h-36 rounded-full border pointer-events-none ${
-                      beatCount === 1 ? 'border-[#9A2B3C] bg-[#9A2B3C]/10' : 'border-[#E9C349] bg-[#E9C349]/10'
+                      beatCount === 1 ? 'border-[#C23E9E] bg-[#C23E9E]/10' : 'border-[#D9A9FF] bg-[#D9A9FF]/10'
                     }`}
                   />
                 )}
@@ -167,7 +167,7 @@ const DrillLabComponent: React.FC<DrillLabProps> = ({
                     className={`w-6 h-6 rounded-full border flex items-center justify-center text-[10px] font-mono transition-all duration-100 ${
                       beatCount === b
                         ? b === 1
-                          ? 'bg-[#9A2B3C] border-[#9A2B3C] text-white scale-125 font-bold shadow-lg'
+                          ? 'bg-[#C23E9E] border-[#C23E9E] text-white scale-125 font-bold shadow-lg'
                           : 'bg-tertiary border-tertiary text-black scale-110 font-bold shadow-md'
                         : 'bg-black/30 border-tertiary/5 text-on-surface-variant font-bold'
                     }`}
@@ -216,7 +216,7 @@ const DrillLabComponent: React.FC<DrillLabProps> = ({
                     <div className="flex items-center gap-2">
                       <span className="text-on-surface-variant">TEMPO DRILL:</span>
                       {drillBpm % 10 === 0 && (
-                        <span className="px-2 py-0.5 rounded text-[9px] font-mono font-black uppercase bg-[#E9C349] text-black shadow flex items-center gap-1">
+                        <span className="px-2 py-0.5 rounded text-[9px] font-mono font-black uppercase bg-[#D9A9FF] text-black shadow flex items-center gap-1">
                           <Sparkles className="w-3 h-3" /> 10x
                         </span>
                       )}
@@ -266,7 +266,7 @@ const DrillLabComponent: React.FC<DrillLabProps> = ({
                         disabled={isDrillRunning}
                         className={`py-2 rounded-xl text-xs font-mono font-bold transition-all border ${
                           drillDuration === dur
-                            ? 'bg-[#9A2B3C] text-white border-[#9A2B3C] shadow-md'
+                            ? 'bg-[#C23E9E] text-white border-[#C23E9E] shadow-md'
                             : 'bg-black/30 text-on-surface-variant border-tertiary/5 hover:border-tertiary/20'
                         }`}
                       >
@@ -309,7 +309,7 @@ const DrillLabComponent: React.FC<DrillLabProps> = ({
                       onClick={() => setMarkingMode('beat')}
                       className={`p-3 rounded-xl text-left text-xs font-bold transition-all border flex items-center justify-between ${
                         markingMode === 'beat'
-                          ? 'bg-[#E9C349]/10 border-[#E9C349]/30 text-white shadow-md'
+                          ? 'bg-[#D9A9FF]/10 border-[#D9A9FF]/30 text-white shadow-md'
                           : 'bg-black/20 border-tertiary/5 text-on-surface-variant hover:border-tertiary/15'
                       }`}
                     >
@@ -321,10 +321,10 @@ const DrillLabComponent: React.FC<DrillLabProps> = ({
                       </div>
                       <span
                         className={`w-4 h-4 rounded-full border flex items-center justify-center shrink-0 ${
-                          markingMode === 'beat' ? 'border-[#E9C349]' : 'border-tertiary/10'
+                          markingMode === 'beat' ? 'border-[#D9A9FF]' : 'border-tertiary/10'
                         }`}
                       >
-                        {markingMode === 'beat' && <span className="w-2 h-2 rounded-full bg-[#E9C349]" />}
+                        {markingMode === 'beat' && <span className="w-2 h-2 rounded-full bg-[#D9A9FF]" />}
                       </span>
                     </button>
 
@@ -334,7 +334,7 @@ const DrillLabComponent: React.FC<DrillLabProps> = ({
                       onClick={() => setMarkingMode('voice')}
                       className={`p-3 rounded-xl text-left text-xs font-bold transition-all border flex items-center justify-between ${
                         markingMode === 'voice'
-                          ? 'bg-[#E9C349]/10 border-[#E9C349]/30 text-white shadow-md'
+                          ? 'bg-[#D9A9FF]/10 border-[#D9A9FF]/30 text-white shadow-md'
                           : 'bg-black/20 border-tertiary/5 text-on-surface-variant hover:border-tertiary/15'
                       }`}
                     >
@@ -346,10 +346,10 @@ const DrillLabComponent: React.FC<DrillLabProps> = ({
                       </div>
                       <span
                         className={`w-4 h-4 rounded-full border flex items-center justify-center shrink-0 ${
-                          markingMode === 'voice' ? 'border-[#E9C349]' : 'border-tertiary/10'
+                          markingMode === 'voice' ? 'border-[#D9A9FF]' : 'border-tertiary/10'
                         }`}
                       >
-                        {markingMode === 'voice' && <span className="w-2 h-2 rounded-full bg-[#E9C349]" />}
+                        {markingMode === 'voice' && <span className="w-2 h-2 rounded-full bg-[#D9A9FF]" />}
                       </span>
                     </button>
 
@@ -359,7 +359,7 @@ const DrillLabComponent: React.FC<DrillLabProps> = ({
                       onClick={() => setMarkingMode('both')}
                       className={`p-3 rounded-xl text-left text-xs font-bold transition-all border flex items-center justify-between ${
                         markingMode === 'both'
-                          ? 'bg-[#E9C349]/10 border-[#E9C349]/30 text-white shadow-md'
+                          ? 'bg-[#D9A9FF]/10 border-[#D9A9FF]/30 text-white shadow-md'
                           : 'bg-black/20 border-tertiary/5 text-on-surface-variant hover:border-tertiary/15'
                       }`}
                     >
@@ -371,10 +371,10 @@ const DrillLabComponent: React.FC<DrillLabProps> = ({
                       </div>
                       <span
                         className={`w-4 h-4 rounded-full border flex items-center justify-center shrink-0 ${
-                          markingMode === 'both' ? 'border-[#E9C349]' : 'border-tertiary/10'
+                          markingMode === 'both' ? 'border-[#D9A9FF]' : 'border-tertiary/10'
                         }`}
                       >
-                        {markingMode === 'both' && <span className="w-2 h-2 rounded-full bg-[#E9C349]" />}
+                        {markingMode === 'both' && <span className="w-2 h-2 rounded-full bg-[#D9A9FF]" />}
                       </span>
                     </button>
 
@@ -384,7 +384,7 @@ const DrillLabComponent: React.FC<DrillLabProps> = ({
                       onClick={() => setMarkingMode('strong')}
                       className={`p-3 rounded-xl text-left text-xs font-bold transition-all border flex items-center justify-between ${
                         markingMode === 'strong'
-                          ? 'bg-[#E9C349]/10 border-[#E9C349]/30 text-white shadow-md'
+                          ? 'bg-[#D9A9FF]/10 border-[#D9A9FF]/30 text-white shadow-md'
                           : 'bg-black/20 border-tertiary/5 text-on-surface-variant hover:border-tertiary/15'
                       }`}
                     >
@@ -396,17 +396,17 @@ const DrillLabComponent: React.FC<DrillLabProps> = ({
                       </div>
                       <span
                         className={`w-4 h-4 rounded-full border flex items-center justify-center shrink-0 ${
-                          markingMode === 'strong' ? 'border-[#E9C349]' : 'border-tertiary/10'
+                          markingMode === 'strong' ? 'border-[#D9A9FF]' : 'border-tertiary/10'
                         }`}
                       >
-                        {markingMode === 'strong' && <span className="w-2 h-2 rounded-full bg-[#E9C349]" />}
+                        {markingMode === 'strong' && <span className="w-2 h-2 rounded-full bg-[#D9A9FF]" />}
                       </span>
                     </button>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-[#9A2B3C]/5 border border-[#9A2B3C]/15 p-4 rounded-xl text-[11px] text-on-surface-variant font-medium shadow-inner relative z-10">
+              <div className="bg-[#C23E9E]/5 border border-[#C23E9E]/15 p-4 rounded-xl text-[11px] text-on-surface-variant font-medium shadow-inner relative z-10">
                 <div className="flex items-center gap-2 text-[#ffb3b2] font-mono font-bold uppercase mb-1">
                   <Flame className="w-4 h-4 text-tertiary" />
                   <span>💡 Tip del Instructor:</span>

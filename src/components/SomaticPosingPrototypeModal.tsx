@@ -57,7 +57,7 @@ export default function SomaticPosingPrototypeModal({
         
         {/* Toast alert */}
         {toastMsg && (
-          <div className="fixed top-6 right-6 z-50 bg-[#E9C349] text-black px-4 py-2.5 rounded-xl font-bold text-xs shadow-2xl flex items-center gap-2 border border-black/20 animate-bounce">
+          <div className="fixed top-6 right-6 z-50 bg-[#D9A9FF] text-black px-4 py-2.5 rounded-xl font-bold text-xs shadow-2xl flex items-center gap-2 border border-black/20 animate-bounce">
             <Sparkles className="w-4 h-4 shrink-0" />
             <span>{toastMsg}</span>
           </div>
@@ -67,17 +67,17 @@ export default function SomaticPosingPrototypeModal({
           initial={{ opacity: 0, scale: 0.96, y: 12 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.96, y: 12 }}
-          className="relative bg-[#090B15] border-2 border-[#E9C349]/50 rounded-3xl max-w-7xl w-full p-4 sm:p-6 shadow-[0_0_50px_rgba(233,195,73,0.15)] z-10 space-y-4 overflow-y-auto max-h-[95vh] my-auto custom-scrollbar text-white"
+          className="relative bg-[#090B15] border-2 border-[#D9A9FF]/50 rounded-3xl max-w-7xl w-full p-4 sm:p-6 shadow-[0_0_50px_rgba(217, 169, 255,0.15)] z-10 space-y-4 overflow-y-auto max-h-[95vh] my-auto custom-scrollbar text-white"
         >
           {/* HEADER BAR */}
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between border-b border-white/10 pb-4 gap-3">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-2xl bg-[#E9C349]/20 border border-[#E9C349] flex items-center justify-center text-[#E9C349] shrink-0 shadow-md">
-                <Cpu className="w-5 h-5 text-[#E9C349] animate-pulse" />
+              <div className="w-10 h-10 rounded-2xl bg-[#D9A9FF]/20 border border-[#D9A9FF] flex items-center justify-center text-[#D9A9FF] shrink-0 shadow-md">
+                <Cpu className="w-5 h-5 text-[#D9A9FF] animate-pulse" />
               </div>
               <div>
                 <div className="flex items-center gap-2 flex-wrap">
-                  <span className="px-2.5 py-0.5 rounded-full bg-[#E9C349] text-black font-mono font-black text-[10px] uppercase tracking-wider">
+                  <span className="px-2.5 py-0.5 rounded-full bg-[#D9A9FF] text-black font-mono font-black text-[10px] uppercase tracking-wider">
                     WAKAON SOMATIC LAB
                   </span>
                   <span className="text-[10px] font-mono text-cyan-300 bg-cyan-500/20 px-2 py-0.5 rounded border border-cyan-500/30">
@@ -116,7 +116,7 @@ export default function SomaticPosingPrototypeModal({
               <div>
                 <div className="flex items-center justify-between border-b border-white/10 pb-2 mb-3">
                   <span className="text-[11px] font-mono font-bold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
-                    <Eye className="w-4 h-4 text-[#E9C349]" />
+                    <Eye className="w-4 h-4 text-[#D9A9FF]" />
                     1. IMAGEN ORIGINAL DE POSING
                   </span>
                   <span className="text-[10px] font-mono text-slate-500">CANVAS 1080x1350</span>
@@ -130,7 +130,7 @@ export default function SomaticPosingPrototypeModal({
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20" />
                   
-                  <div className="absolute top-3 left-3 bg-black/80 text-[#E9C349] text-[10px] font-mono font-bold px-3 py-1 rounded-xl border border-[#E9C349]/40 uppercase backdrop-blur-md">
+                  <div className="absolute top-3 left-3 bg-black/80 text-[#D9A9FF] text-[10px] font-mono font-bold px-3 py-1 rounded-xl border border-[#D9A9FF]/40 uppercase backdrop-blur-md">
                     Fotografía Base Sin Procesar
                   </div>
 
@@ -142,16 +142,16 @@ export default function SomaticPosingPrototypeModal({
               </div>
 
               <div className="p-3 bg-black/40 border border-white/10 rounded-xl text-[11px] font-mono text-slate-400 space-y-1">
-                <span className="text-[#E9C349] font-bold">CAPTURA SENSORIAL:</span>
+                <span className="text-[#D9A9FF] font-bold">CAPTURA SENSORIAL:</span>
                 <p>Captura estática en pico de aceleración de arms rolls. Pose de apertura torácica y extensión cenital de brazos.</p>
               </div>
             </div>
 
             {/* PANEL DERECHO: ANÁLISIS Y SUPERPOSICIÓN COLORIDA (5 COLS) */}
-            <div className="lg:col-span-5 bg-[#0D0F1D] border border-[#E9C349]/40 rounded-2xl p-4 flex flex-col justify-between space-y-3 relative overflow-hidden">
+            <div className="lg:col-span-5 bg-[#0D0F1D] border border-[#D9A9FF]/40 rounded-2xl p-4 flex flex-col justify-between space-y-3 relative overflow-hidden">
               <div>
                 <div className="flex items-center justify-between border-b border-white/10 pb-2 mb-3">
-                  <span className="text-[11px] font-mono font-bold text-[#E9C349] uppercase tracking-wider flex items-center gap-1.5">
+                  <span className="text-[11px] font-mono font-bold text-[#D9A9FF] uppercase tracking-wider flex items-center gap-1.5">
                     <Crosshair className="w-4 h-4 text-cyan-400 animate-spin" />
                     2. SUPERPOSICIÓN DE ANÁLISIS SOMÁTICO
                   </span>
@@ -160,7 +160,7 @@ export default function SomaticPosingPrototypeModal({
                   </span>
                 </div>
 
-                <div className="relative aspect-[3/4] rounded-xl overflow-hidden border border-[#E9C349]/50 bg-black group">
+                <div className="relative aspect-[3/4] rounded-xl overflow-hidden border border-[#D9A9FF]/50 bg-black group">
                   {/* Background Image */}
                   <img 
                     src="https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?w=900&q=80" 
@@ -259,7 +259,7 @@ export default function SomaticPosingPrototypeModal({
                         Ángulo Codo Der: 92°
                       </div>
 
-                      <div className="absolute top-[38%] left-[2%] bg-black/85 border border-[#E9C349]/80 px-2 py-0.5 rounded text-[9px] font-mono font-bold text-[#E9C349] shadow-xl backdrop-blur-md">
+                      <div className="absolute top-[38%] left-[2%] bg-black/85 border border-[#D9A9FF]/80 px-2 py-0.5 rounded text-[9px] font-mono font-bold text-[#D9A9FF] shadow-xl backdrop-blur-md">
                         Eje Columna: 98.4% Vertical
                       </div>
 
@@ -279,9 +279,9 @@ export default function SomaticPosingPrototypeModal({
                 </div>
               </div>
 
-              <div className="p-3 bg-black/40 border border-[#E9C349]/20 rounded-xl text-[11px] font-mono text-slate-300 flex items-center justify-between">
+              <div className="p-3 bg-black/40 border border-[#D9A9FF]/20 rounded-xl text-[11px] font-mono text-slate-300 flex items-center justify-between">
                 <span>Detección de puntos: 17 articulaciones</span>
-                <span className="text-[#E9C349] font-bold">Malla Esquelética 2D Active</span>
+                <span className="text-[#D9A9FF] font-bold">Malla Esquelética 2D Active</span>
               </div>
             </div>
 
@@ -290,7 +290,7 @@ export default function SomaticPosingPrototypeModal({
               <div className="space-y-4">
                 <div className="border-b border-white/10 pb-2">
                   <h4 className="text-xs font-mono font-bold text-white uppercase flex items-center gap-1.5">
-                    <Sliders className="w-4 h-4 text-[#E9C349]" />
+                    <Sliders className="w-4 h-4 text-[#D9A9FF]" />
                     CONTROLES
                   </h4>
                   <p className="text-[10px] text-slate-400 mt-0.5">Ajuste de capas somáticas</p>
@@ -301,7 +301,7 @@ export default function SomaticPosingPrototypeModal({
                   <button
                     onClick={handleRunAnalysis}
                     disabled={isAnalyzing}
-                    className="w-full py-2.5 px-3 rounded-xl bg-[#E9C349] hover:bg-[#ffdf6b] text-black font-mono font-black text-xs uppercase transition-all shadow-md active:scale-95 flex items-center justify-center gap-1.5 cursor-pointer"
+                    className="w-full py-2.5 px-3 rounded-xl bg-[#D9A9FF] hover:bg-[#F2CFFF] text-black font-mono font-black text-xs uppercase transition-all shadow-md active:scale-95 flex items-center justify-center gap-1.5 cursor-pointer"
                   >
                     <Activity className={`w-3.5 h-3.5 ${isAnalyzing ? 'animate-spin' : ''}`} />
                     <span>{isAnalyzing ? 'Procesando...' : 'Analizar Silueta'}</span>
@@ -358,7 +358,7 @@ export default function SomaticPosingPrototypeModal({
                       type="checkbox" 
                       checked={showSilhouette} 
                       onChange={(e) => setShowSilhouette(e.target.checked)}
-                      className="accent-[#E9C349] w-4 h-4 cursor-pointer"
+                      className="accent-[#D9A9FF] w-4 h-4 cursor-pointer"
                     />
                   </label>
 

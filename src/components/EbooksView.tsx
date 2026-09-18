@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { 
-  BookOpen, 
+import {
+  BookOpen,
   BookOpenCheck,
-  Search, 
-  Save, 
-  Sparkles, 
-  Clock, 
-  ArrowRight, 
-  Check, 
+  Search,
+  Save,
+  Sparkles,
+  Clock,
+  ArrowRight,
+  Check,
   Award,
   AlertCircle,
   HelpCircle,
@@ -17,7 +17,8 @@ import {
   Notebook as NotebookIcon,
   ChevronRight,
   BrainCircuit,
-  MessageSquare
+  MessageSquare,
+  Cog
 } from 'lucide-react';
 import { User } from '../types';
 import { auth, db } from '../firebase';
@@ -54,8 +55,8 @@ const EBOOKS: Ebook[] = [
     readTime: '10 min de lectura',
     author: 'WaackOn Editorial & Cátedra',
     color: 'bg-primary-container/20',
-    borderColor: 'border-[#e9c349]/50',
-    tagColor: 'bg-[#e9c349]/20 text-[#e9c349] border-[#e9c349]/40',
+    borderColor: 'border-[#d9a9ff]/50',
+    tagColor: 'bg-[#d9a9ff]/20 text-[#d9a9ff] border-[#d9a9ff]/40',
     chapters: [
       {
         title: '1. Introducción: El Espíritu del Waacking',
@@ -156,7 +157,7 @@ Para desarrollar una musicalidad genuina, sumérgete en los clásicos del Disco 
     author: 'Brando Hermoso',
     color: 'bg-primary-container/20',
     borderColor: 'border-[#564241]',
-    tagColor: 'bg-[#81262c]/20 text-[#ffb3b2] border-[#81262c]/30',
+    tagColor: 'bg-[#8F2C7A]/20 text-[#ffb3b2] border-[#8F2C7A]/30',
     chapters: [
       {
         title: '1. ¿Qué es el Arm Roll y su Origen?',
@@ -216,7 +217,7 @@ Entrena con alma, proyecta con drama.
     author: 'Brando Hermoso',
     color: 'bg-surface-container-high/40',
     borderColor: 'border-tertiary/20',
-    tagColor: 'bg-[#e9c349]/10 text-[#e9c349] border-[#e9c349]/20',
+    tagColor: 'bg-[#d9a9ff]/10 text-[#d9a9ff] border-[#d9a9ff]/20',
     chapters: [
       {
         title: '1. Los Orígenes Subterráneos en Los Ángeles',
@@ -264,7 +265,7 @@ Los bailarines de la corriente principal y los coreógrafos comerciales adoptaro
     author: 'Brando Hermoso',
     color: 'bg-primary-container/20',
     borderColor: 'border-[#564241]',
-    tagColor: 'bg-[#81262c]/20 text-[#ffb3b2] border-[#81262c]/30',
+    tagColor: 'bg-[#8F2C7A]/20 text-[#ffb3b2] border-[#8F2C7A]/30',
     chapters: [
       {
         title: '1. Los Clubs Históricos de Los Ángeles',
@@ -750,18 +751,72 @@ export default function EbooksView({ currentUser, language }: EbooksViewProps) {
 
   const t = translations[language] || translations['es'];
 
+  // Tactile "scene tilt": a subtle 3D sway of the ebooks scene as the surrounding
+  // page scrolls, echoing the paper-grain mockup without touching shared chrome.
+  const sceneWrapRef = useRef<HTMLDivElement>(null);
+  const [sceneTilt, setSceneTilt] = useState(0);
+
+  useEffect(() => {
+    const wrap = sceneWrapRef.current;
+    if (!wrap) return;
+
+    let scrollParent: HTMLElement | null = wrap.parentElement;
+    while (scrollParent) {
+      const overflowY = getComputedStyle(scrollParent).overflowY;
+      if (overflowY === 'auto' || overflowY === 'scroll') break;
+      scrollParent = scrollParent.parentElement;
+    }
+    const scrollTarget: HTMLElement | Window = scrollParent || window;
+    const getScrollTop = () => (scrollParent ? scrollParent.scrollTop : window.scrollY);
+
+    let lastScrollTop = getScrollTop();
+    let rafId = 0;
+    let settleTimeout: ReturnType<typeof setTimeout>;
+
+    const onScroll = () => {
+      cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(() => {
+        const scrollTop = getScrollTop();
+        const delta = scrollTop - lastScrollTop;
+        lastScrollTop = scrollTop;
+        setSceneTilt(Math.max(-1.2, Math.min(1.2, delta * 0.5)));
+      });
+      clearTimeout(settleTimeout);
+      settleTimeout = setTimeout(() => setSceneTilt(0), 220);
+    };
+
+    scrollTarget.addEventListener('scroll', onScroll, { passive: true });
+    return () => {
+      scrollTarget.removeEventListener('scroll', onScroll);
+      cancelAnimationFrame(rafId);
+      clearTimeout(settleTimeout);
+    };
+  }, []);
+
   return (
-    <div className="flex-1 min-h-full w-full p-6 space-y-6 bg-background text-on-surface flex flex-col font-body-md select-none">
-      
+    <div className="ebook-tactile-scope flex-1 min-h-full w-full p-6 space-y-6 bg-background text-on-surface flex flex-col font-body-md select-none">
+
+      <div ref={sceneWrapRef} className="relative" style={{ perspective: '1800px' }}>
+      {/* Ambient tactile backdrop: paper grain + warm lamp glow, contained to this screen */}
+      <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden rounded-3xl">
+        <div className="absolute inset-0 opacity-[0.05] ebook-grain" />
+        <div className="ebook-lamp-glow absolute left-1/2 top-[-120px] h-[420px] w-[70%] -translate-x-1/2 rounded-full bg-[radial-gradient(ellipse_at_50%_0,rgba(233,195,73,.14),rgba(233,195,73,.03)_42%,transparent_70%)]" />
+      </div>
+
+      <div
+        className="transition-transform duration-300 ease-out will-change-transform"
+        style={{ transform: `rotateX(${sceneTilt}deg)`, transformOrigin: '50% 0%' }}
+      >
+
       {/* HEADER BANNER */}
       <div className="border-b border-tertiary/10 pb-4 mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4 z-10">
         <div className="text-left">
-          <h2 className="text-2xl font-display-lg font-bold text-white tracking-tight uppercase">{t.ebooksTitle || 'RECURSOS Y LITERATURA'}</h2>
+          <h2 className="text-2xl font-display-lg font-bold text-slate-900 dark:text-white tracking-tight uppercase">{t.ebooksTitle || 'RECURSOS Y LITERATURA'}</h2>
           <p className="text-xs text-on-surface-variant font-medium mt-1">{t.ebooksSubtitle || 'Explora la historia viva, la era disco de los 70s y las raíces expresivas del Punking. Toma notas y ponte a prueba.'}</p>
         </div>
-        
+
         <div className="flex items-center gap-2 self-start md:self-center">
-          <span className="text-[10px] font-mono font-bold text-[#E9C349] border border-[#E9C349]/20 bg-[#E9C349]/10 px-2.5 py-0.5 rounded-full uppercase tracking-wider">
+          <span className="text-[10px] font-mono font-bold text-[#D9A9FF] border border-[#D9A9FF]/20 bg-[#D9A9FF]/10 px-2.5 py-0.5 rounded-full uppercase tracking-wider">
             {language === 'es' ? 'Historia & Cultura' : 'History & Culture'}
           </span>
           <span className="text-[10px] font-mono font-bold text-primary border border-primary/20 bg-primary-container/20 px-2.5 py-0.5 rounded-full uppercase tracking-wider">
@@ -777,8 +832,8 @@ export default function EbooksView({ currentUser, language }: EbooksViewProps) {
             onClick={() => setSubTab('books')}
             className={`px-4 py-1.5 text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-1.5 border ${
               subTab === 'books' 
-                ? 'bg-[#81262c] text-[#ffdad9] border-[#ffb3b2]/25 shadow-md font-bold' 
-                : 'text-on-surface-variant border-transparent hover:text-white'
+                ? 'bg-[#8F2C7A] text-[#ffdad9] border-[#ffb3b2]/25 shadow-md font-bold' 
+                : 'text-on-surface-variant border-transparent hover:text-slate-900 dark:hover:text-white'
             }`}
           >
             <BookOpen className="w-3.5 h-3.5" />
@@ -788,8 +843,8 @@ export default function EbooksView({ currentUser, language }: EbooksViewProps) {
             onClick={() => setSubTab('tienda')}
             className={`px-4 py-1.5 text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-1.5 border ${
               subTab === 'tienda' 
-                ? 'bg-[#81262c] text-[#ffdad9] border-[#ffb3b2]/25 shadow-md font-bold' 
-                : 'text-on-surface-variant border-transparent hover:text-white'
+                ? 'bg-[#8F2C7A] text-[#ffdad9] border-[#ffb3b2]/25 shadow-md font-bold' 
+                : 'text-on-surface-variant border-transparent hover:text-slate-900 dark:hover:text-white'
             }`}
           >
             <Sparkles className="w-3.5 h-3.5" />
@@ -825,7 +880,7 @@ export default function EbooksView({ currentUser, language }: EbooksViewProps) {
                         placeholder="Buscar e-book o categoría..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-full text-xs font-bold bg-[#0d0d11]/80 border border-tertiary/15 rounded-xl pl-9 pr-3 py-2.5 text-white placeholder-on-surface-variant/40 focus:outline-none focus:border-tertiary/30 transition-all"
+                        className="w-full text-xs font-bold bg-slate-100 dark:bg-[#0d0d11]/80 border border-tertiary/15 rounded-xl pl-9 pr-3 py-2.5 text-slate-900 dark:text-white placeholder-on-surface-variant/40 focus:outline-none focus:border-tertiary/30 transition-all"
                       />
                     </div>
 
@@ -837,15 +892,20 @@ export default function EbooksView({ currentUser, language }: EbooksViewProps) {
                   </div>
 
                   {/* Ebooks Cards Grid */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6" style={{ perspective: '1400px' }}>
                     {filteredBooks.map((book) => {
                       const savedNote = notebookNotes[book.id];
                       return (
-                        <div 
+                        <div
                           key={book.id}
-                          className="bg-surface-container border border-tertiary/10 rounded-2xl p-5 flex flex-col justify-between min-h-[300px] shadow-2xl hover:border-[#E9C349]/20 hover:scale-[1.01] transition-all"
+                          className="group relative bg-gradient-to-br from-[#1a1720] via-[#141218] to-[#0f0e12] border border-tertiary/10 rounded-2xl p-5 flex flex-col justify-between min-h-[300px] shadow-2xl overflow-hidden transition-all duration-300 ease-out hover:border-[#D9A9FF]/30 hover:shadow-[0_34px_56px_-22px_rgba(0,0,0,1),0_0_0_1px_rgba(233,195,73,.22)] hover:[transform:translateY(-5px)_rotateX(1.6deg)]"
                         >
-                          <div className="space-y-3 text-left">
+                          {/* Tactile paper-grain wash, contained to the card */}
+                          <div className="pointer-events-none absolute inset-0 opacity-[0.05] ebook-grain" />
+                          {/* Leather-bound spine along the left edge */}
+                          <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-[9px] rounded-l-2xl bg-gradient-to-r from-[#2a2028] via-[#171319] to-black/60 shadow-[inset_-1px_0_0_rgba(233,195,73,.16)]" />
+
+                          <div className="relative z-10 space-y-3 text-left">
                             <div className="flex justify-between items-start">
                               <span className={`text-[8px] font-mono font-bold border px-2 py-0.5 rounded uppercase ${book.tagColor}`}>
                                 {book.category}
@@ -855,7 +915,7 @@ export default function EbooksView({ currentUser, language }: EbooksViewProps) {
                               </span>
                             </div>
 
-                            <h3 className="text-lg font-display-lg font-bold text-white uppercase tracking-tight leading-tight">
+                            <h3 className="text-lg font-display-lg font-bold text-slate-900 dark:text-white uppercase tracking-tight leading-tight">
                               {book.title}
                             </h3>
                             <p className="text-xs text-on-surface-variant font-medium leading-relaxed">
@@ -868,26 +928,36 @@ export default function EbooksView({ currentUser, language }: EbooksViewProps) {
                           </div>
 
                           {/* Bottom Actions */}
-                          <div className="mt-6 pt-4 border-t border-dashed border-tertiary/10 flex items-center justify-between">
+                          <div className="relative z-10 mt-6 pt-4 border-t border-dashed border-tertiary/10 flex items-center justify-between">
                             {savedNote ? (
-                              <span className="text-[9px] font-mono font-bold text-[#E9C349] bg-[#E9C349]/10 px-2 py-1 rounded border border-[#E9C349]/20 flex items-center gap-1 uppercase">
-                                <Bookmark className="w-3 h-3 fill-[#E9C349]" /> Nota Guardada
+                              <span className="text-[9px] font-mono font-bold text-[#D9A9FF] bg-[#D9A9FF]/10 px-2 py-1 rounded border border-[#D9A9FF]/20 flex items-center gap-1 uppercase">
+                                <Bookmark className="w-3 h-3 fill-[#D9A9FF]" /> Nota Guardada
                               </span>
                             ) : (
                               <span className="text-[9px] text-on-surface-variant/40 font-mono font-bold uppercase">Sin anotaciones</span>
                             )}
 
+                            {/* "Comenzar" rendered as a physical gold knob/lever */}
                             <button
                               onClick={() => {
                                 setSelectedBook(book);
                                 setActiveChapterIdx(0);
                               }}
-                              className="px-4 py-2 bg-on-primary-fixed-variant hover:bg-on-primary-container text-primary-fixed text-xs font-bold rounded-xl border border-primary/25 shadow-lg hover:scale-105 active:scale-95 transition-all uppercase flex items-center gap-1"
+                              className="flex items-center gap-1.5 px-4 py-2 rounded-xl border border-white/30 text-[#221a05] font-extrabold text-xs tracking-wide uppercase bg-[radial-gradient(circle_at_34%_26%,#f0dfa8,#c8a63f_46%,#8a6d1f)] shadow-[inset_0_1.5px_0_rgba(255,255,255,.55),inset_0_-2px_4px_rgba(0,0,0,.45),0_4px_10px_-2px_rgba(0,0,0,.85)] hover:brightness-110 hover:scale-105 active:scale-95 transition-all"
                             >
                               <span>Comenzar</span>
-                              <ArrowRight className="w-3.5 h-3.5" />
+                              <ArrowRight className="w-3.5 h-3.5" strokeWidth={2.4} />
                             </button>
                           </div>
+
+                          {/* Page corner that peels up on hover, tucked behind the card content */}
+                          <div
+                            className="pointer-events-none absolute right-0 bottom-0 z-0 h-[34px] w-[34px] shadow-[-3px_-3px_10px_rgba(0,0,0,.55)] transition-all duration-400 ease-out group-hover:h-[110px] group-hover:w-[110px] group-hover:shadow-[-16px_-16px_40px_rgba(0,0,0,.75)]"
+                            style={{
+                              background: 'linear-gradient(315deg, #efe6d2 0 46%, #c9bfa8 47%, transparent 48%)',
+                              clipPath: 'polygon(100% 0, 100% 100%, 0 100%)'
+                            }}
+                          />
                         </div>
                       );
                     })}
@@ -896,18 +966,18 @@ export default function EbooksView({ currentUser, language }: EbooksViewProps) {
                   {/* Additional historical archive placeholder representation */}
                   <div className="bg-surface-container border border-tertiary/10 rounded-2xl p-5 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-4">
                     <div className="flex items-center gap-3 text-left">
-                      <div className="p-3 bg-[#E9C349]/10 rounded-2xl border border-[#E9C349]/20 text-[#E9C349] shrink-0">
+                      <div className="p-3 bg-[#D9A9FF]/10 rounded-2xl border border-[#D9A9FF]/20 text-[#D9A9FF] shrink-0">
                         <BookOpenCheck className="w-6 h-6" />
                       </div>
                       <div>
-                        <h4 className="text-xs font-mono font-bold text-[#E9C349] uppercase leading-none">BIBLIOTECA EN EXPANSIÓN</h4>
-                        <h3 className="text-sm font-display-lg font-bold text-white uppercase mt-1">MANUSCRITOS, HISTORIALES Y REVISTAS DE ÉPOCA</h3>
+                        <h4 className="text-xs font-mono font-bold text-[#D9A9FF] uppercase leading-none">BIBLIOTECA EN EXPANSIÓN</h4>
+                        <h3 className="text-sm font-display-lg font-bold text-slate-900 dark:text-white uppercase mt-1">MANUSCRITOS, HISTORIALES Y REVISTAS DE ÉPOCA</h3>
                         <p className="text-xs text-on-surface-variant font-medium mt-1 leading-relaxed">
                           El equipo de Waack On está traduciendo fanzines originales de los 70s y recortes de prensa de Soul Train. Muy pronto estarán disponibles gratis para todos.
                         </p>
                       </div>
                     </div>
-                    <span className="text-[10px] font-mono font-bold text-[#E9C349] bg-[#E9C349]/10 border border-[#E9C349]/20 px-3 py-1 rounded-full shrink-0 uppercase">
+                    <span className="text-[10px] font-mono font-bold text-[#D9A9FF] bg-[#D9A9FF]/10 border border-[#D9A9FF]/20 px-3 py-1 rounded-full shrink-0 uppercase">
                       PRÓXIMAMENTE
                     </span>
                   </div>
@@ -927,7 +997,7 @@ export default function EbooksView({ currentUser, language }: EbooksViewProps) {
                       <span className="text-[9px] font-mono font-bold text-primary bg-primary-container/30 border border-primary/20 px-2.5 py-0.5 rounded-full uppercase tracking-wider">
                         CATÁLOGO EXCLUSIVO
                       </span>
-                      <h4 className="text-md font-bold text-white uppercase mt-2">INFORMES, MÉTODOS Y AUDIO GUÍAS PREMIUM</h4>
+                      <h4 className="text-md font-bold text-slate-900 dark:text-white uppercase mt-2">INFORMES, MÉTODOS Y AUDIO GUÍAS PREMIUM</h4>
                       <p className="text-xs text-on-surface-variant font-medium mt-1 max-w-xl leading-relaxed">
                         Complementa tu formación con guías detalladas, cuadernos imprimibles y masterclasses en video de alta calidad para llevar tu freestyle al siguiente nivel.
                       </p>
@@ -958,7 +1028,7 @@ export default function EbooksView({ currentUser, language }: EbooksViewProps) {
 
                           <div className="p-5 flex-1 flex flex-col justify-between space-y-4 text-left">
                             <div className="space-y-1.5">
-                              <h3 className="text-md font-bold text-white uppercase leading-tight">{prod.title}</h3>
+                              <h3 className="text-md font-bold text-slate-900 dark:text-white uppercase leading-tight">{prod.title}</h3>
                               <p className="text-xs text-on-surface-variant font-medium leading-relaxed">{prod.description}</p>
                             </div>
 
@@ -966,7 +1036,7 @@ export default function EbooksView({ currentUser, language }: EbooksViewProps) {
                               {/* Tags */}
                               <div className="flex flex-wrap gap-1.5">
                                 {(prod.tags || []).map((tag) => (
-                                  <span key={tag} className="text-[8px] font-mono font-bold bg-[#0d0d11]/80 border border-tertiary/10 text-on-surface-variant px-2 py-0.5 rounded">
+                                  <span key={tag} className="text-[8px] font-mono font-bold bg-slate-100 dark:bg-[#0d0d11]/80 border border-tertiary/10 text-on-surface-variant px-2 py-0.5 rounded">
                                     #{(tag || '').toUpperCase()}
                                   </span>
                                 ))}
@@ -974,13 +1044,13 @@ export default function EbooksView({ currentUser, language }: EbooksViewProps) {
 
                               {/* Progress for download */}
                               {isDownloading && (
-                                <div className="space-y-1 bg-[#0d0d11]/80 p-2.5 rounded-xl border border-tertiary/10">
+                                <div className="space-y-1 bg-slate-100 dark:bg-[#0d0d11]/80 p-2.5 rounded-xl border border-tertiary/10">
                                   <div className="flex justify-between items-center text-[9px] font-mono font-bold text-primary">
                                     <span>DESCARGANDO...</span>
                                     <span>{downloadProgress}%</span>
                                   </div>
-                                  <div className="w-full bg-[#1c1b1b] border border-[#564241] h-2 rounded-full overflow-hidden">
-                                    <div className="bg-[#81262c] h-full transition-all duration-150" style={{ width: `${downloadProgress}%` }} />
+                                  <div className="w-full bg-slate-300 dark:bg-[#1c1b1b] border border-slate-300 dark:border-[#564241] h-2 rounded-full overflow-hidden">
+                                    <div className="bg-[#8F2C7A] h-full transition-all duration-150" style={{ width: `${downloadProgress}%` }} />
                                   </div>
                                 </div>
                               )}
@@ -997,13 +1067,13 @@ export default function EbooksView({ currentUser, language }: EbooksViewProps) {
                                 disabled={isDownloading}
                                 className={`w-full py-2.5 rounded-xl font-bold text-xs uppercase shadow-lg hover:scale-102 active:scale-95 transition-all text-center flex items-center justify-center gap-1.5 border ${
                                   isUnlocked 
-                                    ? 'bg-[#E9C349]/10 border-[#E9C349]/20 text-[#E9C349] hover:bg-[#E9C349]/20' 
+                                    ? 'bg-[#D9A9FF]/10 border-[#D9A9FF]/20 text-[#D9A9FF] hover:bg-[#D9A9FF]/20' 
                                     : 'bg-on-primary-fixed-variant border-primary/25 text-primary-fixed hover:bg-on-primary-container'
                                 }`}
                               >
                                 {isUnlocked ? (
                                   <>
-                                    <Save className="w-4 h-4 text-[#E9C349]" />
+                                    <Save className="w-4 h-4 text-[#D9A9FF]" />
                                     Descargar Material
                                   </>
                                 ) : (
@@ -1031,7 +1101,7 @@ export default function EbooksView({ currentUser, language }: EbooksViewProps) {
                 className="bg-surface-container border border-tertiary/10 rounded-2xl shadow-2xl overflow-hidden"
               >
                 {/* Reader Header Nav */}
-                <div className="p-4 bg-[#0d0d11]/60 border-b border-tertiary/10 flex flex-col md:flex-row items-center justify-between gap-4">
+                <div className="p-4 bg-slate-50 dark:bg-[#0d0d11]/60 border-b border-tertiary/10 flex flex-col md:flex-row items-center justify-between gap-4">
                   <div className="flex items-center gap-3 w-full md:w-auto">
                     <button
                       onClick={() => setSelectedBook(null)}
@@ -1041,7 +1111,7 @@ export default function EbooksView({ currentUser, language }: EbooksViewProps) {
                     </button>
                     <div className="min-w-0 text-left">
                       <p className="text-[8px] font-mono font-bold text-primary uppercase leading-none">{selectedBook.category}</p>
-                      <h3 className="text-sm font-bold text-white uppercase mt-1 truncate">{selectedBook.title}</h3>
+                      <h3 className="text-sm font-bold text-slate-900 dark:text-white uppercase mt-1 truncate">{selectedBook.title}</h3>
                     </div>
                   </div>
 
@@ -1054,7 +1124,7 @@ export default function EbooksView({ currentUser, language }: EbooksViewProps) {
                         className={`px-3.5 py-2 text-[11px] font-mono font-bold rounded-lg border transition-all focus:outline-none ${
                           activeChapterIdx === idx 
                             ? 'bg-on-primary-fixed-variant text-primary border-primary/30 shadow-md font-bold' 
-                            : 'bg-[#121212]/40 text-on-surface-variant border-tertiary/10 hover:border-tertiary/20 hover:text-white'
+                            : 'bg-slate-100 dark:bg-[#121212]/40 text-on-surface-variant border-tertiary/10 hover:border-tertiary/20 hover:text-slate-900 dark:hover:text-white'
                         }`}
                       >
                         Cap. {idx + 1}
@@ -1064,7 +1134,7 @@ export default function EbooksView({ currentUser, language }: EbooksViewProps) {
                 </div>
 
                 {/* Reader Content Body */}
-                <div className="p-6 md:p-8 space-y-6 text-left max-h-[500px] overflow-y-auto bg-black/40">
+                <div className="p-6 md:p-8 space-y-6 text-left max-h-[500px] overflow-y-auto bg-slate-50 dark:bg-black/40">
                   <h2 className="text-lg md:text-xl font-bold text-primary uppercase tracking-tight pb-3 border-b border-dashed border-tertiary/10">
                     {getTranslatedEbookText(selectedBook.chapters[activeChapterIdx].title, language)}
                   </h2>
@@ -1075,7 +1145,7 @@ export default function EbooksView({ currentUser, language }: EbooksViewProps) {
                 </div>
 
                 {/* Reader Footer Control Bar */}
-                <div className="p-4 bg-[#0d0d11]/60 border-t border-tertiary/10 flex flex-col sm:flex-row items-center justify-between gap-3">
+                <div className="p-4 bg-slate-50 dark:bg-[#0d0d11]/60 border-t border-tertiary/10 flex flex-col sm:flex-row items-center justify-between gap-3">
                   <div className="text-[10px] font-mono text-on-surface-variant font-bold">
                     Capítulo {activeChapterIdx + 1} de {(selectedBook.chapters || []).length} • Leyendo de Waack On
                   </div>
@@ -1084,7 +1154,7 @@ export default function EbooksView({ currentUser, language }: EbooksViewProps) {
                     <button
                       disabled={activeChapterIdx === 0}
                       onClick={() => setActiveChapterIdx(prev => prev - 1)}
-                      className="px-3.5 py-1.5 bg-[#121212]/40 hover:bg-[#121212] border border-tertiary/10 text-on-surface text-xs font-bold rounded-xl disabled:opacity-40 disabled:pointer-events-none transition-all focus:outline-none"
+                      className="px-3.5 py-1.5 bg-slate-100 dark:bg-[#121212]/40 hover:bg-slate-200 dark:hover:bg-[#121212] border border-tertiary/10 text-on-surface text-xs font-bold rounded-xl disabled:opacity-40 disabled:pointer-events-none transition-all focus:outline-none"
                     >
                       Anterior
                     </button>
@@ -1117,7 +1187,7 @@ export default function EbooksView({ currentUser, language }: EbooksViewProps) {
               <div className="border-b border-tertiary/10 pb-3 flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <NotebookIcon className="w-5 h-5 text-primary" />
-                  <h3 className="text-xs font-mono font-bold text-white uppercase tracking-wider">
+                  <h3 className="text-xs font-mono font-bold text-slate-900 dark:text-white uppercase tracking-wider">
                     MIS APUNTES DE ESTUDIO: {(selectedBook?.title || '').toUpperCase()}
                   </h3>
                 </div>
@@ -1142,7 +1212,7 @@ export default function EbooksView({ currentUser, language }: EbooksViewProps) {
                   value={notebookNotes[selectedBook.id] || ''}
                   onChange={(e) => setNotebookNotes({ ...notebookNotes, [selectedBook.id]: e.target.value })}
                   placeholder="Redacta tus reflexiones, preguntas, notas sobre fundadores o ideas de personajes teatrales para tus próximas coreografías..."
-                  className="w-full text-xs font-bold bg-[#0d0d11]/80 border border-tertiary/15 rounded-xl px-3 py-2.5 text-white placeholder-on-surface-variant/40 focus:outline-none focus:border-tertiary/30 leading-relaxed text-left"
+                  className="w-full text-xs font-bold bg-slate-100 dark:bg-[#0d0d11]/80 border border-tertiary/15 rounded-xl px-3 py-2.5 text-slate-900 dark:text-white placeholder-on-surface-variant/40 focus:outline-none focus:border-tertiary/30 leading-relaxed text-left"
                 />
 
                 <div className="flex flex-col sm:flex-row gap-3 justify-between items-center">
@@ -1174,7 +1244,7 @@ export default function EbooksView({ currentUser, language }: EbooksViewProps) {
               <span className="text-[9px] font-mono font-bold text-primary bg-primary-container/20 border border-primary/20 px-2 py-0.5 rounded uppercase">
                 PONTE A PRUEBA
               </span>
-              <h3 className="text-sm font-bold text-white uppercase mt-1">RETO DE CONOCIMIENTO</h3>
+              <h3 className="text-sm font-bold text-slate-900 dark:text-white uppercase mt-1">RETO DE CONOCIMIENTO</h3>
             </div>
 
             <AnimatePresence mode="wait">
@@ -1187,22 +1257,37 @@ export default function EbooksView({ currentUser, language }: EbooksViewProps) {
                   exit={{ opacity: 0 }}
                   className="space-y-4 pt-2 text-center"
                 >
-                  <div className="w-16 h-16 bg-primary-container/10 border border-primary/20 rounded-full flex items-center justify-center mx-auto text-primary text-2xl shadow-xl">
-                    <BrainCircuit className="w-8 h-8 animate-pulse text-primary" />
+                  {/* Engraved brain, rotating slowly in a lamplit plaque */}
+                  <div
+                    className="w-20 h-20 mx-auto rounded-full flex items-center justify-center border border-primary/20 shadow-[inset_0_0_18px_rgba(0,0,0,.7)] bg-[radial-gradient(circle_at_50%_40%,rgba(233,195,73,.12),transparent_70%)]"
+                    style={{ perspective: '600px' }}
+                  >
+                    <BrainCircuit className="w-9 h-9 text-primary ebook-brain-spin drop-shadow-[0_0_6px_rgba(233,195,73,.5)]" />
                   </div>
-                  <h4 className="text-xs font-bold uppercase text-white mt-2">¿Cuánto sabes sobre Waacking?</h4>
+                  <h4 className="text-xs font-bold uppercase text-slate-900 dark:text-white mt-2">¿Cuánto sabes sobre Waacking?</h4>
                   <p className="text-[10px] text-on-surface-variant font-medium leading-relaxed">
                     Responde estas {QUIZ_QUESTIONS.length} preguntas interactivas basadas en la historia subterránea de Los Ángeles y demuestra que dominas el plano cultural de tu danza.
                   </p>
-                  
+
+                  {/* "Empezar Test" rendered as a physical gear-driven lever switch */}
                   <button
                     onClick={() => {
                       setQuizActive(true);
                       handleRestartQuiz();
                     }}
-                    className="w-full py-2.5 bg-on-primary-fixed-variant hover:bg-on-primary-container text-primary-fixed border border-primary/25 text-xs font-bold rounded-xl transition-all uppercase focus:outline-none"
+                    className="group w-full flex items-center gap-3 px-3 py-2.5 rounded-xl border border-primary/25 bg-gradient-to-b from-[#26232a] to-[#15131a] shadow-[inset_0_1px_0_rgba(255,255,255,.12),inset_0_-2px_6px_rgba(0,0,0,.6),0_4px_12px_-4px_rgba(0,0,0,.9)] hover:border-[#D9A9FF]/50 transition-all focus:outline-none"
                   >
-                    EMPEZAR TEST
+                    <span className="relative w-6 h-6 shrink-0 text-[#D9A9FF]/70">
+                      <Cog className="w-6 h-6 absolute inset-0 ebook-gear-cw" />
+                      <Cog className="w-3.5 h-3.5 absolute -right-1 -bottom-1 ebook-gear-ccw" />
+                    </span>
+                    <span className="flex-1 min-w-0 flex flex-col items-start gap-0.5 text-left">
+                      <span className="text-[11.5px] font-extrabold tracking-wide uppercase text-[#f2e6c4]">Empezar Test</span>
+                      <span className="text-[8px] font-mono font-bold tracking-widest uppercase text-[#D9A9FF]/60">Palanca &middot; {QUIZ_QUESTIONS.length} preguntas</span>
+                    </span>
+                    <span className="w-11 h-[22px] shrink-0 rounded-full bg-gradient-to-b from-[#0d0c0f] to-[#1a181c] border border-black/80 shadow-[inset_0_2px_5px_rgba(0,0,0,.9)] relative">
+                      <span className="absolute left-0.5 top-0.5 w-4 h-4 rounded-full bg-[radial-gradient(circle_at_35%_28%,#f4e7bd,#c8a63f_50%,#7d6420)] shadow-[0_2px_5px_rgba(0,0,0,.85),inset_0_1px_0_rgba(255,255,255,.5)] transition-transform duration-300 group-hover:translate-x-5" />
+                    </span>
                   </button>
                 </motion.div>
               ) : quizFinished ? (
@@ -1214,11 +1299,11 @@ export default function EbooksView({ currentUser, language }: EbooksViewProps) {
                   exit={{ opacity: 0 }}
                   className="space-y-4 pt-2 text-center"
                 >
-                  <div className="w-14 h-14 bg-primary-container/20 border border-primary/25 rounded-full flex items-center justify-center mx-auto text-[#E9C349] text-xl shadow-xl">
+                  <div className="w-14 h-14 bg-primary-container/20 border border-primary/25 rounded-full flex items-center justify-center mx-auto text-[#D9A9FF] text-xl shadow-xl">
                     <Award className="w-7 h-7 text-primary" />
                   </div>
                   <div>
-                    <h4 className="text-sm font-bold uppercase text-white mt-2">Test Completado</h4>
+                    <h4 className="text-sm font-bold uppercase text-slate-900 dark:text-white mt-2">Test Completado</h4>
                     <p className="text-xs font-mono font-bold text-primary mt-1 uppercase">PUNTUACIÓN: {score} de {QUIZ_QUESTIONS.length} aciertos</p>
                   </div>
                   
@@ -1233,7 +1318,7 @@ export default function EbooksView({ currentUser, language }: EbooksViewProps) {
                   <div className="flex gap-2">
                     <button
                       onClick={handleRestartQuiz}
-                      className="flex-1 py-2 bg-[#121212]/40 hover:bg-[#121212] border border-tertiary/10 text-on-surface text-xs font-bold rounded-xl transition-all uppercase focus:outline-none"
+                      className="flex-1 py-2 bg-slate-100 dark:bg-[#121212]/40 hover:bg-slate-200 dark:hover:bg-[#121212] border border-tertiary/10 text-on-surface text-xs font-bold rounded-xl transition-all uppercase focus:outline-none"
                     >
                       Reintentar
                     </button>
@@ -1261,8 +1346,8 @@ export default function EbooksView({ currentUser, language }: EbooksViewProps) {
                   </div>
 
                   {/* Question Box */}
-                  <div className="p-3 bg-[#0d0d11]/80 border border-tertiary/15 rounded-xl text-left">
-                    <p className="text-xs font-bold text-white leading-relaxed uppercase">
+                  <div className="p-3 bg-slate-100 dark:bg-[#0d0d11]/80 border border-tertiary/15 rounded-xl text-left">
+                    <p className="text-xs font-bold text-slate-900 dark:text-white leading-relaxed uppercase">
                       {QUIZ_QUESTIONS[currentQuestionIdx].question}
                     </p>
                   </div>
@@ -1272,7 +1357,7 @@ export default function EbooksView({ currentUser, language }: EbooksViewProps) {
                     {QUIZ_QUESTIONS[currentQuestionIdx].options.map((option, idx) => {
                       const isSelected = selectedOption === option;
                       const isCorrect = option === QUIZ_QUESTIONS[currentQuestionIdx].answer;
-                      let optionStyle = "bg-[#121212]/40 border-tertiary/10 text-on-surface-variant hover:border-tertiary/25 hover:text-white";
+                      let optionStyle = "bg-slate-100 dark:bg-[#121212]/40 border-tertiary/10 text-on-surface-variant hover:border-tertiary/25 hover:text-slate-900 dark:hover:text-white";
 
                       if (showExplanation) {
                         if (isCorrect) {
@@ -1280,7 +1365,7 @@ export default function EbooksView({ currentUser, language }: EbooksViewProps) {
                         } else if (isSelected) {
                           optionStyle = "bg-red-950/40 border-red-500/40 text-red-300";
                         } else {
-                          optionStyle = "bg-[#121212]/10 border-tertiary/5 text-on-surface-variant/40";
+                          optionStyle = "bg-slate-100/60 dark:bg-[#121212]/10 border-tertiary/5 text-on-surface-variant/40";
                         }
                       } else if (isSelected) {
                         optionStyle = "bg-on-primary-fixed-variant/40 border-primary text-primary shadow-lg";
@@ -1306,9 +1391,9 @@ export default function EbooksView({ currentUser, language }: EbooksViewProps) {
                     <motion.div 
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className="p-3 bg-[#E9C349]/10 rounded-xl border border-[#E9C349]/20 text-left text-[10px] leading-relaxed text-[#E9C349]"
+                      className="p-3 bg-[#D9A9FF]/10 rounded-xl border border-[#D9A9FF]/20 text-left text-[10px] leading-relaxed text-[#D9A9FF]"
                     >
-                      <span className="font-mono font-bold text-[9px] uppercase tracking-wider block text-[#E9C349] mb-1">📖 SABÍAS QUE...</span>
+                      <span className="font-mono font-bold text-[9px] uppercase tracking-wider block text-[#D9A9FF] mb-1">📖 SABÍAS QUE...</span>
                       {QUIZ_QUESTIONS[currentQuestionIdx].explanation}
                     </motion.div>
                   )}
@@ -1343,10 +1428,10 @@ export default function EbooksView({ currentUser, language }: EbooksViewProps) {
           {/* Quick Study Checklist cards */}
           <div className="bg-surface-container border border-tertiary/10 rounded-2xl p-5 shadow-2xl">
             <div className="text-left">
-              <span className="text-[9px] font-mono font-bold text-[#E9C349] bg-[#E9C349]/10 border border-[#E9C349]/20 px-2 py-0.5 rounded uppercase">
+              <span className="text-[9px] font-mono font-bold text-[#D9A9FF] bg-[#D9A9FF]/10 border border-[#D9A9FF]/20 px-2 py-0.5 rounded uppercase">
                 RUTINA DE ESTUDIO
               </span>
-              <h3 className="text-sm font-bold text-white uppercase mt-1">METODOLOGÍA WAACK ON</h3>
+              <h3 className="text-sm font-bold text-slate-900 dark:text-white uppercase mt-1">METODOLOGÍA WAACK ON</h3>
             </div>
             
             <div className="mt-4 space-y-3">
@@ -1356,8 +1441,8 @@ export default function EbooksView({ currentUser, language }: EbooksViewProps) {
                 { title: 'Anotar un personaje teatral en el bloc', checked: false },
                 { title: 'Hacer el test con 100% de aciertos', checked: false }
               ].map((item, idx) => (
-                <div key={idx} className="flex items-center gap-2.5 p-2 bg-[#0d0d11]/80 border border-tertiary/10 rounded-xl">
-                  <div className={`w-5 h-5 rounded border flex items-center justify-center shrink-0 ${item.checked ? 'bg-[#E9C349]/20 border-[#E9C349] text-[#E9C349]' : 'bg-[#0d0d11] border-tertiary/20'}`}>
+                <div key={idx} className="flex items-center gap-2.5 p-2 bg-slate-100 dark:bg-[#0d0d11]/80 border border-tertiary/10 rounded-xl">
+                  <div className={`w-5 h-5 rounded border flex items-center justify-center shrink-0 ${item.checked ? 'bg-[#D9A9FF]/20 border-[#D9A9FF] text-[#D9A9FF]' : 'bg-slate-200 dark:bg-[#0d0d11] border-tertiary/20'}`}>
                     {item.checked && <Check className="w-3.5 h-3.5 stroke-[3px]" />}
                   </div>
                   <span className="text-[10px] font-bold text-on-surface-variant leading-tight uppercase text-left">{item.title}</span>
@@ -1368,6 +1453,9 @@ export default function EbooksView({ currentUser, language }: EbooksViewProps) {
 
         </div>
 
+      </div>
+
+      </div>
       </div>
 
     {/* Checkout Modal Overlay */}
@@ -1382,11 +1470,11 @@ export default function EbooksView({ currentUser, language }: EbooksViewProps) {
           <div className="flex justify-between items-start border-b border-tertiary/10 pb-3">
             <div className="text-left">
               <span className="text-[8px] font-mono font-bold text-primary bg-primary-container/20 border border-primary/20 px-2 py-0.5 rounded uppercase">MÉTODO DE PAGO SEGURO</span>
-              <h3 className="text-md font-bold text-white uppercase mt-1">CHECKOUT WAACK ON</h3>
+              <h3 className="text-md font-bold text-slate-900 dark:text-white uppercase mt-1">CHECKOUT WAACK ON</h3>
             </div>
-            <button 
-              onClick={() => setPurchasingProduct(null)} 
-              className="text-on-surface-variant hover:text-white font-bold text-sm"
+            <button
+              onClick={() => setPurchasingProduct(null)}
+              className="text-on-surface-variant hover:text-slate-900 dark:hover:text-white font-bold text-sm"
             >
               ✕
             </button>
@@ -1394,7 +1482,7 @@ export default function EbooksView({ currentUser, language }: EbooksViewProps) {
 
           {checkoutStep === 'entering' && (
             <div className="space-y-4">
-              <div className="bg-[#0d0d11]/80 p-3 rounded-xl border border-tertiary/10 text-[11px] leading-relaxed text-left">
+              <div className="bg-slate-100 dark:bg-[#0d0d11]/80 p-3 rounded-xl border border-tertiary/10 text-[11px] leading-relaxed text-left">
                 <p className="font-bold uppercase text-[9px] text-on-surface-variant/70">PRODUCTO A ADQUIRIR:</p>
                 <p className="text-primary font-bold uppercase text-xs mt-1">{purchasingProduct.title} ({purchasingProduct.price})</p>
               </div>
@@ -1403,7 +1491,7 @@ export default function EbooksView({ currentUser, language }: EbooksViewProps) {
               <div className="bg-gradient-to-tr from-[#121212] to-on-primary-fixed-variant rounded-2xl border border-tertiary/20 p-5 text-white relative overflow-hidden shadow-2xl">
                 <div className="absolute right-[-20px] bottom-[-20px] w-24 h-24 bg-primary/10 rounded-full blur-xl pointer-events-none" />
                 <div className="flex justify-between items-start mb-6">
-                  <span className="text-[10px] font-mono tracking-widest text-[#E9C349] font-bold">WAACK ON PAY</span>
+                  <span className="text-[10px] font-mono tracking-widest text-[#D9A9FF] font-bold">WAACK ON PAY</span>
                   <span className="text-[9px] font-mono text-on-surface-variant">CREDIT CARD</span>
                 </div>
                 <div className="w-8 h-6 bg-amber-400/80 rounded-sm mb-3 border border-black/20" />
@@ -1474,7 +1562,7 @@ export default function EbooksView({ currentUser, language }: EbooksViewProps) {
               </div>
               <div>
                 <h4 className="text-sm font-bold text-green-400 uppercase">¡PRODUCTO DESBLOQUEADO!</h4>
-                <p className="text-[11px] text-on-surface-variant font-medium mt-1">Tu pago por <strong className="text-white font-black">{purchasingProduct.price}</strong> se completó con éxito.</p>
+                <p className="text-[11px] text-on-surface-variant font-medium mt-1">Tu pago por <strong className="text-slate-900 dark:text-white font-black">{purchasingProduct.price}</strong> se completó con éxito.</p>
                 <p className="text-[10px] text-primary font-mono font-bold mt-2 bg-primary-container/20 p-1.5 rounded border border-primary/20 uppercase">Ya puedes descargar tu archivo desde tu biblioteca virtual.</p>
               </div>
               <button

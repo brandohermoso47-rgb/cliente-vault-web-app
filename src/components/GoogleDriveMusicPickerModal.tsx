@@ -175,7 +175,7 @@ export const GoogleDriveMusicPickerModal: React.FC<GoogleDriveMusicPickerModalPr
         initial={{ opacity: 0, scale: 0.95, y: 10 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 10 }}
-        className="bg-[#0b0e1a] border border-[#E9C349]/40 rounded-3xl p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto space-y-5 shadow-2xl relative text-white font-sans"
+        className="bg-[#0b0e1a] border border-[#D9A9FF]/40 rounded-3xl p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto space-y-5 shadow-2xl relative text-white font-sans"
       >
         {/* Header */}
         <div className="flex items-center justify-between border-b border-white/10 pb-4">
@@ -186,7 +186,7 @@ export const GoogleDriveMusicPickerModal: React.FC<GoogleDriveMusicPickerModalPr
             <div>
               <h3 className="text-base font-mono font-black text-white uppercase flex items-center gap-2">
                 <span>Google Drive Picker - Importar Música</span>
-                <Sparkles className="w-4 h-4 text-[#E9C349]" />
+                <Sparkles className="w-4 h-4 text-[#D9A9FF]" />
               </h3>
               <p className="text-xs text-slate-400 font-mono">
                 Importa pistas MP3/Audio directamente desde tu Google Drive para tus alumnos.
@@ -339,10 +339,10 @@ export const GoogleDriveMusicPickerModal: React.FC<GoogleDriveMusicPickerModalPr
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="p-4 bg-[#14182e] border border-[#E9C349]/30 rounded-2xl space-y-3"
+                className="p-4 bg-[#14182e] border border-[#D9A9FF]/30 rounded-2xl space-y-3"
               >
                 <div className="flex items-center justify-between border-b border-white/10 pb-2">
-                  <span className="text-xs font-mono font-bold text-[#E9C349] uppercase flex items-center gap-1.5">
+                  <span className="text-xs font-mono font-bold text-[#D9A9FF] uppercase flex items-center gap-1.5">
                     <PlusCircle className="w-4 h-4" />
                     <span>Configurar Pista Importada: {selectedFile.name}</span>
                   </span>
@@ -355,7 +355,7 @@ export const GoogleDriveMusicPickerModal: React.FC<GoogleDriveMusicPickerModalPr
                       type="number"
                       value={trackBpm}
                       onChange={(e) => setTrackBpm(Number(e.target.value))}
-                      className="w-full bg-[#0c0e1a] border border-white/20 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-[#E9C349]"
+                      className="w-full bg-[#0c0e1a] border border-white/20 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-[#D9A9FF]"
                     />
                   </div>
 
@@ -365,7 +365,7 @@ export const GoogleDriveMusicPickerModal: React.FC<GoogleDriveMusicPickerModalPr
                       type="text"
                       value={trackArtist}
                       onChange={(e) => setTrackArtist(e.target.value)}
-                      className="w-full bg-[#0c0e1a] border border-white/20 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-[#E9C349]"
+                      className="w-full bg-[#0c0e1a] border border-white/20 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-[#D9A9FF]"
                     />
                   </div>
                 </div>
@@ -376,7 +376,7 @@ export const GoogleDriveMusicPickerModal: React.FC<GoogleDriveMusicPickerModalPr
                     <select
                       value={trackCategory}
                       onChange={(e) => setTrackCategory(e.target.value)}
-                      className="w-full bg-[#0c0e1a] border border-white/20 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-[#E9C349]"
+                      className="w-full bg-[#0c0e1a] border border-white/20 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-[#D9A9FF]"
                     >
                       <option value="Wrist Rolls & Drops">Wrist Rolls & Drops</option>
                       <option value="Groove & Grounding">Groove & Grounding</option>
@@ -391,7 +391,7 @@ export const GoogleDriveMusicPickerModal: React.FC<GoogleDriveMusicPickerModalPr
                       type="text"
                       value={trackTargetClass}
                       onChange={(e) => setTrackTargetClass(e.target.value)}
-                      className="w-full bg-[#0c0e1a] border border-white/20 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-[#E9C349]"
+                      className="w-full bg-[#0c0e1a] border border-white/20 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-[#D9A9FF]"
                     />
                   </div>
                 </div>
@@ -403,7 +403,7 @@ export const GoogleDriveMusicPickerModal: React.FC<GoogleDriveMusicPickerModalPr
                     placeholder="Instrucciones rítmicas de la pista..."
                     value={trackNotes}
                     onChange={(e) => setTrackNotes(e.target.value)}
-                    className="w-full bg-[#0c0e1a] border border-white/20 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-[#E9C349]"
+                    className="w-full bg-[#0c0e1a] border border-white/20 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-[#D9A9FF]"
                   />
                 </div>
 
@@ -413,7 +413,7 @@ export const GoogleDriveMusicPickerModal: React.FC<GoogleDriveMusicPickerModalPr
                     id="shareDriveCheck"
                     checked={isShared}
                     onChange={(e) => setIsShared(e.target.checked)}
-                    className="w-4 h-4 accent-[#E9C349] cursor-pointer"
+                    className="w-4 h-4 accent-[#D9A9FF] cursor-pointer"
                   />
                   <label htmlFor="shareDriveCheck" className="text-xs text-slate-200 cursor-pointer">
                     Compartir inmediatamente con mis alumnos en la nube
@@ -423,7 +423,7 @@ export const GoogleDriveMusicPickerModal: React.FC<GoogleDriveMusicPickerModalPr
                 <button
                   type="button"
                   onClick={handleConfirmImport}
-                  className="w-full py-3 rounded-2xl bg-gradient-to-r from-[#E9C349] to-amber-500 hover:brightness-110 text-black font-mono font-black text-xs uppercase shadow-xl transition-all cursor-pointer flex items-center justify-center gap-2 active:scale-95"
+                  className="w-full py-3 rounded-2xl bg-gradient-to-r from-[#D9A9FF] to-amber-500 hover:brightness-110 text-black font-mono font-black text-xs uppercase shadow-xl transition-all cursor-pointer flex items-center justify-center gap-2 active:scale-95"
                 >
                   <UploadCloud className="w-4 h-4 fill-black" />
                   <span>IMPORTAR A MIS LISTAS EN LA NUBE</span>

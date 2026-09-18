@@ -118,10 +118,10 @@ export const SubscriptionPlansModal: React.FC<SubscriptionPlansModalProps> = ({
         initial={{ opacity: 0, scale: 0.95, y: 15 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 15 }}
-        className="relative bg-[#0F0D1A] border-2 border-[#E9C349]/40 rounded-3xl max-w-5xl w-full p-4 sm:p-8 shadow-2xl z-10 space-y-6 overflow-y-auto max-h-[90vh] my-auto custom-scrollbar"
+        className="relative bg-[#0F0D1A] border-2 border-[#D9A9FF]/40 rounded-3xl max-w-5xl w-full p-4 sm:p-8 shadow-2xl z-10 space-y-6 overflow-y-auto max-h-[90vh] my-auto custom-scrollbar"
       >
         {/* Glow ambient backgrounds */}
-        <div className="absolute top-0 right-0 w-96 h-96 bg-[#E9C349]/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute top-0 right-0 w-96 h-96 bg-[#D9A9FF]/10 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute bottom-0 left-0 w-80 h-80 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
 
         {/* Close Button */}
@@ -150,8 +150,8 @@ export const SubscriptionPlansModal: React.FC<SubscriptionPlansModalProps> = ({
 
         {/* Modal Header */}
         <div className="text-center space-y-2 max-w-2xl mx-auto">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#E9C349]/15 border border-[#E9C349]/30 text-[#E9C349] font-mono text-[10px] font-black uppercase tracking-widest">
-            <Crown className="w-3.5 h-3.5 text-[#E9C349]" />
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#D9A9FF]/15 border border-[#D9A9FF]/30 text-[#D9A9FF] font-mono text-[10px] font-black uppercase tracking-widest">
+            <Crown className="w-3.5 h-3.5 text-[#D9A9FF]" />
             MODELO DE SUSCRIPCIONES Y MEMBRESÍAS WAACK ON
           </div>
 
@@ -254,21 +254,21 @@ export const SubscriptionPlansModal: React.FC<SubscriptionPlansModalProps> = ({
             onClick={() => setSelectedPlan('instructor_pass')}
             className={`p-6 rounded-3xl border-2 transition-all cursor-pointer flex flex-col justify-between space-y-4 relative overflow-hidden ${
               selectedPlan === 'instructor_pass'
-                ? 'bg-gradient-to-b from-[#1C1628] to-[#120E1E] border-[#E9C349] shadow-[0_0_30px_rgba(233,195,73,0.3)] scale-[1.02]'
-                : 'bg-[#120F20] border-white/10 hover:border-[#E9C349]/50 hover:bg-[#18142A]'
+                ? 'bg-gradient-to-b from-[#1C1628] to-[#120E1E] border-[#D9A9FF] shadow-[0_0_30px_rgba(217, 169, 255,0.3)] scale-[1.02]'
+                : 'bg-[#120F20] border-white/10 hover:border-[#D9A9FF]/50 hover:bg-[#18142A]'
             }`}
           >
             {/* VIP Tag */}
-            <div className="absolute top-0 right-0 bg-[#E9C349] text-black text-[9px] font-mono font-black uppercase px-3 py-1 rounded-bl-2xl shadow-md">
+            <div className="absolute top-0 right-0 bg-[#D9A9FF] text-black text-[9px] font-mono font-black uppercase px-3 py-1 rounded-bl-2xl shadow-md">
               RECOMENDADO ALUMNOS
             </div>
 
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <span className="px-2.5 py-1 rounded-lg bg-[#E9C349]/20 border border-[#E9C349]/40 text-[#E9C349] text-[10px] font-mono font-black uppercase tracking-wider">
+                <span className="px-2.5 py-1 rounded-lg bg-[#D9A9FF]/20 border border-[#D9A9FF]/40 text-[#D9A9FF] text-[10px] font-mono font-black uppercase tracking-wider">
                   PANEL DE INSTRUCTOR
                 </span>
-                <GraduationCap className="w-5 h-5 text-[#E9C349]" />
+                <GraduationCap className="w-5 h-5 text-[#D9A9FF]" />
               </div>
 
               <div>
@@ -282,7 +282,7 @@ export const SubscriptionPlansModal: React.FC<SubscriptionPlansModalProps> = ({
 
               <div className="pt-2 border-t border-white/10">
                 <div className="flex items-baseline gap-1">
-                  <span className="text-3xl font-black text-[#E9C349] font-mono">$15.00</span>
+                  <span className="text-3xl font-black text-[#D9A9FF] font-mono">$15.00</span>
                   <span className="text-xs font-mono text-slate-300">USD / mes por profesor</span>
                 </div>
                 <div className="mt-1 px-2.5 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-[10px] font-mono font-bold flex items-center gap-1">
@@ -292,19 +292,19 @@ export const SubscriptionPlansModal: React.FC<SubscriptionPlansModalProps> = ({
 
               <div className="space-y-2 pt-2 text-xs font-sans text-slate-300">
                 <div className="flex items-start gap-2">
-                  <Check className="w-4 h-4 text-[#E9C349] shrink-0 mt-0.5" />
+                  <Check className="w-4 h-4 text-[#D9A9FF] shrink-0 mt-0.5" />
                   <span><strong>Programa 4 Semanas</strong>: Clases exclusivas en HD y Masterclasses</span>
                 </div>
                 <div className="flex items-start gap-2">
-                  <Check className="w-4 h-4 text-[#E9C349] shrink-0 mt-0.5" />
+                  <Check className="w-4 h-4 text-[#D9A9FF] shrink-0 mt-0.5" />
                   <span><strong>Feedback 1v1</strong>: Corrección biomecánica de video enviada por el profesor</span>
                 </div>
                 <div className="flex items-start gap-2">
-                  <Check className="w-4 h-4 text-[#E9C349] shrink-0 mt-0.5" />
+                  <Check className="w-4 h-4 text-[#D9A9FF] shrink-0 mt-0.5" />
                   <span><strong>Biblioteca Exclusiva</strong>: Workbooks PDF, Guías teóricas y Ebooks</span>
                 </div>
                 <div className="flex items-start gap-2">
-                  <Check className="w-4 h-4 text-[#E9C349] shrink-0 mt-0.5" />
+                  <Check className="w-4 h-4 text-[#D9A9FF] shrink-0 mt-0.5" />
                   <span><strong>Pase Freestyle Lab incluido</strong>: Acceso total a las herramientas generales</span>
                 </div>
               </div>
@@ -317,7 +317,7 @@ export const SubscriptionPlansModal: React.FC<SubscriptionPlansModalProps> = ({
                 e.stopPropagation();
                 handleSelectAndActivate('instructor_pass');
               }}
-              className="w-full py-3 px-4 rounded-2xl bg-[#E9C349] hover:bg-[#d8b33c] text-black font-mono font-black text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-lg active:scale-95 mt-4"
+              className="w-full py-3 px-4 rounded-2xl bg-[#D9A9FF] hover:bg-[#B87CFF] text-black font-mono font-black text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-lg active:scale-95 mt-4"
             >
               {loadingPlan === 'instructor_pass' ? (
                 <span>Procesando...</span>
@@ -494,7 +494,7 @@ export const SubscriptionPlansModal: React.FC<SubscriptionPlansModalProps> = ({
             </span>
           </div>
 
-          <span className="text-[10px] font-bold text-[#E9C349] bg-[#E9C349]/10 px-3 py-1 rounded-xl border border-[#E9C349]/20 shrink-0">
+          <span className="text-[10px] font-bold text-[#D9A9FF] bg-[#D9A9FF]/10 px-3 py-1 rounded-xl border border-[#D9A9FF]/20 shrink-0">
             SIN CONTRATOS NI PERMANENCIA
           </span>
         </div>

@@ -1,0 +1,310 @@
+extend type Query {
+  """
+  ✨ Look up a single `Block` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  block(
+    """
+    The key used to identify the object.
+    """
+    key: Block_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Block_FirstRow
+  ): Block @fdc_generated(from: "Block", purpose: QUERY_SINGLE)
+  """
+  ✨ Look up a single `Comment` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  comment(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Comment_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Comment_FirstRow
+  ): Comment @fdc_generated(from: "Comment", purpose: QUERY_SINGLE)
+  """
+  ✨ Look up a single `Follow` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  follow(
+    """
+    The key used to identify the object.
+    """
+    key: Follow_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Follow_FirstRow
+  ): Follow @fdc_generated(from: "Follow", purpose: QUERY_SINGLE)
+  """
+  ✨ Look up a single `Like` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  like(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Like_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Like_FirstRow
+  ): Like @fdc_generated(from: "Like", purpose: QUERY_SINGLE)
+  """
+  ✨ Look up a single `Post` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  post(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Post_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Post_FirstRow
+  ): Post @fdc_generated(from: "Post", purpose: QUERY_SINGLE)
+  """
+  ✨ Look up a single `User` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  user(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: User_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: User_FirstRow
+  ): User @fdc_generated(from: "User", purpose: QUERY_SINGLE)
+  """
+  ✨ List `Block` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  blocks(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: Block_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [Block_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: Block_Having
+  ): [Block!]! @fdc_generated(from: "Block", purpose: QUERY_MULTIPLE)
+  """
+  ✨ List `Comment` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  comments(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: Comment_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [Comment_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: Comment_Having
+  ): [Comment!]! @fdc_generated(from: "Comment", purpose: QUERY_MULTIPLE)
+  """
+  ✨ List `Follow` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  follows(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: Follow_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [Follow_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: Follow_Having
+  ): [Follow!]! @fdc_generated(from: "Follow", purpose: QUERY_MULTIPLE)
+  """
+  ✨ List `Like` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  likes(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: Like_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [Like_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: Like_Having
+  ): [Like!]! @fdc_generated(from: "Like", purpose: QUERY_MULTIPLE)
+  """
+  ✨ List `Post` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  posts(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: Post_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [Post_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: Post_Having
+  ): [Post!]! @fdc_generated(from: "Post", purpose: QUERY_MULTIPLE)
+  """
+  ✨ List `User` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  users(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: User_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [User_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: User_Having
+  ): [User!]! @fdc_generated(from: "User", purpose: QUERY_MULTIPLE)
+}

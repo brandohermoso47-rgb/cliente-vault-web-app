@@ -194,15 +194,16 @@ export default function BWImageGallery({ isGrayscaleGlobal = false, onToggleGray
 
   // Real-time listener for user favorites in Firestore
   useEffect(() => {
-    if (!activeUserId || activeUserId === 'guest') {
-      const localFavs = localStorage.getItem('waackon_bw_favs_guest');
+    const authedUid = auth.currentUser?.uid;
+    if (!authedUid) {
+      const localFavs = localStorage.getItem(`waackon_bw_favs_${activeUserId || 'guest'}`);
       if (localFavs) {
         try { setFavoriteIds(JSON.parse(localFavs)); } catch (e) { console.error(e); }
       }
       return;
     }
 
-    const favoritosRef = collection(db, 'users', activeUserId, 'favoritos');
+    const favoritosRef = collection(db, 'users', authedUid, 'favoritos');
     const unsubscribe = onSnapshot(
       favoritosRef,
       (snapshot) => {
@@ -255,9 +256,10 @@ export default function BWImageGallery({ isGrayscaleGlobal = false, onToggleGray
     const storageUid = activeUserId || 'guest';
     localStorage.setItem(`waackon_bw_favs_${storageUid}`, JSON.stringify(newFavIds));
 
-    if (activeUserId && activeUserId !== 'guest') {
+    const authedUid = auth.currentUser?.uid;
+    if (authedUid) {
       try {
-        const favDocRef = doc(db, 'users', activeUserId, 'favoritos', item.id);
+        const favDocRef = doc(db, 'users', authedUid, 'favoritos', item.id);
         if (isFav) {
           await deleteDoc(favDocRef);
           setToastMessage('Eliminado de tus favoritos en Firestore');
@@ -380,10 +382,10 @@ export default function BWImageGallery({ isGrayscaleGlobal = false, onToggleGray
             <span className="text-xs font-mono text-[#8A8A8A]">Expediente Fotográfico</span>
           </div>
           <h2 className="text-2xl md:text-3xl font-black text-white tracking-tight flex items-center gap-3">
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-100 to-[#E9C349]">
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-100 to-[#D9A9FF]">
               Galería Fotográfica en Blanco y Negro
             </span>
-            <span className="px-2.5 py-0.5 rounded-full bg-[#E9C349]/10 border border-[#E9C349]/30 text-[#E9C349] text-[10px] font-mono font-extrabold uppercase tracking-widest hidden sm:inline-block">
+            <span className="px-2.5 py-0.5 rounded-full bg-[#D9A9FF]/10 border border-[#D9A9FF]/30 text-[#D9A9FF] text-[10px] font-mono font-extrabold uppercase tracking-widest hidden sm:inline-block">
               HD Contrast
             </span>
           </h2>
@@ -396,7 +398,7 @@ export default function BWImageGallery({ isGrayscaleGlobal = false, onToggleGray
         <div className="flex flex-wrap items-center gap-3 shrink-0">
           <button
             onClick={() => setShowUploadModal(true)}
-            className="px-4 py-2.5 bg-[#E9C349] hover:bg-yellow-300 text-black text-xs font-mono font-black rounded-2xl transition-all shadow-xl flex items-center gap-2 cursor-pointer active:scale-95"
+            className="px-4 py-2.5 bg-[#D9A9FF] hover:bg-yellow-300 text-black text-xs font-mono font-black rounded-2xl transition-all shadow-xl flex items-center gap-2 cursor-pointer active:scale-95"
           >
             <Upload className="w-4 h-4 stroke-[2.5]" />
             <span>SUBIR FOTO B&W</span>
@@ -640,7 +642,7 @@ export default function BWImageGallery({ isGrayscaleGlobal = false, onToggleGray
             </p>
             <button
               onClick={() => setShowUploadModal(true)}
-              className="px-5 py-2.5 bg-[#E9C349] text-black text-xs font-black rounded-xl uppercase shadow-lg hover:bg-yellow-300 transition-all"
+              className="px-5 py-2.5 bg-[#D9A9FF] text-black text-xs font-black rounded-xl uppercase shadow-lg hover:bg-yellow-300 transition-all"
             >
               Subir Mi Primera Foto
             </button>
@@ -665,7 +667,7 @@ export default function BWImageGallery({ isGrayscaleGlobal = false, onToggleGray
                   />
                   {/* Smooth Gradient Overlay with Image Title on Hover */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 p-4 flex flex-col justify-end backdrop-blur-[1px]">
-                    <span className="text-[10px] font-mono font-bold text-[#E9C349] uppercase tracking-wider mb-0.5">
+                    <span className="text-[10px] font-mono font-bold text-[#D9A9FF] uppercase tracking-wider mb-0.5">
                       {item.bpmStyle || item.category}
                     </span>
                     <h3 className="text-xs sm:text-sm font-black text-white leading-tight drop-shadow-lg mb-2">
@@ -718,7 +720,7 @@ export default function BWImageGallery({ isGrayscaleGlobal = false, onToggleGray
                   </motion.button>
 
                   {item.isUserUploaded && (
-                    <span className="absolute top-2.5 left-2.5 px-2 py-0.5 bg-[#E9C349] text-black text-[9px] font-mono font-black rounded-md shadow-md uppercase z-10">
+                    <span className="absolute top-2.5 left-2.5 px-2 py-0.5 bg-[#D9A9FF] text-black text-[9px] font-mono font-black rounded-md shadow-md uppercase z-10">
                       Mi Foto
                     </span>
                   )}
@@ -785,7 +787,7 @@ export default function BWImageGallery({ isGrayscaleGlobal = false, onToggleGray
             >
               <div className="flex justify-between items-center border-b border-[#262626] pb-3">
                 <div className="flex items-center gap-2">
-                  <Camera className="w-5 h-5 text-[#E9C349]" />
+                  <Camera className="w-5 h-5 text-[#D9A9FF]" />
                   <h3 className="text-base font-black text-white uppercase tracking-tight">
                     Subir Foto a Mi Galería B&W
                   </h3>
@@ -805,7 +807,7 @@ export default function BWImageGallery({ isGrayscaleGlobal = false, onToggleGray
                     Seleccionar Imagen
                   </label>
 
-                  <div className="border-2 border-dashed border-[#333] hover:border-[#E9C349]/50 rounded-2xl p-4 text-center bg-[#0A0A0A] transition-all relative">
+                  <div className="border-2 border-dashed border-[#333] hover:border-[#D9A9FF]/50 rounded-2xl p-4 text-center bg-[#0A0A0A] transition-all relative">
                     {uploadPreview ? (
                       <div className="relative group">
                         <img
@@ -823,7 +825,7 @@ export default function BWImageGallery({ isGrayscaleGlobal = false, onToggleGray
                       </div>
                     ) : (
                       <div className="space-y-3 py-2">
-                        <Upload className="w-10 h-10 text-[#E9C349] mx-auto animate-bounce" />
+                        <Upload className="w-10 h-10 text-[#D9A9FF] mx-auto animate-bounce" />
                         <div className="text-xs text-[#8A8A8A]">
                           <span className="text-white font-bold block">Haz clic para buscar un archivo</span>
                           JPG, PNG, WebP
@@ -847,7 +849,7 @@ export default function BWImageGallery({ isGrayscaleGlobal = false, onToggleGray
                       setUploadImageUrl(e.target.value);
                       if (e.target.value) setUploadPreview(e.target.value);
                     }}
-                    className="w-full bg-[#0A0A0A] border border-[#262626] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#E9C349]"
+                    className="w-full bg-[#0A0A0A] border border-[#262626] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#D9A9FF]"
                   />
                 </div>
 
@@ -862,7 +864,7 @@ export default function BWImageGallery({ isGrayscaleGlobal = false, onToggleGray
                     placeholder="Ej: Ensayo de Port de Bras & Pose"
                     value={uploadTitle}
                     onChange={(e) => setUploadTitle(e.target.value)}
-                    className="w-full bg-[#0A0A0A] border border-[#262626] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#E9C349]"
+                    className="w-full bg-[#0A0A0A] border border-[#262626] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#D9A9FF]"
                   />
                 </div>
 
@@ -874,7 +876,7 @@ export default function BWImageGallery({ isGrayscaleGlobal = false, onToggleGray
                   <select
                     value={uploadCategory}
                     onChange={(e) => setUploadCategory(e.target.value as any)}
-                    className="w-full bg-[#0A0A0A] border border-[#262626] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#E9C349]"
+                    className="w-full bg-[#0A0A0A] border border-[#262626] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#D9A9FF]"
                   >
                     <option value="mis_fotos">Mis Fotos de Práctica</option>
                     <option value="eventos">Eventos</option>
@@ -897,7 +899,7 @@ export default function BWImageGallery({ isGrayscaleGlobal = false, onToggleGray
                     placeholder="Ej: Análisis del ángulo de los brazos en el acento rítmico..."
                     value={uploadCaption}
                     onChange={(e) => setUploadCaption(e.target.value)}
-                    className="w-full bg-[#0A0A0A] border border-[#262626] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#E9C349]"
+                    className="w-full bg-[#0A0A0A] border border-[#262626] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#D9A9FF]"
                   />
                 </div>
 
@@ -911,7 +913,7 @@ export default function BWImageGallery({ isGrayscaleGlobal = false, onToggleGray
                     placeholder="Ej: 128 BPM Waacking"
                     value={uploadBpm}
                     onChange={(e) => setUploadBpm(e.target.value)}
-                    className="w-full bg-[#0A0A0A] border border-[#262626] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#E9C349]"
+                    className="w-full bg-[#0A0A0A] border border-[#262626] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#D9A9FF]"
                   />
                 </div>
 
@@ -926,7 +928,7 @@ export default function BWImageGallery({ isGrayscaleGlobal = false, onToggleGray
                   <button
                     type="submit"
                     disabled={!uploadPreview && !uploadImageUrl}
-                    className="px-5 py-2 bg-[#E9C349] text-black text-xs font-black rounded-xl hover:bg-yellow-300 transition-all uppercase disabled:opacity-50"
+                    className="px-5 py-2 bg-[#D9A9FF] text-black text-xs font-black rounded-xl hover:bg-yellow-300 transition-all uppercase disabled:opacity-50"
                   >
                     Guardar Foto en B&W
                   </button>

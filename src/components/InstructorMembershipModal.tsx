@@ -116,8 +116,8 @@ export default function InstructorMembershipModal({
         className="relative bg-[#121212] border border-[#262626] rounded-2xl max-w-2xl w-full p-4 sm:p-7 shadow-2xl z-10 space-y-6 overflow-y-auto max-h-[90vh] my-auto custom-scrollbar"
       >
         {/* Glow ambient background accent */}
-        <div className="absolute -top-20 -right-20 w-72 h-72 bg-[#E9C349]/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-20 -left-20 w-72 h-72 bg-[#9A2B3C]/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -top-20 -right-20 w-72 h-72 bg-[#D9A9FF]/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-20 -left-20 w-72 h-72 bg-[#C23E9E]/10 rounded-full blur-3xl pointer-events-none" />
 
         {/* Close Button */}
         <button
@@ -155,11 +155,11 @@ export default function InstructorMembershipModal({
               <img
                 src={instructor.avatar}
                 alt={instructor.name}
-                className="w-16 h-16 md:w-20 md:h-20 rounded-2xl object-cover border-2 border-[#E9C349] shadow-lg"
+                className="w-16 h-16 md:w-20 md:h-20 rounded-2xl object-cover border-2 border-[#D9A9FF] shadow-lg"
                 referrerPolicy="no-referrer"
               />
               {instructor.isFeaturedInstructor && (
-                <div className="absolute -bottom-2 -right-1 bg-[#E9C349] text-black text-[8px] font-mono font-black uppercase px-2 py-0.5 rounded-full shadow-md flex items-center gap-0.5">
+                <div className="absolute -bottom-2 -right-1 bg-[#D9A9FF] text-black text-[8px] font-mono font-black uppercase px-2 py-0.5 rounded-full shadow-md flex items-center gap-0.5">
                   <Sparkles className="w-2.5 h-2.5 fill-black" />
                   <span>VIP</span>
                 </div>
@@ -168,7 +168,7 @@ export default function InstructorMembershipModal({
 
             <div className="space-y-1 min-w-0">
               <div className="flex items-center gap-2 flex-wrap">
-                <span className="text-[10px] font-mono font-bold text-[#E9C349] bg-[#E9C349]/10 border border-[#E9C349]/30 px-2 py-0.5 rounded-md uppercase">
+                <span className="text-[10px] font-mono font-bold text-[#D9A9FF] bg-[#D9A9FF]/10 border border-[#D9A9FF]/30 px-2 py-0.5 rounded-md uppercase">
                   {instructor.level}
                 </span>
                 <span className="text-[10px] font-mono text-slate-400">
@@ -181,8 +181,8 @@ export default function InstructorMembershipModal({
               </h2>
 
               <div className="flex items-center gap-3 text-xs text-[#8A8A8A] font-mono">
-                <div className="flex items-center gap-1 text-[#E9C349] font-bold">
-                  <Star className="w-3.5 h-3.5 fill-[#E9C349]" />
+                <div className="flex items-center gap-1 text-[#D9A9FF] font-bold">
+                  <Star className="w-3.5 h-3.5 fill-[#D9A9FF]" />
                   <span>{instructor.rating.toFixed(1)}</span>
                 </div>
                 <span>•</span>
@@ -195,7 +195,7 @@ export default function InstructorMembershipModal({
                   href={`https://instagram.com/${instructor.instagram.replace('@', '')}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-1 text-slate-400 hover:text-[#E9C349] transition-colors"
+                  className="flex items-center gap-1 text-slate-400 hover:text-[#D9A9FF] transition-colors"
                 >
                   <Instagram className="w-3.5 h-3.5" />
                   <span>{instructor.instagram}</span>
@@ -205,8 +205,8 @@ export default function InstructorMembershipModal({
           </div>
 
           {/* Pricing Highlight */}
-          <div className="bg-gradient-to-br from-[#1E1B12] to-[#141414] border border-[#E9C349]/40 rounded-2xl p-3.5 text-right shrink-0 shadow-inner flex flex-col justify-center">
-            <span className="text-[10px] font-mono font-bold text-[#E9C349] uppercase block tracking-wider">
+          <div className="bg-gradient-to-br from-[#1E1B12] to-[#141414] border border-[#D9A9FF]/40 rounded-2xl p-3.5 text-right shrink-0 shadow-inner flex flex-col justify-center">
+            <span className="text-[10px] font-mono font-bold text-[#D9A9FF] uppercase block tracking-wider">
               {isEs ? 'PLAN DE MEMBRESÍA MENSUAL' : 'MONTHLY MEMBERSHIP PLAN'}
             </span>
             <div className="flex items-baseline justify-end gap-1 mt-0.5">
@@ -226,7 +226,7 @@ export default function InstructorMembershipModal({
             onClick={() => setActiveTab('programa')}
             className={`px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all flex items-center gap-2 border ${
               activeTab === 'programa'
-                ? 'bg-[#E9C349] text-black border-[#E9C349] shadow-md'
+                ? 'bg-[#D9A9FF] text-black border-[#D9A9FF] shadow-md'
                 : 'bg-[#181818] text-[#8A8A8A] hover:text-white border-white/5'
             }`}
           >
@@ -239,7 +239,7 @@ export default function InstructorMembershipModal({
             onClick={() => setActiveTab('beneficios')}
             className={`px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all flex items-center gap-2 border ${
               activeTab === 'beneficios'
-                ? 'bg-[#E9C349] text-black border-[#E9C349] shadow-md'
+                ? 'bg-[#D9A9FF] text-black border-[#D9A9FF] shadow-md'
                 : 'bg-[#181818] text-[#8A8A8A] hover:text-white border-white/5'
             }`}
           >
@@ -252,11 +252,11 @@ export default function InstructorMembershipModal({
             onClick={() => setActiveTab('metodologia')}
             className={`px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all flex items-center gap-2 border ${
               activeTab === 'metodologia'
-                ? 'bg-[#9A2B3C] text-white border-[#9A2B3C] shadow-md'
+                ? 'bg-[#C23E9E] text-white border-[#C23E9E] shadow-md'
                 : 'bg-[#181818] text-[#8A8A8A] hover:text-white border-white/5'
             }`}
           >
-            <BookOpen className="w-4 h-4 text-[#E9C349]" />
+            <BookOpen className="w-4 h-4 text-[#D9A9FF]" />
             <span>{isEs ? 'Metodología & Tools' : 'Methodology & Tools'}</span>
           </button>
         </div>
@@ -267,14 +267,14 @@ export default function InstructorMembershipModal({
             {weeksData.map((w) => (
               <div
                 key={w.week}
-                className="bg-[#181818] border border-white/5 rounded-xl p-4 space-y-2 hover:border-[#E9C349]/30 transition-all group"
+                className="bg-[#181818] border border-white/5 rounded-xl p-4 space-y-2 hover:border-[#D9A9FF]/30 transition-all group"
               >
                 <div className="flex items-center justify-between gap-2">
                   <div className="flex items-center gap-2">
-                    <span className="w-6 h-6 rounded-lg bg-[#E9C349]/10 border border-[#E9C349]/40 text-[#E9C349] text-xs font-mono font-bold flex items-center justify-center shrink-0">
+                    <span className="w-6 h-6 rounded-lg bg-[#D9A9FF]/10 border border-[#D9A9FF]/40 text-[#D9A9FF] text-xs font-mono font-bold flex items-center justify-center shrink-0">
                       W{w.week}
                     </span>
-                    <h4 className="text-xs font-bold text-white group-hover:text-[#E9C349] transition-colors">
+                    <h4 className="text-xs font-bold text-white group-hover:text-[#D9A9FF] transition-colors">
                       {w.title}
                     </h4>
                   </div>
@@ -291,7 +291,7 @@ export default function InstructorMembershipModal({
                   {(w.highlights || []).map((h, idx) => (
                     <span
                       key={idx}
-                      className="text-[9px] font-mono text-[#E9C349] bg-[#E9C349]/5 border border-[#E9C349]/20 px-2 py-0.5 rounded-md font-bold"
+                      className="text-[9px] font-mono text-[#D9A9FF] bg-[#D9A9FF]/5 border border-[#D9A9FF]/20 px-2 py-0.5 rounded-md font-bold"
                     >
                       ✓ {h}
                     </span>
@@ -307,7 +307,7 @@ export default function InstructorMembershipModal({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-[320px] overflow-y-auto pr-1 scrollbar-thin">
             {/* 1. Evaluación y Feedback */}
             <div className="bg-[#181818] border border-white/5 rounded-xl p-4 space-y-2">
-              <div className="flex items-center gap-2 text-[#E9C349]">
+              <div className="flex items-center gap-2 text-[#D9A9FF]">
                 <Video className="w-4 h-4 shrink-0" />
                 <h4 className="text-xs font-bold text-white uppercase">
                   {isEs ? 'Evaluación & Video-Feedback 1v1' : '1v1 Assessment & Video Feedback'}
@@ -322,7 +322,7 @@ export default function InstructorMembershipModal({
 
             {/* 2. Material Exclusivo */}
             <div className="bg-[#181818] border border-white/5 rounded-xl p-4 space-y-2">
-              <div className="flex items-center gap-2 text-[#E9C349]">
+              <div className="flex items-center gap-2 text-[#D9A9FF]">
                 <BookOpen className="w-4 h-4 shrink-0" />
                 <h4 className="text-xs font-bold text-white uppercase">
                   {isEs ? 'Material Exclusivo Waack On' : 'Exclusive Waack On Material'}
@@ -337,7 +337,7 @@ export default function InstructorMembershipModal({
 
             {/* 3. Batallas en Vivo */}
             <div className="bg-[#181818] border border-white/5 rounded-xl p-4 space-y-2">
-              <div className="flex items-center gap-2 text-[#E9C349]">
+              <div className="flex items-center gap-2 text-[#D9A9FF]">
                 <Zap className="w-4 h-4 shrink-0" />
                 <h4 className="text-xs font-bold text-white uppercase">
                   {isEs ? 'Pase a Batallas en Vivo & Jams' : 'Live Battle & Jam Passes'}
@@ -352,7 +352,7 @@ export default function InstructorMembershipModal({
 
             {/* 4. Certificado Oficial */}
             <div className="bg-[#181818] border border-white/5 rounded-xl p-4 space-y-2">
-              <div className="flex items-center gap-2 text-[#E9C349]">
+              <div className="flex items-center gap-2 text-[#D9A9FF]">
                 <Award className="w-4 h-4 shrink-0" />
                 <h4 className="text-xs font-bold text-white uppercase">
                   {isEs ? 'Certificado Digital Acreditado' : 'Accredited Digital Certificate'}
@@ -368,7 +368,7 @@ export default function InstructorMembershipModal({
         )}
 
         {/* Benefits summary list banner */}
-        <div className="p-3 bg-gradient-to-r from-[#181818] via-[#1F1B13] to-[#181818] border border-[#E9C349]/30 rounded-xl flex flex-wrap items-center justify-between gap-3 text-[10px] font-mono">
+        <div className="p-3 bg-gradient-to-r from-[#181818] via-[#1F1B13] to-[#181818] border border-[#D9A9FF]/30 rounded-xl flex flex-wrap items-center justify-between gap-3 text-[10px] font-mono">
           <div className="flex items-center gap-2 text-emerald-400 font-bold">
             <ShieldCheck className="w-4 h-4 shrink-0" />
             <span>{isEs ? 'Garantía de Satisfacción Waack On' : 'Waack On Satisfaction Guarantee'}</span>
@@ -385,12 +385,12 @@ export default function InstructorMembershipModal({
         {/* TAB 3: METODOLOGÍA & HERRAMIENTAS FREESTYLE LAB */}
         {activeTab === 'metodologia' && (
           <div className="space-y-4 max-h-[320px] overflow-y-auto pr-1 scrollbar-thin">
-            <div className="p-4 bg-[#181224] border border-[#E9C349]/30 rounded-2xl space-y-3">
+            <div className="p-4 bg-[#181224] border border-[#D9A9FF]/30 rounded-2xl space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-[10px] font-mono font-bold text-[#E9C349] uppercase tracking-wider">
+                <span className="text-[10px] font-mono font-bold text-[#D9A9FF] uppercase tracking-wider">
                   ENFOQUE PEDAGÓGICO DE CÁTEDRA
                 </span>
-                <span className="px-2 py-0.5 rounded bg-[#9A2B3C]/30 text-[#E9C349] text-[9px] font-mono font-bold">
+                <span className="px-2 py-0.5 rounded bg-[#C23E9E]/30 text-[#D9A9FF] text-[9px] font-mono font-bold">
                   VERIFICADO
                 </span>
               </div>
@@ -411,8 +411,8 @@ Se trabajan aceleraciones de muñeca, aislamiento escapular y proyectabilidad dr
                     ? instructor.associatedLabTools
                     : ['Espejo Ciego', 'DramaLab', 'BattleLab', 'SomaticFeedbackLab']
                   ).map(t => (
-                    <span key={t} className="px-2.5 py-1 rounded-xl bg-[#E9C349]/15 border border-[#E9C349]/30 text-[#E9C349] text-[10px] font-mono font-bold flex items-center gap-1">
-                      <Zap className="w-3 h-3 text-[#E9C349]" />
+                    <span key={t} className="px-2.5 py-1 rounded-xl bg-[#D9A9FF]/15 border border-[#D9A9FF]/30 text-[#D9A9FF] text-[10px] font-mono font-bold flex items-center gap-1">
+                      <Zap className="w-3 h-3 text-[#D9A9FF]" />
                       <span>{t}</span>
                     </span>
                   ))}
@@ -445,7 +445,7 @@ Se trabajan aceleraciones de muñeca, aislamiento escapular y proyectabilidad dr
             <button
               type="button"
               onClick={handleSubscribeClick}
-              className="px-6 py-2.5 bg-[#E9C349] hover:bg-[#d8b33c] text-black text-xs font-mono font-black rounded-xl shadow-lg transition-all uppercase flex items-center justify-center gap-2 hover:scale-105 w-1/2 sm:w-auto"
+              className="px-6 py-2.5 bg-[#D9A9FF] hover:bg-[#B87CFF] text-black text-xs font-mono font-black rounded-xl shadow-lg transition-all uppercase flex items-center justify-center gap-2 hover:scale-105 w-1/2 sm:w-auto"
             >
               <CreditCard className="w-4 h-4 stroke-[2.5]" />
               <span>{isEs ? 'Unirme al Plan Mensual' : 'Join Monthly Plan'}</span>

@@ -123,7 +123,7 @@ export default function GoogleSlidesView({ currentUser, language, onClose }: Goo
   return (
     <div className="space-y-6 w-full p-4 sm:p-6 md:p-8">
       {/* Header Banner */}
-      <div className="bg-gradient-to-r from-purple-950/80 via-neutral-900 to-amber-950/60 border border-[#E9C349]/30 rounded-3xl p-6 md:p-8 shadow-2xl relative overflow-hidden flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+      <div className="bg-gradient-to-r from-purple-950/80 via-neutral-900 to-amber-950/60 border border-[#D9A9FF]/30 rounded-3xl p-6 md:p-8 shadow-2xl relative overflow-hidden flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
         <div className="absolute top-0 right-0 w-96 h-96 bg-amber-500/5 rounded-full blur-3xl pointer-events-none" />
         
         <div className="flex items-center gap-4 relative z-10">
@@ -161,7 +161,7 @@ export default function GoogleSlidesView({ currentUser, language, onClose }: Goo
           )}
           <button
             onClick={() => setShowAddModal(true)}
-            className="flex-1 md:flex-initial px-5 py-3 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black font-bold text-xs rounded-xl shadow-[0_0_20px_rgba(233,195,73,0.3)] transition-all flex items-center justify-center gap-2 uppercase tracking-wider"
+            className="flex-1 md:flex-initial px-5 py-3 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black font-bold text-xs rounded-xl shadow-[0_0_20px_rgba(217, 169, 255,0.3)] transition-all flex items-center justify-center gap-2 uppercase tracking-wider"
           >
             <Plus className="w-4 h-4" /> {language === 'es' ? 'Añadir Google Slide' : 'Add Google Slide'}
           </button>
@@ -173,8 +173,8 @@ export default function GoogleSlidesView({ currentUser, language, onClose }: Goo
         {/* Left column: Decks List */}
         <div className="lg:col-span-4 space-y-4">
           <div className="bg-[#181818] border border-white/10 rounded-2xl p-5 shadow-xl">
-            <h3 className="text-xs font-mono font-bold text-[#E9C349] uppercase tracking-wider mb-4 flex items-center gap-2">
-              <FileText className="w-4 h-4 text-[#E9C349]" /> {language === 'es' ? 'Decks Disponibles' : 'Available Decks'} ({decks.length})
+            <h3 className="text-xs font-mono font-bold text-[#D9A9FF] uppercase tracking-wider mb-4 flex items-center gap-2">
+              <FileText className="w-4 h-4 text-[#D9A9FF]" /> {language === 'es' ? 'Decks Disponibles' : 'Available Decks'} ({decks.length})
             </h3>
             <div className="space-y-3 max-h-[600px] overflow-y-auto custom-scrollbar pr-1">
               {decks.map(deck => {
