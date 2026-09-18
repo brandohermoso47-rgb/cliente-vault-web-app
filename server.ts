@@ -302,7 +302,7 @@ async function getInstructorFinancesSummary(instructorUid: string) {
 
 async function startServer() {
   const app = express();
-  const PORT = 3000;
+  const PORT = process.env.PORT ? Number(process.env.PORT) : 3000;
 
   // Guarda el buffer crudo del body: requerido por stripe.webhooks.constructEvent
   // para verificar la firma HMAC del webhook (el body ya parseado no sirve).
