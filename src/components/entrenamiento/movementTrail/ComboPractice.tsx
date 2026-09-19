@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { useAnimationFrame } from 'motion/react';
 import * as Tone from 'tone';
 import { ArrowLeft, Camera, Pause, Play } from 'lucide-react';
 import type { Language } from '../../../lib/translations';
@@ -51,12 +52,13 @@ export default function ComboPractice({ language, comboId, onExit, onAddBonusPoi
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const synthRef = useRef<Tone.Synth | null>(null);
   const beatIntervalRef = useRef<number | null>(null);
-  const rafRef = useRef(0);
   const figureStartRef = useRef(0);
   const comboRef = useRef<MovementCombo | null>(null);
   const sequenceRef = useRef<MovementFigure[]>([]);
   const figureIndexRef = useRef(0);
   figureIndexRef.current = figureIndex;
+  const playingRef = useRef(false);
+  playingRef.current = playing;
 
   useEffect(() => {
     const c = comboStore.get(comboId) ?? null;
@@ -77,35 +79,36 @@ export default function ComboPractice({ language, comboId, onExit, onAddBonusPoi
 
   function stopPlayback() {
     if (beatIntervalRef.current) window.clearInterval(beatIntervalRef.current);
-    if (rafRef.current) cancelAnimationFrame(rafRef.current);
     setPlaying(false);
   }
 
-  function drawGhostLoop() {
-    const canvas = canvasRef.current;
-    const ctx = canvas?.getContext('2d');
-    const figure = sequenceRef.current[figureIndexRef.current];
-    const combo = comboRef.current;
-    if (ctx && canvas) {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      if (figure && combo) {
-        const targetDurationMs = (combo.beatsPerFigure * 60000) / combo.bpm;
-        const elapsed = performance.now() - figureStartRef.current;
-        const revealElapsed = figure.durationMs > 0 ? (elapsed / targetDurationMs) * figure.durationMs : 0;
-        drawGhostReveal(ctx, figure.points, canvas.width, canvas.height, revealElapsed, {
-          color: figure.color,
-          strokeWidth: figure.strokeWidth,
-        });
-        if (figure.mirrored) {
-          drawGhostReveal(ctx, mirrorPoints(figure.points, figure.mirrorAxisX), canvas.width, canvas.height, revealElapsed, {
-            color: '#D9A9FF',
+  useAnimationFrame(
+    useCallback(() => {
+      if (!playingRef.current) return;
+      const canvas = canvasRef.current;
+      const ctx = canvas?.getContext('2d');
+      const figure = sequenceRef.current[figureIndexRef.current];
+      const combo = comboRef.current;
+      if (ctx && canvas) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        if (figure && combo) {
+          const targetDurationMs = (combo.beatsPerFigure * 60000) / combo.bpm;
+          const elapsed = performance.now() - figureStartRef.current;
+          const revealElapsed = figure.durationMs > 0 ? (elapsed / targetDurationMs) * figure.durationMs : 0;
+          drawGhostReveal(ctx, figure.points, canvas.width, canvas.height, revealElapsed, {
+            color: figure.color,
             strokeWidth: figure.strokeWidth,
           });
+          if (figure.mirrored) {
+            drawGhostReveal(ctx, mirrorPoints(figure.points, figure.mirrorAxisX), canvas.width, canvas.height, revealElapsed, {
+              color: '#D9A9FF',
+              strokeWidth: figure.strokeWidth,
+            });
+          }
         }
       }
-    }
-    rafRef.current = requestAnimationFrame(drawGhostLoop);
-  }
+    }, [])
+  );
 
   async function startPlayback() {
     if (!combo || sequence.length === 0) return;
@@ -156,8 +159,6 @@ export default function ComboPractice({ language, comboId, onExit, onAddBonusPoi
         }
       }
     }, beatMs);
-
-    rafRef.current = requestAnimationFrame(drawGhostLoop);
   }
 
   const currentFigure = sequence[figureIndex];
