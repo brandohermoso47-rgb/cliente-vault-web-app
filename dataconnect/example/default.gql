@@ -1,0 +1,23 @@
+mutation CreateUser($username: String!, $email: String!, $bio: String) @auth(level: USER, insecureReason: "Required for this demo app: signed-in users create their profile.") {
+  user_insert(data: {id_expr: "auth.uid", username: $username, email: $email, bio: $bio, createdAt_expr: "request.time"})
+}
+
+mutation CreatePost($mediaUrl: String!, $caption: String!) @auth(level: USER, insecureReason: "Required for this demo app: signed-in users create posts.") {
+  post_insert(data: {mediaUrl: $mediaUrl, caption: $caption, createdAt_expr: "request.time", author: {id_expr: "auth.uid"}})
+}
+
+mutation DeletePost($id: UUID!) @auth(level: USER, insecureReason: "Required for this demo app: users may delete their own posts.") {
+  post_delete(key: {id: $id}) @check(expr: "this.author.id == auth.uid", message: "You can only delete your own post.")
+}
+
+query ListPosts @auth(level: USER, insecureReason: "Required for this demo app: only authenticated users can view the feed.") {
+  posts(orderBy: [{createdAt: DESC}], limit: 20) {
+    id
+    mediaUrl
+    caption
+    author {
+      username
+      profileImageUrl
+    }
+  }
+}

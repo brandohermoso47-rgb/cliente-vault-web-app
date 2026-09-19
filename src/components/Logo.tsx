@@ -18,13 +18,22 @@ export default function Logo({ className = '', variant = 'full', mode = 'default
         aria-label="Waack On Official Logo"
       >
         <defs>
-          {/* Pristine 3D White Porcelain / Chrome Metallic Gradient */}
-          <linearGradient id="waack-official-3d" x1="0%" y1="0%" x2="100%" y2="100%">
+          {/* Pristine 3D White Porcelain / Chrome Metallic Gradient — used on dark backgrounds */}
+          <linearGradient id="waack-metal-dark" x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" stopColor="#FFFFFF" />
             <stop offset="25%" stopColor="#F8FAFC" />
             <stop offset="50%" stopColor="#E2E8F0" />
             <stop offset="75%" stopColor="#94A3B8" />
             <stop offset="100%" stopColor="#64748B" />
+          </linearGradient>
+
+          {/* Dark graphite metallic gradient — used on light backgrounds for legibility */}
+          <linearGradient id="waack-metal-light" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#1E293B" />
+            <stop offset="25%" stopColor="#0F172A" />
+            <stop offset="50%" stopColor="#1E293B" />
+            <stop offset="75%" stopColor="#334155" />
+            <stop offset="100%" stopColor="#020617" />
           </linearGradient>
 
           {/* Highlight Specular Gradient */}
@@ -52,7 +61,7 @@ export default function Logo({ className = '', variant = 'full', mode = 'default
                 className="font-sans font-black uppercase tracking-widest text-[52px]"
                 style={{
                   fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-                  fill: 'url(#waack-official-3d)',
+                  fill: 'var(--logo-metal-fill, url(#waack-metal-dark))',
                   letterSpacing: '0.14em',
                   fontWeight: 900
                 }}
@@ -71,7 +80,7 @@ export default function Logo({ className = '', variant = 'full', mode = 'default
                 <path
                   d="M0 -55 C30 -55 55 -30 55 0 C55 30 30 55 0 55 C-30 55 -55 30 -55 0 C-55 -30 -30 -55 0 -55 Z"
                   fill="none"
-                  stroke="url(#waack-official-3d)"
+                  stroke="var(--logo-metal-fill, url(#waack-metal-dark))"
                   strokeWidth="20"
                   strokeLinecap="round"
                 />
@@ -86,8 +95,8 @@ export default function Logo({ className = '', variant = 'full', mode = 'default
                 {/* --- 3D DANCER SILHOUETTE INSIDE "O" --- */}
                 <g transform="translate(0, -10)">
                   {/* Head & Hair Knot */}
-                  <circle cx="0" cy="-36" r="9" fill="url(#waack-official-3d)" />
-                  <path d="M-2 -45 C-1 -48 4 -48 5 -45 C3 -43 -1 -43 -2 -45 Z" fill="url(#waack-official-3d)" />
+                  <circle cx="0" cy="-36" r="9" fill="var(--logo-metal-fill, url(#waack-metal-dark))" />
+                  <path d="M-2 -45 C-1 -48 4 -48 5 -45 C3 -43 -1 -43 -2 -45 Z" fill="var(--logo-metal-fill, url(#waack-metal-dark))" />
 
                   {/* Graceful Sculpted Torso & Waacking Stance */}
                   <path
@@ -96,7 +105,7 @@ export default function Logo({ className = '', variant = 'full', mode = 'default
                        C-10 24, -4 34, 0 42 
                        C4 34, 10 24, 12 12 
                        C14 -5, 11 -18, 3 -25 Z"
-                    fill="url(#waack-official-3d)"
+                    fill="var(--logo-metal-fill, url(#waack-metal-dark))"
                   />
 
                   {/* Right Arm Reaching Overhead (Waacking Extension) */}
@@ -105,10 +114,10 @@ export default function Logo({ className = '', variant = 'full', mode = 'default
                        C14 -28, 28 -38, 42 -46
                        C44 -48, 46 -45, 43 -43
                        C30 -34, 15 -22, 4 -12 Z"
-                    fill="url(#waack-official-3d)"
+                    fill="var(--logo-metal-fill, url(#waack-metal-dark))"
                   />
                   {/* Hand flare at wrist */}
-                  <path d="M42 -46 C45 -48, 47 -46, 44 -43 Z" fill="url(#waack-official-3d)" />
+                  <path d="M42 -46 C45 -48, 47 -46, 44 -43 Z" fill="var(--logo-metal-fill, url(#waack-metal-dark))" />
 
                   {/* Left Arm Curved on Waist */}
                   <path
@@ -116,7 +125,7 @@ export default function Logo({ className = '', variant = 'full', mode = 'default
                        C-16 -12, -24 -2, -26 10
                        C-27 12, -25 13, -24 11
                        C-21 2, -14 -7, -3 -12 Z"
-                    fill="url(#waack-official-3d)"
+                    fill="var(--logo-metal-fill, url(#waack-metal-dark))"
                   />
                 </g>
               </g>
@@ -130,7 +139,7 @@ export default function Logo({ className = '', variant = 'full', mode = 'default
                   className="font-sans font-black uppercase"
                   style={{
                     fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-                    fill: 'url(#waack-official-3d)',
+                    fill: 'var(--logo-metal-fill, url(#waack-metal-dark))',
                     fontSize: '85px',
                     fontWeight: 900
                   }}
