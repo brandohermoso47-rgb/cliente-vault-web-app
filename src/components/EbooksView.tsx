@@ -55,8 +55,8 @@ const EBOOKS: Ebook[] = [
     readTime: '10 min de lectura',
     author: 'WaackOn Editorial & Cátedra',
     color: 'bg-primary-container/20',
-    borderColor: 'border-[#d9a9ff]/50',
-    tagColor: 'bg-[#d9a9ff]/20 text-[#d9a9ff] border-[#d9a9ff]/40',
+    borderColor: 'border-[#e9c349]/50',
+    tagColor: 'bg-[#e9c349]/20 text-[#e9c349] border-[#e9c349]/40',
     chapters: [
       {
         title: '1. Introducción: El Espíritu del Waacking',
@@ -157,7 +157,7 @@ Para desarrollar una musicalidad genuina, sumérgete en los clásicos del Disco 
     author: 'Brando Hermoso',
     color: 'bg-primary-container/20',
     borderColor: 'border-[#564241]',
-    tagColor: 'bg-[#8F2C7A]/20 text-[#ffb3b2] border-[#8F2C7A]/30',
+    tagColor: 'bg-[#81262c]/20 text-[#ffb3b2] border-[#81262c]/30',
     chapters: [
       {
         title: '1. ¿Qué es el Arm Roll y su Origen?',
@@ -217,7 +217,7 @@ Entrena con alma, proyecta con drama.
     author: 'Brando Hermoso',
     color: 'bg-surface-container-high/40',
     borderColor: 'border-tertiary/20',
-    tagColor: 'bg-[#d9a9ff]/10 text-[#d9a9ff] border-[#d9a9ff]/20',
+    tagColor: 'bg-[#e9c349]/10 text-[#e9c349] border-[#e9c349]/20',
     chapters: [
       {
         title: '1. Los Orígenes Subterráneos en Los Ángeles',
@@ -265,7 +265,7 @@ Los bailarines de la corriente principal y los coreógrafos comerciales adoptaro
     author: 'Brando Hermoso',
     color: 'bg-primary-container/20',
     borderColor: 'border-[#564241]',
-    tagColor: 'bg-[#8F2C7A]/20 text-[#ffb3b2] border-[#8F2C7A]/30',
+    tagColor: 'bg-[#81262c]/20 text-[#ffb3b2] border-[#81262c]/30',
     chapters: [
       {
         title: '1. Los Clubs Históricos de Los Ángeles',
@@ -816,7 +816,7 @@ export default function EbooksView({ currentUser, language }: EbooksViewProps) {
         </div>
 
         <div className="flex items-center gap-2 self-start md:self-center">
-          <span className="text-[10px] font-mono font-bold text-[#D9A9FF] border border-[#D9A9FF]/20 bg-[#D9A9FF]/10 px-2.5 py-0.5 rounded-full uppercase tracking-wider">
+          <span className="text-[10px] font-mono font-bold text-[#E9C349] border border-[#E9C349]/20 bg-[#E9C349]/10 px-2.5 py-0.5 rounded-full uppercase tracking-wider">
             {language === 'es' ? 'Historia & Cultura' : 'History & Culture'}
           </span>
           <span className="text-[10px] font-mono font-bold text-primary border border-primary/20 bg-primary-container/20 px-2.5 py-0.5 rounded-full uppercase tracking-wider">
@@ -930,8 +930,8 @@ export default function EbooksView({ currentUser, language }: EbooksViewProps) {
                           {/* Bottom Actions */}
                           <div className="relative z-10 mt-6 pt-4 border-t border-dashed border-tertiary/10 flex items-center justify-between">
                             {savedNote ? (
-                              <span className="text-[9px] font-mono font-bold text-[#D9A9FF] bg-[#D9A9FF]/10 px-2 py-1 rounded border border-[#D9A9FF]/20 flex items-center gap-1 uppercase">
-                                <Bookmark className="w-3 h-3 fill-[#D9A9FF]" /> Nota Guardada
+                              <span className="text-[9px] font-mono font-bold text-[#E9C349] bg-[#E9C349]/10 px-2 py-1 rounded border border-[#E9C349]/20 flex items-center gap-1 uppercase">
+                                <Bookmark className="w-3 h-3 fill-[#E9C349]" /> Nota Guardada
                               </span>
                             ) : (
                               <span className="text-[9px] text-on-surface-variant/40 font-mono font-bold uppercase">Sin anotaciones</span>
@@ -966,7 +966,7 @@ export default function EbooksView({ currentUser, language }: EbooksViewProps) {
                   {/* Additional historical archive placeholder representation */}
                   <div className="bg-surface-container border border-tertiary/10 rounded-2xl p-5 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-4">
                     <div className="flex items-center gap-3 text-left">
-                      <div className="p-3 bg-[#D9A9FF]/10 rounded-2xl border border-[#D9A9FF]/20 text-[#D9A9FF] shrink-0">
+                      <div className="p-3 bg-[#E9C349]/10 rounded-2xl border border-[#E9C349]/20 text-[#E9C349] shrink-0">
                         <BookOpenCheck className="w-6 h-6" />
                       </div>
                       <div>
@@ -977,7 +977,7 @@ export default function EbooksView({ currentUser, language }: EbooksViewProps) {
                         </p>
                       </div>
                     </div>
-                    <span className="text-[10px] font-mono font-bold text-[#D9A9FF] bg-[#D9A9FF]/10 border border-[#D9A9FF]/20 px-3 py-1 rounded-full shrink-0 uppercase">
+                    <span className="text-[10px] font-mono font-bold text-[#E9C349] bg-[#E9C349]/10 border border-[#E9C349]/20 px-3 py-1 rounded-full shrink-0 uppercase">
                       PRÓXIMAMENTE
                     </span>
                   </div>
@@ -1067,13 +1067,13 @@ export default function EbooksView({ currentUser, language }: EbooksViewProps) {
                                 disabled={isDownloading}
                                 className={`w-full py-2.5 rounded-xl font-bold text-xs uppercase shadow-lg hover:scale-102 active:scale-95 transition-all text-center flex items-center justify-center gap-1.5 border ${
                                   isUnlocked 
-                                    ? 'bg-[#D9A9FF]/10 border-[#D9A9FF]/20 text-[#D9A9FF] hover:bg-[#D9A9FF]/20' 
+                                    ? 'bg-[#E9C349]/10 border-[#E9C349]/20 text-[#E9C349] hover:bg-[#E9C349]/20' 
                                     : 'bg-on-primary-fixed-variant border-primary/25 text-primary-fixed hover:bg-on-primary-container'
                                 }`}
                               >
                                 {isUnlocked ? (
                                   <>
-                                    <Save className="w-4 h-4 text-[#D9A9FF]" />
+                                    <Save className="w-4 h-4 text-[#E9C349]" />
                                     Descargar Material
                                   </>
                                 ) : (
@@ -1299,7 +1299,7 @@ export default function EbooksView({ currentUser, language }: EbooksViewProps) {
                   exit={{ opacity: 0 }}
                   className="space-y-4 pt-2 text-center"
                 >
-                  <div className="w-14 h-14 bg-primary-container/20 border border-primary/25 rounded-full flex items-center justify-center mx-auto text-[#D9A9FF] text-xl shadow-xl">
+                  <div className="w-14 h-14 bg-primary-container/20 border border-primary/25 rounded-full flex items-center justify-center mx-auto text-[#E9C349] text-xl shadow-xl">
                     <Award className="w-7 h-7 text-primary" />
                   </div>
                   <div>
@@ -1391,9 +1391,9 @@ export default function EbooksView({ currentUser, language }: EbooksViewProps) {
                     <motion.div 
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className="p-3 bg-[#D9A9FF]/10 rounded-xl border border-[#D9A9FF]/20 text-left text-[10px] leading-relaxed text-[#D9A9FF]"
+                      className="p-3 bg-[#E9C349]/10 rounded-xl border border-[#E9C349]/20 text-left text-[10px] leading-relaxed text-[#E9C349]"
                     >
-                      <span className="font-mono font-bold text-[9px] uppercase tracking-wider block text-[#D9A9FF] mb-1">📖 SABÍAS QUE...</span>
+                      <span className="font-mono font-bold text-[9px] uppercase tracking-wider block text-[#E9C349] mb-1">📖 SABÍAS QUE...</span>
                       {QUIZ_QUESTIONS[currentQuestionIdx].explanation}
                     </motion.div>
                   )}
@@ -1428,7 +1428,7 @@ export default function EbooksView({ currentUser, language }: EbooksViewProps) {
           {/* Quick Study Checklist cards */}
           <div className="bg-surface-container border border-tertiary/10 rounded-2xl p-5 shadow-2xl">
             <div className="text-left">
-              <span className="text-[9px] font-mono font-bold text-[#D9A9FF] bg-[#D9A9FF]/10 border border-[#D9A9FF]/20 px-2 py-0.5 rounded uppercase">
+              <span className="text-[9px] font-mono font-bold text-[#E9C349] bg-[#E9C349]/10 border border-[#E9C349]/20 px-2 py-0.5 rounded uppercase">
                 RUTINA DE ESTUDIO
               </span>
               <h3 className="text-sm font-bold text-slate-900 dark:text-white uppercase mt-1">METODOLOGÍA WAACK ON</h3>
@@ -1491,7 +1491,7 @@ export default function EbooksView({ currentUser, language }: EbooksViewProps) {
               <div className="bg-gradient-to-tr from-[#121212] to-on-primary-fixed-variant rounded-2xl border border-tertiary/20 p-5 text-white relative overflow-hidden shadow-2xl">
                 <div className="absolute right-[-20px] bottom-[-20px] w-24 h-24 bg-primary/10 rounded-full blur-xl pointer-events-none" />
                 <div className="flex justify-between items-start mb-6">
-                  <span className="text-[10px] font-mono tracking-widest text-[#D9A9FF] font-bold">WAACK ON PAY</span>
+                  <span className="text-[10px] font-mono tracking-widest text-[#E9C349] font-bold">WAACK ON PAY</span>
                   <span className="text-[9px] font-mono text-on-surface-variant">CREDIT CARD</span>
                 </div>
                 <div className="w-8 h-6 bg-amber-400/80 rounded-sm mb-3 border border-black/20" />
