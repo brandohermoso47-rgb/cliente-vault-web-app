@@ -1,0 +1,654 @@
+extend type Mutation {
+  """
+  ✨ Insert a single `Block` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  block_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: Block_Data!
+  ): Block_KeyOutput! @fdc_generated(from: "Block", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert a single `Comment` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  comment_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: Comment_Data!
+  ): Comment_KeyOutput! @fdc_generated(from: "Comment", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert a single `Follow` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  follow_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: Follow_Data!
+  ): Follow_KeyOutput! @fdc_generated(from: "Follow", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert a single `Like` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  like_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: Like_Data!
+  ): Like_KeyOutput! @fdc_generated(from: "Like", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert a single `Post` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  post_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: Post_Data!
+  ): Post_KeyOutput! @fdc_generated(from: "Post", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert a single `User` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  user_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: User_Data!
+  ): User_KeyOutput! @fdc_generated(from: "User", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert `Block` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  block_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [Block_Data!]!
+  ): [Block_KeyOutput!]! @fdc_generated(from: "Block", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert `Comment` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  comment_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [Comment_Data!]!
+  ): [Comment_KeyOutput!]! @fdc_generated(from: "Comment", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert `Follow` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  follow_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [Follow_Data!]!
+  ): [Follow_KeyOutput!]! @fdc_generated(from: "Follow", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert `Like` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  like_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [Like_Data!]!
+  ): [Like_KeyOutput!]! @fdc_generated(from: "Like", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert `Post` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  post_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [Post_Data!]!
+  ): [Post_KeyOutput!]! @fdc_generated(from: "Post", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert `User` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  user_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [User_Data!]!
+  ): [User_KeyOutput!]! @fdc_generated(from: "User", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert or update a single `Block` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Block`.
+  """
+  block_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: Block_Data!
+  ): Block_KeyOutput! @fdc_generated(from: "Block", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update a single `Comment` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Comment`.
+  """
+  comment_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: Comment_Data!
+  ): Comment_KeyOutput! @fdc_generated(from: "Comment", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update a single `Follow` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Follow`.
+  """
+  follow_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: Follow_Data!
+  ): Follow_KeyOutput! @fdc_generated(from: "Follow", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update a single `Like` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Like`.
+  """
+  like_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: Like_Data!
+  ): Like_KeyOutput! @fdc_generated(from: "Like", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update a single `Post` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Post`.
+  """
+  post_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: Post_Data!
+  ): Post_KeyOutput! @fdc_generated(from: "Post", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update a single `User` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `User`.
+  """
+  user_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: User_Data!
+  ): User_KeyOutput! @fdc_generated(from: "User", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update `Block` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Block`.
+  """
+  block_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [Block_Data!]!
+  ): [Block_KeyOutput!]! @fdc_generated(from: "Block", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Insert or update `Comment` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Comment`.
+  """
+  comment_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [Comment_Data!]!
+  ): [Comment_KeyOutput!]! @fdc_generated(from: "Comment", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Insert or update `Follow` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Follow`.
+  """
+  follow_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [Follow_Data!]!
+  ): [Follow_KeyOutput!]! @fdc_generated(from: "Follow", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Insert or update `Like` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Like`.
+  """
+  like_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [Like_Data!]!
+  ): [Like_KeyOutput!]! @fdc_generated(from: "Like", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Insert or update `Post` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Post`.
+  """
+  post_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [Post_Data!]!
+  ): [Post_KeyOutput!]! @fdc_generated(from: "Post", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Insert or update `User` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `User`.
+  """
+  user_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [User_Data!]!
+  ): [User_KeyOutput!]! @fdc_generated(from: "User", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Update a single `Block` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `Block` or `null` if not found.
+  """
+  block_update(
+    """
+    The key used to identify the object.
+    """
+    key: Block_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Block_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: Block_Data!
+  ): Block_KeyOutput @fdc_generated(from: "Block", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update a single `Comment` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `Comment` or `null` if not found.
+  """
+  comment_update(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Comment_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Comment_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: Comment_Data!
+  ): Comment_KeyOutput @fdc_generated(from: "Comment", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update a single `Follow` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `Follow` or `null` if not found.
+  """
+  follow_update(
+    """
+    The key used to identify the object.
+    """
+    key: Follow_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Follow_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: Follow_Data!
+  ): Follow_KeyOutput @fdc_generated(from: "Follow", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update a single `Like` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `Like` or `null` if not found.
+  """
+  like_update(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Like_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Like_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: Like_Data!
+  ): Like_KeyOutput @fdc_generated(from: "Like", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update a single `Post` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `Post` or `null` if not found.
+  """
+  post_update(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Post_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Post_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: Post_Data!
+  ): Post_KeyOutput @fdc_generated(from: "Post", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update a single `User` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `User` or `null` if not found.
+  """
+  user_update(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: User_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: User_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: User_Data!
+  ): User_KeyOutput @fdc_generated(from: "User", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update `Block` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  block_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: Block_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: Block_Data!
+  ): Int! @fdc_generated(from: "Block", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Update `Comment` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  comment_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: Comment_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: Comment_Data!
+  ): Int! @fdc_generated(from: "Comment", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Update `Follow` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  follow_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: Follow_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: Follow_Data!
+  ): Int! @fdc_generated(from: "Follow", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Update `Like` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  like_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: Like_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: Like_Data!
+  ): Int! @fdc_generated(from: "Like", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Update `Post` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  post_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: Post_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: Post_Data!
+  ): Int! @fdc_generated(from: "Post", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Update `User` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  user_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: User_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: User_Data!
+  ): Int! @fdc_generated(from: "User", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Delete a single `Block` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  block_delete(
+    """
+    The key used to identify the object.
+    """
+    key: Block_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Block_FirstRow
+  ): Block_KeyOutput @fdc_generated(from: "Block", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete a single `Comment` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  comment_delete(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Comment_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Comment_FirstRow
+  ): Comment_KeyOutput @fdc_generated(from: "Comment", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete a single `Follow` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  follow_delete(
+    """
+    The key used to identify the object.
+    """
+    key: Follow_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Follow_FirstRow
+  ): Follow_KeyOutput @fdc_generated(from: "Follow", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete a single `Like` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  like_delete(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Like_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Like_FirstRow
+  ): Like_KeyOutput @fdc_generated(from: "Like", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete a single `Post` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  post_delete(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Post_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Post_FirstRow
+  ): Post_KeyOutput @fdc_generated(from: "Post", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete a single `User` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  user_delete(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: User_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: User_FirstRow
+  ): User_KeyOutput @fdc_generated(from: "User", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete `Block` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  block_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: Block_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "Block", purpose: DELETE_MULTIPLE)
+  """
+  ✨ Delete `Comment` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  comment_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: Comment_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "Comment", purpose: DELETE_MULTIPLE)
+  """
+  ✨ Delete `Follow` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  follow_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: Follow_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "Follow", purpose: DELETE_MULTIPLE)
+  """
+  ✨ Delete `Like` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  like_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: Like_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "Like", purpose: DELETE_MULTIPLE)
+  """
+  ✨ Delete `Post` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  post_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: Post_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "Post", purpose: DELETE_MULTIPLE)
+  """
+  ✨ Delete `User` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  user_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: User_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "User", purpose: DELETE_MULTIPLE)
+}

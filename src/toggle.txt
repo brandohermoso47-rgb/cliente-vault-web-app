@@ -1,0 +1,3 @@
+<div onClick={v.goLogin} style={{"position":"fixed","right":"24px","bottom":"24px","padding":"11px 20px","borderRadius":"999px","border":"1px solid var(--hair)","background":"var(--glass)","backdropFilter":"blur(24px)","boxShadow":"var(--lg-edge), var(--lg-lift)","fontSize":"12px","fontWeight":"600","color":"var(--ink-2)","cursor":"pointer","zIndex":"20"}} className={cx(pc("hover", "color:var(--ink)"))}>
+  {v.loginToggleLabel}
+</div>

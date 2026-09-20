@@ -1,0 +1,74 @@
+:root{
+  --ground:#000000; --ground-2:#131316;
+  --glass:rgba(232,234,240,0.10); --glass-2:rgba(232,234,240,0.06);
+  --hair:rgba(236,238,244,0.24); --hair-soft:rgba(236,238,244,0.11);
+  --sheen:rgba(248,249,252,0.36);
+  --ink:#FFFFFF; --ink-2:#BDBFC6; --ink-3:#85878E;
+  --gold:#E4B94D; --gold-hi:#F4D374; --gold-lo:#C9982E; --gold-text:#E4B94D;
+  --blue:#4C6FE0; --pink:#E5177A; --purple:#8B66D8; --yellow:#F5C518;
+  --chrome-1:#FFFFFF; --chrome-2:#E2E8F0; --chrome-3:#94A3B8; --chrome-4:#64748B;
+  --chrome-spec:#CBD5E1; --chrome-shadow:#000000;
+  --shadow:0 20px 50px rgba(0,0,0,0.42);
+  --lg-blur:blur(30px) saturate(180%) brightness(1.06);
+  --lg-edge:inset 0 1px 0 rgba(255,255,255,0.52), inset 0 0 0 1px rgba(255,255,255,0.07), inset 0 -14px 28px -14px rgba(255,255,255,0.3), inset 6px 0 18px -14px rgba(255,255,255,0.4), inset -6px 0 18px -14px rgba(255,255,255,0.4);
+  --lg-lift:0 25px 50px rgba(0,0,0,0.28);
+}
+[data-theme="light"]{
+  --ground:#FFFFFF; --ground-2:#F5F5F7;
+  --glass:rgba(255,255,255,0.58); --glass-2:rgba(255,255,255,0.40);
+  --hair:rgba(13,13,13,0.10); --hair-soft:rgba(13,13,13,0.055);
+  --sheen:rgba(255,255,255,0.85);
+  --ink:#0D0D0D; --ink-2:#6B6F79; --ink-3:#9AA0AC;
+  --blue:#3B5BDB; --pink:#E5177A; --purple:#6C4AB6; --yellow:#C79A00;
+  --gold-text:#8A6415;
+  --chrome-1:#8B8D94; --chrome-2:#6E7078; --chrome-3:#3A3C42; --chrome-4:#1A1B1E;
+  --chrome-spec:#4A4C52; --chrome-shadow:#6B6F79;
+  --shadow:0 20px 44px rgba(13,13,13,0.10);
+  --lg-blur:blur(30px) saturate(150%) brightness(1.02);
+  --lg-edge:inset 0 1px 0 rgba(255,255,255,0.9), inset 0 0 0 1px rgba(255,255,255,0.4), inset 0 -14px 28px -14px rgba(255,255,255,0.6), inset 6px 0 18px -14px rgba(13,13,13,0.06), inset -6px 0 18px -14px rgba(13,13,13,0.06);
+  --lg-lift:0 22px 46px rgba(13,13,13,0.12);
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--ground);color:var(--ink);font-family:Geist,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:var(--blue);text-decoration:none}
+a:hover{color:var(--pink)}
+@keyframes goldEdge{
+  0%,100%{box-shadow:var(--lg-edge), 0 0 0 1px rgba(228,185,77,0.20), 0 0 18px -6px rgba(228,185,77,0.28)}
+  50%{box-shadow:var(--lg-edge), 0 0 0 1px rgba(244,211,116,0.80), 0 0 30px -4px rgba(228,185,77,0.55)}
+}
+@keyframes goldSweep{0%{transform:translateX(-140%)}100%{transform:translateX(420%)}}
+@keyframes bgDrift{
+  0%{transform:scale(1.12) translate3d(0,0,0);opacity:.1}
+  50%{transform:scale(1.2) translate3d(-2.5%,-1.5%,0);opacity:.18}
+  100%{transform:scale(1.12) translate3d(0,0,0);opacity:.1}
+}
+@keyframes metroBeat{0%{transform:scale(1)}18%{transform:scale(1.16)}100%{transform:scale(1)}}
+@keyframes adMarquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes livePulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(.65)}}
+@keyframes rise3d{
+  0%{opacity:0;transform:perspective(1200px) rotateX(-22deg) translateZ(-140px) translateY(46px)}
+  60%{opacity:1}
+  100%{opacity:1;transform:perspective(1200px) rotateX(0deg) translateZ(0) translateY(0)}
+}
+@keyframes tilt3d{
+  0%,100%{transform:perspective(1200px) rotateX(0deg) rotateY(0deg)}
+  25%{transform:perspective(1200px) rotateX(1.6deg) rotateY(-2.2deg)}
+  75%{transform:perspective(1200px) rotateX(-1.4deg) rotateY(2deg)}
+}
+@keyframes btnFloat3d{
+  0%,100%{transform:perspective(700px) translateZ(0) rotateX(0deg)}
+  50%{transform:perspective(700px) translateZ(16px) rotateX(-3deg)}
+}
+@keyframes gridSweep3d{
+  0%{transform:perspective(900px) rotateX(62deg) translateY(64px) scaleY(.82)}
+  100%{transform:perspective(900px) rotateX(62deg) translateY(0) scaleY(1)}
+}
+@keyframes gridDrift3d{
+  0%{background-position:0 0, 0 0}
+  100%{background-position:0 88px, 88px 0}
+}
+::-webkit-scrollbar{width:8px;height:8px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(228,185,77,0.3);border-radius:999px}
+@keyframes dirScroll{from{transform:translateY(0)}to{transform:translateY(-50%)}}
+.dir-marquee:hover .dir-track{animation-play-state:paused}

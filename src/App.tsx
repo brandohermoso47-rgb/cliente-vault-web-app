@@ -1,0 +1,1979 @@
+// GENERADO por tools/port-logic.mjs desde la lógica del prototipo. Edita tools/logic.source.js o el script, no este archivo.
+/* eslint-disable */
+// @ts-nocheck
+import React, { Component } from 'react';
+import { onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, signOut } from 'firebase/auth';
+import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
+import { auth, db, firebaseConfigured } from './lib/firebase';
+import Shell from './Shell';
+import Login from './views/Login';
+import ChatDock from './views/ChatDock';
+
+import { sty } from './lib/dc';
+
+class App extends Component<any, any> {
+  static defaultProps = { paleta: 'Fucsia & naranja', materia: 'Vidrio platinado', profundidad: 1.6, menu: 'Expandido' };
+  state: any = { view: (import.meta.env.DEV && new URLSearchParams(location.search).get('view')) || 'login', theme: 'dark', navOpen: null, acct: false, user: null, authReady: false };
+  unsubAuth: any = null;
+
+  /* Rol derivado de las dos suscripciones posibles */
+  subs = { platform: false, instructor: true, docente: false };
+
+  toggleSub(k) {
+    this.subs = Object.assign({}, this.subs, { [k]: !this.subs[k] });
+    this.forceUpdate();
+  }
+
+  role() {
+    const p = this.subs.platform, i = this.subs.instructor;
+    if (p && i) return { id: 'estudiante_premium', name: 'Estudiante Premium', short: 'EST · PREMIUM', color: 'var(--gold)', ink: '#1A1400', desc: 'Suscripción de plataforma y al menos una cátedra activa. Acceso completo.' };
+    if (i) return { id: 'estudiante', name: 'Estudiante', short: 'ESTUDIANTE', color: 'var(--blue)', ink: '#08060B', desc: 'Suscrito a una cátedra de instructor. Acceso a sus cursos, lives y material.' };
+    if (p) return { id: 'usuario_premium', name: 'Usuario Premium', short: 'PREMIUM', color: 'var(--purple)', ink: '#fff', desc: 'Suscripción de plataforma activa. Laboratorio, diario y comunidad sin cátedras.' };
+    return { id: 'usuario', name: 'Usuario', short: 'USUARIO', color: 'var(--ink-3)', ink: '#08060B', desc: 'Cuenta gratuita. Muro, reels y una lección de muestra por instructor.' };
+  }
+
+  navIsOpen() {
+    if (this.state.navOpen === true || this.state.navOpen === false) return this.state.navOpen;
+    return (this.props.menu ?? 'Solo iconos') === 'Expandido';
+  }
+
+  /* ---------- Laboratorio Freestyle ---------- */
+  labBpm = 112;
+  labRunning = false;
+  labDrill = 0;
+
+  drillData = [
+    { t: 'Arm rolls continuos', d: 'Rotación completa sin parar el flujo. Mantén el codo alto.', secs: '2:00', c1: 'var(--blue)', c2: 'var(--purple)' },
+    { t: 'Punto y pose', d: 'Marca el golpe, congela dos tiempos, suelta.', secs: '1:30', c1: 'var(--pink)', c2: 'var(--purple)' },
+    { t: 'Síncopa cruzada', d: 'Acentúa el contratiempo con el brazo contrario.', secs: '2:30', c1: 'var(--yellow)', c2: 'var(--pink)' },
+    { t: 'Freestyle libre', d: 'Sin estructura. Solo escucha y responde.', secs: '3:00', c1: 'var(--purple)', c2: 'var(--blue)' }
+  ];
+
+  setBpm = (e) => { this.labBpm = Number(e.target.value); this.forceUpdate(); };
+  toggleMetro = () => { this.labRunning = !this.labRunning; this.forceUpdate(); };
+  pickDrill(i) { this.labDrill = i; this.forceUpdate(); }
+
+  buildDrills() {
+    return this.drillData.map((d, i) => ({
+      key: 'd' + i,
+      title: d.t,
+      desc: d.d,
+      secs: d.secs,
+      isActive: this.labDrill === i,
+      pick: () => this.pickDrill(i),
+      dot: 'width:10px;height:10px;flex:0 0 10px;border-radius:50%;background:linear-gradient(135deg,' + d.c1 + ',' + d.c2 + ')',
+      card: 'display:flex;align-items:center;gap:14px;padding:16px 18px;border-radius:20px;cursor:pointer;border:1px solid ' + (this.labDrill === i ? 'color-mix(in oklch, var(--blue) 55%, transparent)' : 'var(--hair)') + ';background:var(--glass);backdrop-filter:var(--lg-blur);-webkit-backdrop-filter:var(--lg-blur);box-shadow:var(--lg-edge);transform-style:preserve-3d;transition:transform .26s cubic-bezier(.2,.85,.25,1), border-color .2s ease;animation:rise3d .8s cubic-bezier(.2,.85,.25,1) ' + (0.06 * i).toFixed(2) + 's backwards'
+    }));
+  }
+
+  /* ---------- Laboratorio: espejo, takes, annotator ---------- */
+  labRec = false;
+  labMirror = true;
+  labGrid = false;
+  labTake = 0;
+  labFrame = 2;
+  labNote = '';
+
+  toggleRec = () => { this.labRec = !this.labRec; this.forceUpdate(); };
+  toggleMirror = () => { this.labMirror = !this.labMirror; this.forceUpdate(); };
+  toggleGrid = () => { this.labGrid = !this.labGrid; this.forceUpdate(); };
+  pickTake(i) { this.labTake = i; this.forceUpdate(); }
+  pickFrame(i) { this.labFrame = i; this.forceUpdate(); }
+  onLabNote = (e) => { this.labNote = e.target.value; this.forceUpdate(); };
+
+  takeData = [
+    { n: 'TAKE_04', drill: 'Síncopa cruzada', dur: '0:42', bpm: 118, frames: 6, c1: 'var(--yellow)', c2: 'var(--pink)' },
+    { n: 'TAKE_03', drill: 'Punto y pose', dur: '1:06', bpm: 112, frames: 3, c1: 'var(--pink)', c2: 'var(--purple)' },
+    { n: 'TAKE_02', drill: 'Arm rolls continuos', dur: '2:00', bpm: 104, frames: 8, c1: 'var(--blue)', c2: 'var(--purple)' },
+    { n: 'TAKE_01', drill: 'Freestyle libre', dur: '3:00', bpm: 96, frames: 2, c1: 'var(--purple)', c2: 'var(--blue)' }
+  ];
+
+  buildTakes() {
+    return this.takeData.map((t, i) => ({
+      key: 'tk' + i,
+      name: t.n,
+      drill: t.drill,
+      meta: t.dur + ' · ' + t.bpm + ' BPM · ' + t.frames + ' frames',
+      pick: () => this.pickTake(i),
+      isOn: this.labTake === i,
+      thumb: 'height:104px;border-radius:16px;background:linear-gradient(135deg,' + t.c1 + ',' + t.c2 + ');opacity:' + (this.labTake === i ? '.95' : '.55') + ';position:relative;overflow:hidden',
+      card: 'display:flex;flex-direction:column;gap:12px;padding:14px;border-radius:22px;cursor:pointer;border:1px solid ' + (this.labTake === i ? 'color-mix(in oklch, var(--yellow) 55%, transparent)' : 'var(--hair)') + ';background:var(--glass);backdrop-filter:var(--lg-blur);-webkit-backdrop-filter:var(--lg-blur);box-shadow:var(--lg-edge);transition:border-color .2s ease, transform .26s cubic-bezier(.2,.85,.25,1)'
+    }));
+  }
+
+  frameData = [
+    { t: '00:03', tag: 'PREP' }, { t: '00:07', tag: 'ROLL_IN' }, { t: '00:11', tag: 'PEAK' },
+    { t: '00:16', tag: 'HOLD' }, { t: '00:21', tag: 'RELEASE' }, { t: '00:26', tag: 'RECOVER' }
+  ];
+
+  buildFrames() {
+    return this.frameData.map((f, i) => ({
+      key: 'fr' + i,
+      time: f.t,
+      tag: f.tag,
+      pick: () => this.pickFrame(i),
+      style: 'flex:0 0 96px;display:flex;flex-direction:column;gap:6px;padding:8px;border-radius:14px;cursor:pointer;border:1px solid ' + (this.labFrame === i ? 'var(--yellow)' : 'var(--hair)') + ';background:var(--glass-2);transition:border-color .18s ease',
+      thumb: 'height:54px;border-radius:9px;background:repeating-linear-gradient(115deg, color-mix(in oklch, var(--ink) 12%, transparent) 0 3px, transparent 3px 9px), var(--glass-2);opacity:' + (this.labFrame === i ? '1' : '.6'),
+      label: 'font-family:\'Geist Mono\',monospace;font-size:8.5px;letter-spacing:.14em;color:' + (this.labFrame === i ? 'var(--yellow)' : 'var(--ink-3)')
+    }));
+  }
+
+  frameMetrics = [
+    { k: 'ELBOW_EXT', v: '164.2°' },
+    { k: 'TORSO_TORQUE', v: '12 Nm' },
+    { k: 'SYMMETRY', v: '84%' },
+    { k: 'FLUIDITY', v: '92%' }
+  ];
+
+  coachData = [
+    { t: 'Mantén la elevación', d: 'El codo cae bajo la línea del hombro en el barrido radial. Súbelo dos dedos y la silueta se abre.', c: 'var(--yellow)', tag: null },
+    { t: 'Torque del torso', d: 'Estás rotando desde la cintura. Inicia el giro en la costilla y el brazo llegará más lejos sin esfuerzo.', c: 'var(--pink)', tag: '84% EFICIENCIA' },
+    { t: 'Bloqueo de tempo', d: 'Pierdes el pulso en el tiempo 7 de cada frase. Cuenta el contratiempo en voz alta durante dos rondas.', c: 'var(--blue)', tag: null }
+  ];
+
+  buildCoach() {
+    return this.coachData.map((c, i) => ({
+      key: 'co' + i,
+      title: c.t,
+      desc: c.d,
+      tag: c.tag,
+      hasTag: !!c.tag,
+      card: 'padding:18px 20px;border-radius:20px;border:1px solid var(--hair);border-left:3px solid ' + c.c + ';background:var(--glass);backdrop-filter:var(--lg-blur);-webkit-backdrop-filter:var(--lg-blur);box-shadow:var(--lg-edge)',
+      chip: 'font-family:\'Geist Mono\',monospace;font-size:9px;letter-spacing:.12em;padding:4px 8px;border-radius:7px;white-space:nowrap;color:' + c.c + ';border:1px solid color-mix(in oklch, ' + c.c + ' 45%, transparent)'
+    }));
+  }
+
+  timelineData = [
+    { l: 'Calentamiento', m: '4 min', w: 18, c: 'var(--blue)' },
+    { l: 'Arm rolls', m: '2 min', w: 14, c: 'var(--purple)' },
+    { l: 'Punto y pose', m: '1:30', w: 12, c: 'var(--pink)' },
+    { l: 'Síncopa cruzada', m: '2:30', w: 20, c: 'var(--yellow)' },
+    { l: 'Freestyle libre', m: '3 min', w: 22, c: 'var(--purple)' },
+    { l: 'Enfriar', m: '2 min', w: 14, c: 'var(--ink-3)' }
+  ];
+
+  buildTimeline() {
+    return this.timelineData.map((t, i) => ({
+      key: 'tl' + i,
+      label: t.l,
+      meta: t.m,
+      isNow: i === 3,
+      bar: 'flex:' + t.w + ' 1 0;height:100%;background:' + t.c + ';opacity:' + (i === 3 ? '1' : '.4'),
+      col: 'flex:' + t.w + ' 1 0;min-width:0;display:flex;flex-direction:column;gap:3px;padding-right:8px'
+    }));
+  }
+
+  labStats = [
+    { k: 'TEMPO_LOCK', v: '92%', d: 'Pulso sostenido esta semana' },
+    { k: 'SYMMETRY', v: '84%', d: 'Brazo izquierdo dos grados corto' },
+    { k: 'TAKES', v: '14', d: 'Grabados en los últimos 7 días' },
+    { k: 'FRAMES', v: '38', d: 'Anotados con sensación interna' }
+  ];
+
+  buildLabStats() {
+    return this.labStats.map((s, i) => ({
+      key: 'ls' + i,
+      kicker: s.k,
+      value: s.v,
+      desc: s.d,
+      card: 'padding:20px;border-radius:22px;border:1px solid var(--hair);background:var(--glass);backdrop-filter:var(--lg-blur);-webkit-backdrop-filter:var(--lg-blur);box-shadow:var(--lg-edge)'
+    }));
+  }
+
+  /* ---------- Somatic Diary ---------- */
+  moodPick = 2;
+  setMood(i) { this.moodPick = i; this.forceUpdate(); }
+
+  moodData = [
+    { l: 'Agotada', c: 'var(--purple)' },
+    { l: 'Cansada', c: 'var(--blue)' },
+    { l: 'Neutral', c: 'var(--ink-3)' },
+    { l: 'Con chispa', c: 'var(--yellow)' },
+    { l: 'Imparable', c: 'var(--pink)' }
+  ];
+
+  buildMoods() {
+    const base = 'flex:1 1 0;text-align:center;padding:14px 10px;border-radius:18px;font-size:12px;font-weight:600;cursor:pointer;transition:border-color .2s ease, color .2s ease;';
+    return this.moodData.map((m, i) => ({
+      key: 'm' + i,
+      label: m.l,
+      pick: () => this.setMood(i),
+      style: base + (this.moodPick === i
+        ? 'color:#fff;background:' + m.c + ';border:1px solid transparent;'
+        : 'color:var(--ink-2);border:1px solid var(--hair);background:var(--glass-2);')
+    }));
+  }
+
+  bodyLog = [
+    { zone: 'Hombros', note: 'Tensión leve tras los overhead rolls', level: 'Media', pct: 55 },
+    { zone: 'Muñecas', note: 'Sin molestias, movilidad completa', level: 'Baja', pct: 20 },
+    { zone: 'Zona lumbar', note: 'Rigidez al despertar, mejora al calentar', level: 'Media', pct: 48 },
+    { zone: 'Tobillos', note: 'Buen rango en los giros', level: 'Baja', pct: 15 }
+  ];
+
+  buildBody() {
+    return this.bodyLog.map((b, i) => ({
+      key: 'b' + i,
+      zone: b.zone,
+      note: b.note,
+      level: b.level,
+      bar: 'width:' + b.pct + '%;height:100%;border-radius:999px;background:' + (b.pct > 50 ? 'var(--yellow)' : 'var(--blue)')
+    }));
+  }
+
+  /* ---------- Manuales & Podcasts ---------- */
+  libTab = 'Todo';
+  pickLib(t) { this.libTab = t; this.forceUpdate(); }
+
+  libData = [
+    { t: 'Manual de Fundamentos', k: 'Manual', meta: '48 páginas · PDF', by: 'Brando Hermoso', c1: 'var(--blue)', c2: 'var(--purple)' },
+    { t: 'Anatomía del brazo waacker', k: 'Manual', meta: '32 páginas · PDF', by: 'Brando Hermoso', c1: 'var(--purple)', c2: 'var(--blue)' },
+    { t: 'El waacking no es una pose, es una respuesta', k: 'Podcast', ep: 0, meta: 'Ep. 12 · 48 min', by: 'Brando Hermoso', c1: 'var(--pink)', c2: 'var(--yellow)' },
+    { t: 'Batallas: leer al rival en ocho tiempos', k: 'Podcast', ep: 2, meta: 'Ep. 10 · 53 min', by: 'Pedro Punking', c1: 'var(--yellow)', c2: 'var(--pink)' },
+    { t: 'Playlist Disco esencial', k: 'Guía', meta: '24 temas comentados', by: 'Equipo Waack ON', c1: 'var(--blue)', c2: 'var(--pink)' },
+    { t: 'Glosario de poses', k: 'Guía', meta: '60 términos', by: 'Equipo Waack ON', c1: 'var(--purple)', c2: 'var(--pink)' }
+  ];
+
+  buildLibTabs() {
+    const base = 'padding:9px 16px;border-radius:999px;font-size:12px;cursor:pointer;white-space:nowrap;';
+    const on = base + 'font-weight:700;color:#fff;background:var(--blue);box-shadow:0 8px 18px -8px var(--blue), inset 0 1px 0 rgba(255,255,255,.3);';
+    const off = base + 'font-weight:600;color:var(--ink-2);border:1px solid var(--hair);background:var(--glass-2);box-shadow:var(--lg-edge);';
+    return ['Todo', 'Manual', 'Podcast', 'Guía'].map((t) => ({
+      key: t,
+      label: t === 'Todo' ? 'Todo' : t + 's',
+      style: this.libTab === t ? on : off,
+      pick: () => this.pickLib(t)
+    }));
+  }
+
+  buildLib() {
+    const list = this.libTab === 'Todo' ? this.libData : this.libData.filter((x) => x.k === this.libTab);
+    return list.map((x, i) => ({
+      key: x.t,
+      title: x.t,
+      kind: x.k,
+      meta: x.meta,
+      by: x.by,
+      isAudio: x.k === 'Podcast',
+      onOpen: x.k === 'Podcast' ? () => this.setState({ view: 'podcast' }, () => this.podGo(x.ep || 0)) : undefined,
+      cover: 'height:130px;background:linear-gradient(135deg, color-mix(in oklch, ' + x.c1 + ' 58%, #000 20%), color-mix(in oklch, ' + x.c2 + ' 55%, #000 32%))',
+      card: 'display:flex;flex-direction:column;border-radius:24px;overflow:hidden;cursor:pointer;border:1px solid var(--hair);background:var(--glass);backdrop-filter:var(--lg-blur);-webkit-backdrop-filter:var(--lg-blur);box-shadow:var(--lg-edge);opacity:1;transform-style:preserve-3d;transition:transform .26s cubic-bezier(.2,.85,.25,1), border-color .26s ease;animation:rise3d .8s cubic-bezier(.2,.85,.25,1) ' + (0.06 * i).toFixed(2) + 's backwards'
+    }));
+  }
+
+  /* ---------- Muro & Retos ---------- */
+  wallData = [
+    { u: 'Lorena "WaackQueen"', r: 'Instructora', t: 'Subid vuestro clip del reto #34 antes del domingo. Miro todos y comento los tres mejores.', time: 'hace 20 min', likes: 84, comments: 12, c1: 'var(--pink)', c2: 'var(--purple)' },
+    { u: 'Sara Molina', r: 'Nivel 2', t: 'Primera vez que encadeno 16 tiempos a 128 BPM sin perder el punto. Gracias por los drills.', time: 'hace 2 h', likes: 152, comments: 31, c1: 'var(--blue)', c2: 'var(--pink)' },
+    { u: 'Ibuki Imata', r: 'Instructor', t: 'Recordad: el freno importa más que la velocidad. Grabaos de perfil para verlo.', time: 'hace 5 h', likes: 208, comments: 44, c1: 'var(--yellow)', c2: 'var(--pink)' }
+  ];
+
+  buildWall() {
+    return this.wallData.map((w, i) => ({
+      key: 'w' + i,
+      user: w.u,
+      role: w.r,
+      text: w.t,
+      time: w.time,
+      likes: String(w.likes),
+      comments: String(w.comments),
+      avatar: 'width:42px;height:42px;flex:0 0 42px;border-radius:15px;border:1px solid var(--hair);background:linear-gradient(135deg, color-mix(in oklch, ' + w.c1 + ' 72%, #fff 8%), color-mix(in oklch, ' + w.c2 + ' 70%, #000 18%))'
+    }));
+  }
+
+  challengeData = [
+    { n: '#34', t: 'Síncopa en contratiempo', d: 'Graba 30 s marcando el contratiempo con brazo contrario.', left: '2 días', joined: 486, c1: 'var(--pink)', c2: 'var(--purple)' },
+    { n: '#35', t: 'Posing de alta costura', d: 'Tres poses encadenadas, una por cada acento del tema.', left: '9 días', joined: 122, c1: 'var(--purple)', c2: 'var(--blue)' }
+  ];
+
+  buildChallenges() {
+    return this.challengeData.map((c, i) => ({
+      key: c.n,
+      num: 'Reto ' + c.n,
+      title: c.t,
+      desc: c.d,
+      left: 'Quedan ' + c.left,
+      joined: c.joined + ' participantes',
+      cover: 'height:120px;background:linear-gradient(135deg, color-mix(in oklch, ' + c.c1 + ' 58%, #000 20%), color-mix(in oklch, ' + c.c2 + ' 55%, #000 32%))'
+    }));
+  }
+
+  /* ---------- Ranking & Insignias ---------- */
+  rankData = [
+    { p: 1, n: 'Ibuki Imata', lv: 'Nivel 4', pts: 4820, c1: 'var(--yellow)', c2: 'var(--pink)' },
+    { p: 2, n: 'Sara Molina', lv: 'Nivel 3', pts: 3990, c1: 'var(--blue)', c2: 'var(--purple)' },
+    { p: 3, n: 'Yoonji Kim', lv: 'Nivel 3', pts: 3610, c1: 'var(--purple)', c2: 'var(--pink)' },
+    { p: 4, n: 'Elena Pose', lv: 'Nivel 2', pts: 2870, c1: 'var(--pink)', c2: 'var(--yellow)' },
+    { p: 5, n: 'Marc Duarte', lv: 'Nivel 2', pts: 2410, c1: 'var(--blue)', c2: 'var(--pink)' },
+    { p: 18, n: 'Tú', lv: 'Nivel 1', pts: 100, me: true, c1: 'var(--purple)', c2: 'var(--pink)' }
+  ];
+
+  buildRank() {
+    return this.rankData.map((r, i) => ({
+      key: 'r' + r.p,
+      pos: String(r.p).padStart(2, '0'),
+      name: r.n,
+      level: r.lv,
+      pts: r.pts.toLocaleString('es-ES') + ' pts',
+      isMe: !!r.me,
+      avatar: 'width:40px;height:40px;flex:0 0 40px;border-radius:14px;border:1px solid var(--hair);background:linear-gradient(135deg, color-mix(in oklch, ' + r.c1 + ' 72%, #fff 8%), color-mix(in oklch, ' + r.c2 + ' 70%, #000 18%))',
+      row: 'display:flex;align-items:center;gap:14px;padding:14px 18px;border-radius:20px;border:1px solid ' + (r.me ? 'color-mix(in oklch, var(--pink) 55%, transparent)' : 'var(--hair)') + ';background:var(--glass);backdrop-filter:var(--lg-blur);-webkit-backdrop-filter:var(--lg-blur);box-shadow:var(--lg-edge);transform-style:preserve-3d;transition:transform .26s cubic-bezier(.2,.85,.25,1), border-color .26s ease;animation:rise3d .8s cubic-bezier(.2,.85,.25,1) ' + (0.05 * i).toFixed(2) + 's backwards'
+    }));
+  }
+
+  badgeData = [
+    { t: 'Primer paso', d: 'Completaste tu primera lección', got: true, c: 'var(--blue)', ic: 'step' },
+    { t: 'Racha de 7', d: 'Siete días seguidos entrenando', got: true, c: 'var(--pink)', ic: 'flame' },
+    { t: 'Ritmo firme', d: 'Un drill completo a 128 BPM', got: true, c: 'var(--yellow)', ic: 'beat' },
+    { t: 'Voz propia', d: 'Publica tu primer reel', got: true, c: 'var(--purple)', ic: 'mic' },
+    { t: 'Retadora', d: 'Participa en tres retos semanales', got: true, c: 'var(--blue)', ic: 'trophy' },
+    { t: 'Diario vivo', d: 'Diez entradas en el Somatic Diary', got: true, c: 'var(--pink)', ic: 'book' },
+    { t: 'Batalla ganada', d: 'Gana una ronda 1vs1', got: false, c: 'var(--ink-3)', ic: 'trophy' },
+    { t: 'Nivel 3', d: 'Alcanza el Nivel 3', got: false, c: 'var(--ink-3)', ic: 'star' }
+  ];
+
+  buildBadges() {
+    return this.badgeData.map((b, i) => ({
+      key: 'bg' + i,
+      title: b.t,
+      desc: b.d,
+      locked: !b.got,
+      unlocked: !!b.got,
+      icStep: b.ic === 'step',
+      icFlame: b.ic === 'flame',
+      icBeat: b.ic === 'beat',
+      icMic: b.ic === 'mic',
+      icTrophy: b.ic === 'trophy',
+      icBook: b.ic === 'book',
+      icStar: b.ic === 'star',
+      ring: 'position:relative;display:flex;align-items:center;justify-content:center;width:52px;height:52px;flex:0 0 52px;border-radius:50%;border:2px solid ' + (b.got ? b.c : 'var(--hair)') + ';color:' + (b.got ? b.c : 'var(--ink-3)') + ';background:var(--glass-2)',
+      card: 'display:flex;align-items:center;gap:14px;padding:16px 18px;border-radius:20px;border:1px solid var(--hair);background:var(--glass);backdrop-filter:var(--lg-blur);-webkit-backdrop-filter:var(--lg-blur);box-shadow:var(--lg-edge);opacity:' + (b.got ? '1' : '.55') + ';transform-style:preserve-3d;transition:transform .26s cubic-bezier(.2,.85,.25,1), border-color .26s ease;animation:rise3d .8s cubic-bezier(.2,.85,.25,1) ' + (0.05 * i).toFixed(2) + 's backwards'
+    }));
+  }
+
+  /* ---------- Planes & Membresía ---------- */
+  planCycle = 'Mensual';
+  setCycle(c) { this.planCycle = c; this.forceUpdate(); }
+
+  planData = [
+    { n: 'Explora', p: { Mensual: '0 €', Anual: '0 €' }, d: 'Acceso al muro, reels y una lección de muestra por instructor.', feats: ['Muro y reels completos', 'Una lección de muestra', 'Retos semanales sin premio'], cur: false, hi: false },
+    { n: 'Una cátedra', p: { Mensual: '19 € / mes', Anual: '190 € / año' }, d: 'Todos los cursos de un instructor, con su sala de chat privada.', feats: ['Un instructor a elegir', 'Sala de chat de la cátedra', 'Lives en directo y repetición', 'Manuales y podcasts'], cur: true, hi: false },
+    { n: 'Escuela completa', p: { Mensual: '39 € / mes', Anual: '390 € / año' }, d: 'Todas las cátedras, laboratorio y prioridad en batallas.', feats: ['Todos los instructores', 'Laboratorio Freestyle', 'Somatic Diary con seguimiento', 'Plaza prioritaria en batallas'], cur: false, hi: true }
+  ];
+
+  buildPlans() {
+    return this.planData.map((p, i) => ({
+      key: p.n,
+      name: p.n,
+      price: p.p[this.planCycle],
+      desc: p.d,
+      feats: p.feats.map((f, j) => ({ key: p.n + j, text: f })),
+      isCurrent: p.cur,
+      ctaLabel: p.cur ? 'Tu plan actual' : (p.hi ? 'Mejorar plan' : 'Elegir plan'),
+      slotId: 'plan-bg-' + (i + 1),
+      slotHint: 'Imagen de fondo · ' + p.n,
+      cta: p.hi
+        ? 'position:relative;z-index:2;display:block;text-align:center;padding:14px 20px;border-radius:999px;font-size:13px;font-weight:700;color:#1A1400;background:linear-gradient(90deg,var(--gold-hi),var(--gold-lo));box-shadow:inset 0 1px 0 rgba(255,255,255,.5);cursor:pointer'
+        : 'position:relative;z-index:2;display:block;text-align:center;padding:14px 20px;border-radius:999px;font-size:13px;font-weight:700;color:var(--ink);border:1px solid var(--hair);background:var(--glass-2);box-shadow:var(--lg-edge);cursor:pointer',
+      card: 'position:relative;overflow:hidden;min-height:460px;display:flex;flex-direction:column;gap:16px;padding:172px 26px 28px;border-radius:26px;border:1px solid ' + (p.hi ? 'color-mix(in oklch, var(--purple) 55%, transparent)' : 'var(--hair)') + ';background:var(--glass);backdrop-filter:var(--lg-blur);-webkit-backdrop-filter:var(--lg-blur);box-shadow:var(--lg-edge);opacity:1;animation:rise3d .8s cubic-bezier(.2,.85,.25,1) ' + (0.08 * i).toFixed(2) + 's backwards' + (p.hi ? ';animation:goldEdge 4.5s ease-in-out infinite' : '')
+    }));
+  }
+
+  buildCycleTabs() {
+    const base = 'flex:1;text-align:center;padding:10px 18px;border-radius:999px;font-size:12px;cursor:pointer;';
+    return ['Mensual', 'Anual'].map((c) => ({
+      key: c,
+      label: c === 'Anual' ? 'Anual · 2 meses gratis' : 'Mensual',
+      style: base + (this.planCycle === c
+        ? 'font-weight:700;color:var(--ink);background:var(--glass);border:1px solid var(--hair);box-shadow:var(--lg-edge);'
+        : 'font-weight:600;color:var(--ink-2);border:1px solid transparent;'),
+      pick: () => this.setCycle(c)
+    }));
+  }
+
+  /* ---------- Ayuda & Legal ---------- */
+  faqOpen = 0;
+  toggleFaq(i) { this.faqOpen = this.faqOpen === i ? -1 : i; this.forceUpdate(); }
+
+  faqData = [
+    { q: '¿Puedo suscribirme a varios instructores?', a: 'Sí. Cada cátedra se cobra por separado y aparece como una sección propia en Clases & Cursos. También puedes pasar al plan Escuela completa, que las incluye todas.' },
+    { q: '¿Qué pasa si cancelo a mitad de mes?', a: 'Mantienes el acceso hasta el final del periodo pagado. No se emiten reembolsos parciales, pero tu progreso y tus insignias se conservan.' },
+    { q: '¿Los lives quedan grabados?', a: 'Sí, las sesiones en directo quedan disponibles en repetición durante 30 días para quien tenga la cátedra activa.' },
+    { q: '¿Cómo funciona el Somatic Diary?', a: 'Registras sensación y molestias tras cada sesión. Tu instructor ve el resumen agregado, nunca las notas privadas.' },
+    { q: '¿Puedo descargar los manuales?', a: 'Los manuales en PDF se descargan con marca de agua personal. Los podcasts se escuchan en la app.' }
+  ];
+
+  buildFaq() {
+    return this.faqData.map((f, i) => ({
+      key: 'f' + i,
+      q: f.q,
+      a: f.a,
+      isOpen: this.faqOpen === i,
+      toggle: () => this.toggleFaq(i),
+      sign: this.faqOpen === i ? '−' : '+'
+    }));
+  }
+
+  annData = [
+    { id: 'a1', cat: 'Competencias', author: 'Brando Hermoso', role: 'Instructor', title: 'Gran Batalla Waack On 2026', body: 'Inscripciones abiertas para la batalla 1vs1. Categorías Novice y Open. Plazas limitadas a 32 bailarines por ronda.', date: '09 · 02 · 26', c1: 'var(--blue)', c2: 'var(--purple)', cta: 'Inscribirme', pinned: true },
+    { id: 'a2', cat: 'Sesiones & Jams', author: 'Lorena "WaackQueen"', role: 'Instructora', title: 'Jam & Sesión Rítmica', body: 'Jam abierta con DJ en directo. Trae ropa cómoda; empezamos con círculo de calentamiento a las 19:00.', date: '09 · 07 · 26', c1: 'var(--pink)', c2: 'var(--yellow)', cta: 'Apuntarme' },
+    { id: 'a3', cat: 'Clases Especiales', author: 'Yoon Ji Kim', role: 'Clase especial', title: 'Masterclass Yoon Ji Kim', body: 'Sesión única sobre musicalidad K-Groove. Plazas por orden de inscripción; se graba para los suscriptores anuales.', date: '09 · 15 · 26', c1: 'var(--purple)', c2: 'var(--blue)', cta: 'Reservar' },
+    { id: 'a4', cat: 'Comunicados', author: 'Equipo Waack ON', role: 'Comunicado', title: 'Nuevo horario de soporte', body: 'A partir de octubre el soporte responde de lunes a viernes, de 10:00 a 18:00 (CET).', date: '09 · 18 · 26', c1: 'var(--yellow)', c2: 'var(--pink)', cta: 'Leer' }
+  ];
+
+  annFilter = 'Todos';
+
+  pickAnn(c) { this.annFilter = c; this.forceUpdate(); }
+
+  buildAnnTabs() {
+    const base = 'display:inline-flex;align-items:center;gap:8px;padding:9px 16px;border-radius:999px;font-size:12px;cursor:pointer;white-space:nowrap;transition:transform .2s cubic-bezier(.2,.85,.25,1), color .2s ease;transform-style:preserve-3d;';
+    const on = base + 'font-weight:700;color:#fff;background:var(--purple);box-shadow:0 8px 18px -8px var(--purple), inset 0 1px 0 rgba(255,255,255,.3);';
+    const off = base + 'font-weight:600;color:var(--ink-2);border:1px solid var(--hair);background:var(--glass-2);box-shadow:var(--lg-edge);';
+    const cats = ['Todos', 'Competencias', 'Sesiones & Jams', 'Clases Especiales', 'Comunicados'];
+    return cats.map((c) => ({
+      key: c,
+      label: c === 'Todos' ? 'Todos los anuncios' : c,
+      count: String(c === 'Todos' ? this.annData.length : this.annData.filter((a) => a.cat === c).length),
+      style: this.annFilter === c ? on : off,
+      pick: () => this.pickAnn(c)
+    }));
+  }
+
+  buildAnns() {
+    const list = this.annFilter === 'Todos' ? this.annData : this.annData.filter((a) => a.cat === this.annFilter);
+    return list.map((a, i) => ({
+      key: a.id,
+      cat: a.cat,
+      author: a.author,
+      role: a.role,
+      title: a.title,
+      body: a.body,
+      date: a.date,
+      cta: a.cta,
+      isPinned: !!a.pinned,
+      avatar: 'width:34px;height:34px;flex:0 0 34px;border-radius:12px;border:1px solid var(--hair);background:linear-gradient(135deg, color-mix(in oklch, ' + a.c1 + ' 72%, #fff 8%), color-mix(in oklch, ' + a.c2 + ' 70%, #000 18%))',
+      cover: 'height:150px;background:linear-gradient(135deg, color-mix(in oklch, ' + a.c1 + ' 58%, #000 20%), color-mix(in oklch, ' + a.c2 + ' 55%, #000 32%))',
+      card: 'display:flex;flex-direction:column;border-radius:24px;overflow:hidden;border:1px solid var(--hair);background:var(--glass);backdrop-filter:var(--lg-blur);-webkit-backdrop-filter:var(--lg-blur);box-shadow:var(--lg-edge);opacity:1;transform-style:preserve-3d;transition:transform .26s cubic-bezier(.2,.85,.25,1), border-color .26s ease;animation:rise3d .8s cubic-bezier(.2,.85,.25,1) ' + (0.07 * i).toFixed(2) + 's backwards'
+    }));
+  }
+
+  trackData = [
+    { t: 'Waack That Funk', bpm: '112 BPM', tag: 'Entrenamiento', c1: 'var(--pink)', c2: 'var(--purple)' },
+    { t: 'Midnight Posing Lounge', bpm: '96 BPM', tag: 'Calentamiento', c1: 'var(--blue)', c2: 'var(--purple)' },
+    { t: 'Whacking Arms Drill', bpm: '128 BPM', tag: 'Velocidad', c1: 'var(--yellow)', c2: 'var(--pink)' }
+  ];
+
+  playingIndex = 0;
+
+  playTrack(i) { this.playingIndex = i; this.forceUpdate(); }
+
+  buildTracks() {
+    return this.trackData.map((t, i) => ({
+      key: 't' + i,
+      title: t.t,
+      bpm: t.bpm,
+      tag: t.tag,
+      isPlaying: this.playingIndex === i,
+      play: () => this.playTrack(i),
+      thumb: 'display:flex;align-items:center;justify-content:center;width:40px;height:40px;flex:0 0 40px;border-radius:13px;color:#fff;background:linear-gradient(135deg, color-mix(in oklch, ' + t.c1 + ' 70%, #000 10%), color-mix(in oklch, ' + t.c2 + ' 66%, #000 22%))',
+      card: 'display:flex;align-items:center;gap:12px;padding:13px 15px;border-radius:20px;border:1px solid ' + (this.playingIndex === i ? 'color-mix(in oklch, var(--pink) 55%, transparent)' : 'var(--hair)') + ';background:var(--glass);backdrop-filter:var(--lg-blur);-webkit-backdrop-filter:var(--lg-blur);box-shadow:var(--lg-edge);cursor:pointer;transform-style:preserve-3d;transition:transform .26s cubic-bezier(.2,.85,.25,1), border-color .2s ease;animation:rise3d .8s cubic-bezier(.2,.85,.25,1) ' + (0.06 * i).toFixed(2) + 's backwards'
+    }));
+  }
+
+  chatRooms = [
+    { id: 'general', name: 'Waack ON Global', topic: 'Sala general de la comunidad', last: 'Lorena: mañana subo el drill de 128 BPM', time: '2 min', unread: 4, live: true, c1: 'var(--pink)', c2: 'var(--purple)', members: '1.2K' },
+    { id: 'brando', name: 'Cátedra · Brando Hermoso', topic: 'Dudas de fundamentos y biomecánica', last: 'Brando: revisad la alineación del codo', time: '18 min', unread: 2, c1: 'var(--blue)', c2: 'var(--purple)', members: '312' },
+    { id: 'lorena', name: 'Cátedra · Lorena WaackQueen', topic: 'Speed-Waack y síncopas', last: 'Tú: ¿el contratiempo va en el hi-hat?', time: '1 h', unread: 0, c1: 'var(--pink)', c2: 'var(--yellow)', members: '204' },
+    { id: 'retos', name: 'Reto semanal #34', topic: 'Sube tu clip antes del domingo', last: 'Ibuki: quedan 9 plazas para la ronda 2', time: '3 h', unread: 7, c1: 'var(--yellow)', c2: 'var(--pink)', members: '486' },
+    { id: 'battles', name: 'Battles & Cyphers', topic: 'Convocatorias y resultados', last: 'Sara: cypher en Madrid el sábado', time: 'Ayer', unread: 0, c1: 'var(--purple)', c2: 'var(--blue)', members: '733' },
+    { id: 'soporte', name: 'Soporte Waack ON', topic: 'Pagos, accesos y cuenta', last: 'Equipo: tu recibo de septiembre está listo', time: '2 d', unread: 0, c1: 'var(--blue)', c2: 'var(--pink)', members: 'Equipo' }
+  ];
+
+  fisState = { part: 'Hombros', routine: ['Círculos de hombro controlados', 'Apertura de pecho en pared'] };
+  fisData = {
+    'Hombros': { time: '12 min', items: [
+      { name: 'Círculos de hombro controlados', kind: 'Movilidad', dose: '2 × 10 por lado', level: 'Base', note: 'De pie, brazos sueltos. Dibuja círculos lentos hacia atrás sin subir el trapecio. Es el calentamiento obligatorio antes de cualquier arm control.' },
+      { name: 'Deslizamiento en pared', kind: 'Movilidad', dose: '3 × 8', level: 'Base', note: 'Espalda y antebrazos pegados a la pared. Sube y baja los brazos sin despegar las muñecas.' },
+      { name: 'Estiramiento de deltoides cruzado', kind: 'Estiramiento', dose: '30 s por lado', level: 'Base', note: 'Cruza el brazo al pecho y empuja con el codo contrario. Hombro abajo, no encogido.' },
+      { name: 'Rotación externa con banda', kind: 'Fuerza', dose: '3 × 12 por lado', level: 'Medio', note: 'Codo pegado al costado. Abre el antebrazo contra la banda. Protege el manguito rotador en sesiones largas.' },
+      { name: 'Plancha con toque de hombro', kind: 'Fuerza', dose: '3 × 20 toques', level: 'Medio', note: 'Plancha alta, cadera quieta. Toca el hombro contrario alternando sin girar la pelvis.' }
+    ]},
+    'Brazos y muñecas': { time: '10 min', items: [
+      { name: 'Círculos de muñeca', kind: 'Movilidad', dose: '2 × 15 por sentido', level: 'Base', note: 'Antebrazo fijo. Solo gira la muñeca. Base del twirl limpio.' },
+      { name: 'Estiramiento de flexores', kind: 'Estiramiento', dose: '30 s por brazo', level: 'Base', note: 'Brazo extendido, palma al frente, tira suave de los dedos hacia ti.' },
+      { name: 'Latigazo de antebrazo', kind: 'Técnica', dose: '3 × 12 por lado', level: 'Medio', note: 'Impulso desde el codo, la mano llega última. Trabaja la disociación que pide el waacking.' },
+      { name: 'Isométrico de agarre', kind: 'Fuerza', dose: '3 × 25 s', level: 'Medio', note: 'Aprieta un objeto blando. Evita el temblor de mano en los puntos finales.' }
+    ]},
+    'Pecho': { time: '11 min', items: [
+      { name: 'Apertura de pecho en pared', kind: 'Estiramiento', dose: '40 s por lado', level: 'Base', note: 'Antebrazo en el marco de la puerta, gira el torso al lado contrario. Abre espacio para el arm control alto.' },
+      { name: 'Puente torácico apoyado', kind: 'Movilidad', dose: '2 × 8 respiraciones', level: 'Base', note: 'Espalda alta sobre un rulo o cojín firme. Deja caer los brazos abiertos.' },
+      { name: 'Flexión con tempo', kind: 'Fuerza', dose: '3 × 8 (3 s bajada)', level: 'Medio', note: 'Baja contando tres, sube en uno. Rodillas al suelo si pierdes la línea de cadera.' },
+      { name: 'Apertura con banda', kind: 'Fuerza', dose: '3 × 15', level: 'Base', note: 'Banda al frente, abre los brazos hasta la línea del pecho y vuelve despacio.' }
+    ]},
+    'Espalda': { time: '13 min', items: [
+      { name: 'Gato y vaca', kind: 'Movilidad', dose: '2 × 10 ciclos', level: 'Base', note: 'Sincroniza con la respiración. Despierta toda la columna antes de la sesión.' },
+      { name: 'Rotación torácica en cuadrupedia', kind: 'Movilidad', dose: '2 × 8 por lado', level: 'Base', note: 'Mano en la nuca, abre el codo al techo siguiendo con la mirada.' },
+      { name: 'Remo con banda', kind: 'Fuerza', dose: '3 × 12', level: 'Medio', note: 'Escápulas juntas al final del recorrido. Sostiene la postura en series largas de brazos.' },
+      { name: 'Superman', kind: 'Fuerza', dose: '3 × 12', level: 'Base', note: 'Boca abajo, levanta pecho y muslos a la vez. Sin tensar el cuello.' },
+      { name: 'Postura del niño', kind: 'Estiramiento', dose: '60 s', level: 'Base', note: 'Cierre de sesión. Suelta lumbar y hombros.' }
+    ]},
+    'Piernas': { time: '14 min', items: [
+      { name: 'Sentadilla profunda sostenida', kind: 'Movilidad', dose: '3 × 40 s', level: 'Base', note: 'Talones en el suelo, pecho alto. Prepara los niveles bajos del freestyle.' },
+      { name: 'Zancada con giro', kind: 'Movilidad', dose: '2 × 8 por lado', level: 'Medio', note: 'Zancada larga y rotación del torso sobre la pierna adelantada.' },
+      { name: 'Estiramiento de isquiotibiales', kind: 'Estiramiento', dose: '40 s por pierna', level: 'Base', note: 'Pierna extendida, espalda larga. No redondees la lumbar para llegar más lejos.' },
+      { name: 'Elevación de gemelos', kind: 'Fuerza', dose: '3 × 20', level: 'Base', note: 'Sube despacio, baja más despacio. Aguanta los apoyos en punta.' },
+      { name: 'Sentadilla búlgara', kind: 'Fuerza', dose: '3 × 10 por pierna', level: 'Avanzado', note: 'Pie trasero elevado. Trabaja el equilibrio que pide el cambio de peso en el cypher.' }
+    ]},
+    'Core': { time: '9 min', items: [
+      { name: 'Plancha frontal', kind: 'Fuerza', dose: '3 × 40 s', level: 'Base', note: 'Cadera en línea, glúteo activo. Sostiene el torso cuando los brazos van rápido.' },
+      { name: 'Plancha lateral', kind: 'Fuerza', dose: '3 × 30 s por lado', level: 'Medio', note: 'Hombro sobre el codo. Evita que caiga la cadera.' },
+      { name: 'Dead bug', kind: 'Control', dose: '3 × 10 por lado', level: 'Base', note: 'Lumbar pegada al suelo mientras extiendes brazo y pierna contrarios.' },
+      { name: 'Giro ruso sin peso', kind: 'Fuerza', dose: '3 × 20', level: 'Medio', note: 'Gira desde el tronco, no desde los brazos. Prepara los cambios de frente.' }
+    ]}
+  };
+  fisTipList = [
+    { text: 'Calienta al menos seis minutos antes de cualquier serie de fuerza.' },
+    { text: 'Si una zona molesta más de dos sesiones seguidas, avísale a tu instructor antes de seguir cargando.' },
+    { text: 'Los estiramientos largos van al final, nunca antes de entrenar potencia.' }
+  ];
+  dirState = { q: '' };
+  dirData = [
+    { n: 'Master of Rhythm', c: 'Estados Unidos', pr: '$35 USD/mes', ini: 'MR', r: '5.0', v: '840', h: '@master_of_rhythm', hi: true, sp: ['Advanced', 'Técnica Waack On', 'Mecánica Corporal'], g: ['--pink', '--purple'] },
+    { n: 'Brando Hermoso', c: 'España', pr: '$45 USD/mes', ini: 'BH', r: '4.9', v: '1548', h: '@brando_hermoso', hi: true, sp: ['Rolls Rápidos', 'Mecánica Corporal', 'Postura Somática'], g: ['--blue', '--purple'] },
+    { n: 'YoonJi Kim', c: 'Corea', pr: '$48 USD/mes', ini: 'YK', r: '4.9', v: '1158', h: '@yoonji_waack', hi: true, sp: ['Musicalidad Rítmica', 'Aislamiento Codos', 'Síncopa Disco'], g: ['--purple', '--blue'] },
+    { n: 'Kumari "WaackQueen"', c: 'Estados Unidos', pr: '$38 USD/mes', ini: 'KW', r: '4.8', v: '920', h: '@kumari_waack', hi: true, sp: ['Expresión Teatral', 'Pasarela Disco', 'Carácter Actoral'], g: ['--yellow', '--pink'] },
+    { n: 'Ibuki Imata', c: 'Japón', pr: '$42 USD/mes', ini: 'II', r: '4.9', v: '2180', h: '@ibuki_waack_on', hi: false, sp: ['Velocidad Sostenida', 'Freestyle Dinámico', 'BPM Avanzados'], g: ['--pink', '--blue'] },
+    { n: 'Lorena "La Waack"', c: 'Colombia', pr: '$29 USD/mes', ini: 'LW', r: '4.7', v: '480', h: '@lorena_lawaack', hi: false, sp: ['Pose Simétrica', 'Vibras de los 70s', 'Elegancia de Brazos'], g: ['--purple', '--pink'] }
+  ];
+  dirSetQ = (e) => { this.dirState.q = e.target.value; this.forceUpdate(); };
+
+  notifData = [
+    { t: 'Lorena publicó una clase nueva', x: 'Cátedra Nivel 2 — bloque de arm control disponible ahora.', w: 'hace 12 min', c: '--pink', unread: true },
+    { t: 'Tu clase empieza en 1 h', x: 'Taller de musicalidad con Ibuki Imata, sala virtual 3.', w: 'hace 40 min', c: '--yellow', unread: true },
+    { t: 'Nueva insignia desbloqueada', x: 'Retadora: participaste en tres retos semanales.', w: 'ayer', c: '--blue', unread: true },
+    { t: '14 me gusta en tu clip', x: 'Tu reel del reto #34 sigue subiendo en el muro.', w: 'hace 2 días', c: '--purple', unread: false }
+  ];
+  perfState = { tab: 'Todo', upload: false, kind: 'Vídeo', draft: '', following: 342, agTab: 'Próximas', agOpen: 0 };
+  agendaData = [
+    { id: 1, when: 'next', day: 'JUE 24', hour: '19:00', dur: '60 min', title: 'Cátedra de Waacking — Nivel 2', teacher: 'Lorena "WaackQueen"', mode: 'En vivo', place: 'Sala virtual 1', accent: '--pink', note: 'Bloque de arm control y rotaciones. Lleva rodilleras y agua.' },
+    { id: 2, when: 'next', day: 'VIE 25', hour: '11:30', dur: '45 min', title: 'Movilidad de hombro y muñeca', teacher: 'Equipo físico', mode: 'Grabada', place: 'Cuerpo & Estiramientos', accent: '--blue', note: 'Rutina corta previa a la cátedra del sábado.' },
+    { id: 3, when: 'next', day: 'SÁB 26', hour: '17:00', dur: '90 min', title: 'Taller de musicalidad — Ibuki Imata', teacher: 'Ibuki Imata', mode: 'En vivo', place: 'Sala virtual 3', accent: '--yellow', note: 'Trae dos temas a 120-128 BPM para trabajar el freno.' },
+    { id: 4, when: 'past', day: 'LUN 21', hour: '19:00', dur: '60 min', title: 'Cátedra de Waacking — Nivel 2', teacher: 'Lorena "WaackQueen"', mode: 'En vivo', place: 'Sala virtual 1', accent: '--pink', note: 'Sesión completada. La grabación está disponible 30 días.' },
+    { id: 5, when: 'past', day: 'SÁB 19', hour: '12:00', dur: '50 min', title: 'Freestyle Lab guiado', teacher: 'Sesión abierta', mode: 'En vivo', place: 'Sala virtual 2', accent: '--purple', note: 'Sesión completada. Sube tu clip al muro si quieres feedback.' }
+  ];
+  agPick = (t) => { this.perfState.agTab = t; this.forceUpdate(); };
+  agToggle = (id) => { this.perfState.agOpen = this.perfState.agOpen === id ? 0 : id; this.forceUpdate(); };
+  perfMediaData = [
+    { kind: 'Vídeo', likes: 214, g: ['--pink', '--purple'] },
+    { kind: 'Vídeo', likes: 96, g: ['--blue', '--purple'] },
+    { kind: 'Foto', likes: 341, g: ['--yellow', '--pink'] },
+    { kind: 'Vídeo', likes: 58, g: ['--purple', '--blue'] },
+    { kind: 'Foto', likes: 127, g: ['--pink', '--blue'] },
+    { kind: 'Vídeo', likes: 402, g: ['--purple', '--pink'] },
+    { kind: 'Foto', likes: 73, g: ['--blue', '--yellow'] },
+    { kind: 'Vídeo', likes: 185, g: ['--pink', '--purple'] },
+    { kind: 'Foto', likes: 240, g: ['--purple', '--yellow'] }
+  ];
+  perfHighlightData = [
+    { label: 'Cyphers', n: '12' }, { label: 'Drills', n: '30' }, { label: 'Batallas', n: '06' },
+    { label: 'Clase Lorena', n: '18' }, { label: 'Viajes', n: '09' }
+  ];
+  perfSuggestData = [
+    { handle: '@pipe.waack', meta: 'Nivel 3 · 2 amigos en común', ini: 'PW', g: ['--pink', '--purple'], on: false },
+    { handle: '@lu.somatic', meta: 'Instructora · Cuerpo', ini: 'LS', g: ['--blue', '--purple'], on: true },
+    { handle: '@dani.tempo', meta: 'Instructor · Ritmo', ini: 'DT', g: ['--yellow', '--pink'], on: false },
+    { handle: '@ibuki.imata', meta: 'Instructor · Punking', ini: 'II', g: ['--purple', '--blue'], on: false }
+  ];
+  perfToggleFollow = (i) => {
+    const s = this.perfSuggestData[i];
+    s.on = !s.on;
+    this.perfState.following += s.on ? 1 : -1;
+    this.forceUpdate();
+  };
+  perfPublishPost = () => {
+    const k = this.perfState.kind;
+    const pal = k === 'Vídeo' ? ['--pink', '--purple'] : ['--blue', '--yellow'];
+    this.perfMediaData.unshift({ kind: k, likes: 0, g: pal });
+    this.perfState.upload = false;
+    this.perfState.draft = '';
+    this.forceUpdate();
+  };
+
+  fisRun = { active: false, idx: 0, left: 0, paused: false };
+  fisTimer = null;
+
+  fisSecsFor(dose) {
+    if (!dose) return 45;
+    const s = dose.match(/(\d+)\s*s\b/);
+    if (s) return Math.max(15, parseInt(s[1], 10) * (/por (lado|pierna)/.test(dose) ? 2 : 1));
+    const m = dose.match(/(\d+)\s*×\s*(\d+)/);
+    if (m) return Math.min(120, parseInt(m[1], 10) * parseInt(m[2], 10) * 3);
+    return 45;
+  }
+  fisRunList() {
+    const out = [];
+    this.fisState.routine.forEach((name) => {
+      Object.keys(this.fisData).forEach((k) => {
+        this.fisData[k].items.forEach((e) => { if (e.name === name) out.push({ ...e, part: k }); });
+      });
+    });
+    return out;
+  }
+  fisTick = () => {
+    if (this.fisRun.paused) return;
+    if (this.fisRun.left > 1) { this.fisRun.left -= 1; this.forceUpdate(); return; }
+    this.fisAdvance();
+  };
+  fisAdvance() {
+    const list = this.fisRunList();
+    if (this.fisRun.idx + 1 >= list.length) {
+      this.fisRun.idx = list.length;
+      this.fisClearTimer();
+    } else {
+      this.fisRun.idx += 1;
+      this.fisRun.left = this.fisSecsFor(list[this.fisRun.idx].dose);
+    }
+    this.forceUpdate();
+  }
+  fisClearTimer() { if (this.fisTimer) { clearInterval(this.fisTimer); this.fisTimer = null; } }
+  fisStartRun = () => {
+    const list = this.fisRunList();
+    if (!list.length) return;
+    this.fisClearTimer();
+    this.fisRun = { active: true, idx: 0, left: this.fisSecsFor(list[0].dose), paused: false };
+    this.fisTimer = setInterval(this.fisTick, 1000);
+    this.forceUpdate();
+  };
+  fisStopRun = () => { this.fisClearTimer(); this.fisRun.active = false; this.forceUpdate(); };
+  fisTogglePause = () => {
+    this.fisRun.paused = !this.fisRun.paused;
+    this.forceUpdate();
+  };
+  fisSetPart = (p) => { this.fisState.part = p; this.forceUpdate(); };
+  fisToggle = (name) => {
+    const r = this.fisState.routine;
+    const i = r.indexOf(name);
+    if (i === -1) r.push(name); else r.splice(i, 1);
+    this.forceUpdate();
+  };
+
+  feedState = { filter: 'Todo' };
+  feedFilterList = ['Todo', 'Clips', 'Retos', 'Cátedras'];
+  feedToolList = [
+    { name: 'Imagen', d: '<rect x="3" y="4" width="18" height="16" rx="3"></rect><path d="m4 17 5-5 4 4 3-2 4 4"></path>' },
+    { name: 'Video', d: '<rect x="2" y="6" width="14" height="12" rx="3"></rect><path d="m22 8-6 4 6 4Z"></path>' },
+    { name: 'Audio', d: '<rect x="9" y="3" width="6" height="11" rx="3"></rect><path d="M5 11a7 7 0 0 0 14 0M12 18v3"></path>' },
+    { name: 'Encuesta', d: '<rect x="3" y="4" width="18" height="16" rx="3"></rect><path d="M7 15V9M12 15v-3M17 15v-5"></path>' },
+    { name: 'Reto', d: '<path d="M4 4v16"></path><path d="M4 5h12l-2 3 2 3H4"></path>' },
+    { name: 'Quiz', d: '<circle cx="12" cy="12" r="9"></circle><path d="M9.6 9.3a2.5 2.5 0 1 1 3.4 2.3c-.6.3-1 .9-1 1.6M12 17h.01"></path>' },
+    { name: 'Cuenta atrás', d: '<path d="M6 3h12M6 21h12"></path><path d="M7 3c0 5 5 6 5 9s-5 4-5 9M17 3c0 5-5 6-5 9s5 4 5 9"></path>' },
+    { name: 'Programar', d: '<rect x="3" y="5" width="18" height="16" rx="3"></rect><path d="M3 10h18M8 3v4M16 3v4"></path>' },
+    { name: 'Propina', d: '<circle cx="12" cy="12" r="9"></circle><path d="M14.5 9.3A2.7 2.7 0 0 0 12 8c-1.5 0-2.5.8-2.5 2s1 1.9 2.5 2 2.5.8 2.5 2-1 2-2.5 2a2.7 2.7 0 0 1-2.5-1.3M12 6.4v11.2"></path>' },
+    { name: 'Mencionar', d: '<circle cx="12" cy="12" r="4"></circle><path d="M16 8v5a2.8 2.8 0 0 0 5 0v-1a9 9 0 1 0-3.6 7.2"></path>' }
+  ];
+  feedPostData = [
+    { name: 'PIPE', handle: '@pipe.waack', time: 'hace unos segundos', text: 'Take crudo del drill de muñeca de hoy. Sin corrección todavía, solo el pulso a 128.', tags: 'Añadir etiquetas', likes: '128', comments: '14', g: ['--pink', '--purple'] },
+    { name: 'Lu Somatic', handle: '@lu.somatic', time: 'hace 2 h', text: 'Recordatorio: antes del cypher, tres minutos de hombro. El arm control se cae cuando el trapecio está frío.', tags: '#calentamiento #armcontrol', likes: '341', comments: '27', g: ['--blue', '--purple'] }
+  ];
+  feedSetFilter = (f) => { this.feedState.filter = f; this.forceUpdate(); };
+
+  tvState = { connected: false, cat: 'Todo' };
+  tvCatList = ['Todo', 'Clases abiertas', 'Batallas', 'Historia del waacking', 'Musicalidad', 'Detrás de cámara'];
+  tvVideoData = [
+    { title: 'Batalla final: cypher de septiembre', channel: 'Waack On Studio', meta: '32K vistas · hace 5 días', dur: '12:04', g: ['--pink', '--purple'] },
+    { title: 'Rutina de brazos antes de entrenar', channel: 'Lu Somatic', meta: '8.1K vistas · hace 1 semana', dur: '07:19', g: ['--blue', '--purple'] },
+    { title: 'Punking 70s: de dónde viene el arm control', channel: 'Archivo Waack On', meta: '21K vistas · hace 3 semanas', dur: '24:50', g: ['--purple', '--pink'] },
+    { title: 'Escuchar el hi-hat: ejercicio de conteo', channel: 'Dani Tempo', meta: '5.6K vistas · hace 4 días', dur: '09:32', g: ['--yellow', '--pink'] },
+    { title: 'Sesión de espejo con corrección en vivo', channel: 'Waack On Studio', meta: '11K vistas · hace 2 semanas', dur: '18:07', g: ['--blue', '--pink'] },
+    { title: 'Mi primer año haciendo waacking', channel: 'Sofi Freestyle', meta: '3.2K vistas · hace 6 días', dur: '05:44', g: ['--purple', '--blue'] },
+    { title: 'Cómo grabar tus takes con una sola luz', channel: 'Detrás del Lab', meta: '6.9K vistas · hace 1 mes', dur: '14:21', g: ['--yellow', '--purple'] },
+    { title: 'Freestyle de 60 segundos sin repetir paso', channel: 'Kim Wrist', meta: '17K vistas · hace 9 días', dur: '02:58', g: ['--pink', '--blue'] }
+  ];
+  tvQueueData = [
+    { title: 'Calentamiento de hombros, 6 minutos', channel: 'Lu Somatic', meta: '6:12 · hace 3 días', dur: '06:12', g: ['--blue', '--purple'] },
+    { title: 'Drill de puntos sobre house clásico', channel: 'Dani Tempo', meta: '8:40 · hace 1 semana', dur: '08:40', g: ['--yellow', '--pink'] },
+    { title: 'Cypher abierto: ronda de invitados', channel: 'Waack On Studio', meta: '22:15 · hace 2 semanas', dur: '22:15', g: ['--pink', '--purple'] },
+    { title: 'Entrevista: la escena en Bogotá', channel: 'Archivo Waack On', meta: '31:02 · hace 1 mes', dur: '31:02', g: ['--purple', '--blue'] },
+    { title: 'Estiramiento para después del take', channel: 'Lu Somatic', meta: '11:27 · hace 4 días', dur: '11:27', g: ['--blue', '--pink'] }
+  ];
+  tvChannelData = [
+    { name: 'Waack On Studio', subs: '12.1K suscriptores', g: ['--pink', '--purple'] },
+    { name: 'Lu Somatic', subs: '4.8K suscriptores', g: ['--blue', '--purple'] },
+    { name: 'Dani Tempo', subs: '2.3K suscriptores', g: ['--yellow', '--pink'] },
+    { name: 'Archivo Waack On', subs: '9.6K suscriptores', g: ['--purple', '--blue'] }
+  ];
+  tvGrad(g) { return 'linear-gradient(140deg, color-mix(in srgb, var(' + g[0] + ') 82%, #0D0A12 18%), color-mix(in srgb, var(' + g[1] + ') 58%, #0D0A12 42%))'; }
+  tvSetCat = (c) => { this.tvState.cat = c; this.forceUpdate(); };
+  tvToggleConnect = () => { this.tvState.connected = !this.tvState.connected; this.forceUpdate(); };
+
+  chatState = { open: false, roomId: null, query: '' };
+
+  toggleChat = () => {
+    this.chatState = Object.assign({}, this.chatState, { open: !this.chatState.open });
+    this.forceUpdate();
+  };
+
+  closeChat = () => {
+    this.chatState = Object.assign({}, this.chatState, { open: false, roomId: null });
+    this.forceUpdate();
+  };
+
+  openRoom(id) {
+    this.chatState = Object.assign({}, this.chatState, { roomId: id });
+    this.forceUpdate();
+  }
+
+  backToRooms = () => {
+    this.chatState = Object.assign({}, this.chatState, { roomId: null });
+    this.forceUpdate();
+  };
+
+  onChatQuery = (e) => {
+    this.chatState = Object.assign({}, this.chatState, { query: e.target.value });
+    this.forceUpdate();
+  };
+
+  buildChatRooms() {
+    const q = this.chatState.query.trim().toLowerCase();
+    return this.chatRooms
+      .filter((r) => !q || r.name.toLowerCase().indexOf(q) > -1 || r.topic.toLowerCase().indexOf(q) > -1)
+      .map((r) => ({
+        key: r.id,
+        name: r.name,
+        topic: r.topic,
+        last: r.last,
+        time: r.time,
+        members: r.members + ' miembros',
+        isLive: !!r.live,
+        hasUnread: r.unread > 0,
+        unread: String(r.unread),
+        open: () => this.openRoom(r.id),
+        avatar: 'width:40px;height:40px;flex:0 0 40px;border-radius:14px;border:1px solid var(--hair);background:linear-gradient(135deg, color-mix(in oklch, ' + r.c1 + ' 72%, #fff 8%), color-mix(in oklch, ' + r.c2 + ' 70%, #000 18%))'
+      }));
+  }
+
+  activeRoom() {
+    const r = this.chatRooms.filter((x) => x.id === this.chatState.roomId)[0];
+    if (!r) return null;
+    return {
+      name: r.name,
+      topic: r.topic,
+      members: r.members + ' miembros',
+      avatar: 'width:36px;height:36px;flex:0 0 36px;border-radius:12px;border:1px solid var(--hair);background:linear-gradient(135deg, color-mix(in oklch, ' + r.c1 + ' 72%, #fff 8%), color-mix(in oklch, ' + r.c2 + ' 70%, #000 18%))'
+    };
+  }
+
+  loginForm = { email: '', pass: '', error: '', info: '', mode: 'login' };
+
+  setLoginField(k, v) {
+    this.loginForm = Object.assign({}, this.loginForm, { [k]: v, error: '', info: '' });
+    this.forceUpdate();
+  }
+
+  submitLogin = async () => {
+    const { email, pass } = this.loginForm;
+    let error = '';
+    if (!/^[^s@]+@[^s@]+.[^s@]+$/.test(email)) error = 'Introduce un correo válido.';
+    else if (this.loginForm.mode === 'signup' && !(pass.length >= 9 && /[a-z]/.test(pass) && /[A-Z]/.test(pass) && /[0-9]/.test(pass) && /[^A-Za-z0-9]/.test(pass))) error = 'La contraseña debe tener mínimo 9 caracteres, con mayúscula, minúscula, número y símbolo (ej. Waack#2026x).';
+    else if (!pass) error = 'Escribe tu contraseña.';
+    if (!error && !firebaseConfigured) error = 'Firebase no está configurado (falta .env.local).';
+    if (error) {
+      this.loginForm = Object.assign({}, this.loginForm, { error });
+      this.forceUpdate();
+      return;
+    }
+    try {
+      if (this.loginForm.mode === 'signup') await createUserWithEmailAndPassword(auth, email, pass);
+      else await signInWithEmailAndPassword(auth, email, pass);
+    } catch (e: any) {
+      const MSG: any = {
+        'auth/invalid-credential': 'Correo o contraseña incorrectos.',
+        'auth/wrong-password': 'Correo o contraseña incorrectos.',
+        'auth/user-not-found': 'Correo o contraseña incorrectos.',
+        'auth/email-already-in-use': 'Ese correo ya tiene una cuenta. Inicia sesión.',
+        'auth/weak-password': 'La contraseña es muy débil.',
+        'auth/password-does-not-meet-requirements': 'La contraseña debe tener mínimo 9 caracteres, con mayúscula, minúscula, número y símbolo.',
+        'auth/invalid-email': 'Introduce un correo válido.',
+        'auth/network-request-failed': 'Sin conexión con Firebase. Revisa tu internet.',
+        'auth/unauthorized-domain': 'Este dominio no está autorizado en Firebase Authentication.',
+        'auth/too-many-requests': 'Demasiados intentos. Espera un momento e inténtalo de nuevo.',
+        'auth/operation-not-allowed': 'El acceso con correo no está habilitado en Firebase.',
+      };
+      this.loginForm = Object.assign({}, this.loginForm, { error: MSG[e?.code] || 'No se pudo completar. Intenta de nuevo.' });
+      this.forceUpdate();
+    }
+  };
+
+  toggleLoginMode = () => {
+    this.loginForm = Object.assign({}, this.loginForm, { mode: this.loginForm.mode === 'signup' ? 'login' : 'signup', error: '', info: '' });
+    this.forceUpdate();
+  };
+
+  forgotPassword = async () => {
+    const { email } = this.loginForm;
+    if (!/^[^s@]+@[^s@]+.[^s@]+$/.test(email)) {
+      this.loginForm = Object.assign({}, this.loginForm, { error: 'Escribe tu correo arriba y vuelve a pulsar «Forgot Password?».', info: '' });
+    } else if (!firebaseConfigured) {
+      this.loginForm = Object.assign({}, this.loginForm, { error: 'Firebase no está configurado (falta .env.local).', info: '' });
+    } else {
+      try { await sendPasswordResetEmail(auth, email); } catch (e) {}
+      // Mismo mensaje exista o no la cuenta, para no revelar qué correos están registrados.
+      this.loginForm = Object.assign({}, this.loginForm, { error: '', info: 'Si existe una cuenta con ese correo, te enviamos un enlace para restablecer la contraseña.' });
+    }
+    this.forceUpdate();
+  };
+
+  logout = async () => {
+    this.setState({ acct: false });
+    try { await signOut(auth); } catch (e) {}
+  };
+
+  teacherData = [
+    { id: 'brando', name: 'Brando Hermoso', role: 'Fundamentos & Biomecánica', plan: 'Mensual · renueva 12 oct', c1: 'var(--blue)', c2: 'var(--purple)', courses: [
+      { t: 'Biomecánica & Fundamentos de Poses', d: 'Alineación articular, fijación de poses geométricas y disociación de torso.', lvl: 'Nivel 1', pct: 75 },
+      { t: 'Rolls de Muñeca · Serie de Velocidad', d: 'Progresión de 96 a 128 BPM con control de trayectoria y freno.', lvl: 'Nivel 1', pct: 40 }
+    ] },
+    { id: 'lorena', name: 'Lorena "WaackQueen"', role: 'Speed-Waack & Síncopas', plan: 'Anual · renueva 3 mar', c1: 'var(--pink)', c2: 'var(--purple)', courses: [
+      { t: 'Speed-Waack & Síncopas Avanzadas', d: 'Velocidad articular y precisión para marcar los platillos y el contratiempo.', lvl: 'Nivel 2', pct: 30 },
+      { t: 'Battle Training · Rondas de 60 s', d: 'Estructura de ronda, respuesta al DJ y cierre de frase.', lvl: 'Nivel 2', pct: 0 }
+    ] },
+    { id: 'ibuki', name: 'Ibuki Imata', role: 'Overhead Rolls & Aislamiento', plan: 'Mensual · renueva 28 sep', c1: 'var(--purple)', c2: 'var(--blue)', courses: [
+      { t: 'Overhead Rolls & Aislamiento de Codos', d: 'Rotación limpia en descenso de codos sin tensionar el trapecio superior.', lvl: 'Nivel 2', pct: 100 }
+    ] }
+  ];
+
+  lockedData = [
+    { name: 'Jessica Sonor', role: 'Dramatismo, Acting & Musicalidad Disco', price: '19 € / mes', c1: 'var(--yellow)', c2: 'var(--pink)' },
+    { name: 'Yoonji Kim', role: 'Musicalidad K-Groove', price: '15 € / mes', c1: 'var(--blue)', c2: 'var(--pink)' }
+  ];
+
+  teacherFilter = 'all';
+
+  pickTeacher(id) { this.teacherFilter = id; this.forceUpdate(); }
+
+  avatarStyle(a, b, size) {
+    return 'width:' + size + 'px;height:' + size + 'px;flex:0 0 ' + size + 'px;border-radius:50%;border:2px solid var(--hair);background:linear-gradient(135deg, color-mix(in oklch, ' + a + ' 72%, #fff 8%), color-mix(in oklch, ' + b + ' 70%, #000 18%))';
+  }
+
+  buildTeacherTabs() {
+    const base = 'padding:10px 18px;border-radius:999px;font-size:12px;cursor:pointer;transition:transform .2s cubic-bezier(.2,.85,.25,1), color .2s ease;transform-style:preserve-3d;';
+    const on = base + 'font-weight:700;color:#fff;background:var(--blue);box-shadow:0 8px 18px -8px var(--blue), inset 0 1px 0 rgba(255,255,255,.3);';
+    const off = base + 'font-weight:600;color:var(--ink-2);border:1px solid var(--hair);background:var(--glass-2);box-shadow:var(--lg-edge);';
+    const tabs = [{ id: 'all', label: 'Todos (' + this.teacherData.length + ')' }].concat(
+      this.teacherData.map((t) => ({ id: t.id, label: t.name }))
+    );
+    return tabs.map((t) => ({
+      key: t.id,
+      label: t.label,
+      style: this.teacherFilter === t.id ? on : off,
+      pick: () => this.pickTeacher(t.id)
+    }));
+  }
+
+  buildTeacherSections() {
+    const list = this.teacherFilter === 'all'
+      ? this.teacherData
+      : this.teacherData.filter((t) => t.id === this.teacherFilter);
+    return list.map((t, ti) => ({
+      key: t.id,
+      name: t.name,
+      role: t.role,
+      plan: t.plan,
+      count: t.courses.length === 1 ? '1 curso' : t.courses.length + ' cursos',
+      avatar: this.avatarStyle(t.c1, t.c2, 46),
+      courses: t.courses.map((c, ci) => ({
+        key: t.id + ci,
+        title: c.t,
+        desc: c.d,
+        meta: t.name + ' · ' + c.lvl,
+        pctLabel: c.pct === 0 ? 'Sin empezar' : c.pct + '%',
+        bar: 'width:' + c.pct + '%;height:100%;background:' + (c.pct === 100 ? 'var(--blue)' : 'var(--blue)'),
+        cover: 'height:160px;background:linear-gradient(135deg, color-mix(in oklch, ' + t.c1 + ' 60%, #000 18%), color-mix(in oklch, ' + t.c2 + ' 55%, #000 30%))',
+        card: 'border-radius:24px;overflow:hidden;border:1px solid var(--hair);background:var(--glass);backdrop-filter:var(--lg-blur);-webkit-backdrop-filter:var(--lg-blur);cursor:pointer;opacity:1;transform-style:preserve-3d;transition:transform .26s cubic-bezier(.2,.85,.25,1), border-color .26s ease;animation:rise3d .8s cubic-bezier(.2,.85,.25,1) ' + (0.06 * (ti * 2 + ci)).toFixed(2) + 's backwards'
+      }))
+    }));
+  }
+
+  buildLocked() {
+    return this.lockedData.map((l, i) => ({
+      key: 'l' + i,
+      name: l.name,
+      role: l.role,
+      price: l.price,
+      avatar: this.avatarStyle(l.c1, l.c2, 44)
+    }));
+  }
+
+  reelData = [
+    { user: '@brando_waack_live', caption: 'Laboratorio de velocidad · 128 BPM', music: 'Chic — Le Freak', live: true, likes: 1284, comments: 96, c1: 'var(--pink)', c2: 'var(--purple)' },
+    { user: '@lorena_waackqueen', caption: 'Síncopas en contratiempo', music: 'Cheryl Lynn — Got To Be Real', likes: 862, comments: 41, c1: 'var(--blue)', c2: 'var(--purple)' },
+    { user: '@ibuki_imata', caption: 'Overhead rolls a 135 BPM', music: 'Sylvester — Dance', nuevo: true, likes: 2310, comments: 188, c1: 'var(--yellow)', c2: 'var(--pink)' },
+    { user: '@yoonji_kim', caption: 'Musicalidad K-Groove', music: 'Brass Construction — Movin', likes: 1540, comments: 73, c1: 'var(--purple)', c2: 'var(--blue)' },
+    { user: '@sara_waack', caption: 'Reto semanal #34', music: 'Loleatta Holloway — Hit & Run', likes: 604, comments: 29, c1: 'var(--pink)', c2: 'var(--yellow)' },
+    { user: '@elena_pose', caption: 'Posing de alta costura', music: 'Grace Jones — Pull Up', likes: 998, comments: 57, c1: 'var(--blue)', c2: 'var(--pink)' }
+  ];
+
+  reelState = { liked: {}, muted: true, feedIndex: 0, tab: 'Para ti' };
+
+  fmt(n) { return n >= 1000 ? (n / 1000).toFixed(1).replace('.0', '') + 'K' : String(n); }
+
+  toggleLike(i) {
+    const liked = Object.assign({}, this.reelState.liked);
+    liked[i] = !liked[i];
+    this.reelState = Object.assign({}, this.reelState, { liked });
+    this.forceUpdate();
+  }
+
+  setReelTab(t) {
+    this.reelState = Object.assign({}, this.reelState, { tab: t });
+    this.forceUpdate();
+  }
+
+  toggleMute = () => {
+    this.reelState = Object.assign({}, this.reelState, { muted: !this.reelState.muted });
+    this.forceUpdate();
+  };
+
+  feedRef = (el) => { this.feedEl = el; };
+
+  scrollReel = (dir) => {
+    const el = this.feedEl;
+    if (!el) return;
+    el.scrollBy({ top: dir * el.clientHeight, behavior: 'smooth' });
+  };
+
+  buildReels() {
+    return this.reelData.map((r, i) => {
+      const on = !!this.reelState.liked[i];
+      return {
+        key: 'r' + i,
+        user: r.user,
+        caption: r.caption,
+        music: '♪ ' + r.music,
+        isLive: !!r.live,
+        isNew: !!r.nuevo,
+        likeLabel: this.fmt(r.likes + (on ? 1 : 0)),
+        commentLabel: this.fmt(r.comments),
+        onLike: () => this.toggleLike(i),
+        heart: on
+          ? 'width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--pink);color:#fff;border:1px solid rgba(255,255,255,.35);cursor:pointer;transition:transform .18s cubic-bezier(.2,.85,.25,1);transform:scale(1.08)'
+          : 'width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.14);color:#fff;border:1px solid rgba(255,255,255,.28);backdrop-filter:blur(14px);cursor:pointer;transition:transform .18s cubic-bezier(.2,.85,.25,1)',
+        heartFill: on ? 'currentColor' : 'none',
+        bg: 'position:absolute;inset:0;background:linear-gradient(150deg, color-mix(in oklch, ' + r.c1 + ' 58%, #000 22%), color-mix(in oklch, ' + r.c2 + ' 58%, #000 38%))',
+        avatar: 'width:38px;height:38px;border-radius:50%;flex:0 0 auto;border:2px solid rgba(255,255,255,.85);background:linear-gradient(135deg, color-mix(in oklch, ' + r.c1 + ' 70%, #fff 10%), color-mix(in oklch, ' + r.c2 + ' 70%, #000 20%))'
+      };
+    });
+  }
+
+  /* ---------- Panel de Instructor ---------- */
+  insTab = 'dashboard';
+  insStudent = null;
+
+  insTabs = [
+    { id: 'dashboard', l: 'Dashboard' },
+    { id: 'students', l: 'Alumnos', b: '5' },
+    { id: 'classes', l: 'Clases & Directos' },
+    { id: 'finances', l: 'Finanzas' },
+    { id: 'documents', l: 'Documentos PDF', b: '2' },
+    { id: 'methodology', l: 'Metodología & Lab' },
+    { id: 'publish', l: 'Publicar Cursos' },
+    { id: 'podcasts', l: 'Podcasts' },
+    { id: 'overview', l: 'Ventas & Actividad' },
+    { id: 'promotion', l: 'Ajustes & Destacados' }
+  ];
+
+  students = [
+    { id: 'st-1', n: 'Ana "Waack Queen" Silva', lv: 'Intermedio', last: 'Ayer', mail: 'ana.queen@dance.com', pct: 85, c1: 'var(--pink)', c2: 'var(--purple)' },
+    { id: 'st-2', n: 'Ji-Won Kim', lv: 'Principiante', last: 'Hace 2 horas', mail: 'jiwon@waack.kr', pct: 55, c1: 'var(--blue)', c2: 'var(--purple)' },
+    { id: 'st-3', n: 'Yuki Sato', lv: 'Avanzado', last: 'Hace 3 días', mail: 'yuki.s@dance.jp', pct: 35, c1: 'var(--yellow)', c2: 'var(--pink)' },
+    { id: 'st-4', n: 'Carlos Mendoza', lv: 'Intermedio', last: 'Hoy', mail: 'carlos.m@waacking.es', pct: 62, c1: 'var(--purple)', c2: 'var(--blue)' },
+    { id: 'st-5', n: 'Melissa Roberts', lv: 'Principiante', last: 'Hace 5 minutos', mail: 'mel@roberts.com', pct: 18, c1: 'var(--pink)', c2: 'var(--yellow)' }
+  ];
+
+  insStats = [
+    { v: '2,890', l: 'Alumnos alcanzados', d: '+12% vs. mes previo', c: 'var(--pink)' },
+    { v: '1,387', l: 'Lecciones completadas', d: '+8% vs. mes previo', c: 'var(--blue)' },
+    { v: '4,017', l: 'Notificaciones enviadas', d: '+3% vs. mes previo', c: 'var(--yellow)' },
+    { v: '2,033', l: 'Ventas de cursos', d: '+21% vs. mes previo', c: 'var(--purple)' }
+  ];
+
+  setInsTab(id) { this.insTab = id; this.forceUpdate(); }
+  setStudent(id) { this.insStudent = this.insStudent === id ? null : id; this.forceUpdate(); }
+
+  buildInsTabs() {
+    const base = 'display:inline-flex;align-items:center;gap:8px;padding:11px 18px;border-radius:999px;font-size:12.5px;cursor:pointer;white-space:nowrap;transition:color .18s ease, border-color .18s ease;';
+    const on = base + 'font-weight:700;color:#14111A;background:var(--pink);box-shadow:0 8px 18px -8px var(--pink), inset 0 1px 0 rgba(255,255,255,.3);';
+    const off = base + 'font-weight:600;color:var(--ink-2);border:1px solid var(--hair);background:var(--glass-2);box-shadow:var(--lg-edge);';
+    return this.insTabs.map((t) => ({
+      key: t.id,
+      label: t.l,
+      badge: t.b || '',
+      hasBadge: !!t.b,
+      style: this.insTab === t.id ? on : off,
+      pick: () => this.setInsTab(t.id)
+    }));
+  }
+
+  buildStudentChips() {
+    const base = 'display:inline-flex;align-items:center;gap:8px;padding:9px 15px;border-radius:999px;font-family:"Geist Mono",monospace;font-size:10.5px;font-weight:700;cursor:pointer;white-space:nowrap;';
+    const all = {
+      key: 'all',
+      name: 'Todos (5)',
+      pick: () => { this.insStudent = null; this.forceUpdate(); },
+      style: base + (this.insStudent === null
+        ? 'color:#1A1400;background:linear-gradient(90deg,var(--gold-hi),var(--gold-lo));box-shadow:inset 0 1px 0 rgba(255,255,255,.5);'
+        : 'color:var(--ink-2);border:1px solid var(--hair);background:var(--glass-2);')
+    };
+    return [all].concat(this.students.map((s) => ({
+      key: s.id,
+      name: s.n,
+      pick: () => this.setStudent(s.id),
+      style: base + (this.insStudent === s.id
+        ? 'color:#fff;background:var(--purple);'
+        : 'color:var(--ink-2);border:1px solid var(--hair);background:var(--glass-2);')
+    })));
+  }
+
+  buildInsStats() {
+    return this.insStats.map((s, i) => ({
+      key: 's' + i,
+      value: s.v,
+      label: s.l,
+      delta: s.d,
+      dot: 'width:38px;height:38px;border-radius:13px;background:' + s.c + ';box-shadow:0 8px 20px -8px ' + s.c,
+      deltaStyle: 'font-family:"Geist Mono",monospace;font-size:10.5px;margin-top:10px;color:' + s.c,
+      card: 'padding:24px;border-radius:24px;border:1px solid var(--hair);background:var(--glass);backdrop-filter:var(--lg-blur);-webkit-backdrop-filter:var(--lg-blur);box-shadow:var(--lg-edge);opacity:1;transform-style:preserve-3d;transition:transform .26s cubic-bezier(.2,.85,.25,1);animation:rise3d .8s cubic-bezier(.2,.85,.25,1) ' + (0.07 * i).toFixed(2) + 's backwards'
+    }));
+  }
+
+  buildStudentRows() {
+    const list = this.insStudent ? this.students.filter((s) => s.id === this.insStudent) : this.students;
+    return list.map((s) => ({
+      key: s.id,
+      name: s.n,
+      mail: s.mail,
+      level: s.lv,
+      last: s.last,
+      pct: s.pct + '%',
+      bar: 'width:' + s.pct + '%;height:100%;border-radius:999px;background:' + (s.pct > 60 ? 'var(--blue)' : 'var(--yellow)'),
+      avatar: 'width:40px;height:40px;flex:0 0 40px;border-radius:14px;border:1px solid var(--hair);background:linear-gradient(135deg, color-mix(in oklch, ' + s.c1 + ' 72%, #fff 8%), color-mix(in oklch, ' + s.c2 + ' 70%, #000 18%))'
+    }));
+  }
+
+  insBpm = 124;
+  insLive = true;
+  setInsBpm = (e) => { this.insBpm = Number(e.target.value); this.forceUpdate(); };
+  toggleInsLive = () => { this.insLive = !this.insLive; this.forceUpdate(); };
+
+  insClasses = [
+    { t: 'Fundamentos · Grupo A', when: 'Hoy · 19:00 CET', who: '18 inscritos', state: 'En vivo', live: true },
+    { t: 'Speed-Waack · Nivel 2', when: 'Jueves · 20:00 CET', who: '12 inscritos', state: 'Programada' },
+    { t: 'Repaso de batalla', when: 'Sábado · 11:00 CET', who: '7 inscritos', state: 'Programada' }
+  ];
+
+  buildInsClasses() {
+    return this.insClasses.map((c, i) => ({
+      key: 'c' + i,
+      title: c.t,
+      when: c.when,
+      who: c.who,
+      state: c.state,
+      isLive: !!c.live,
+      badge: 'padding:5px 11px;border-radius:999px;font-family:"Geist Mono",monospace;font-size:8.5px;font-weight:700;letter-spacing:.12em;white-space:nowrap;text-transform:uppercase;' + (c.live ? 'background:var(--pink);color:#fff;' : 'border:1px solid var(--hair);color:var(--ink-3);')
+    }));
+  }
+
+  insDocs = [
+    { t: 'Manual de Fundamentos v3', m: '48 páginas · actualizado hace 2 días', st: 'Publicado' },
+    { t: 'Guía de calentamiento somático', m: '12 páginas · borrador', st: 'Borrador' },
+    { t: 'Pauta de batalla 1vs1', m: '6 páginas · pendiente de revisión', st: 'En revisión' }
+  ];
+
+  insCourses = [
+    { t: 'Biomecánica & Fundamentos', m: '9 lecciones · 312 alumnos', st: 'Publicado' },
+    { t: 'Overhead Rolls', m: '6 lecciones · 128 alumnos', st: 'Publicado' },
+    { t: 'Taller de musicalidad disco', m: '4 lecciones · sin publicar', st: 'Borrador' }
+  ];
+
+  insPods = [
+    { t: 'Historia del Waacking', m: 'Ep. 12 · 44 min · 1.2K escuchas' },
+    { t: 'Cómo preparar una batalla', m: 'Ep. 13 · 38 min · 860 escuchas' },
+    { t: 'Sobre el miedo al cypher', m: 'Ep. 14 · grabando' }
+  ];
+
+  simpleList(arr) {
+    return arr.map((x, i) => ({
+      key: 'i' + i,
+      title: x.t,
+      meta: x.m,
+      state: x.st || '',
+      hasState: !!x.st,
+      badge: 'padding:5px 11px;border-radius:999px;font-family:"Geist Mono",monospace;font-size:8.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;white-space:nowrap;' + (x.st === 'Publicado' ? 'background:var(--blue);color:#fff;' : 'border:1px solid var(--hair);color:var(--ink-3);')
+    }));
+  }
+
+  adData = [
+    { k: 'Batalla', t: 'Gran Batalla Waack On 2026', m: 'Inscripciones abiertas · 32 plazas', c1: 'var(--blue)', c2: 'var(--purple)' },
+    { k: 'Masterclass', t: 'Yoon Ji Kim · K-Groove', m: '15 oct · plazas limitadas', c1: 'var(--purple)', c2: 'var(--pink)' },
+    { k: 'Tienda', t: 'Guantes de escenario', m: 'Envío gratis a España', c1: 'var(--pink)', c2: 'var(--yellow)' },
+    { k: 'Jam', t: 'Jam & Sesión Rítmica', m: '7 oct · DJ en directo', c1: 'var(--yellow)', c2: 'var(--pink)' },
+    { k: 'Podcast', t: 'Historia del Waacking', m: 'Nuevo episodio disponible', c1: 'var(--blue)', c2: 'var(--pink)' },
+    { k: 'Festival', t: 'Iberian Waack Weekend', m: 'Lisboa · 21–23 nov', c1: 'var(--purple)', c2: 'var(--blue)' }
+  ];
+
+  buildAds(skin, blur) {
+    const base = this.adData.concat(this.adData);
+    return base.map((a, i) => ({
+      key: 'ad' + i,
+      kind: a.k,
+      title: a.t,
+      meta: a.m,
+      thumb: 'width:44px;height:44px;flex:0 0 44px;border-radius:14px;background:linear-gradient(135deg, color-mix(in oklch, ' + a.c1 + ' 70%, #000 10%), color-mix(in oklch, ' + a.c2 + ' 66%, #000 24%))',
+      card: 'display:flex;align-items:center;gap:12px;width:262px;flex:0 0 262px;padding:12px 14px;border-radius:18px;cursor:pointer;transform-style:preserve-3d;transition:transform .24s cubic-bezier(.2,.85,.25,1);' + (skin || '') + (blur || '')
+    }));
+  }
+
+  hero(v) {
+    const map = {
+      dashboard: { kicker: 'Tu sesión de hoy', accent: 'var(--blue)', title: 'Nivel 1 · Fundamentos & Arm Rolls', sub: 'Continúa donde lo dejaste. Te faltan dos lecciones para desbloquear Nivel 2: Ritmo & Expresión Disco.', cta: 'Continuar entrenamiento' },
+      cursos: { kicker: 'Entrenar', accent: 'var(--blue)', title: 'Clases & Cursos', sub: 'Tus cursos separados por instructor. Cada suscripción activa mantiene su propia cátedra y su progreso.', cta: 'Explorar cátedras' },
+      entrenamiento: { kicker: 'Entrenar', accent: 'var(--blue)', title: 'Laboratorio Freestyle', sub: 'Elige un drill, fija el tempo y suelta el cuerpo. El laboratorio no corrige: solo marca el pulso para que tú improvises.', cta: 'Empezar sesión libre' },
+      fisico: { kicker: 'Entrenar', accent: 'var(--blue)', title: 'Cuerpo & Estiramientos', sub: 'Rutinas de estiramiento y entrenamiento físico por zona del cuerpo. Arma tu sesión y ejecútala antes o después de bailar.', cta: 'Empezar rutina' },
+      perfil: { kicker: 'Comunidad', accent: 'var(--pink)', title: 'Mi perfil', sub: 'Tu archivo público: los clips y fotos que compartes, y los bailarines a los que sigues.', cta: 'Subir contenido' },
+      ebooks: { kicker: 'Entrenar', accent: 'var(--blue)', title: 'Manuales', sub: 'Material de lectura que acompaña a las cátedras: manuales y guías. Incluido en cualquier suscripción activa.', cta: 'Seguir leyendo' },
+      podcast: { kicker: 'Comunidad', accent: 'var(--pink)', title: 'Waack On Radio', sub: 'Reproductor del podcast. Conversaciones largas con instructores e invitados de la comunidad.', cta: 'Ver todos los episodios' },
+      podcasts: { kicker: 'Comunidad', accent: 'var(--pink)', title: 'Podcasts', sub: 'Conversaciones sobre cultura waacking, con instructores e invitados de la comunidad.', cta: 'Escuchar el último' },
+      lives: { kicker: 'Comunidad', accent: 'var(--pink)', title: 'Lives / En Vivo', sub: 'Clases en directo con las cátedras activas. Quedan grabadas 30 días en repetición.', cta: 'Entrar al directo' },
+      reels: { kicker: 'Comunidad', accent: 'var(--pink)', title: 'Waack Reels', sub: 'El feed de la comunidad. Desliza para ver los clips de otros bailarines.', cta: 'Publicar mi reel' },
+      tv: { kicker: 'Comunidad', accent: 'var(--pink)', title: 'Waack On TV', sub: 'El canal abierto de la escuela. Conecta tu cuenta de YouTube y publica tu propio canal en la parrilla.', cta: 'Conectar mi canal' },
+      comunidad: { kicker: 'Comunidad', accent: 'var(--pink)', title: 'Muro & Retos', sub: 'Lo que comparte la comunidad y los retos abiertos de la semana.', cta: 'Publicar en el muro' },
+      ranking: { kicker: 'Comunidad', accent: 'var(--pink)', title: 'Ranking & Insignias', sub: 'Liga mensual por puntos de práctica. Se reinicia el día 1 de cada mes.', cta: 'Ver mis puntos' },
+      planes: { kicker: 'Cuenta', accent: 'var(--purple)', title: 'Planes & Membresía', sub: 'Puedes pagar una cátedra suelta o abrir la escuela completa. Cambias o cancelas cuando quieras.', cta: 'Comparar planes' },
+      support: { kicker: 'Cuenta', accent: 'var(--purple)', title: 'Ayuda & Legal', sub: 'Respuestas rápidas, contacto con soporte y los términos de la plataforma.', cta: 'Escribir a soporte' },
+      instructor: { kicker: 'Docente · acceso verificado', accent: 'var(--purple)', title: 'Panel de Instructor', sub: 'Tu cátedra, tus alumnos y tus ingresos en un solo sitio. Solo tú y el equipo de Waack ON veis esta pantalla.', cta: 'Volver a Estudiante' }
+    };
+    return map[v] || map.dashboard;
+  }
+
+  rootRef = (el) => { this.rootEl = el; this.syncVars(); };
+
+  bgVideoRef = (el) => {
+    if (!el) return;
+    try { el.muted = true; const p = el.play(); if (p && p.catch) p.catch(() => {}); } catch (e) {}
+  };
+
+  syncVars() {
+    const el = this.rootEl;
+    if (!el) return;
+    const PALETAS = {
+      'Neón de club': { blue: '#3BE8F0', pink: '#FF2E9A', purple: '#9B5CFF', yellow: '#F5C518' },
+      'Fucsia & naranja': { blue: '#FF7A2F', pink: '#FF1E8E', purple: '#FF4FB0', yellow: '#FFA23A' },
+      'Dorado de escenario': { blue: '#C9982E', pink: '#E4B94D', purple: '#8A6415', yellow: '#F4D374' },
+      'Monocromo editorial': { blue: '#8E93A3', pink: '#C8CCD8', purple: '#5E6270', yellow: '#A8ADBA' }
+    };
+    const pal = PALETAS[this.props.paleta ?? 'Fucsia & naranja'] || PALETAS['Fucsia & naranja'];
+    el.style.setProperty('--z3d', String(this.props.profundidad ?? 1));
+    el.style.setProperty('--blue', pal.blue);
+    el.style.setProperty('--pink', pal.pink);
+    el.style.setProperty('--purple', pal.purple);
+    el.style.setProperty('--yellow', pal.yellow);
+  }
+
+  syncTheme() {
+    try {
+      document.documentElement.setAttribute('data-theme', this.state.theme);
+      document.body.setAttribute('data-theme', this.state.theme);
+    } catch (e) {}
+  }
+  componentDidMount() {
+    this.syncTheme(); this.syncVars();
+    if (!firebaseConfigured) { this.setState({ authReady: true }); return; }
+    this.unsubAuth = onAuthStateChanged(auth, async (user) => {
+      this.setState((st: any) => ({ user, authReady: true, view: user ? (st.view === 'login' ? 'dashboard' : st.view) : 'login' }));
+      if (user) {
+        try {
+          const ref = doc(db, 'users', user.uid);
+          if (!(await getDoc(ref)).exists()) await setDoc(ref, { email: user.email, displayName: user.displayName ?? null, role: 'usuario', createdAt: serverTimestamp() });
+        } catch (e) { console.warn('No se pudo crear el perfil en Firestore', e); }
+      }
+    });
+  }
+  componentWillUnmount() { clearInterval(this._podTimer); this.fisClearTimer && this.fisClearTimer(); this.unsubAuth && this.unsubAuth(); }
+  componentDidUpdate() { this.syncTheme(); this.syncVars(); }
+
+  autoPlay(el) {
+    if (!el) return;
+    el.muted = true;
+    el.defaultMuted = true;
+    el.setAttribute('muted', '');
+    el.setAttribute('playsinline', '');
+    const go = () => el.play().catch(() => {});
+    go();
+    el.addEventListener('canplay', go, { once: true });
+  }
+
+  heroVideoRef = (el) => this.autoPlay(el);
+  loginVideoRef = (el) => this.autoPlay(el);
+  insVideoRef = (el) => this.autoPlay(el);
+
+  bannerRef = (el) => {
+    if (!el) return;
+    el.muted = true;
+    el.defaultMuted = true;
+    el.setAttribute('muted', '');
+    el.setAttribute('playsinline', '');
+    const go = () => el.play().catch(() => {});
+    go();
+    el.addEventListener('canplay', go, { once: true });
+  };
+
+  chromeInk() { return this.state.theme === 'light' ? '#14151A' : '#FFFFFF'; }
+  chromeInk2() { return this.state.theme === 'light' ? 'rgba(20,21,26,.72)' : 'rgba(255,255,255,.75)'; }
+  chromeInk3() { return this.state.theme === 'light' ? 'rgba(20,21,26,.55)' : 'rgba(255,255,255,.6)'; }
+
+  nav(active, accent) {
+    const light = this.state.theme === 'light';
+    const open = this.navIsOpen();
+    const base = 'display:flex;align-items:center;gap:11px;border-radius:999px;font-size:12px;font-weight:600;letter-spacing:.01em;cursor:pointer;transition:all .18s ease;'
+      + (open ? 'padding:9px 14px;' : 'padding:11px 0;justify-content:center;');
+    return active
+      ? base + `color:${light ? '#14151A' : '#FFFFFF'};background:${light ? 'rgba(255,255,255,.72)' : 'rgba(255,255,255,.12)'};border:1px solid ${accent};box-shadow:var(--lg-edge);`
+      : base + 'color:' + (light ? 'rgba(20,21,26,.72)' : 'rgba(255,255,255,.72)') + ';border:1px solid transparent;';
+  }
+
+  podEpisodes = [
+    { n:'12', title:'El waacking no es una pose, es una respuesta', guest:'Con Brando Hermoso · grabado en Sala Central 01', dur:'48:20', secs:2900, notes:'Brando repasa cómo llegó al waacking desde el punking de los setenta, por qué entrena el brazo antes que la cara y qué escucha cuando prepara una batalla. En el último bloque responde preguntas de la comunidad sobre musicalidad a 128 BPM.' },
+    { n:'11', title:'Escuchar el disco antes de mover el brazo', guest:'Con Sara Waack · sesión abierta', dur:'41:05', secs:2465, notes:'Una conversación sobre el oído: identificar el hi-hat, anticipar el break y usar el silencio. Sara propone tres ejercicios de escucha sin movimiento.' },
+    { n:'10', title:'Batallas: leer al rival en ocho tiempos', guest:'Con Pedro Punking', dur:'53:48', secs:3228, notes:'Cómo se construye una ronda, qué mirar en los primeros ocho tiempos y cuándo conviene bajar la intensidad para subir el impacto.' },
+    { n:'09', title:'Cuerpo, hombro y años de práctica', guest:'Con Elena Pose', dur:'37:12', secs:2232, notes:'Prevención de lesiones en el hombro, rutinas de calentamiento y la diferencia entre fuerza y control.' },
+    { n:'08', title:'La escena latina, contada desde dentro', guest:'Mesa abierta con la comunidad', dur:'1:02:30', secs:3750, notes:'Cinco ciudades, cinco maneras de entender la pista. Un repaso de festivales, jams y lo que falta por construir.' }
+  ];
+
+  podFmt(s) {
+    s = Math.max(0, Math.floor(s));
+    const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), sec = s % 60;
+    const mm = String(m).padStart(2, '0'), ss = String(sec).padStart(2, '0');
+    return h ? `${h}:${mm}:${ss}` : `${m}:${ss}`;
+  }
+
+  podTick() {
+    clearInterval(this._podTimer);
+    if (!this.state.podPlaying) return;
+    this._podTimer = setInterval(() => {
+      const ep = this.podEpisodes[this.state.podTrack || 0];
+      const next = (this.state.podPos || 0) + (this.state.podRate || 1);
+      if (next >= ep.secs) { this.setState({ podPos: 0, podPlaying: false }); clearInterval(this._podTimer); }
+      else this.setState({ podPos: next });
+    }, 1000);
+  }
+
+  podGo(i) {
+    const n = this.podEpisodes.length;
+    this.setState({ podTrack: ((i % n) + n) % n, podPos: 0, podPlaying: true }, () => this.podTick());
+  }
+
+  buildPodBars() {
+    const ep = this.podEpisodes[this.state.podTrack || 0];
+    const pos = (this.state.podPos || 0) / ep.secs;
+    const t = this.state.podTrack || 0;
+    const out = [];
+    for (let i = 0; i < 48; i++) {
+      const h = 22 + Math.abs(Math.sin((i + 1) * (1.7 + t * 0.3))) * 66 + (i % 5) * 4;
+      const done = i / 48 <= pos;
+      out.push({ style: `flex:1;min-width:0;height:${Math.min(100, h)}%;border-radius:2px;background:${done ? 'var(--pink)' : 'var(--hair)'};transition:background .2s ease` });
+    }
+    return out;
+  }
+
+  buildPodList() {
+    const cur = this.state.podTrack || 0;
+    return this.podEpisodes.map((e, i) => ({
+      n: e.n, title: e.title, meta: `${e.dur} · ${e.guest.replace(/^Con /, '')}`,
+      onSelect: () => this.podGo(i),
+      row: 'display:flex;align-items:flex-start;gap:14px;padding:15px 18px;cursor:pointer;transition:background .18s ease;' + (i ? 'border-top:1px solid var(--hair-soft);' : '') + (i === cur ? 'background:var(--glass);' : ''),
+      num: `font-family:'Geist Mono',monospace;font-size:11px;font-weight:700;width:26px;flex:0 0 26px;padding-top:2px;color:${i === cur ? 'var(--pink)' : 'var(--ink-3)'}`
+    }));
+  }
+
+  /* ---------- Reproductor: capítulos, transcripción, extras ---------- */
+  podChapters = [
+    { t: 0, l: 'Apertura y saludo' },
+    { t: 320, l: 'Primer contacto con el waacking' },
+    { t: 940, l: 'El brazo como respuesta, no como pose' },
+    { t: 1620, l: 'Entrenar el oído antes del cuerpo' },
+    { t: 2280, l: 'Consejos para quien empieza' }
+  ];
+
+  podLines = [
+    { t: 0, s: 'Brando', x: 'Cuando empecé no había vídeos. Copiabas lo que veías en una fiesta y lo repetías toda la semana.' },
+    { t: 320, s: 'Host', x: '¿Y cómo sabías si lo estabas haciendo bien?' },
+    { t: 940, s: 'Brando', x: 'No lo sabías. Sabías si funcionaba con la música, que es otra cosa. El brazo responde a un sonido concreto.' },
+    { t: 1620, s: 'Brando', x: 'Primero el oído. Si no distingues el hi-hat del clap, el brazo va a llegar tarde siempre.' },
+    { t: 2280, s: 'Host', x: 'Un consejo para alguien que entra hoy al estilo.' }
+  ];
+
+  podVol = 0.8;
+  podSleep = false;
+
+  podSkip(n) {
+    const ep = this.podEpisodes[this.state.podTrack || 0];
+    const next = Math.min(ep.secs, Math.max(0, (this.state.podPos || 0) + n));
+    this.setState({ podPos: next });
+  }
+
+  podSeekTo(t) { this.setState({ podPos: t, podPlaying: true }, () => this.podTick()); }
+  setPodVol = (e) => { this.podVol = Number(e.target.value); this.forceUpdate(); };
+  togglePodSleep = () => { this.podSleep = !this.podSleep; this.forceUpdate(); };
+
+  podActiveChapter() {
+    const pos = this.state.podPos || 0;
+    let idx = 0;
+    this.podChapters.forEach((c, i) => { if (pos >= c.t) idx = i; });
+    return idx;
+  }
+
+  buildPodChapters() {
+    const act = this.podActiveChapter();
+    return this.podChapters.map((c, i) => ({
+      key: 'pc' + i,
+      label: c.l,
+      time: this.podFmt(c.t),
+      go: () => this.podSeekTo(c.t),
+      row: 'display:flex;align-items:center;gap:14px;padding:13px 16px;border-radius:16px;cursor:pointer;border:1px solid ' + (act === i ? 'color-mix(in oklch, var(--pink) 55%, transparent)' : 'transparent') + ';background:' + (act === i ? 'var(--glass-2)' : 'transparent') + ';transition:background .18s ease, border-color .18s ease',
+      num: 'font-family:\'Geist Mono\',monospace;font-size:11px;color:' + (act === i ? 'var(--pink)' : 'var(--ink-3)') + ';white-space:nowrap',
+      text: 'flex:1;min-width:0;font-size:13.5px;font-weight:' + (act === i ? '700' : '600') + ';color:' + (act === i ? 'var(--ink)' : 'var(--ink-2)') + ';text-wrap:pretty'
+    }));
+  }
+
+  buildPodLines() {
+    const act = this.podActiveChapter();
+    return this.podLines.map((l, i) => ({
+      key: 'pl' + i,
+      speaker: l.s,
+      text: l.x,
+      time: this.podFmt(l.t),
+      go: () => this.podSeekTo(l.t),
+      row: 'display:flex;gap:14px;padding:12px 4px;cursor:pointer;border-radius:12px;opacity:' + (act === i ? '1' : '.62') + ';transition:opacity .2s ease',
+      name: 'font-family:\'Geist Mono\',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:' + (act === i ? 'var(--pink)' : 'var(--ink-3)') + ';flex:0 0 74px'
+    }));
+  }
+
+  renderVals() {
+    const v = this.state.view;
+    const crumbs = { perfil:'Mi perfil', dashboard:'Dashboard', cursos:'Clases & Cursos', lives:'Lives / En Vivo', reels:'Waack Reels', tv:'Waack On TV', podcast:'Waack On Radio', entrenamiento:'Laboratorio Freestyle', fisico:'Cuerpo & Estiramientos', ebooks:'Manuales', podcasts:'Podcasts', comunidad:'Muro & Retos', ranking:'Ranking & Insignias', planes:'Planes & Membresía', support:'Ayuda & Legal', instructor:'Panel de Instructor' };
+    const pill = 'flex:1;text-align:center;padding:8px 12px;border-radius:999px;font-size:11px;font-weight:700;cursor:pointer;transition:all .18s ease;';
+    const on = pill + 'background:var(--glass);color:var(--ink);border:1px solid var(--hair);box-shadow:var(--lg-edge);';
+    const off = pill + 'color:var(--ink-2);border:1px solid transparent;';
+    const glassCard = 'border:1px solid var(--hair);background:var(--glass);backdrop-filter:var(--lg-blur);-webkit-backdrop-filter:var(--lg-blur);box-shadow:var(--lg-edge), var(--lg-lift);';
+    const dark = this.state.theme === 'dark';
+    /* --- Tweaks --- */
+    const paleta = this.props.paleta ?? 'Fucsia & naranja';
+    const materia = this.props.materia ?? 'Vidrio platinado';
+    const depth = this.props.profundidad ?? 1;
+    const rise = (i) => 'opacity:1;transform-style:preserve-3d;transition:transform .26s cubic-bezier(.2,.85,.25,1), border-color .26s ease;'
+      + (depth > 0.05 ? 'animation:rise3d ' + (0.82 / Math.max(depth, 0.35)).toFixed(2) + 's cubic-bezier(.2,.85,.25,1) ' + (0.07 * i).toFixed(2) + 's backwards;' : '');
+
+    const PALETAS = {
+      'Neón de club': { blue: '#3BE8F0', pink: '#FF2E9A', purple: '#9B5CFF', yellow: '#F5C518' },
+      'Fucsia & naranja': { blue: '#FF7A2F', pink: '#FF1E8E', purple: '#FF4FB0', yellow: '#FFA23A' },
+      'Dorado de escenario': { blue: '#C9982E', pink: '#E4B94D', purple: '#8A6415', yellow: '#F4D374' },
+      'Monocromo editorial': { blue: '#8E93A3', pink: '#C8CCD8', purple: '#5E6270', yellow: '#A8ADBA' }
+    };
+    const pal = PALETAS[paleta] || PALETAS['Fucsia & naranja'];
+    const tweakVars = '--z3d:' + depth + ';--blue:' + pal.blue + ';--pink:' + pal.pink + ';--purple:' + pal.purple + ';--yellow:' + pal.yellow;
+
+    const flat = materia === 'Plano mate';
+    const soft = materia === 'Vidrio suave';
+
+    const plate = dark
+      ? 'background:linear-gradient(135deg, rgba(198,206,222,.20) 0%, rgba(74,80,94,.30) 26%, rgba(226,232,244,.22) 48%, rgba(52,56,66,.34) 70%, rgba(188,197,214,.18) 100%), #0A0910;border:1px solid rgba(226,232,244,.26);box-shadow:inset 0 1px 0 rgba(255,255,255,.55), inset 0 -24px 46px -28px rgba(0,0,0,.85), 0 28px 62px -28px rgba(0,0,0,.85);'
+      : 'background:linear-gradient(135deg, rgba(255,255,255,.9) 0%, rgba(226,232,244,.62) 26%, rgba(255,255,255,.95) 48%, rgba(214,222,238,.6) 70%, rgba(255,255,255,.9) 100%);border:1px solid rgba(13,13,13,.09);box-shadow:inset 0 1px 0 rgba(255,255,255,1), inset 0 -20px 40px -30px rgba(255,255,255,.9), 0 20px 46px -28px rgba(13,13,13,.16);';
+    const plateFlat = dark
+      ? 'background:rgba(22,20,26,.92);border:1px solid rgba(226,232,244,.12);box-shadow:none;'
+      : 'background:#F2F3F6;border:1px solid rgba(13,13,13,.08);box-shadow:none;';
+    const plateSoft = dark
+      ? 'background:rgba(233,196,226,.07);border:1px solid var(--hair);box-shadow:inset 0 1px 0 var(--sheen);'
+      : 'background:rgba(255,255,255,.55);border:1px solid var(--hair);box-shadow:inset 0 1px 0 var(--sheen);';
+    const plateSkin = flat ? plateFlat : (soft ? plateSoft : plate);
+    const plateBlur = flat ? '' : (soft
+      ? 'backdrop-filter:blur(22px) saturate(140%);-webkit-backdrop-filter:blur(22px) saturate(140%);'
+      : 'backdrop-filter:blur(34px) saturate(190%);-webkit-backdrop-filter:blur(34px) saturate(190%);');
+    const platePad = plateSkin + 'border-radius:' + (flat ? '20px' : '28px') + ';padding:22px;' + plateBlur;
+    const grid3d = 'display:grid;gap:16px;perspective:1400px;perspective-origin:50% 0%;' + platePad;
+    const tabBase = 'padding:7px 4px;font-size:14px;font-weight:700;white-space:nowrap;cursor:pointer;transition:color .18s ease;';
+    const tabOn = tabBase + 'color:#fff;border-bottom:2px solid #fff;';
+    const tabOff = tabBase + 'color:rgba(255,255,255,.55);border-bottom:2px solid transparent;';
+
+
+    return {
+      theme: this.state.theme,
+      chromeInk: 'color:' + this.chromeInk(),
+      chromeInk2: 'color:' + this.chromeInk2(),
+      chromeBg: dark
+        ? 'background:linear-gradient(160deg, #3A3D42 0%, #2B2E33 22%, #4A4E55 48%, #26282C 74%, #35383D 100%);'
+        : 'background:linear-gradient(160deg, #F2F4F7 0%, #E3E6EB 24%, #FAFBFC 50%, #DDE1E7 76%, #EEF0F4 100%);',
+      headerBg: dark
+        ? 'background:linear-gradient(180deg, #5A5E66 0%, #43464D 52%, #33363B 100%);'
+        : 'background:linear-gradient(180deg, #FFFFFF 0%, #F1F3F6 52%, #E6E9EE 100%);',
+      isLight: !dark,
+      isDark: dark,
+      crumb: crumbs[v] || 'Dashboard',
+      isLogin: v === 'login',
+      isInicio: false,
+      isApp: v !== 'login',
+      ambientLayer: dark
+        ? 'position:absolute;inset:0;pointer-events:none;background:radial-gradient(1000px 580px at 6% -10%, rgba(228,230,236,.14), transparent 66%), radial-gradient(900px 540px at 98% 6%, rgba(168,172,182,.12), transparent 70%), radial-gradient(800px 500px at 58% 110%, rgba(120,124,134,.10), transparent 72%)'
+        : 'position:absolute;inset:0;pointer-events:none;background:radial-gradient(980px 560px at 8% -8%, color-mix(in oklch, var(--purple) 16%, transparent), transparent 68%), radial-gradient(880px 520px at 96% 4%, color-mix(in oklch, var(--blue) 14%, transparent), transparent 70%)',
+      bannerScrim: dark
+        ? 'position:absolute;inset:0;background:linear-gradient(100deg, rgba(8,6,11,.97) 46%, rgba(8,6,11,.72))'
+        : 'position:absolute;inset:0;background:linear-gradient(100deg, rgba(255,255,255,.97) 46%, rgba(255,255,255,.78))',
+      heroCard: 'padding:30px 26px;border-radius:22px;border:1px solid rgba(236,240,248,.28);background:rgba(232,236,244,.07);backdrop-filter:blur(26px) saturate(150%);-webkit-backdrop-filter:blur(26px) saturate(150%);box-shadow:inset 0 1px 0 rgba(255,255,255,.4), 0 18px 50px -24px rgba(0,0,0,.8)',
+      goInicio: () => this.setState({ view: 'dashboard' }),
+      isDashboard: v === 'dashboard',
+      isCursos: v === 'cursos',
+      isLives: v === 'lives',
+      isReels: v === 'reels',
+      isFeed: v === 'dashboard',
+      showHero: v !== 'dashboard' && v !== 'perfil',
+      feedPlate: platePad,
+      composerPlate: platePad + 'background-image:linear-gradient(135deg, rgba(229,23,122,.28) 0%, rgba(229,23,122,.10) 34%, rgba(76,111,224,.14) 66%, rgba(76,111,224,.30) 100%);',
+      railPlate: platePad,
+      feedTools: this.feedToolList.map((t) => ({
+        name: t.name,
+        svg: React.createElement('svg', {
+          width: 17, height: 17, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor',
+          strokeWidth: 1.7, strokeLinecap: 'round', strokeLinejoin: 'round',
+          dangerouslySetInnerHTML: { __html: t.d }
+        })
+      })),
+      feedFilters: this.feedFilterList.map((f) => ({
+        name: f,
+        pick: () => this.feedSetFilter(f),
+        style: this.feedState.filter === f
+          ? 'padding:9px 17px;border-radius:999px;font-size:12px;font-weight:700;color:#14111A;background:var(--pink);box-shadow:0 8px 18px -8px var(--pink), inset 0 1px 0 rgba(255,255,255,.3);cursor:pointer;transition:transform .2s cubic-bezier(.2,.85,.25,1)'
+          : 'padding:9px 17px;border-radius:999px;font-size:12px;font-weight:600;color:var(--ink-2);border:1px solid var(--hair);background:var(--glass-2);box-shadow:var(--lg-edge);cursor:pointer;transition:transform .2s cubic-bezier(.2,.85,.25,1), color .2s ease'
+      })),
+      feedPosts: this.feedPostData.map((p) => ({
+        name: p.name, handle: p.handle, time: p.time, text: p.text, tags: p.tags, likes: p.likes, comments: p.comments,
+        media: this.tvGrad(p.g),
+        avatar: 'width:42px;height:42px;flex:0 0 42px;border-radius:50%;background:' + this.tvGrad(p.g),
+        card: 'border-radius:24px;overflow:hidden;' + glassCard
+      })),
+      isTv: v === 'tv',
+      tvConnected: this.tvState.connected,
+      tvOffline: !this.tvState.connected,
+      tvConnect: this.tvToggleConnect,
+      tvConnectTitle: this.tvState.connected ? 'Canal conectado a Waack On TV' : 'Conecta tu canal y publícalo en Waack On TV',
+      tvConnectHint: this.tvState.connected
+        ? 'Tus videos públicos se sincronizan cada 6 horas. Elige qué listas aparecen en la parrilla de la comunidad.'
+        : 'Accede con tu cuenta de YouTube para traer tus videos, listas y estadísticas. Solo lectura: nada se publica sin tu confirmación.',
+      tvGridLabel: this.tvState.cat === 'Todo' ? 'Parrilla de la comunidad' : this.tvState.cat,
+      tvHeroThumb: this.tvGrad(['--pink', '--purple']),
+      tvCats: this.tvCatList.map((c) => ({
+        name: c,
+        pick: () => this.tvSetCat(c),
+        style: this.tvState.cat === c
+          ? 'padding:10px 18px;border-radius:999px;font-size:12px;font-weight:700;color:#14111A;background:var(--pink);box-shadow:0 8px 18px -8px var(--pink), inset 0 1px 0 rgba(255,255,255,.3);cursor:pointer;transition:transform .2s cubic-bezier(.2,.85,.25,1)'
+          : 'padding:10px 18px;border-radius:999px;font-size:12px;font-weight:600;color:var(--ink-2);border:1px solid var(--hair);background:var(--glass-2);box-shadow:var(--lg-edge);cursor:pointer;transition:transform .2s cubic-bezier(.2,.85,.25,1), color .2s ease'
+      })),
+      tvVideos: this.tvVideoData.map((x, i) => ({
+        title: x.title, channel: x.channel, meta: x.meta, dur: x.dur,
+        thumb: this.tvGrad(x.g),
+        card: 'border-radius:22px;overflow:hidden;cursor:pointer;transition:transform .24s cubic-bezier(.2,.85,.25,1);' + glassCard,
+        avatar: 'width:32px;height:32px;border-radius:50%;flex:0 0 32px;background:' + this.tvGrad(x.g)
+      })),
+      tvQueue: this.tvQueueData.map((x) => ({ title: x.title, channel: x.channel, meta: x.meta, dur: x.dur, thumb: this.tvGrad(x.g) })),
+      tvChannels: this.tvChannelData.map((x) => ({
+        name: x.name, subs: x.subs,
+        avatar: 'width:38px;height:38px;border-radius:50%;flex:0 0 38px;background:' + this.tvGrad(x.g)
+      })),
+      tvPlate: platePad,
+      navTv: this.nav(v === 'tv', 'var(--pink)'),
+      goTv: () => this.setState({ view: 'tv' }),
+      isPodcast: v === 'podcast',
+      podPlaying: !!this.state.podPlaying,
+      podPaused: !this.state.podPlaying,
+      podEpLabel: 'Episodio ' + this.podEpisodes[this.state.podTrack || 0].n + ' · Waack On Radio',
+      podTitle: this.podEpisodes[this.state.podTrack || 0].title,
+      podGuest: this.podEpisodes[this.state.podTrack || 0].guest,
+      podNotes: this.podEpisodes[this.state.podTrack || 0].notes,
+      podDuration: this.podEpisodes[this.state.podTrack || 0].dur,
+      podElapsed: this.podFmt(this.state.podPos || 0),
+      podBars: this.buildPodBars(),
+      podChapterList: this.buildPodChapters(),
+      podLineList: this.buildPodLines(),
+      podBack15: () => this.podSkip(-15),
+      podFwd15: () => this.podSkip(15),
+      podVol: this.podVol,
+      setPodVol: this.setPodVol,
+      togglePodSleep: this.togglePodSleep,
+      podSleepBtn: 'display:inline-flex;align-items:center;gap:8px;padding:11px 17px;border-radius:999px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid ' + (this.podSleep ? 'color-mix(in oklch, var(--pink) 55%, transparent)' : 'var(--hair)') + ';background:var(--glass-2);color:' + (this.podSleep ? 'var(--ink)' : 'var(--ink-2)'),
+      podSleepLabel: this.podSleep ? 'Temporizador 30 min · activo' : 'Temporizador de sueño',
+      podList: this.buildPodList(),
+      podBtnLabel: this.state.podPlaying ? 'Pausar' : 'Reproducir',
+      podRateLabel: (this.state.podRate || 1) + 'x',
+      podBtnMain: 'display:inline-flex;align-items:center;gap:9px;padding:13px 22px;border-radius:999px;color:#fff;background:linear-gradient(135deg,var(--pink),var(--purple));border:1px solid var(--hair);box-shadow:var(--lg-lift);cursor:pointer;transition:transform .18s ease',
+      podBtnGhost: 'display:inline-flex;align-items:center;justify-content:center;gap:6px;width:auto;min-width:44px;height:44px;padding:0 14px;border-radius:999px;color:var(--ink);border:1px solid var(--hair);background:var(--glass-2);box-shadow:var(--lg-edge);cursor:pointer;transition:border-color .18s ease',
+      podToggle: () => this.setState({ podPlaying: !this.state.podPlaying }, () => this.podTick()),
+      podNext: () => this.podGo((this.state.podTrack || 0) + 1),
+      podPrev: () => this.podGo((this.state.podTrack || 0) - 1),
+      podRate: () => { const r = [1, 1.25, 1.5, 2]; const i = r.indexOf(this.state.podRate || 1); this.setState({ podRate: r[(i + 1) % r.length] }); },
+      podSeek: (e) => {
+        const b = e.currentTarget.getBoundingClientRect();
+        const p = Math.min(1, Math.max(0, (e.clientX - b.left) / b.width));
+        this.setState({ podPos: Math.floor(p * this.podEpisodes[this.state.podTrack || 0].secs) });
+      },
+      navPodcast: this.nav(v === 'podcast', 'var(--purple)'),
+      goPodcast: () => this.setState({ view: 'podcast' }),
+      isLab: v === 'entrenamiento',
+      isFisico: v === 'fisico',
+      fisPlate: platePad,
+      fisPart: this.fisState.part,
+      fisPartLower: this.fisState.part.toLowerCase(),
+      fisPartTime: (this.fisData[this.fisState.part] || {}).time,
+      fisParts: Object.keys(this.fisData).map((p) => ({
+        name: p,
+        pick: () => this.fisSetPart(p),
+        style: this.fisState.part === p
+          ? 'padding:10px 18px;border-radius:999px;font-size:12px;font-weight:700;color:#14111A;background:var(--blue);box-shadow:0 8px 18px -8px var(--blue), inset 0 1px 0 rgba(255,255,255,.3);cursor:pointer;transition:transform .2s cubic-bezier(.2,.85,.25,1)'
+          : 'padding:10px 18px;border-radius:999px;font-size:12px;font-weight:600;color:var(--ink-2);border:1px solid var(--hair);background:var(--glass-2);box-shadow:var(--lg-edge);cursor:pointer;transition:transform .2s cubic-bezier(.2,.85,.25,1), color .2s ease'
+      })),
+      fisExercises: ((this.fisData[this.fisState.part] || {}).items || []).map((e, i) => {
+        const inR = this.fisState.routine.indexOf(e.name) !== -1;
+        return {
+          num: String(i + 1).padStart(2, '0'),
+          name: e.name, kind: e.kind, dose: e.dose, level: e.level, note: e.note,
+          add: () => this.fisToggle(e.name),
+          btnLabel: inR ? 'En la rutina' : 'Añadir',
+          btn: inR
+            ? 'padding:8px 16px;border-radius:999px;font-size:11.5px;font-weight:700;color:#14111A;background:var(--blue);cursor:pointer;white-space:nowrap'
+            : 'padding:8px 16px;border-radius:999px;font-size:11.5px;font-weight:600;color:var(--ink-2);border:1px solid var(--hair);background:var(--glass-2);cursor:pointer;white-space:nowrap',
+          tag: "font-family:'Geist Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;padding:4px 9px;border-radius:999px;white-space:nowrap;color:var(--ink-2);border:1px solid var(--hair);background:var(--glass-2)"
+        };
+      }),
+      fisRoutine: this.fisState.routine.map((name) => {
+        let part = '', dose = '';
+        Object.keys(this.fisData).forEach((k) => {
+          this.fisData[k].items.forEach((e) => { if (e.name === name) { part = k; dose = e.dose; } });
+        });
+        return { name, part, dose, remove: () => this.fisToggle(name) };
+      }),
+      fisRoutineEmpty: this.fisState.routine.length === 0,
+      fisRoutineTime: this.fisState.routine.length + ' ejercicios',
+      fisTips: this.fisTipList,
+      isPerfil: v === 'perfil',
+      stopProp: (e) => e.stopPropagation(),
+      ...(() => {
+        const p = this.perfState;
+        const shown = this.perfMediaData.filter((m) => p.tab === 'Todo' || (p.tab === 'Vídeos' ? m.kind === 'Vídeo' : m.kind === 'Foto'));
+        const chip = (active) => active
+          ? 'padding:10px 18px;border-radius:999px;font-size:12px;font-weight:700;color:#14111A;background:var(--blue);box-shadow:0 8px 18px -8px var(--blue), inset 0 1px 0 rgba(255,255,255,.3);cursor:pointer'
+          : 'padding:10px 18px;border-radius:999px;font-size:12px;font-weight:600;color:var(--ink-2);border:1px solid var(--hair);background:var(--glass-2);box-shadow:var(--lg-edge);cursor:pointer;transition:color .18s ease';
+        return {
+          perfCount: this.perfMediaData.length,
+          agTabs: ['Próximas', 'Pasadas', 'Todas'].map((t) => ({
+            label: t, style: chip(p.agTab === t), pick: () => this.agPick(t)
+          })),
+          agCount: this.agendaData.filter((a) => a.when === 'next').length + ' PRÓX.',
+          agPanelOpen: !!p.agShow,
+          agPanelToggle: () => { this.perfState.agShow = !p.agShow; this.forceUpdate(); },
+          agPanelClose: () => { this.perfState.agShow = false; this.forceUpdate(); },
+          agPanelBtn: 'display:inline-flex;align-items:center;gap:10px;padding:11px 16px;border-radius:999px;border:1px solid ' + (p.agShow ? 'color-mix(in oklch, var(--pink) 50%, transparent)' : 'var(--hair)') + ';background:var(--glass-2);box-shadow:var(--lg-edge);cursor:pointer;transition:border-color .18s ease',
+          agList: this.agendaData
+            .filter((a) => p.agTab === 'Todas' || (p.agTab === 'Próximas' ? a.when === 'next' : a.when === 'past'))
+            .map((a) => {
+              const open = p.agOpen === a.id;
+              const past = a.when === 'past';
+              return {
+                day: a.day, hour: a.hour, dur: a.dur, title: a.title, teacher: a.teacher,
+                mode: a.mode, place: a.place, note: a.note, open,
+                arrow: open ? '−' : '+',
+                cta: past ? 'Ver grabación' : 'Entrar a la sala',
+                row: 'display:flex;align-items:center;gap:16px;padding:14px 16px;border-radius:18px;cursor:pointer;border:1px solid ' + (open ? 'color-mix(in oklch, var(' + a.accent + ') 55%, transparent)' : 'var(--hair)') + ';background:var(--glass-2);box-shadow:var(--lg-edge);transition:border-color .18s ease, transform .18s ease;opacity:' + (past ? '.72' : '1'),
+                date: 'flex:0 0 58px;text-align:center;padding:8px 0;border-radius:13px;background:color-mix(in oklch, var(' + a.accent + ') 16%, transparent);border:1px solid color-mix(in oklch, var(' + a.accent + ') 32%, transparent)',
+                dayStyle: "font-family:'Geist Mono',monospace;font-size:9px;letter-spacing:.12em;color:var(" + a.accent + ')',
+                hourStyle: 'font-size:13px;font-weight:800;color:var(--ink);margin-top:3px;font-variant-numeric:tabular-nums',
+                tag: "display:inline-flex;padding:4px 10px;border-radius:999px;font-family:'Geist Mono',monospace;font-size:8.5px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:var(" + a.accent + ');border:1px solid color-mix(in oklch, var(' + a.accent + ') 40%, transparent);background:color-mix(in oklch, var(' + a.accent + ') 12%, transparent)',
+                ctaStyle: 'display:inline-flex;align-items:center;padding:9px 16px;border-radius:999px;font-size:11.5px;font-weight:700;cursor:pointer;' + (past
+                  ? 'color:var(--ink-2);border:1px solid var(--hair);background:var(--glass-2)'
+                  : 'color:#14111A;background:var(' + a.accent + ');box-shadow:0 8px 18px -10px var(' + a.accent + ')'),
+                toggle: () => this.agToggle(a.id)
+              };
+            }),
+          perfFollowing: p.following,
+          perfVideoCount: this.perfMediaData.filter((m) => m.kind === 'Vídeo').length,
+          perfPhotoCount: this.perfMediaData.filter((m) => m.kind === 'Foto').length,
+          perfEmpty: shown.length === 0,
+          perfHighlights: this.perfHighlightData.map((h, i) => ({
+            label: h.label, n: h.n,
+            ring: 'width:62px;height:62px;border-radius:50%;padding:2px;background:linear-gradient(135deg,var(' + ['--pink', '--purple', '--blue', '--yellow'][i % 4] + '),var(' + ['--purple', '--blue', '--pink', '--pink'][i % 4] + '))'
+          })),
+          perfTabs: ['Todo', 'Vídeos', 'Fotos'].map((t) => ({
+            label: t, style: chip(p.tab === t),
+            pick: () => { this.perfState.tab = t; this.forceUpdate(); }
+          })),
+          perfMedia: shown.map((m) => ({
+            badge: m.kind, likes: m.likes,
+            open: () => {},
+            tile: 'position:relative;aspect-ratio:1;border-radius:16px;overflow:hidden;cursor:pointer;transition:transform .2s ease;background:linear-gradient(135deg,var(' + m.g[0] + '),var(' + m.g[1] + '));box-shadow:0 14px 30px -18px rgba(0,0,0,.7)'
+          })),
+          perfSuggest: this.perfSuggestData.map((s, i) => ({
+            handle: s.handle, meta: s.meta, ini: s.ini,
+            av: 'width:38px;height:38px;flex:0 0 38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;background:linear-gradient(135deg,var(' + s.g[0] + '),var(' + s.g[1] + '))',
+            toggle: () => this.perfToggleFollow(i),
+            btnLabel: s.on ? 'Siguiendo' : 'Seguir',
+            btnWide: s.on
+              ? 'padding:8px 12px;border-radius:13px;text-align:center;font-size:10.5px;font-weight:700;color:var(--ink-2);border:1px solid var(--hair);background:var(--glass-2);cursor:pointer'
+              : 'padding:8px 12px;border-radius:13px;text-align:center;font-size:10.5px;font-weight:700;color:#14111A;background:var(--blue);box-shadow:0 8px 18px -10px var(--blue);cursor:pointer',
+            btn: s.on
+              ? 'padding:8px 14px;border-radius:999px;font-size:11px;font-weight:700;color:var(--ink-2);border:1px solid var(--hair);background:var(--glass-2);cursor:pointer;white-space:nowrap'
+              : 'padding:8px 14px;border-radius:999px;font-size:11px;font-weight:700;color:#14111A;background:var(--blue);box-shadow:0 8px 18px -8px var(--blue);cursor:pointer;white-space:nowrap'
+          })),
+          perfUploadOpen: p.upload,
+          perfOpenUpload: () => { this.perfState.upload = true; this.forceUpdate(); },
+          perfCloseUpload: () => { this.perfState.upload = false; this.forceUpdate(); },
+          perfKinds: ['Vídeo', 'Foto'].map((k) => ({
+            label: k, style: chip(p.kind === k),
+            pick: () => { this.perfState.kind = k; this.forceUpdate(); }
+          })),
+          perfDropTitle: p.kind === 'Vídeo' ? 'Arrastra tu clip aquí' : 'Arrastra tu foto aquí',
+          perfDropHint: p.kind === 'Vídeo' ? 'MP4 o MOV, hasta 90 segundos. Vertical recomendado.' : 'JPG o PNG, mínimo 1080 px de ancho.',
+          perfDraft: p.draft,
+          perfSetDraft: (e) => { this.perfState.draft = e.target.value; this.forceUpdate(); },
+          perfPublish: this.perfPublishPost
+        };
+      })(),
+      ...(() => {
+        const list = this.fisRunList();
+        const r = this.fisRun;
+        const done = r.idx >= list.length;
+        const cur = done ? null : list[r.idx];
+        const total = this.fisSecsFor(cur && cur.dose);
+        const mm = Math.floor(r.left / 60), ss = r.left % 60;
+        const empty = this.fisState.routine.length === 0;
+        return {
+          fisStart: empty ? () => {} : this.fisStartRun,
+          fisStartLabel: empty ? 'Añade ejercicios primero' : 'Empezar rutina',
+          fisStartBtn: empty
+            ? 'margin-top:18px;padding:13px 18px;border-radius:999px;text-align:center;font-size:12.5px;font-weight:700;color:var(--ink-3);border:1px solid var(--hair);background:var(--glass-2);cursor:default'
+            : 'margin-top:18px;padding:13px 18px;border-radius:999px;text-align:center;font-size:12.5px;font-weight:700;color:#14111A;background:var(--pink);box-shadow:0 10px 22px -10px var(--pink), inset 0 1px 0 rgba(255,255,255,.3);cursor:pointer;transition:transform .18s ease',
+          fisRunActive: r.active,
+          fisRunPlaying: r.active && !done,
+          fisRunDone: r.active && done,
+          fisRunStep: done ? list.length + ' de ' + list.length : (r.idx + 1) + ' de ' + list.length,
+          fisRunBar: 'height:100%;background:linear-gradient(90deg,var(--blue),var(--pink));transition:width .3s ease;width:'
+            + Math.round(((done ? list.length : r.idx + (total ? (total - r.left) / total : 0)) / Math.max(1, list.length)) * 100) + '%',
+          fisRunName: cur ? cur.name : '',
+          fisRunPart: cur ? cur.part : '',
+          fisRunKind: cur ? cur.kind : '',
+          fisRunDose: cur ? cur.dose : '',
+          fisRunNote: cur ? cur.note : '',
+          fisRunClock: mm + ':' + String(ss).padStart(2, '0'),
+          fisRunSummary: list.length + ' ejercicios, ' + Math.round(list.reduce((a, e) => a + this.fisSecsFor(e.dose), 0) / 60) + ' minutos de trabajo. Anota cómo se sintió la zona en el Somatic Diary.',
+          fisPause: this.fisTogglePause,
+          fisPauseLabel: r.paused ? 'Reanudar' : 'Pausa',
+          fisNext: () => this.fisAdvance(),
+          fisNextLabel: r.idx + 1 >= list.length ? 'Terminar' : 'Siguiente',
+          fisStop: this.fisStopRun
+        };
+      })(),
+      isEbooks: v === 'ebooks' || v === 'podcasts',
+      isMuro: v === 'comunidad',
+      isRanking: v === 'ranking',
+      isPlanes: v === 'planes',
+      isSupport: v === 'support',
+      labBpm: this.labBpm,
+      labBpmLabel: this.labBpm + ' BPM',
+      setBpm: this.setBpm,
+      toggleMetro: this.toggleMetro,
+      metroRunning: this.labRunning,
+      metroLabel: this.labRunning ? 'Detener metrónomo' : 'Iniciar metrónomo',
+      metroDot: 'width:86px;height:86px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--purple));box-shadow:0 0 44px -6px var(--blue);' + (this.labRunning ? 'animation:metroBeat ' + (60 / this.labBpm).toFixed(3) + 's ease-in-out infinite;' : 'opacity:.4;'),
+      drills: this.buildDrills(),
+      labTakes: this.buildTakes(),
+      labFrames: this.buildFrames(),
+      labCoach: this.buildCoach(),
+      labTimeline: this.buildTimeline(),
+      labStatCards: this.buildLabStats(),
+      labRecLabel: this.labRec ? 'Detener' : 'Grabar',
+      labRecOn: this.labRec,
+      toggleRec: this.toggleRec,
+      toggleMirror: this.toggleMirror,
+      toggleGrid: this.toggleGrid,
+      labGridOn: this.labGrid,
+      labNote: this.labNote,
+      onLabNote: this.onLabNote,
+      labNoteCount: this.labNote.length + '/280',
+      labTakeName: this.takeData[this.labTake].n,
+      labTakeDrill: this.takeData[this.labTake].drill,
+      labFrameTime: this.frameData[this.labFrame].t,
+      labFrameTag: this.frameData[this.labFrame].tag,
+      labMetrics: this.frameMetrics.map((m, i) => ({ key: 'fm' + i, kicker: m.k, value: m.v })),
+      labStageRec: 'display:inline-flex;align-items:center;gap:7px;padding:6px 12px;border-radius:999px;font-family:\'Geist Mono\',monospace;font-size:9.5px;letter-spacing:.14em;color:' + (this.labRec ? '#fff' : 'var(--ink-2)') + ';background:' + (this.labRec ? 'var(--pink)' : 'color-mix(in oklch, var(--ground) 62%, transparent)') + ';border:1px solid var(--hair)',
+      labRecDot: 'width:7px;height:7px;border-radius:50%;background:' + (this.labRec ? '#fff' : 'var(--ink-3)') + ';' + (this.labRec ? 'animation:metroBeat 1s ease-in-out infinite' : ''),
+      labMirrorBtn: 'display:inline-flex;align-items:center;gap:8px;padding:11px 18px;border-radius:999px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid ' + (this.labMirror ? 'color-mix(in oklch, var(--blue) 55%, transparent)' : 'var(--hair)') + ';background:var(--glass-2);color:' + (this.labMirror ? 'var(--ink)' : 'var(--ink-2)'),
+      labGridBtn: 'display:inline-flex;align-items:center;gap:8px;padding:11px 18px;border-radius:999px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid ' + (this.labGrid ? 'color-mix(in oklch, var(--blue) 55%, transparent)' : 'var(--hair)') + ';background:var(--glass-2);color:' + (this.labGrid ? 'var(--ink)' : 'var(--ink-2)'),
+      labRecBtn: 'display:inline-flex;align-items:center;gap:9px;padding:11px 20px;border-radius:999px;font-size:12px;font-weight:700;cursor:pointer;border:1px solid transparent;color:#fff;background:' + (this.labRec ? 'var(--pink)' : 'color-mix(in oklch, var(--pink) 78%, transparent)') + ';box-shadow:0 8px 18px -10px var(--pink), inset 0 1px 0 rgba(255,255,255,.3)',
+      labGridOverlay: this.labGrid
+        ? 'position:absolute;inset:0;background-image:linear-gradient(to right, color-mix(in oklch, var(--ink) 16%, transparent) 1px, transparent 1px), linear-gradient(to bottom, color-mix(in oklch, var(--ink) 16%, transparent) 1px, transparent 1px);background-size:11.11% 11.11%;pointer-events:none'
+        : 'display:none',
+      moods: this.buildMoods(),
+      bodyZones: this.buildBody(),
+      libTabs: this.buildLibTabs(),
+      libItems: this.buildLib(),
+      wallPosts: this.buildWall(),
+      challenges: this.buildChallenges(),
+      rankRows: this.buildRank(),
+      badges: this.buildBadges(),
+      plans: this.buildPlans(),
+      cycleTabs: this.buildCycleTabs(),
+      faqs: this.buildFaq(),
+      loginToggleLabel: v === 'login' ? 'Ver la app' : 'Ver pantalla de acceso',
+      showLoginToggle: false,
+      logout: this.logout,
+      loginInfo: this.loginForm.info,
+      loginSubmitLabel: this.loginForm.mode === 'signup' ? 'Crear cuenta' : 'Log In',
+      loginSwitchText: this.loginForm.mode === 'signup' ? 'Already have an account?' : "Don't have an account?",
+      loginSwitchLabel: this.loginForm.mode === 'signup' ? 'Log In' : 'Sign Up',
+      toggleLoginMode: this.toggleLoginMode,
+      forgotPassword: this.forgotPassword,
+      bannerRef: this.bannerRef,
+      heroVideoRef: this.heroVideoRef,
+      loginVideoRef: this.loginVideoRef,
+      insVideoRef: this.insVideoRef,
+      isInstructor: v === 'instructor',
+      navInstructor: this.nav(v === 'instructor', 'var(--purple)'),
+      goInstructor: () => this.setState({ view: 'instructor' }),
+      insTabList: this.buildInsTabs(),
+      insChips: this.buildStudentChips(),
+      insStatCards: this.buildInsStats(),
+      insRows: this.buildStudentRows(),
+      insIsDashboard: this.insTab === 'dashboard',
+      insIsStudents: this.insTab === 'students',
+      insIsClasses: this.insTab === 'classes',
+      insIsFinances: this.insTab === 'finances',
+      insIsDocs: this.insTab === 'documents',
+      insIsMethod: this.insTab === 'methodology',
+      insIsPublish: this.insTab === 'publish',
+      insIsPods: this.insTab === 'podcasts',
+      insIsOverview: this.insTab === 'overview',
+      insIsPromo: this.insTab === 'promotion',
+      insClassList: this.buildInsClasses(),
+      insDocList: this.simpleList(this.insDocs),
+      insCourseList: this.simpleList(this.insCourses),
+      insPodList: this.simpleList(this.insPods),
+      insBpm: this.insBpm,
+      insBpmLabel: this.insBpm + ' BPM',
+      setInsBpm: this.setInsBpm,
+      insLive: this.insLive,
+      toggleInsLive: this.toggleInsLive,
+      insLiveLabel: this.insLive ? 'Terminar clase en vivo' : 'Abrir sala en vivo',
+      roleName: this.role().name,
+      roleShort: this.role().short,
+      roleDesc: this.role().desc,
+      roleBadge: 'display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:999px;font-family:"Geist Mono",monospace;font-size:10px;font-weight:700;letter-spacing:.12em;white-space:nowrap;color:' + this.role().ink + ';background:' + this.role().color,
+      roleLine: 'font-family:"Geist Mono",monospace;font-size:9px;margin-top:3px;color:' + this.role().color,
+      hasPlatform: this.subs.platform,
+      hasInstructor: this.subs.instructor,
+      togglePlatform: () => this.toggleSub('platform'),
+      toggleInstructor: () => this.toggleSub('instructor'),
+      subPlatformStyle: 'display:flex;align-items:center;gap:10px;padding:13px 16px;border-radius:18px;cursor:pointer;font-size:13px;font-weight:600;transition:border-color .2s ease;border:1px solid ' + (this.subs.platform ? 'color-mix(in oklch, var(--purple) 60%, transparent)' : 'var(--hair)') + ';background:var(--glass-2);color:' + (this.subs.platform ? 'var(--ink)' : 'var(--ink-2)'),
+      subInstructorStyle: 'display:flex;align-items:center;gap:10px;padding:13px 16px;border-radius:18px;cursor:pointer;font-size:13px;font-weight:600;transition:border-color .2s ease;border:1px solid ' + (this.subs.instructor ? 'color-mix(in oklch, var(--blue) 60%, transparent)' : 'var(--hair)') + ';background:var(--glass-2);color:' + (this.subs.instructor ? 'var(--ink)' : 'var(--ink-2)'),
+      acctOpen: this.state.acct,
+      notifOpen: !!this.state.notif,
+      notifToggle: () => this.setState({ notif: !this.state.notif, acct: false }),
+      notifClose: () => this.setState({ notif: false }),
+      notifReadAll: () => { this.notifData.forEach((n) => { n.unread = false; }); this.forceUpdate(); },
+      notifList: this.notifData.map((n, i) => ({
+        title: n.t, text: n.x, time: n.w,
+        row: 'display:flex;gap:11px;align-items:flex-start;padding:11px 12px;border-radius:16px;cursor:pointer;transition:background .18s ease;' + (n.unread ? 'background:color-mix(in oklch, var(--blue) 8%, transparent)' : ''),
+        dot: 'width:8px;height:8px;flex:0 0 8px;margin-top:5px;border-radius:50%;background:' + (n.unread ? 'var(' + n.c + ')' : 'var(--hair)'),
+        read: () => { this.notifData[i].unread = false; this.forceUpdate(); }
+      })),
+      acctToggle: () => this.setState({ acct: !this.state.acct }),
+      acctClose: () => this.setState({ acct: false }),
+      acctAvatar: 'width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#fff;background:linear-gradient(135deg,var(--purple),var(--pink));cursor:pointer;transition:box-shadow .2s ease;box-shadow:' + (this.state.acct ? '0 0 0 2px var(--ground), 0 0 0 4px var(--pink)' : 'var(--lg-edge)'),
+      acctLinks: [
+        { label: 'Mi perfil', view: 'perfil' },
+        { label: 'Panel de instructor', view: 'instructor' },
+        { label: 'Planes & Membresía', view: 'planes' },
+        { label: 'Cuerpo & Estiramientos', view: 'fisico' },
+        { label: 'Ayuda & Legal', view: 'support' }
+      ].map((l) => ({
+        label: l.label,
+        go: () => this.setState({ view: l.view, acct: false }),
+        style: 'display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:14px;cursor:pointer;font-size:12.5px;font-weight:600;transition:background .16s ease, color .16s ease;color:' + (v === l.view ? '#FFFFFF' : 'rgba(255,255,255,.78)') + ';background:' + (v === l.view ? 'rgba(255,255,255,.12)' : 'transparent')
+      })),
+      acctSwitch: 'position:relative;display:inline-block;width:34px;height:19px;border-radius:999px;flex:0 0 34px;transition:background .2s ease;background:' + (this.subs.docente ? 'var(--gold)' : 'var(--glass-2)') + ';border:1px solid ' + (this.subs.docente ? 'transparent' : 'var(--hair)'),
+      acctKnob: 'position:absolute;top:2px;left:' + (this.subs.docente ? '17px' : '2px') + ';width:13px;height:13px;border-radius:50%;background:' + (this.subs.docente ? '#1A1400' : 'var(--ink-3)') + ';transition:left .2s ease',
+      isDocente: this.subs.docente,
+      toggleDocente: () => this.toggleSub('docente'),
+      subDocenteStyle: 'display:flex;align-items:center;gap:10px;padding:13px 16px;border-radius:18px;cursor:pointer;font-size:13px;font-weight:600;transition:border-color .2s ease;border:1px solid ' + (this.subs.docente ? 'color-mix(in oklch, var(--gold) 60%, transparent)' : 'var(--hair)') + ';background:var(--glass-2);color:' + (this.subs.docente ? 'var(--ink)' : 'var(--ink-2)'),
+      dirQuery: this.dirState.q,
+      dirSetQuery: this.dirSetQ,
+      ...(() => {
+        const q = this.dirState.q.trim().toLowerCase();
+        const list = this.dirData
+          .filter((d) => !q || (d.n + ' ' + d.c + ' ' + d.sp.join(' ')).toLowerCase().indexOf(q) !== -1)
+          .slice()
+          .sort((a, b) => (b.hi ? 1 : 0) - (a.hi ? 1 : 0));
+        const loop = list.length >= 4 && !q;
+        const mk = (d, i) => ({
+            name: d.n, country: d.c, price: d.pr, ini: d.ini, rating: d.r, votes: d.v, handle: d.h, hi: d.hi,
+            sp: d.sp.map((s, j) => ({ key: d.h + j, text: s })),
+            av: 'width:38px;height:38px;flex:0 0 38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;background:linear-gradient(135deg,var(' + d.g[0] + '),var(' + d.g[1] + '))',
+            priceStyle: 'display:inline-block;margin-top:10px;padding:5px 10px;border-radius:999px;font-family:\'Geist Mono\',monospace;font-size:9px;font-weight:700;color:#1A1400;background:linear-gradient(90deg,var(--gold-hi),var(--gold-lo))',
+            card: 'position:relative;padding:13px;min-width:0;border-radius:18px;border:1px solid ' + (d.hi ? 'color-mix(in oklch, var(--gold) 28%, transparent)' : 'var(--hair)') + ';background:var(--glass-2);cursor:pointer;transition:transform .2s ease, border-color .2s ease;animation:rise3d .7s cubic-bezier(.2,.85,.25,1) ' + (0.06 * i).toFixed(2) + 's backwards'
+        });
+        return {
+          dirEmpty: list.length === 0,
+          dirTeachers: list.map(mk),
+          dirTeachersLoop: loop ? list.map(mk) : [],
+          dirTrackStyle: 'display:flex;flex-direction:column;gap:10px;'
+            + (loop
+              ? 'animation:dirScroll ' + (list.length * 7) + 's linear infinite;will-change:transform'
+              : 'max-height:430px;overflow-y:auto')
+        };
+      })(),
+      navOpen: this.navIsOpen(),
+      asideW: this.navIsOpen() ? '266px' : '78px',
+      navLabel: this.navIsOpen() ? 'flex:1' : 'display:none',
+      navGroupLabel: this.navIsOpen()
+        ? "font-family:'Geist Mono',monospace;font-size:9px;font-weight:700;letter-spacing:.22em;color:" + this.chromeInk3()
+        : 'display:none',
+      navKicker: this.navIsOpen()
+        ? "font-family:'Geist Mono',monospace;font-size:8px;letter-spacing:.26em;color:var(--gold-text);font-weight:700;margin-top:8px"
+        : 'display:none',
+      navLogo: this.navIsOpen()
+        ? 'width:200px;height:200px;object-fit:contain;display:block;filter:drop-shadow(0 12px 30px rgba(120,130,220,.45))'
+        : 'width:56px;height:56px;object-fit:contain;display:block;filter:drop-shadow(0 8px 18px rgba(120,130,220,.5))',
+      navCollapsed: !this.navIsOpen(),
+      toggleNav: () => this.setState({ navOpen: !this.navIsOpen() }),
+      navToggleLabel: this.navIsOpen() ? 'Recoger menú' : 'Expandir menú',
+      adTiles: this.buildAds(plateSkin, plateBlur),
+      adsBanner: 'position:relative;overflow:hidden;border-radius:22px;padding:14px 0;margin-bottom:26px;max-width:1180px;' + plateSkin + plateBlur,
+      heroKicker: (this.hero(v) || {}).kicker,
+      heroTitle: (this.hero(v) || {}).title,
+      heroSub: (this.hero(v) || {}).sub,
+      heroCta: (this.hero(v) || {}).cta,
+      heroKickerStyle: "font-family:'Geist Mono',monospace;font-size:10px;letter-spacing:.22em;font-weight:700;text-transform:uppercase;color:" + (this.hero(v) || {}).accent,
+      navIdle: this.nav(false),
+      navLab: this.nav(v === 'entrenamiento', 'var(--blue)'),
+      navFisico: this.nav(v === 'fisico', 'var(--blue)'),
+      navEbooks: this.nav(v === 'ebooks', 'var(--blue)'),
+      navPodcasts: this.nav(v === 'podcasts' || v === 'podcast', 'var(--pink)'),
+      navMuro: this.nav(v === 'comunidad', 'var(--pink)'),
+      navRanking: this.nav(v === 'ranking', 'var(--pink)'),
+      navPlanes: this.nav(v === 'planes', 'var(--purple)'),
+      navSupport: this.nav(v === 'support', 'var(--purple)'),
+      goLab: () => this.setState({ view: 'entrenamiento' }),
+      goFisico: () => this.setState({ view: 'fisico' }),
+      goPerfil: () => this.setState({ view: 'perfil' }),
+      navPerfil: this.nav(v === 'perfil', 'var(--pink)'),
+      goEbooks: () => { this.libTab = 'Manual'; this.setState({ view: 'ebooks' }); },
+      goPodcasts: () => { this.libTab = 'Podcast'; this.setState({ view: 'podcasts' }); },
+      goMuro: () => this.setState({ view: 'comunidad' }),
+      goRanking: () => this.setState({ view: 'ranking' }),
+      goPlanes: () => this.setState({ view: 'planes' }),
+      goSupport: () => this.setState({ view: 'support' }),
+      navDashboard: this.nav(v === 'dashboard', 'var(--blue)'),
+      navCursos: this.nav(v === 'cursos', 'var(--blue)'),
+      navLives: this.nav(v === 'lives', 'var(--pink)'),
+      navReels: this.nav(v === 'reels', 'var(--pink)'),
+      annTabs: this.buildAnnTabs(),
+      annCards: this.buildAnns(),
+      trackList: this.buildTracks(),
+      nowPlaying: this.trackData[this.playingIndex].t,
+      nowPlayingBpm: this.trackData[this.playingIndex].bpm,
+      chatOpen: this.chatState.open,
+      chatClosed: !this.chatState.open,
+      chatRoomList: this.buildChatRooms(),
+      chatRoom: this.activeRoom(),
+      inRoom: !!this.chatState.roomId,
+      chatRoomsVisible: !this.chatState.roomId,
+      chatQuery: this.chatState.query,
+      onChatQuery: this.onChatQuery,
+      toggleChat: this.toggleChat,
+      closeChat: this.closeChat,
+      backToRooms: this.backToRooms,
+      chatTotalUnread: '13',
+      loginEmail: this.loginForm.email,
+      loginPass: this.loginForm.pass,
+      loginError: this.loginForm.error,
+      onEmail: (e) => this.setLoginField('email', e.target.value),
+      onPass: (e) => this.setLoginField('pass', e.target.value),
+      submitLogin: this.submitLogin,
+      teacherTabs: this.buildTeacherTabs(),
+      teacherSections: this.buildTeacherSections(),
+      lockedTeachers: this.buildLocked(),
+      rootRef: this.rootRef,
+      bgVideoRef: this.bgVideoRef,
+      platePanel: platePad + 'display:flex;flex-direction:column;gap:10px;perspective:1400px;perspective-origin:50% 0%;',
+      plateRow: platePad + 'display:flex;flex-direction:column;gap:12px;perspective:1400px;perspective-origin:50% 0%;',
+      reelItems: this.buildReels(),
+      reelMuted: this.reelState.muted,
+      muteLabel: this.reelState.muted ? 'Sonido apagado' : 'Sonido activo',
+      toggleMute: this.toggleMute,
+      feedRef: this.feedRef,
+      reelNext: () => this.scrollReel(1),
+      reelPrev: () => this.scrollReel(-1),
+      tabForYou: this.reelState.tab === 'Para ti' ? tabOn : tabOff,
+      tabFollowing: this.reelState.tab === 'Siguiendo' ? tabOn : tabOff,
+      pickForYou: () => this.setReelTab('Para ti'),
+      pickFollowing: () => this.setReelTab('Siguiendo'),
+      statGrid: grid3d + 'grid-template-columns:repeat(auto-fit,minmax(200px,1fr));backdrop-filter:none;-webkit-backdrop-filter:none;background:' + (dark ? 'linear-gradient(135deg,#2B2E35 0%,#1C1E23 26%,#383C45 52%,#191B20 74%,#2F333B 100%)' : 'linear-gradient(135deg,#FFFFFF 0%,#EEF1F6 26%,#FFFFFF 52%,#E7EBF2 74%,#FFFFFF 100%)') + ';',
+      cardGrid: grid3d + 'grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px;',
+      reelGrid: grid3d + 'grid-template-columns:repeat(auto-fill,minmax(210px,1fr));',
+      statCard: 'padding:22px;border-radius:22px;' + glassCard,
+      statCard1: 'padding:22px;border-radius:22px;' + glassCard + rise(0),
+      statCard2: 'padding:22px;border-radius:22px;' + glassCard + rise(1),
+      statCard3: 'padding:22px;border-radius:22px;' + glassCard + rise(2),
+      statCard4: 'padding:22px;border-radius:22px;' + glassCard + rise(3),
+      listCard: 'display:flex;gap:12px;padding:14px;border-radius:20px;cursor:pointer;' + glassCard,
+      courseCard: 'border-radius:24px;overflow:hidden;cursor:pointer;' + glassCard,
+      courseCard1: 'border-radius:24px;overflow:hidden;cursor:pointer;' + glassCard + rise(0),
+      courseCard2: 'border-radius:24px;overflow:hidden;cursor:pointer;' + glassCard + rise(1),
+      courseCard3: 'border-radius:24px;overflow:hidden;cursor:pointer;' + glassCard + rise(2),
+      courseCard4: 'border-radius:24px;overflow:hidden;cursor:pointer;' + glassCard + rise(3),
+      reelCard: 'border-radius:22px;overflow:hidden;cursor:pointer;' + glassCard,
+      reelCard1: 'border-radius:22px;overflow:hidden;cursor:pointer;' + glassCard + rise(0),
+      reelCard2: 'border-radius:22px;overflow:hidden;cursor:pointer;' + glassCard + rise(1),
+      reelCard3: 'border-radius:22px;overflow:hidden;cursor:pointer;' + glassCard + rise(2),
+      reelCard4: 'border-radius:22px;overflow:hidden;cursor:pointer;' + glassCard + rise(3),
+      reelCard5: 'border-radius:22px;overflow:hidden;cursor:pointer;' + glassCard + rise(4),
+      reelCard6: 'border-radius:22px;overflow:hidden;cursor:pointer;' + glassCard + rise(5),
+      chipOn: 'padding:10px 18px;border-radius:999px;font-size:12px;font-weight:700;color:#fff;background:var(--blue);box-shadow:0 8px 18px -8px var(--blue), inset 0 1px 0 rgba(255,255,255,.3);cursor:pointer;transform-style:preserve-3d;transition:transform .2s cubic-bezier(.2,.85,.25,1), box-shadow .2s ease;animation:btnFloat3d 3.4s ease-in-out infinite',
+      chipLive: 'padding:10px 18px;border-radius:999px;font-size:12px;font-weight:700;color:#14111A;background:var(--pink);box-shadow:0 8px 18px -8px var(--pink), inset 0 1px 0 rgba(255,255,255,.3);cursor:pointer;transform-style:preserve-3d;transition:transform .2s cubic-bezier(.2,.85,.25,1), box-shadow .2s ease;animation:btnFloat3d 3.4s ease-in-out infinite',
+      chipOff: 'padding:10px 18px;border-radius:999px;font-size:12px;font-weight:600;color:var(--ink-2);border:1px solid var(--hair);background:var(--glass-2);box-shadow:var(--lg-edge);cursor:pointer;transform-style:preserve-3d;transition:transform .2s cubic-bezier(.2,.85,.25,1), color .2s ease',
+      chipHover3d: 'transform:perspective(700px) translateZ(18px) translateY(-3px) rotateX(-6deg);color:var(--ink)',
+      themeDarkBtn: (this.navIsOpen() ? '' : 'width:100%;padding:9px 0;') + (this.state.theme === 'dark' ? on : off),
+      themeLightBtn: (this.navIsOpen() ? '' : 'width:100%;padding:9px 0;') + (this.state.theme === 'light' ? on : off),
+      themeDarkLabel: this.navIsOpen() ? 'Oscuro' : '☾',
+      themeLightLabel: this.navIsOpen() ? 'Claro' : '☀',
+      themeSwitchWrap: this.navIsOpen()
+        ? 'display:flex;gap:5px;padding:5px;border-radius:999px;background:var(--glass-2);border:1px solid var(--hair)'
+        : 'display:flex;flex-direction:column;gap:5px;padding:5px;border-radius:22px;background:var(--glass-2);border:1px solid var(--hair)',
+      goDashboard: () => this.setState({ view: 'dashboard' }),
+      goCursos: () => this.setState({ view: 'cursos' }),
+      goLives: () => this.setState({ view: 'lives' }),
+      goReels: () => this.setState({ view: 'reels' }),
+      goLogin: () => this.setState({ view: this.state.view === 'login' ? 'dashboard' : 'login' }),
+      setDark: () => this.setState({ theme: 'dark' }),
+      setLight: () => this.setState({ theme: 'light' })
+    };
+  }
+  render() {
+    const v = { ...this.props, ...this.renderVals() };
+    if (!this.state.authReady) return <div style={{ minHeight: '100vh', background: '#000' }} />;
+    return (
+      <div data-theme={v.theme} style={{ minHeight: '100vh', background: 'var(--ground)', color: 'var(--ink)', position: 'relative', overflow: 'hidden', fontFamily: 'Geist,system-ui,sans-serif' }} ref={v.rootRef}>
+        <div style={sty(v.ambientLayer)}></div>
+        {v.isLogin && <Login v={v} />}
+        {v.isApp && <Shell v={v} />}
+        {v.isApp && <ChatDock v={v} />}
+      </div>
+    );
+  }
+}
+
+export default App;

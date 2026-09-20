@@ -1,0 +1,64 @@
+extend type Block {
+  """
+  ✨ Implicit foreign key field based on `Block`.`blocker`. It must match the value of `User`.`id`. See `@ref` for how to customize it.
+  """
+  blockerId: UUID! @fdc_generated(from: "Block.blocker", purpose: IMPLICIT_REF_FIELD)
+  """
+  ✨ Implicit foreign key field based on `Block`.`blocked`. It must match the value of `User`.`id`. See `@ref` for how to customize it.
+  """
+  blockedId: UUID! @fdc_generated(from: "Block.blocked", purpose: IMPLICIT_REF_FIELD)
+}
+extend type Comment {
+  """
+  ✨ Implicit primary key field. It's a UUID column default to a generated new value. See `@table` for how to customize it.
+  """
+  id: UUID! @default(expr: "uuidV4()") @fdc_generated(from: "Comment", purpose: IMPLICIT_KEY_FIELD)
+  """
+  ✨ Implicit foreign key field based on `Comment`.`author`. It must match the value of `User`.`id`. See `@ref` for how to customize it.
+  """
+  authorId: UUID! @fdc_generated(from: "Comment.author", purpose: IMPLICIT_REF_FIELD)
+  """
+  ✨ Implicit foreign key field based on `Comment`.`post`. It must match the value of `Post`.`id`. See `@ref` for how to customize it.
+  """
+  postId: UUID! @fdc_generated(from: "Comment.post", purpose: IMPLICIT_REF_FIELD)
+}
+extend type Follow {
+  """
+  ✨ Implicit foreign key field based on `Follow`.`follower`. It must match the value of `User`.`id`. See `@ref` for how to customize it.
+  """
+  followerId: UUID! @fdc_generated(from: "Follow.follower", purpose: IMPLICIT_REF_FIELD)
+  """
+  ✨ Implicit foreign key field based on `Follow`.`followed`. It must match the value of `User`.`id`. See `@ref` for how to customize it.
+  """
+  followedId: UUID! @fdc_generated(from: "Follow.followed", purpose: IMPLICIT_REF_FIELD)
+}
+extend type Like {
+  """
+  ✨ Implicit primary key field. It's a UUID column default to a generated new value. See `@table` for how to customize it.
+  """
+  id: UUID! @default(expr: "uuidV4()") @fdc_generated(from: "Like", purpose: IMPLICIT_KEY_FIELD)
+  """
+  ✨ Implicit foreign key field based on `Like`.`post`. It must match the value of `Post`.`id`. See `@ref` for how to customize it.
+  """
+  postId: UUID! @fdc_generated(from: "Like.post", purpose: IMPLICIT_REF_FIELD)
+  """
+  ✨ Implicit foreign key field based on `Like`.`user`. It must match the value of `User`.`id`. See `@ref` for how to customize it.
+  """
+  userId: UUID! @fdc_generated(from: "Like.user", purpose: IMPLICIT_REF_FIELD)
+}
+extend type Post {
+  """
+  ✨ Implicit primary key field. It's a UUID column default to a generated new value. See `@table` for how to customize it.
+  """
+  id: UUID! @default(expr: "uuidV4()") @fdc_generated(from: "Post", purpose: IMPLICIT_KEY_FIELD)
+  """
+  ✨ Implicit foreign key field based on `Post`.`author`. It must match the value of `User`.`id`. See `@ref` for how to customize it.
+  """
+  authorId: UUID! @fdc_generated(from: "Post.author", purpose: IMPLICIT_REF_FIELD)
+}
+extend type User {
+  """
+  ✨ Implicit primary key field. It's a UUID column default to a generated new value. See `@table` for how to customize it.
+  """
+  id: UUID! @default(expr: "uuidV4()") @fdc_generated(from: "User", purpose: IMPLICIT_KEY_FIELD)
+}
