@@ -71,6 +71,7 @@ rep('componentDidMount() { this.syncTheme(); this.syncVars(); }', `componentDidM
     if (!firebaseConfigured) { this.setState({ authReady: true }); return; }
     this.unsubAuth = onAuthStateChanged(auth, async (user) => {
       this.setState((st: any) => ({ user, authReady: true, view: user ? (st.view === 'login' ? 'dashboard' : st.view) : 'login' }));
+      if (user) this.startData(); else this.stopData();
       if (user) {
         try {
           const ref = doc(db, 'users', user.uid);
@@ -79,7 +80,35 @@ rep('componentDidMount() { this.syncTheme(); this.syncVars(); }', `componentDidM
       }
     });
   }`);
-rep('componentWillUnmount() { clearInterval(this._podTimer); }', 'componentWillUnmount() { clearInterval(this._podTimer); this.fisClearTimer && this.fisClearTimer(); this.unsubAuth && this.unsubAuth(); }');
+rep('componentWillUnmount() { clearInterval(this._podTimer); }', `componentWillUnmount() { clearInterval(this._podTimer); this.fisClearTimer && this.fisClearTimer(); this.unsubAuth && this.unsubAuth(); this.stopData(); }
+
+  /* ---------- Datos en vivo desde Firestore (reels, teachers, lives) ----------
+     Si una colección está vacía se conservan los datos de ejemplo del prototipo. */
+  unsubData: any[] = [];
+  stopData() { this.unsubData.forEach((u: any) => u()); this.unsubData = []; }
+  startData() {
+    this.stopData();
+    const byNewest = (a: any, b: any) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0);
+    const byOrder = (a: any, b: any) => (a.order ?? 0) - (b.order ?? 0);
+    const watch = (name: string, apply: (rows: any[]) => void) =>
+      onSnapshot(collection(db, name), (snap) => {
+        if (snap.empty) return;
+        apply(snap.docs.map((d) => ({ id: d.id, ...d.data() })));
+        this.forceUpdate();
+      }, (e) => console.warn('Firestore ' + name + ':', e.code));
+    this.unsubData = [
+      watch('reels', (rows) => {
+        this.reelData = rows.sort(byNewest).map((r: any) => ({ c1: 'var(--pink)', c2: 'var(--purple)', likes: 0, comments: 0, ...r }));
+      }),
+      watch('teachers', (rows) => {
+        this.teacherData = rows.sort(byOrder).map((t: any) => ({ c1: 'var(--blue)', c2: 'var(--purple)', plan: '', courses: [], ...t }));
+        if (this.teacherFilter !== 'all' && !this.teacherData.some((t: any) => t.id === this.teacherFilter)) this.teacherFilter = 'all';
+      }),
+      watch('lives', (rows) => {
+        this.insClasses = rows.sort(byOrder).map((c: any) => ({ t: c.title ?? c.t ?? '', when: c.when ?? '', who: c.who ?? '', state: c.state ?? 'Programada', live: !!c.live }));
+      }),
+    ];
+  }`);
 
 rep("showLoginToggle: v !== 'inicio',", `showLoginToggle: false,
       logout: this.logout,
@@ -95,7 +124,7 @@ const head = `// GENERADO por tools/port-logic.mjs desde la lógica del prototip
 // @ts-nocheck
 import React, { Component } from 'react';
 import { onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, signOut } from 'firebase/auth';
-import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
+import { doc, getDoc, setDoc, serverTimestamp, collection, onSnapshot } from 'firebase/firestore';
 import { auth, db, firebaseConfigured } from './lib/firebase';
 import Shell from './Shell';
 import Login from './views/Login';
