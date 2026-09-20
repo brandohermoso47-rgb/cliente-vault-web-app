@@ -27,7 +27,7 @@ rep(/submitLogin = \(\) => \{[\s\S]*?this\.setState\(\{ view: 'dashboard' \}\);\
         'auth/invalid-credential': 'Correo o contraseña incorrectos.',
         'auth/wrong-password': 'Correo o contraseña incorrectos.',
         'auth/user-not-found': 'Correo o contraseña incorrectos.',
-        'auth/email-already-in-use': 'Ese correo ya tiene una cuenta. Inicia sesión.',
+        'auth/email-already-in-use': 'Ese correo ya tiene una cuenta (quizá creada con Google). Pulsa «Continuar con Google» o inicia sesión.',
         'auth/weak-password': 'La contraseña es muy débil.',
         'auth/password-does-not-meet-requirements': 'La contraseña debe tener mínimo 9 caracteres, con mayúscula, minúscula, número y símbolo.',
         'auth/invalid-email': 'Introduce un correo válido.',
@@ -36,7 +36,27 @@ rep(/submitLogin = \(\) => \{[\s\S]*?this\.setState\(\{ view: 'dashboard' \}\);\
         'auth/too-many-requests': 'Demasiados intentos. Espera un momento e inténtalo de nuevo.',
         'auth/operation-not-allowed': 'El acceso con correo no está habilitado en Firebase.',
       };
-      this.loginForm = Object.assign({}, this.loginForm, { error: MSG[e?.code] || 'No se pudo completar. Intenta de nuevo.' });
+      this.loginForm = Object.assign({}, this.loginForm, { error: MSG[e?.code] || ('No se pudo completar (' + (e?.code || e?.message || 'error desconocido') + ').') });
+      this.forceUpdate();
+    }
+  };
+
+  googleLogin = async () => {
+    if (!firebaseConfigured) {
+      this.loginForm = Object.assign({}, this.loginForm, { error: 'Firebase no está configurado (falta .env.local).' });
+      this.forceUpdate();
+      return;
+    }
+    try {
+      await signInWithPopup(auth, new GoogleAuthProvider());
+    } catch (e: any) {
+      if (e?.code === 'auth/popup-closed-by-user' || e?.code === 'auth/cancelled-popup-request') return;
+      const MSG: any = {
+        'auth/popup-blocked': 'El navegador bloqueó la ventana de Google. Permite las ventanas emergentes y reintenta.',
+        'auth/unauthorized-domain': 'Este dominio no está autorizado en Firebase Authentication.',
+        'auth/network-request-failed': 'Sin conexión con Firebase. Revisa tu internet.',
+      };
+      this.loginForm = Object.assign({}, this.loginForm, { error: MSG[e?.code] || ('No se pudo entrar con Google (' + (e?.code || 'error desconocido') + ').'), info: '' });
       this.forceUpdate();
     }
   };
@@ -117,13 +137,14 @@ rep("showLoginToggle: v !== 'inicio',", `showLoginToggle: false,
       loginSwitchText: this.loginForm.mode === 'signup' ? 'Already have an account?' : "Don't have an account?",
       loginSwitchLabel: this.loginForm.mode === 'signup' ? 'Log In' : 'Sign Up',
       toggleLoginMode: this.toggleLoginMode,
+      googleLogin: this.googleLogin,
       forgotPassword: this.forgotPassword,`);
 
 const head = `// GENERADO por tools/port-logic.mjs desde la lógica del prototipo. Edita tools/logic.source.js o el script, no este archivo.
 /* eslint-disable */
 // @ts-nocheck
 import React, { Component } from 'react';
-import { onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, signOut } from 'firebase/auth';
+import { onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, signInWithPopup, GoogleAuthProvider, signOut } from 'firebase/auth';
 import { doc, getDoc, setDoc, serverTimestamp, collection, onSnapshot } from 'firebase/firestore';
 import { auth, db, firebaseConfigured } from './lib/firebase';
 import Shell from './Shell';
