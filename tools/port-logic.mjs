@@ -10,7 +10,7 @@ rep("state = { view: 'dashboard', theme: 'dark', navOpen: null, acct: false };",
 rep(/submitLogin = \(\) => \{[\s\S]*?this\.setState\(\{ view: 'dashboard' \}\);\n  \};/.exec(s)[0], `submitLogin = async () => {
     const { email, pass } = this.loginForm;
     let error = '';
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) error = 'Introduce un correo válido.';
+    if (!/^[^ @]+@[^ @]+[.][^ @]+$/.test(email)) error = 'Introduce un correo válido.';
     else if (this.loginForm.mode === 'signup' && !(pass.length >= 9 && /[a-z]/.test(pass) && /[A-Z]/.test(pass) && /[0-9]/.test(pass) && /[^A-Za-z0-9]/.test(pass))) error = 'La contraseña debe tener mínimo 9 caracteres, con mayúscula, minúscula, número y símbolo (ej. Waack#2026x).';
     else if (!pass) error = 'Escribe tu contraseña.';
     if (!error && !firebaseConfigured) error = 'Firebase no está configurado (falta .env.local).';
@@ -48,7 +48,7 @@ rep(/submitLogin = \(\) => \{[\s\S]*?this\.setState\(\{ view: 'dashboard' \}\);\
 
   forgotPassword = async () => {
     const { email } = this.loginForm;
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    if (!/^[^ @]+@[^ @]+[.][^ @]+$/.test(email)) {
       this.loginForm = Object.assign({}, this.loginForm, { error: 'Escribe tu correo arriba y vuelve a pulsar «Forgot Password?».', info: '' });
     } else if (!firebaseConfigured) {
       this.loginForm = Object.assign({}, this.loginForm, { error: 'Firebase no está configurado (falta .env.local).', info: '' });
