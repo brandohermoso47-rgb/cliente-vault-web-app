@@ -19,7 +19,7 @@ perfil de Firestore, para que las reglas lo entiendan.
 ```bash
 cd api
 npm install
-npm test                 # 28 pruebas contra un PostgreSQL embebido (PGlite); no hace falta Firebase ni Stripe
+npm test                 # 48 pruebas contra un PostgreSQL embebido (PGlite); no hace falta Firebase ni Stripe
 export DATABASE_URL=postgres://usuario:clave@localhost:5432/waackon
 npm run db:migrate
 npm run dev              # http://localhost:8080  (el frontend la proxea en /api)
@@ -40,31 +40,36 @@ Cambios de esquema: edita `api/src/db/schema.ts` y ejecuta `npm run db:generate`
 | `POST /admin/users/:id/role`, `GET/PUT /admin/plans/:id` | admin | Roles y catálogo de planes |
 
 ## Puesta en marcha en Google Cloud (una vez)
-> Crea recursos con coste (Cloud SQL tiene un cargo mensual fijo aunque no haya tráfico). Revisa precios antes.
+> Crea recursos con coste (Cloud SQL `db-f1-micro` cuesta unos 8–10 USD/mes aunque no haya tráfico). Cloud Run escala a cero.
+> La política de organización de este proyecto prohíbe la IP pública en Cloud SQL, así que se usa **IP privada** en la red `default`
+> (ya tiene el acceso privado a servicios configurado) y Cloud Run entra con **Direct VPC egress**.
 
 ```bash
 PROJECT=buoyant-objective-fwjkk; REGION=us-central1
 gcloud services enable run.googleapis.com sqladmin.googleapis.com secretmanager.googleapis.com artifactregistry.googleapis.com cloudbuild.googleapis.com --project $PROJECT
 
-# 1) Cloud SQL (PostgreSQL) — elige la instancia más pequeña para empezar
-gcloud sql instances create waackon-db --database-version=POSTGRES_16 --tier=db-f1-micro --region=$REGION --project $PROJECT
+# 1) Cloud SQL (PostgreSQL 16) con IP privada y protección contra borrado
+gcloud sql instances create waackon-db --project $PROJECT --database-version=POSTGRES_16 --edition=ENTERPRISE   --tier=db-f1-micro --region=$REGION --storage-size=10GB --storage-auto-increase --availability-type=zonal   --backup-start-time=05:00 --deletion-protection --network=projects/$PROJECT/global/networks/default --no-assign-ip
 gcloud sql databases create waackon --instance=waackon-db --project $PROJECT
 gcloud sql users create waackon_app --instance=waackon-db --password="<CONTRASEÑA_LARGA>" --project $PROJECT
 
-# 2) Secretos (los pones tú; nunca en el repositorio)
+# 2) Secretos (los pones tú; nunca en el repositorio). Stripe es opcional al principio: sin él la API responde "pagos no activados".
 printf '%s' '<CONTRASEÑA_LARGA>' | gcloud secrets create DB_PASSWORD --data-file=- --project $PROJECT
-printf '%s' 'sk_live_o_test_…'   | gcloud secrets create STRIPE_SECRET_KEY --data-file=- --project $PROJECT
+printf '%s' 'sk_test_…'          | gcloud secrets create STRIPE_SECRET_KEY --data-file=- --project $PROJECT
 printf '%s' 'whsec_…'            | gcloud secrets create STRIPE_WEBHOOK_SECRET --data-file=- --project $PROJECT
 
-# 3) Desplegar la API (Cloud Run construye la imagen desde api/Dockerfile)
+# 3) Cuenta de servicio de la API con los permisos justos
+gcloud iam service-accounts create waack-api --project $PROJECT
+for R in roles/secretmanager.secretAccessor roles/firebaseauth.admin roles/datastore.user; do
+  gcloud projects add-iam-policy-binding $PROJECT --member=serviceAccount:waack-api@$PROJECT.iam.gserviceaccount.com --role=$R --condition=None
+done
+
+# 4) Desplegar la API (Cloud Run construye la imagen desde api/Dockerfile)
+DB_IP=$(gcloud sql instances describe waackon-db --project $PROJECT --format='value(ipAddresses[0].ipAddress)')
 cd api
-gcloud run deploy waack-api --source . --region $REGION --project $PROJECT --allow-unauthenticated \
-  --add-cloudsql-instances $PROJECT:$REGION:waackon-db \
-  --set-env-vars INSTANCE_CONNECTION_NAME=$PROJECT:$REGION:waackon-db,DB_USER=waackon_app,DB_NAME=waackon,APP_URL=https://waack-on.com,RUN_MIGRATIONS=true,BOOTSTRAP_ADMIN_EMAILS=brandohermoso47@gmail.com \
-  --set-secrets DB_PASSWORD=DB_PASSWORD:latest,STRIPE_SECRET_KEY=STRIPE_SECRET_KEY:latest,STRIPE_WEBHOOK_SECRET=STRIPE_WEBHOOK_SECRET:latest
+gcloud run deploy waack-api --source . --region $REGION --project $PROJECT --allow-unauthenticated   --service-account waack-api@$PROJECT.iam.gserviceaccount.com   --network default --subnet default --vpc-egress private-ranges-only   --set-env-vars DB_HOST=$DB_IP,DB_USER=waackon_app,DB_NAME=waackon,APP_URL=https://waack-on.com,RUN_MIGRATIONS=true,BOOTSTRAP_ADMIN_EMAILS=brandohermoso47@gmail.com   --set-secrets DB_PASSWORD=DB_PASSWORD:latest
+# Cuando tengas Stripe: añade --update-secrets STRIPE_SECRET_KEY=STRIPE_SECRET_KEY:latest,STRIPE_WEBHOOK_SECRET=STRIPE_WEBHOOK_SECRET:latest
 ```
-La cuenta de servicio de Cloud Run necesita los roles *Cloud SQL Client*, *Secret Manager Secret Accessor*,
-*Firebase Authentication Admin* y *Cloud Datastore User* (para sincronizar el rol en Firestore).
 `--allow-unauthenticated` es correcto: la API se protege con el ID token de Firebase, no con IAM.
 
 Luego, en `firebase.json` añade **antes** del rewrite `**` y despliega Hosting:

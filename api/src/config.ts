@@ -10,7 +10,9 @@ const Env = z.object({
 
   // PostgreSQL: DATABASE_URL (local/CI) o conexión por socket de Cloud SQL.
   DATABASE_URL: z.string().optional(),
-  INSTANCE_CONNECTION_NAME: z.string().optional(), // proyecto:región:instancia
+  INSTANCE_CONNECTION_NAME: z.string().optional(), // proyecto:región:instancia (socket; requiere IP pública)
+  DB_HOST: z.string().optional(), // IP privada de Cloud SQL (Direct VPC egress)
+  DB_PORT: z.coerce.number().default(5432),
   DB_USER: z.string().optional(),
   DB_PASSWORD: z.string().optional(),
   DB_NAME: z.string().default('waackon'),
