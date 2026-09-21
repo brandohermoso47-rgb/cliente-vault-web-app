@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { browserPopupRedirectResolver, getAuth } from 'firebase/auth';
+import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
 import { getFunctions } from 'firebase/functions';
@@ -20,12 +20,6 @@ const app = firebaseConfigured ? initializeApp({
 
 // Sin configuración (.env.local) quedan en null y la app corre en modo vista previa.
 export const auth = app ? getAuth(app) : (null as unknown as ReturnType<typeof getAuth>);
-// Inicio de sesión con Google en ventana emergente: Firebase carga un componente interno (iframe) la PRIMERA vez que se usa,
-// y si eso ocurre después del clic, Safari/Firefox y algunos Chrome bloquean la ventana. Lo cargamos por adelantado,
-// para que signInWithPopup abra la ventana en el mismo instante del clic.
-if (app) {
-  try { void Promise.resolve((browserPopupRedirectResolver as unknown as { _initialize: (a: unknown) => Promise<unknown> })._initialize(auth)).catch(() => {}); } catch { /* sin navegador */ }
-}
 
 export const db = app ? (import.meta.env.VITE_FIREBASE_FIRESTORE_DB ? getFirestore(app, import.meta.env.VITE_FIREBASE_FIRESTORE_DB) : getFirestore(app)) : (null as unknown as ReturnType<typeof getFirestore>);
 export const storage = app ? getStorage(app) : (null as unknown as ReturnType<typeof getStorage>);
