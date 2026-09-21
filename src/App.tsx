@@ -3,7 +3,7 @@
 // @ts-nocheck
 import React, { Component } from 'react';
 import { onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, signInWithPopup, GoogleAuthProvider, signOut } from 'firebase/auth';
-import { doc, getDoc, setDoc, serverTimestamp, collection, onSnapshot } from 'firebase/firestore';
+import { doc, getDoc, setDoc, serverTimestamp, collection, onSnapshot, query, where } from 'firebase/firestore';
 import { auth, db, firebaseConfigured } from './lib/firebase';
 import Shell from './Shell';
 import Login from './views/Login';
@@ -11,6 +11,7 @@ import ChatDock from './views/ChatDock';
 import Register from './screens/Register';
 import RegisterPro from './screens/RegisterPro';
 import { takePending } from './lib/session';
+import { startCheckout } from './lib/payments';
 
 import { sty } from './lib/dc';
 
@@ -20,9 +21,10 @@ class App extends Component<any, any> {
   unsubAuth: any = null;
 
   /* Rol derivado de las dos suscripciones posibles */
-  subs = { platform: false, instructor: true, docente: false };
+  subs = import.meta.env.DEV ? { platform: false, instructor: true, docente: false } : { platform: false, instructor: false, docente: false };
 
   toggleSub(k) {
+    if (!import.meta.env.DEV) return; // solo demo local
     this.subs = Object.assign({}, this.subs, { [k]: !this.subs[k] });
     this.forceUpdate();
   }
@@ -364,15 +366,52 @@ class App extends Component<any, any> {
     { n: 'Escuela completa', p: { Mensual: '39 € / mes', Anual: '390 € / año' }, d: 'Todas las cátedras, laboratorio y prioridad en batallas.', feats: ['Todos los instructores', 'Laboratorio Freestyle', 'Somatic Diary con seguimiento', 'Plaza prioritaria en batallas'], cur: false, hi: true }
   ];
 
+  /* ---------- Pagos (Stripe Checkout) ---------- */
+  planPickerOpen = false;
+  planMsg = '';
+  planBusy = false;
+  PLAN_IDS = { 'Explora': 'explora', 'Una cátedra': 'catedra', 'Escuela completa': 'escuela' };
+
+  planIsCurrent(p) {
+    const id = this.PLAN_IDS[p.n];
+    const { platform, instructor } = this.subs;
+    if (id === 'escuela') return !!platform;
+    if (id === 'catedra') return !!instructor && !platform;
+    return !platform && !instructor;
+  }
+
+  choosePlan(p) {
+    if (this.planIsCurrent(p) || this.planBusy) return;
+    const id = this.PLAN_IDS[p.n];
+    if (!id || id === 'explora') return; // el plan gratuito no se cobra
+    if (id === 'catedra') { this.planPickerOpen = true; this.planMsg = ''; this.forceUpdate(); return; }
+    this.payStart(id);
+  }
+
+  async payStart(planId, instructorId) {
+    this.planBusy = true;
+    this.planMsg = 'Abriendo el pago seguro…';
+    this.planPickerOpen = false;
+    this.forceUpdate();
+    try {
+      await startCheckout(planId, this.planCycle === 'Anual' ? 'year' : 'month', instructorId);
+    } catch (e) {
+      this.planBusy = false;
+      this.planMsg = e.message || 'No se pudo abrir el pago.';
+      this.forceUpdate();
+    }
+  }
+
   buildPlans() {
     return this.planData.map((p, i) => ({
       key: p.n,
       name: p.n,
+      choose: () => this.choosePlan(p),
       price: p.p[this.planCycle],
       desc: p.d,
       feats: p.feats.map((f, j) => ({ key: p.n + j, text: f })),
-      isCurrent: p.cur,
-      ctaLabel: p.cur ? 'Tu plan actual' : (p.hi ? 'Mejorar plan' : 'Elegir plan'),
+      isCurrent: this.planIsCurrent(p),
+      ctaLabel: this.planIsCurrent(p) ? 'Tu plan actual' : (p.hi ? 'Mejorar plan' : 'Elegir plan'),
       slotId: 'plan-bg-' + (i + 1),
       slotHint: 'Imagen de fondo · ' + p.n,
       cta: p.hi
@@ -1211,7 +1250,7 @@ class App extends Component<any, any> {
     this.syncTheme(); this.syncVars();
     if (!firebaseConfigured) { this.setState({ authReady: true }); return; }
     this.unsubAuth = onAuthStateChanged(auth, async (user) => {
-      this.setState((st: any) => ({ user, authReady: true, view: user ? (['login', 'register', 'registerInstructor', 'registerStudio'].includes(st.view) ? 'dashboard' : st.view) : (['register', 'registerInstructor', 'registerStudio'].includes(st.view) ? st.view : 'login') }));
+      this.setState((st: any) => ({ user, authReady: true, view: user ? (['login', 'register', 'registerInstructor', 'registerStudio'].includes(st.view) ? (/[?&](checkout|connect)=/.test(location.search) ? 'cuenta' : 'dashboard') : st.view) : (['register', 'registerInstructor', 'registerStudio'].includes(st.view) ? st.view : 'login') }));
       if (user) this.startData(); else this.stopData();
       if (user) {
         try {
@@ -1240,6 +1279,16 @@ class App extends Component<any, any> {
         this.forceUpdate();
       }, (e) => console.warn('Firestore ' + name + ':', e.code));
     this.unsubData = [
+      onSnapshot(doc(db, 'users', this.state.user.uid), (snap) => {
+        const role = snap.data()?.role ?? 'usuario';
+        this.subs = Object.assign({}, this.subs, { docente: ['instructor', 'estudio', 'admin'].includes(role) });
+        this.forceUpdate();
+      }, () => {}),
+      onSnapshot(query(collection(db, 'subscriptions'), where('uid', '==', this.state.user.uid)), (snap) => {
+        const live = snap.docs.map((d) => d.data()).filter((x) => ['active', 'trialing', 'past_due'].includes(x.status));
+        this.subs = Object.assign({}, this.subs, { platform: live.some((x) => x.planId === 'escuela'), instructor: live.some((x) => x.planId === 'catedra') });
+        this.forceUpdate();
+      }, () => {}),
       watch('reels', (rows) => {
         this.reelData = rows.sort(byNewest).map((r: any) => ({ c1: 'var(--pink)', c2: 'var(--purple)', likes: 0, comments: 0, ...r }));
       }),
@@ -1785,6 +1834,12 @@ class App extends Component<any, any> {
       rankRows: this.buildRank(),
       badges: this.buildBadges(),
       plans: this.buildPlans(),
+      planMsg: this.planMsg,
+      planPickerOpen: this.planPickerOpen,
+      planPickerClose: () => { this.planPickerOpen = false; this.forceUpdate(); },
+      planPickerStop: (e) => e.stopPropagation(),
+      planPickerList: this.teacherData.map((t) => ({ key: t.uid || t.id, name: t.name, role: t.role, pick: () => this.payStart('catedra', t.uid || t.id) })),
+      showRoleDemo: !!import.meta.env.DEV,
       cycleTabs: this.buildCycleTabs(),
       faqs: this.buildFaq(),
       loginToggleLabel: v === 'login' ? 'Ver la app' : 'Ver pantalla de acceso',

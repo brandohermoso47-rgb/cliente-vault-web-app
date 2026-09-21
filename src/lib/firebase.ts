@@ -2,6 +2,7 @@ import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
+import { getFunctions } from 'firebase/functions';
 
 // Los valores salen de .env.local (ver .env.example). La config web de Firebase no es secreta,
 // pero la seguridad real está en firestore.rules.
@@ -20,3 +21,4 @@ const app = firebaseConfigured ? initializeApp({
 export const auth = app ? getAuth(app) : (null as unknown as ReturnType<typeof getAuth>);
 export const db = app ? (import.meta.env.VITE_FIREBASE_FIRESTORE_DB ? getFirestore(app, import.meta.env.VITE_FIREBASE_FIRESTORE_DB) : getFirestore(app)) : (null as unknown as ReturnType<typeof getFirestore>);
 export const storage = app ? getStorage(app) : (null as unknown as ReturnType<typeof getStorage>);
+export const functions = app ? getFunctions(app, 'us-central1') : null;

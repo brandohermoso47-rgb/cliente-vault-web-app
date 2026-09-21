@@ -147,7 +147,7 @@ const head = `// GENERADO por tools/port-logic.mjs desde la lógica del prototip
 // @ts-nocheck
 import React, { Component } from 'react';
 import { onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, signInWithPopup, GoogleAuthProvider, signOut } from 'firebase/auth';
-import { doc, getDoc, setDoc, serverTimestamp, collection, onSnapshot } from 'firebase/firestore';
+import { doc, getDoc, setDoc, serverTimestamp, collection, onSnapshot, query, where } from 'firebase/firestore';
 import { auth, db, firebaseConfigured } from './lib/firebase';
 import Shell from './Shell';
 import Login from './views/Login';
@@ -155,6 +155,7 @@ import ChatDock from './views/ChatDock';
 import Register from './screens/Register';
 import RegisterPro from './screens/RegisterPro';
 import { takePending } from './lib/session';
+import { startCheckout } from './lib/payments';
 
 `;
 const render = `

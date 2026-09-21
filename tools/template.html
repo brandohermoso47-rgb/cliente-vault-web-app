@@ -1865,6 +1865,27 @@
         <sc-if value="{{ isPlanes }}">
           <div style="display:flex;flex-direction:column;gap:26px;max-width:1180px">
 
+            <sc-if value="{{ planMsg }}">
+              <div style="padding:14px 18px;border-radius:16px;border:1px solid var(--hair);background:var(--glass);font-size:13px;line-height:1.5;color:var(--ink)">{{ planMsg }}</div>
+            </sc-if>
+
+            <sc-if value="{{ planPickerOpen }}">
+              <div onClick="{{ planPickerClose }}" style="position:fixed;inset:0;z-index:3000;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;padding:24px">
+                <div onClick="{{ planPickerStop }}" style="width:100%;max-width:440px;max-height:80vh;overflow:auto;padding:22px;border-radius:24px;border:1px solid var(--hair);background:#0B0A10;box-shadow:0 30px 70px -26px rgba(0,0,0,.9)">
+                  <div style="font-size:16px;font-weight:800;color:#fff">Elige tu instructor</div>
+                  <div style="font-size:12.5px;line-height:1.5;color:rgba(255,255,255,.65);margin:6px 0 14px">Tu suscripción de cátedra da acceso a todos sus cursos y a su sala de chat.</div>
+                  <div style="display:flex;flex-direction:column;gap:8px">
+                    <sc-for list="{{ planPickerList }}" as="t" hint-placeholder-count="3">
+                      <div onClick="{{ t.pick }}" style="display:flex;flex-direction:column;gap:3px;padding:13px 15px;border-radius:16px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.05);cursor:pointer" style-hover="background:rgba(255,255,255,.12)">
+                        <span style="font-size:13.5px;font-weight:700;color:#fff">{{ t.name }}</span>
+                        <span style="font-size:11.5px;color:rgba(255,255,255,.6)">{{ t.role }}</span>
+                      </div>
+                    </sc-for>
+                  </div>
+                </div>
+              </div>
+            </sc-if>
+
             <div style="display:flex;flex-direction:column;gap:16px;padding:24px;border-radius:26px;border:1px solid var(--hair);background:var(--glass);backdrop-filter:var(--lg-blur);-webkit-backdrop-filter:var(--lg-blur);box-shadow:var(--lg-edge)">
               <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
                 <span style="font-family:'Geist Mono',monospace;font-size:9px;letter-spacing:.2em;color:var(--ink-3);text-transform:uppercase">Tu rol actual</span>
@@ -1872,6 +1893,7 @@
               </div>
               <div style="font-family:'Instrument Serif',Georgia,serif;font-size:34px;letter-spacing:-0.01em;color:var(--ink)">{{ roleName }}</div>
               <p style="margin:0;font-size:13.5px;line-height:1.6;color:var(--ink-2);max-width:620px;text-wrap:pretty">{{ roleDesc }}</p>
+              <sc-if value="{{ showRoleDemo }}">
               <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px">
                 <div onClick="{{ togglePlatform }}" style="{{ subPlatformStyle }}">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="flex:0 0 16px"><path d="M4 12l5 5L20 6"></path></svg>
@@ -1887,6 +1909,7 @@
                 </div>
               </div>
               <div style="font-family:'Geist Mono',monospace;font-size:10px;line-height:1.7;color:var(--ink-3)">Sin suscripción → Usuario · Plataforma → Usuario Premium · Instructor → Estudiante · Ambas → Estudiante Premium</div>
+              </sc-if>
             </div>
 
             <div style="display:flex;gap:6px;padding:6px;border-radius:999px;border:1px solid var(--hair);background:var(--glass-2);max-width:340px">
@@ -1894,6 +1917,7 @@
                 <div onClick="{{ c.pick }}" style="{{ c.style }}">{{ c.label }}</div>
               </sc-for>
             </div>
+            <div style="font-size:12px;line-height:1.5;color:var(--ink-3);max-width:640px">Precios de referencia en euros. Al pagar verás el importe en tu moneda y los medios de pago disponibles en tu país; los impuestos se calculan según tu país.</div>
 
             <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:22px;align-items:stretch">
               <sc-for list="{{ plans }}" as="p" hint-placeholder-count="3">
@@ -1915,7 +1939,7 @@
                       </div>
                     </sc-for>
                   </div>
-                  <div style="{{ p.cta }}">{{ p.ctaLabel }}</div>
+                  <div onClick="{{ p.choose }}" style="{{ p.cta }}">{{ p.ctaLabel }}</div>
                 </div>
               </sc-for>
             </div>

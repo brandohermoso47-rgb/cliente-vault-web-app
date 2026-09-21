@@ -1,4 +1,6 @@
 // Parches sobre la lógica del prototipo: registro abierto, registro pro, "Mi cuenta" y perfil en Firestore.
+import patchesPayments from './patches-payments.mjs';
+
 export default function patches(s) {
   const rep = (a, b) => {
     if (!s.includes(a)) throw new Error('parche no encontrado: ' + a.slice(0, 80));
@@ -19,5 +21,5 @@ export default function patches(s) {
   // Perfil + solicitud profesional al crearse la cuenta
   rep("if (!(await getDoc(ref)).exists()) await setDoc(ref, { email: user.email, displayName: user.displayName ?? null, role: 'usuario', createdAt: serverTimestamp() });",
       "const p = takePending();\n          if (!(await getDoc(ref)).exists()) await setDoc(ref, { displayName: user.displayName ?? null, photoURL: user.photoURL ?? null, ...(p.profile || {}), role: 'usuario', createdAt: serverTimestamp() });\n          if (p.application) await setDoc(doc(db, 'applications', user.uid), { ...p.application, uid: user.uid, email: user.email, status: 'pendiente', createdAt: serverTimestamp() });");
-  return s;
+  return patchesPayments(s);
 }

@@ -1,9 +1,10 @@
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
 import { sendPasswordResetEmail, signOut, updateProfile } from 'firebase/auth';
-import { addDoc, collection, deleteDoc, doc, onSnapshot, orderBy, query, serverTimestamp, updateDoc } from 'firebase/firestore';
+import { addDoc, collection, deleteDoc, doc, onSnapshot, orderBy, query, serverTimestamp, updateDoc, where } from 'firebase/firestore';
 import { deleteObject, getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { auth, db, storage } from '../lib/firebase';
 import { countryList, countryName } from '../lib/countries';
+import { openBillingPortal, startConnectOnboarding } from '../lib/payments';
 import { IMAGE_TYPES, VIDEO_TYPES, MAX_IMAGE_MB, MAX_VIDEO_MB, MAX_TOTAL_MB } from '../lib/validators';
 
 const card: CSSProperties = { border: '1px solid var(--hair)', background: 'var(--glass)', backdropFilter: 'var(--lg-blur)', WebkitBackdropFilter: 'var(--lg-blur)', boxShadow: 'var(--lg-edge), var(--lg-lift)', borderRadius: 22, padding: 24 };
@@ -15,6 +16,8 @@ const h2: CSSProperties = { margin: '0 0 4px', fontSize: 16, fontWeight: 800, co
 const note: CSSProperties = { margin: '0 0 16px', fontSize: 12.5, lineHeight: 1.5, color: 'var(--ink-2)' };
 
 const ROLE: Record<string, string> = { usuario: 'Usuario', instructor: 'Instructor', estudio: 'Estudio', admin: 'Administrador' };
+const SUB_STATUS: Record<string, string> = { active: 'Activa', trialing: 'En prueba', past_due: 'Pago pendiente', canceled: 'Cancelada', unpaid: 'Impagada', incomplete: 'Incompleta', incomplete_expired: 'Caducada', paused: 'En pausa' };
+const PLAN_NAME: Record<string, string> = { catedra: 'Una cátedra', escuela: 'Escuela completa' };
 const STATUS: Record<string, string> = { pendiente: 'En revisión', aprobada: 'Aprobada', rechazada: 'Rechazada' };
 const mb = (b: number) => (b / 1048576).toFixed(b > 10485760 ? 0 : 1) + ' MB';
 const safe = (n: string) => n.normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^A-Za-z0-9._-]+/g, '_').slice(-80);
@@ -32,6 +35,8 @@ export default function Account({ go }: { go: (view: string) => void }) {
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
   const [uploads, setUploads] = useState<Record<string, number>>({});
   const [busy, setBusy] = useState(false);
+  const [subs, setSubs] = useState<any[]>([]);
+  const [payout, setPayout] = useState<any>(null);
   const avatarInput = useRef<HTMLInputElement>(null);
   const mediaInput = useRef<HTMLInputElement>(null);
 
@@ -43,11 +48,24 @@ export default function Account({ go }: { go: (view: string) => void }) {
         setProfile(d);
         setForm((f) => (f.displayName || f.handle || f.country || f.bio ? f : { displayName: d.displayName ?? user?.displayName ?? '', handle: d.handle ?? '', country: d.country ?? '', countryCode: d.countryCode ?? '', bio: d.bio ?? '' }));
       }, () => {}),
+      onSnapshot(query(collection(db, 'subscriptions'), where('uid', '==', uid)), (s) => setSubs(s.docs.map((d) => ({ id: d.id, ...(d.data() as any) }))), () => {}),
+      onSnapshot(doc(db, 'payoutAccounts', uid), (s) => setPayout(s.exists() ? s.data() : null), () => {}),
       onSnapshot(doc(db, 'applications', uid), (s) => setApplication(s.exists() ? s.data() : null), () => {}),
       onSnapshot(query(collection(db, 'users', uid, 'media'), orderBy('createdAt', 'desc')), (s) => setMedia(s.docs.map((d) => ({ id: d.id, ...(d.data() as any) }))), () => {}),
     ];
     return () => offs.forEach((o) => o());
   }, [uid]);
+
+  useEffect(() => {
+    const q = new URLSearchParams(location.search);
+    const c = q.get('checkout'), k = q.get('connect');
+    if (!c && !k) return;
+    if (c === 'success') setMsg({ ok: true, text: '¡Pago recibido! Tu suscripción se activará en unos segundos.' });
+    else if (c === 'cancel') setMsg({ ok: false, text: 'Cancelaste el pago. No se ha cobrado nada.' });
+    else if (k === 'done') setMsg({ ok: true, text: 'Datos de cobro enviados. Stripe los verificará y te avisaremos aquí.' });
+    else if (k === 'refresh') setMsg({ ok: false, text: 'El enlace de configuración caducó. Pulsa «Configurar cobros» para continuar.' });
+    history.replaceState(null, '', location.pathname);
+  }, []);
 
   const used = useMemo(() => media.reduce((n, m) => n + (m.size || 0), 0), [media]);
   const pct = Math.min(100, (used / (MAX_TOTAL_MB * 1048576)) * 100);
@@ -134,6 +152,10 @@ export default function Account({ go }: { go: (view: string) => void }) {
     try { await sendPasswordResetEmail(auth, user.email); say(true, `Te enviamos un enlace para cambiar la contraseña a ${user.email}.`); }
     catch { say(false, 'No se pudo enviar el correo. Inténtalo más tarde.'); }
   };
+
+  const canGetPaid = ['instructor', 'estudio', 'admin'].includes(role);
+  const payErr = (e: unknown) => say(false, e instanceof Error ? e.message : 'No se pudo completar la operación.');
+  const fmtDate = (v: any) => { const d = v?.toDate?.(); return d ? d.toLocaleDateString('es', { day: 'numeric', month: 'long', year: 'numeric' }) : ''; };
 
   const hasPassword = user.providerData.some((p) => p.providerId === 'password');
   const uploading = Object.entries(uploads);
@@ -234,6 +256,39 @@ export default function Account({ go }: { go: (view: string) => void }) {
           )}
         </div>
       )}
+
+      {/* Suscripciones y cobros */}
+      <div style={card}>
+        <h2 style={h2}>Suscripciones y pagos</h2>
+        <p style={note}>Pagas con los medios disponibles en tu país; el cobro lo procesa Stripe. Nosotros no guardamos los datos de tu tarjeta.</p>
+        {subs.length === 0 ? (
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
+            <span style={{ fontSize: 13, color: 'var(--ink-2)' }}>No tienes suscripciones.</span>
+            <button style={ghost} onClick={() => go('planes')}>Ver planes</button>
+          </div>
+        ) : (
+          <>
+            <div style={{ display: 'grid', gap: 8, marginBottom: 14 }}>
+              {subs.map((x) => (
+                <div key={x.id} style={{ display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap', padding: '12px 14px', borderRadius: 14, border: '1px solid var(--hair)', background: 'var(--glass-2)', fontSize: 13 }}>
+                  <b style={{ flex: 1, minWidth: 140 }}>{PLAN_NAME[x.planId] ?? x.planId ?? 'Suscripción'}</b>
+                  <span style={{ color: 'var(--ink-2)' }}>{SUB_STATUS[x.status] ?? x.status}</span>
+                  {x.currentPeriodEnd && <span style={{ color: 'var(--ink-3)', fontSize: 12 }}>{x.cancelAtPeriodEnd ? 'Termina' : 'Renueva'} el {fmtDate(x.currentPeriodEnd)}</span>}
+                </div>
+              ))}
+            </div>
+            <button style={ghost} onClick={() => openBillingPortal().catch(payErr)}>Gestionar suscripciones y facturas</button>
+          </>
+        )}
+
+        {canGetPaid && (
+          <div style={{ marginTop: 22, paddingTop: 18, borderTop: '1px solid var(--hair-soft)' }}>
+            <h2 style={{ ...h2, fontSize: 14.5 }}>Cobros como {role === 'estudio' ? 'estudio o academia' : 'instructor/a'}</h2>
+            <p style={note}>{payout?.chargesEnabled ? 'Tu cuenta de cobro está activa: recibirás tu parte de cada suscripción directamente en tu cuenta bancaria, en tu moneda y país.' : payout?.detailsSubmitted ? 'Stripe está verificando tus datos. Te avisaremos cuando puedas cobrar.' : 'Configura tu cuenta de cobro (datos fiscales y bancarios) para recibir el dinero de tus suscriptores. Stripe lo gestiona de forma segura y compatible con tu país.'}</p>
+            {!payout?.chargesEnabled && <button style={btn} onClick={() => startConnectOnboarding().catch(payErr)}>{payout?.stripeAccountId ? 'Continuar configuración de cobros' : 'Configurar cobros'}</button>}
+          </div>
+        )}
+      </div>
 
       {/* Seguridad */}
       <div style={card}>
