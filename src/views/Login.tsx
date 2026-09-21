@@ -60,6 +60,11 @@ export default function Login({ v }: { v: any }) {
             {"Regístrate aquí"}
           </b>
         </div>
+        <div style={{"marginTop":"14px"}}>
+          <a href="/privacidad" target="_blank" rel="noopener noreferrer" style={{"fontSize":"12px","color":"rgba(226,231,255,.6)","textDecoration":"underline","textUnderlineOffset":"3px"}}>
+            {"Política de privacidad"}
+          </a>
+        </div>
         <div style={{"display":"flex","gap":"6px","padding":"5px","marginTop":"28px","borderRadius":"999px","background":"var(--glass-2)","border":"1px solid var(--hair)"}}>
           <div onClick={v.setDark} style={sty(v.themeDarkBtn)}>
             {"Oscuro"}

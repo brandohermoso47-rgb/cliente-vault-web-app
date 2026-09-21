@@ -1217,7 +1217,7 @@ class App extends Component<any, any> {
         try {
           const ref = doc(db, 'users', user.uid);
           const p = takePending();
-          if (!(await getDoc(ref)).exists()) await setDoc(ref, { email: user.email, displayName: user.displayName ?? null, photoURL: user.photoURL ?? null, ...(p.profile || {}), role: 'usuario', createdAt: serverTimestamp() });
+          if (!(await getDoc(ref)).exists()) await setDoc(ref, { displayName: user.displayName ?? null, photoURL: user.photoURL ?? null, ...(p.profile || {}), role: 'usuario', createdAt: serverTimestamp() });
           if (p.application) await setDoc(doc(db, 'applications', user.uid), { ...p.application, uid: user.uid, email: user.email, status: 'pendiente', createdAt: serverTimestamp() });
         } catch (e) { console.warn('No se pudo crear el perfil en Firestore', e); }
       }

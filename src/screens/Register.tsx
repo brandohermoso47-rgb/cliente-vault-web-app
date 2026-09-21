@@ -26,7 +26,7 @@ export default function Register({ go }: { go: (view: string) => void }) {
     if (!emailOk(email)) return setErr('Introduce un correo válido.');
     if (!passwordOk(pass)) return setErr(PASSWORD_HELP);
     if (pass !== pass2) return setErr('Las contraseñas no coinciden.');
-    if (!terms) return setErr('Debes aceptar los términos y la política de privacidad.');
+    if (!terms) return setErr('Debes aceptar la política de privacidad.');
     if (!firebaseConfigured) return setErr('Firebase no está configurado (falta .env.local).');
     setBusy(true);
     pending.profile = { displayName: name.trim(), handle: handle.trim().toLowerCase(), country: country.trim(), accountType: 'usuario' };
@@ -81,7 +81,7 @@ export default function Register({ go }: { go: (view: string) => void }) {
 
         <label style={S.check}>
           <input type="checkbox" checked={terms} onChange={(e) => setTerms(e.target.checked)} style={{ marginTop: 3, accentColor: '#FF2E86' }} />
-          <span>Acepto los Términos de uso y la Política de privacidad de Waack On.</span>
+          <span>He leído y acepto la <a href="/privacidad" target="_blank" rel="noopener noreferrer" style={S.link}>Política de privacidad</a> de Waack On.</span>
         </label>
 
         {err && <div style={S.err}>{err}</div>}

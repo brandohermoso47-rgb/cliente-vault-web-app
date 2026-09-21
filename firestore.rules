@@ -17,7 +17,7 @@ service cloud.firestore {
 
     // ── Perfiles ─────────────────────────────────────────────────────────
     match /users/{userId} {
-      // Los perfiles solo los ven usuarios con sesión (guardan correo).
+      // Los perfiles (nombre, usuario, país, bio, foto, rol) los ven usuarios con sesión. El correo NO se guarda aquí.
       allow read: if signedIn();
       // Al crearse, todo perfil nace como 'usuario': nadie se auto-asigna admin/instructor.
       allow create: if isOwner(userId) && request.resource.data.get('role', 'usuario') == 'usuario';

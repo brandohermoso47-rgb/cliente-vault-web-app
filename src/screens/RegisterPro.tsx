@@ -45,7 +45,7 @@ export default function RegisterPro({ go }: { go: (view: string) => void }) {
     if (!country.trim() || !city.trim()) return setErr('Indica tu país y ciudad.');
     if (styles.trim().length < 2) return setErr('Indica tus especialidades o estilos.');
     if (about.trim().length < 20) return setErr('Cuéntanos un poco más sobre ti o tu estudio (mínimo 20 caracteres).');
-    if (!terms) return setErr('Debes aceptar los términos y la política de privacidad.');
+    if (!terms) return setErr('Debes aceptar la política de privacidad.');
     if (!firebaseConfigured) return setErr('Firebase no está configurado (falta .env.local).');
 
     const application = {
@@ -148,7 +148,7 @@ export default function RegisterPro({ go }: { go: (view: string) => void }) {
 
         <label style={S.check}>
           <input type="checkbox" checked={terms} onChange={(e) => setTerms(e.target.checked)} style={{ marginTop: 3, accentColor: '#FF2E86' }} />
-          <span>Acepto los Términos de uso y la Política de privacidad, y confirmo que los datos son verdaderos.</span>
+          <span>He leído y acepto la <a href="/privacidad" target="_blank" rel="noopener noreferrer" style={S.link}>Política de privacidad</a> y confirmo que los datos son verdaderos.</span>
         </label>
 
         {err && <div style={S.err}>{err}</div>}
