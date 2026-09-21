@@ -166,7 +166,8 @@ const render = `
         <div style={sty(v.ambientLayer)}></div>
         {v.isLogin && <Login v={v} />}
         {v.isRegister && <Register go={v.goView} />}
-        {v.isRegisterPro && <RegisterPro go={v.goView} />}
+        {v.isRegisterInstructor && <RegisterPro kind="instructor" go={v.goView} />}
+        {v.isRegisterStudio && <RegisterPro kind="estudio" go={v.goView} />}
         {v.isApp && <Shell v={v} />}
         {v.isApp && <ChatDock v={v} />}
       </div>

@@ -224,7 +224,7 @@ export default function Account({ go }: { go: (view: string) => void }) {
           ) : (
             <>
               <p style={note}>¿Das clases o tienes un estudio? Solicita tu perfil profesional para publicar cursos y lives. Un administrador lo revisa.</p>
-              <button style={ghost} onClick={() => go('registerPro')}>Solicitar cuenta de instructor o estudio</button>
+              <button style={ghost} onClick={() => go('registerInstructor')}>Solicitar cuenta de instructor o estudio/academia</button>
             </>
           )}
         </div>

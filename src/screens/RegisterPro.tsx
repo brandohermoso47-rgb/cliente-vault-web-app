@@ -6,15 +6,15 @@ import { pending } from '../lib/session';
 import { emailOk, passwordOk, PASSWORD_HELP } from '../lib/validators';
 import { authMessage } from '../lib/authErrors';
 import { S } from './authStyles';
+import RegisterTabs from './RegisterTabs';
 
 type Kind = 'instructor' | 'estudio';
 
 // Registro aparte para instructores y estudios. La cuenta nace como "usuario" y se crea una solicitud
 // (applications/{uid}, estado "pendiente"). Un administrador la aprueba y cambia el rol; nadie se
 // auto-asigna el rol de instructor o estudio.
-export default function RegisterPro({ go }: { go: (view: string) => void }) {
+export default function RegisterPro({ kind, go }: { kind: Kind; go: (view: string) => void }) {
   const signedIn = !!auth?.currentUser; // quien ya tiene cuenta solo envía la solicitud
-  const [kind, setKind] = useState<Kind>('instructor');
   const [orgName, setOrgName] = useState('');
   const [contact, setContact] = useState('');
   const [email, setEmail] = useState('');
@@ -35,7 +35,7 @@ export default function RegisterPro({ go }: { go: (view: string) => void }) {
   const submit = async (e: FormEvent) => {
     e.preventDefault();
     setErr('');
-    if (orgName.trim().length < 2) return setErr(isStudio ? 'Escribe el nombre del estudio.' : 'Escribe tu nombre artístico.');
+    if (orgName.trim().length < 2) return setErr(isStudio ? 'Escribe el nombre del estudio o academia.' : 'Escribe tu nombre artístico.');
     if (isStudio && contact.trim().length < 2) return setErr('Escribe el nombre de la persona de contacto.');
     if (!signedIn) {
       if (!emailOk(email)) return setErr('Introduce un correo válido.');
@@ -95,16 +95,13 @@ export default function RegisterPro({ go }: { go: (view: string) => void }) {
     <div style={S.page}>
       <form style={S.card} onSubmit={submit} noValidate>
         <img src="/uploads/waack_on_gold_3d_depth.png" alt="Waack On" style={S.logo} />
-        <h1 style={S.h1}>Registro de instructores y estudios</h1>
-        <p style={S.sub}>Publica clases, cursos y lives en Waack On. Revisamos cada solicitud antes de activar el perfil profesional.</p>
+        <h1 style={S.h1}>{isStudio ? 'Registro de estudio o academia' : 'Registro de instructor/a'}</h1>
+        <p style={S.sub}>{isStudio ? 'Presenta tu estudio o academia y publica sus clases, cursos y lives en Waack On.' : 'Publica tus clases, cursos y lives en Waack On.'} Revisamos cada solicitud antes de activar el perfil profesional.</p>
 
-        <div style={S.seg}>
-          <div style={S.segBtn(!isStudio)} onClick={() => setKind('instructor')}>Instructor/a</div>
-          <div style={S.segBtn(isStudio)} onClick={() => setKind('estudio')}>Estudio</div>
-        </div>
+        <RegisterTabs active={isStudio ? 'registerStudio' : 'registerInstructor'} go={go} signedIn={signedIn} />
 
-        <label style={S.label}>{isStudio ? 'Nombre del estudio' : 'Nombre artístico'}</label>
-        <input style={S.input} value={orgName} onChange={(e) => setOrgName(e.target.value)} placeholder={isStudio ? 'Waack Studio Madrid' : 'Lorena "WaackQueen"'} />
+        <label style={S.label}>{isStudio ? 'Nombre del estudio o academia' : 'Nombre artístico'}</label>
+        <input style={S.input} value={orgName} onChange={(e) => setOrgName(e.target.value)} placeholder={isStudio ? 'Waack Academy Madrid' : 'Lorena "WaackQueen"'} />
 
         {isStudio && (
           <>
@@ -143,7 +140,7 @@ export default function RegisterPro({ go }: { go: (view: string) => void }) {
         <label style={S.label}>Web o Instagram (opcional)</label>
         <input style={S.input} value={web} onChange={(e) => setWeb(e.target.value)} placeholder="https://instagram.com/tuestudio" />
 
-        <label style={S.label}>{isStudio ? 'Sobre el estudio' : 'Sobre ti'}</label>
+        <label style={S.label}>{isStudio ? 'Sobre el estudio o academia' : 'Sobre ti'}</label>
         <textarea style={{ ...S.input, minHeight: 96, resize: 'vertical' }} value={about} onChange={(e) => setAbout(e.target.value)} maxLength={600} placeholder="Trayectoria, tipo de clases, nivel, experiencia…" />
 
         <label style={S.check}>

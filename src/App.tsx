@@ -1211,7 +1211,7 @@ class App extends Component<any, any> {
     this.syncTheme(); this.syncVars();
     if (!firebaseConfigured) { this.setState({ authReady: true }); return; }
     this.unsubAuth = onAuthStateChanged(auth, async (user) => {
-      this.setState((st: any) => ({ user, authReady: true, view: user ? (['login', 'register', 'registerPro'].includes(st.view) ? 'dashboard' : st.view) : (['register', 'registerPro'].includes(st.view) ? st.view : 'login') }));
+      this.setState((st: any) => ({ user, authReady: true, view: user ? (['login', 'register', 'registerInstructor', 'registerStudio'].includes(st.view) ? 'dashboard' : st.view) : (['register', 'registerInstructor', 'registerStudio'].includes(st.view) ? st.view : 'login') }));
       if (user) this.startData(); else this.stopData();
       if (user) {
         try {
@@ -1473,12 +1473,13 @@ class App extends Component<any, any> {
       crumb: crumbs[v] || 'Dashboard',
       isLogin: v === 'login',
       isInicio: false,
-      isApp: !['login', 'register', 'registerPro'].includes(v),
+      isApp: !['login', 'register', 'registerInstructor', 'registerStudio'].includes(v),
       isRegister: v === 'register',
-      isRegisterPro: v === 'registerPro',
+      isRegisterInstructor: v === 'registerInstructor',
+      isRegisterStudio: v === 'registerStudio',
       isCuenta: v === 'cuenta',
       goView: (view) => this.setState({ view }),
-      goRegisterPro: () => this.setState({ view: 'registerPro' }),
+      goRegisterPro: () => this.setState({ view: 'registerInstructor' }),
       ambientLayer: dark
         ? 'position:absolute;inset:0;pointer-events:none;background:radial-gradient(1000px 580px at 6% -10%, rgba(228,230,236,.14), transparent 66%), radial-gradient(900px 540px at 98% 6%, rgba(168,172,182,.12), transparent 70%), radial-gradient(800px 500px at 58% 110%, rgba(120,124,134,.10), transparent 72%)'
         : 'position:absolute;inset:0;pointer-events:none;background:radial-gradient(980px 560px at 8% -8%, color-mix(in oklch, var(--purple) 16%, transparent), transparent 68%), radial-gradient(880px 520px at 96% 4%, color-mix(in oklch, var(--blue) 14%, transparent), transparent 70%)',
@@ -2030,7 +2031,8 @@ class App extends Component<any, any> {
         <div style={sty(v.ambientLayer)}></div>
         {v.isLogin && <Login v={v} />}
         {v.isRegister && <Register go={v.goView} />}
-        {v.isRegisterPro && <RegisterPro go={v.goView} />}
+        {v.isRegisterInstructor && <RegisterPro kind="instructor" go={v.goView} />}
+        {v.isRegisterStudio && <RegisterPro kind="estudio" go={v.goView} />}
         {v.isApp && <Shell v={v} />}
         {v.isApp && <ChatDock v={v} />}
       </div>

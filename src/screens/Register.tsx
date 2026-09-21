@@ -5,6 +5,7 @@ import { pending } from '../lib/session';
 import { emailOk, handleOk, passwordOk, PASSWORD_HELP } from '../lib/validators';
 import { authMessage } from '../lib/authErrors';
 import { S, GoogleIcon } from './authStyles';
+import RegisterTabs from './RegisterTabs';
 
 // Registro abierto: cualquier persona crea su cuenta de usuario. El rol inicial siempre es "usuario".
 export default function Register({ go }: { go: (view: string) => void }) {
@@ -55,6 +56,8 @@ export default function Register({ go }: { go: (view: string) => void }) {
         <h1 style={S.h1}>Crea tu cuenta</h1>
         <p style={S.sub}>Únete gratis a Waack On. Tendrás tu perfil y tu propio almacenamiento para fotos y videos.</p>
 
+        <RegisterTabs active="register" go={go} />
+
         <label style={S.label}>Nombre completo</label>
         <input style={S.input} value={name} onChange={(e) => setName(e.target.value)} autoComplete="name" placeholder="Sara Molina" />
 
@@ -94,7 +97,6 @@ export default function Register({ go }: { go: (view: string) => void }) {
         </div>
 
         <div style={S.foot}>¿Ya tienes cuenta? <span style={S.link} onClick={() => go('login')}>Inicia sesión</span></div>
-        <div style={{ ...S.foot, marginTop: 10 }}>¿Eres instructor o estudio? <span style={S.link} onClick={() => go('registerPro')}>Regístrate aquí</span></div>
       </form>
     </div>
   );

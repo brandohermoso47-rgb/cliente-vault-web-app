@@ -54,12 +54,6 @@ export default function Login({ v }: { v: any }) {
             {v.loginSwitchLabel}
           </b>
         </div>
-        <div style={{"fontSize":"13px","color":"rgba(226,231,255,.72)","marginTop":"10px"}}>
-          {"¿Eres instructor o estudio? "}
-          <b onClick={v.goRegisterPro} style={{"color":"#fff","cursor":"pointer","textDecoration":"underline","textUnderlineOffset":"3px"}}>
-            {"Regístrate aquí"}
-          </b>
-        </div>
         <div style={{"marginTop":"14px"}}>
           <a href="/privacidad" target="_blank" rel="noopener noreferrer" style={{"fontSize":"12px","color":"rgba(226,231,255,.6)","textDecoration":"underline","textUnderlineOffset":"3px"}}>
             {"Política de privacidad"}
