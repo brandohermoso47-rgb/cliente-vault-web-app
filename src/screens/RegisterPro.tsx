@@ -1,7 +1,7 @@
 import { useMemo, useState, type FormEvent } from 'react';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
-import { doc, serverTimestamp, setDoc } from 'firebase/firestore';
-import { auth, db, firebaseConfigured } from '../lib/firebase';
+import { auth, firebaseConfigured } from '../lib/firebase';
+import { api } from '../lib/api';
 import { pending } from '../lib/session';
 import { emailOk, passwordOk, PASSWORD_HELP } from '../lib/validators';
 import { authMessage } from '../lib/authErrors';
@@ -64,8 +64,7 @@ export default function RegisterPro({ kind, go }: { kind: Kind; go: (view: strin
     setBusy(true);
     try {
       if (signedIn) {
-        const u = auth.currentUser!;
-        await setDoc(doc(db, 'applications', u.uid), { ...application, uid: u.uid, email: u.email, status: 'pendiente', createdAt: serverTimestamp() });
+        await api('POST', '/applications', application);
         setSent(true);
       } else {
         pending.profile = { displayName: application.contactName, countryCode: application.countryCode, country: application.country, accountType: 'usuario' };
@@ -77,7 +76,7 @@ export default function RegisterPro({ kind, go }: { kind: Kind; go: (view: strin
     } catch (ex) {
       pending.profile = null;
       pending.application = null;
-      setErr(authMessage(ex));
+      setErr(ex instanceof Error && !(ex as any).code?.startsWith?.('auth/') ? ex.message : authMessage(ex));
       setBusy(false);
     }
   };

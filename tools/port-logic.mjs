@@ -156,6 +156,7 @@ import Register from './screens/Register';
 import RegisterPro from './screens/RegisterPro';
 import { takePending } from './lib/session';
 import { startCheckout } from './lib/payments';
+import { api } from './lib/api';
 
 `;
 const render = `

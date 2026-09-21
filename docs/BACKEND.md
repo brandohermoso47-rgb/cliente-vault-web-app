@@ -1,0 +1,92 @@
+# Backend (API) — Express + PostgreSQL + Stripe
+
+```
+Navegador ──(Firebase Hosting)──► React SPA
+     │  /api/**  (rewrite de Hosting, mismo dominio, sin CORS)
+     ▼
+Cloud Run: api/ (Express)  ──► Cloud SQL (PostgreSQL, Drizzle)   usuarios · solicitudes · planes · suscripciones · pagos
+     │                    ├─► Firebase Auth (verifica el ID token)
+     │                    ├─► Firestore (rol sincronizado; chat/batallas/notificaciones viven ahí)
+     └─ webhook Stripe ◄──┘   Stripe Checkout / Connect / Portal
+```
+
+Qué vive dónde: **PostgreSQL** = lo transaccional y lo que hay que proteger (usuarios, roles, solicitudes,
+planes, suscripciones, pagos). **Firestore** = tiempo real (chat, salas de batalla, notificaciones) y el perfil
+público que ya usa la app. El rol se guarda en PostgreSQL y la API lo copia a un *custom claim* de Firebase y al
+perfil de Firestore, para que las reglas lo entiendan.
+
+## Desarrollo local
+```bash
+cd api
+npm install
+npm test                 # 28 pruebas contra un PostgreSQL embebido (PGlite); no hace falta Firebase ni Stripe
+export DATABASE_URL=postgres://usuario:clave@localhost:5432/waackon
+npm run db:migrate
+npm run dev              # http://localhost:8080  (el frontend la proxea en /api)
+```
+Cambios de esquema: edita `api/src/db/schema.ts` y ejecuta `npm run db:generate` (crea una migración SQL en `api/drizzle/`).
+
+## Endpoints (`/api/v1`)
+| Método y ruta | Quién | Para qué |
+| --- | --- | --- |
+| `POST /session` | sesión iniciada | Crea/recupera el usuario en PostgreSQL. El primer admin se decide aquí |
+| `GET /me`, `PATCH /me` | usuario | Perfil, rol, solicitud, suscripciones, cobros. El rol **no** se puede enviar |
+| `POST /applications` | usuario | Solicitar cuenta de instructor o estudio/academia |
+| `GET /plans` | usuario | Catálogo de planes activos (sin IDs de Stripe) |
+| `POST /billing/checkout` · `/billing/portal` | usuario | Stripe Checkout y portal de facturación |
+| `POST /connect/onboarding` | instructor/estudio/admin | Alta en Stripe Connect para cobrar |
+| `POST /webhooks/stripe` | Stripe | Firma verificada; idempotente |
+| `GET /admin/applications`, `POST /admin/applications/:id/decision` | admin | Aprobar o rechazar solicitudes (cambia el rol) |
+| `POST /admin/users/:id/role`, `GET/PUT /admin/plans/:id` | admin | Roles y catálogo de planes |
+
+## Puesta en marcha en Google Cloud (una vez)
+> Crea recursos con coste (Cloud SQL tiene un cargo mensual fijo aunque no haya tráfico). Revisa precios antes.
+
+```bash
+PROJECT=buoyant-objective-fwjkk; REGION=us-central1
+gcloud services enable run.googleapis.com sqladmin.googleapis.com secretmanager.googleapis.com artifactregistry.googleapis.com cloudbuild.googleapis.com --project $PROJECT
+
+# 1) Cloud SQL (PostgreSQL) — elige la instancia más pequeña para empezar
+gcloud sql instances create waackon-db --database-version=POSTGRES_16 --tier=db-f1-micro --region=$REGION --project $PROJECT
+gcloud sql databases create waackon --instance=waackon-db --project $PROJECT
+gcloud sql users create waackon_app --instance=waackon-db --password="<CONTRASEÑA_LARGA>" --project $PROJECT
+
+# 2) Secretos (los pones tú; nunca en el repositorio)
+printf '%s' '<CONTRASEÑA_LARGA>' | gcloud secrets create DB_PASSWORD --data-file=- --project $PROJECT
+printf '%s' 'sk_live_o_test_…'   | gcloud secrets create STRIPE_SECRET_KEY --data-file=- --project $PROJECT
+printf '%s' 'whsec_…'            | gcloud secrets create STRIPE_WEBHOOK_SECRET --data-file=- --project $PROJECT
+
+# 3) Desplegar la API (Cloud Run construye la imagen desde api/Dockerfile)
+cd api
+gcloud run deploy waack-api --source . --region $REGION --project $PROJECT --allow-unauthenticated \
+  --add-cloudsql-instances $PROJECT:$REGION:waackon-db \
+  --set-env-vars INSTANCE_CONNECTION_NAME=$PROJECT:$REGION:waackon-db,DB_USER=waackon_app,DB_NAME=waackon,APP_URL=https://waack-on.com,RUN_MIGRATIONS=true,BOOTSTRAP_ADMIN_EMAILS=brandohermoso47@gmail.com \
+  --set-secrets DB_PASSWORD=DB_PASSWORD:latest,STRIPE_SECRET_KEY=STRIPE_SECRET_KEY:latest,STRIPE_WEBHOOK_SECRET=STRIPE_WEBHOOK_SECRET:latest
+```
+La cuenta de servicio de Cloud Run necesita los roles *Cloud SQL Client*, *Secret Manager Secret Accessor*,
+*Firebase Authentication Admin* y *Cloud Datastore User* (para sincronizar el rol en Firestore).
+`--allow-unauthenticated` es correcto: la API se protege con el ID token de Firebase, no con IAM.
+
+Luego, en `firebase.json` añade **antes** del rewrite `**` y despliega Hosting:
+```json
+{ "source": "/api/**", "run": { "serviceId": "waack-api", "region": "us-central1" } }
+```
+Webhook de Stripe → `https://waack-on.com/api/v1/webhooks/stripe` con los eventos
+`customer.subscription.created|updated|deleted`, `invoice.paid`, `invoice.payment_failed` y `account.updated`
+(este último como evento de cuentas conectadas).
+
+## Catálogo de planes (después de crear los productos y precios en Stripe)
+Con tu sesión de administrador, `PUT /api/v1/admin/plans/escuela` y `/catedra`:
+```json
+{ "kind": "platform", "name": "Escuela completa", "active": true, "prices": { "month": "price_…", "year": "price_…" }, "automaticTax": true }
+{ "kind": "instructor", "name": "Una cátedra", "active": true, "prices": { "month": "price_…", "year": "price_…" }, "feePercent": 15, "automaticTax": true }
+```
+`feePercent` (lo que se queda Waack On) es decisión tuya: no hay valor por defecto.
+
+## Pendiente (siguientes fases)
+- Fase 2: cursos y lecciones en PostgreSQL, con acceso según suscripción y URLs firmadas para los videos.
+- Fase 3: subida de reels y clases grabadas (Cloud Storage + transcodificación).
+- Fase 4: directos (servicio de video externo).
+- Fase 5: análisis de postura en el navegador (MediaPipe) + Gemini para recomendaciones, con consentimiento.
+- Panel de aprobación de solicitudes en la interfaz (la API ya existe).
+- Mientras dure la transición, el perfil se guarda en Firestore **y** en PostgreSQL; PostgreSQL manda para rol, solicitudes y pagos.

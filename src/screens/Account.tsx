@@ -1,9 +1,10 @@
-import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
 import { sendPasswordResetEmail, signOut, updateProfile } from 'firebase/auth';
-import { addDoc, collection, deleteDoc, doc, onSnapshot, orderBy, query, serverTimestamp, updateDoc, where } from 'firebase/firestore';
+import { addDoc, collection, deleteDoc, doc, onSnapshot, orderBy, query, serverTimestamp, updateDoc } from 'firebase/firestore';
 import { deleteObject, getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { auth, db, storage } from '../lib/firebase';
 import { countryList, countryName } from '../lib/countries';
+import { api, ApiError } from '../lib/api';
 import { openBillingPortal, startConnectOnboarding } from '../lib/payments';
 import { IMAGE_TYPES, VIDEO_TYPES, MAX_IMAGE_MB, MAX_VIDEO_MB, MAX_TOTAL_MB } from '../lib/validators';
 
@@ -28,15 +29,13 @@ export default function Account({ go }: { go: (view: string) => void }) {
   const user = auth?.currentUser ?? null;
   const uid = user?.uid ?? '';
   const [profile, setProfile] = useState<any>(null);
-  const [application, setApplication] = useState<any>(null);
+  const [me, setMe] = useState<any>(null); // rol, solicitud, suscripciones y cobros (API / PostgreSQL)
   const [media, setMedia] = useState<Media[]>([]);
   const [form, setForm] = useState({ displayName: '', handle: '', country: '', countryCode: '', bio: '' });
   const countries = useMemo(() => countryList('es'), []);
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
   const [uploads, setUploads] = useState<Record<string, number>>({});
   const [busy, setBusy] = useState(false);
-  const [subs, setSubs] = useState<any[]>([]);
-  const [payout, setPayout] = useState<any>(null);
   const avatarInput = useRef<HTMLInputElement>(null);
   const mediaInput = useRef<HTMLInputElement>(null);
 
@@ -48,9 +47,6 @@ export default function Account({ go }: { go: (view: string) => void }) {
         setProfile(d);
         setForm((f) => (f.displayName || f.handle || f.country || f.bio ? f : { displayName: d.displayName ?? user?.displayName ?? '', handle: d.handle ?? '', country: d.country ?? '', countryCode: d.countryCode ?? '', bio: d.bio ?? '' }));
       }, () => {}),
-      onSnapshot(query(collection(db, 'subscriptions'), where('uid', '==', uid)), (s) => setSubs(s.docs.map((d) => ({ id: d.id, ...(d.data() as any) }))), () => {}),
-      onSnapshot(doc(db, 'payoutAccounts', uid), (s) => setPayout(s.exists() ? s.data() : null), () => {}),
-      onSnapshot(doc(db, 'applications', uid), (s) => setApplication(s.exists() ? s.data() : null), () => {}),
       onSnapshot(query(collection(db, 'users', uid, 'media'), orderBy('createdAt', 'desc')), (s) => setMedia(s.docs.map((d) => ({ id: d.id, ...(d.data() as any) }))), () => {}),
     ];
     return () => offs.forEach((o) => o());
@@ -67,9 +63,22 @@ export default function Account({ go }: { go: (view: string) => void }) {
     history.replaceState(null, '', location.pathname);
   }, []);
 
+  const loadMe = useCallback(() => { api('GET', '/me').then(setMe).catch(() => {}); }, []);
+  useEffect(() => {
+    if (!uid) return;
+    loadMe();
+    if (!/[?&](checkout|connect)=/.test(location.search)) return;
+    const ts = [3000, 8000, 15000].map((ms) => setTimeout(loadMe, ms));
+    return () => ts.forEach(clearTimeout);
+  }, [uid, loadMe]);
+
+  const subs: any[] = me?.subscriptions ?? [];
+  const payout = me?.payout ?? null;
+  const application = me?.application ?? null;
+
   const used = useMemo(() => media.reduce((n, m) => n + (m.size || 0), 0), [media]);
   const pct = Math.min(100, (used / (MAX_TOTAL_MB * 1048576)) * 100);
-  const role = profile?.role ?? 'usuario';
+  const role = me?.user?.role ?? profile?.role ?? 'usuario';
   const photo = profile?.photoURL || user?.photoURL || '';
   const initials = (form.displayName || user?.email || '?').split(' ').map((w) => w[0]).slice(0, 2).join('').toUpperCase();
 
@@ -82,6 +91,14 @@ export default function Account({ go }: { go: (view: string) => void }) {
     const handle = form.handle.trim().toLowerCase();
     if (handle && !/^[a-z0-9_.]{3,20}$/.test(handle)) { setBusy(false); return say(false, 'El usuario debe tener 3–20 caracteres: minúsculas, números, punto o guion bajo.'); }
     try {
+      const patch: Record<string, unknown> = { displayName: form.displayName.trim(), bio: form.bio.trim().slice(0, 280) };
+      if (handle) patch.handle = handle;
+      if (form.countryCode) patch.countryCode = form.countryCode;
+      try { await api('PATCH', '/me', patch); loadMe(); }
+      catch (e) {
+        if (e instanceof ApiError && (e.code === 'handle_taken' || e.status === 400)) { setBusy(false); return say(false, e.message); }
+        /* API no disponible: se guarda solo en Firestore */
+      }
       await updateDoc(doc(db, 'users', uid), { displayName: form.displayName.trim(), handle, countryCode: form.countryCode, country: form.countryCode ? countryName(form.countryCode) : form.country.trim(), bio: form.bio.trim().slice(0, 280), updatedAt: serverTimestamp() });
       await updateProfile(user, { displayName: form.displayName.trim() });
       say(true, 'Perfil guardado.');
@@ -155,7 +172,7 @@ export default function Account({ go }: { go: (view: string) => void }) {
 
   const canGetPaid = ['instructor', 'estudio', 'admin'].includes(role);
   const payErr = (e: unknown) => say(false, e instanceof Error ? e.message : 'No se pudo completar la operación.');
-  const fmtDate = (v: any) => { const d = v?.toDate?.(); return d ? d.toLocaleDateString('es', { day: 'numeric', month: 'long', year: 'numeric' }) : ''; };
+  const fmtDate = (v: any) => { const d = v ? new Date(v) : null; return d ? d.toLocaleDateString('es', { day: 'numeric', month: 'long', year: 'numeric' }) : ''; };
 
   const hasPassword = user.providerData.some((p) => p.providerId === 'password');
   const uploading = Object.entries(uploads);
@@ -285,7 +302,7 @@ export default function Account({ go }: { go: (view: string) => void }) {
           <div style={{ marginTop: 22, paddingTop: 18, borderTop: '1px solid var(--hair-soft)' }}>
             <h2 style={{ ...h2, fontSize: 14.5 }}>Cobros como {role === 'estudio' ? 'estudio o academia' : 'instructor/a'}</h2>
             <p style={note}>{payout?.chargesEnabled ? 'Tu cuenta de cobro está activa: recibirás tu parte de cada suscripción directamente en tu cuenta bancaria, en tu moneda y país.' : payout?.detailsSubmitted ? 'Stripe está verificando tus datos. Te avisaremos cuando puedas cobrar.' : 'Configura tu cuenta de cobro (datos fiscales y bancarios) para recibir el dinero de tus suscriptores. Stripe lo gestiona de forma segura y compatible con tu país.'}</p>
-            {!payout?.chargesEnabled && <button style={btn} onClick={() => startConnectOnboarding().catch(payErr)}>{payout?.stripeAccountId ? 'Continuar configuración de cobros' : 'Configurar cobros'}</button>}
+            {!payout?.chargesEnabled && <button style={btn} onClick={() => startConnectOnboarding().catch(payErr)}>{payout ? 'Continuar configuración de cobros' : 'Configurar cobros'}</button>}
           </div>
         )}
       </div>

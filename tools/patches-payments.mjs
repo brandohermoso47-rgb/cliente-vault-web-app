@@ -67,18 +67,54 @@ export default function patchesPayments(s) {
       planPickerList: this.teacherData.map((t) => ({ key: t.uid || t.id, name: t.name, role: t.role, pick: () => this.payStart('catedra', t.uid || t.id) })),
       showRoleDemo: !!import.meta.env.DEV,`);
 
-  // Estado real desde Firestore: rol del perfil y suscripciones activas
-  rep("      watch('reels', (rows) => {", `      onSnapshot(doc(db, 'users', this.state.user.uid), (snap) => {
-        const role = snap.data()?.role ?? 'usuario';
-        this.subs = Object.assign({}, this.subs, { docente: ['instructor', 'estudio', 'admin'].includes(role) });
-        this.forceUpdate();
-      }, () => {}),
-      onSnapshot(query(collection(db, 'subscriptions'), where('uid', '==', this.state.user.uid)), (snap) => {
-        const live = snap.docs.map((d) => d.data()).filter((x) => ['active', 'trialing', 'past_due'].includes(x.status));
-        this.subs = Object.assign({}, this.subs, { platform: live.some((x) => x.planId === 'escuela'), instructor: live.some((x) => x.planId === 'catedra') });
-        this.forceUpdate();
-      }, () => {}),
-      watch('reels', (rows) => {`);
+  // Rol y suscripciones reales: vienen de la API (PostgreSQL es la fuente de verdad).
+  rep("  stopData() {", `  signupData = null;
+  meApi = null;
+
+  // Crea o recupera el usuario en PostgreSQL (idempotente); el primer admin se decide en el servidor.
+  async syncSession(user) {
+    // Si la API no estaba disponible en el registro, la solicitud se guardó en este navegador y se reenvía ahora.
+    const key = 'waackon.pendingSignup.' + user.uid;
+    let stored = null;
+    try { stored = JSON.parse(localStorage.getItem(key) || 'null'); } catch (e) { /* sin almacenamiento */ }
+    const p = this.signupData || stored || {};
+    this.signupData = null;
+    const prof = p.profile || {};
+    const body = {};
+    if (prof.displayName) body.displayName = prof.displayName;
+    if (prof.handle) body.handle = prof.handle;
+    if (prof.countryCode) body.countryCode = prof.countryCode;
+    if (p.application) body.application = p.application;
+    try {
+      const r = await api('POST', '/session', body);
+      if (r.user && r.user.role === 'admin') await user.getIdToken(true); // recoge el claim de rol nuevo
+    } catch (e) {
+      console.warn('API no disponible; se reintentará en el próximo inicio de sesión.', e);
+      // Solo se reintenta si el servicio no estaba disponible (no si los datos eran inválidos).
+      const down = e && (e.status === 503 || e.status === 0 || e.status === 502 || e.status === 504);
+      try { if (down && (p.application || p.profile)) localStorage.setItem(key, JSON.stringify(p)); else localStorage.removeItem(key); } catch (err) { /* sin almacenamiento */ }
+      return;
+    }
+    try { localStorage.removeItem(key); } catch (e) { /* sin almacenamiento */ }
+    await this.refreshMe();
+    if (/[?&]checkout=/.test(location.search)) [3000, 8000, 15000].forEach((ms) => setTimeout(() => this.refreshMe(), ms)); // el webhook tarda unos segundos
+  }
+
+  async refreshMe() {
+    try {
+      const me = await api('GET', '/me');
+      this.meApi = me;
+      const live = (me.subscriptions || []).filter((x) => ['active', 'trialing', 'past_due'].includes(x.status));
+      this.subs = Object.assign({}, this.subs, {
+        platform: live.some((x) => x.planId === 'escuela'),
+        instructor: live.some((x) => x.planId === 'catedra'),
+        docente: ['instructor', 'estudio', 'admin'].includes(me.user && me.user.role),
+      });
+      this.forceUpdate();
+    } catch (e) { /* API aún no disponible: se mantiene el estado por defecto */ }
+  }
+
+  stopData() {`);
 
   // Al volver de Stripe (?checkout=… / ?connect=…) abrir Mi cuenta
   rep("(['login', 'register', 'registerInstructor', 'registerStudio'].includes(st.view) ? 'dashboard' : st.view)",

@@ -31,16 +31,6 @@ service cloud.firestore {
       }
     }
 
-    // ── Solicitudes de instructor/estudio: las crea el dueño (siempre 'pendiente'); solo un admin las resuelve ──
-    match /applications/{uid} {
-      allow read: if isOwner(uid) || isAdmin();
-      allow create: if isOwner(uid)
-        && request.resource.data.status == 'pendiente'
-        && request.resource.data.kind in ['instructor', 'estudio']
-        && request.resource.data.uid == request.auth.uid;
-      allow update, delete: if isAdmin();
-    }
-
     // ── Contenido de la plataforma: lo lee cualquiera con sesión ──
     match /{content}/{docId} {
       allow read: if signedIn()
@@ -54,21 +44,6 @@ service cloud.firestore {
                                           'instructor_playlists', 'instructor_tracks', 'instructor_drive_tracks']
         && (isAdmin() || (isStaff() && resource.data.get('ownerId', '') == request.auth.uid));
     }
-
-    // ── Pagos: SOLO el servidor (Cloud Functions con Admin SDK) escribe estas colecciones ──
-    match /plans/{planId} {
-      allow read: if signedIn();     // catálogo de planes (los IDs de precio de Stripe no son secretos)
-      allow write: if isAdmin();
-    }
-    match /subscriptions/{subId} {
-      allow read: if signedIn() && (resource.data.uid == request.auth.uid || isAdmin());
-      allow write: if false;
-    }
-    match /payoutAccounts/{uid} {
-      allow read: if isOwner(uid) || isAdmin();
-      allow write: if false;
-    }
-    match /customers/{uid} { allow read, write: if false; }
 
     // ── Comunidad y mensajes: usuarios con sesión; cada quien solo edita lo suyo ──
     match /community_messages/{id} {

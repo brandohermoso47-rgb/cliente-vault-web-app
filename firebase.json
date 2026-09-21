@@ -33,9 +33,6 @@
       }
     ]
   },
-  "functions": {
-    "source": "functions"
-  },
   "firestore": {
     "database": "ai-studio-waackonplataform-995cd1f5-e15c-4eff-aaa2-62e6d650abe1",
     "rules": "firestore.rules"

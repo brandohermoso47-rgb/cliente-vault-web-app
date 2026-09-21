@@ -12,6 +12,7 @@ import Register from './screens/Register';
 import RegisterPro from './screens/RegisterPro';
 import { takePending } from './lib/session';
 import { startCheckout } from './lib/payments';
+import { api } from './lib/api';
 
 import { sty } from './lib/dc';
 
@@ -1257,8 +1258,9 @@ class App extends Component<any, any> {
           const ref = doc(db, 'users', user.uid);
           const p = takePending();
           if (!(await getDoc(ref)).exists()) await setDoc(ref, { displayName: user.displayName ?? null, photoURL: user.photoURL ?? null, ...(p.profile || {}), role: 'usuario', createdAt: serverTimestamp() });
-          if (p.application) await setDoc(doc(db, 'applications', user.uid), { ...p.application, uid: user.uid, email: user.email, status: 'pendiente', createdAt: serverTimestamp() });
+          this.signupData = p;
         } catch (e) { console.warn('No se pudo crear el perfil en Firestore', e); }
+        await this.syncSession(user);
       }
     });
   }
@@ -1267,6 +1269,52 @@ class App extends Component<any, any> {
   /* ---------- Datos en vivo desde Firestore (reels, teachers, lives) ----------
      Si una colección está vacía se conservan los datos de ejemplo del prototipo. */
   unsubData: any[] = [];
+  signupData = null;
+  meApi = null;
+
+  // Crea o recupera el usuario en PostgreSQL (idempotente); el primer admin se decide en el servidor.
+  async syncSession(user) {
+    // Si la API no estaba disponible en el registro, la solicitud se guardó en este navegador y se reenvía ahora.
+    const key = 'waackon.pendingSignup.' + user.uid;
+    let stored = null;
+    try { stored = JSON.parse(localStorage.getItem(key) || 'null'); } catch (e) { /* sin almacenamiento */ }
+    const p = this.signupData || stored || {};
+    this.signupData = null;
+    const prof = p.profile || {};
+    const body = {};
+    if (prof.displayName) body.displayName = prof.displayName;
+    if (prof.handle) body.handle = prof.handle;
+    if (prof.countryCode) body.countryCode = prof.countryCode;
+    if (p.application) body.application = p.application;
+    try {
+      const r = await api('POST', '/session', body);
+      if (r.user && r.user.role === 'admin') await user.getIdToken(true); // recoge el claim de rol nuevo
+    } catch (e) {
+      console.warn('API no disponible; se reintentará en el próximo inicio de sesión.', e);
+      // Solo se reintenta si el servicio no estaba disponible (no si los datos eran inválidos).
+      const down = e && (e.status === 503 || e.status === 0 || e.status === 502 || e.status === 504);
+      try { if (down && (p.application || p.profile)) localStorage.setItem(key, JSON.stringify(p)); else localStorage.removeItem(key); } catch (err) { /* sin almacenamiento */ }
+      return;
+    }
+    try { localStorage.removeItem(key); } catch (e) { /* sin almacenamiento */ }
+    await this.refreshMe();
+    if (/[?&]checkout=/.test(location.search)) [3000, 8000, 15000].forEach((ms) => setTimeout(() => this.refreshMe(), ms)); // el webhook tarda unos segundos
+  }
+
+  async refreshMe() {
+    try {
+      const me = await api('GET', '/me');
+      this.meApi = me;
+      const live = (me.subscriptions || []).filter((x) => ['active', 'trialing', 'past_due'].includes(x.status));
+      this.subs = Object.assign({}, this.subs, {
+        platform: live.some((x) => x.planId === 'escuela'),
+        instructor: live.some((x) => x.planId === 'catedra'),
+        docente: ['instructor', 'estudio', 'admin'].includes(me.user && me.user.role),
+      });
+      this.forceUpdate();
+    } catch (e) { /* API aún no disponible: se mantiene el estado por defecto */ }
+  }
+
   stopData() { this.unsubData.forEach((u: any) => u()); this.unsubData = []; }
   startData() {
     this.stopData();
@@ -1279,16 +1327,6 @@ class App extends Component<any, any> {
         this.forceUpdate();
       }, (e) => console.warn('Firestore ' + name + ':', e.code));
     this.unsubData = [
-      onSnapshot(doc(db, 'users', this.state.user.uid), (snap) => {
-        const role = snap.data()?.role ?? 'usuario';
-        this.subs = Object.assign({}, this.subs, { docente: ['instructor', 'estudio', 'admin'].includes(role) });
-        this.forceUpdate();
-      }, () => {}),
-      onSnapshot(query(collection(db, 'subscriptions'), where('uid', '==', this.state.user.uid)), (snap) => {
-        const live = snap.docs.map((d) => d.data()).filter((x) => ['active', 'trialing', 'past_due'].includes(x.status));
-        this.subs = Object.assign({}, this.subs, { platform: live.some((x) => x.planId === 'escuela'), instructor: live.some((x) => x.planId === 'catedra') });
-        this.forceUpdate();
-      }, () => {}),
       watch('reels', (rows) => {
         this.reelData = rows.sort(byNewest).map((r: any) => ({ c1: 'var(--pink)', c2: 'var(--purple)', likes: 0, comments: 0, ...r }));
       }),
