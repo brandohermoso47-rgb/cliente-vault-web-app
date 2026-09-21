@@ -858,7 +858,7 @@ class App extends Component<any, any> {
     } catch (e: any) {
       if (e?.code === 'auth/popup-closed-by-user' || e?.code === 'auth/cancelled-popup-request') return;
       const MSG: any = {
-        'auth/popup-blocked': 'El navegador bloqueó la ventana de Google. Permite las ventanas emergentes y reintenta.',
+        'auth/popup-blocked': 'Tu navegador bloqueó la ventana de Google. Permite las ventanas emergentes para waack-on.com (icono junto a la barra de direcciones) y vuelve a pulsar. Si usas un navegador integrado de otra app, abre waack-on.com en Chrome o Safari.',
         'auth/unauthorized-domain': 'Este dominio no está autorizado en Firebase Authentication.',
         'auth/network-request-failed': 'Sin conexión con Firebase. Revisa tu internet.',
       };

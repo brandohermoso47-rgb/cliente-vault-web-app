@@ -10,7 +10,7 @@ const MSG: Record<string, string> = {
   'auth/too-many-requests': 'Demasiados intentos. Espera un momento e inténtalo de nuevo.',
   'auth/operation-not-allowed': 'El acceso con correo no está habilitado en Firebase.',
   'auth/unauthorized-domain': 'Este dominio no está autorizado en Firebase Authentication.',
-  'auth/popup-blocked': 'El navegador bloqueó la ventana de Google. Permite las ventanas emergentes y reintenta.',
+  'auth/popup-blocked': 'Tu navegador bloqueó la ventana de Google. Permite las ventanas emergentes para waack-on.com (icono junto a la barra de direcciones) y vuelve a pulsar. Si usas un navegador integrado de otra app, abre waack-on.com en Chrome o Safari.',
 };
 export function authMessage(e: any): string {
   const code = e?.code as string | undefined;
