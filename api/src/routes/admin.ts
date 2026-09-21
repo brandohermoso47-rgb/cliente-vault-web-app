@@ -22,7 +22,8 @@ const planBody = z.object({
 export function adminRouter(deps: Deps) {
   const r = Router();
   const { db } = deps;
-  r.use(withAuth(deps), requireRole('admin'));
+  // En rutas de admin también se comprueba que la sesión no haya sido revocada.
+  r.use(withAuth(deps, { checkRevoked: true }), requireRole('admin'));
 
   const setRole = async (userId: string, role: 'usuario' | 'instructor' | 'estudio' | 'admin') => {
     const [u] = await db.update(users).set({ role, updatedAt: new Date() }).where(eq(users.id, userId)).returning();

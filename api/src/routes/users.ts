@@ -1,7 +1,7 @@
 import { and, eq, ne } from 'drizzle-orm';
 import { Router } from 'express';
 import { z } from 'zod';
-import { withAuth } from '../auth.js';
+import { requireVerifiedEmail, withAuth } from '../auth.js';
 import { list } from '../config.js';
 import { schema } from '../db/index.js';
 import type { User } from '../db/schema.js';
@@ -30,12 +30,15 @@ const sessionBody = z.object({
   application: applicationBody.optional(),
 });
 
+// La foto de perfil solo puede apuntar a Firebase Storage o a la foto de la cuenta de Google.
+const PHOTO_HOSTS = new Set(['firebasestorage.googleapis.com', 'storage.googleapis.com', 'lh3.googleusercontent.com']);
+
 const patchBody = z.object({
   displayName: z.string().trim().min(1).max(80).optional(),
   handle: handle.optional(),
   countryCode: country.optional(),
   bio: z.string().trim().max(280).optional(),
-  photoUrl: z.string().url().max(600).startsWith('https://').optional(),
+  photoUrl: z.string().url().max(600).refine((u) => PHOTO_HOSTS.has(new URL(u).hostname) && u.startsWith('https://'), 'La foto debe estar en el almacenamiento de Waack On o en tu cuenta de Google').optional(),
 }).strict(); // el rol y el resto de campos NO se pueden enviar
 
 export const publicUser = (u: User) => ({
@@ -123,7 +126,7 @@ export function usersRouter(deps: Deps) {
   }));
 
   // Quien ya tiene cuenta solicita ser instructor o estudio/academia.
-  r.post('/applications', withAuth(deps), wrap(async (req, res) => {
+  r.post('/applications', withAuth(deps), requireVerifiedEmail, wrap(async (req, res) => {
     const body = parse(applicationBody, req.body);
     const u = req.user!;
     if (u.role !== 'usuario') throw new HttpError(409, 'already_professional', 'Tu cuenta ya tiene un rol profesional.');

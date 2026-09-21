@@ -2,7 +2,7 @@ import { and, eq, inArray } from 'drizzle-orm';
 import { Router } from 'express';
 import type Stripe from 'stripe';
 import { z } from 'zod';
-import { withAuth } from '../auth.js';
+import { requireVerifiedEmail, withAuth } from '../auth.js';
 import { schema, type Db } from '../db/index.js';
 import type { User } from '../db/schema.js';
 import { HttpError, parse, wrap, type Deps } from '../http.js';
@@ -39,7 +39,7 @@ export function billingRouter(deps: Deps) {
     res.json({ plans: rows.map((p) => ({ id: p.id, kind: p.kind, name: p.name, intervals: { month: !!p.prices.month, year: !!p.prices.year } })) });
   }));
 
-  r.post('/billing/checkout', withAuth(deps), wrap(async (req, res) => {
+  r.post('/billing/checkout', withAuth(deps), requireVerifiedEmail, wrap(async (req, res) => {
     const stripe = needStripe(deps);
     let { planId, interval, instructorId } = parse(checkoutBody, req.body);
     const user = req.user!;
@@ -102,7 +102,7 @@ export function billingRouter(deps: Deps) {
   }));
 
   // Alta de instructores y estudios en Stripe Connect para recibir su parte.
-  r.post('/connect/onboarding', withAuth(deps), wrap(async (req, res) => {
+  r.post('/connect/onboarding', withAuth(deps), requireVerifiedEmail, wrap(async (req, res) => {
     const stripe = needStripe(deps);
     const user = req.user!;
     if (!['instructor', 'estudio', 'admin'].includes(user.role)) throw new HttpError(403, 'forbidden', 'Solo instructores y estudios aprobados pueden recibir pagos.');

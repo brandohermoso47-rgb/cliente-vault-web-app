@@ -1,5 +1,5 @@
 import { useMemo, useState, type FormEvent } from 'react';
-import { createUserWithEmailAndPassword, updateProfile, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
+import { createUserWithEmailAndPassword, sendEmailVerification, updateProfile, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 import { auth, firebaseConfigured } from '../lib/firebase';
 import { pending } from '../lib/session';
 import { emailOk, handleOk, passwordOk, PASSWORD_HELP } from '../lib/validators';
@@ -37,6 +37,7 @@ export default function Register({ go }: { go: (view: string) => void }) {
     try {
       const cred = await createUserWithEmailAndPassword(auth, email.trim(), pass);
       await updateProfile(cred.user, { displayName: name.trim() });
+      sendEmailVerification(cred.user).catch(() => {}); // sin este paso no podrá pagar ni pedir un rol profesional
       // App.tsx detecta la sesión nueva, crea users/{uid} con role "usuario" y entra al dashboard.
     } catch (ex) {
       pending.profile = null;

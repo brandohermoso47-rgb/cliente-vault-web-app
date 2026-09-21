@@ -9,8 +9,8 @@ import type { Config } from './config.js';
 import type { Role } from './db/schema.js';
 
 // Verificación real del ID token de Firebase Auth (en Cloud Run usa las credenciales de la cuenta de servicio).
-export const firebaseVerifier = (): VerifyToken => async (idToken) => {
-  const d = await getAuth().verifyIdToken(idToken);
+export const firebaseVerifier = (): VerifyToken => async (idToken, opts) => {
+  const d = await getAuth().verifyIdToken(idToken, opts?.checkRevoked === true);
   return { uid: d.uid, email: d.email, emailVerified: d.email_verified === true, name: d.name as string | undefined, picture: d.picture };
 };
 
@@ -23,12 +23,12 @@ export const firebaseRoleSync = (cfg: Config): SyncRole => async (uid, role) => 
 const bearer = (h?: string) => (h && h.startsWith('Bearer ') ? h.slice(7).trim() : '');
 
 // Exige un ID token válido y (por defecto) carga la fila de usuario de Postgres en req.user.
-export const withAuth = (deps: Deps, opts: { loadUser?: boolean } = {}): RequestHandler => (req, _res, next) => {
+export const withAuth = (deps: Deps, opts: { loadUser?: boolean; checkRevoked?: boolean } = {}): RequestHandler => (req, _res, next) => {
   (async () => {
     const raw = bearer(req.headers.authorization);
     if (!raw) throw new HttpError(401, 'unauthenticated', 'Falta el token de sesión.');
     try {
-      req.token = await deps.verify(raw);
+      req.token = await deps.verify(raw, { checkRevoked: opts.checkRevoked === true });
     } catch {
       throw new HttpError(401, 'invalid_token', 'Sesión no válida o caducada.');
     }
@@ -42,5 +42,12 @@ export const withAuth = (deps: Deps, opts: { loadUser?: boolean } = {}): Request
 
 export const requireRole = (...roles: Role[]): RequestHandler => (req, _res, next) => {
   if (!req.user || !roles.includes(req.user.role)) return next(new HttpError(403, 'forbidden', 'No tienes permiso para esta acción.'));
+  next();
+};
+
+// Acciones sensibles (pagar, pedir un rol profesional, cobrar) exigen correo verificado:
+// evita registrar el correo de otra persona con una contraseña propia.
+export const requireVerifiedEmail: RequestHandler = (req, _res, next) => {
+  if (!req.token?.emailVerified) return next(new HttpError(403, 'email_not_verified', 'Verifica tu correo electrónico para continuar.'));
   next();
 };

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
-import { sendPasswordResetEmail, signOut, updateProfile } from 'firebase/auth';
+import { sendEmailVerification, sendPasswordResetEmail, signOut, updateProfile } from 'firebase/auth';
 import { addDoc, collection, deleteDoc, doc, onSnapshot, orderBy, query, serverTimestamp, updateDoc } from 'firebase/firestore';
 import { deleteObject, getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { auth, db, storage } from '../lib/firebase';
@@ -174,6 +174,19 @@ export default function Account({ go }: { go: (view: string) => void }) {
   const payErr = (e: unknown) => say(false, e instanceof Error ? e.message : 'No se pudo completar la operación.');
   const fmtDate = (v: any) => { const d = v ? new Date(v) : null; return d ? d.toLocaleDateString('es', { day: 'numeric', month: 'long', year: 'numeric' }) : ''; };
 
+  const [, bump] = useState(0);
+  const resendVerification = async () => {
+    try { await sendEmailVerification(user); say(true, `Te enviamos un correo de verificación a ${user.email}. Revisa también la carpeta de spam.`); }
+    catch { say(false, 'No se pudo enviar el correo. Espera un momento e inténtalo de nuevo.'); }
+  };
+  const checkVerified = async () => {
+    await user.reload();
+    await user.getIdToken(true); // el servidor lee "correo verificado" del token
+    bump((n) => n + 1);
+    loadMe();
+    say(user.emailVerified, user.emailVerified ? '¡Correo verificado!' : 'Aún no aparece como verificado. Abre el enlace del correo y vuelve a pulsar.');
+  };
+
   const hasPassword = user.providerData.some((p) => p.providerId === 'password');
   const uploading = Object.entries(uploads);
 
@@ -199,6 +212,17 @@ export default function Account({ go }: { go: (view: string) => void }) {
           </div>
         </div>
       </div>
+
+      {!user.emailVerified && hasPassword && (
+        <div style={{ ...card, padding: '18px 22px', borderColor: 'rgba(245,197,24,.6)' }}>
+          <div style={{ fontSize: 14, fontWeight: 800, marginBottom: 6 }}>Verifica tu correo</div>
+          <p style={{ ...note, marginBottom: 12 }}>Necesitas confirmar {user.email} para poder pagar suscripciones o solicitar una cuenta de instructor o estudio.</p>
+          <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+            <button style={btn} onClick={resendVerification}>Reenviar correo</button>
+            <button style={ghost} onClick={checkVerified}>Ya lo verifiqué</button>
+          </div>
+        </div>
+      )}
 
       {msg && <div style={{ ...card, padding: '14px 18px', fontSize: 13, color: msg.ok ? '#3DBA78' : '#FF7A5C', borderColor: msg.ok ? 'rgba(61,186,120,.5)' : 'rgba(255,122,92,.5)' }}>{msg.text}</div>}
 

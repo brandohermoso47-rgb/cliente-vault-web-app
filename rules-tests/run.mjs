@@ -1,0 +1,180 @@
+// Pruebas de las reglas de Firestore y Storage con la API de simulación de reglas de Firebase
+// (no necesita Java ni emulador y NO toca datos reales). Requiere `gcloud auth login`.
+//   node rules-tests/run.mjs
+import { execSync } from 'node:child_process';
+import { readFileSync } from 'node:fs';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const root = join(dirname(fileURLToPath(import.meta.url)), '..');
+const PROJECT = process.env.FIREBASE_PROJECT || 'buoyant-objective-fwjkk';
+const token = execSync('gcloud auth print-access-token', { encoding: 'utf8' }).trim();
+
+const DOC = (p) => `/databases/(default)/documents/${p}`;
+const roleMock = (uid, role) => ({ function: 'get', args: [{ exactValue: DOC(`users/${uid}`) }], result: { value: { data: { role } } } });
+// Roles conocidos en las pruebas
+const MOCKS = [roleMock('admin1', 'admin'), roleMock('inst1', 'instructor'), roleMock('estu1', 'estudio'), roleMock('user1', 'usuario'), roleMock('user2', 'usuario')];
+const auth = (uid) => ({ uid, token: { email_verified: true } });
+
+let cases = [];
+const t = (name, expectation, method, path, { uid, data, incoming } = {}) => cases.push({
+  name, expectation, tc: {
+    expectation,
+    request: { path: DOC(path), method, ...(uid ? { auth: auth(uid) } : {}), ...(incoming ? { resource: { data: incoming } } : {}) },
+    ...(data ? { resource: { data } } : {}),
+    functionMocks: MOCKS,
+  },
+});
+const allow = (n, m, p, o) => t(n, 'ALLOW', m, p, o);
+const deny = (n, m, p, o) => t(n, 'DENY', m, p, o);
+
+// ── Firestore ─────────────────────────────────────────────────────────────────────────────────────
+const validProfile = { displayName: 'Ana', handle: 'ana.w', countryCode: 'ES', bio: 'hola', role: 'usuario' };
+
+// perfiles
+deny('anónimo no lee perfiles', 'get', 'users/user1', {});
+allow('usuario con sesión lee perfiles', 'get', 'users/user2', { uid: 'user1', data: validProfile });
+allow('crea su perfil como usuario', 'create', 'users/user1', { uid: 'user1', incoming: validProfile });
+deny('NO se puede crear perfil con rol admin', 'create', 'users/user1', { uid: 'user1', incoming: { ...validProfile, role: 'admin' } });
+deny('NO se puede crear el perfil de otra persona', 'create', 'users/user2', { uid: 'user1', incoming: validProfile });
+deny('perfil con campos desconocidos', 'create', 'users/user1', { uid: 'user1', incoming: { ...validProfile, isVip: true } });
+deny('bio de más de 280 caracteres', 'create', 'users/user1', { uid: 'user1', incoming: { ...validProfile, bio: 'x'.repeat(281) } });
+allow('edita su propio perfil sin tocar el rol', 'update', 'users/user1', { uid: 'user1', data: validProfile, incoming: { ...validProfile, bio: 'nueva' } });
+deny('NO puede subirse el rol a admin', 'update', 'users/user1', { uid: 'user1', data: validProfile, incoming: { ...validProfile, role: 'admin' } });
+deny('NO puede editar el perfil de otro', 'update', 'users/user2', { uid: 'user1', data: validProfile, incoming: { ...validProfile, bio: 'hackeado' } });
+allow('un admin sí puede cambiar roles', 'update', 'users/user2', { uid: 'admin1', data: validProfile, incoming: { ...validProfile, role: 'instructor' } });
+deny('nadie borra perfiles salvo admin', 'delete', 'users/user2', { uid: 'user1', data: validProfile });
+allow('el dueño lee su galería privada', 'get', 'users/user1/media/m1', { uid: 'user1', data: { url: 'x' } });
+deny('otro usuario NO lee la galería privada', 'get', 'users/user1/media/m1', { uid: 'user2', data: { url: 'x' } });
+deny('otro usuario NO escribe en la galería ajena', 'create', 'users/user1/media/m2', { uid: 'user2', incoming: { url: 'x' } });
+
+// contenido de la plataforma
+for (const col of ['reels', 'teachers', 'lives', 'lessons']) {
+  allow(`${col}: lectura con sesión`, 'get', `${col}/c1`, { uid: 'user1', data: { ownerId: 'inst1' } });
+  deny(`${col}: anónimo no lee`, 'get', `${col}/c1`, { data: { ownerId: 'inst1' } });
+  deny(`${col}: un usuario normal NO publica`, 'create', `${col}/c1`, { uid: 'user1', incoming: { ownerId: 'user1' } });
+  allow(`${col}: un instructor publica lo suyo`, 'create', `${col}/c1`, { uid: 'inst1', incoming: { ownerId: 'inst1' } });
+  deny(`${col}: un instructor NO publica a nombre de otro`, 'create', `${col}/c1`, { uid: 'inst1', incoming: { ownerId: 'estu1' } });
+  deny(`${col}: un instructor NO edita lo de otro`, 'update', `${col}/c1`, { uid: 'inst1', data: { ownerId: 'estu1' }, incoming: { ownerId: 'estu1', x: 1 } });
+  allow(`${col}: un admin edita todo`, 'update', `${col}/c1`, { uid: 'admin1', data: { ownerId: 'estu1' }, incoming: { ownerId: 'estu1', x: 1 } });
+}
+allow('un estudio publica un reel propio', 'create', 'reels/r1', { uid: 'estu1', incoming: { ownerId: 'estu1' } });
+
+// comunidad
+allow('publica en el muro con su uid', 'create', 'community_messages/m1', { uid: 'user1', incoming: { uid: 'user1', text: 'hola' } });
+deny('NO publica suplantando a otro', 'create', 'community_messages/m1', { uid: 'user1', incoming: { uid: 'user2', text: 'hola' } });
+deny('NO publica sin uid', 'create', 'community_messages/m1', { uid: 'user1', incoming: { text: 'hola' } });
+deny('mensaje de más de 2000 caracteres', 'create', 'chat_messages/m1', { uid: 'user1', incoming: { uid: 'user1', text: 'x'.repeat(2001) } });
+deny('NO edita mensajes ajenos', 'update', 'community_messages/m1', { uid: 'user2', data: { uid: 'user1', text: 'a' }, incoming: { uid: 'user1', text: 'b' } });
+deny('NO cambia el autor de su mensaje', 'update', 'community_messages/m1', { uid: 'user1', data: { uid: 'user1', text: 'a' }, incoming: { uid: 'user2', text: 'a' } });
+allow('borra su propio mensaje', 'delete', 'chat_messages/m1', { uid: 'user1', data: { uid: 'user1', text: 'a' } });
+allow('un admin modera (borra)', 'delete', 'chat_messages/m1', { uid: 'admin1', data: { uid: 'user1', text: 'a' } });
+deny('NO borra mensajes ajenos', 'delete', 'chat_messages/m1', { uid: 'user2', data: { uid: 'user1', text: 'a' } });
+
+// mensajes directos
+const dm = { participants: ['user1', 'user2'], senderId: 'user1', text: 'privado' };
+allow('participante lee un mensaje directo', 'get', 'direct_messages/d1', { uid: 'user2', data: dm });
+deny('un tercero NO lee mensajes directos', 'get', 'direct_messages/d1', { uid: 'admin1', data: dm });
+deny('anónimo NO lee mensajes directos', 'get', 'direct_messages/d1', { data: dm });
+allow('envía un mensaje directo', 'create', 'direct_messages/d1', { uid: 'user1', incoming: dm });
+deny('NO envía mensajes a nombre de otro', 'create', 'direct_messages/d1', { uid: 'user2', incoming: dm });
+deny('NO se auto-añade a una conversación ajena', 'create', 'direct_messages/d1', { uid: 'admin1', incoming: { ...dm, senderId: 'admin1' } });
+deny('los mensajes directos no se editan', 'update', 'direct_messages/d1', { uid: 'user1', data: dm, incoming: { ...dm, text: 'x' } });
+deny('el receptor no borra mensajes del emisor', 'delete', 'direct_messages/d1', { uid: 'user2', data: dm });
+
+// amistades
+const fr = { users: ['user1', 'user2'], requesterId: 'user1', status: 'pending' };
+allow('crea una solicitud de amistad', 'create', 'friendships/f1', { uid: 'user1', incoming: fr });
+deny('NO crea una amistad ya aceptada', 'create', 'friendships/f1', { uid: 'user1', incoming: { ...fr, status: 'accepted' } });
+deny('un tercero NO lee amistades ajenas', 'get', 'friendships/f1', { uid: 'admin1', data: fr });
+allow('el destinatario acepta', 'update', 'friendships/f1', { uid: 'user2', data: fr, incoming: { ...fr, status: 'accepted' } });
+deny('quien envió NO se auto-acepta', 'update', 'friendships/f1', { uid: 'user1', data: fr, incoming: { ...fr, status: 'accepted' } });
+deny('NO cambia otros campos de la amistad', 'update', 'friendships/f1', { uid: 'user2', data: fr, incoming: { ...fr, status: 'accepted', users: ['user2', 'admin1'] } });
+
+// notificaciones y datos personales
+const nt = { userId: 'user1', read: false, text: 'hola' };
+allow('lee sus notificaciones', 'get', 'notifications/n1', { uid: 'user1', data: nt });
+deny('NO lee notificaciones ajenas', 'get', 'notifications/n1', { uid: 'user2', data: nt });
+deny('un cliente NO crea notificaciones', 'create', 'notifications/n1', { uid: 'user1', incoming: nt });
+allow('marca una notificación como leída', 'update', 'notifications/n1', { uid: 'user1', data: nt, incoming: { ...nt, read: true } });
+deny('NO altera el texto de una notificación', 'update', 'notifications/n1', { uid: 'user1', data: nt, incoming: { ...nt, read: true, text: 'otra' } });
+allow('crea su registro de práctica', 'create', 'practice_logs/p1', { uid: 'user1', incoming: { userId: 'user1', minutes: 30 } });
+deny('NO crea registros a nombre de otro', 'create', 'practice_logs/p1', { uid: 'user1', incoming: { userId: 'user2', minutes: 30 } });
+deny('NO lee registros de práctica ajenos', 'get', 'practice_logs/p1', { uid: 'user2', data: { userId: 'user1' } });
+deny('NO lee playlists ajenas', 'get', 'user_playlists/l1', { uid: 'user2', data: { userId: 'user1' } });
+deny('NO lee feedback ajeno', 'get', 'feedback_items/f1', { uid: 'user2', data: { userId: 'user1' } });
+
+// batallas
+allow('crea una batalla como anfitrión', 'create', 'battles/b1', { uid: 'user1', incoming: { hostId: 'user1', participants: ['user1'] } });
+deny('NO crea batallas a nombre de otro', 'create', 'battles/b1', { uid: 'user1', incoming: { hostId: 'user2', participants: ['user2'] } });
+deny('un no participante NO edita la batalla', 'update', 'battles/b1', { uid: 'user2', data: { hostId: 'user1', participants: ['user1'] }, incoming: { hostId: 'user1', participants: ['user1', 'user2'] } });
+deny('NO cambia el anfitrión de la batalla', 'update', 'battles/b1', { uid: 'user1', data: { hostId: 'user1', participants: ['user1'] }, incoming: { hostId: 'user2', participants: ['user1'] } });
+
+// colecciones eliminadas o inexistentes: todo denegado por defecto
+deny('subscriptions ya no es accesible', 'get', 'subscriptions/s1', { uid: 'user1', data: { uid: 'user1' } });
+deny('colección desconocida denegada', 'get', 'secretos/x', { uid: 'admin1', data: {} });
+deny('un admin tampoco escribe en colecciones desconocidas', 'create', 'secretos/x', { uid: 'admin1', incoming: {} });
+allow('test: lectura pública', 'get', 'test/t1', {});
+deny('test: sin escritura pública', 'create', 'test/t1', { incoming: { a: 1 } });
+
+// ── Storage ──────────────────────────────────────────────────────────────────────────────────────
+const sCases = [];
+const BUCKET = 'buoyant-objective-fwjkk.firebasestorage.app';
+const MB = 1024 * 1024;
+const st = (name, expectation, method, path, { uid, file } = {}) => sCases.push({
+  name, expectation, tc: {
+    expectation,
+    request: { path: `/b/${BUCKET}/o/${path}`, method, ...(uid ? { auth: auth(uid) } : {}), ...(file ? { resource: file } : {}) },
+  },
+});
+const png = (size = 1 * MB) => ({ contentType: 'image/png', size });
+const mp4 = (size = 50 * MB) => ({ contentType: 'video/mp4', size });
+
+st('el dueño sube una foto a su carpeta', 'ALLOW', 'create', 'users/user1/media/a.png', { uid: 'user1', file: png() });
+st('el dueño sube un video de 150 MB', 'ALLOW', 'create', 'users/user1/media/v.mp4', { uid: 'user1', file: mp4(150 * MB) });
+st('NO sube en la carpeta de otra persona', 'DENY', 'create', 'users/user1/media/a.png', { uid: 'user2', file: png() });
+st('anónimo NO sube', 'DENY', 'create', 'users/user1/media/a.png', { file: png() });
+st('foto de más de 10 MB', 'DENY', 'create', 'users/user1/media/a.png', { uid: 'user1', file: png(11 * MB) });
+st('video de más de 200 MB', 'DENY', 'create', 'users/user1/media/v.mp4', { uid: 'user1', file: mp4(201 * MB) });
+st('SVG (puede llevar scripts) denegado', 'DENY', 'create', 'users/user1/media/x.svg', { uid: 'user1', file: { contentType: 'image/svg+xml', size: 1000 } });
+st('HTML denegado', 'DENY', 'create', 'users/user1/media/x.html', { uid: 'user1', file: { contentType: 'text/html', size: 1000 } });
+st('ejecutable denegado', 'DENY', 'create', 'users/user1/media/x.exe', { uid: 'user1', file: { contentType: 'application/octet-stream', size: 1000 } });
+st('PDF denegado', 'DENY', 'create', 'users/user1/media/x.pdf', { uid: 'user1', file: { contentType: 'application/pdf', size: 1000 } });
+st('fuera de users/ todo denegado', 'DENY', 'create', 'publico/a.png', { uid: 'user1', file: png() });
+st('un admin tampoco sube fuera de su carpeta', 'DENY', 'create', 'users/user1/media/a.png', { uid: 'admin1', file: png() });
+st('usuario con sesión puede ver archivos', 'ALLOW', 'get', 'users/user1/avatar/a.png', { uid: 'user2' });
+st('anónimo NO ve archivos', 'DENY', 'get', 'users/user1/avatar/a.png', {});
+st('el dueño borra su archivo', 'ALLOW', 'delete', 'users/user1/media/a.png', { uid: 'user1' });
+st('NO borra archivos ajenos', 'DENY', 'delete', 'users/user1/media/a.png', { uid: 'user2' });
+st('los archivos no se sobrescriben (update)', 'DENY', 'update', 'users/user1/media/a.png', { uid: 'user1', file: png() });
+st('nada legible fuera de users/', 'DENY', 'get', 'privado/a.png', { uid: 'admin1' });
+
+// ── Ejecución ───────────────────────────────────────────────────────────────────────────────────
+async function run(file, testCases) {
+  const source = { files: [{ name: file.name, content: readFileSync(join(root, file.path), 'utf8') }] };
+  const res = await fetch(`https://firebaserules.googleapis.com/v1/projects/${PROJECT}:test`, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json', 'x-goog-user-project': PROJECT },
+    body: JSON.stringify({ source, testSuite: { testCases: testCases.map((c) => c.tc) } }),
+  });
+  const json = await res.json();
+  if (!res.ok) { console.error('Error de la API:', JSON.stringify(json).slice(0, 600)); process.exit(2); }
+  if (json.issues?.length) { console.error('Problemas en las reglas:', json.issues); process.exit(2); }
+  return json.testResults ?? [];
+}
+
+let failed = 0;
+async function suite(label, file, list) {
+  const results = await run(file, list);
+  let bad = 0;
+  results.forEach((r, i) => {
+    const ok = r.state === 'SUCCESS';
+    if (!ok) bad++;
+    console.log(`${ok ? '✓' : '✗'} ${list[i].name}${ok ? '' : `   → esperado ${list[i].expectation}, obtuve ${r.state}${r.errorPosition ? ' (' + JSON.stringify(r.errorPosition) + ')' : ''} ${(r.debugMessages || []).slice(0, 2).join(' | ')}`}`);
+  });
+  console.log(`\n${label}: ${results.length - bad}/${results.length} correctas\n`);
+  failed += bad;
+}
+await suite('Firestore', { name: 'firestore.rules', path: process.env.RULES_FILE || 'firestore.rules' }, cases);
+await suite('Storage', { name: 'storage.rules', path: 'storage.rules' }, sCases);
+process.exit(failed ? 1 : 0);

@@ -43,6 +43,10 @@ export function createApp(deps: Deps) {
   app.use(express.json({ limit: '100kb' }));
   app.use('/api/v1', rateLimit({ windowMs: 15 * 60 * 1000, limit: 600, standardHeaders: 'draft-7', legacyHeaders: false }));
 
+  // Más estricto en lo que cuesta dinero o cambia permisos.
+  const strict = rateLimit({ windowMs: 15 * 60 * 1000, limit: 60, standardHeaders: 'draft-7', legacyHeaders: false });
+  app.use(['/api/v1/billing', '/api/v1/connect', '/api/v1/applications', '/api/v1/admin'], strict);
+
   app.use('/api/v1', usersRouter(deps));
   app.use('/api/v1', billingRouter(deps));
   app.use('/api/v1/admin', adminRouter(deps));

@@ -1,5 +1,5 @@
 import { useMemo, useState, type FormEvent } from 'react';
-import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import { createUserWithEmailAndPassword, sendEmailVerification, updateProfile } from 'firebase/auth';
 import { auth, firebaseConfigured } from '../lib/firebase';
 import { api } from '../lib/api';
 import { pending } from '../lib/session';
@@ -71,6 +71,7 @@ export default function RegisterPro({ kind, go }: { kind: Kind; go: (view: strin
         pending.application = application;
         const cred = await createUserWithEmailAndPassword(auth, email.trim(), pass);
         await updateProfile(cred.user, { displayName: application.contactName });
+        sendEmailVerification(cred.user).catch(() => {});
         // App.tsx crea users/{uid} + applications/{uid} y entra a la app.
       }
     } catch (ex) {

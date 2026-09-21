@@ -16,6 +16,7 @@ export async function makeTestApp(env: Record<string, string> = {}) {
   await migrate(drizzle(client), { migrationsFolder: MIGRATIONS_DIR });
 
   const synced: Array<[string, string]> = [];
+  const verifyChecks: boolean[] = []; // por cada verificación de token: ¿se pidió comprobar revocación?
   const stripeCalls: Record<string, any[]> = { checkout: [], portal: [], accounts: [], links: [], customers: [] };
   const stripe: any = {
     // El primer cliente es cus_test1; los siguientes son distintos (Stripe nunca repite IDs).
@@ -33,7 +34,8 @@ export async function makeTestApp(env: Record<string, string> = {}) {
   const config = loadConfig({ STRIPE_WEBHOOK_SECRET: 'whsec_test', APP_URL: 'https://app.test', ...env } as NodeJS.ProcessEnv);
   const app = createApp({
     db, config, stripe,
-    verify: async (t) => {
+    verify: async (t, opts) => {
+      verifyChecks.push(opts?.checkRevoked === true);
       const m = /^tok:([^:]+):([^:]*):(true|false)$/.exec(t);
       if (!m) throw new Error('invalid');
       return { uid: m[1], email: m[2] || undefined, emailVerified: m[3] === 'true', name: m[1] };
@@ -55,5 +57,5 @@ export async function makeTestApp(env: Record<string, string> = {}) {
     return { status: res.status, json };
   }
 
-  return { db, call, synced, stripeCalls, close: async () => { server.close(); await client.close(); } };
+  return { db, base, call, synced, stripeCalls, verifyChecks, close: async () => { server.close(); await client.close(); } };
 }

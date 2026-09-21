@@ -14,18 +14,26 @@ service cloud.firestore {
     function roleUnchanged() {
       return request.resource.data.get('role', 'usuario') == resource.data.get('role', 'usuario');
     }
+    function shortText(field, max) { return request.resource.data.get(field, '').size() <= max; }
+    function only(fields) { return request.resource.data.diff(resource.data).affectedKeys().hasOnly(fields); }
 
     // ── Perfiles ─────────────────────────────────────────────────────────
     match /users/{userId} {
       // Los perfiles (nombre, usuario, país, bio, foto, rol) los ven usuarios con sesión. El correo NO se guarda aquí.
       allow read: if signedIn();
-      // Al crearse, todo perfil nace como 'usuario': nadie se auto-asigna admin/instructor.
-      allow create: if isOwner(userId) && request.resource.data.get('role', 'usuario') == 'usuario';
+      // Al crearse, todo perfil nace como 'usuario' y solo con los campos conocidos y de tamaño razonable.
+      allow create: if isOwner(userId)
+        && request.resource.data.get('role', 'usuario') == 'usuario'
+        && request.resource.data.keys().hasOnly(['displayName', 'photoURL', 'photoPath', 'handle', 'country', 'countryCode', 'bio', 'accountType', 'role', 'createdAt', 'updatedAt', 'email'])
+        && shortText('bio', 280) && shortText('displayName', 80) && shortText('handle', 20);
       // El dueño edita su perfil pero no su rol; solo un admin cambia roles.
-      allow update: if (isOwner(userId) && roleUnchanged()) || isAdmin();
+      allow update: if (isOwner(userId) && roleUnchanged()
+          && request.resource.data.keys().hasOnly(['displayName', 'photoURL', 'photoPath', 'handle', 'country', 'countryCode', 'bio', 'accountType', 'role', 'createdAt', 'updatedAt', 'email'])
+          && shortText('bio', 280) && shortText('displayName', 80) && shortText('handle', 20))
+        || isAdmin();
       allow delete: if isAdmin();
 
-      // Datos privados del usuario (playlists, favoritos, práctica, etc.)
+      // Datos privados del usuario (galería, playlists, favoritos, práctica…): solo el dueño.
       match /{sub}/{docId} {
         allow read, write: if isOwner(userId);
       }
@@ -45,26 +53,73 @@ service cloud.firestore {
         && (isAdmin() || (isStaff() && resource.data.get('ownerId', '') == request.auth.uid));
     }
 
-    // ── Comunidad y mensajes: usuarios con sesión; cada quien solo edita lo suyo ──
+    // ── Comunidad (público para usuarios con sesión): cada quien solo publica y edita lo suyo ──
     match /community_messages/{id} {
       allow read: if signedIn();
-      allow create: if signedIn() && request.resource.data.get('uid', request.auth.uid) == request.auth.uid;
-      allow update, delete: if isAdmin() || (signedIn() && resource.data.get('uid', '') == request.auth.uid);
+      allow create: if signedIn() && request.resource.data.get('uid', '') == request.auth.uid && shortText('text', 2000);
+      allow update: if signedIn() && resource.data.get('uid', '') == request.auth.uid
+        && request.resource.data.uid == resource.data.uid && shortText('text', 2000);
+      allow delete: if isAdmin() || (signedIn() && resource.data.get('uid', '') == request.auth.uid);
     }
     match /chat_messages/{id} {
       allow read: if signedIn();
-      allow create: if signedIn() && request.resource.data.get('uid', request.auth.uid) == request.auth.uid;
-      allow update, delete: if isAdmin() || (signedIn() && resource.data.get('uid', '') == request.auth.uid);
+      allow create: if signedIn() && request.resource.data.get('uid', '') == request.auth.uid && shortText('text', 2000);
+      allow update: if signedIn() && resource.data.get('uid', '') == request.auth.uid
+        && request.resource.data.uid == resource.data.uid && shortText('text', 2000);
+      allow delete: if isAdmin() || (signedIn() && resource.data.get('uid', '') == request.auth.uid);
     }
-    match /direct_messages/{id}  { allow read, write: if signedIn(); }
-    match /friendships/{id}      { allow read, write: if signedIn(); }
-    match /battles/{id}          { allow read, write: if signedIn(); }
-    match /user_playlists/{id}   { allow read, write: if signedIn(); }
-    match /feedback_items/{id}   { allow read, write: if signedIn(); }
-    match /notifications/{id}    { allow read, write: if signedIn(); }
-    match /practice_logs/{id}    { allow read, write: if signedIn(); }
 
-    // ── Comprobación de conexión: solo lectura (antes era escritura pública) ──
+    // ── Mensajes directos: { participants: [uidA, uidB], senderId, text, createdAt } ──
+    // Solo los dos participantes los leen. Se consultan con where('participants', 'array-contains', uid).
+    match /direct_messages/{id} {
+      allow read: if signedIn() && request.auth.uid in resource.data.participants;
+      allow create: if signedIn()
+        && request.resource.data.senderId == request.auth.uid
+        && request.resource.data.participants.size() == 2
+        && request.auth.uid in request.resource.data.participants
+        && shortText('text', 2000);
+      allow update: if false; // los mensajes no se editan
+      allow delete: if signedIn() && resource.data.senderId == request.auth.uid;
+    }
+
+    // ── Amistades: { users: [uidA, uidB], requesterId, status: pending|accepted|declined|blocked } ──
+    match /friendships/{id} {
+      allow read: if signedIn() && request.auth.uid in resource.data.users;
+      allow create: if signedIn()
+        && request.resource.data.requesterId == request.auth.uid
+        && request.resource.data.users.size() == 2
+        && request.auth.uid in request.resource.data.users
+        && request.resource.data.status == 'pending';
+      // Solo se cambia el estado y quien envió la solicitud no puede aceptarla por la otra persona.
+      allow update: if signedIn() && request.auth.uid in resource.data.users
+        && only(['status'])
+        && request.resource.data.status in ['accepted', 'declined', 'blocked']
+        && (request.resource.data.status != 'accepted' || resource.data.requesterId != request.auth.uid);
+      allow delete: if signedIn() && request.auth.uid in resource.data.users;
+    }
+
+    // ── Batallas: { hostId, participants: [uid…], status, … } ──
+    match /battles/{id} {
+      allow read: if signedIn();
+      allow create: if signedIn() && request.resource.data.hostId == request.auth.uid && request.auth.uid in request.resource.data.participants;
+      allow update: if signedIn() && request.auth.uid in resource.data.participants && request.resource.data.hostId == resource.data.hostId;
+      allow delete: if isAdmin() || (signedIn() && resource.data.hostId == request.auth.uid);
+    }
+
+    // ── Notificaciones: { userId, … }. Las crea el servidor; el dueño solo las lee, marca como leídas o borra ──
+    match /notifications/{id} {
+      allow read: if signedIn() && resource.data.userId == request.auth.uid;
+      allow create: if false;
+      allow update: if signedIn() && resource.data.userId == request.auth.uid && only(['read']);
+      allow delete: if signedIn() && resource.data.userId == request.auth.uid;
+    }
+
+    // ── Datos personales con { userId }: playlists, comentarios de práctica y registros ──
+    match /user_playlists/{id} { allow read, update, delete: if signedIn() && resource.data.userId == request.auth.uid; allow create: if signedIn() && request.resource.data.userId == request.auth.uid; }
+    match /feedback_items/{id} { allow read, update, delete: if signedIn() && resource.data.userId == request.auth.uid; allow create: if signedIn() && request.resource.data.userId == request.auth.uid; }
+    match /practice_logs/{id}  { allow read, update, delete: if signedIn() && resource.data.userId == request.auth.uid; allow create: if signedIn() && request.resource.data.userId == request.auth.uid; }
+
+    // ── Comprobación de conexión: solo lectura ──
     match /test/{docId} { allow read: if true; allow write: if false; }
   }
 }

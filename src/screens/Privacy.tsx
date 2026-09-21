@@ -74,7 +74,7 @@ const ES: Doc = {
         ['**Resto del mundo**', 'Los derechos que reconozca la ley de tu país.', 'La autoridad de protección de datos de tu país.'],
       ] } ] },
     { title: 'Cookies y almacenamiento local', blocks: [
-      { t: 'p', x: 'Solo usamos almacenamiento técnico necesario del navegador, por ejemplo para mantener tu sesión iniciada a través de Firebase. No usamos cookies de publicidad ni de analítica de terceros. Puedes borrar estos datos desde tu navegador, pero tendrás que volver a iniciar sesión.' } ] },
+      { t: 'p', x: 'Solo usamos almacenamiento técnico necesario del navegador, por ejemplo para mantener tu sesión iniciada a través de Firebase y, de forma temporal, para reenviar los datos de tu registro si el servicio no estaba disponible en ese momento (se borran al enviarse). No usamos cookies de publicidad ni de analítica de terceros. Puedes borrar estos datos desde tu navegador, pero tendrás que volver a iniciar sesión.' } ] },
     { title: 'Seguridad', blocks: [
       { t: 'p', x: 'Protegemos tus datos con conexión cifrada (HTTPS), contraseñas cifradas, reglas de acceso que limitan qué puede leer y escribir cada usuario y roles con permisos diferenciados. Ningún sistema es infalible: usa una contraseña única y robusta y avísanos si detectas un uso indebido de tu cuenta. Si ocurre una brecha que te afecte, te lo notificaremos y avisaremos a las autoridades cuando la ley lo exija.' } ] },
     { title: 'Menores de edad', blocks: [
@@ -149,7 +149,7 @@ const EN: Doc = {
         ['**Rest of the world**', 'The rights recognized by your country’s law.', 'Your country’s data protection authority.'],
       ] } ] },
     { title: 'Cookies and local storage', blocks: [
-      { t: 'p', x: 'We only use technical browser storage that is necessary, for example to keep you signed in through Firebase. We do not use advertising or third-party analytics cookies. You can clear this data from your browser, but you will need to sign in again.' } ] },
+      { t: 'p', x: 'We only use technical browser storage that is necessary, for example to keep you signed in through Firebase and, temporarily, to resend your sign-up details if the service was unavailable at that moment (they are deleted once sent). We do not use advertising or third-party analytics cookies. You can clear this data from your browser, but you will need to sign in again.' } ] },
     { title: 'Security', blocks: [
       { t: 'p', x: 'We protect your data with encrypted connections (HTTPS), encrypted passwords, access rules that limit what each user can read and write, and roles with separate permissions. No system is infallible: use a unique, strong password and let us know if you notice misuse of your account. If a breach affects you, we will notify you and the authorities where the law requires it.' } ] },
     { title: 'Minors', blocks: [
