@@ -24,7 +24,7 @@ export function createApp(deps: Deps) {
     maxAge: 600,
   }));
 
-  app.get('/healthz', (_req, res) => { res.json({ ok: true }); });
+  app.get('/api/health', (_req, res) => { res.json({ ok: true }); });
 
   // Webhook de Stripe: necesita el cuerpo SIN parsear para verificar la firma, así que va antes de express.json().
   app.post('/api/v1/webhooks/stripe', express.raw({ type: 'application/json', limit: '1mb' }), wrap(async (req, res) => {

@@ -39,13 +39,20 @@ Cambios de esquema: edita `api/src/db/schema.ts` y ejecuta `npm run db:generate`
 | `GET /admin/applications`, `POST /admin/applications/:id/decision` | admin | Aprobar o rechazar solicitudes (cambia el rol) |
 | `POST /admin/users/:id/role`, `GET/PUT /admin/plans/:id` | admin | Roles y catálogo de planes |
 
+## Región de despliegue
+Este proyecto tiene la cuota `MaxRegionsPerProject` de Cloud Run al límite: **`us-central1` falla con "quota exceeded"**, así que la API
+se despliega en **`europe-west1`** (región ya usada por el proyecto). Para no pagar latencia entre regiones, Cloud SQL debe estar
+en la **misma región** (`europe-west1`); la red `default` y el acceso privado a servicios son globales. Para usar otra región,
+solicita más cuota en *Cloud Run → Cuotas y límites*.
+Nota: `/healthz` está reservada por Cloud Run; el chequeo de salud de la API es `GET /api/health`.
+
 ## Puesta en marcha en Google Cloud (una vez)
 > Crea recursos con coste (Cloud SQL `db-f1-micro` cuesta unos 8–10 USD/mes aunque no haya tráfico). Cloud Run escala a cero.
 > La política de organización de este proyecto prohíbe la IP pública en Cloud SQL, así que se usa **IP privada** en la red `default`
 > (ya tiene el acceso privado a servicios configurado) y Cloud Run entra con **Direct VPC egress**.
 
 ```bash
-PROJECT=buoyant-objective-fwjkk; REGION=us-central1
+PROJECT=buoyant-objective-fwjkk; REGION=europe-west1
 gcloud services enable run.googleapis.com sqladmin.googleapis.com secretmanager.googleapis.com artifactregistry.googleapis.com cloudbuild.googleapis.com --project $PROJECT
 
 # 1) Cloud SQL (PostgreSQL 16) con IP privada y protección contra borrado

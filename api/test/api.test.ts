@@ -11,7 +11,7 @@ afterAll(async () => { await t.close(); });
 const proApplication = { kind: 'estudio', orgName: 'Waack Academy', contactName: 'Ana Ruiz', countryCode: 'mx', city: 'CDMX', styles: 'Waacking, Punking', about: 'Academia de baile con diez años de experiencia.' };
 
 describe('salud y autenticación', () => {
-  it('healthz responde', async () => { expect((await t.call('GET', '/healthz')).status).toBe(200); });
+  it('health responde', async () => { expect((await t.call('GET', '/api/health')).status).toBe(200); });
   it('sin token → 401', async () => { expect((await t.call('GET', '/api/v1/me')).status).toBe(401); });
   it('token inválido → 401', async () => { expect((await t.call('GET', '/api/v1/me', { token: 'basura' })).status).toBe(401); });
   it('con token válido pero sin sesión → 409', async () => { expect((await t.call('GET', '/api/v1/me', { token: tok('nadie') })).status).toBe(409); });

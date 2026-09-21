@@ -18,7 +18,7 @@ afterAll(async () => { await t.close(); });
 
 describe('cabeceras y CORS', () => {
   it('no anuncia el framework y añade cabeceras de seguridad', async () => {
-    const res = await fetch(t.base + '/healthz');
+    const res = await fetch(t.base + '/api/health');
     expect(res.headers.get('x-powered-by')).toBeNull();
     expect(res.headers.get('x-content-type-options')).toBe('nosniff');
     expect(res.headers.get('strict-transport-security')).toMatch(/max-age=/);
@@ -26,12 +26,12 @@ describe('cabeceras y CORS', () => {
   });
 
   it('un origen no permitido NO recibe cabeceras CORS', async () => {
-    const res = await fetch(t.base + '/healthz', { headers: { origin: 'https://evil.example' } });
+    const res = await fetch(t.base + '/api/health', { headers: { origin: 'https://evil.example' } });
     expect(res.headers.get('access-control-allow-origin')).toBeNull();
   });
 
   it('un origen permitido sí', async () => {
-    const res = await fetch(t.base + '/healthz', { headers: { origin: 'https://waack-on.com' } });
+    const res = await fetch(t.base + '/api/health', { headers: { origin: 'https://waack-on.com' } });
     expect(res.headers.get('access-control-allow-origin')).toBe('https://waack-on.com');
   });
 });
