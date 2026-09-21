@@ -22,6 +22,8 @@ export const users = pgTable('users', {
   bio: text('bio'),
   photoUrl: text('photo_url'),
   role: userRole('role').notNull().default('usuario'),
+  termsVersion: text('terms_version'), // versión de los Términos de servicio que aceptó al registrarse
+  termsAcceptedAt: timestamp('terms_accepted_at', { withTimezone: true }),
   createdAt: createdAt(),
   updatedAt: updatedAt(),
 });

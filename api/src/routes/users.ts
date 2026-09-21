@@ -28,6 +28,7 @@ const sessionBody = z.object({
   handle: handle.optional(),
   countryCode: country.optional(),
   application: applicationBody.optional(),
+  termsVersion: z.string().trim().regex(/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/).optional(), // p. ej. 2026-09-21
 });
 
 // La foto de perfil solo puede apuntar a Firebase Storage o a la foto de la cuenta de Google.
@@ -74,6 +75,7 @@ export function usersRouter(deps: Deps) {
         handle: h,
         countryCode: body.countryCode ?? body.application?.countryCode ?? null, // Stripe Connect necesita el país del cobrador
         photoUrl: t.picture ?? null,
+        ...(body.termsVersion ? { termsVersion: body.termsVersion, termsAcceptedAt: new Date() } : {}),
       }).onConflictDoNothing({ target: users.firebaseUid }).returning();
       if (created) { user = created; isNew = true; }
       else [user] = await db.select().from(users).where(eq(users.firebaseUid, t.uid)).limit(1);

@@ -55,6 +55,12 @@ export default function Login({ v }: { v: any }) {
           </b>
         </div>
         <div style={{"marginTop":"14px"}}>
+          <a href="/terminos" target="_blank" rel="noopener noreferrer" style={{"fontSize":"12px","color":"rgba(226,231,255,.6)","textDecoration":"underline","textUnderlineOffset":"3px"}}>
+            {"Términos de servicio"}
+          </a>
+          <span style={{"color":"rgba(226,231,255,.35)"}}>
+            {" · "}
+          </span>
           <a href="/privacidad" target="_blank" rel="noopener noreferrer" style={{"fontSize":"12px","color":"rgba(226,231,255,.6)","textDecoration":"underline","textUnderlineOffset":"3px"}}>
             {"Política de privacidad"}
           </a>

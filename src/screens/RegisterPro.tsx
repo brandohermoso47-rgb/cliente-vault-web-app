@@ -3,7 +3,7 @@ import { createUserWithEmailAndPassword, sendEmailVerification, updateProfile } 
 import { auth, firebaseConfigured } from '../lib/firebase';
 import { api } from '../lib/api';
 import { pending } from '../lib/session';
-import { emailOk, passwordOk, PASSWORD_HELP } from '../lib/validators';
+import { emailOk, passwordOk, PASSWORD_HELP, TERMS_VERSION } from '../lib/validators';
 import { authMessage } from '../lib/authErrors';
 import { S } from './authStyles';
 import RegisterTabs from './RegisterTabs';
@@ -47,7 +47,7 @@ export default function RegisterPro({ kind, go }: { kind: Kind; go: (view: strin
     if (!country || !city.trim()) return setErr('Indica tu país y ciudad.');
     if (styles.trim().length < 2) return setErr('Indica tus especialidades o estilos.');
     if (about.trim().length < 20) return setErr('Cuéntanos un poco más sobre ti o tu estudio (mínimo 20 caracteres).');
-    if (!terms) return setErr('Debes aceptar la política de privacidad.');
+    if (!terms) return setErr('Debes aceptar los términos de servicio y la política de privacidad.');
     if (!firebaseConfigured) return setErr('Firebase no está configurado (falta .env.local).');
 
     const application = {
@@ -67,6 +67,7 @@ export default function RegisterPro({ kind, go }: { kind: Kind; go: (view: strin
         await api('POST', '/applications', application);
         setSent(true);
       } else {
+        pending.terms = TERMS_VERSION;
         pending.profile = { displayName: application.contactName, countryCode: application.countryCode, country: application.country, accountType: 'usuario' };
         pending.application = application;
         const cred = await createUserWithEmailAndPassword(auth, email.trim(), pass);
@@ -77,6 +78,7 @@ export default function RegisterPro({ kind, go }: { kind: Kind; go: (view: strin
     } catch (ex) {
       pending.profile = null;
       pending.application = null;
+      pending.terms = null;
       setErr(ex instanceof Error && !(ex as any).code?.startsWith?.('auth/') ? ex.message : authMessage(ex));
       setBusy(false);
     }
@@ -151,7 +153,7 @@ export default function RegisterPro({ kind, go }: { kind: Kind; go: (view: strin
 
         <label style={S.check}>
           <input type="checkbox" checked={terms} onChange={(e) => setTerms(e.target.checked)} style={{ marginTop: 3, accentColor: '#FF2E86' }} />
-          <span>He leído y acepto la <a href="/privacidad" target="_blank" rel="noopener noreferrer" style={S.link}>Política de privacidad</a> y confirmo que los datos son verdaderos.</span>
+          <span>He leído y acepto los <a href="/terminos" target="_blank" rel="noopener noreferrer" style={S.link}>Términos de servicio</a> y la <a href="/privacidad" target="_blank" rel="noopener noreferrer" style={S.link}>Política de privacidad</a> y confirmo que los datos son verdaderos.</span>
         </label>
 
         {err && <div style={S.err}>{err}</div>}

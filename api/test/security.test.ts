@@ -163,3 +163,26 @@ describe('límite de peticiones', () => {
     expect(statuses[0]).not.toBe(429);
   });
 });
+
+describe('aceptación de los términos de servicio', () => {
+  it('se guarda la versión y la fecha al crear la cuenta, y no se pisa después', async () => {
+    const r = await t.call('POST', '/api/v1/session', { token: tok('terms1'), body: { termsVersion: '2026-09-21' } });
+    expect(r.status).toBe(201);
+    let [u] = await t.db.select().from(schema.users).where(eq(schema.users.firebaseUid, 'terms1'));
+    expect(u.termsVersion).toBe('2026-09-21');
+    expect(u.termsAcceptedAt).toBeInstanceOf(Date);
+    const first = u.termsAcceptedAt!.getTime();
+    await t.call('POST', '/api/v1/session', { token: tok('terms1'), body: { termsVersion: '2030-01-01' } });
+    [u] = await t.db.select().from(schema.users).where(eq(schema.users.firebaseUid, 'terms1'));
+    expect(u.termsVersion).toBe('2026-09-21');
+    expect(u.termsAcceptedAt!.getTime()).toBe(first);
+  });
+  it('una versión con formato raro se rechaza', async () => {
+    expect((await t.call('POST', '/api/v1/session', { token: tok('terms2'), body: { termsVersion: "1'; DROP TABLE users" } })).status).toBe(400);
+  });
+  it('sin versión, la cuenta se crea sin registro de aceptación (p. ej. entrada con Google)', async () => {
+    await t.call('POST', '/api/v1/session', { token: tok('terms3') });
+    const [u] = await t.db.select().from(schema.users).where(eq(schema.users.firebaseUid, 'terms3'));
+    expect(u.termsVersion).toBeNull();
+  });
+});

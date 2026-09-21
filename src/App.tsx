@@ -1286,6 +1286,7 @@ class App extends Component<any, any> {
     if (prof.handle) body.handle = prof.handle;
     if (prof.countryCode) body.countryCode = prof.countryCode;
     if (p.application) body.application = p.application;
+    if (p.terms) body.termsVersion = p.terms;
     try {
       const r = await api('POST', '/session', body);
       if (r.user && r.user.role === 'admin') await user.getIdToken(true); // recoge el claim de rol nuevo

@@ -4,6 +4,7 @@ import Privacy from './Privacy';
 import Register from './Register';
 import RegisterPro from './RegisterPro';
 import RegisterTabs from './RegisterTabs';
+import Terms from './Terms';
 
 afterEach(cleanup);
 
@@ -63,7 +64,7 @@ describe('registro de usuario', () => {
     expect(error()).toBe('Las contraseñas no coinciden.');
     type('Repite la contraseña', 'Waack#2026x');
     submit();
-    expect(error()).toBe('Debes aceptar la política de privacidad.');
+    expect(error()).toBe('Debes aceptar los términos de servicio y la política de privacidad.');
     fireEvent.click(document.querySelector('input[type=checkbox]')!);
     submit();
     // Todo válido: llega hasta la comprobación de Firebase (no configurado en pruebas) y no crea nada.
@@ -76,6 +77,9 @@ describe('registro de usuario', () => {
     const link = screen.getByText('Política de privacidad') as HTMLAnchorElement;
     expect(link.getAttribute('href')).toBe('/privacidad');
     expect(link.getAttribute('rel')).toContain('noopener');
+    const terms = screen.getByText('Términos de servicio') as HTMLAnchorElement;
+    expect(terms.getAttribute('href')).toBe('/terminos');
+    expect(terms.getAttribute('rel')).toContain('noopener');
   });
 
   it('las contraseñas nunca se muestran en claro', () => {
@@ -121,7 +125,7 @@ describe('registro de instructor y de estudio o academia', () => {
     expect(error()).toMatch(/mínimo 20 caracteres/);
     type('Sobre el estudio o academia', 'Academia de baile con diez años de experiencia.');
     submit();
-    expect(error()).toBe('Debes aceptar la política de privacidad.');
+    expect(error()).toBe('Debes aceptar los términos de servicio y la política de privacidad.');
   });
 });
 
@@ -145,5 +149,35 @@ describe('política de privacidad', () => {
   it('los enlaces externos usan rel=noopener', () => {
     render(<Privacy />);
     document.querySelectorAll('a[target=_blank]').forEach((a) => expect(a.getAttribute('rel')).toContain('noopener'));
+  });
+});
+
+describe('términos de servicio', () => {
+  it('se muestran completos en español, sin marcas de formato sin resolver', () => {
+    window.history.replaceState(null, '', '/terminos?lang=es');
+    render(<Terms />);
+    expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('Términos de servicio');
+    expect(document.querySelectorAll('section').length).toBe(18);
+    expect(document.body.textContent).not.toMatch(/\*\*|\{mail\}|\[\[/);
+    // temas imprescindibles para una plataforma de pagos con instructores
+    for (const tema of ['Suscripciones, precios y pagos', 'Desistimiento y reembolsos', 'Instructores y estudios: cobros', 'Salud y actividad física', 'Ley aplicable']) {
+      expect(document.body.textContent).toContain(tema);
+    }
+    expect(document.querySelector('a[href^="mailto:"]')).toBeTruthy();
+  });
+  it('cambia a inglés con las mismas secciones y enlaza la política de privacidad', async () => {
+    window.history.replaceState(null, '', '/terminos?lang=es');
+    render(<Terms />);
+    fireEvent.click(screen.getByText('English'));
+    await waitFor(() => expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('Terms of Service'));
+    expect(document.querySelectorAll('section').length).toBe(18);
+    expect(document.querySelector('a[href^="/privacidad"]')).toBeTruthy();
+    expect(document.querySelector('a[href^="/terminos"]')).toBeTruthy();
+  });
+  it('avisa de lo que debe completar la titularidad (entidad, comisión, ley aplicable)', () => {
+    window.history.replaceState(null, '', '/terminos?lang=es');
+    render(<Terms />);
+    const pendientes = [...document.querySelectorAll('span')].filter((x) => /^\[/.test(x.textContent || '')).length;
+    expect(pendientes).toBeGreaterThanOrEqual(6);
   });
 });

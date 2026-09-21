@@ -2,7 +2,7 @@ import { useMemo, useState, type FormEvent } from 'react';
 import { createUserWithEmailAndPassword, sendEmailVerification, updateProfile, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 import { auth, firebaseConfigured } from '../lib/firebase';
 import { pending } from '../lib/session';
-import { emailOk, handleOk, passwordOk, PASSWORD_HELP } from '../lib/validators';
+import { emailOk, handleOk, passwordOk, PASSWORD_HELP, TERMS_VERSION } from '../lib/validators';
 import { authMessage } from '../lib/authErrors';
 import { S, GoogleIcon } from './authStyles';
 import RegisterTabs from './RegisterTabs';
@@ -30,9 +30,10 @@ export default function Register({ go }: { go: (view: string) => void }) {
     if (!emailOk(email)) return setErr('Introduce un correo válido.');
     if (!passwordOk(pass)) return setErr(PASSWORD_HELP);
     if (pass !== pass2) return setErr('Las contraseñas no coinciden.');
-    if (!terms) return setErr('Debes aceptar la política de privacidad.');
+    if (!terms) return setErr('Debes aceptar los términos de servicio y la política de privacidad.');
     if (!firebaseConfigured) return setErr('Firebase no está configurado (falta .env.local).');
     setBusy(true);
+    pending.terms = TERMS_VERSION;
     pending.profile = { displayName: name.trim(), handle: handle.trim().toLowerCase(), countryCode: country, country: countryName(country), accountType: 'usuario' };
     try {
       const cred = await createUserWithEmailAndPassword(auth, email.trim(), pass);
@@ -41,6 +42,7 @@ export default function Register({ go }: { go: (view: string) => void }) {
       // App.tsx detecta la sesión nueva, crea users/{uid} con role "usuario" y entra al dashboard.
     } catch (ex) {
       pending.profile = null;
+      pending.terms = null;
       setErr(authMessage(ex));
       setBusy(false);
     }
@@ -91,7 +93,7 @@ export default function Register({ go }: { go: (view: string) => void }) {
 
         <label style={S.check}>
           <input type="checkbox" checked={terms} onChange={(e) => setTerms(e.target.checked)} style={{ marginTop: 3, accentColor: '#FF2E86' }} />
-          <span>He leído y acepto la <a href="/privacidad" target="_blank" rel="noopener noreferrer" style={S.link}>Política de privacidad</a> de Waack On.</span>
+          <span>He leído y acepto los <a href="/terminos" target="_blank" rel="noopener noreferrer" style={S.link}>Términos de servicio</a> y la <a href="/privacidad" target="_blank" rel="noopener noreferrer" style={S.link}>Política de privacidad</a> de Waack On.</span>
         </label>
 
         {err && <div style={S.err}>{err}</div>}
