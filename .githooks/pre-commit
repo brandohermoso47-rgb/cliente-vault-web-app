@@ -1,0 +1,3 @@
+#!/bin/sh
+# Bloquea el commit si aparece una credencial. Activar una vez: git config core.hooksPath .githooks
+node tools/scan-secrets.mjs --staged || { echo "Commit cancelado: quita las credenciales y vuelve a intentarlo."; exit 1; }

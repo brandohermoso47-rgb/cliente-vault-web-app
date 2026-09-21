@@ -4,6 +4,7 @@ import type { Db } from './db/index.js';
 import type { Config } from './config.js';
 import type { User } from './db/schema.js';
 import type Stripe from 'stripe';
+import { withContext, type Ctx } from './db/context.js';
 
 export class HttpError extends Error {
   constructor(public status: number, public code: string, message?: string) {
@@ -21,6 +22,7 @@ export type Deps = {
   config: Config;
   verify: VerifyToken;
   syncRole: SyncRole;
+  verifyAppCheck?: (token: string) => Promise<void>;
   stripe?: Stripe;
 };
 
@@ -54,4 +56,26 @@ export function errorHandler(err: unknown, _req: Request, res: Response, _next: 
   }
   console.error('Error no controlado:', err);
   res.status(500).json({ error: 'internal', message: 'Error interno del servidor.' });
+}
+
+// Respuesta que devuelve un manejador transaccional.
+export type Reply = { status?: number; body: unknown };
+
+// Ejecuta el manejador DENTRO de una transacción con el contexto de seguridad de la persona (Row Level Security).
+// El commit ocurre ANTES de enviar la respuesta; si el manejador lanza un error, se hace rollback de todo.
+//  - 'user'  : exige sesión con usuario (req.user); solo verá y tocará sus filas (o las de admin si lo es).
+//  - 'system': para el inicio de sesión y el webhook de Stripe.
+export function handle(deps: Deps, kind: 'user' | 'system', fn: (c: { req: Request; db: Db }) => Promise<Reply>): RequestHandler {
+  return (req, res, next) => {
+    (async () => {
+      let ctx: Ctx;
+      if (kind === 'system') ctx = { role: 'system' };
+      else {
+        if (!req.user) throw new HttpError(401, 'unauthenticated', 'Falta la sesión.');
+        ctx = { userId: req.user.id, role: req.user.role === 'admin' ? 'admin' : 'user' };
+      }
+      const reply = await withContext(deps.db, ctx, (db) => fn({ req, db }));
+      res.status(reply.status ?? 200).json(reply.body);
+    })().catch(next);
+  };
 }

@@ -186,3 +186,75 @@ describe('aceptación de los términos de servicio', () => {
     expect(u.termsVersion).toBeNull();
   });
 });
+
+describe('solo mi app: origen estricto', () => {
+  const ME = '/api/v1/me';
+  it('un origen ajeno recibe 403 aunque lleve un token válido', async () => {
+    const r = await t.call('GET', ME, { token: tok('eve'), headers: { origin: 'https://evil.example' } });
+    expect(r.status).toBe(403);
+    expect(r.json.error).toBe('origin_not_allowed');
+  });
+  it('un subdominio o esquema parecido tampoco pasa', async () => {
+    for (const origin of ['https://waack-on.com.evil.example', 'http://waack-on.com', 'https://evil.waack-on.com', 'null']) {
+      expect((await t.call('GET', ME, { token: tok('eve'), headers: { origin } })).status).toBe(403);
+    }
+  });
+  it('sin Origin y sin señal de venir del propio sitio → 403 (curl, scripts, otros servidores)', async () => {
+    expect((await t.call('GET', ME, { token: tok('eve'), headers: { origin: null } })).status).toBe(403);
+    expect((await t.call('GET', ME, { token: tok('eve'), headers: { origin: null, 'sec-fetch-site': 'cross-site' } })).status).toBe(403);
+  });
+  it('un GET del propio sitio (sin Origin pero con Sec-Fetch-Site: same-origin) sí pasa', async () => {
+    expect((await t.call('GET', ME, { token: tok('eve'), headers: { origin: null, 'sec-fetch-site': 'same-origin' } })).status).toBe(200);
+  });
+  it('sin Origin pero con Referer de mi web pasa; con Referer ajeno no', async () => {
+    expect((await t.call('GET', ME, { token: tok('eve'), headers: { origin: null, referer: 'https://waack-on.com/planes' } })).status).toBe(200);
+    expect((await t.call('GET', ME, { token: tok('eve'), headers: { origin: null, referer: 'https://evil.example/waack-on.com' } })).status).toBe(403);
+  });
+  it('el preflight de un origen ajeno no recibe permisos CORS; el de mi web sí (con App Check)', async () => {
+    const bad = await fetch(t.base + ME, { method: 'OPTIONS', headers: { origin: 'https://evil.example', 'access-control-request-method': 'GET' } });
+    expect(bad.headers.get('access-control-allow-origin')).toBeNull();
+    const ok = await fetch(t.base + ME, { method: 'OPTIONS', headers: { origin: 'https://waack-on.com', 'access-control-request-method': 'GET', 'access-control-request-headers': 'authorization,x-firebase-appcheck' } });
+    expect(ok.headers.get('access-control-allow-origin')).toBe('https://waack-on.com');
+    expect((ok.headers.get('access-control-allow-headers') || '').toLowerCase()).toContain('x-firebase-appcheck');
+  });
+  it('health y el webhook de Stripe (firmado) funcionan sin Origin', async () => {
+    expect((await t.call('GET', '/api/health', { headers: { origin: null } })).status).toBe(200);
+    const w = await t.call('POST', '/api/v1/webhooks/stripe', { headers: { origin: null, 'stripe-signature': 'good' }, raw: JSON.stringify({ id: 'evt_noorigin', type: 'charge.succeeded', data: { object: {} } }) });
+    expect(w.status).toBe(200);
+  });
+});
+
+describe('solo mi app: Firebase App Check', () => {
+  let strict: Awaited<ReturnType<typeof makeTestApp>>;
+  beforeAll(async () => {
+    strict = await makeTestApp({ APP_CHECK: 'enforce' });
+    await strict.call('POST', '/api/v1/session', { token: tok('zed'), headers: { 'x-firebase-appcheck': 'appcheck-ok' } });
+  });
+  afterAll(async () => { await strict.close(); });
+
+  it('sin token de App Check → 401', async () => {
+    const r = await strict.call('GET', '/api/v1/me', { token: tok('zed') });
+    expect(r.status).toBe(401);
+    expect(r.json.error).toBe('app_check_required');
+  });
+  it('con un token falso → 401', async () => {
+    const r = await strict.call('GET', '/api/v1/me', { token: tok('zed'), headers: { 'x-firebase-appcheck': 'inventado' } });
+    expect(r.status).toBe(401);
+    expect(r.json.error).toBe('app_check_invalid');
+  });
+  it('con un token válido → 200', async () => {
+    expect((await strict.call('GET', '/api/v1/me', { token: tok('zed'), headers: { 'x-firebase-appcheck': 'appcheck-ok' } })).status).toBe(200);
+  });
+  it('un token de sesión robado no basta sin la app (App Check)', async () => {
+    expect((await strict.call('GET', '/api/v1/me', { token: tok('zed'), headers: { origin: null } })).status).toBe(403);
+  });
+  it('health y el webhook siguen sin App Check', async () => {
+    expect((await strict.call('GET', '/api/health')).status).toBe(200);
+    expect((await strict.call('POST', '/api/v1/webhooks/stripe', { headers: { 'stripe-signature': 'good' }, raw: JSON.stringify({ id: 'evt_ac', type: 'x', data: { object: {} } }) })).status).toBe(200);
+  });
+  it('no arranca APP_CHECK=enforce sin verificador', async () => {
+    const { createApp } = await import('../src/app.js');
+    const { loadConfig } = await import('../src/config.js');
+    expect(() => createApp({ db: t.db, config: loadConfig({ APP_CHECK: 'enforce' } as NodeJS.ProcessEnv), verify: async () => ({ uid: 'x', emailVerified: true }), syncRole: async () => {} })).toThrow(/App Check/);
+  });
+});

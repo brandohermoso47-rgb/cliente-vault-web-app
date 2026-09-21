@@ -1,4 +1,5 @@
-import { auth } from './firebase';
+import { getToken } from 'firebase/app-check';
+import { appCheck, auth } from './firebase';
 
 // Cliente de la API de Waack On (Express en Cloud Run, servida en /api por Firebase Hosting).
 // Cada petición lleva el ID token de Firebase; el servidor lo verifica.
@@ -12,11 +13,14 @@ export async function api<T = any>(method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'D
   const user = auth?.currentUser;
   if (!user) throw new ApiError(401, 'unauthenticated', 'Inicia sesión para continuar.');
   const token = await user.getIdToken();
+  // Si App Check está activo, cada petición demuestra que sale de la app real.
+  let appCheckToken = '';
+  if (appCheck) { try { appCheckToken = (await getToken(appCheck, false)).token; } catch { /* la API decidirá si lo exige */ } }
   let res: Response;
   try {
     res = await fetch(BASE + path, {
       method,
-      headers: { Authorization: `Bearer ${token}`, ...(body === undefined ? {} : { 'Content-Type': 'application/json' }) },
+      headers: { Authorization: `Bearer ${token}`, ...(appCheckToken ? { 'X-Firebase-AppCheck': appCheckToken } : {}), ...(body === undefined ? {} : { 'Content-Type': 'application/json' }) },
       body: body === undefined ? undefined : JSON.stringify(body),
     });
   } catch {

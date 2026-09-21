@@ -41,14 +41,18 @@ export async function makeTestApp(env: Record<string, string> = {}) {
       return { uid: m[1], email: m[2] || undefined, emailVerified: m[3] === 'true', name: m[1] };
     },
     syncRole: async (uid, role) => { synced.push([uid, role]); },
+    verifyAppCheck: async (token) => { if (token !== 'appcheck-ok') throw new Error('bad app check'); },
   });
   const server = app.listen(0);
   const base = `http://127.0.0.1:${(server.address() as AddressInfo).port}`;
 
-  async function call(method: string, path: string, opts: { token?: string; body?: unknown; headers?: Record<string, string>; raw?: string } = {}) {
+  async function call(method: string, path: string, opts: { token?: string; body?: unknown; headers?: Record<string, string | null>; raw?: string } = {}) {
+    // Por defecto la petición "viene de la app" (origen permitido). Pasa { origin: null } para quitarlo.
+    const merged: Record<string, string | null> = { 'content-type': 'application/json', origin: 'https://waack-on.com', ...(opts.token ? { authorization: `Bearer ${opts.token}` } : {}), ...opts.headers };
+    const headers = Object.fromEntries(Object.entries(merged).filter(([, v]) => v !== null)) as Record<string, string>;
     const res = await fetch(base + path, {
       method,
-      headers: { ...(opts.raw === undefined ? { 'content-type': 'application/json' } : { 'content-type': 'application/json' }), ...(opts.token ? { authorization: `Bearer ${opts.token}` } : {}), ...opts.headers },
+      headers,
       body: opts.raw ?? (opts.body === undefined ? undefined : JSON.stringify(opts.body)),
     });
     const text = await res.text();

@@ -6,7 +6,12 @@ const Env = z.object({
   NODE_ENV: z.string().default('development'),
   PORT: z.coerce.number().default(8080),
   APP_URL: z.string().default('https://waack-on.com'),
-  ALLOWED_ORIGINS: z.string().default('https://waack-on.com,https://buoyant-objective-fwjkk.web.app,http://localhost:5173'),
+  // Únicos orígenes (webs) que pueden llamar a la API. En desarrollo añade http://localhost:5173 en tu entorno, no aquí.
+  ALLOWED_ORIGINS: z.string().default('https://waack-on.com'),
+  // 'true': rechaza (403) toda petición que no venga de un origen permitido (o del propio sitio). Solo apágalo para diagnosticar.
+  STRICT_ORIGIN: z.enum(['true', 'false']).default('true'),
+  // Firebase App Check: 'enforce' exige un token que demuestra que la petición sale de la app real (no de curl ni de un script).
+  APP_CHECK: z.enum(['off', 'enforce']).default('off'),
 
   // PostgreSQL: DATABASE_URL (local/CI) o conexión por socket de Cloud SQL.
   DATABASE_URL: z.string().optional(),
@@ -25,7 +30,7 @@ const Env = z.object({
   BOOTSTRAP_ADMIN_EMAILS: z.string().default(''),
 
   // Base de Firestore con nombre (chat, salas, notificaciones). Se usa para sincronizar el rol.
-  FIRESTORE_DB: z.string().default('ai-studio-waackonplataform-995cd1f5-e15c-4eff-aaa2-62e6d650abe1'),
+  FIRESTORE_DB: z.string().optional(), // sin valor por defecto: se define por entorno
 });
 
 export type Config = z.infer<typeof Env>;

@@ -5,7 +5,7 @@ import { emailOk, handleOk, passwordOk } from './validators';
 
 describe('validadores', () => {
   it('acepta correos normales, incluidos los que llevan la letra "s" (regresión del error de registro)', () => {
-    for (const e of ['brandohermoso47@gmail.com', 'sara@waack-on.com', 'a.b+c@sub.dominio.es', 'x@y.z']) expect(emailOk(e)).toBe(true);
+    for (const e of ['susana.sosa@ejemplo.com', 'sara@waack-on.com', 'a.b+c@sub.dominio.es', 'x@y.z']) expect(emailOk(e)).toBe(true);
   });
   it('rechaza correos inválidos', () => {
     for (const e of ['', 'mal@sin', 'sin-arroba.com', 'a b@c.com', '@x.com', 'a@@x.com']) expect(emailOk(e)).toBe(false);

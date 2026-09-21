@@ -20,11 +20,41 @@ perfil de Firestore, para que las reglas lo entiendan.
 cd api
 npm install
 npm test                 # 48 pruebas contra un PostgreSQL embebido (PGlite); no hace falta Firebase ni Stripe
-export DATABASE_URL=postgres://usuario:clave@localhost:5432/waackon
+export DATABASE_URL=postgres://localhost:5432/waackon   # la contraseña, si la hay, va en PGPASSWORD (nunca en el código)
+export ALLOWED_ORIGINS=http://localhost:5173           # solo desarrollo
+export FIRESTORE_DB=<ID-de-tu-base-de-Firestore>
 npm run db:migrate
 npm run dev              # http://localhost:8080  (el frontend la proxea en /api)
 ```
 Cambios de esquema: edita `api/src/db/schema.ts` y ejecuta `npm run db:generate` (crea una migración SQL en `api/drizzle/`).
+
+## Row Level Security (PostgreSQL)
+La base de datos decide qué filas puede ver y modificar cada persona, **para todos los usuarios** (usuario, instructor, estudio y admin), aunque una
+ruta de la API olvide un `WHERE`. Está en `api/drizzle/0002_row_level_security.sql` y se prueba en `api/test/rls.test.ts`.
+
+- Cada petición corre en **una transacción** con `SET LOCAL ROLE waackon_rt` (rol sin privilegios ni `BYPASSRLS`) y dos variables:
+  `app.user_id` y `app.role` (`user` | `admin` | `system`). Ver `api/src/db/context.ts` (`withContext`, `elevate`).
+- **Usuarios, instructores y estudios:** solo ven y editan sus propias filas (perfil, solicitud, suscripciones, pagos, cuenta de cobro).
+- **Admin:** además gestiona usuarios, solicitudes y planes, pero **no ve pagos, suscripciones ni cuentas de cobro de otras personas**.
+- **`system`:** solo inicio de sesión y webhook de Stripe. Cada uso de `elevate()` es una excepción explícita y de solo lectura.
+- **Sin contexto no se ve nada** (falla cerrado). Nadie puede cambiarse el rol ni la identidad: lo impide un disparador (`users_guard`),
+  también para acceso directo a la base. Si un DBA necesita cambiar un rol a mano: `SET app.role = 'system';` antes.
+- El arranque de la API **falla si alguna tabla del esquema público no tiene RLS activo y forzado**: al crear tablas nuevas añade sus políticas en una migración.
+- Firestore y Storage tienen sus propias reglas (`firestore.rules`, `storage.rules`), probadas con `npm run test:rules`.
+
+## Solo mi app (CORS estricto + App Check)
+- **Origen:** la API responde `403 origin_not_allowed` a cualquier petición cuyo `Origin` no esté en `ALLOWED_ORIGINS`
+  (o que no venga del propio sitio: `Sec-Fetch-Site: same-origin` / `Referer` permitido). No solo omite cabeceras CORS: rechaza.
+  Health (`/api/health`) y el webhook de Stripe (va firmado) están exentos. Para desarrollo local añade `http://localhost:5173` en tu entorno.
+- **App Check** (lo que de verdad demuestra que la petición sale de tu app y no de un script): activa App Check en Firebase Console
+  (reCAPTCHA Enterprise), pon la clave del sitio en `VITE_APPCHECK_SITE_KEY` y despliega la API con `APP_CHECK=enforce`.
+  Actívalo también para Firestore y Storage en la consola. Sin clave, la app funciona igual (modo `off`).
+
+## Secretos: nunca en el código
+Las credenciales viven en **Secret Manager** (`DB_PASSWORD`, `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`) y en variables de entorno.
+`npm run scan:secrets` busca claves, tokens y contraseñas en los archivos versionados (el hook `.githooks/pre-commit` lo hace en cada commit:
+`git config core.hooksPath .githooks`). La clave web de Firebase (`VITE_FIREBASE_API_KEY`) es un identificador público, pero se mantiene
+en `.env.local` (fuera de Git) y conviene restringirla por referer en Google Cloud → APIs y servicios → Credenciales.
 
 ## Endpoints (`/api/v1`)
 | Método y ruta | Quién | Para qué |
@@ -74,7 +104,7 @@ done
 # 4) Desplegar la API (Cloud Run construye la imagen desde api/Dockerfile)
 DB_IP=$(gcloud sql instances describe waackon-db --project $PROJECT --format='value(ipAddresses[0].ipAddress)')
 cd api
-gcloud run deploy waack-api --source . --region $REGION --project $PROJECT --allow-unauthenticated   --service-account waack-api@$PROJECT.iam.gserviceaccount.com   --network default --subnet default --vpc-egress private-ranges-only   --set-env-vars DB_HOST=$DB_IP,DB_USER=waackon_app,DB_NAME=waackon,APP_URL=https://waack-on.com,RUN_MIGRATIONS=true,BOOTSTRAP_ADMIN_EMAILS=brandohermoso47@gmail.com   --set-secrets DB_PASSWORD=DB_PASSWORD:latest
+gcloud run deploy waack-api --source . --region $REGION --project $PROJECT --allow-unauthenticated   --service-account waack-api@$PROJECT.iam.gserviceaccount.com   --network default --subnet default --vpc-egress private-ranges-only   --set-env-vars DB_HOST=$DB_IP,DB_USER=waackon_app,DB_NAME=waackon,APP_URL=https://waack-on.com,ALLOWED_ORIGINS=https://waack-on.com,STRICT_ORIGIN=true,FIRESTORE_DB=<ID-de-tu-base-de-Firestore>,RUN_MIGRATIONS=true,BOOTSTRAP_ADMIN_EMAILS=<tu-correo>   --set-secrets DB_PASSWORD=DB_PASSWORD:latest
 # Cuando tengas Stripe: añade --update-secrets STRIPE_SECRET_KEY=STRIPE_SECRET_KEY:latest,STRIPE_WEBHOOK_SECRET=STRIPE_WEBHOOK_SECRET:latest
 ```
 `--allow-unauthenticated` es correcto: la API se protege con el ID token de Firebase, no con IAM.

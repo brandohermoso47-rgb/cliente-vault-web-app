@@ -3,9 +3,10 @@ import { Router } from 'express';
 import type Stripe from 'stripe';
 import { z } from 'zod';
 import { requireVerifiedEmail, withAuth } from '../auth.js';
+import { elevate } from '../db/context.js';
 import { schema, type Db } from '../db/index.js';
 import type { User } from '../db/schema.js';
-import { HttpError, parse, wrap, type Deps } from '../http.js';
+import { HttpError, handle, parse, type Deps } from '../http.js';
 
 const { users, plans, stripeCustomers, payoutAccounts, subscriptions } = schema;
 
@@ -31,15 +32,15 @@ async function getOrCreateCustomer(db: Db, stripe: Stripe, user: User): Promise<
 
 export function billingRouter(deps: Deps) {
   const r = Router();
-  const { db, config } = deps;
+  const { config } = deps;
 
   // Catálogo visible para cualquier usuario con sesión (sin IDs de Stripe).
-  r.get('/plans', withAuth(deps), wrap(async (_req, res) => {
+  r.get('/plans', withAuth(deps), handle(deps, 'user', async ({ db }) => {
     const rows = await db.select().from(plans).where(eq(plans.active, true)).orderBy(plans.id);
-    res.json({ plans: rows.map((p) => ({ id: p.id, kind: p.kind, name: p.name, intervals: { month: !!p.prices.month, year: !!p.prices.year } })) });
+    return { body: { plans: rows.map((p) => ({ id: p.id, kind: p.kind, name: p.name, intervals: { month: !!p.prices.month, year: !!p.prices.year } })) } };
   }));
 
-  r.post('/billing/checkout', withAuth(deps), requireVerifiedEmail, wrap(async (req, res) => {
+  r.post('/billing/checkout', withAuth(deps), requireVerifiedEmail, handle(deps, 'user', async ({ req, db }) => {
     const stripe = needStripe(deps);
     let { planId, interval, instructorId } = parse(checkoutBody, req.body);
     const user = req.user!;
@@ -55,11 +56,16 @@ export function billingRouter(deps: Deps) {
     if (plan.kind === 'instructor') {
       if (!instructorId) throw new HttpError(400, 'instructor_required', 'Elige un instructor.');
       const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(instructorId);
-      const [inst] = await db.select().from(users).where(isUuid ? eq(users.id, instructorId) : eq(users.firebaseUid, instructorId)).limit(1);
+      // Con RLS solo vemos nuestras filas; la ficha del instructor y su cuenta de cobro son de otra persona:
+      // única excepción controlada (solo lectura) mediante 'system'.
+      const { inst, payout } = await elevate(db, async () => {
+        const [inst] = await db.select().from(users).where(isUuid ? eq(users.id, instructorId!) : eq(users.firebaseUid, instructorId!)).limit(1);
+        const [payout] = inst ? await db.select().from(payoutAccounts).where(eq(payoutAccounts.userId, inst.id)).limit(1) : [];
+        return { inst, payout };
+      });
       if (!inst || !['instructor', 'estudio', 'admin'].includes(inst.role)) throw new HttpError(404, 'instructor_not_found', 'Instructor no encontrado.');
       if (inst.id === user.id) throw new HttpError(400, 'self_subscription', 'No puedes suscribirte a ti mismo.');
       instructorId = inst.id; // a partir de aquí siempre el UUID
-      const [payout] = await db.select().from(payoutAccounts).where(eq(payoutAccounts.userId, inst.id)).limit(1);
       if (!payout || !payout.chargesEnabled) throw new HttpError(422, 'instructor_not_ready', 'Este instructor aún no puede recibir pagos.');
       if (plan.feePercent === null) throw new HttpError(422, 'plan_misconfigured', 'El plan no tiene comisión configurada.');
       meta.instructorId = instructorId;
@@ -90,19 +96,19 @@ export function billingRouter(deps: Deps) {
       params.customer_update = { address: 'auto', name: 'auto' };
     }
     const session = await stripe.checkout.sessions.create(params);
-    res.json({ url: session.url });
+    return { body: { url: session.url } };
   }));
 
-  r.post('/billing/portal', withAuth(deps), wrap(async (req, res) => {
+  r.post('/billing/portal', withAuth(deps), handle(deps, 'user', async ({ req, db }) => {
     const stripe = needStripe(deps);
     const [row] = await db.select().from(stripeCustomers).where(eq(stripeCustomers.userId, req.user!.id)).limit(1);
     if (!row) throw new HttpError(409, 'no_customer', 'Aún no tienes suscripciones.');
     const session = await stripe.billingPortal.sessions.create({ customer: row.stripeCustomerId, return_url: `${config.APP_URL}/` });
-    res.json({ url: session.url });
+    return { body: { url: session.url } };
   }));
 
   // Alta de instructores y estudios en Stripe Connect para recibir su parte.
-  r.post('/connect/onboarding', withAuth(deps), requireVerifiedEmail, wrap(async (req, res) => {
+  r.post('/connect/onboarding', withAuth(deps), requireVerifiedEmail, handle(deps, 'user', async ({ req, db }) => {
     const stripe = needStripe(deps);
     const user = req.user!;
     if (!['instructor', 'estudio', 'admin'].includes(user.role)) throw new HttpError(403, 'forbidden', 'Solo instructores y estudios aprobados pueden recibir pagos.');
@@ -123,7 +129,7 @@ export function billingRouter(deps: Deps) {
       refresh_url: `${config.APP_URL}/?connect=refresh`,
       return_url: `${config.APP_URL}/?connect=done`,
     });
-    res.json({ url: link.url });
+    return { body: { url: link.url } };
   }));
 
   return r;

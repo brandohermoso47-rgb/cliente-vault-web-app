@@ -3,13 +3,14 @@ import { Router } from 'express';
 import { z } from 'zod';
 import { requireVerifiedEmail, withAuth } from '../auth.js';
 import { list } from '../config.js';
+import { elevate } from '../db/context.js';
 import { schema } from '../db/index.js';
 import type { User } from '../db/schema.js';
-import { HttpError, parse, wrap, type Deps } from '../http.js';
+import { HttpError, handle, parse, type Deps } from '../http.js';
 
 const { users, applications, subscriptions, plans, payoutAccounts } = schema;
 
-const handle = z.string().trim().toLowerCase().regex(/^[a-z0-9_.]{3,20}$/, '3–20 caracteres: minúsculas, números, punto o guion bajo');
+const handle_ = z.string().trim().toLowerCase().regex(/^[a-z0-9_.]{3,20}$/, '3–20 caracteres: minúsculas, números, punto o guion bajo');
 const country = z.string().trim().length(2).transform((s) => s.toUpperCase());
 
 export const applicationBody = z.object({
@@ -25,7 +26,7 @@ export const applicationBody = z.object({
 
 const sessionBody = z.object({
   displayName: z.string().trim().min(1).max(80).optional(),
-  handle: handle.optional(),
+  handle: handle_.optional(),
   countryCode: country.optional(),
   application: applicationBody.optional(),
   termsVersion: z.string().trim().regex(/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/).optional(), // p. ej. 2026-09-21
@@ -36,7 +37,7 @@ const PHOTO_HOSTS = new Set(['firebasestorage.googleapis.com', 'storage.googleap
 
 const patchBody = z.object({
   displayName: z.string().trim().min(1).max(80).optional(),
-  handle: handle.optional(),
+  handle: handle_.optional(),
   countryCode: country.optional(),
   bio: z.string().trim().max(280).optional(),
   photoUrl: z.string().url().max(600).refine((u) => PHOTO_HOSTS.has(new URL(u).hostname) && u.startsWith('https://'), 'La foto debe estar en el almacenamiento de Waack On o en tu cuenta de Google').optional(),
@@ -51,10 +52,10 @@ const isUnique = (e: any) => (e?.code ?? e?.cause?.code) === '23505';
 
 export function usersRouter(deps: Deps) {
   const r = Router();
-  const { db } = deps;
 
   // Se llama tras iniciar sesión: crea (o recupera) la fila de usuario. Es idempotente.
-  r.post('/session', withAuth(deps, { loadUser: false }), wrap(async (req, res) => {
+  // Corre como 'system': aún no existe la fila de la persona sobre la que aplicar RLS.
+  r.post('/session', withAuth(deps, { loadUser: false }), handle(deps, 'system', async ({ req, db }) => {
     const body = parse(sessionBody, req.body ?? {});
     const t = req.token!;
     const admins = list(deps.config.BOOTSTRAP_ADMIN_EMAILS).map((e) => e.toLowerCase());
@@ -91,10 +92,10 @@ export function usersRouter(deps: Deps) {
       const [existing] = await db.select({ id: applications.id }).from(applications).where(eq(applications.userId, user.id)).limit(1);
       if (!existing && user.role === 'usuario') await db.insert(applications).values({ ...body.application, userId: user.id });
     }
-    res.status(isNew ? 201 : 200).json({ user: publicUser(user), isNew });
+    return { status: isNew ? 201 : 200, body: { user: publicUser(user), isNew } };
   }));
 
-  r.get('/me', withAuth(deps), wrap(async (req, res) => {
+  r.get('/me', withAuth(deps), handle(deps, 'user', async ({ req, db }) => {
     const u = req.user!;
     const [app] = await db.select().from(applications).where(eq(applications.userId, u.id)).limit(1);
     const [payout] = await db.select().from(payoutAccounts).where(eq(payoutAccounts.userId, u.id)).limit(1);
@@ -103,24 +104,27 @@ export function usersRouter(deps: Deps) {
       status: subscriptions.status, currency: subscriptions.currency, currentPeriodEnd: subscriptions.currentPeriodEnd,
       cancelAtPeriodEnd: subscriptions.cancelAtPeriodEnd,
     }).from(subscriptions).leftJoin(plans, eq(plans.id, subscriptions.planId)).where(eq(subscriptions.userId, u.id));
-    res.json({
-      user: publicUser(u),
-      application: app ? { kind: app.kind, orgName: app.orgName, status: app.status, createdAt: app.createdAt } : null,
-      payout: payout ? { chargesEnabled: payout.chargesEnabled, payoutsEnabled: payout.payoutsEnabled, detailsSubmitted: payout.detailsSubmitted } : null,
-      subscriptions: subs,
-    });
+    return {
+      body: {
+        user: publicUser(u),
+        application: app ? { kind: app.kind, orgName: app.orgName, status: app.status, createdAt: app.createdAt } : null,
+        payout: payout ? { chargesEnabled: payout.chargesEnabled, payoutsEnabled: payout.payoutsEnabled, detailsSubmitted: payout.detailsSubmitted } : null,
+        subscriptions: subs,
+      },
+    };
   }));
 
-  r.patch('/me', withAuth(deps), wrap(async (req, res) => {
+  r.patch('/me', withAuth(deps), handle(deps, 'user', async ({ req, db }) => {
     const body = parse(patchBody, req.body ?? {});
     const u = req.user!;
     if (body.handle) {
-      const [taken] = await db.select({ id: users.id }).from(users).where(and(eq(users.handle, body.handle), ne(users.id, u.id))).limit(1);
+      // Con RLS solo vemos nuestra fila: para saber si el @usuario lo tiene otra persona hace falta 'system' (solo esta consulta).
+      const taken = await elevate(db, async () => (await db.select({ id: users.id }).from(users).where(and(eq(users.handle, body.handle!), ne(users.id, u.id))).limit(1))[0]);
       if (taken) throw new HttpError(409, 'handle_taken', 'Ese nombre de usuario ya está en uso.');
     }
     try {
       const [updated] = await db.update(users).set({ ...body, updatedAt: new Date() }).where(eq(users.id, u.id)).returning();
-      res.json({ user: publicUser(updated) });
+      return { body: { user: publicUser(updated) } };
     } catch (e) {
       if (isUnique(e)) throw new HttpError(409, 'handle_taken', 'Ese nombre de usuario ya está en uso.');
       throw e;
@@ -128,14 +132,14 @@ export function usersRouter(deps: Deps) {
   }));
 
   // Quien ya tiene cuenta solicita ser instructor o estudio/academia.
-  r.post('/applications', withAuth(deps), requireVerifiedEmail, wrap(async (req, res) => {
+  r.post('/applications', withAuth(deps), requireVerifiedEmail, handle(deps, 'user', async ({ req, db }) => {
     const body = parse(applicationBody, req.body);
     const u = req.user!;
     if (u.role !== 'usuario') throw new HttpError(409, 'already_professional', 'Tu cuenta ya tiene un rol profesional.');
     const [existing] = await db.select({ id: applications.id }).from(applications).where(eq(applications.userId, u.id)).limit(1);
     if (existing) throw new HttpError(409, 'application_exists', 'Ya enviaste una solicitud.');
     const [created] = await db.insert(applications).values({ ...body, userId: u.id }).returning();
-    res.status(201).json({ application: { kind: created.kind, orgName: created.orgName, status: created.status } });
+    return { status: 201, body: { application: { kind: created.kind, orgName: created.orgName, status: created.status } } };
   }));
 
   return r;

@@ -10,7 +10,8 @@
     "convert": "node tools/convert.mjs",
     "deploy": "npm run build && firebase deploy",
     "test": "vitest run",
-    "test:rules": "node rules-tests/run.mjs"
+    "test:rules": "node rules-tests/run.mjs",
+    "scan:secrets": "node tools/scan-secrets.mjs"
   },
   "dependencies": {
     "firebase": "^11.0.0",

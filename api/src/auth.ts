@@ -1,9 +1,11 @@
 import { eq } from 'drizzle-orm';
 import type { RequestHandler } from 'express';
 import { getApp } from 'firebase-admin/app';
+import { getAppCheck } from 'firebase-admin/app-check';
 import { getAuth } from 'firebase-admin/auth';
 import { getFirestore } from 'firebase-admin/firestore';
 import { schema } from './db/index.js';
+import { withContext } from './db/context.js';
 import { HttpError, type Deps, type SyncRole, type VerifyToken } from './http.js';
 import type { Config } from './config.js';
 import type { Role } from './db/schema.js';
@@ -16,9 +18,13 @@ export const firebaseVerifier = (): VerifyToken => async (idToken, opts) => {
 
 // Mantiene coherentes el rol de Postgres, el custom claim de Firebase y el perfil de Firestore (que usan las reglas).
 export const firebaseRoleSync = (cfg: Config): SyncRole => async (uid, role) => {
+  if (!cfg.FIRESTORE_DB) throw new Error('Falta FIRESTORE_DB (ID de la base de Firestore) para sincronizar el rol.');
   await getAuth().setCustomUserClaims(uid, { role });
   await getFirestore(getApp(), cfg.FIRESTORE_DB).collection('users').doc(uid).set({ role }, { merge: true });
 };
+
+// App Check: comprueba que el token lo emitió Firebase para ESTA app (reCAPTCHA Enterprise / v3).
+export const firebaseAppCheckVerifier = () => async (token: string): Promise<void> => { await getAppCheck().verifyToken(token); };
 
 const bearer = (h?: string) => (h && h.startsWith('Bearer ') ? h.slice(7).trim() : '');
 
@@ -33,7 +39,9 @@ export const withAuth = (deps: Deps, opts: { loadUser?: boolean; checkRevoked?: 
       throw new HttpError(401, 'invalid_token', 'Sesión no válida o caducada.');
     }
     if (opts.loadUser ?? true) {
-      const [u] = await deps.db.select().from(schema.users).where(eq(schema.users.firebaseUid, req.token.uid)).limit(1);
+      // Aún no sabemos quién es: la búsqueda por UID de Firebase es la única consulta que se hace como 'system'.
+      const uid = req.token.uid;
+      const [u] = await withContext(deps.db, { role: 'system' }, (db) => db.select().from(schema.users).where(eq(schema.users.firebaseUid, uid)).limit(1));
       if (!u) throw new HttpError(409, 'no_session', 'Primero llama a POST /v1/session.');
       req.user = u;
     }
