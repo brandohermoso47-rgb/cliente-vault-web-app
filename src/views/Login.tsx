@@ -54,6 +54,12 @@ export default function Login({ v }: { v: any }) {
             {v.loginSwitchLabel}
           </b>
         </div>
+        <div style={{"fontSize":"13px","color":"rgba(226,231,255,.72)","marginTop":"10px"}}>
+          {"¿Eres instructor o estudio? "}
+          <b onClick={v.goRegisterPro} style={{"color":"#fff","cursor":"pointer","textDecoration":"underline","textUnderlineOffset":"3px"}}>
+            {"Regístrate aquí"}
+          </b>
+        </div>
         <div style={{"display":"flex","gap":"6px","padding":"5px","marginTop":"28px","borderRadius":"999px","background":"var(--glass-2)","border":"1px solid var(--hair)"}}>
           <div onClick={v.setDark} style={sty(v.themeDarkBtn)}>
             {"Oscuro"}

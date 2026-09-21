@@ -20,6 +20,7 @@ import Ranking from './views/Ranking';
 import Planes from './views/Planes';
 import Support from './views/Support';
 import Instructor from './views/Instructor';
+import Account from './screens/Account';
 
 export default function Shell({ v }: { v: any }) {
   return (
@@ -464,6 +465,7 @@ export default function Shell({ v }: { v: any }) {
         {v.isPlanes && <Planes v={v} />}
         {v.isSupport && <Support v={v} />}
         {v.isInstructor && <Instructor v={v} />}
+        {v.isCuenta && <Account go={v.goView} />}
         </div>
       </main>
     </div>

@@ -140,6 +140,8 @@ rep("showLoginToggle: v !== 'inicio',", `showLoginToggle: false,
       googleLogin: this.googleLogin,
       forgotPassword: this.forgotPassword,`);
 
+s = (await import('./patches.mjs')).default(s);
+
 const head = `// GENERADO por tools/port-logic.mjs desde la lógica del prototipo. Edita tools/logic.source.js o el script, no este archivo.
 /* eslint-disable */
 // @ts-nocheck
@@ -150,6 +152,9 @@ import { auth, db, firebaseConfigured } from './lib/firebase';
 import Shell from './Shell';
 import Login from './views/Login';
 import ChatDock from './views/ChatDock';
+import Register from './screens/Register';
+import RegisterPro from './screens/RegisterPro';
+import { takePending } from './lib/session';
 
 `;
 const render = `
@@ -160,6 +165,8 @@ const render = `
       <div data-theme={v.theme} style={{ minHeight: '100vh', background: 'var(--ground)', color: 'var(--ink)', position: 'relative', overflow: 'hidden', fontFamily: 'Geist,system-ui,sans-serif' }} ref={v.rootRef}>
         <div style={sty(v.ambientLayer)}></div>
         {v.isLogin && <Login v={v} />}
+        {v.isRegister && <Register go={v.goView} />}
+        {v.isRegisterPro && <RegisterPro go={v.goView} />}
         {v.isApp && <Shell v={v} />}
         {v.isApp && <ChatDock v={v} />}
       </div>

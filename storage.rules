@@ -1,0 +1,17 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Cada persona sube y borra solo en su carpeta users/{uid}/...
+    // Lectura: cualquiera con sesión (las fotos de perfil se ven en la comunidad).
+    match /users/{uid}/{allPaths=**} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null && request.auth.uid == uid
+        && ((request.resource.contentType.matches('image/(jpeg|png|webp|gif)') && request.resource.size < 10 * 1024 * 1024)
+         || (request.resource.contentType.matches('video/(mp4|webm|quicktime)') && request.resource.size < 200 * 1024 * 1024));
+      allow delete: if request.auth != null && request.auth.uid == uid;
+      allow update: if false;
+    }
+    // Todo lo demás, cerrado.
+    match /{allPaths=**} { allow read, write: if false; }
+  }
+}

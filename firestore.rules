@@ -9,8 +9,8 @@ service cloud.firestore {
       return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.get('role', 'usuario');
     }
     function isAdmin() { return signedIn() && role() == 'admin'; }
-    // Personal que publica contenido: admin o instructor.
-    function isStaff() { return signedIn() && (role() == 'admin' || role() == 'instructor'); }
+    // Personal que publica contenido: admin, instructor o estudio (roles que asigna un admin).
+    function isStaff() { return signedIn() && (role() == 'admin' || role() == 'instructor' || role() == 'estudio'); }
     function roleUnchanged() {
       return request.resource.data.get('role', 'usuario') == resource.data.get('role', 'usuario');
     }
@@ -31,14 +31,28 @@ service cloud.firestore {
       }
     }
 
-    // ── Contenido de la plataforma: lo lee cualquiera con sesión, lo publica el personal ──
+    // ── Solicitudes de instructor/estudio: las crea el dueño (siempre 'pendiente'); solo un admin las resuelve ──
+    match /applications/{uid} {
+      allow read: if isOwner(uid) || isAdmin();
+      allow create: if isOwner(uid)
+        && request.resource.data.status == 'pendiente'
+        && request.resource.data.kind in ['instructor', 'estudio']
+        && request.resource.data.uid == request.auth.uid;
+      allow update, delete: if isAdmin();
+    }
+
+    // ── Contenido de la plataforma: lo lee cualquiera con sesión ──
     match /{content}/{docId} {
       allow read: if signedIn()
         && content in ['reels', 'teachers', 'lives', 'lessons', 'announcements', 'presentations',
                        'instructor_playlists', 'instructor_tracks', 'instructor_drive_tracks'];
-      allow write: if isStaff()
-        && content in ['reels', 'teachers', 'lives', 'lessons', 'announcements', 'presentations',
-                       'instructor_playlists', 'instructor_tracks', 'instructor_drive_tracks'];
+      // Publica el personal, pero solo edita/borra lo suyo (ownerId); el admin edita todo.
+      allow create: if content in ['reels', 'teachers', 'lives', 'lessons', 'announcements', 'presentations',
+                                   'instructor_playlists', 'instructor_tracks', 'instructor_drive_tracks']
+        && (isAdmin() || (isStaff() && request.resource.data.get('ownerId', '') == request.auth.uid));
+      allow update, delete: if content in ['reels', 'teachers', 'lives', 'lessons', 'announcements', 'presentations',
+                                          'instructor_playlists', 'instructor_tracks', 'instructor_drive_tracks']
+        && (isAdmin() || (isStaff() && resource.data.get('ownerId', '') == request.auth.uid));
     }
 
     // ── Comunidad y mensajes: usuarios con sesión; cada quien solo edita lo suyo ──

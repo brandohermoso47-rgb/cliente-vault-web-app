@@ -8,6 +8,9 @@ import { auth, db, firebaseConfigured } from './lib/firebase';
 import Shell from './Shell';
 import Login from './views/Login';
 import ChatDock from './views/ChatDock';
+import Register from './screens/Register';
+import RegisterPro from './screens/RegisterPro';
+import { takePending } from './lib/session';
 
 import { sty } from './lib/dc';
 
@@ -825,8 +828,7 @@ class App extends Component<any, any> {
   };
 
   toggleLoginMode = () => {
-    this.loginForm = Object.assign({}, this.loginForm, { mode: this.loginForm.mode === 'signup' ? 'login' : 'signup', error: '', info: '' });
-    this.forceUpdate();
+    this.setState({ view: 'register' });
   };
 
   forgotPassword = async () => {
@@ -1209,12 +1211,14 @@ class App extends Component<any, any> {
     this.syncTheme(); this.syncVars();
     if (!firebaseConfigured) { this.setState({ authReady: true }); return; }
     this.unsubAuth = onAuthStateChanged(auth, async (user) => {
-      this.setState((st: any) => ({ user, authReady: true, view: user ? (st.view === 'login' ? 'dashboard' : st.view) : 'login' }));
+      this.setState((st: any) => ({ user, authReady: true, view: user ? (['login', 'register', 'registerPro'].includes(st.view) ? 'dashboard' : st.view) : (['register', 'registerPro'].includes(st.view) ? st.view : 'login') }));
       if (user) this.startData(); else this.stopData();
       if (user) {
         try {
           const ref = doc(db, 'users', user.uid);
-          if (!(await getDoc(ref)).exists()) await setDoc(ref, { email: user.email, displayName: user.displayName ?? null, role: 'usuario', createdAt: serverTimestamp() });
+          const p = takePending();
+          if (!(await getDoc(ref)).exists()) await setDoc(ref, { email: user.email, displayName: user.displayName ?? null, photoURL: user.photoURL ?? null, ...(p.profile || {}), role: 'usuario', createdAt: serverTimestamp() });
+          if (p.application) await setDoc(doc(db, 'applications', user.uid), { ...p.application, uid: user.uid, email: user.email, status: 'pendiente', createdAt: serverTimestamp() });
         } catch (e) { console.warn('No se pudo crear el perfil en Firestore', e); }
       }
     });
@@ -1409,7 +1413,7 @@ class App extends Component<any, any> {
 
   renderVals() {
     const v = this.state.view;
-    const crumbs = { perfil:'Mi perfil', dashboard:'Dashboard', cursos:'Clases & Cursos', lives:'Lives / En Vivo', reels:'Waack Reels', tv:'Waack On TV', podcast:'Waack On Radio', entrenamiento:'Laboratorio Freestyle', fisico:'Cuerpo & Estiramientos', ebooks:'Manuales', podcasts:'Podcasts', comunidad:'Muro & Retos', ranking:'Ranking & Insignias', planes:'Planes & Membresía', support:'Ayuda & Legal', instructor:'Panel de Instructor' };
+    const crumbs = { perfil:'Mi perfil', cuenta:'Mi cuenta', dashboard:'Dashboard', cursos:'Clases & Cursos', lives:'Lives / En Vivo', reels:'Waack Reels', tv:'Waack On TV', podcast:'Waack On Radio', entrenamiento:'Laboratorio Freestyle', fisico:'Cuerpo & Estiramientos', ebooks:'Manuales', podcasts:'Podcasts', comunidad:'Muro & Retos', ranking:'Ranking & Insignias', planes:'Planes & Membresía', support:'Ayuda & Legal', instructor:'Panel de Instructor' };
     const pill = 'flex:1;text-align:center;padding:8px 12px;border-radius:999px;font-size:11px;font-weight:700;cursor:pointer;transition:all .18s ease;';
     const on = pill + 'background:var(--glass);color:var(--ink);border:1px solid var(--hair);box-shadow:var(--lg-edge);';
     const off = pill + 'color:var(--ink-2);border:1px solid transparent;';
@@ -1469,7 +1473,12 @@ class App extends Component<any, any> {
       crumb: crumbs[v] || 'Dashboard',
       isLogin: v === 'login',
       isInicio: false,
-      isApp: v !== 'login',
+      isApp: !['login', 'register', 'registerPro'].includes(v),
+      isRegister: v === 'register',
+      isRegisterPro: v === 'registerPro',
+      isCuenta: v === 'cuenta',
+      goView: (view) => this.setState({ view }),
+      goRegisterPro: () => this.setState({ view: 'registerPro' }),
       ambientLayer: dark
         ? 'position:absolute;inset:0;pointer-events:none;background:radial-gradient(1000px 580px at 6% -10%, rgba(228,230,236,.14), transparent 66%), radial-gradient(900px 540px at 98% 6%, rgba(168,172,182,.12), transparent 70%), radial-gradient(800px 500px at 58% 110%, rgba(120,124,134,.10), transparent 72%)'
         : 'position:absolute;inset:0;pointer-events:none;background:radial-gradient(980px 560px at 8% -8%, color-mix(in oklch, var(--purple) 16%, transparent), transparent 68%), radial-gradient(880px 520px at 96% 4%, color-mix(in oklch, var(--blue) 14%, transparent), transparent 70%)',
@@ -1844,6 +1853,7 @@ class App extends Component<any, any> {
       acctClose: () => this.setState({ acct: false }),
       acctAvatar: 'width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#fff;background:linear-gradient(135deg,var(--purple),var(--pink));cursor:pointer;transition:box-shadow .2s ease;box-shadow:' + (this.state.acct ? '0 0 0 2px var(--ground), 0 0 0 4px var(--pink)' : 'var(--lg-edge)'),
       acctLinks: [
+        { label: 'Mi cuenta', view: 'cuenta' },
         { label: 'Mi perfil', view: 'perfil' },
         { label: 'Panel de instructor', view: 'instructor' },
         { label: 'Planes & Membresía', view: 'planes' },
@@ -2019,6 +2029,8 @@ class App extends Component<any, any> {
       <div data-theme={v.theme} style={{ minHeight: '100vh', background: 'var(--ground)', color: 'var(--ink)', position: 'relative', overflow: 'hidden', fontFamily: 'Geist,system-ui,sans-serif' }} ref={v.rootRef}>
         <div style={sty(v.ambientLayer)}></div>
         {v.isLogin && <Login v={v} />}
+        {v.isRegister && <Register go={v.goView} />}
+        {v.isRegisterPro && <RegisterPro go={v.goView} />}
         {v.isApp && <Shell v={v} />}
         {v.isApp && <ChatDock v={v} />}
       </div>
