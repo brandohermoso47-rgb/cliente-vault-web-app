@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from 'react';
+import { useMemo, useState, type FormEvent } from 'react';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { doc, serverTimestamp, setDoc } from 'firebase/firestore';
 import { auth, db, firebaseConfigured } from '../lib/firebase';
@@ -7,6 +7,7 @@ import { emailOk, passwordOk, PASSWORD_HELP } from '../lib/validators';
 import { authMessage } from '../lib/authErrors';
 import { S } from './authStyles';
 import RegisterTabs from './RegisterTabs';
+import { countryList, countryName, guessCountryCode } from '../lib/countries';
 
 type Kind = 'instructor' | 'estudio';
 
@@ -20,7 +21,8 @@ export default function RegisterPro({ kind, go }: { kind: Kind; go: (view: strin
   const [email, setEmail] = useState('');
   const [pass, setPass] = useState('');
   const [pass2, setPass2] = useState('');
-  const [country, setCountry] = useState('');
+  const [country, setCountry] = useState(guessCountryCode());
+  const countries = useMemo(() => countryList('es'), []);
   const [city, setCity] = useState('');
   const [styles, setStyles] = useState('');
   const [web, setWeb] = useState('');
@@ -42,7 +44,7 @@ export default function RegisterPro({ kind, go }: { kind: Kind; go: (view: strin
       if (!passwordOk(pass)) return setErr(PASSWORD_HELP);
       if (pass !== pass2) return setErr('Las contraseñas no coinciden.');
     }
-    if (!country.trim() || !city.trim()) return setErr('Indica tu país y ciudad.');
+    if (!country || !city.trim()) return setErr('Indica tu país y ciudad.');
     if (styles.trim().length < 2) return setErr('Indica tus especialidades o estilos.');
     if (about.trim().length < 20) return setErr('Cuéntanos un poco más sobre ti o tu estudio (mínimo 20 caracteres).');
     if (!terms) return setErr('Debes aceptar la política de privacidad.');
@@ -52,7 +54,8 @@ export default function RegisterPro({ kind, go }: { kind: Kind; go: (view: strin
       kind,
       orgName: orgName.trim(),
       contactName: (isStudio ? contact : orgName).trim(),
-      country: country.trim(),
+      countryCode: country,
+      country: countryName(country),
       city: city.trim(),
       styles: styles.trim(),
       web: web.trim(),
@@ -65,7 +68,7 @@ export default function RegisterPro({ kind, go }: { kind: Kind; go: (view: strin
         await setDoc(doc(db, 'applications', u.uid), { ...application, uid: u.uid, email: u.email, status: 'pendiente', createdAt: serverTimestamp() });
         setSent(true);
       } else {
-        pending.profile = { displayName: application.contactName, country: application.country, accountType: 'usuario' };
+        pending.profile = { displayName: application.contactName, countryCode: application.countryCode, country: application.country, accountType: 'usuario' };
         pending.application = application;
         const cred = await createUserWithEmailAndPassword(auth, email.trim(), pass);
         await updateProfile(cred.user, { displayName: application.contactName });
@@ -126,7 +129,10 @@ export default function RegisterPro({ kind, go }: { kind: Kind; go: (view: strin
         <div style={S.row}>
           <div style={{ flex: '1 1 160px' }}>
             <label style={S.label}>País</label>
-            <input style={S.input} value={country} onChange={(e) => setCountry(e.target.value)} placeholder="España" />
+            <select style={S.select} value={country} onChange={(e) => setCountry(e.target.value)} autoComplete="country">
+              <option value="">Selecciona…</option>
+              {countries.map((c) => <option key={c.code} value={c.code}>{c.name}</option>)}
+            </select>
           </div>
           <div style={{ flex: '1 1 160px' }}>
             <label style={S.label}>Ciudad</label>

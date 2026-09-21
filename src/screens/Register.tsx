@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from 'react';
+import { useMemo, useState, type FormEvent } from 'react';
 import { createUserWithEmailAndPassword, updateProfile, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 import { auth, firebaseConfigured } from '../lib/firebase';
 import { pending } from '../lib/session';
@@ -6,12 +6,14 @@ import { emailOk, handleOk, passwordOk, PASSWORD_HELP } from '../lib/validators'
 import { authMessage } from '../lib/authErrors';
 import { S, GoogleIcon } from './authStyles';
 import RegisterTabs from './RegisterTabs';
+import { countryList, countryName, guessCountryCode } from '../lib/countries';
 
 // Registro abierto: cualquier persona crea su cuenta de usuario. El rol inicial siempre es "usuario".
 export default function Register({ go }: { go: (view: string) => void }) {
   const [name, setName] = useState('');
   const [handle, setHandle] = useState('');
-  const [country, setCountry] = useState('');
+  const [country, setCountry] = useState(guessCountryCode());
+  const countries = useMemo(() => countryList('es'), []);
   const [email, setEmail] = useState('');
   const [pass, setPass] = useState('');
   const [pass2, setPass2] = useState('');
@@ -24,13 +26,14 @@ export default function Register({ go }: { go: (view: string) => void }) {
     setErr('');
     if (name.trim().length < 2) return setErr('Escribe tu nombre completo.');
     if (!handleOk(handle)) return setErr('El usuario debe tener 3–20 caracteres: letras minúsculas, números, punto o guion bajo.');
+    if (!country) return setErr('Selecciona tu país.');
     if (!emailOk(email)) return setErr('Introduce un correo válido.');
     if (!passwordOk(pass)) return setErr(PASSWORD_HELP);
     if (pass !== pass2) return setErr('Las contraseñas no coinciden.');
     if (!terms) return setErr('Debes aceptar la política de privacidad.');
     if (!firebaseConfigured) return setErr('Firebase no está configurado (falta .env.local).');
     setBusy(true);
-    pending.profile = { displayName: name.trim(), handle: handle.trim().toLowerCase(), country: country.trim(), accountType: 'usuario' };
+    pending.profile = { displayName: name.trim(), handle: handle.trim().toLowerCase(), countryCode: country, country: countryName(country), accountType: 'usuario' };
     try {
       const cred = await createUserWithEmailAndPassword(auth, email.trim(), pass);
       await updateProfile(cred.user, { displayName: name.trim() });
@@ -68,7 +71,10 @@ export default function Register({ go }: { go: (view: string) => void }) {
           </div>
           <div style={{ flex: '1 1 160px' }}>
             <label style={S.label}>País</label>
-            <input style={S.input} value={country} onChange={(e) => setCountry(e.target.value)} autoComplete="country-name" placeholder="España" />
+            <select style={S.select} value={country} onChange={(e) => setCountry(e.target.value)} autoComplete="country">
+              <option value="">Selecciona…</option>
+              {countries.map((c) => <option key={c.code} value={c.code}>{c.name}</option>)}
+            </select>
           </div>
         </div>
 

@@ -3,6 +3,7 @@ import { sendPasswordResetEmail, signOut, updateProfile } from 'firebase/auth';
 import { addDoc, collection, deleteDoc, doc, onSnapshot, orderBy, query, serverTimestamp, updateDoc } from 'firebase/firestore';
 import { deleteObject, getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { auth, db, storage } from '../lib/firebase';
+import { countryList, countryName } from '../lib/countries';
 import { IMAGE_TYPES, VIDEO_TYPES, MAX_IMAGE_MB, MAX_VIDEO_MB, MAX_TOTAL_MB } from '../lib/validators';
 
 const card: CSSProperties = { border: '1px solid var(--hair)', background: 'var(--glass)', backdropFilter: 'var(--lg-blur)', WebkitBackdropFilter: 'var(--lg-blur)', boxShadow: 'var(--lg-edge), var(--lg-lift)', borderRadius: 22, padding: 24 };
@@ -26,7 +27,8 @@ export default function Account({ go }: { go: (view: string) => void }) {
   const [profile, setProfile] = useState<any>(null);
   const [application, setApplication] = useState<any>(null);
   const [media, setMedia] = useState<Media[]>([]);
-  const [form, setForm] = useState({ displayName: '', handle: '', country: '', bio: '' });
+  const [form, setForm] = useState({ displayName: '', handle: '', country: '', countryCode: '', bio: '' });
+  const countries = useMemo(() => countryList('es'), []);
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
   const [uploads, setUploads] = useState<Record<string, number>>({});
   const [busy, setBusy] = useState(false);
@@ -39,7 +41,7 @@ export default function Account({ go }: { go: (view: string) => void }) {
       onSnapshot(doc(db, 'users', uid), (s) => {
         const d: any = s.data() ?? {};
         setProfile(d);
-        setForm((f) => (f.displayName || f.handle || f.country || f.bio ? f : { displayName: d.displayName ?? user?.displayName ?? '', handle: d.handle ?? '', country: d.country ?? '', bio: d.bio ?? '' }));
+        setForm((f) => (f.displayName || f.handle || f.country || f.bio ? f : { displayName: d.displayName ?? user?.displayName ?? '', handle: d.handle ?? '', country: d.country ?? '', countryCode: d.countryCode ?? '', bio: d.bio ?? '' }));
       }, () => {}),
       onSnapshot(doc(db, 'applications', uid), (s) => setApplication(s.exists() ? s.data() : null), () => {}),
       onSnapshot(query(collection(db, 'users', uid, 'media'), orderBy('createdAt', 'desc')), (s) => setMedia(s.docs.map((d) => ({ id: d.id, ...(d.data() as any) }))), () => {}),
@@ -62,7 +64,7 @@ export default function Account({ go }: { go: (view: string) => void }) {
     const handle = form.handle.trim().toLowerCase();
     if (handle && !/^[a-z0-9_.]{3,20}$/.test(handle)) { setBusy(false); return say(false, 'El usuario debe tener 3–20 caracteres: minúsculas, números, punto o guion bajo.'); }
     try {
-      await updateDoc(doc(db, 'users', uid), { displayName: form.displayName.trim(), handle, country: form.country.trim(), bio: form.bio.trim().slice(0, 280), updatedAt: serverTimestamp() });
+      await updateDoc(doc(db, 'users', uid), { displayName: form.displayName.trim(), handle, countryCode: form.countryCode, country: form.countryCode ? countryName(form.countryCode) : form.country.trim(), bio: form.bio.trim().slice(0, 280), updatedAt: serverTimestamp() });
       await updateProfile(user, { displayName: form.displayName.trim() });
       say(true, 'Perfil guardado.');
     } catch { say(false, 'No se pudo guardar el perfil. Inténtalo de nuevo.'); }
@@ -169,7 +171,10 @@ export default function Account({ go }: { go: (view: string) => void }) {
         <input style={input} value={form.displayName} onChange={(e) => setForm({ ...form, displayName: e.target.value })} />
         <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
           <div style={{ flex: '1 1 220px' }}><label style={label}>Usuario</label><input style={input} value={form.handle} onChange={(e) => setForm({ ...form, handle: e.target.value.toLowerCase() })} placeholder="sara.waack" /></div>
-          <div style={{ flex: '1 1 220px' }}><label style={label}>País</label><input style={input} value={form.country} onChange={(e) => setForm({ ...form, country: e.target.value })} /></div>
+          <div style={{ flex: '1 1 220px' }}><label style={label}>País</label><select style={{ ...input, colorScheme: 'dark light' }} value={form.countryCode} onChange={(e) => setForm({ ...form, countryCode: e.target.value, country: countryName(e.target.value) })}>
+            <option value="">{form.country || 'Selecciona…'}</option>
+            {countries.map((c) => <option key={c.code} value={c.code}>{c.name}</option>)}
+          </select></div>
         </div>
         <label style={label}>Bio <span style={{ opacity: 0.6 }}>({form.bio.length}/280)</span></label>
         <textarea style={{ ...input, minHeight: 84, resize: 'vertical' }} maxLength={280} value={form.bio} onChange={(e) => setForm({ ...form, bio: e.target.value })} placeholder="Cuéntanos qué bailas y qué buscas en Waack On" />
