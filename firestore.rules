@@ -98,6 +98,29 @@ service cloud.firestore {
       allow delete: if signedIn() && request.auth.uid in resource.data.users;
     }
 
+    // ── Interacción real en Reels/contenido: like y comentarios por documento, y seguir a alguien ──
+    match /{content}/{docId}/likes/{uid} {
+      allow read: if signedIn();
+      allow create, delete: if signedIn() && content in ['reels', 'lives'] && request.auth.uid == uid;
+      allow update: if false;
+    }
+    match /{content}/{docId}/comments/{id} {
+      allow read: if signedIn();
+      allow create: if signedIn() && content in ['reels', 'lives']
+        && request.resource.data.get('uid', '') == request.auth.uid && shortText('text', 500);
+      allow update: if false;
+      allow delete: if isAdmin() || (signedIn() && resource.data.get('uid', '') == request.auth.uid);
+    }
+    // { followerId, followingId }, id del documento = "<followerId>_<followingId>" (evita duplicados).
+    match /follows/{id} {
+      allow read: if signedIn();
+      allow create: if signedIn() && request.resource.data.followerId == request.auth.uid
+        && request.resource.data.followingId != request.auth.uid
+        && id == request.resource.data.followerId + '_' + request.resource.data.followingId;
+      allow delete: if signedIn() && resource.data.followerId == request.auth.uid;
+      allow update: if false;
+    }
+
     // ── Publicaciones del dashboard: { authorId, authorName, authorHandle, authorPhotoURL, text,
     //    mediaUrl, mediaType, likesCount, commentsCount, createdAt }. Cualquiera con sesión las lee
     //    (el feed de cada quien filtra por autor del lado del cliente: sus amigos y él mismo);

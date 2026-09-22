@@ -18,6 +18,7 @@ import { startCheckout } from './lib/payments';
 import { api } from './lib/api';
 import { acceptFriend, declineFriend, myFriendIds, removeFriend, sendFriendRequest } from './lib/friends';
 import { publishPost, subscribeFeed } from './lib/posts';
+import { addComment, likeInfo, toggleFollow, toggleLike, watchComments } from './lib/social';
 
 import { sty } from './lib/dc';
 
@@ -981,6 +982,76 @@ class App extends Component<any, any> {
   ];
 
   reelState = { liked: {}, muted: true, feedIndex: 0, tab: 'Para ti' };
+  reelSocial: Record<string, { count: number; liked: boolean; following: boolean; commentsOpen: boolean; comments: any[]; unsubComments?: any; commentText: string }> = {};
+
+  reelSocialFor(id: string) {
+    if (!this.reelSocial[id]) {
+      this.reelSocial[id] = { count: 0, liked: false, following: false, commentsOpen: false, comments: [], commentText: '' };
+      const uid = this.state.user?.uid;
+      if (uid) {
+        likeInfo('reels', id, uid).then((info: any) => {
+          this.reelSocial[id] = Object.assign({}, this.reelSocial[id], info);
+          this.forceUpdate();
+        });
+      }
+    }
+    return this.reelSocial[id];
+  }
+
+  reelToggleLike(r: any) {
+    const uid = this.state.user?.uid;
+    if (!r.id || !uid) { this.toggleLike(r.i); return; }
+    const cur = this.reelSocialFor(r.id);
+    const liked = !cur.liked;
+    this.reelSocial[r.id] = Object.assign({}, cur, { liked, count: cur.count + (liked ? 1 : -1) });
+    this.forceUpdate();
+    toggleLike('reels', r.id, uid, !liked).catch(() => {
+      this.reelSocial[r.id] = cur;
+      this.forceUpdate();
+    });
+  }
+
+  reelToggleFollow(r: any) {
+    const uid = this.state.user?.uid;
+    if (!r.id || !r.ownerId || !uid || r.ownerId === uid) return;
+    const cur = this.reelSocialFor(r.id);
+    const following = !cur.following;
+    this.reelSocial[r.id] = Object.assign({}, cur, { following });
+    this.forceUpdate();
+    toggleFollow(uid, r.ownerId, !following).catch(() => {
+      this.reelSocial[r.id] = cur;
+      this.forceUpdate();
+    });
+  }
+
+  reelToggleComments(r: any) {
+    if (!r.id) return;
+    const cur = this.reelSocialFor(r.id);
+    const open = !cur.commentsOpen;
+    if (open && !cur.unsubComments) {
+      cur.unsubComments = watchComments('reels', r.id, (rows: any) => {
+        this.reelSocial[r.id] = Object.assign({}, this.reelSocial[r.id], { comments: rows });
+        this.forceUpdate();
+      });
+    }
+    this.reelSocial[r.id] = Object.assign({}, cur, { commentsOpen: open });
+    this.forceUpdate();
+  }
+
+  reelCommentChange(r: any, e: any) {
+    this.reelSocial[r.id] = Object.assign({}, this.reelSocialFor(r.id), { commentText: e.target.value });
+    this.forceUpdate();
+  }
+
+  reelSendComment(r: any) {
+    const uid = this.state.user?.uid;
+    const cur = this.reelSocialFor(r.id);
+    const text = cur.commentText.trim();
+    if (!uid || !text) return;
+    this.reelSocial[r.id] = Object.assign({}, cur, { commentText: '' });
+    this.forceUpdate();
+    addComment('reels', r.id, uid, this.myProfile?.displayName || this.state.user?.displayName || 'Alguien', text).catch(() => {});
+  }
 
   fmt(n) { return n >= 1000 ? (n / 1000).toFixed(1).replace('.0', '') + 'K' : String(n); }
 
@@ -1011,17 +1082,30 @@ class App extends Component<any, any> {
 
   buildReels() {
     return this.reelData.map((r, i) => {
-      const on = !!this.reelState.liked[i];
+      const real = !!r.id;
+      const social = real ? this.reelSocialFor(r.id) : null;
+      const on = real ? social.liked : !!this.reelState.liked[i];
+      const count = real ? social.count : r.likes + (on ? 1 : 0);
+      const rr = Object.assign({}, r, { i });
       return {
-        key: 'r' + i,
+        key: r.id || 'r' + i,
         user: r.user,
         caption: r.caption,
         music: '♪ ' + r.music,
         isLive: !!r.live,
         isNew: !!r.nuevo,
-        likeLabel: this.fmt(r.likes + (on ? 1 : 0)),
-        commentLabel: this.fmt(r.comments),
-        onLike: () => this.toggleLike(i),
+        likeLabel: this.fmt(count),
+        commentLabel: this.fmt(real ? social.comments.length : r.comments),
+        followLabel: real && social.following ? 'Siguiendo' : 'Seguir',
+        showFollow: !real || (r.ownerId && r.ownerId !== this.state.user?.uid),
+        onFollow: () => this.reelToggleFollow(rr),
+        onComments: () => this.reelToggleComments(rr),
+        commentsOpen: real ? social.commentsOpen : false,
+        comments: real ? social.comments : [],
+        commentValue: real ? social.commentText : '',
+        onCommentChange: (e: any) => this.reelCommentChange(rr, e),
+        onSendComment: () => this.reelSendComment(rr),
+        onLike: () => this.reelToggleLike(rr),
         heart: on
           ? 'width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--pink);color:#fff;border:1px solid rgba(255,255,255,.35);cursor:pointer;transition:transform .18s cubic-bezier(.2,.85,.25,1);transform:scale(1.08)'
           : 'width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.14);color:#fff;border:1px solid rgba(255,255,255,.28);backdrop-filter:blur(14px);cursor:pointer;transition:transform .18s cubic-bezier(.2,.85,.25,1)',

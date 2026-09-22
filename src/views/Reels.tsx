@@ -54,8 +54,8 @@ export default function Reels({ v }: { v: any }) {
                         {r?.likeLabel}
                       </span>
                     </div>
-                    <div style={{"display":"flex","flexDirection":"column","alignItems":"center","gap":"6px"}}>
-                      <div style={{"width":"46px","height":"46px","borderRadius":"50%","display":"flex","alignItems":"center","justifyContent":"center","background":"rgba(255,255,255,.14)","border":"1px solid rgba(255,255,255,.28)","backdropFilter":"blur(14px)","color":"#fff","cursor":"pointer"}}>
+                    <div onClick={r?.onComments} style={{"display":"flex","flexDirection":"column","alignItems":"center","gap":"6px","cursor":"pointer"}}>
+                      <div style={{"width":"46px","height":"46px","borderRadius":"50%","display":"flex","alignItems":"center","justifyContent":"center","background":"rgba(255,255,255,.14)","border":"1px solid rgba(255,255,255,.28)","backdropFilter":"blur(14px)","color":"#fff"}}>
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round">
                           <path d="M21 11.5a8.4 8.4 0 01-9 8.4 9.9 9.9 0 01-2.8-.4L3 21l1.6-4.6A8.3 8.3 0 013 11.5 8.4 8.4 0 0112 3a8.4 8.4 0 019 8.5z"></path>
                         </svg>
@@ -83,9 +83,13 @@ export default function Reels({ v }: { v: any }) {
                       <span style={{"fontSize":"13px","fontWeight":"700","color":"#fff"}}>
                         {r?.user}
                       </span>
-                      <span style={{"padding":"5px 12px","borderRadius":"999px","border":"1px solid rgba(255,255,255,.6)","fontSize":"11px","fontWeight":"700","color":"#fff","cursor":"pointer"}} className={cx(pc("hover", "background:rgba(255,255,255,.2)"))}>
-                        {"Seguir"}
-                      </span>
+                      {r?.showFollow && (
+                        <>
+                          <span onClick={r?.onFollow} style={{"padding":"5px 12px","borderRadius":"999px","border":"1px solid rgba(255,255,255,.6)","fontSize":"11px","fontWeight":"700","color":"#fff","cursor":"pointer"}} className={cx(pc("hover", "background:rgba(255,255,255,.2)"))}>
+                            {r?.followLabel}
+                          </span>
+                        </>
+                      )}
                     </div>
                     <div style={{"fontSize":"13px","lineHeight":"1.45","color":"#fff","textWrap":"pretty"}}>
                       {r?.caption}
@@ -94,6 +98,40 @@ export default function Reels({ v }: { v: any }) {
                       {r?.music}
                     </div>
                   </div>
+                  {r?.commentsOpen && (
+                    <>
+                      <div style={{"position":"absolute","left":"0","right":"0","bottom":"0","top":"40%","background":"rgba(8,6,11,.94)","backdropFilter":"blur(20px)","borderRadius":"20px 20px 0 0","display":"flex","flexDirection":"column","zIndex":"4"}}>
+                        <div style={{"display":"flex","alignItems":"center","justifyContent":"space-between","padding":"14px 18px","borderBottom":"1px solid rgba(255,255,255,.12)"}}>
+                          <span style={{"fontSize":"13px","fontWeight":"700","color":"#fff"}}>
+                            {"Comentarios"}
+                          </span>
+                          <span onClick={r?.onComments} style={{"color":"rgba(255,255,255,.7)","cursor":"pointer","fontSize":"18px","lineHeight":"1"}}>
+                            {"×"}
+                          </span>
+                        </div>
+                        <div style={{"flex":"1","overflowY":"auto","padding":"12px 18px","display":"flex","flexDirection":"column","gap":"12px"}}>
+                          {(r?.comments ?? []).map((c: any, $index: number) => (
+                            <Fragment key={$index}>
+                              <div>
+                                <div style={{"fontSize":"12px","fontWeight":"700","color":"#fff"}}>
+                                  {c?.authorName}
+                                </div>
+                                <div style={{"fontSize":"12.5px","color":"rgba(255,255,255,.82)","marginTop":"2px"}}>
+                                  {c?.text}
+                                </div>
+                              </div>
+                            </Fragment>
+                          ))}
+                        </div>
+                        <div style={{"display":"flex","gap":"8px","padding":"12px 18px","borderTop":"1px solid rgba(255,255,255,.12)"}}>
+                          <input value={r?.commentValue} onChange={r?.onCommentChange} placeholder="Escribe un comentario…" style={{"flex":"1","minWidth":"0","padding":"10px 14px","borderRadius":"999px","border":"1px solid rgba(255,255,255,.2)","background":"rgba(255,255,255,.08)","color":"#fff","fontSize":"12.5px","outline":"none","boxSizing":"border-box"}} />
+                          <div onClick={r?.onSendComment} style={{"padding":"10px 16px","borderRadius":"999px","fontSize":"12px","fontWeight":"700","color":"#14111A","background":"var(--pink)","cursor":"pointer","whiteSpace":"nowrap"}}>
+                            {"Enviar"}
+                          </div>
+                        </div>
+                      </div>
+                    </>
+                  )}
                 </div>
               </Fragment>
             ))}
