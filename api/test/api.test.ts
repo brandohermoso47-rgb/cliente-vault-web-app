@@ -136,11 +136,11 @@ describe('planes y checkout', () => {
 
   it('plan inexistente, periodo sin precio y datos inválidos', async () => {
     expect((await t.call('POST', '/api/v1/billing/checkout', { token: tok('alice'), body: { planId: 'nope', interval: 'month' } })).status).toBe(404);
-    expect((await t.call('POST', '/api/v1/billing/checkout', { token: tok('alice'), body: { planId: 'catedra', interval: 'year', instructorId: '00000000-0000-4000-8000-000000000000' } })).status).toBe(422);
+    expect((await t.call('POST', '/api/v1/billing/checkout', { token: tok('alice'), body: { planId: 'catedra', interval: 'year', instructorId: '00000000-0000-4000-8000-000000000000' } })).status).toBe(404); // instructor no existe
     expect((await t.call('POST', '/api/v1/billing/checkout', { token: tok('alice'), body: { planId: 'escuela', interval: 'weekly' } })).status).toBe(400);
   });
 
-  it('suscribirse a un instructor exige que pueda cobrar (Connect)', async () => {
+  it('un instructor sin cobros activos, o sin precio propio fijado, no puede recibir suscriptores', async () => {
     const ana = (await t.call('GET', '/api/v1/me', { token: tok('ana') })).json.user; // estudio aprobado
     const body = { planId: 'catedra', interval: 'month', instructorId: ana.id };
     const blocked = await t.call('POST', '/api/v1/billing/checkout', { token: tok('alice'), body });
@@ -152,11 +152,29 @@ describe('planes y checkout', () => {
     expect(t.stripeCalls.accounts.at(-1)).toMatchObject({ type: 'express', country: 'MX' });
     await t.call('POST', '/api/v1/webhooks/stripe', { raw: JSON.stringify({ id: 'evt_acc1', type: 'account.updated', data: { object: { id: 'acct_test1', charges_enabled: true, payouts_enabled: true, details_submitted: true } } }), headers: { 'stripe-signature': 'good' } });
 
+    // Puede cobrar, pero todavía no fijó su precio.
+    const noPrice = await t.call('POST', '/api/v1/billing/checkout', { token: tok('alice'), body });
+    expect(noPrice.status).toBe(422);
+    expect(noPrice.json.error).toBe('instructor_price_not_set');
+  });
+
+  it('un usuario normal no puede fijar precio; el instructor sí, y ahí sí se puede suscribir (reparto fijo 75/25)', async () => {
+    const ana = (await t.call('GET', '/api/v1/me', { token: tok('ana') })).json.user;
+    expect((await t.call('POST', '/api/v1/billing/instructor-price', { token: tok('alice'), body: { priceMonthlyCents: 1500, currency: 'usd' } })).status).toBe(403);
+
+    const priced = await t.call('POST', '/api/v1/billing/instructor-price', { token: tok('ana'), body: { priceMonthlyCents: 2900, currency: 'usd' } });
+    expect(priced.status).toBe(200);
+    expect(priced.json).toMatchObject({ priceMonthlyCents: 2900, currency: 'usd' });
+    expect(t.stripeCalls.products).toHaveLength(1);
+    expect(t.stripeCalls.prices.at(-1)).toMatchObject({ unit_amount: 2900, currency: 'usd', recurring: { interval: 'month' } });
+
+    const body = { planId: 'catedra', interval: 'month', instructorId: ana.id };
     const ok = await t.call('POST', '/api/v1/billing/checkout', { token: tok('alice'), body });
     expect(ok.status).toBe(200);
     const p = t.stripeCalls.checkout.at(-1);
+    expect(p.line_items[0].price).toBe('price_test1');
     expect(p.subscription_data.transfer_data.destination).toBe('acct_test1');
-    expect(p.subscription_data.application_fee_percent).toBe(15);
+    expect(p.subscription_data.application_fee_percent).toBe(25);
     expect(p.subscription_data.metadata.instructorId).toBe(ana.id);
 
     expect((await t.call('POST', '/api/v1/billing/checkout', { token: tok('ana'), body })).status).toBe(400); // a sí mismo
@@ -222,5 +240,19 @@ describe('portal de facturación', () => {
   it('abre el portal si ya hay cliente en Stripe; si no, 409', async () => {
     expect((await t.call('POST', '/api/v1/billing/portal', { token: tok('alice') })).json.url).toBe('https://billing.stripe.test/p1');
     expect((await t.call('POST', '/api/v1/billing/portal', { token: tok('bob') })).status).toBe(409);
+  });
+});
+
+describe('directorio de instructores', () => {
+  it('lista solo a instructores/estudios, con su precio si ya lo fijaron, y filtra con ?q=', async () => {
+    const r = await t.call('GET', '/api/v1/instructors', { token: tok('alice') });
+    expect(r.status).toBe(200);
+    const ana = r.json.instructors.find((i: any) => i.name === 'Ana');
+    expect(ana).toMatchObject({ priceMonthlyCents: 2900, currency: 'usd', chargesEnabled: true });
+    expect(r.json.instructors.every((i: any) => ['Ana'].includes(i.name) || i.name !== 'Alice')).toBe(true); // alice (usuario) no aparece
+
+    const q = await t.call('GET', '/api/v1/instructors?q=ana', { token: tok('alice') });
+    expect(q.json.instructors.map((i: any) => i.name)).toEqual(['Ana']);
+    expect((await t.call('GET', '/api/v1/instructors?q=zzz-nadie', { token: tok('alice') })).json.instructors).toEqual([]);
   });
 });

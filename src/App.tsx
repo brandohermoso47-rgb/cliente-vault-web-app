@@ -10,6 +10,7 @@ import Login from './views/Login';
 import ChatDock from './views/ChatDock';
 import Register from './screens/Register';
 import RegisterPro from './screens/RegisterPro';
+import SetupPhoto from './screens/SetupPhoto';
 import { takePending } from './lib/session';
 import { startCheckout } from './lib/payments';
 import { api } from './lib/api';
@@ -1257,10 +1258,13 @@ class App extends Component<any, any> {
         try {
           const ref = doc(db, 'users', user.uid);
           const p = takePending();
-          if (!(await getDoc(ref)).exists()) await setDoc(ref, { displayName: user.displayName ?? null, photoURL: user.photoURL ?? null, ...(p.profile || {}), role: 'usuario', createdAt: serverTimestamp() });
+          const isNewAccount = !(await getDoc(ref)).exists();
+          if (isNewAccount) await setDoc(ref, { displayName: user.displayName ?? null, photoURL: user.photoURL ?? null, ...(p.profile || {}), role: 'usuario', createdAt: serverTimestamp() });
           this.signupData = p;
+          this.isNewAccount = isNewAccount;
         } catch (e) { console.warn('No se pudo crear el perfil en Firestore', e); }
         await this.syncSession(user);
+        if (this.isNewAccount) { this.isNewAccount = false; if (!user.photoURL) this.setState({ view: 'setupPhoto' }); }
       }
     });
   }
@@ -1561,10 +1565,11 @@ class App extends Component<any, any> {
       crumb: crumbs[v] || 'Dashboard',
       isLogin: v === 'login',
       isInicio: false,
-      isApp: !['login', 'register', 'registerInstructor', 'registerStudio'].includes(v),
+      isApp: !['login', 'register', 'registerInstructor', 'registerStudio', 'setupPhoto'].includes(v),
       isRegister: v === 'register',
       isRegisterInstructor: v === 'registerInstructor',
       isRegisterStudio: v === 'registerStudio',
+      isSetupPhoto: v === 'setupPhoto',
       isCuenta: v === 'cuenta',
       goView: (view) => this.setState({ view }),
       goRegisterPro: () => this.setState({ view: 'registerInstructor' }),
@@ -2127,6 +2132,7 @@ class App extends Component<any, any> {
         {v.isRegister && <Register go={v.goView} />}
         {v.isRegisterInstructor && <RegisterPro kind="instructor" go={v.goView} />}
         {v.isRegisterStudio && <RegisterPro kind="estudio" go={v.goView} />}
+        {v.isSetupPhoto && <SetupPhoto go={v.goView} />}
         {v.isApp && <Shell v={v} />}
         {v.isApp && <ChatDock v={v} />}
       </div>

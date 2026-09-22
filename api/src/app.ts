@@ -6,6 +6,7 @@ import { list } from './config.js';
 import { errorHandler, HttpError, wrap, type Deps } from './http.js';
 import { adminRouter } from './routes/admin.js';
 import { billingRouter } from './routes/billing.js';
+import { instructorsRouter } from './routes/instructors.js';
 import { usersRouter } from './routes/users.js';
 import { withContext } from './db/context.js';
 import { processStripeEvent } from './stripeEvents.js';
@@ -75,6 +76,7 @@ export function createApp(deps: Deps) {
 
   app.use('/api/v1', usersRouter(deps));
   app.use('/api/v1', billingRouter(deps));
+  app.use('/api/v1', instructorsRouter(deps));
   app.use('/api/v1/admin', adminRouter(deps));
 
   app.use((_req, _res, next) => next(new HttpError(404, 'not_found', 'Ruta no encontrada.')));

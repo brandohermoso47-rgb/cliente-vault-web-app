@@ -59,6 +59,18 @@ export const plans = pgTable('plans', {
   updatedAt: updatedAt(),
 });
 
+// Precio propio de cada instructor para su cátedra (antes era un único precio compartido en `plans`).
+export const instructorPricing = pgTable('instructor_pricing', {
+  userId: uuid('user_id').primaryKey().references(() => users.id, { onDelete: 'cascade' }),
+  priceMonthlyCents: integer('price_monthly_cents').notNull(),
+  currency: varchar('currency', { length: 3 }).notNull().default('usd'),
+  stripeProductId: text('stripe_product_id'),
+  stripeMonthlyPriceId: text('stripe_monthly_price_id'),
+  stripeYearlyPriceId: text('stripe_yearly_price_id'),
+  createdAt: createdAt(),
+  updatedAt: updatedAt(),
+});
+
 export const stripeCustomers = pgTable('stripe_customers', {
   userId: uuid('user_id').primaryKey().references(() => users.id, { onDelete: 'cascade' }),
   stripeCustomerId: text('stripe_customer_id').notNull().unique(),

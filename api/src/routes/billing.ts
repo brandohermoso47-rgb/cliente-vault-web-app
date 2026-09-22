@@ -7,13 +7,19 @@ import { elevate } from '../db/context.js';
 import { schema, type Db } from '../db/index.js';
 import type { User } from '../db/schema.js';
 import { HttpError, handle, parse, type Deps } from '../http.js';
+import { INSTRUCTOR_FEE_PERCENT, INSTRUCTOR_PRICE_MAX_CENTS, INSTRUCTOR_PRICE_MIN_CENTS } from '../config.js';
 
-const { users, plans, stripeCustomers, payoutAccounts, subscriptions } = schema;
+const { users, plans, stripeCustomers, payoutAccounts, subscriptions, instructorPricing } = schema;
 
 const checkoutBody = z.object({
   planId: z.string().min(1).max(40),
   interval: z.enum(['month', 'year']),
   instructorId: z.string().min(1).max(128).optional(), // id de usuario (UUID de Postgres) o UID de Firebase del instructor o estudio
+});
+
+const instructorPriceBody = z.object({
+  priceMonthlyCents: z.number().int().min(INSTRUCTOR_PRICE_MIN_CENTS).max(INSTRUCTOR_PRICE_MAX_CENTS),
+  currency: z.string().length(3).default('usd'),
 });
 
 const needStripe = (deps: Deps): Stripe => {
@@ -47,17 +53,17 @@ export function billingRouter(deps: Deps) {
 
     const [plan] = await db.select().from(plans).where(eq(plans.id, planId)).limit(1);
     if (!plan || !plan.active) throw new HttpError(404, 'plan_not_found', 'Este plan no está disponible.');
-    const price = plan.prices[interval];
-    if (!price) throw new HttpError(422, 'no_price', 'Este plan no tiene precio para ese periodo.');
 
     const meta: Record<string, string> = { userId: user.id, planId: plan.id };
     const subscriptionData: Stripe.Checkout.SessionCreateParams.SubscriptionData = { metadata: meta };
+    let price: string | undefined = plan.prices[interval];
 
     if (plan.kind === 'instructor') {
       if (!instructorId) throw new HttpError(400, 'instructor_required', 'Elige un instructor.');
       const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(instructorId);
       // Con RLS solo vemos nuestras filas; la ficha del instructor y su cuenta de cobro son de otra persona:
-      // única excepción controlada (solo lectura) mediante 'system'.
+      // única excepción controlada (solo lectura) mediante 'system'. El precio del instructor sí es público
+      // (directorio), así que esa tabla se lee sin elevar.
       const { inst, payout } = await elevate(db, async () => {
         const [inst] = await db.select().from(users).where(isUuid ? eq(users.id, instructorId!) : eq(users.firebaseUid, instructorId!)).limit(1);
         const [payout] = inst ? await db.select().from(payoutAccounts).where(eq(payoutAccounts.userId, inst.id)).limit(1) : [];
@@ -67,11 +73,15 @@ export function billingRouter(deps: Deps) {
       if (inst.id === user.id) throw new HttpError(400, 'self_subscription', 'No puedes suscribirte a ti mismo.');
       instructorId = inst.id; // a partir de aquí siempre el UUID
       if (!payout || !payout.chargesEnabled) throw new HttpError(422, 'instructor_not_ready', 'Este instructor aún no puede recibir pagos.');
-      if (plan.feePercent === null) throw new HttpError(422, 'plan_misconfigured', 'El plan no tiene comisión configurada.');
+      const [pricing] = await db.select().from(instructorPricing).where(eq(instructorPricing.userId, instructorId)).limit(1);
+      const stripePriceId = interval === 'year' ? pricing?.stripeYearlyPriceId : pricing?.stripeMonthlyPriceId;
+      if (!pricing || !stripePriceId) throw new HttpError(422, 'instructor_price_not_set', 'Este instructor todavía no fijó su precio.');
+      price = stripePriceId;
       meta.instructorId = instructorId;
       subscriptionData.transfer_data = { destination: payout.stripeAccountId };
-      subscriptionData.application_fee_percent = Number(plan.feePercent);
+      subscriptionData.application_fee_percent = INSTRUCTOR_FEE_PERCENT;
     }
+    if (!price) throw new HttpError(422, 'no_price', 'Este plan no tiene precio para ese periodo.');
 
     // Evita cobrar dos veces el mismo plan (y el mismo instructor).
     const existing = await db.select({ id: subscriptions.id, instructorId: subscriptions.instructorId }).from(subscriptions)
@@ -97,6 +107,31 @@ export function billingRouter(deps: Deps) {
     }
     const session = await stripe.checkout.sessions.create(params);
     return { body: { url: session.url } };
+  }));
+
+  // El instructor fija (o cambia) el precio mensual de su propia cátedra. El servidor crea/actualiza
+  // el Producto y el Precio en Stripe (cuenta de la plataforma; el reparto se hace vía transfer_data
+  // en el checkout, no hace falta un Precio en la cuenta Connect del instructor).
+  r.post('/billing/instructor-price', withAuth(deps), requireVerifiedEmail, handle(deps, 'user', async ({ req, db }) => {
+    const stripe = needStripe(deps);
+    const user = req.user!;
+    if (!['instructor', 'estudio', 'admin'].includes(user.role)) throw new HttpError(403, 'forbidden', 'Solo instructores y estudios pueden fijar un precio.');
+    const { priceMonthlyCents, currency } = parse(instructorPriceBody, req.body);
+    const cur = currency.toLowerCase();
+
+    let [row] = await db.select().from(instructorPricing).where(eq(instructorPricing.userId, user.id)).limit(1);
+    let productId = row?.stripeProductId ?? undefined;
+    if (!productId) {
+      const product = await stripe.products.create({ name: `Cátedra de ${user.displayName ?? 'instructor'}`, metadata: { userId: user.id } });
+      productId = product.id;
+    }
+    const price = await stripe.prices.create({ product: productId, currency: cur, unit_amount: priceMonthlyCents, recurring: { interval: 'month' } });
+
+    const values = { userId: user.id, priceMonthlyCents, currency: cur, stripeProductId: productId, stripeMonthlyPriceId: price.id, updatedAt: new Date() };
+    if (row) await db.update(instructorPricing).set(values).where(eq(instructorPricing.userId, user.id));
+    else await db.insert(instructorPricing).values(values);
+
+    return { body: { priceMonthlyCents, currency: cur } };
   }));
 
   r.post('/billing/portal', withAuth(deps), handle(deps, 'user', async ({ req, db }) => {

@@ -154,6 +154,7 @@ import Login from './views/Login';
 import ChatDock from './views/ChatDock';
 import Register from './screens/Register';
 import RegisterPro from './screens/RegisterPro';
+import SetupPhoto from './screens/SetupPhoto';
 import { takePending } from './lib/session';
 import { startCheckout } from './lib/payments';
 import { api } from './lib/api';
@@ -170,6 +171,7 @@ const render = `
         {v.isRegister && <Register go={v.goView} />}
         {v.isRegisterInstructor && <RegisterPro kind="instructor" go={v.goView} />}
         {v.isRegisterStudio && <RegisterPro kind="estudio" go={v.goView} />}
+        {v.isSetupPhoto && <SetupPhoto go={v.goView} />}
         {v.isApp && <Shell v={v} />}
         {v.isApp && <ChatDock v={v} />}
       </div>

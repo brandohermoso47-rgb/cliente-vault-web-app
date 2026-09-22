@@ -17,7 +17,7 @@ export async function makeTestApp(env: Record<string, string> = {}) {
 
   const synced: Array<[string, string]> = [];
   const verifyChecks: boolean[] = []; // por cada verificación de token: ¿se pidió comprobar revocación?
-  const stripeCalls: Record<string, any[]> = { checkout: [], portal: [], accounts: [], links: [], customers: [] };
+  const stripeCalls: Record<string, any[]> = { checkout: [], portal: [], accounts: [], links: [], customers: [], products: [], prices: [] };
   const stripe: any = {
     // El primer cliente es cus_test1; los siguientes son distintos (Stripe nunca repite IDs).
     customers: { create: async (p: any) => { stripeCalls.customers.push(p); return { id: stripeCalls.customers.length === 1 ? 'cus_test1' : `cus_test${stripeCalls.customers.length}` }; } },
@@ -25,6 +25,8 @@ export async function makeTestApp(env: Record<string, string> = {}) {
     billingPortal: { sessions: { create: async (p: any) => { stripeCalls.portal.push(p); return { url: 'https://billing.stripe.test/p1' }; } } },
     accounts: { create: async (p: any) => { stripeCalls.accounts.push(p); return { id: 'acct_test1' }; } },
     accountLinks: { create: async (p: any) => { stripeCalls.links.push(p); return { url: 'https://connect.stripe.test/l1' }; } },
+    products: { create: async (p: any) => { stripeCalls.products.push(p); return { id: `prod_test${stripeCalls.products.length}` }; } },
+    prices: { create: async (p: any) => { stripeCalls.prices.push(p); return { id: `price_test${stripeCalls.prices.length}` }; } },
     webhooks: {
       // La "firma" válida es la cadena "good"; el cuerpo es el evento en JSON.
       constructEvent: (body: Buffer, sig: string) => { if (sig !== 'good') throw new Error('bad signature'); return JSON.parse(body.toString()); },

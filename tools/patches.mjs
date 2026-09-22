@@ -8,7 +8,7 @@ export default function patches(s) {
   };
 
   // Rutas que viven fuera del shell (sin barra lateral)
-  rep("isApp: v !== 'login',", "isApp: !['login', 'register', 'registerInstructor', 'registerStudio'].includes(v),\n      isRegister: v === 'register',\n      isRegisterInstructor: v === 'registerInstructor',\n      isRegisterStudio: v === 'registerStudio',\n      isCuenta: v === 'cuenta',\n      goView: (view) => this.setState({ view }),\n      goRegisterPro: () => this.setState({ view: 'registerInstructor' }),");
+  rep("isApp: v !== 'login',", "isApp: !['login', 'register', 'registerInstructor', 'registerStudio', 'setupPhoto'].includes(v),\n      isRegister: v === 'register',\n      isRegisterInstructor: v === 'registerInstructor',\n      isRegisterStudio: v === 'registerStudio',\n      isSetupPhoto: v === 'setupPhoto',\n      isCuenta: v === 'cuenta',\n      goView: (view) => this.setState({ view }),\n      goRegisterPro: () => this.setState({ view: 'registerInstructor' }),");
   rep("perfil:'Mi perfil',", "perfil:'Mi perfil', cuenta:'Mi cuenta',");
   rep("{ label: 'Mi perfil', view: 'perfil' },", "{ label: 'Mi cuenta', view: 'cuenta' },\n        { label: 'Mi perfil', view: 'perfil' },");
 
@@ -18,16 +18,18 @@ export default function patches(s) {
   // Sesión: las pantallas de registro no se cierran al iniciar sesión hasta que Firebase confirma
   rep("view: user ? (st.view === 'login' ? 'dashboard' : st.view) : 'login'", "view: user ? (['login', 'register', 'registerInstructor', 'registerStudio'].includes(st.view) ? 'dashboard' : st.view) : (['register', 'registerInstructor', 'registerStudio'].includes(st.view) ? st.view : 'login')");
 
-  // Tras crear el perfil de Firestore, sincroniza el usuario con la API
+  // Tras crear el perfil de Firestore, sincroniza el usuario con la API y, si la cuenta es nueva
+  // y todavía no tiene foto (p. ej. no vino de Google con avatar), pide una foto de perfil.
   rep(`        } catch (e) { console.warn('No se pudo crear el perfil en Firestore', e); }
       }
     });`, `        } catch (e) { console.warn('No se pudo crear el perfil en Firestore', e); }
         await this.syncSession(user);
+        if (this.isNewAccount) { this.isNewAccount = false; if (!user.photoURL) this.setState({ view: 'setupPhoto' }); }
       }
     });`);
 
   // Perfil + solicitud profesional al crearse la cuenta
   rep("if (!(await getDoc(ref)).exists()) await setDoc(ref, { email: user.email, displayName: user.displayName ?? null, role: 'usuario', createdAt: serverTimestamp() });",
-      "const p = takePending();\n          if (!(await getDoc(ref)).exists()) await setDoc(ref, { displayName: user.displayName ?? null, photoURL: user.photoURL ?? null, ...(p.profile || {}), role: 'usuario', createdAt: serverTimestamp() });\n          this.signupData = p;");
+      "const p = takePending();\n          const isNewAccount = !(await getDoc(ref)).exists();\n          if (isNewAccount) await setDoc(ref, { displayName: user.displayName ?? null, photoURL: user.photoURL ?? null, ...(p.profile || {}), role: 'usuario', createdAt: serverTimestamp() });\n          this.signupData = p;\n          this.isNewAccount = isNewAccount;");
   return patchesPayments(s);
 }

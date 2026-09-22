@@ -37,3 +37,11 @@ export type Config = z.infer<typeof Env>;
 export const loadConfig = (env: NodeJS.ProcessEnv = process.env): Config => Env.parse(env);
 
 export const list = (csv: string) => csv.split(',').map((s) => s.trim()).filter(Boolean);
+
+// Reparto fijo de cada suscripción a un instructor: 75% para el instructor, 25% para la plataforma.
+// Igual para todos (no se negocia por instructor). Antes vivía en `plans.feePercent`; ya no se usa esa columna.
+export const INSTRUCTOR_FEE_PERCENT = 25;
+
+// Límites de precio propio que puede fijar un instructor para su cátedra (en la moneda que declare).
+export const INSTRUCTOR_PRICE_MIN_CENTS = 100; // 1.00
+export const INSTRUCTOR_PRICE_MAX_CENTS = 50000; // 500.00
