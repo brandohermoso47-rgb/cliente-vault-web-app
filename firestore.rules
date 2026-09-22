@@ -64,6 +64,38 @@ service cloud.firestore {
       allow delete: if isAdmin() || (signedIn() && resource.data.ownerId == request.auth.uid);
     }
 
+    // ── Modo Practice / Battle Training: videollamada 1 a 1 (señalización WebRTC).
+    //    { callerId, calleeId, mode: 'practice'|'battle', offer, answer, status, round, createdAt } ──
+    match /battle_calls/{id} {
+      allow read: if signedIn() && (resource.data.callerId == request.auth.uid || resource.data.calleeId == request.auth.uid);
+      allow create: if signedIn() && request.resource.data.callerId == request.auth.uid
+        && request.resource.data.calleeId != request.auth.uid
+        && request.resource.data.status == 'ringing';
+      // Cualquiera de los dos actualiza (aceptar, mandar la respuesta, avanzar la ronda, colgar).
+      allow update: if signedIn() && (resource.data.callerId == request.auth.uid || resource.data.calleeId == request.auth.uid)
+        && request.resource.data.callerId == resource.data.callerId && request.resource.data.calleeId == resource.data.calleeId;
+      allow delete: if signedIn() && (resource.data.callerId == request.auth.uid || resource.data.calleeId == request.auth.uid);
+
+      match /callerCandidates/{cid} {
+        allow read: if signedIn() && (get(/databases/$(database)/documents/battle_calls/$(id)).data.callerId == request.auth.uid || get(/databases/$(database)/documents/battle_calls/$(id)).data.calleeId == request.auth.uid);
+        allow create: if signedIn() && get(/databases/$(database)/documents/battle_calls/$(id)).data.callerId == request.auth.uid;
+        allow update, delete: if false;
+      }
+      match /calleeCandidates/{cid} {
+        allow read: if signedIn() && (get(/databases/$(database)/documents/battle_calls/$(id)).data.callerId == request.auth.uid || get(/databases/$(database)/documents/battle_calls/$(id)).data.calleeId == request.auth.uid);
+        allow create: if signedIn() && get(/databases/$(database)/documents/battle_calls/$(id)).data.calleeId == request.auth.uid;
+        allow update, delete: if false;
+      }
+    }
+
+    // ── "Ir en vivo" libre (cualquier usuario, distinto de las cátedras oficiales en `lives`):
+    //    { uid, displayName, startedAt }. El id del documento es el uid: una sesión en vivo por persona. ──
+    match /live_sessions/{uid} {
+      allow read: if signedIn();
+      allow create, update: if signedIn() && request.auth.uid == uid;
+      allow delete: if signedIn() && request.auth.uid == uid;
+    }
+
     // ── Comunidad (público para usuarios con sesión): cada quien solo publica y edita lo suyo ──
     match /community_messages/{id} {
       allow read: if signedIn();

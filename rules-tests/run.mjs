@@ -13,7 +13,10 @@ const token = execSync('gcloud auth print-access-token', { encoding: 'utf8' }).t
 const DOC = (p) => `/databases/(default)/documents/${p}`;
 const roleMock = (uid, role) => ({ function: 'get', args: [{ exactValue: DOC(`users/${uid}`) }], result: { value: { data: { role } } } });
 // Roles conocidos en las pruebas
-const MOCKS = [roleMock('admin1', 'admin'), roleMock('inst1', 'instructor'), roleMock('estu1', 'estudio'), roleMock('user1', 'usuario'), roleMock('user2', 'usuario')];
+const MOCKS = [
+  roleMock('admin1', 'admin'), roleMock('inst1', 'instructor'), roleMock('estu1', 'estudio'), roleMock('user1', 'usuario'), roleMock('user2', 'usuario'),
+  { function: 'get', args: [{ exactValue: DOC('battle_calls/call1') }], result: { value: { data: { callerId: 'user1', calleeId: 'user2' } } } },
+];
 const auth = (uid) => ({ uid, token: { email_verified: true } });
 
 let cases = [];
@@ -90,6 +93,28 @@ deny('NO se puede seguir a sí mismo', 'create', 'follows/user1_user1', { uid: '
 deny('NO crea un "follow" a nombre de otro', 'create', 'follows/user2_user1', { uid: 'user1', incoming: { followerId: 'user2', followingId: 'user1' } });
 allow('deja de seguir', 'delete', 'follows/user1_user2', { uid: 'user1', data: { followerId: 'user1', followingId: 'user2' } });
 deny('un tercero NO puede dejar de seguir por otro', 'delete', 'follows/user1_user2', { uid: 'user2', data: { followerId: 'user1', followingId: 'user2' } });
+
+// Modo Practice / Battle Training: videollamada 1 a 1
+allow('llama a otra persona', 'create', 'battle_calls/c1', { uid: 'user1', incoming: { callerId: 'user1', calleeId: 'user2', status: 'ringing' } });
+deny('NO llama a nombre de otro', 'create', 'battle_calls/c1', { uid: 'user2', incoming: { callerId: 'user1', calleeId: 'user2', status: 'ringing' } });
+deny('NO se puede llamar a sí mismo', 'create', 'battle_calls/c1', { uid: 'user1', incoming: { callerId: 'user1', calleeId: 'user1', status: 'ringing' } });
+allow('el que llama lee su propia llamada', 'get', 'battle_calls/call1', { uid: 'user1', data: { callerId: 'user1', calleeId: 'user2' } });
+allow('a quien llaman también la lee', 'get', 'battle_calls/call1', { uid: 'user2', data: { callerId: 'user1', calleeId: 'user2' } });
+deny('un tercero NO lee la llamada', 'get', 'battle_calls/call1', { uid: 'admin1', data: { callerId: 'user1', calleeId: 'user2' } });
+allow('el destinatario acepta (responde la oferta)', 'update', 'battle_calls/call1', { uid: 'user2', data: { callerId: 'user1', calleeId: 'user2', status: 'ringing' }, incoming: { callerId: 'user1', calleeId: 'user2', status: 'accepted', answer: { type: 'answer', sdp: 'x' } } });
+deny('NO cambia quién llamó a quién', 'update', 'battle_calls/call1', { uid: 'user2', data: { callerId: 'user1', calleeId: 'user2' }, incoming: { callerId: 'user2', calleeId: 'user2', status: 'accepted' } });
+allow('cualquiera de los dos cuelga', 'delete', 'battle_calls/call1', { uid: 'user1', data: { callerId: 'user1', calleeId: 'user2' } });
+deny('un tercero NO cuelga la llamada ajena', 'delete', 'battle_calls/call1', { uid: 'admin1', data: { callerId: 'user1', calleeId: 'user2' } });
+allow('quien llama manda su candidato ICE', 'create', 'battle_calls/call1/callerCandidates/x1', { uid: 'user1', incoming: { candidate: 'x' } });
+deny('a quien llaman NO manda un candidato como si fuera el que llama', 'create', 'battle_calls/call1/callerCandidates/x1', { uid: 'user2', incoming: { candidate: 'x' } });
+allow('a quien llaman manda su candidato ICE', 'create', 'battle_calls/call1/calleeCandidates/x1', { uid: 'user2', incoming: { candidate: 'x' } });
+
+// "Ir en vivo" libre
+allow('cualquiera activa su propia transmisión', 'create', 'live_sessions/user1', { uid: 'user1', incoming: { uid: 'user1', displayName: 'Ana' } });
+deny('NO activa la transmisión de otra persona', 'create', 'live_sessions/user1', { uid: 'user2', incoming: { uid: 'user1', displayName: 'Ana' } });
+allow('cualquiera con sesión ve quién está en vivo', 'get', 'live_sessions/user1', { uid: 'user2', data: { uid: 'user1' } });
+allow('termina su propia transmisión', 'delete', 'live_sessions/user1', { uid: 'user1', data: { uid: 'user1' } });
+deny('NO termina la transmisión de otra persona', 'delete', 'live_sessions/user1', { uid: 'user2', data: { uid: 'user1' } });
 
 // comunidad
 allow('publica en el muro con su uid', 'create', 'community_messages/m1', { uid: 'user1', incoming: { uid: 'user1', text: 'hola' } });
