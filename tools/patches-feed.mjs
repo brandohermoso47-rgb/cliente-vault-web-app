@@ -8,16 +8,16 @@ export default function patchesFeed(s) {
   };
 
   // Arranca/para las suscripciones de amistades + feed junto con el resto de datos en vivo.
-  rep(`      onSnapshot(doc(db, 'users', this.state.user.uid), (snap: any) => {`,
-      `      watchMyFriendships(this.state.user.uid, (rows: any) => {
+  rep(`      onSnapshot(doc(db, 'users', auth.currentUser!.uid), (snap: any) => {`,
+      `      watchMyFriendships(auth.currentUser!.uid, (rows: any) => {
         this.friendRows = rows;
         this.forceUpdate();
-        const uid = this.state.user.uid;
+        const uid = auth.currentUser!.uid;
         const ids = [uid, ...myFriendIds(rows, uid)];
         this.unsubFeed && this.unsubFeed();
         this.unsubFeed = subscribeFeed(ids, (posts: any) => { this.livePosts = posts; this.forceUpdate(); });
       }),
-      onSnapshot(doc(db, 'users', this.state.user.uid), (snap: any) => {`);
+      onSnapshot(doc(db, 'users', auth.currentUser!.uid), (snap: any) => {`);
   rep('  stopData() { this.unsubData.forEach((u: any) => u()); this.unsubData = []; }',
       `  unsubFeed: any = null;
   friendRows: any[] = [];

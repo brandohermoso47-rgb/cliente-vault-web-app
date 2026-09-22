@@ -14,9 +14,9 @@ export default function patchesProfile(s) {
   }`, `      watch('lives', (rows) => {
         this.insClasses = rows.sort(byOrder).map((c: any) => ({ t: c.title ?? c.t ?? '', when: c.when ?? '', who: c.who ?? '', state: c.state ?? 'Programada', live: !!c.live }));
       }),
-      onSnapshot(doc(db, 'users', this.state.user.uid), (snap: any) => {
+      onSnapshot(doc(db, 'users', auth.currentUser!.uid), (snap: any) => {
         const d: any = snap.data() ?? {};
-        this.myProfile = { displayName: d.displayName ?? null, photoURL: d.photoURL ?? null, photoPath: d.photoPath ?? null, handle: d.handle ?? null };
+        this.myProfile = { displayName: d.displayName ?? null, photoURL: d.photoURL ?? null, photoPath: d.photoPath ?? null, handle: d.handle ?? null, bio: d.bio ?? null };
         this.forceUpdate();
       }, () => {}),
     ];

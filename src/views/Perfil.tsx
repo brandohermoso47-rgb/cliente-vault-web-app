@@ -63,7 +63,7 @@ export default function Perfil({ v }: { v: any }) {
               </div>
               <div>
                 <div style={{"fontSize":"19px","fontWeight":"800","color":"var(--ink)","fontVariantNumeric":"tabular-nums"}}>
-                  {"1.284"}
+                  {v.perfFollowers}
                 </div>
                 <div style={{"fontFamily":"'Geist Mono',monospace","fontSize":"9px","letterSpacing":".16em","color":"var(--ink-3)","textTransform":"uppercase","marginTop":"4px"}}>
                   {"Seguidores"}
@@ -80,30 +80,41 @@ export default function Perfil({ v }: { v: any }) {
             </div>
             <div style={{"maxWidth":"520px"}}>
               <div style={{"fontSize":"13.5px","fontWeight":"700","color":"var(--ink)"}}>
-                {"Sara Molina"}
+                {v.myName}
               </div>
               <div style={{"fontSize":"12.5px","lineHeight":"1.6","color":"var(--ink-2)","marginTop":"6px","textWrap":"pretty"}}>
-                {"Waacking desde 2023. Cátedra de Lorena. Entrenando arm control a 128 BPM. Madrid."}
+                {v.myBio}
               </div>
             </div>
           </div>
         </div>
-        <div style={{"display":"flex","gap":"16px","overflowX":"auto","marginTop":"26px","paddingTop":"22px","borderTop":"1px solid var(--hair)"}}>
-          {(v.perfHighlights ?? []).map((h: any, $index: number) => (
-            <Fragment key={$index}>
-              <div style={{"display":"flex","flexDirection":"column","alignItems":"center","gap":"8px","cursor":"pointer","flex":"0 0 auto"}}>
-                <div style={sty(h?.ring)}>
-                  <div style={{"width":"100%","height":"100%","borderRadius":"50%","border":"2px solid var(--ground)","background":"var(--glass-2)","display":"flex","alignItems":"center","justifyContent":"center","fontFamily":"'Geist Mono',monospace","fontSize":"10px","color":"var(--ink-2)"}}>
-                    {h?.n}
+        {v.perfHighlights?.length && (
+          <>
+            <div style={{"display":"flex","gap":"16px","overflowX":"auto","marginTop":"26px","paddingTop":"22px","borderTop":"1px solid var(--hair)"}}>
+              {(v.perfHighlights ?? []).map((h: any, $index: number) => (
+                <Fragment key={$index}>
+                  <div style={{"display":"flex","flexDirection":"column","alignItems":"center","gap":"8px","cursor":"pointer","flex":"0 0 auto"}}>
+                    <div style={sty(h?.ring)}>
+                      <div style={{"width":"100%","height":"100%","borderRadius":"50%","border":"2px solid var(--ground)","background":"var(--glass-2)","display":"flex","alignItems":"center","justifyContent":"center","fontFamily":"'Geist Mono',monospace","fontSize":"10px","color":"var(--ink-2)"}}>
+                        {h?.n}
+                      </div>
+                    </div>
+                    <span style={{"fontSize":"10.5px","lineHeight":"1.3","color":"var(--ink-3)","width":"84px","textAlign":"center","textWrap":"pretty"}}>
+                      {h?.label}
+                    </span>
                   </div>
-                </div>
-                <span style={{"fontSize":"10.5px","lineHeight":"1.3","color":"var(--ink-3)","width":"84px","textAlign":"center","textWrap":"pretty"}}>
-                  {h?.label}
-                </span>
-              </div>
-            </Fragment>
-          ))}
-        </div>
+                </Fragment>
+              ))}
+            </div>
+          </>
+        )}
+        {v.perfHighlightsEmpty && (
+          <>
+            <div style={{"marginTop":"20px","paddingTop":"18px","borderTop":"1px solid var(--hair)","fontSize":"11.5px","color":"var(--ink-3)"}}>
+              {"Todavía no tienes insignias. Se te irán otorgando a medida que uses la app."}
+            </div>
+          </>
+        )}
       </div>
       <div style={{"position":"relative","zIndex":"40","alignSelf":"flex-start"}}>
         <div onClick={v.agPanelToggle} style={sty(v.agPanelBtn)} className={cx(pc("hover", "border-color:color-mix(in oklch, var(--pink) 50%, transparent)"))}>
@@ -224,6 +235,16 @@ export default function Perfil({ v }: { v: any }) {
             {(v.perfMedia ?? []).map((m: any, $index: number) => (
               <Fragment key={$index}>
                 <div onClick={m?.open} style={sty(m?.tile)} className={cx(pc("hover", "transform:translateY(-3px)"))}>
+                  {m?.isVideo && (
+                    <>
+                      <video src={m?.mediaUrl} muted="" style={{"position":"absolute","inset":"0","width":"100%","height":"100%","objectFit":"cover"}}></video>
+                    </>
+                  )}
+                  {!m?.isVideo && (
+                    <>
+                      <img src={m?.mediaUrl} alt="" style={{"position":"absolute","inset":"0","width":"100%","height":"100%","objectFit":"cover"}} />
+                    </>
+                  )}
                   <div style={{"position":"absolute","inset":"0","background":"rgba(10,8,14,.36)","opacity":"0","transition":"opacity .2s ease","display":"flex","alignItems":"flex-end","padding":"12px"}} className={cx(pc("hover", "opacity:1"))}>
                     <span style={{"fontFamily":"'Geist Mono',monospace","fontSize":"10px","color":"#fff"}}>
                       {"♥ "}

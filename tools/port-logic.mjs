@@ -164,6 +164,7 @@ import { acceptFriend, declineFriend, myFriendIds, removeFriend, sendFriendReque
 import { publishPost, subscribeFeed } from './lib/posts';
 import { addComment, likeInfo, toggleFollow, toggleLike, watchComments } from './lib/social';
 import { publishReel } from './lib/reels';
+import { watchFollowCounts, watchMyMedia, watchMyPostCount } from './lib/profileStats';
 
 `;
 const render = `

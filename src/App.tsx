@@ -20,6 +20,7 @@ import { acceptFriend, declineFriend, myFriendIds, removeFriend, sendFriendReque
 import { publishPost, subscribeFeed } from './lib/posts';
 import { addComment, likeInfo, toggleFollow, toggleLike, watchComments } from './lib/social';
 import { publishReel } from './lib/reels';
+import { watchFollowCounts, watchMyMedia, watchMyPostCount } from './lib/profileStats';
 
 import { sty } from './lib/dc';
 
@@ -1537,7 +1538,13 @@ class App extends Component<any, any> {
     return 'Cargando…';
   };
 
-  stopData() { this.unsubData.forEach((u: any) => u()); this.unsubData = []; this.unsubFeed && this.unsubFeed(); this.unsubFeed = null; }
+  stopData() {
+    this.unsubData.forEach((u: any) => u()); this.unsubData = [];
+    this.unsubFeed && this.unsubFeed(); this.unsubFeed = null;
+    this.unsubFollowCounts && this.unsubFollowCounts(); this.unsubFollowCounts = null;
+    this.unsubMyMedia && this.unsubMyMedia(); this.unsubMyMedia = null;
+    this.unsubMyPostCount && this.unsubMyPostCount(); this.unsubMyPostCount = null;
+  }
   startData() {
     this.stopData();
     const byNewest = (a: any, b: any) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0);
@@ -1559,21 +1566,35 @@ class App extends Component<any, any> {
       watch('lives', (rows) => {
         this.insClasses = rows.sort(byOrder).map((c: any) => ({ t: c.title ?? c.t ?? '', when: c.when ?? '', who: c.who ?? '', state: c.state ?? 'Programada', live: !!c.live }));
       }),
-      watchMyFriendships(this.state.user.uid, (rows: any) => {
+      watchMyFriendships(auth.currentUser!.uid, (rows: any) => {
         this.friendRows = rows;
         this.forceUpdate();
-        const uid = this.state.user.uid;
+        const uid = auth.currentUser!.uid;
         const ids = [uid, ...myFriendIds(rows, uid)];
         this.unsubFeed && this.unsubFeed();
         this.unsubFeed = subscribeFeed(ids, (posts: any) => { this.livePosts = posts; this.forceUpdate(); });
       }),
-      onSnapshot(doc(db, 'users', this.state.user.uid), (snap: any) => {
+      onSnapshot(doc(db, 'users', auth.currentUser!.uid), (snap: any) => {
         const d: any = snap.data() ?? {};
-        this.myProfile = { displayName: d.displayName ?? null, photoURL: d.photoURL ?? null, photoPath: d.photoPath ?? null, handle: d.handle ?? null };
+        this.myProfile = { displayName: d.displayName ?? null, photoURL: d.photoURL ?? null, photoPath: d.photoPath ?? null, handle: d.handle ?? null, bio: d.bio ?? null };
         this.forceUpdate();
       }, () => {}),
     ];
+    const meUid = auth.currentUser!.uid;
+    this.unsubFollowCounts && this.unsubFollowCounts();
+    this.unsubFollowCounts = watchFollowCounts(meUid, (c: any) => { this.followCounts = c; this.forceUpdate(); });
+    this.unsubMyMedia && this.unsubMyMedia();
+    this.unsubMyMedia = watchMyMedia(meUid, (tiles: any) => { this.myMedia = tiles; this.forceUpdate(); });
+    this.unsubMyPostCount && this.unsubMyPostCount();
+    this.unsubMyPostCount = watchMyPostCount(meUid, (n: any) => { this.myPostCount = n; this.forceUpdate(); });
   }
+
+  followCounts = { followers: 0, following: 0 };
+  myMedia: any[] = [];
+  myPostCount = 0;
+  unsubFollowCounts: any = null;
+  unsubMyMedia: any = null;
+  unsubMyPostCount: any = null;
 
   myProfile: any = null;
   myAvatarBusy = false;
@@ -2020,7 +2041,9 @@ class App extends Component<any, any> {
           ? 'padding:10px 18px;border-radius:999px;font-size:12px;font-weight:700;color:#14111A;background:var(--blue);box-shadow:0 8px 18px -8px var(--blue), inset 0 1px 0 rgba(255,255,255,.3);cursor:pointer'
           : 'padding:10px 18px;border-radius:999px;font-size:12px;font-weight:600;color:var(--ink-2);border:1px solid var(--hair);background:var(--glass-2);box-shadow:var(--lg-edge);cursor:pointer;transition:color .18s ease';
         return {
-          perfCount: this.perfMediaData.length,
+          perfCount: this.myPostCount,
+          myName: this.myProfile?.displayName || this.state.user?.displayName || 'Sin nombre',
+          myBio: this.myProfile?.bio || '',
           agTabs: ['Próximas', 'Pasadas', 'Todas'].map((t) => ({
             label: t, style: chip(p.agTab === t), pick: () => this.agPick(t)
           })),
@@ -2050,23 +2073,24 @@ class App extends Component<any, any> {
                 toggle: () => this.agToggle(a.id)
               };
             }),
-          perfFollowing: p.following,
-          perfVideoCount: this.perfMediaData.filter((m) => m.kind === 'Vídeo').length,
-          perfPhotoCount: this.perfMediaData.filter((m) => m.kind === 'Foto').length,
-          perfEmpty: shown.length === 0,
-          perfHighlights: this.perfHighlightData.map((h, i) => ({
-            label: h.label, n: h.n,
-            ring: 'width:62px;height:62px;border-radius:50%;padding:2px;background:linear-gradient(135deg,var(' + ['--pink', '--purple', '--blue', '--yellow'][i % 4] + '),var(' + ['--purple', '--blue', '--pink', '--pink'][i % 4] + '))'
-          })),
+          perfFollowing: this.followCounts.following,
+          perfFollowers: this.followCounts.followers,
+          perfVideoCount: this.myMedia.filter((m: any) => m.kind === 'Vídeo').length,
+          perfPhotoCount: this.myMedia.filter((m: any) => m.kind === 'Foto').length,
+          perfEmpty: this.myMedia.length === 0,
+          perfHighlights: [],
+          perfHighlightsEmpty: true,
           perfTabs: ['Todo', 'Vídeos', 'Fotos'].map((t) => ({
             label: t, style: chip(p.tab === t),
             pick: () => { this.perfState.tab = t; this.forceUpdate(); }
           })),
-          perfMedia: shown.map((m) => ({
-            badge: m.kind, likes: m.likes,
-            open: () => {},
-            tile: 'position:relative;aspect-ratio:1;border-radius:16px;overflow:hidden;cursor:pointer;transition:transform .2s ease;background:linear-gradient(135deg,var(' + m.g[0] + '),var(' + m.g[1] + '));box-shadow:0 14px 30px -18px rgba(0,0,0,.7)'
-          })),
+          perfMedia: this.myMedia
+            .filter((m: any) => p.tab === 'Todo' || (p.tab === 'Vídeos' ? m.kind === 'Vídeo' : m.kind === 'Foto'))
+            .map((m: any) => ({
+              badge: m.kind, likes: m.likes, mediaUrl: m.mediaUrl, isVideo: m.kind === 'Vídeo',
+              open: () => {},
+              tile: 'position:relative;aspect-ratio:1;border-radius:16px;overflow:hidden;cursor:pointer;transition:transform .2s ease;background:#000;box-shadow:0 14px 30px -18px rgba(0,0,0,.7)'
+            })),
           perfSuggest: this.perfSuggestData.map((s, i) => ({
             handle: s.handle, meta: s.meta, ini: s.ini,
             av: 'width:38px;height:38px;flex:0 0 38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;background:linear-gradient(135deg,var(' + s.g[0] + '),var(' + s.g[1] + '))',
