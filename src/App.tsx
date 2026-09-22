@@ -2,9 +2,11 @@
 /* eslint-disable */
 // @ts-nocheck
 import React, { Component } from 'react';
-import { onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, signInWithPopup, GoogleAuthProvider, signOut } from 'firebase/auth';
-import { doc, getDoc, setDoc, serverTimestamp, collection, onSnapshot, query, where } from 'firebase/firestore';
-import { auth, db, firebaseConfigured } from './lib/firebase';
+import { onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, signInWithPopup, GoogleAuthProvider, signOut, updateProfile } from 'firebase/auth';
+import { doc, getDoc, getDocs, setDoc, updateDoc, serverTimestamp, collection, onSnapshot, query, where, addDoc, deleteDoc, orderBy, limit as fbLimit } from 'firebase/firestore';
+import { ref, uploadBytesResumable, getDownloadURL, deleteObject } from 'firebase/storage';
+import { auth, db, storage, firebaseConfigured } from './lib/firebase';
+import { IMAGE_TYPES, VIDEO_TYPES, MAX_IMAGE_MB, MAX_VIDEO_MB } from './lib/validators';
 import Shell from './Shell';
 import Login from './views/Login';
 import ChatDock from './views/ChatDock';
@@ -14,6 +16,8 @@ import SetupPhoto from './screens/SetupPhoto';
 import { takePending } from './lib/session';
 import { startCheckout } from './lib/payments';
 import { api } from './lib/api';
+import { acceptFriend, declineFriend, myFriendIds, removeFriend, sendFriendRequest } from './lib/friends';
+import { publishPost, subscribeFeed } from './lib/posts';
 
 import { sty } from './lib/dc';
 
@@ -1320,7 +1324,99 @@ class App extends Component<any, any> {
     } catch (e) { /* API aún no disponible: se mantiene el estado por defecto */ }
   }
 
-  stopData() { this.unsubData.forEach((u: any) => u()); this.unsubData = []; }
+  unsubFeed: any = null;
+  friendRows: any[] = [];
+  livePosts: any[] = [];
+  feedComposerText = '';
+  feedComposerFile: File | null = null;
+  feedComposerBusy = false;
+  feedComposerErr = '';
+  friendSearch = '';
+  friendSearchBusy = false;
+  friendSearchErr = '';
+  friendSearchResult: any = null;
+
+  timeAgo = (ts: any) => {
+    const secs = ts?.seconds ? (Date.now() / 1000 - ts.seconds) : null;
+    if (secs == null) return 'ahora';
+    if (secs < 60) return 'hace unos segundos';
+    if (secs < 3600) return 'hace ' + Math.floor(secs / 60) + ' min';
+    if (secs < 86400) return 'hace ' + Math.floor(secs / 3600) + ' h';
+    return 'hace ' + Math.floor(secs / 86400) + ' d';
+  };
+  feedComposerChange = (e: any) => { this.feedComposerText = e.target.value; this.forceUpdate(); };
+  onFeedPick = (kind: 'image' | 'video') => {
+    this.feedPendingKind = kind;
+    (document.getElementById('feed-media-input') as HTMLInputElement | null)?.click();
+  };
+  onFeedFile = (e: any) => {
+    const f = e?.target?.files?.[0];
+    if (e?.target) e.target.value = '';
+    if (!f) return;
+    this.feedComposerFile = f;
+    this.feedComposerErr = '';
+    this.forceUpdate();
+  };
+  feedClearFile = () => { this.feedComposerFile = null; this.forceUpdate(); };
+  feedPublish = async () => {
+    const user = this.state.user;
+    if (!user || this.feedComposerBusy) return;
+    this.feedComposerErr = '';
+    this.feedComposerBusy = true;
+    this.forceUpdate();
+    try {
+      await publishPost({
+        uid: user.uid,
+        authorName: this.myProfile?.displayName || user.displayName || 'Sin nombre',
+        authorHandle: this.myProfile?.handle ? '@' + this.myProfile.handle : '@usuario',
+        authorPhotoURL: this.myProfile?.photoURL ?? null,
+        text: this.feedComposerText,
+        file: this.feedComposerFile,
+      });
+      this.feedComposerText = '';
+      this.feedComposerFile = null;
+    } catch (e: any) {
+      this.feedComposerErr = e?.message || 'No se pudo publicar. Inténtalo de nuevo.';
+    }
+    this.feedComposerBusy = false;
+    this.forceUpdate();
+  };
+
+  friendSearchChange = (e: any) => { this.friendSearch = e.target.value; this.forceUpdate(); };
+  friendSearchGo = async () => {
+    const handle = this.friendSearch.trim().toLowerCase().replace(/^@/, '');
+    if (!handle) return;
+    this.friendSearchBusy = true; this.friendSearchErr = ''; this.friendSearchResult = null; this.forceUpdate();
+    try {
+      const snap = await getDocs(query(collection(db, 'users'), where('handle', '==', handle), fbLimit(1)));
+      if (snap.empty) this.friendSearchErr = 'No se encontró ese usuario.';
+      else this.friendSearchResult = { id: snap.docs[0].id, ...snap.docs[0].data() };
+    } catch { this.friendSearchErr = 'No se pudo buscar. Inténtalo de nuevo.'; }
+    this.friendSearchBusy = false; this.forceUpdate();
+  };
+  friendAdd = async (otherUid: string) => {
+    try { await sendFriendRequest(this.state.user.uid, otherUid); this.friendSearchResult = null; this.friendSearch = ''; }
+    catch (e: any) { this.friendSearchErr = e?.message || 'No se pudo enviar la solicitud.'; }
+    this.forceUpdate();
+  };
+  friendAccept = (id: string) => acceptFriend(id);
+  friendDecline = (id: string) => declineFriend(id);
+  friendRemove = (id: string) => removeFriend(id);
+
+  userNameCache: Record<string, string> = {};
+  resolveUserName = (uid: string) => {
+    if (this.userNameCache[uid]) return this.userNameCache[uid];
+    if (!uid || this.userNameCache[uid] === '') return uid;
+    this.userNameCache[uid] = '';
+    getDoc(doc(db, 'users', uid)).then((snap) => {
+      const d: any = snap.data();
+      this.userNameCache[uid] = d?.handle ? '@' + d.handle : (d?.displayName || 'Alguien');
+      this.forceUpdate();
+    }).catch(() => { this.userNameCache[uid] = 'Alguien'; });
+    return 'Cargando…';
+  };
+
+  stopData() { this.unsubData.forEach((u: any) => u()); this.unsubData = []; this.unsubFeed && this.unsubFeed(); this.unsubFeed = null; }
   startData() {
     this.stopData();
     const byNewest = (a: any, b: any) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0);
@@ -1342,8 +1438,51 @@ class App extends Component<any, any> {
       watch('lives', (rows) => {
         this.insClasses = rows.sort(byOrder).map((c: any) => ({ t: c.title ?? c.t ?? '', when: c.when ?? '', who: c.who ?? '', state: c.state ?? 'Programada', live: !!c.live }));
       }),
+      watchMyFriendships(this.state.user.uid, (rows: any) => {
+        this.friendRows = rows;
+        this.forceUpdate();
+        const uid = this.state.user.uid;
+        const ids = [uid, ...myFriendIds(rows, uid)];
+        this.unsubFeed && this.unsubFeed();
+        this.unsubFeed = subscribeFeed(ids, (posts: any) => { this.livePosts = posts; this.forceUpdate(); });
+      }),
+      onSnapshot(doc(db, 'users', this.state.user.uid), (snap: any) => {
+        const d: any = snap.data() ?? {};
+        this.myProfile = { displayName: d.displayName ?? null, photoURL: d.photoURL ?? null, photoPath: d.photoPath ?? null, handle: d.handle ?? null };
+        this.forceUpdate();
+      }, () => {}),
     ];
   }
+
+  myProfile: any = null;
+  myAvatarBusy = false;
+  myAvatarPct: number | null = null;
+  myAvatarErr = '';
+  onMyAvatarPick = () => { (document.getElementById('perf-avatar-input') as HTMLInputElement | null)?.click(); };
+  onMyAvatarFile = (e: any) => {
+    const f = e?.target?.files?.[0];
+    if (e?.target) e.target.value = '';
+    const user = this.state.user;
+    if (!f || !user) return;
+    if (!IMAGE_TYPES.includes(f.type)) { this.myAvatarErr = 'Formato no permitido (usa JPG, PNG, WEBP o GIF).'; this.forceUpdate(); return; }
+    if (f.size > MAX_IMAGE_MB * 1048576) { this.myAvatarErr = `La foto puede pesar máx. ${MAX_IMAGE_MB} MB.`; this.forceUpdate(); return; }
+    this.myAvatarErr = ''; this.myAvatarBusy = true; this.myAvatarPct = 0; this.forceUpdate();
+    const path = `users/${user.uid}/avatar/${Date.now()}-${f.name.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^A-Za-z0-9._-]+/g, '_').slice(-80)}`;
+    const task = uploadBytesResumable(ref(storage, path), f, { contentType: f.type });
+    task.on('state_changed',
+      (snap: any) => { this.myAvatarPct = (snap.bytesTransferred / snap.totalBytes) * 100; this.forceUpdate(); },
+      () => { this.myAvatarBusy = false; this.myAvatarPct = null; this.myAvatarErr = 'No se pudo subir la foto. Inténtalo de nuevo.'; this.forceUpdate(); },
+      async () => {
+        try {
+          const url = await getDownloadURL(task.snapshot.ref);
+          const old = this.myProfile?.photoPath;
+          await updateDoc(doc(db, 'users', user.uid), { photoURL: url, photoPath: path, updatedAt: serverTimestamp() });
+          await updateProfile(user, { photoURL: url });
+          if (old) deleteObject(ref(storage, old)).catch(() => {});
+        } catch { this.myAvatarErr = 'La foto se subió pero no se pudo guardar.'; }
+        this.myAvatarBusy = false; this.myAvatarPct = null; this.forceUpdate();
+      });
+  };
   componentDidUpdate() { this.syncTheme(); this.syncVars(); }
 
   autoPlay(el) {
@@ -1590,14 +1729,28 @@ class App extends Component<any, any> {
       feedPlate: platePad,
       composerPlate: platePad + 'background-image:linear-gradient(135deg, rgba(229,23,122,.28) 0%, rgba(229,23,122,.10) 34%, rgba(76,111,224,.14) 66%, rgba(76,111,224,.30) 100%);',
       railPlate: platePad,
-      feedTools: this.feedToolList.map((t) => ({
+      feedTools: this.feedToolList.map((t, i) => ({
         name: t.name,
+        ready: i < 2,
+        pick: i === 0 ? () => this.onFeedPick('image') : i === 1 ? () => this.onFeedPick('video') : undefined,
+        style: 'width:34px;height:34px;border-radius:11px;display:flex;align-items:center;justify-content:center;color:var(--ink-2);transition:background .16s ease, color .16s ease;' + (i < 2 ? 'cursor:pointer' : 'cursor:default;opacity:.4'),
+        title: i < 2 ? t.name : t.name + ' (próximamente)',
         svg: React.createElement('svg', {
           width: 17, height: 17, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor',
           strokeWidth: 1.7, strokeLinecap: 'round', strokeLinejoin: 'round',
           dangerouslySetInnerHTML: { __html: t.d }
         })
       })),
+      feedComposerValue: this.feedComposerText,
+      feedComposerChange: this.feedComposerChange,
+      feedFileName: this.feedComposerFile?.name ?? '',
+      feedClearFile: this.feedClearFile,
+      feedPublish: this.feedPublish,
+      feedPublishBusy: this.feedComposerBusy,
+      feedPublishLabel: this.feedComposerBusy ? 'Publicando…' : 'Publicar',
+      feedPublishStyle: 'padding:10px 22px;border-radius:999px;font-size:12.5px;font-weight:700;color:#14111A;background:var(--pink);box-shadow:0 10px 22px -10px var(--pink), inset 0 1px 0 rgba(255,255,255,.3);white-space:nowrap;' + (this.feedComposerBusy ? 'opacity:.6;cursor:default' : 'cursor:pointer'),
+      feedComposerErr: this.feedComposerErr,
+      onFeedFile: this.onFeedFile,
       feedFilters: this.feedFilterList.map((f) => ({
         name: f,
         pick: () => this.feedSetFilter(f),
@@ -1605,12 +1758,36 @@ class App extends Component<any, any> {
           ? 'padding:9px 17px;border-radius:999px;font-size:12px;font-weight:700;color:#14111A;background:var(--pink);box-shadow:0 8px 18px -8px var(--pink), inset 0 1px 0 rgba(255,255,255,.3);cursor:pointer;transition:transform .2s cubic-bezier(.2,.85,.25,1)'
           : 'padding:9px 17px;border-radius:999px;font-size:12px;font-weight:600;color:var(--ink-2);border:1px solid var(--hair);background:var(--glass-2);box-shadow:var(--lg-edge);cursor:pointer;transition:transform .2s cubic-bezier(.2,.85,.25,1), color .2s ease'
       })),
-      feedPosts: this.feedPostData.map((p) => ({
-        name: p.name, handle: p.handle, time: p.time, text: p.text, tags: p.tags, likes: p.likes, comments: p.comments,
-        media: this.tvGrad(p.g),
-        avatar: 'width:42px;height:42px;flex:0 0 42px;border-radius:50%;background:' + this.tvGrad(p.g),
+      feedPosts: (this.livePosts.length ? this.livePosts : this.feedPostData).map((p) => ({
+        name: p.name ?? p.authorName, handle: p.handle ?? p.authorHandle,
+        time: p.time ?? this.timeAgo(p.createdAt), text: p.text, tags: p.tags ?? '',
+        likes: p.likes ?? p.likesCount ?? 0, comments: p.comments ?? p.commentsCount ?? 0,
+        mediaUrl: p.mediaUrl ?? null, isImage: p.mediaType === 'image', isVideo: p.mediaType === 'video',
+        media: p.g ? this.tvGrad(p.g) : 'linear-gradient(135deg,var(--pink),var(--purple))',
+        avatar: (p.authorPhotoURL || p.avatarUrl)
+          ? `width:42px;height:42px;flex:0 0 42px;border-radius:50%;background:center/cover no-repeat url('${p.authorPhotoURL || p.avatarUrl}')`
+          : 'width:42px;height:42px;flex:0 0 42px;border-radius:50%;background:' + (p.g ? this.tvGrad(p.g) : 'linear-gradient(135deg,var(--pink),var(--purple))'),
         card: 'border-radius:24px;overflow:hidden;' + glassCard
       })),
+      friendPending: this.friendRows.filter((f: any) => f.status === 'pending' && f.requesterId !== this.state.user?.uid).map((f: any) => ({
+        id: f.id, other: this.resolveUserName(f.users.find((u: string) => u !== this.state.user?.uid)),
+        accept: () => this.friendAccept(f.id), decline: () => this.friendDecline(f.id)
+      })),
+      friendList: this.friendRows.filter((f: any) => f.status === 'accepted').map((f: any) => ({
+        id: f.id, other: this.resolveUserName(f.users.find((u: string) => u !== this.state.user?.uid)), remove: () => this.friendRemove(f.id)
+      })),
+      friendListEmpty: this.friendRows.filter((f: any) => f.status === 'accepted').length === 0,
+      friendSearchValue: this.friendSearch,
+      friendSearchChange: this.friendSearchChange,
+      friendSearchGo: this.friendSearchGo,
+      friendSearchBusy: this.friendSearchBusy,
+      friendSearchLabel: this.friendSearchBusy ? '…' : 'Buscar',
+      friendSearchErr: this.friendSearchErr,
+      friendSearchResult: this.friendSearchResult ? {
+        id: this.friendSearchResult.id, name: this.friendSearchResult.displayName || this.friendSearchResult.handle,
+        handle: this.friendSearchResult.handle ? '@' + this.friendSearchResult.handle : '',
+        add: () => this.friendAdd(this.friendSearchResult.id)
+      } : null,
       isTv: v === 'tv',
       tvConnected: this.tvState.connected,
       tvOffline: !this.tvState.connected,
@@ -1951,7 +2128,17 @@ class App extends Component<any, any> {
       })),
       acctToggle: () => this.setState({ acct: !this.state.acct }),
       acctClose: () => this.setState({ acct: false }),
-      acctAvatar: 'width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#fff;background:linear-gradient(135deg,var(--purple),var(--pink));cursor:pointer;transition:box-shadow .2s ease;box-shadow:' + (this.state.acct ? '0 0 0 2px var(--ground), 0 0 0 4px var(--pink)' : 'var(--lg-edge)'),
+      acctAvatar: 'width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#fff;background:' + (this.myProfile?.photoURL ? `center/cover no-repeat url('${this.myProfile.photoURL}')` : 'linear-gradient(135deg,var(--purple),var(--pink))') + ';cursor:pointer;transition:box-shadow .2s ease;box-shadow:' + (this.state.acct ? '0 0 0 2px var(--ground), 0 0 0 4px var(--pink)' : 'var(--lg-edge)'),
+      myInitial: this.myProfile?.photoURL ? '' : (this.myProfile?.displayName || this.state.user?.displayName || this.state.user?.email || '?').trim().slice(0, 1).toUpperCase(),
+      myDropAvatar: 'width:44px;height:44px;flex:0 0 44px;border-radius:50%;background:' + (this.myProfile?.photoURL ? `center/cover no-repeat url('${this.myProfile.photoURL}')` : 'linear-gradient(135deg,var(--purple),var(--pink))') + ';display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;color:#fff',
+      myDisplayName: this.myProfile?.displayName || this.state.user?.displayName || 'Sin nombre',
+      myHandle: this.myProfile?.handle ? '@' + this.myProfile.handle : (this.state.user?.email ? '@' + this.state.user.email.split('@')[0] : '@usuario'),
+      perfAvatarStyle: 'width:100%;height:100%;border-radius:50%;border:3px solid var(--ground);display:flex;align-items:center;justify-content:center;font-size:40px;font-weight:800;color:#fff;letter-spacing:-.02em;cursor:pointer;background:' + (this.myProfile?.photoURL ? `center/cover no-repeat url('${this.myProfile.photoURL}')` : 'linear-gradient(135deg,var(--purple),var(--pink))'),
+      perfAvatarBusy: this.myAvatarBusy,
+      perfAvatarPct: this.myAvatarPct == null ? '' : Math.round(this.myAvatarPct) + '%',
+      perfAvatarErr: this.myAvatarErr,
+      onMyAvatarPick: this.onMyAvatarPick,
+      onMyAvatarFile: this.onMyAvatarFile,
       acctLinks: [
         { label: 'Mi cuenta', view: 'cuenta' },
         { label: 'Mi perfil', view: 'perfil' },

@@ -146,9 +146,11 @@ const head = `// GENERADO por tools/port-logic.mjs desde la lógica del prototip
 /* eslint-disable */
 // @ts-nocheck
 import React, { Component } from 'react';
-import { onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, signInWithPopup, GoogleAuthProvider, signOut } from 'firebase/auth';
-import { doc, getDoc, setDoc, serverTimestamp, collection, onSnapshot, query, where } from 'firebase/firestore';
-import { auth, db, firebaseConfigured } from './lib/firebase';
+import { onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, signInWithPopup, GoogleAuthProvider, signOut, updateProfile } from 'firebase/auth';
+import { doc, getDoc, getDocs, setDoc, updateDoc, serverTimestamp, collection, onSnapshot, query, where, addDoc, deleteDoc, orderBy, limit as fbLimit } from 'firebase/firestore';
+import { ref, uploadBytesResumable, getDownloadURL, deleteObject } from 'firebase/storage';
+import { auth, db, storage, firebaseConfigured } from './lib/firebase';
+import { IMAGE_TYPES, VIDEO_TYPES, MAX_IMAGE_MB, MAX_VIDEO_MB } from './lib/validators';
 import Shell from './Shell';
 import Login from './views/Login';
 import ChatDock from './views/ChatDock';
@@ -158,6 +160,8 @@ import SetupPhoto from './screens/SetupPhoto';
 import { takePending } from './lib/session';
 import { startCheckout } from './lib/payments';
 import { api } from './lib/api';
+import { acceptFriend, declineFriend, myFriendIds, removeFriend, sendFriendRequest } from './lib/friends';
+import { publishPost, subscribeFeed } from './lib/posts';
 
 `;
 const render = `

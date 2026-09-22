@@ -11,15 +11,35 @@ export default function Feed({ v }: { v: any }) {
       <div style={{"minWidth":"0","display":"flex","flexDirection":"column","gap":"18px"}}>
         <div style={sty(v.composerPlate)}>
           <div style={{"display":"flex","gap":"14px","alignItems":"flex-start"}}>
-            <span style={{"width":"42px","height":"42px","flex":"0 0 42px","borderRadius":"50%","background":"linear-gradient(135deg,var(--pink),var(--purple))"}}></span>
+            <span style={sty(v.myDropAvatar)}>
+              {v.myInitial}
+            </span>
             <div style={{"flex":"1","minWidth":"0"}}>
-              <div style={{"fontSize":"14.5px","color":"var(--ink-3)","padding":"9px 0 16px","borderBottom":"1px solid var(--hair-soft)"}}>
-                {"Escribir nueva publicación..."}
-              </div>
+              <textarea value={v.feedComposerValue} onChange={v.feedComposerChange} placeholder="Escribir nueva publicación..." rows="2" style={{"width":"100%","boxSizing":"border-box","resize":"vertical","border":"none","borderBottom":"1px solid var(--hair-soft)","background":"transparent","color":"var(--ink)","fontFamily":"inherit","fontSize":"14.5px","padding":"9px 0 16px","outline":"none"}}></textarea>
+              {v.feedFileName && (
+                <>
+                  <div style={{"display":"flex","alignItems":"center","gap":"8px","marginTop":"8px","fontSize":"11.5px","color":"var(--ink-2)"}}>
+                    <span>
+                      {"📎 "}
+                      {v.feedFileName}
+                    </span>
+                    <span onClick={v.feedClearFile} style={{"cursor":"pointer","color":"var(--pink)"}}>
+                      {"Quitar"}
+                    </span>
+                  </div>
+                </>
+              )}
+              {v.feedComposerErr && (
+                <>
+                  <div style={{"marginTop":"8px","fontSize":"11.5px","color":"var(--pink)"}}>
+                    {v.feedComposerErr}
+                  </div>
+                </>
+              )}
               <div style={{"display":"flex","alignItems":"center","gap":"6px","flexWrap":"wrap","paddingTop":"14px"}}>
                 {(v.feedTools ?? []).map((t: any, $index: number) => (
                   <Fragment key={$index}>
-                    <div title={t?.name} style={{"width":"34px","height":"34px","borderRadius":"11px","display":"flex","alignItems":"center","justifyContent":"center","color":"var(--ink-2)","cursor":"pointer","transition":"background .16s ease, color .16s ease"}} className={cx(pc("hover", "background:var(--glass-2);color:var(--pink)"))}>
+                    <div onClick={t?.pick} title={t?.name} style={sty(t?.style)} className={cx(pc("hover", "background:var(--glass-2);color:var(--pink)"))}>
                       {" "}
                       {t?.svg}
                       {" "}
@@ -27,10 +47,11 @@ export default function Feed({ v }: { v: any }) {
                   </Fragment>
                 ))}
                 <div style={{"flex":"1"}}></div>
-                <div style={{"padding":"10px 22px","borderRadius":"999px","fontSize":"12.5px","fontWeight":"700","color":"#14111A","background":"var(--pink)","boxShadow":"0 10px 22px -10px var(--pink), inset 0 1px 0 rgba(255,255,255,.3)","cursor":"pointer","whiteSpace":"nowrap"}} className={cx(pc("hover", "transform:translateY(-1px)"))}>
-                  {"Publicar"}
+                <div onClick={v.feedPublish} style={sty(v.feedPublishStyle)} className={cx(pc("hover", "transform:translateY(-1px)"))}>
+                  {v.feedPublishLabel}
                 </div>
               </div>
+              <input id="feed-media-input" type="file" accept="image/*,video/*" onChange={v.onFeedFile} style={{"display":"none"}} />
             </div>
           </div>
         </div>
@@ -141,7 +162,16 @@ export default function Feed({ v }: { v: any }) {
                   {" "}
                 </div>
               </div>
-              <div style={sty(`aspect-ratio:16/10;width:100%;background:${p?.media ?? ""}`)}></div>
+              {p?.isImage && (
+                <>
+                  <img src={p?.mediaUrl} alt="" style={{"aspectRatio":"16/10","width":"100%","objectFit":"cover","display":"block"}} />
+                </>
+              )}
+              {p?.isVideo && (
+                <>
+                  <video src={p?.mediaUrl} controls="" style={{"aspectRatio":"16/10","width":"100%","display":"block","background":"#000"}}></video>
+                </>
+              )}
               <div style={{"display":"flex","alignItems":"center","gap":"18px","padding":"14px 20px"}}>
                 <div style={{"display":"flex","alignItems":"center","gap":"7px","fontSize":"12px","fontWeight":"600","color":"var(--ink-2)","cursor":"pointer"}} className={cx(pc("hover", "color:var(--pink)"))}>
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
@@ -180,31 +210,89 @@ export default function Feed({ v }: { v: any }) {
         </div>
         <div style={sty(v.railPlate)}>
           <div style={{"fontFamily":"'Geist Mono',monospace","fontSize":"9px","letterSpacing":".2em","color":"var(--ink-3)","textTransform":"uppercase"}}>
-            {"Recomendaciones"}
+            {"Amigos"}
           </div>
-          <div style={{"display":"flex","flexDirection":"column","gap":"14px","marginTop":"15px"}}>
-            {(v.perfSuggest ?? []).map((s: any, $index: number) => (
-              <Fragment key={$index}>
-                <div style={{"display":"flex","flexDirection":"column","gap":"8px"}}>
-                  <div style={{"display":"flex","alignItems":"center","gap":"9px"}}>
-                    <div style={sty(s?.av)}>
-                      {s?.ini}
-                    </div>
-                    <div style={{"flex":"1","minWidth":"0"}}>
-                      <div style={{"fontSize":"11.5px","fontWeight":"700","lineHeight":"1.3","color":"var(--ink)","overflowWrap":"anywhere"}}>
-                        {s?.handle}
-                      </div>
-                      <div style={{"fontFamily":"'Geist Mono',monospace","fontSize":"8.5px","lineHeight":"1.4","color":"var(--ink-3)","marginTop":"3px","overflowWrap":"anywhere"}}>
-                        {s?.meta}
-                      </div>
-                    </div>
+          <div style={{"display":"flex","gap":"6px","marginTop":"12px"}}>
+            <input value={v.friendSearchValue} onChange={v.friendSearchChange} placeholder="Buscar por @usuario" style={{"flex":"1","minWidth":"0","padding":"9px 12px","borderRadius":"12px","border":"1px solid var(--hair)","background":"var(--glass-2)","color":"var(--ink)","fontSize":"12px","fontFamily":"inherit","outline":"none","boxSizing":"border-box"}} />
+            <div onClick={v.friendSearchGo} style={{"padding":"9px 14px","borderRadius":"12px","fontSize":"11.5px","fontWeight":"700","color":"#14111A","background":"var(--pink)","cursor":"pointer","whiteSpace":"nowrap"}}>
+              {v.friendSearchLabel}
+            </div>
+          </div>
+          {v.friendSearchErr && (
+            <>
+              <div style={{"marginTop":"8px","fontSize":"11px","color":"var(--pink)"}}>
+                {v.friendSearchErr}
+              </div>
+            </>
+          )}
+          {v.friendSearchResult && (
+            <>
+              <div style={{"display":"flex","alignItems":"center","gap":"9px","marginTop":"10px","padding":"9px","borderRadius":"14px","background":"var(--glass-2)"}}>
+                <div style={{"flex":"1","minWidth":"0"}}>
+                  <div style={{"fontSize":"11.5px","fontWeight":"700","color":"var(--ink)","overflowWrap":"anywhere"}}>
+                    {v.friendSearchResult?.name}
                   </div>
-                  <div onClick={s?.toggle} style={sty(s?.btnWide)}>
-                    {s?.btnLabel}
+                  <div style={{"fontFamily":"'Geist Mono',monospace","fontSize":"8.5px","color":"var(--ink-3)"}}>
+                    {v.friendSearchResult?.handle}
                   </div>
                 </div>
-              </Fragment>
-            ))}
+                <div onClick={v.friendSearchResult?.add} style={{"padding":"8px 12px","borderRadius":"999px","fontSize":"10.5px","fontWeight":"700","color":"#14111A","background":"var(--blue)","cursor":"pointer","whiteSpace":"nowrap"}}>
+                  {"Agregar"}
+                </div>
+              </div>
+            </>
+          )}
+          {v.friendPending && (
+            <>
+              <div style={{"marginTop":"16px","fontFamily":"'Geist Mono',monospace","fontSize":"8.5px","letterSpacing":".14em","color":"var(--ink-3)","textTransform":"uppercase"}}>
+                {"Solicitudes"}
+              </div>
+              <div style={{"display":"flex","flexDirection":"column","gap":"8px","marginTop":"8px"}}>
+                {(v.friendPending ?? []).map((f: any, $index: number) => (
+                  <Fragment key={$index}>
+                    <div style={{"display":"flex","alignItems":"center","gap":"9px"}}>
+                      <div style={{"flex":"1","minWidth":"0","fontSize":"11px","color":"var(--ink-2)","overflowWrap":"anywhere"}}>
+                        {f?.other}
+                      </div>
+                      <div onClick={f?.accept} style={{"padding":"6px 10px","borderRadius":"999px","fontSize":"10px","fontWeight":"700","color":"#14111A","background":"var(--blue)","cursor":"pointer"}}>
+                        {"Aceptar"}
+                      </div>
+                      <div onClick={f?.decline} style={{"padding":"6px 10px","borderRadius":"999px","fontSize":"10px","fontWeight":"700","color":"var(--ink-2)","border":"1px solid var(--hair)","cursor":"pointer"}}>
+                        {"Rechazar"}
+                      </div>
+                    </div>
+                  </Fragment>
+                ))}
+              </div>
+            </>
+          )}
+          <div style={{"marginTop":"16px","fontFamily":"'Geist Mono',monospace","fontSize":"8.5px","letterSpacing":".14em","color":"var(--ink-3)","textTransform":"uppercase"}}>
+            {"Tus amigos"}
+          </div>
+          <div style={{"display":"flex","flexDirection":"column","gap":"8px","marginTop":"8px"}}>
+            {v.friendList && (
+              <>
+                {(v.friendList ?? []).map((f: any, $index: number) => (
+                  <Fragment key={$index}>
+                    <div style={{"display":"flex","alignItems":"center","gap":"9px"}}>
+                      <div style={{"flex":"1","minWidth":"0","fontSize":"11.5px","color":"var(--ink)","overflowWrap":"anywhere"}}>
+                        {f?.other}
+                      </div>
+                      <div onClick={f?.remove} style={{"padding":"6px 10px","borderRadius":"999px","fontSize":"10px","fontWeight":"600","color":"var(--ink-2)","border":"1px solid var(--hair)","cursor":"pointer"}}>
+                        {"Quitar"}
+                      </div>
+                    </div>
+                  </Fragment>
+                ))}
+              </>
+            )}
+            {v.friendListEmpty && (
+              <>
+                <div style={{"fontSize":"11px","color":"var(--ink-3)"}}>
+                  {"Todavía no tienes amigos. Búscalos arriba."}
+                </div>
+              </>
+            )}
           </div>
         </div>
         <div style={sty(v.railPlate)}>

@@ -386,22 +386,22 @@ export default function Shell({ v }: { v: any }) {
             </div>
             <div style={{"position":"relative"}}>
               <div onClick={v.acctToggle} style={sty(v.acctAvatar)}>
-                {"SM"}
+                {v.myInitial}
               </div>
               {v.acctOpen && (
                 <>
                   <div onClick={v.acctClose} style={{"position":"fixed","inset":"0","zIndex":"2000"}}></div>
                   <div style={{"position":"absolute","top":"50px","right":"0","zIndex":"2001","width":"280px","borderRadius":"22px","border":"1px solid color-mix(in oklch, var(--pink) 60%, transparent)","background":"#0B0A10","boxShadow":"0 30px 70px -26px rgba(0,0,0,.9), 0 0 0 1px rgba(255,255,255,.06), 0 0 34px -12px var(--pink)","padding":"16px","animation":"rise3d .28s cubic-bezier(.2,.85,.25,1)"}}>
                     <div style={{"display":"flex","alignItems":"center","gap":"12px"}}>
-                      <div style={{"width":"44px","height":"44px","flex":"0 0 44px","borderRadius":"50%","background":"linear-gradient(135deg,var(--purple),var(--pink))","display":"flex","alignItems":"center","justifyContent":"center","fontSize":"15px","fontWeight":"800","color":"#fff"}}>
-                        {"SM"}
+                      <div style={sty(v.myDropAvatar)}>
+                        {v.myInitial}
                       </div>
                       <div style={{"flex":"1","minWidth":"0"}}>
                         <div style={{"fontSize":"13.5px","fontWeight":"700","color":"#FFFFFF","overflowWrap":"anywhere"}}>
-                          {"Sara Molina"}
+                          {v.myDisplayName}
                         </div>
                         <div style={{"fontFamily":"'Geist Mono',monospace","fontSize":"9.5px","color":"rgba(255,255,255,.6)","marginTop":"3px","overflowWrap":"anywhere"}}>
-                          {"@sara.waack"}
+                          {v.myHandle}
                         </div>
                       </div>
                     </div>
@@ -430,14 +430,6 @@ export default function Shell({ v }: { v: any }) {
                       ))}
                     </div>
                     <div style={{"height":"1px","background":"rgba(255,255,255,.16)","margin":"12px 0"}}></div>
-                    <div onClick={v.toggleDocente} style={{"display":"flex","alignItems":"center","gap":"10px","padding":"10px 12px","borderRadius":"14px","cursor":"pointer","fontSize":"12.5px","fontWeight":"600","color":"rgba(255,255,255,.78)"}} className={cx(pc("hover", "color:#fff"))}>
-                      <span style={{"flex":"1"}}>
-                        {"Modo instructor"}
-                      </span>
-                      <span style={sty(v.acctSwitch)}>
-                        <span style={sty(v.acctKnob)}></span>
-                      </span>
-                    </div>
                     <div onClick={v.logout} style={{"marginTop":"8px","padding":"11px 14px","borderRadius":"14px","textAlign":"center","fontSize":"12px","fontWeight":"700","color":"#14111A","border":"1px solid var(--pink)","background":"var(--pink)","cursor":"pointer","transition":"filter .18s ease"}} className={cx(pc("hover", "filter:brightness(1.1)"))}>
                       {"Cerrar sesión"}
                     </div>

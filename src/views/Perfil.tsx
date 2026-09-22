@@ -10,15 +10,36 @@ export default function Perfil({ v }: { v: any }) {
     <div style={{"display":"flex","flexDirection":"column","gap":"22px","maxWidth":"1080px"}}>
       <div style={sty(v.fisPlate)}>
         <div style={{"display":"flex","gap":"30px","alignItems":"flex-start","flexWrap":"wrap"}}>
-          <div style={{"width":"132px","height":"132px","flex":"0 0 132px","borderRadius":"50%","padding":"3px","background":"linear-gradient(135deg,var(--pink),var(--purple),var(--blue))","boxShadow":"0 18px 40px -20px var(--purple)"}}>
-            <div style={{"width":"100%","height":"100%","borderRadius":"50%","border":"3px solid var(--ground)","background":"linear-gradient(135deg,var(--purple),var(--pink))","display":"flex","alignItems":"center","justifyContent":"center","fontSize":"40px","fontWeight":"800","color":"#fff","letterSpacing":"-.02em"}}>
-              {"SM"}
+          <div style={{"width":"132px","height":"132px","flex":"0 0 132px","borderRadius":"50%","padding":"3px","background":"linear-gradient(135deg,var(--pink),var(--purple),var(--blue))","boxShadow":"0 18px 40px -20px var(--purple)","position":"relative"}}>
+            <div onClick={v.onMyAvatarPick} title="Cambiar foto de perfil" style={sty(v.perfAvatarStyle)}>
+              {v.myInitial}
             </div>
+            {v.perfAvatarBusy && (
+              <>
+                <div style={{"position":"absolute","inset":"3px","borderRadius":"50%","background":"rgba(0,0,0,.55)","color":"#fff","display":"flex","alignItems":"center","justifyContent":"center","fontFamily":"'Geist Mono',monospace","fontSize":"12px"}}>
+                  {v.perfAvatarPct}
+                </div>
+              </>
+            )}
+            <div onClick={v.onMyAvatarPick} title="Cambiar foto de perfil" style={{"position":"absolute","right":"2px","bottom":"2px","width":"30px","height":"30px","borderRadius":"50%","display":"flex","alignItems":"center","justifyContent":"center","color":"#fff","background":"var(--purple)","border":"2px solid var(--ground)","cursor":"pointer"}}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                <path d="M4 7h3l2-3h6l2 3h3v13H4Z"></path>
+                <circle cx="12" cy="13" r="3.5"></circle>
+              </svg>
+            </div>
+            <input id="perf-avatar-input" type="file" accept="image/*" onChange={v.onMyAvatarFile} style={{"display":"none"}} />
           </div>
           <div style={{"flex":"1","minWidth":"260px","display":"flex","flexDirection":"column","gap":"16px"}}>
+            {v.perfAvatarErr && (
+              <>
+                <div style={{"fontSize":"11.5px","color":"var(--pink)"}}>
+                  {v.perfAvatarErr}
+                </div>
+              </>
+            )}
             <div style={{"display":"flex","alignItems":"center","gap":"14px","flexWrap":"wrap"}}>
               <div style={{"fontSize":"22px","fontWeight":"800","letterSpacing":"-.02em","color":"var(--ink)"}}>
-                {"@sara.waack"}
+                {v.myHandle}
               </div>
               <div style={{"display":"inline-flex","alignItems":"center","gap":"6px","padding":"5px 11px","borderRadius":"999px","border":"1px solid var(--hair)","background":"var(--glass-2)","fontFamily":"'Geist Mono',monospace","fontSize":"9px","letterSpacing":".14em","color":"var(--ink-2)","textTransform":"uppercase"}}>
                 {"Nivel 2"}

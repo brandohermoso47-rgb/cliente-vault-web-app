@@ -98,6 +98,28 @@ service cloud.firestore {
       allow delete: if signedIn() && request.auth.uid in resource.data.users;
     }
 
+    // ── Publicaciones del dashboard: { authorId, authorName, authorHandle, authorPhotoURL, text,
+    //    mediaUrl, mediaType, likesCount, commentsCount, createdAt }. Cualquiera con sesión las lee
+    //    (el feed de cada quien filtra por autor del lado del cliente: sus amigos y él mismo);
+    //    solo el autor publica/edita/borra lo suyo.
+    match /posts/{id} {
+      allow read: if signedIn();
+      allow create: if signedIn() && request.resource.data.authorId == request.auth.uid
+        && shortText('text', 2000)
+        && request.resource.data.get('mediaType', null) in [null, 'image', 'video']
+        && request.resource.data.keys().hasOnly(['authorId', 'authorName', 'authorHandle', 'authorPhotoURL', 'text', 'mediaUrl', 'mediaType', 'likesCount', 'commentsCount', 'createdAt']);
+      allow update: if signedIn() && resource.data.authorId == request.auth.uid
+        && request.resource.data.authorId == resource.data.authorId && only(['text']) && shortText('text', 2000);
+      allow delete: if isAdmin() || (signedIn() && resource.data.authorId == request.auth.uid);
+
+      // Un "me gusta" por persona: el id del documento es el uid, así no se puede duplicar.
+      match /likes/{uid} {
+        allow read: if signedIn();
+        allow create, delete: if signedIn() && request.auth.uid == uid;
+        allow update: if false;
+      }
+    }
+
     // ── Batallas: { hostId, participants: [uid…], status, … } ──
     match /battles/{id} {
       allow read: if signedIn();

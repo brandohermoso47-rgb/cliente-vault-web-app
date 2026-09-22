@@ -203,16 +203,16 @@
             </sc-if>
           </div>
           <div style="position:relative">
-            <div onClick="{{ acctToggle }}" style="{{ acctAvatar }}">SM</div>
+            <div onClick="{{ acctToggle }}" style="{{ acctAvatar }}">{{ myInitial }}</div>
 
             <sc-if value="{{ acctOpen }}">
               <div onClick="{{ acctClose }}" style="position:fixed;inset:0;z-index:2000"></div>
               <div style="position:absolute;top:50px;right:0;z-index:2001;width:280px;border-radius:22px;border:1px solid color-mix(in oklch, var(--pink) 60%, transparent);background:#0B0A10;box-shadow:0 30px 70px -26px rgba(0,0,0,.9), 0 0 0 1px rgba(255,255,255,.06), 0 0 34px -12px var(--pink);padding:16px;animation:rise3d .28s cubic-bezier(.2,.85,.25,1)">
                 <div style="display:flex;align-items:center;gap:12px">
-                  <div style="width:44px;height:44px;flex:0 0 44px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--pink));display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;color:#fff">SM</div>
+                  <div style="{{ myDropAvatar }}">{{ myInitial }}</div>
                   <div style="flex:1;min-width:0">
-                    <div style="font-size:13.5px;font-weight:700;color:#FFFFFF;overflow-wrap:anywhere">Sara Molina</div>
-                    <div style="font-family:'Geist Mono',monospace;font-size:9.5px;color:rgba(255,255,255,.6);margin-top:3px;overflow-wrap:anywhere">@sara.waack</div>
+                    <div style="font-size:13.5px;font-weight:700;color:#FFFFFF;overflow-wrap:anywhere">{{ myDisplayName }}</div>
+                    <div style="font-family:'Geist Mono',monospace;font-size:9.5px;color:rgba(255,255,255,.6);margin-top:3px;overflow-wrap:anywhere">{{ myHandle }}</div>
                   </div>
                 </div>
 
@@ -233,11 +233,6 @@
                 </div>
 
                 <div style="height:1px;background:rgba(255,255,255,.16);margin:12px 0"></div>
-
-                <div onClick="{{ toggleDocente }}" style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:14px;cursor:pointer;font-size:12.5px;font-weight:600;color:rgba(255,255,255,.78)" style-hover="color:#fff">
-                  <span style="flex:1">Modo instructor</span>
-                  <span style="{{ acctSwitch }}"><span style="{{ acctKnob }}"></span></span>
-                </div>
 
                 <div onClick="{{ logout }}" style="margin-top:8px;padding:11px 14px;border-radius:14px;text-align:center;font-size:12px;font-weight:700;color:#14111A;border:1px solid var(--pink);background:var(--pink);cursor:pointer;transition:filter .18s ease" style-hover="filter:brightness(1.1)">Cerrar sesión</div>
               </div>
@@ -305,18 +300,28 @@
 
               <div style="{{ composerPlate }}">
                 <div style="display:flex;gap:14px;align-items:flex-start">
-                  <span style="width:42px;height:42px;flex:0 0 42px;border-radius:50%;background:linear-gradient(135deg,var(--pink),var(--purple))"></span>
+                  <span style="{{ myDropAvatar }}">{{ myInitial }}</span>
                   <div style="flex:1;min-width:0">
-                    <div style="font-size:14.5px;color:var(--ink-3);padding:9px 0 16px;border-bottom:1px solid var(--hair-soft)">Escribir nueva publicación...</div>
+                    <textarea value="{{ feedComposerValue }}" onChange="{{ feedComposerChange }}" placeholder="Escribir nueva publicación..." rows="2" style="width:100%;box-sizing:border-box;resize:vertical;border:none;border-bottom:1px solid var(--hair-soft);background:transparent;color:var(--ink);font-family:inherit;font-size:14.5px;padding:9px 0 16px;outline:none"></textarea>
+                    <sc-if value="{{ feedFileName }}">
+                      <div style="display:flex;align-items:center;gap:8px;margin-top:8px;font-size:11.5px;color:var(--ink-2)">
+                        <span>📎 {{ feedFileName }}</span>
+                        <span onClick="{{ feedClearFile }}" style="cursor:pointer;color:var(--pink)">Quitar</span>
+                      </div>
+                    </sc-if>
+                    <sc-if value="{{ feedComposerErr }}">
+                      <div style="margin-top:8px;font-size:11.5px;color:var(--pink)">{{ feedComposerErr }}</div>
+                    </sc-if>
                     <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding-top:14px">
                       <sc-for list="{{ feedTools }}" as="t" hint-placeholder-count="8">
-                        <div title="{{ t.name }}" style="width:34px;height:34px;border-radius:11px;display:flex;align-items:center;justify-content:center;color:var(--ink-2);cursor:pointer;transition:background .16s ease, color .16s ease" style-hover="background:var(--glass-2);color:var(--pink)">
+                        <div onClick="{{ t.pick }}" title="{{ t.name }}" style="{{ t.style }}" style-hover="background:var(--glass-2);color:var(--pink)">
                           {{ t.svg }}
                         </div>
                       </sc-for>
                       <div style="flex:1"></div>
-                      <div style="padding:10px 22px;border-radius:999px;font-size:12.5px;font-weight:700;color:#14111A;background:var(--pink);box-shadow:0 10px 22px -10px var(--pink), inset 0 1px 0 rgba(255,255,255,.3);cursor:pointer;white-space:nowrap" style-hover="transform:translateY(-1px)">Publicar</div>
+                      <div onClick="{{ feedPublish }}" style="{{ feedPublishStyle }}" style-hover="transform:translateY(-1px)">{{ feedPublishLabel }}</div>
                     </div>
+                    <input id="feed-media-input" type="file" accept="image/*,video/*" onChange="{{ onFeedFile }}" style="display:none" />
                   </div>
                 </div>
               </div>
@@ -380,7 +385,12 @@
                       {{ p.tags }}
                     </div>
                   </div>
-                  <div style="aspect-ratio:16/10;width:100%;background:{{ p.media }}"></div>
+                  <sc-if value="{{ p.isImage }}">
+                    <img src="{{ p.mediaUrl }}" alt="" style="aspect-ratio:16/10;width:100%;object-fit:cover;display:block" />
+                  </sc-if>
+                  <sc-if value="{{ p.isVideo }}">
+                    <video src="{{ p.mediaUrl }}" controls style="aspect-ratio:16/10;width:100%;display:block;background:#000"></video>
+                  </sc-if>
                   <div style="display:flex;align-items:center;gap:18px;padding:14px 20px">
                     <div style="display:flex;align-items:center;gap:7px;font-size:12px;font-weight:600;color:var(--ink-2);cursor:pointer" style-hover="color:var(--pink)">
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M20.8 5.6a5 5 0 0 0-7.1 0L12 7.3l-1.7-1.7a5 5 0 1 0-7.1 7.1L12 21.5l8.8-8.8a5 5 0 0 0 0-7.1Z"></path></svg>
@@ -404,20 +414,48 @@
               </div>
 
               <div style="{{ railPlate }}">
-                <div style="font-family:'Geist Mono',monospace;font-size:9px;letter-spacing:.2em;color:var(--ink-3);text-transform:uppercase">Recomendaciones</div>
-                <div style="display:flex;flex-direction:column;gap:14px;margin-top:15px">
-                  <sc-for list="{{ perfSuggest }}" as="s" hint-placeholder-count="4">
-                    <div style="display:flex;flex-direction:column;gap:8px">
-                      <div style="display:flex;align-items:center;gap:9px">
-                        <div style="{{ s.av }}">{{ s.ini }}</div>
-                        <div style="flex:1;min-width:0">
-                          <div style="font-size:11.5px;font-weight:700;line-height:1.3;color:var(--ink);overflow-wrap:anywhere">{{ s.handle }}</div>
-                          <div style="font-family:'Geist Mono',monospace;font-size:8.5px;line-height:1.4;color:var(--ink-3);margin-top:3px;overflow-wrap:anywhere">{{ s.meta }}</div>
-                        </div>
-                      </div>
-                      <div onClick="{{ s.toggle }}" style="{{ s.btnWide }}">{{ s.btnLabel }}</div>
+                <div style="font-family:'Geist Mono',monospace;font-size:9px;letter-spacing:.2em;color:var(--ink-3);text-transform:uppercase">Amigos</div>
+                <div style="display:flex;gap:6px;margin-top:12px">
+                  <input value="{{ friendSearchValue }}" onChange="{{ friendSearchChange }}" placeholder="Buscar por @usuario" style="flex:1;min-width:0;padding:9px 12px;border-radius:12px;border:1px solid var(--hair);background:var(--glass-2);color:var(--ink);font-size:12px;font-family:inherit;outline:none;box-sizing:border-box" />
+                  <div onClick="{{ friendSearchGo }}" style="padding:9px 14px;border-radius:12px;font-size:11.5px;font-weight:700;color:#14111A;background:var(--pink);cursor:pointer;white-space:nowrap">{{ friendSearchLabel }}</div>
+                </div>
+                <sc-if value="{{ friendSearchErr }}">
+                  <div style="margin-top:8px;font-size:11px;color:var(--pink)">{{ friendSearchErr }}</div>
+                </sc-if>
+                <sc-if value="{{ friendSearchResult }}">
+                  <div style="display:flex;align-items:center;gap:9px;margin-top:10px;padding:9px;border-radius:14px;background:var(--glass-2)">
+                    <div style="flex:1;min-width:0">
+                      <div style="font-size:11.5px;font-weight:700;color:var(--ink);overflow-wrap:anywhere">{{ friendSearchResult.name }}</div>
+                      <div style="font-family:'Geist Mono',monospace;font-size:8.5px;color:var(--ink-3)">{{ friendSearchResult.handle }}</div>
                     </div>
-                  </sc-for>
+                    <div onClick="{{ friendSearchResult.add }}" style="padding:8px 12px;border-radius:999px;font-size:10.5px;font-weight:700;color:#14111A;background:var(--blue);cursor:pointer;white-space:nowrap">Agregar</div>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ friendPending }}">
+                  <div style="margin-top:16px;font-family:'Geist Mono',monospace;font-size:8.5px;letter-spacing:.14em;color:var(--ink-3);text-transform:uppercase">Solicitudes</div>
+                  <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px">
+                    <sc-for list="{{ friendPending }}" as="f" hint-placeholder-count="2">
+                      <div style="display:flex;align-items:center;gap:9px">
+                        <div style="flex:1;min-width:0;font-size:11px;color:var(--ink-2);overflow-wrap:anywhere">{{ f.other }}</div>
+                        <div onClick="{{ f.accept }}" style="padding:6px 10px;border-radius:999px;font-size:10px;font-weight:700;color:#14111A;background:var(--blue);cursor:pointer">Aceptar</div>
+                        <div onClick="{{ f.decline }}" style="padding:6px 10px;border-radius:999px;font-size:10px;font-weight:700;color:var(--ink-2);border:1px solid var(--hair);cursor:pointer">Rechazar</div>
+                      </div>
+                    </sc-for>
+                  </div>
+                </sc-if>
+                <div style="margin-top:16px;font-family:'Geist Mono',monospace;font-size:8.5px;letter-spacing:.14em;color:var(--ink-3);text-transform:uppercase">Tus amigos</div>
+                <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px">
+                  <sc-if value="{{ friendList }}">
+                    <sc-for list="{{ friendList }}" as="f" hint-placeholder-count="3">
+                      <div style="display:flex;align-items:center;gap:9px">
+                        <div style="flex:1;min-width:0;font-size:11.5px;color:var(--ink);overflow-wrap:anywhere">{{ f.other }}</div>
+                        <div onClick="{{ f.remove }}" style="padding:6px 10px;border-radius:999px;font-size:10px;font-weight:600;color:var(--ink-2);border:1px solid var(--hair);cursor:pointer">Quitar</div>
+                      </div>
+                    </sc-for>
+                  </sc-if>
+                  <sc-if value="{{ friendListEmpty }}">
+                    <div style="font-size:11px;color:var(--ink-3)">Todavía no tienes amigos. Búscalos arriba.</div>
+                  </sc-if>
                 </div>
               </div>
 
@@ -1547,13 +1585,23 @@
 
             <div style="{{ fisPlate }}">
               <div style="display:flex;gap:30px;align-items:flex-start;flex-wrap:wrap">
-                <div style="width:132px;height:132px;flex:0 0 132px;border-radius:50%;padding:3px;background:linear-gradient(135deg,var(--pink),var(--purple),var(--blue));box-shadow:0 18px 40px -20px var(--purple)">
-                  <div style="width:100%;height:100%;border-radius:50%;border:3px solid var(--ground);background:linear-gradient(135deg,var(--purple),var(--pink));display:flex;align-items:center;justify-content:center;font-size:40px;font-weight:800;color:#fff;letter-spacing:-.02em">SM</div>
+                <div style="width:132px;height:132px;flex:0 0 132px;border-radius:50%;padding:3px;background:linear-gradient(135deg,var(--pink),var(--purple),var(--blue));box-shadow:0 18px 40px -20px var(--purple);position:relative">
+                  <div onClick="{{ onMyAvatarPick }}" title="Cambiar foto de perfil" style="{{ perfAvatarStyle }}">{{ myInitial }}</div>
+                  <sc-if value="{{ perfAvatarBusy }}">
+                    <div style="position:absolute;inset:3px;border-radius:50%;background:rgba(0,0,0,.55);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Geist Mono',monospace;font-size:12px">{{ perfAvatarPct }}</div>
+                  </sc-if>
+                  <div onClick="{{ onMyAvatarPick }}" title="Cambiar foto de perfil" style="position:absolute;right:2px;bottom:2px;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;background:var(--purple);border:2px solid var(--ground);cursor:pointer">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h3l2-3h6l2 3h3v13H4Z"></path><circle cx="12" cy="13" r="3.5"></circle></svg>
+                  </div>
+                  <input id="perf-avatar-input" type="file" accept="image/*" onChange="{{ onMyAvatarFile }}" style="display:none" />
                 </div>
 
                 <div style="flex:1;min-width:260px;display:flex;flex-direction:column;gap:16px">
+                  <sc-if value="{{ perfAvatarErr }}">
+                    <div style="font-size:11.5px;color:var(--pink)">{{ perfAvatarErr }}</div>
+                  </sc-if>
                   <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
-                    <div style="font-size:22px;font-weight:800;letter-spacing:-.02em;color:var(--ink)">@sara.waack</div>
+                    <div style="font-size:22px;font-weight:800;letter-spacing:-.02em;color:var(--ink)">{{ myHandle }}</div>
                     <div style="display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:999px;border:1px solid var(--hair);background:var(--glass-2);font-family:'Geist Mono',monospace;font-size:9px;letter-spacing:.14em;color:var(--ink-2);text-transform:uppercase">Nivel 2</div>
                     <div style="flex:1"></div>
                     <div onClick="{{ perfOpenUpload }}" style="padding:11px 20px;border-radius:999px;font-size:12.5px;font-weight:700;color:#14111A;background:var(--pink);box-shadow:0 10px 22px -10px var(--pink), inset 0 1px 0 rgba(255,255,255,.3);cursor:pointer;white-space:nowrap;transition:transform .18s ease" style-hover="transform:translateY(-1px)">Subir contenido</div>
