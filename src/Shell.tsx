@@ -77,7 +77,7 @@ export default function Shell({ v }: { v: any }) {
               </span>
             </div>
             <div onClick={v.goDashboard} style={sty(v.navDashboard)}>
-              <span style={{"display":"flex","alignItems":"center","justifyContent":"center","width":"28px","height":"28px","flex":"0 0 28px","borderRadius":"9px","border":"1px solid currentColor","background":"color-mix(in oklch, currentColor 16%, transparent)"}}>
+              <span style={{"display":"flex","alignItems":"center","justifyContent":"center","width":"28px","height":"28px","flex":"0 0 28px","borderRadius":"9px","color":"var(--blue)","border":"1px solid var(--blue)","background":"color-mix(in oklch, var(--blue) 16%, transparent)"}}>
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
                   <rect x="3" y="3" width="7" height="9" rx="1"></rect>
                   <rect x="14" y="3" width="7" height="5" rx="1"></rect>
@@ -91,7 +91,7 @@ export default function Shell({ v }: { v: any }) {
               </span>
             </div>
             <div onClick={v.goCursos} style={sty(v.navCursos)}>
-              <span style={{"display":"flex","alignItems":"center","justifyContent":"center","width":"28px","height":"28px","flex":"0 0 28px","borderRadius":"9px","border":"1px solid currentColor","background":"color-mix(in oklch, currentColor 16%, transparent)"}}>
+              <span style={{"display":"flex","alignItems":"center","justifyContent":"center","width":"28px","height":"28px","flex":"0 0 28px","borderRadius":"9px","color":"var(--gold)","border":"1px solid var(--gold)","background":"color-mix(in oklch, var(--gold) 16%, transparent)"}}>
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
                   <path d="M22 10 12 5 2 10l10 5 10-5Z"></path>
                   <path d="M6 12v5c0 1 2.7 2.5 6 2.5s6-1.5 6-2.5v-5"></path>
@@ -103,7 +103,7 @@ export default function Shell({ v }: { v: any }) {
               </span>
             </div>
             <div onClick={v.goLab} style={sty(v.navLab)}>
-              <span style={{"display":"flex","alignItems":"center","justifyContent":"center","width":"28px","height":"28px","flex":"0 0 28px","borderRadius":"9px","border":"1px solid currentColor","background":"color-mix(in oklch, currentColor 16%, transparent)"}}>
+              <span style={{"display":"flex","alignItems":"center","justifyContent":"center","width":"28px","height":"28px","flex":"0 0 28px","borderRadius":"9px","color":"var(--purple)","border":"1px solid var(--purple)","background":"color-mix(in oklch, var(--purple) 16%, transparent)"}}>
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
                   <path d="m12 3-1.9 5.8L4 10.7l4.6 4-1.3 6 4.7-3.2 4.7 3.2-1.3-6 4.6-4-6.1-1.9L12 3Z"></path>
                 </svg>
@@ -114,7 +114,7 @@ export default function Shell({ v }: { v: any }) {
               </span>
             </div>
             <div onClick={v.goFisico} style={sty(v.navFisico)}>
-              <span style={{"display":"flex","alignItems":"center","justifyContent":"center","width":"28px","height":"28px","flex":"0 0 28px","borderRadius":"9px","border":"1px solid currentColor","background":"color-mix(in oklch, currentColor 16%, transparent)"}}>
+              <span style={{"display":"flex","alignItems":"center","justifyContent":"center","width":"28px","height":"28px","flex":"0 0 28px","borderRadius":"9px","color":"color-mix(in oklch, var(--blue) 50%, var(--purple))","border":"1px solid color-mix(in oklch, var(--blue) 50%, var(--purple))","background":"color-mix(in oklch, color-mix(in oklch, var(--blue) 50%, var(--purple)) 16%, transparent)"}}>
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
                   <path d="M6 5v14"></path>
                   <path d="M18 5v14"></path>
@@ -130,7 +130,7 @@ export default function Shell({ v }: { v: any }) {
               </span>
             </div>
             <div onClick={v.goEbooks} style={sty(v.navEbooks)}>
-              <span style={{"display":"flex","alignItems":"center","justifyContent":"center","width":"28px","height":"28px","flex":"0 0 28px","borderRadius":"9px","border":"1px solid currentColor","background":"color-mix(in oklch, currentColor 16%, transparent)"}}>
+              <span style={{"display":"flex","alignItems":"center","justifyContent":"center","width":"28px","height":"28px","flex":"0 0 28px","borderRadius":"9px","color":"color-mix(in oklch, var(--yellow) 60%, var(--gold))","border":"1px solid color-mix(in oklch, var(--yellow) 60%, var(--gold))","background":"color-mix(in oklch, color-mix(in oklch, var(--yellow) 60%, var(--gold)) 16%, transparent)"}}>
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
                   <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
                   <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"></path>
@@ -150,7 +150,7 @@ export default function Shell({ v }: { v: any }) {
               </span>
             </div>
             <div onClick={v.goLives} style={sty(v.navLives)}>
-              <span style={{"display":"flex","alignItems":"center","justifyContent":"center","width":"28px","height":"28px","flex":"0 0 28px","borderRadius":"9px","border":"1px solid currentColor","background":"color-mix(in oklch, currentColor 16%, transparent)"}}>
+              <span style={{"display":"flex","alignItems":"center","justifyContent":"center","width":"28px","height":"28px","flex":"0 0 28px","borderRadius":"9px","color":"var(--pink)","border":"1px solid var(--pink)","background":"color-mix(in oklch, var(--pink) 16%, transparent)"}}>
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
                   <path d="M4.9 19.1a10 10 0 0 1 0-14.2"></path>
                   <path d="M7.8 16.2a6 6 0 0 1 0-8.4"></path>
@@ -170,7 +170,7 @@ export default function Shell({ v }: { v: any }) {
               </span>
             </div>
             <div onClick={v.goTv} style={sty(v.navTv)}>
-              <span style={{"display":"flex","alignItems":"center","justifyContent":"center","width":"28px","height":"28px","flex":"0 0 28px","borderRadius":"9px","border":"1px solid currentColor","background":"color-mix(in oklch, currentColor 16%, transparent)"}}>
+              <span style={{"display":"flex","alignItems":"center","justifyContent":"center","width":"28px","height":"28px","flex":"0 0 28px","borderRadius":"9px","color":"color-mix(in oklch, var(--pink) 55%, var(--purple))","border":"1px solid color-mix(in oklch, var(--pink) 55%, var(--purple))","background":"color-mix(in oklch, color-mix(in oklch, var(--pink) 55%, var(--purple)) 16%, transparent)"}}>
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
                   <rect x="2" y="7" width="20" height="14" rx="3"></rect>
                   <path d="m7 3 5 4 5-4"></path>
@@ -182,7 +182,7 @@ export default function Shell({ v }: { v: any }) {
               </span>
             </div>
             <div onClick={v.goReels} style={sty(v.navReels)}>
-              <span style={{"display":"flex","alignItems":"center","justifyContent":"center","width":"28px","height":"28px","flex":"0 0 28px","borderRadius":"9px","border":"1px solid currentColor","background":"color-mix(in oklch, currentColor 16%, transparent)"}}>
+              <span style={{"display":"flex","alignItems":"center","justifyContent":"center","width":"28px","height":"28px","flex":"0 0 28px","borderRadius":"9px","color":"color-mix(in oklch, var(--pink) 60%, var(--blue))","border":"1px solid color-mix(in oklch, var(--pink) 60%, var(--blue))","background":"color-mix(in oklch, color-mix(in oklch, var(--pink) 60%, var(--blue)) 16%, transparent)"}}>
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
                   <rect x="2" y="3" width="20" height="18" rx="3"></rect>
                   <path d="M7 3v18"></path>
@@ -196,7 +196,7 @@ export default function Shell({ v }: { v: any }) {
               </span>
             </div>
             <div onClick={v.goPodcasts} style={sty(v.navPodcasts)}>
-              <span style={{"display":"flex","alignItems":"center","justifyContent":"center","width":"28px","height":"28px","flex":"0 0 28px","borderRadius":"9px","border":"1px solid currentColor","background":"color-mix(in oklch, currentColor 16%, transparent)"}}>
+              <span style={{"display":"flex","alignItems":"center","justifyContent":"center","width":"28px","height":"28px","flex":"0 0 28px","borderRadius":"9px","color":"color-mix(in oklch, var(--purple) 55%, var(--blue))","border":"1px solid color-mix(in oklch, var(--purple) 55%, var(--blue))","background":"color-mix(in oklch, color-mix(in oklch, var(--purple) 55%, var(--blue)) 16%, transparent)"}}>
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
                   <rect x="9" y="2" width="6" height="11" rx="3"></rect>
                   <path d="M5 10a7 7 0 0 0 14 0"></path>
@@ -209,7 +209,7 @@ export default function Shell({ v }: { v: any }) {
               </span>
             </div>
             <div onClick={v.goMuro} style={sty(v.navMuro)}>
-              <span style={{"display":"flex","alignItems":"center","justifyContent":"center","width":"28px","height":"28px","flex":"0 0 28px","borderRadius":"9px","border":"1px solid currentColor","background":"color-mix(in oklch, currentColor 16%, transparent)"}}>
+              <span style={{"display":"flex","alignItems":"center","justifyContent":"center","width":"28px","height":"28px","flex":"0 0 28px","borderRadius":"9px","color":"color-mix(in oklch, var(--yellow) 55%, var(--pink))","border":"1px solid color-mix(in oklch, var(--yellow) 55%, var(--pink))","background":"color-mix(in oklch, color-mix(in oklch, var(--yellow) 55%, var(--pink)) 16%, transparent)"}}>
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
                   <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
                   <circle cx="9" cy="7" r="4"></circle>
@@ -222,7 +222,7 @@ export default function Shell({ v }: { v: any }) {
               </span>
             </div>
             <div onClick={v.goRanking} style={sty(v.navRanking)}>
-              <span style={{"display":"flex","alignItems":"center","justifyContent":"center","width":"28px","height":"28px","flex":"0 0 28px","borderRadius":"9px","border":"1px solid currentColor","background":"color-mix(in oklch, currentColor 16%, transparent)"}}>
+              <span style={{"display":"flex","alignItems":"center","justifyContent":"center","width":"28px","height":"28px","flex":"0 0 28px","borderRadius":"9px","color":"var(--yellow)","border":"1px solid var(--yellow)","background":"color-mix(in oklch, var(--yellow) 16%, transparent)"}}>
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
                   <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
                   <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path>
@@ -245,7 +245,7 @@ export default function Shell({ v }: { v: any }) {
               </span>
             </div>
             <div onClick={v.goPlanes} style={sty(v.navPlanes)}>
-              <span style={{"display":"flex","alignItems":"center","justifyContent":"center","width":"28px","height":"28px","flex":"0 0 28px","borderRadius":"9px","border":"1px solid currentColor","background":"color-mix(in oklch, currentColor 16%, transparent)"}}>
+              <span style={{"display":"flex","alignItems":"center","justifyContent":"center","width":"28px","height":"28px","flex":"0 0 28px","borderRadius":"9px","color":"color-mix(in oklch, var(--gold) 55%, var(--pink))","border":"1px solid color-mix(in oklch, var(--gold) 55%, var(--pink))","background":"color-mix(in oklch, color-mix(in oklch, var(--gold) 55%, var(--pink)) 16%, transparent)"}}>
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
                   <path d="m5 16-2-9 6 4 3-6 3 6 6-4-2 9H5Z"></path>
                   <path d="M5 20h14"></path>
@@ -273,7 +273,7 @@ export default function Shell({ v }: { v: any }) {
               </span>
             </div>
             <div onClick={v.goInstructor} style={sty(v.navInstructor)}>
-              <span style={{"display":"flex","alignItems":"center","justifyContent":"center","width":"28px","height":"28px","flex":"0 0 28px","borderRadius":"9px","border":"1px solid currentColor","background":"color-mix(in oklch, currentColor 16%, transparent)"}}>
+              <span style={{"display":"flex","alignItems":"center","justifyContent":"center","width":"28px","height":"28px","flex":"0 0 28px","borderRadius":"9px","color":"color-mix(in oklch, var(--purple) 60%, var(--pink))","border":"1px solid color-mix(in oklch, var(--purple) 60%, var(--pink))","background":"color-mix(in oklch, color-mix(in oklch, var(--purple) 60%, var(--pink)) 16%, transparent)"}}>
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
                   <path d="M12 3 2 8l10 5 10-5-10-5Z"></path>
                   <path d="M6 11v5c0 1 2.7 2.5 6 2.5s6-1.5 6-2.5v-5"></path>
@@ -294,7 +294,7 @@ export default function Shell({ v }: { v: any }) {
               )}
             </div>
             <div onClick={v.goSupport} style={sty(v.navSupport)}>
-              <span style={{"display":"flex","alignItems":"center","justifyContent":"center","width":"28px","height":"28px","flex":"0 0 28px","borderRadius":"9px","border":"1px solid currentColor","background":"color-mix(in oklch, currentColor 16%, transparent)"}}>
+              <span style={{"display":"flex","alignItems":"center","justifyContent":"center","width":"28px","height":"28px","flex":"0 0 28px","borderRadius":"9px","color":"color-mix(in oklch, var(--blue) 55%, var(--yellow))","border":"1px solid color-mix(in oklch, var(--blue) 55%, var(--yellow))","background":"color-mix(in oklch, color-mix(in oklch, var(--blue) 55%, var(--yellow)) 16%, transparent)"}}>
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
                   <circle cx="12" cy="12" r="10"></circle>
                   <path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3"></path>
