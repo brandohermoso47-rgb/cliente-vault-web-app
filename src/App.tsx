@@ -19,6 +19,7 @@ import { api } from './lib/api';
 import { acceptFriend, declineFriend, myFriendIds, removeFriend, sendFriendRequest } from './lib/friends';
 import { publishPost, subscribeFeed } from './lib/posts';
 import { addComment, likeInfo, toggleFollow, toggleLike, watchComments } from './lib/social';
+import { publishReel } from './lib/reels';
 
 import { sty } from './lib/dc';
 
@@ -1053,6 +1054,40 @@ class App extends Component<any, any> {
     addComment('reels', r.id, uid, this.myProfile?.displayName || this.state.user?.displayName || 'Alguien', text).catch(() => {});
   }
 
+  reelUploadOpen = false;
+  reelUploadFile: File | null = null;
+  reelUploadCaption = '';
+  reelUploadMusic = '';
+  reelUploadBusy = false;
+  reelUploadPct: number | null = null;
+  reelUploadErr = '';
+  reelUploadShow = () => { this.reelUploadOpen = true; this.forceUpdate(); };
+  reelUploadHide = () => { if (!this.reelUploadBusy) { this.reelUploadOpen = false; this.reelUploadErr = ''; this.forceUpdate(); } };
+  reelPickFile = () => { (document.getElementById('reel-upload-input') as HTMLInputElement | null)?.click(); };
+  reelOnFile = (e: any) => {
+    const f = e?.target?.files?.[0];
+    if (e?.target) e.target.value = '';
+    if (f) { this.reelUploadFile = f; this.reelUploadErr = ''; this.forceUpdate(); }
+  };
+  reelCaptionChange = (e: any) => { this.reelUploadCaption = e.target.value; this.forceUpdate(); };
+  reelMusicChange = (e: any) => { this.reelUploadMusic = e.target.value; this.forceUpdate(); };
+  reelSubmitUpload = async () => {
+    const user = this.state.user;
+    if (!user || this.reelUploadBusy) return;
+    if (!this.reelUploadFile) { this.reelUploadErr = 'Elige un video para publicar.'; this.forceUpdate(); return; }
+    this.reelUploadBusy = true; this.reelUploadErr = ''; this.reelUploadPct = 0; this.forceUpdate();
+    try {
+      await publishReel({
+        uid: user.uid,
+        ownerHandle: this.myProfile?.handle ? '@' + this.myProfile.handle : '@' + (user.displayName || 'usuario').toLowerCase().replace(/\s+/g, '.'),
+        caption: this.reelUploadCaption, music: this.reelUploadMusic, file: this.reelUploadFile,
+        onProgress: (pct: number) => { this.reelUploadPct = pct; this.forceUpdate(); },
+      });
+      this.reelUploadOpen = false; this.reelUploadFile = null; this.reelUploadCaption = ''; this.reelUploadMusic = '';
+    } catch (e: any) { this.reelUploadErr = e?.message || 'No se pudo publicar el reel. Inténtalo de nuevo.'; }
+    this.reelUploadBusy = false; this.reelUploadPct = null; this.forceUpdate();
+  };
+
   fmt(n) { return n >= 1000 ? (n / 1000).toFixed(1).replace('.0', '') + 'K' : String(n); }
 
   toggleLike(i) {
@@ -1105,6 +1140,8 @@ class App extends Component<any, any> {
         commentValue: real ? social.commentText : '',
         onCommentChange: (e: any) => this.reelCommentChange(rr, e),
         onSendComment: () => this.reelSendComment(rr),
+        hasVideo: !!r.mediaUrl,
+        videoUrl: r.mediaUrl,
         onLike: () => this.reelToggleLike(rr),
         heart: on
           ? 'width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--pink);color:#fff;border:1px solid rgba(255,255,255,.35);cursor:pointer;transition:transform .18s cubic-bezier(.2,.85,.25,1);transform:scale(1.08)'
@@ -2352,6 +2389,19 @@ class App extends Component<any, any> {
       tabFollowing: this.reelState.tab === 'Siguiendo' ? tabOn : tabOff,
       pickForYou: () => this.setReelTab('Para ti'),
       pickFollowing: () => this.setReelTab('Siguiendo'),
+      reelUploadOpen: this.reelUploadOpen,
+      reelUploadShow: this.reelUploadShow,
+      reelUploadHide: this.reelUploadHide,
+      reelPickFile: this.reelPickFile,
+      reelOnFile: this.reelOnFile,
+      reelFileName: this.reelUploadFile?.name ?? '',
+      reelCaptionValue: this.reelUploadCaption,
+      reelCaptionChange: this.reelCaptionChange,
+      reelMusicValue: this.reelUploadMusic,
+      reelMusicChange: this.reelMusicChange,
+      reelUploadErr: this.reelUploadErr,
+      reelSubmitUpload: this.reelSubmitUpload,
+      reelUploadLabel: this.reelUploadBusy ? (this.reelUploadPct == null ? 'Publicando…' : Math.round(this.reelUploadPct) + '%') : 'Publicar reel',
       statGrid: grid3d + 'grid-template-columns:repeat(auto-fit,minmax(200px,1fr));backdrop-filter:none;-webkit-backdrop-filter:none;background:' + (dark ? 'linear-gradient(135deg,#2B2E35 0%,#1C1E23 26%,#383C45 52%,#191B20 74%,#2F333B 100%)' : 'linear-gradient(135deg,#FFFFFF 0%,#EEF1F6 26%,#FFFFFF 52%,#E7EBF2 74%,#FFFFFF 100%)') + ';',
       cardGrid: grid3d + 'grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px;',
       reelGrid: grid3d + 'grid-template-columns:repeat(auto-fill,minmax(210px,1fr));',

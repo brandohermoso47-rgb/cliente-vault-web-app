@@ -27,6 +27,11 @@ export default function Reels({ v }: { v: any }) {
               <Fragment key={$index}>
                 <div style={{"position":"relative","width":"100%","height":"100%","scrollSnapAlign":"start","overflow":"hidden"}}>
                   <div style={sty(r?.bg)}></div>
+                  {r?.hasVideo && (
+                    <>
+                      <video src={r?.videoUrl} autoPlay="" loop="" playsInline="" muted={v.reelMuted} style={{"position":"absolute","inset":"0","width":"100%","height":"100%","objectFit":"cover"}}></video>
+                    </>
+                  )}
                   <div style={{"position":"absolute","inset":"0","background":"radial-gradient(120% 68% at 50% 18%, transparent, rgba(0,0,0,.6))"}}></div>
                   {r?.isLive && (
                     <>
@@ -145,12 +150,55 @@ export default function Reels({ v }: { v: any }) {
                 {"Siguiendo"}
               </div>
             </div>
-            <div onClick={v.toggleMute} title={v.muteLabel} style={{"display":"flex","alignItems":"center","justifyContent":"center","width":"34px","height":"34px","borderRadius":"50%","background":"rgba(255,255,255,.14)","border":"1px solid rgba(255,255,255,.28)","backdropFilter":"blur(12px)","color":"#fff","cursor":"pointer","pointerEvents":"auto"}}>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round">
-                <path d="M11 5L6 9H3v6h3l5 4V5z"></path>
-              </svg>
+            <div style={{"display":"flex","gap":"10px","pointerEvents":"auto"}}>
+              <div onClick={v.reelUploadShow} title="Publicar mi reel" style={{"display":"flex","alignItems":"center","justifyContent":"center","width":"34px","height":"34px","borderRadius":"50%","background":"var(--pink)","color":"#fff","cursor":"pointer"}}>
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round">
+                  <path d="M12 5v14"></path>
+                  <path d="M5 12h14"></path>
+                </svg>
+              </div>
+              <div onClick={v.toggleMute} title={v.muteLabel} style={{"display":"flex","alignItems":"center","justifyContent":"center","width":"34px","height":"34px","borderRadius":"50%","background":"rgba(255,255,255,.14)","border":"1px solid rgba(255,255,255,.28)","backdropFilter":"blur(12px)","color":"#fff","cursor":"pointer"}}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round">
+                  <path d="M11 5L6 9H3v6h3l5 4V5z"></path>
+                </svg>
+              </div>
             </div>
           </div>
+          {v.reelUploadOpen && (
+            <>
+              <div onClick={v.reelUploadHide} style={{"position":"fixed","inset":"0","zIndex":"60","background":"rgba(0,0,0,.7)","display":"flex","alignItems":"center","justifyContent":"center","padding":"20px"}}>
+                <div onClick={v.stopProp} style={{"width":"100%","maxWidth":"420px","borderRadius":"22px","background":"#0B0A10","border":"1px solid rgba(255,255,255,.14)","padding":"24px","boxShadow":"0 40px 90px -30px rgba(0,0,0,.9)"}}>
+                  <div style={{"fontSize":"16px","fontWeight":"800","color":"#fff","marginBottom":"4px"}}>
+                    {"Publicar mi reel"}
+                  </div>
+                  <div style={{"fontSize":"12px","color":"rgba(255,255,255,.6)","marginBottom":"16px"}}>
+                    {"Un video corto, visible para toda la comunidad."}
+                  </div>
+                  <input id="reel-upload-input" type="file" accept="video/*" onChange={v.reelOnFile} style={{"display":"none"}} />
+                  <div onClick={v.reelPickFile} style={{"padding":"14px","borderRadius":"14px","border":"1px dashed rgba(255,255,255,.3)","textAlign":"center","color":"rgba(255,255,255,.75)","fontSize":"12.5px","cursor":"pointer","marginBottom":"12px"}}>
+                    {v.reelFileName}
+                  </div>
+                  <textarea value={v.reelCaptionValue} onChange={v.reelCaptionChange} placeholder="Escribe una descripción…" rows="2" style={{"width":"100%","boxSizing":"border-box","padding":"11px 14px","borderRadius":"14px","border":"1px solid rgba(255,255,255,.2)","background":"rgba(255,255,255,.06)","color":"#fff","fontFamily":"inherit","fontSize":"13px","outline":"none","resize":"vertical","marginBottom":"10px"}}></textarea>
+                  <input value={v.reelMusicValue} onChange={v.reelMusicChange} placeholder="Canción o sonido (opcional)" style={{"width":"100%","boxSizing":"border-box","padding":"11px 14px","borderRadius":"14px","border":"1px solid rgba(255,255,255,.2)","background":"rgba(255,255,255,.06)","color":"#fff","fontSize":"13px","outline":"none","marginBottom":"14px"}} />
+                  {v.reelUploadErr && (
+                    <>
+                      <div style={{"fontSize":"11.5px","color":"var(--pink)","marginBottom":"12px"}}>
+                        {v.reelUploadErr}
+                      </div>
+                    </>
+                  )}
+                  <div style={{"display":"flex","gap":"10px"}}>
+                    <div onClick={v.reelUploadHide} style={{"flex":"1","textAlign":"center","padding":"12px","borderRadius":"999px","fontSize":"12.5px","fontWeight":"700","color":"rgba(255,255,255,.8)","border":"1px solid rgba(255,255,255,.2)","cursor":"pointer"}}>
+                      {"Cancelar"}
+                    </div>
+                    <div onClick={v.reelSubmitUpload} style={{"flex":"1","textAlign":"center","padding":"12px","borderRadius":"999px","fontSize":"12.5px","fontWeight":"700","color":"#14111A","background":"var(--pink)","cursor":"pointer"}}>
+                      {v.reelUploadLabel}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
           <div style={{"position":"absolute","bottom":"0","left":"0","right":"0","display":"flex","alignItems":"center","justifyContent":"space-around","padding":"14px 18px 20px","background":"linear-gradient(transparent,rgba(0,0,0,.75))"}}>
             <div style={{"display":"flex","flexDirection":"column","alignItems":"center","gap":"4px","color":"rgba(255,255,255,.6)","cursor":"pointer"}} className={cx(pc("hover", "color:#fff"))}>
               <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">

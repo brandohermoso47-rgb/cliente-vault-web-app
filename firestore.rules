@@ -39,18 +39,29 @@ service cloud.firestore {
       }
     }
 
-    // ── Contenido de la plataforma: lo lee cualquiera con sesión ──
+    // ── Contenido de instructores/estudios/admin: lo lee cualquiera con sesión ──
     match /{content}/{docId} {
       allow read: if signedIn()
-        && content in ['reels', 'teachers', 'lives', 'lessons', 'announcements', 'presentations',
+        && content in ['teachers', 'lives', 'lessons', 'announcements', 'presentations',
                        'instructor_playlists', 'instructor_tracks', 'instructor_drive_tracks'];
       // Publica el personal, pero solo edita/borra lo suyo (ownerId); el admin edita todo.
-      allow create: if content in ['reels', 'teachers', 'lives', 'lessons', 'announcements', 'presentations',
+      allow create: if content in ['teachers', 'lives', 'lessons', 'announcements', 'presentations',
                                    'instructor_playlists', 'instructor_tracks', 'instructor_drive_tracks']
         && (isAdmin() || (isStaff() && request.resource.data.get('ownerId', '') == request.auth.uid));
-      allow update, delete: if content in ['reels', 'teachers', 'lives', 'lessons', 'announcements', 'presentations',
+      allow update, delete: if content in ['teachers', 'lives', 'lessons', 'announcements', 'presentations',
                                           'instructor_playlists', 'instructor_tracks', 'instructor_drive_tracks']
         && (isAdmin() || (isStaff() && resource.data.get('ownerId', '') == request.auth.uid));
+    }
+
+    // ── Reels: el feed de la comunidad — cualquier persona con sesión publica el suyo ──
+    match /reels/{id} {
+      allow read: if signedIn();
+      allow create: if signedIn() && request.resource.data.ownerId == request.auth.uid
+        && shortText('caption', 300)
+        && request.resource.data.keys().hasOnly(['ownerId', 'user', 'caption', 'music', 'mediaUrl', 'mediaType', 'c1', 'c2', 'createdAt']);
+      allow update: if signedIn() && resource.data.ownerId == request.auth.uid
+        && request.resource.data.ownerId == resource.data.ownerId && only(['caption']) && shortText('caption', 300);
+      allow delete: if isAdmin() || (signedIn() && resource.data.ownerId == request.auth.uid);
     }
 
     // ── Comunidad (público para usuarios con sesión): cada quien solo publica y edita lo suyo ──

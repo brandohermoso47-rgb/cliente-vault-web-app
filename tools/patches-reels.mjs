@@ -78,7 +78,41 @@ export default function patchesReels(s) {
     this.reelSocial[r.id] = Object.assign({}, cur, { commentText: '' });
     this.forceUpdate();
     addComment('reels', r.id, uid, this.myProfile?.displayName || this.state.user?.displayName || 'Alguien', text).catch(() => {});
-  }`);
+  }
+
+  reelUploadOpen = false;
+  reelUploadFile: File | null = null;
+  reelUploadCaption = '';
+  reelUploadMusic = '';
+  reelUploadBusy = false;
+  reelUploadPct: number | null = null;
+  reelUploadErr = '';
+  reelUploadShow = () => { this.reelUploadOpen = true; this.forceUpdate(); };
+  reelUploadHide = () => { if (!this.reelUploadBusy) { this.reelUploadOpen = false; this.reelUploadErr = ''; this.forceUpdate(); } };
+  reelPickFile = () => { (document.getElementById('reel-upload-input') as HTMLInputElement | null)?.click(); };
+  reelOnFile = (e: any) => {
+    const f = e?.target?.files?.[0];
+    if (e?.target) e.target.value = '';
+    if (f) { this.reelUploadFile = f; this.reelUploadErr = ''; this.forceUpdate(); }
+  };
+  reelCaptionChange = (e: any) => { this.reelUploadCaption = e.target.value; this.forceUpdate(); };
+  reelMusicChange = (e: any) => { this.reelUploadMusic = e.target.value; this.forceUpdate(); };
+  reelSubmitUpload = async () => {
+    const user = this.state.user;
+    if (!user || this.reelUploadBusy) return;
+    if (!this.reelUploadFile) { this.reelUploadErr = 'Elige un video para publicar.'; this.forceUpdate(); return; }
+    this.reelUploadBusy = true; this.reelUploadErr = ''; this.reelUploadPct = 0; this.forceUpdate();
+    try {
+      await publishReel({
+        uid: user.uid,
+        ownerHandle: this.myProfile?.handle ? '@' + this.myProfile.handle : '@' + (user.displayName || 'usuario').toLowerCase().replace(/\\s+/g, '.'),
+        caption: this.reelUploadCaption, music: this.reelUploadMusic, file: this.reelUploadFile,
+        onProgress: (pct: number) => { this.reelUploadPct = pct; this.forceUpdate(); },
+      });
+      this.reelUploadOpen = false; this.reelUploadFile = null; this.reelUploadCaption = ''; this.reelUploadMusic = '';
+    } catch (e: any) { this.reelUploadErr = e?.message || 'No se pudo publicar el reel. Inténtalo de nuevo.'; }
+    this.reelUploadBusy = false; this.reelUploadPct = null; this.forceUpdate();
+  };`);
 
   rep(`  buildReels() {
     return this.reelData.map((r, i) => {
@@ -118,7 +152,25 @@ export default function patchesReels(s) {
         commentValue: real ? social.commentText : '',
         onCommentChange: (e: any) => this.reelCommentChange(rr, e),
         onSendComment: () => this.reelSendComment(rr),
+        hasVideo: !!r.mediaUrl,
+        videoUrl: r.mediaUrl,
         onLike: () => this.reelToggleLike(rr),`);
+
+  rep('      pickFollowing: () => this.setReelTab(\'Siguiendo\'),',
+      `      pickFollowing: () => this.setReelTab('Siguiendo'),
+      reelUploadOpen: this.reelUploadOpen,
+      reelUploadShow: this.reelUploadShow,
+      reelUploadHide: this.reelUploadHide,
+      reelPickFile: this.reelPickFile,
+      reelOnFile: this.reelOnFile,
+      reelFileName: this.reelUploadFile?.name ?? '',
+      reelCaptionValue: this.reelUploadCaption,
+      reelCaptionChange: this.reelCaptionChange,
+      reelMusicValue: this.reelUploadMusic,
+      reelMusicChange: this.reelMusicChange,
+      reelUploadErr: this.reelUploadErr,
+      reelSubmitUpload: this.reelSubmitUpload,
+      reelUploadLabel: this.reelUploadBusy ? (this.reelUploadPct == null ? 'Publicando…' : Math.round(this.reelUploadPct) + '%') : 'Publicar reel',`);
 
   return s;
 }

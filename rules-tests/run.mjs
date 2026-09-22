@@ -48,8 +48,8 @@ allow('el dueño lee su galería privada', 'get', 'users/user1/media/m1', { uid:
 deny('otro usuario NO lee la galería privada', 'get', 'users/user1/media/m1', { uid: 'user2', data: { url: 'x' } });
 deny('otro usuario NO escribe en la galería ajena', 'create', 'users/user1/media/m2', { uid: 'user2', incoming: { url: 'x' } });
 
-// contenido de la plataforma
-for (const col of ['reels', 'teachers', 'lives', 'lessons']) {
+// contenido de instructores/estudios/admin
+for (const col of ['teachers', 'lives', 'lessons']) {
   allow(`${col}: lectura con sesión`, 'get', `${col}/c1`, { uid: 'user1', data: { ownerId: 'inst1' } });
   deny(`${col}: anónimo no lee`, 'get', `${col}/c1`, { data: { ownerId: 'inst1' } });
   deny(`${col}: un usuario normal NO publica`, 'create', `${col}/c1`, { uid: 'user1', incoming: { ownerId: 'user1' } });
@@ -58,7 +58,38 @@ for (const col of ['reels', 'teachers', 'lives', 'lessons']) {
   deny(`${col}: un instructor NO edita lo de otro`, 'update', `${col}/c1`, { uid: 'inst1', data: { ownerId: 'estu1' }, incoming: { ownerId: 'estu1', x: 1 } });
   allow(`${col}: un admin edita todo`, 'update', `${col}/c1`, { uid: 'admin1', data: { ownerId: 'estu1' }, incoming: { ownerId: 'estu1', x: 1 } });
 }
-allow('un estudio publica un reel propio', 'create', 'reels/r1', { uid: 'estu1', incoming: { ownerId: 'estu1' } });
+
+// reels: el feed de la comunidad, cualquier persona con sesión publica el suyo
+allow('reels: lectura con sesión', 'get', 'reels/r1', { uid: 'user1', data: { ownerId: 'user2' } });
+deny('reels: anónimo no lee', 'get', 'reels/r1', { data: { ownerId: 'user2' } });
+allow('reels: un usuario normal SÍ publica el suyo', 'create', 'reels/r1', { uid: 'user1', incoming: { ownerId: 'user1', caption: 'hola' } });
+allow('un estudio también publica un reel propio', 'create', 'reels/r1', { uid: 'estu1', incoming: { ownerId: 'estu1' } });
+deny('reels: NO publica a nombre de otro', 'create', 'reels/r1', { uid: 'user1', incoming: { ownerId: 'user2' } });
+deny('reels: caption de más de 300 caracteres', 'create', 'reels/r1', { uid: 'user1', incoming: { ownerId: 'user1', caption: 'x'.repeat(301) } });
+deny('reels: campos desconocidos', 'create', 'reels/r1', { uid: 'user1', incoming: { ownerId: 'user1', extra: 1 } });
+allow('reels: el dueño solo edita la descripción', 'update', 'reels/r1', { uid: 'user1', data: { ownerId: 'user1', caption: 'a' }, incoming: { ownerId: 'user1', caption: 'b' } });
+deny('reels: NO cambia el dueño al editar', 'update', 'reels/r1', { uid: 'user1', data: { ownerId: 'user1', caption: 'a' }, incoming: { ownerId: 'user2', caption: 'b' } });
+deny('reels: un tercero NO edita', 'update', 'reels/r1', { uid: 'user2', data: { ownerId: 'user1', caption: 'a' }, incoming: { ownerId: 'user1', caption: 'b' } });
+allow('reels: el dueño borra el suyo', 'delete', 'reels/r1', { uid: 'user1', data: { ownerId: 'user1' } });
+deny('reels: un tercero NO borra', 'delete', 'reels/r1', { uid: 'user2', data: { ownerId: 'user1' } });
+allow('reels: un admin borra cualquiera', 'delete', 'reels/r1', { uid: 'admin1', data: { ownerId: 'user1' } });
+
+// likes/comentarios en reels
+allow('reels: cualquiera con sesión da "me gusta"', 'create', 'reels/r1/likes/user1', { uid: 'user1', incoming: {} });
+deny('reels: NO se puede dar "me gusta" a nombre de otro', 'create', 'reels/r1/likes/user1', { uid: 'user2', incoming: {} });
+allow('reels: quita su propio "me gusta"', 'delete', 'reels/r1/likes/user1', { uid: 'user1', data: {} });
+allow('reels: cualquiera con sesión comenta', 'create', 'reels/r1/comments/c1', { uid: 'user1', incoming: { uid: 'user1', text: 'hola' } });
+deny('reels: NO comenta a nombre de otro', 'create', 'reels/r1/comments/c1', { uid: 'user1', incoming: { uid: 'user2', text: 'hola' } });
+deny('reels: comentario de más de 500 caracteres', 'create', 'reels/r1/comments/c1', { uid: 'user1', incoming: { uid: 'user1', text: 'x'.repeat(501) } });
+allow('reels: borra su propio comentario', 'delete', 'reels/r1/comments/c1', { uid: 'user1', data: { uid: 'user1', text: 'a' } });
+deny('reels: un tercero NO borra el comentario ajeno', 'delete', 'reels/r1/comments/c1', { uid: 'user2', data: { uid: 'user1', text: 'a' } });
+
+// seguir a alguien
+allow('sigue a otra persona', 'create', 'follows/user1_user2', { uid: 'user1', incoming: { followerId: 'user1', followingId: 'user2' } });
+deny('NO se puede seguir a sí mismo', 'create', 'follows/user1_user1', { uid: 'user1', incoming: { followerId: 'user1', followingId: 'user1' } });
+deny('NO crea un "follow" a nombre de otro', 'create', 'follows/user2_user1', { uid: 'user1', incoming: { followerId: 'user2', followingId: 'user1' } });
+allow('deja de seguir', 'delete', 'follows/user1_user2', { uid: 'user1', data: { followerId: 'user1', followingId: 'user2' } });
+deny('un tercero NO puede dejar de seguir por otro', 'delete', 'follows/user1_user2', { uid: 'user2', data: { followerId: 'user1', followingId: 'user2' } });
 
 // comunidad
 allow('publica en el muro con su uid', 'create', 'community_messages/m1', { uid: 'user1', incoming: { uid: 'user1', text: 'hola' } });

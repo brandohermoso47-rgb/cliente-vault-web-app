@@ -1169,6 +1169,9 @@
                   <sc-for list="{{ reelItems }}" as="r" hint-placeholder-count="2">
                     <div style="position:relative;width:100%;height:100%;scroll-snap-align:start;overflow:hidden">
                       <div style="{{ r.bg }}"></div>
+                      <sc-if value="{{ r.hasVideo }}">
+                        <video src="{{ r.videoUrl }}" autoPlay loop playsInline muted="{{ reelMuted }}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"></video>
+                      </sc-if>
                       <div style="position:absolute;inset:0;background:radial-gradient(120% 68% at 50% 18%, transparent, rgba(0,0,0,.6))"></div>
 
                       <sc-if value="{{ r.isLive }}" hint-placeholder-val="{{ true }}">
@@ -1240,10 +1243,35 @@
                     <div onClick="{{ pickForYou }}" style="{{ tabForYou }}">Para ti</div>
                     <div onClick="{{ pickFollowing }}" style="{{ tabFollowing }}">Siguiendo</div>
                   </div>
-                  <div onClick="{{ toggleMute }}" title="{{ muteLabel }}" style="display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.28);backdrop-filter:blur(12px);color:#fff;cursor:pointer;pointer-events:auto">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M11 5L6 9H3v6h3l5 4V5z"></path></svg>
+                  <div style="display:flex;gap:10px;pointer-events:auto">
+                    <div onClick="{{ reelUploadShow }}" title="Publicar mi reel" style="display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;background:var(--pink);color:#fff;cursor:pointer">
+                      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14"></path><path d="M5 12h14"></path></svg>
+                    </div>
+                    <div onClick="{{ toggleMute }}" title="{{ muteLabel }}" style="display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.28);backdrop-filter:blur(12px);color:#fff;cursor:pointer">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M11 5L6 9H3v6h3l5 4V5z"></path></svg>
+                    </div>
                   </div>
                 </div>
+
+                <sc-if value="{{ reelUploadOpen }}">
+                  <div onClick="{{ reelUploadHide }}" style="position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.7);display:flex;align-items:center;justify-content:center;padding:20px">
+                    <div onClick="{{ stopProp }}" style="width:100%;max-width:420px;border-radius:22px;background:#0B0A10;border:1px solid rgba(255,255,255,.14);padding:24px;box-shadow:0 40px 90px -30px rgba(0,0,0,.9)">
+                      <div style="font-size:16px;font-weight:800;color:#fff;margin-bottom:4px">Publicar mi reel</div>
+                      <div style="font-size:12px;color:rgba(255,255,255,.6);margin-bottom:16px">Un video corto, visible para toda la comunidad.</div>
+                      <input id="reel-upload-input" type="file" accept="video/*" onChange="{{ reelOnFile }}" style="display:none" />
+                      <div onClick="{{ reelPickFile }}" style="padding:14px;border-radius:14px;border:1px dashed rgba(255,255,255,.3);text-align:center;color:rgba(255,255,255,.75);font-size:12.5px;cursor:pointer;margin-bottom:12px">{{ reelFileName }}</div>
+                      <textarea value="{{ reelCaptionValue }}" onChange="{{ reelCaptionChange }}" placeholder="Escribe una descripción…" rows="2" style="width:100%;box-sizing:border-box;padding:11px 14px;border-radius:14px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.06);color:#fff;font-family:inherit;font-size:13px;outline:none;resize:vertical;margin-bottom:10px"></textarea>
+                      <input value="{{ reelMusicValue }}" onChange="{{ reelMusicChange }}" placeholder="Canción o sonido (opcional)" style="width:100%;box-sizing:border-box;padding:11px 14px;border-radius:14px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.06);color:#fff;font-size:13px;outline:none;margin-bottom:14px" />
+                      <sc-if value="{{ reelUploadErr }}">
+                        <div style="font-size:11.5px;color:var(--pink);margin-bottom:12px">{{ reelUploadErr }}</div>
+                      </sc-if>
+                      <div style="display:flex;gap:10px">
+                        <div onClick="{{ reelUploadHide }}" style="flex:1;text-align:center;padding:12px;border-radius:999px;font-size:12.5px;font-weight:700;color:rgba(255,255,255,.8);border:1px solid rgba(255,255,255,.2);cursor:pointer">Cancelar</div>
+                        <div onClick="{{ reelSubmitUpload }}" style="flex:1;text-align:center;padding:12px;border-radius:999px;font-size:12.5px;font-weight:700;color:#14111A;background:var(--pink);cursor:pointer">{{ reelUploadLabel }}</div>
+                      </div>
+                    </div>
+                  </div>
+                </sc-if>
 
                 <div style="position:absolute;bottom:0;left:0;right:0;display:flex;align-items:center;justify-content:space-around;padding:14px 18px 20px;background:linear-gradient(transparent,rgba(0,0,0,.75))">
                   <div style="display:flex;flex-direction:column;align-items:center;gap:4px;color:rgba(255,255,255,.6);cursor:pointer" style-hover="color:#fff">

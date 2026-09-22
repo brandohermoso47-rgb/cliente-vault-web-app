@@ -163,6 +163,7 @@ import { api } from './lib/api';
 import { acceptFriend, declineFriend, myFriendIds, removeFriend, sendFriendRequest } from './lib/friends';
 import { publishPost, subscribeFeed } from './lib/posts';
 import { addComment, likeInfo, toggleFollow, toggleLike, watchComments } from './lib/social';
+import { publishReel } from './lib/reels';
 
 `;
 const render = `
