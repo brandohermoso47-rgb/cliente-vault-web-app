@@ -151,12 +151,6 @@ export default function Reels({ v }: { v: any }) {
               </div>
             </div>
             <div style={{"display":"flex","gap":"10px","pointerEvents":"auto"}}>
-              <div onClick={v.reelUploadShow} title="Publicar mi reel" style={{"display":"flex","alignItems":"center","justifyContent":"center","width":"34px","height":"34px","borderRadius":"50%","background":"var(--pink)","color":"#fff","cursor":"pointer"}}>
-                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round">
-                  <path d="M12 5v14"></path>
-                  <path d="M5 12h14"></path>
-                </svg>
-              </div>
               <div onClick={v.toggleMute} title={v.muteLabel} style={{"display":"flex","alignItems":"center","justifyContent":"center","width":"34px","height":"34px","borderRadius":"50%","background":"rgba(255,255,255,.14)","border":"1px solid rgba(255,255,255,.28)","backdropFilter":"blur(12px)","color":"#fff","cursor":"pointer"}}>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round">
                   <path d="M11 5L6 9H3v6h3l5 4V5z"></path>
@@ -217,7 +211,7 @@ export default function Reels({ v }: { v: any }) {
                 {"REELS"}
               </span>
             </div>
-            <div style={{"display":"flex","alignItems":"center","justifyContent":"center","width":"42px","height":"30px","borderRadius":"10px","background":"linear-gradient(90deg,var(--gold-hi),var(--gold-lo))","color":"#1A1400","cursor":"pointer"}}>
+            <div onClick={v.reelUploadShow} title="Publicar mi reel" style={{"display":"flex","alignItems":"center","justifyContent":"center","width":"42px","height":"30px","borderRadius":"10px","background":"linear-gradient(90deg,var(--gold-hi),var(--gold-lo))","color":"#1A1400","cursor":"pointer"}}>
               <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round">
                 <path d="M12 5v14M5 12h14"></path>
               </svg>
