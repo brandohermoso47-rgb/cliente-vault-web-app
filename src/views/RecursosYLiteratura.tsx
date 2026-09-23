@@ -1,7 +1,5 @@
-// Ebooks.tsx — Recursos y Literatura con diseño 5a + 6a
-// Tienda Premium, gestor de contenido para instructores, y libros de estudio
-/* eslint-disable */
-// @ts-nocheck
+// Recursos y Literatura — Tienda Premium + Gestor de contenido para instructores
+// Diseño 5a (Manuales chrome) + 6a (Tienda Premium + subida/edición)
 import { Fragment, useState } from 'react';
 import { cx, pc, sty } from '../lib/dc';
 
@@ -24,16 +22,18 @@ interface DocItem {
   spine: string;
 }
 
-export default function Ebooks({ v }: { v: any }) {
+export default function RecursosYLiteratura() {
   const [role, setRole] = useState<'student' | 'instructor'>('student');
   const [tab, setTab] = useState<'store' | 'libros' | 'gestion'>('store');
   const [cart, setCart] = useState<Set<string>>(new Set());
   const [filters, setFilters] = useState<Set<string>>(new Set());
 
+  // Edición de documentos
   const [isEditing, setIsEditing] = useState(false);
   const [editingDocId, setEditingDocId] = useState<string | null>(null);
   const [uploadMode, setUploadMode] = useState<'pdf' | 'write' | 'slides'>('pdf');
 
+  // Campos del formulario de subida
   const [formData, setFormData] = useState({
     title: '',
     body: '',
@@ -49,6 +49,7 @@ export default function Ebooks({ v }: { v: any }) {
     { id: '2', title: 'Historia del Waacking', author: 'Carlos Rodríguez', format: 'Texto', spine: '#ff2d95' },
   ]);
 
+  // Productos de la tienda
   const products: Product[] = [
     {
       id: 'p1',
@@ -167,7 +168,6 @@ export default function Ebooks({ v }: { v: any }) {
     setEditingDocId(null);
   };
 
-  // Vista del diseño nuevo: 5a + 6a (Glass Morphism + Fluorescentes)
   return (
     <div
       style={{
@@ -296,7 +296,11 @@ export default function Ebooks({ v }: { v: any }) {
 
           {/* Carrito */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '4px 10px', borderRadius: 99, border: '1px solid rgba(233,195,73,.5)', background: 'rgba(233,195,73,.12)' }}>
-            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="#E9C349" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 4h2l2.4 11h11L21 7H6.2" /><circle cx="9" cy="19.5" r="1.3" /><circle cx="17" cy="19.5" r="1.3" /></svg>
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="#E9C349" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M3 4h2l2.4 11h11L21 7H6.2" />
+              <circle cx="9" cy="19.5" r="1.3" />
+              <circle cx="17" cy="19.5" r="1.3" />
+            </svg>
             <span style={{ font: '700 10px Geist Mono, monospace', color: '#f3dd93' }}>{cart.size}</span>
           </div>
         </div>
@@ -930,7 +934,7 @@ export default function Ebooks({ v }: { v: any }) {
                       borderRadius: 99,
                     }}
                   >
-                    {docs.find((d) => d.id === editingDocId)?.format || 'PDF'}
+                    PDF
                   </span>
                 </div>
 
