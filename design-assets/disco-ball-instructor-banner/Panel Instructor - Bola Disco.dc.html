@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800;900&family=Geist+Mono:wght@400;500;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<style>
+  body { margin:0; background:#07050e; color:#F0F2F7; font-family:'Geist',ui-sans-serif,system-ui,sans-serif; }
+  a { color:#E9C349; text-decoration:none; }
+  a:hover { color:#ffd700; }
+  ::-webkit-scrollbar { width:8px; height:8px; }
+  ::-webkit-scrollbar-track { background:#0A0A0C; }
+  ::-webkit-scrollbar-thumb { background:rgba(233,195,73,.35); border-radius:4px; border:1px solid rgba(255,255,255,.08); }
+  ::-webkit-scrollbar-thumb:hover { background:#E9C349; }
+  @keyframes wPing { 75%,100% { transform:scale(2); opacity:0; } }
+  @keyframes wPulse { 50% { opacity:.45; } }
+  :focus-visible { outline:2px solid #E9C349; outline-offset:2px; }
+</style>
+</helmet>
+
+<div style="min-height:100%;width:100%;background:#07050e;color:#e2e8f0;display:flex;flex-direction:column;align-items:center;padding:12px;box-sizing:border-box;font-family:'Geist',sans-serif">
+<div style="width:100%;max-width:1400px;background:rgba(18,15,32,.9);border:1px solid rgba(255,255,255,.1);border-radius:28px;box-shadow:0 20px 60px rgba(0,0,0,.8),0 0 40px rgba(147,51,234,.15);display:flex;flex-direction:column;overflow:hidden;position:relative;min-height:680px">
+
+  <div style="padding:18px 20px;border-bottom:1px solid rgba(255,255,255,.1);background:rgba(14,12,24,.8);display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px">
+    <div style="display:flex;align-items:center;gap:14px;min-width:0">
+      <div style="position:relative;flex-shrink:0">
+        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200" alt="Instructor" style="width:44px;height:44px;border-radius:16px;object-fit:cover;border:2px solid rgba(236,72,153,.8);box-shadow:0 4px 6px rgba(0,0,0,.3);display:block">
+        <span style="position:absolute;bottom:-4px;right:-4px;background:#db2777;color:#fff;padding:4px;border-radius:9999px;display:flex;box-shadow:0 2px 6px rgba(0,0,0,.5)"><span style="width:10px;height:10px;background:currentColor;mask:url(https://unpkg.com/lucide-static@0.546.0/icons/pencil-line.svg) center/contain no-repeat;-webkit-mask:url(https://unpkg.com/lucide-static@0.546.0/icons/pencil-line.svg) center/contain no-repeat;display:block"></span></span>
+      </div>
+      <div style="min-width:0">
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+          <h2 style="margin:0;font-size:18px;font-weight:900;color:#fff;letter-spacing:-.02em">{{ headerTitle }}</h2>
+          <span style="padding:2px 8px;border-radius:9999px;font-size:9px;font-family:'Geist Mono',monospace;font-weight:700;background:rgba(236,72,153,.2);border:1px solid rgba(236,72,153,.4);color:#f9a8d4">DOCENTE</span>
+        </div>
+        <p style="margin:2px 0 0;font-size:11px;font-family:'Geist Mono',monospace;color:#B0B7C3;font-weight:600;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+          <span>Jassy Soner</span>
+          <span style="color:#f472b6">@jassywaack</span>
+          <span style="color:#34d399;display:flex;align-items:center;gap:4px;font-size:9px"><span style="width:6px;height:6px;border-radius:50%;background:#34d399;animation:wPulse 2s ease-in-out infinite;display:block"></span>RBAC: instructor · acceso verificado</span>
+        </p>
+      </div>
+    </div>
+
+    <div style="display:flex;align-items:center;gap:10px;flex-shrink:0">
+      <button type="button" style="padding:8px 12px;border-radius:12px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05);color:#cbd5e1;font-size:12px;font-weight:700;display:flex;align-items:center;gap:6px;cursor:pointer;font-family:inherit" style-hover="background:rgba(255,255,255,.1);color:#fff">
+        <span style="width:14px;height:14px;background:currentColor;mask:url(https://unpkg.com/lucide-static@0.546.0/icons/calendar.svg) center/contain no-repeat;-webkit-mask:url(https://unpkg.com/lucide-static@0.546.0/icons/calendar.svg) center/contain no-repeat;display:block"></span>Clases
+      </button>
+      <button type="button" style="padding:8px;border-radius:12px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05);color:#cbd5e1;position:relative;cursor:pointer;display:flex" style-hover="background:rgba(255,255,255,.1)">
+        <span style="width:16px;height:16px;background:currentColor;mask:url(https://unpkg.com/lucide-static@0.546.0/icons/bell-ring.svg) center/contain no-repeat;-webkit-mask:url(https://unpkg.com/lucide-static@0.546.0/icons/bell-ring.svg) center/contain no-repeat;display:block"></span>
+        <span style="position:absolute;top:4px;right:4px;width:8px;height:8px;border-radius:50%;background:#ec4899;animation:wPing 1.4s cubic-bezier(0,0,.2,1) infinite"></span>
+      </button>
+      <button type="button" style="padding:8px 12px;border-radius:12px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05);color:#cbd5e1;font-size:12px;font-weight:700;display:flex;align-items:center;gap:6px;cursor:pointer;font-family:inherit" style-hover="background:rgba(255,255,255,.1);color:#fff">
+        <span style="width:14px;height:14px;background:currentColor;mask:url(https://unpkg.com/lucide-static@0.546.0/icons/settings.svg) center/contain no-repeat;-webkit-mask:url(https://unpkg.com/lucide-static@0.546.0/icons/settings.svg) center/contain no-repeat;display:block"></span>Ajustes
+      </button>
+      <button type="button" style="padding:8px 12px;border-radius:12px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05);color:#cbd5e1;font-size:12px;font-weight:700;display:flex;align-items:center;gap:6px;cursor:pointer;font-family:inherit" style-hover="background:rgba(255,255,255,.1);color:#fff">
+        <span style="width:14px;height:14px;background:#E9C349;mask:url(https://unpkg.com/lucide-static@0.546.0/icons/arrow-right-left.svg) center/contain no-repeat;-webkit-mask:url(https://unpkg.com/lucide-static@0.546.0/icons/arrow-right-left.svg) center/contain no-repeat;display:block"></span>Volver a Estudiante
+      </button>
+    </div>
+  </div>
+
+  <div style="padding:10px 16px;border-bottom:1px solid rgba(255,255,255,.1);background:rgba(10,8,21,.9);display:flex;align-items:center;gap:6px;overflow-x:auto">
+    <sc-for list="{{ tabs }}" as="tab" hint-placeholder-count="10">
+      <button type="button" onClick="{{ tab.select }}" style="{{ tab.style }}">
+        <span style="{{ tab.iconStyle }}"></span>
+        <span>{{ tab.label }}</span>
+        <sc-if value="{{ tab.badge }}" hint-placeholder-val="{{ true }}">
+          <span style="{{ tab.badgeStyle }}">{{ tab.badge }}</span>
+        </sc-if>
+      </button>
+    </sc-for>
+  </div>
+
+  <div style="padding:10px 16px;border-bottom:1px solid rgba(255,255,255,.1);background:rgba(20,15,38,.95);display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px">
+    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;min-width:0">
+      <div style="display:flex;align-items:center;gap:6px;font-size:11px;font-family:'Geist Mono',monospace;font-weight:700">
+        <span style="width:14px;height:14px;background:#E9C349;mask:url(https://unpkg.com/lucide-static@0.546.0/icons/funnel.svg) center/contain no-repeat;-webkit-mask:url(https://unpkg.com/lucide-static@0.546.0/icons/funnel.svg) center/contain no-repeat;display:block"></span>
+        <span style="text-transform:uppercase;font-size:10px;letter-spacing:.05em;color:#E9C349;white-space:nowrap">Estudiante Filtrado:</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+        <button type="button" onClick="{{ clearFilter }}" style="{{ allChipStyle }}">Todos (5)</button>
+        <sc-for list="{{ chips }}" as="chip" hint-placeholder-count="5">
+          <button type="button" onClick="{{ chip.select }}" style="{{ chip.style }}">
+            <span style="{{ chip.dotStyle }}"></span>
+            <span>{{ chip.name }}</span>
+          </button>
+        </sc-for>
+      </div>
+    </div>
+    <div style="font-size:10px;font-family:'Geist Mono',monospace;color:#B0B7C3">{{ filterHint }}</div>
+  </div>
+
+  <sc-if value="{{ notDashboard }}" hint-placeholder-val="{{ false }}">
+    <div style="flex:1;padding:48px 20px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center">
+      <span style="width:26px;height:26px;background:#E9C349;mask:url(https://unpkg.com/lucide-static@0.546.0/icons/layers.svg) center/contain no-repeat;-webkit-mask:url(https://unpkg.com/lucide-static@0.546.0/icons/layers.svg) center/contain no-repeat;display:block"></span>
+      <div style="font-size:15px;font-weight:800;color:#fff">{{ headerTitle }}</div>
+      <p style="margin:0;max-width:420px;font-size:11px;font-family:'Geist Mono',monospace;color:#B0B7C3;line-height:1.7">Sección no incluida en esta maqueta. Vuelve a <strong style="color:#E9C349">Dashboard</strong> para ver la bola disco y el resto del panel recreado.</p>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isDashboard }}" hint-placeholder-val="{{ true }}">
+  <div style="flex:1;padding:20px;display:flex;flex-direction:column;gap:24px">
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;align-items:stretch">
+
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div style="display:flex;align-items:baseline;justify-content:space-between;gap:8px">
+          <h3 style="margin:0;font-size:11px;font-family:'Geist Mono',monospace;font-weight:700;text-transform:uppercase;color:#E9C349;letter-spacing:.1em">Quick Stats</h3>
+          <span style="font-size:10px;font-family:'Geist Mono',monospace;color:#9AA2B2">últimos 30 días</span>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;flex:1">
+          <sc-for list="{{ stats }}" as="s" hint-placeholder-count="4">
+            <div style="{{ s.cardStyle }}">
+              <div style="display:flex;align-items:center;justify-content:space-between">
+                <div style="{{ s.iconBox }}"><span style="{{ s.icon }}"></span></div>
+                <span style="{{ s.dot }}"></span>
+              </div>
+              <div style="margin-top:12px">
+                <div style="font-size:22px;font-weight:700;color:#fff;font-family:'Geist Mono',monospace;line-height:1.1">{{ s.value }}</div>
+                <div style="font-size:11px;color:#B0B7C3;font-weight:600;margin-top:3px">{{ s.label }}</div>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+
+      <div style="background:rgba(23,19,42,.6);border:1px solid rgba(255,255,255,.1);border-radius:16px;position:relative;overflow:hidden;display:flex;flex-direction:column;min-height:340px">
+        <div style="position:relative;z-index:2;padding:14px 14px 0;display:flex;align-items:flex-start;justify-content:space-between;gap:8px">
+          <div>
+            <div style="font-size:10px;font-family:'Geist Mono',monospace;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:#E9C349">Studio Vibe</div>
+            <div style="font-size:13px;font-weight:800;color:#fff;margin-top:2px;white-space:nowrap">Bola disco de sala</div>
+          </div>
+          <div style="{{ livePillStyle }}"><span style="{{ liveDotStyle }}"></span>{{ liveLabel }}</div>
+        </div>
+
+        <div style="flex:1;min-height:210px;position:relative">
+          <x-import component-from-global-scope="disco-ball-widget" from="./disco-ball-widget.js" bpm="{{ bpm }}" live="{{ liveAttr }}" ref="{{ ballRef }}" style="position:absolute;inset:0;display:block" hint-size="100%,210px"></x-import>
+        </div>
+
+        <div style="position:relative;z-index:2;padding:0 14px 14px;display:flex;flex-direction:column;gap:10px">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;background:rgba(10,8,21,.75);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:8px 10px">
+            <div style="display:flex;align-items:center;gap:8px;min-width:0">
+              <span style="width:14px;height:14px;background:#E9C349;mask:url(https://unpkg.com/lucide-static@0.546.0/icons/disc-3.svg) center/contain no-repeat;-webkit-mask:url(https://unpkg.com/lucide-static@0.546.0/icons/disc-3.svg) center/contain no-repeat;display:block;flex-shrink:0"></span>
+              <span style="font-size:10px;font-family:'Geist Mono',monospace;color:#B0B7C3;text-transform:uppercase;letter-spacing:.08em">Tempo</span>
+              <span style="font-size:15px;font-family:'Geist Mono',monospace;font-weight:700;color:#fff">{{ bpm }}</span>
+              <span style="font-size:10px;font-family:'Geist Mono',monospace;color:#9AA2B2">BPM</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:6px;flex-shrink:0">
+              <button type="button" onClick="{{ bpmDown }}" aria-label="Bajar BPM" style="width:26px;height:26px;border-radius:8px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:#e2e8f0;font-weight:800;cursor:pointer;font-family:inherit;line-height:1" style-hover="background:rgba(233,195,73,.18);border-color:rgba(233,195,73,.5)">−</button>
+              <button type="button" onClick="{{ bpmUp }}" aria-label="Subir BPM" style="width:26px;height:26px;border-radius:8px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:#e2e8f0;font-weight:800;cursor:pointer;font-family:inherit;line-height:1" style-hover="background:rgba(233,195,73,.18);border-color:rgba(233,195,73,.5)">+</button>
+            </div>
+          </div>
+          <div style="display:flex;gap:8px">
+            <button type="button" onClick="{{ toggleLive }}" style="{{ liveBtnStyle }}">{{ liveBtnLabel }}</button>
+            <button type="button" onClick="{{ celebrate }}" style="flex:1;padding:9px 10px;border-radius:12px;border:1px solid rgba(233,195,73,.4);background:rgba(233,195,73,.14);color:#E9C349;font-size:11px;font-weight:800;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:6px" style-hover="background:rgba(233,195,73,.26)">
+              <span style="width:13px;height:13px;background:currentColor;mask:url(https://unpkg.com/lucide-static@0.546.0/icons/sparkles.svg) center/contain no-repeat;-webkit-mask:url(https://unpkg.com/lucide-static@0.546.0/icons/sparkles.svg) center/contain no-repeat;display:block"></span>Destello
+            </button>
+          </div>
+          <p style="margin:0;font-size:10px;font-family:'Geist Mono',monospace;color:#9AA2B2;text-align:center">Arrastra la bola para girarla</p>
+        </div>
+      </div>
+
+      <div style="background:rgba(23,19,42,.8);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:12px">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <h3 style="margin:0;font-size:11px;font-family:'Geist Mono',monospace;font-weight:700;text-transform:uppercase;color:#E9C349;letter-spacing:.1em">Student Management (5)</h3>
+          <button type="button" style="background:none;border:0;font-size:10px;font-family:'Geist Mono',monospace;font-weight:700;color:#E9C349;display:flex;align-items:center;gap:4px;cursor:pointer;padding:2px 4px" style-hover="color:#ffd700">
+            <span>Ver Todos</span>
+            <span style="width:12px;height:12px;background:currentColor;mask:url(https://unpkg.com/lucide-static@0.546.0/icons/chevron-right.svg) center/contain no-repeat;-webkit-mask:url(https://unpkg.com/lucide-static@0.546.0/icons/chevron-right.svg) center/contain no-repeat;display:block"></span>
+          </button>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px;flex:1">
+          <sc-for list="{{ topStudents }}" as="st" hint-placeholder-count="3">
+            <div onClick="{{ st.select }}" style="{{ st.cardStyle }}">
+              <div style="display:flex;align-items:center;justify-content:space-between;font-size:12px;font-weight:700;margin-bottom:8px;gap:8px">
+                <div style="display:flex;align-items:center;gap:8px;min-width:0">
+                  <div style="{{ st.avatarStyle }}">{{ st.initials }}</div>
+                  <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ st.name }}</span>
+                </div>
+                <span style="font-family:'Geist Mono',monospace;font-size:10px;color:#B0B7C3;flex-shrink:0">{{ st.level }}</span>
+              </div>
+              <div style="width:100%;background:#1e293b;border-radius:9999px;height:6px;overflow:hidden">
+                <div style="{{ st.barStyle }}"></div>
+              </div>
+              <div style="display:flex;align-items:center;justify-content:space-between;font-size:9px;font-family:'Geist Mono',monospace;color:#9AA2B2;margin-top:5px;gap:6px">
+                <span>UID: {{ st.id }}</span>
+                <span style="{{ st.statusStyle }}">{{ st.status }}</span>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:20px">
+      <div style="grid-column:span 1;background:rgba(23,19,42,.8);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:16px;min-width:0">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+          <div>
+            <h3 style="margin:0;font-size:14px;font-weight:700;color:#fff">Communication Hub</h3>
+            <p style="margin:2px 0 0;font-size:10px;font-family:'Geist Mono',monospace;color:#B0B7C3">Haz clic en un alumno para seleccionarlo</p>
+          </div>
+          <button type="button" onClick="{{ startLive }}" style="padding:9px 16px;border-radius:12px;border:0;background:linear-gradient(90deg,#f97316,#ec4899);color:#fff;font-weight:900;font-size:12px;box-shadow:0 8px 20px rgba(236,72,153,.3);cursor:pointer;font-family:inherit" style-hover="filter:brightness(1.1)">Start Live Class</button>
+        </div>
+        <div style="overflow-x:auto">
+          <table style="width:100%;text-align:left;font-size:12px;border-collapse:collapse">
+            <thead>
+              <tr style="color:#B0B7C3;font-family:'Geist Mono',monospace;font-size:10px;border-bottom:1px solid rgba(255,255,255,.1)">
+                <th style="padding-bottom:8px;font-weight:600">Alumno</th>
+                <th style="padding-bottom:8px;font-weight:600">Nivel</th>
+                <th style="padding-bottom:8px;font-weight:600">Actividad</th>
+                <th style="padding-bottom:8px;text-align:right;font-weight:600">Acción</th>
+              </tr>
+            </thead>
+            <tbody>
+              <sc-for list="{{ rows }}" as="r" hint-placeholder-count="5">
+                <tr onClick="{{ r.select }}" style="{{ r.rowStyle }}">
+                  <td style="padding:10px 0">
+                    <div style="display:flex;align-items:center;gap:10px">
+                      <div style="width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-weight:700;color:#E9C349;font-size:10px;flex-shrink:0">{{ r.initials }}</div>
+                      <div style="min-width:0">
+                        <div style="font-weight:700;color:#fff;font-size:12px;display:flex;align-items:center;gap:6px">
+                          <span>{{ r.name }}</span>
+                          <sc-if value="{{ r.selected }}" hint-placeholder-val="{{ false }}">
+                            <span style="font-size:9px;font-family:'Geist Mono',monospace;background:#ec4899;color:#fff;padding:1px 6px;border-radius:4px;font-weight:700">FILTRADO</span>
+                          </sc-if>
+                        </div>
+                        <div style="font-size:9px;font-family:'Geist Mono',monospace;color:#9AA2B2">{{ r.email }}</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td style="padding:10px 0"><span style="{{ r.levelStyle }}">{{ r.level }}</span></td>
+                  <td style="padding:10px 0;color:#B0B7C3;font-family:'Geist Mono',monospace;font-size:11px">{{ r.lastActive }}</td>
+                  <td style="padding:10px 0;text-align:right"><span style="{{ r.actionStyle }}">{{ r.actionLabel }}</span></td>
+                </tr>
+              </sc-for>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div style="background:rgba(23,19,42,.8);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:16px;min-width:0">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+          <div>
+            <h3 style="margin:0;font-size:14px;font-weight:700;color:#fff">Message</h3>
+            <p style="margin:2px 0 0;font-size:10px;font-family:'Geist Mono',monospace;color:#B0B7C3">{{ broadcastTarget }}</p>
+          </div>
+          <button type="button" onClick="{{ broadcast }}" style="padding:9px 16px;border-radius:12px;border:0;background:linear-gradient(90deg,#f97316,#ec4899);color:#fff;font-weight:900;font-size:12px;box-shadow:0 8px 20px rgba(236,72,153,.3);cursor:pointer;font-family:inherit" style-hover="filter:brightness(1.1)">Broadcast Message</button>
+        </div>
+        <div style="background:#0e0c18;border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:12px;flex:1;display:flex;flex-direction:column;justify-content:space-between;min-height:140px">
+          <textarea value="{{ draft }}" onChange="{{ setDraft }}" placeholder="Short your message..." rows="3" style="width:100%;background:transparent;color:#fff;font-size:12px;border:0;outline:none;resize:none;flex:1;font-family:inherit;box-sizing:border-box"></textarea>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding-top:10px;border-top:1px solid rgba(255,255,255,.05)">
+            <span style="width:16px;height:16px;background:#B0B7C3;mask:url(https://unpkg.com/lucide-static@0.546.0/icons/smile.svg) center/contain no-repeat;-webkit-mask:url(https://unpkg.com/lucide-static@0.546.0/icons/smile.svg) center/contain no-repeat;display:block"></span>
+            <button type="button" onClick="{{ broadcast }}" aria-label="Enviar" style="padding:7px;border-radius:8px;background:#ec4899;border:0;cursor:pointer;display:flex" style-hover="background:#db2777">
+              <span style="width:14px;height:14px;background:#fff;mask:url(https://unpkg.com/lucide-static@0.546.0/icons/send.svg) center/contain no-repeat;-webkit-mask:url(https://unpkg.com/lucide-static@0.546.0/icons/send.svg) center/contain no-repeat;display:block"></span>
+            </button>
+          </div>
+        </div>
+        <div style="{{ toastStyle }}">{{ toast }}</div>
+      </div>
+    </div>
+
+    <div style="padding:20px;border-radius:24px;background:linear-gradient(90deg,#0F172A,#1E1B4B,#0F172A);border:1px solid rgba(14,165,233,.3);box-shadow:0 12px 30px rgba(0,0,0,.4);display:flex;flex-direction:column;gap:16px">
+      <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;border-bottom:1px solid rgba(255,255,255,.1);padding-bottom:12px">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="padding:8px;border-radius:12px;background:rgba(14,165,233,.2);border:1px solid rgba(14,165,233,.3);display:flex">
+            <span style="width:20px;height:20px;background:#38bdf8;mask:url(https://unpkg.com/lucide-static@0.546.0/icons/graduation-cap.svg) center/contain no-repeat;-webkit-mask:url(https://unpkg.com/lucide-static@0.546.0/icons/graduation-cap.svg) center/contain no-repeat;display:block"></span>
+          </div>
+          <div>
+            <div style="font-size:10px;font-family:'Geist Mono',monospace;font-weight:700;color:#38bdf8;text-transform:uppercase;letter-spacing:.14em;display:flex;align-items:center;gap:6px">
+              <span>HERRAMIENTAS DE INTEGRACIÓN CÁTEDRA</span>
+              <span style="width:6px;height:6px;border-radius:50%;background:#38bdf8;animation:wPing 1.4s cubic-bezier(0,0,.2,1) infinite;display:block"></span>
+            </div>
+            <h4 style="margin:2px 0 0;font-size:14px;font-weight:800;color:#fff">Ecosistema Google Workspace para Instructores</h4>
+          </div>
+        </div>
+        <span style="font-size:10px;font-family:'Geist Mono',monospace;color:#B0B7C3;background:rgba(255,255,255,.05);padding:5px 10px;border-radius:8px;border:1px solid rgba(255,255,255,.1)">Acceso directo integrado</span>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px">
+        <sc-for list="{{ workspace }}" as="w" hint-placeholder-count="5">
+          <button type="button" style="{{ w.style }}" style-hover="background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.28)">
+            <span style="{{ w.icon }}"></span>
+            <div style="font-size:12px;font-weight:700;color:#fff;margin-top:8px">{{ w.title }}</div>
+            <div style="font-size:10px;color:#B0B7C3;font-family:'Geist Mono',monospace">{{ w.sub }}</div>
+          </button>
+        </sc-for>
+      </div>
+    </div>
+
+  </div>
+  </sc-if>
+</div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1400}}">
+const STUDENTS = [
+  { id: 'st-1', name: 'Ana "Waack Queen" Silva', level: 'Intermedio', lastActive: 'Ayer', email: 'ana.queen@dance.com', pct: 85 },
+  { id: 'st-2', name: 'Ji-Won Kim', level: 'Principiante', lastActive: 'Hace 2 horas', email: 'jiwon@waack.kr', pct: 55 },
+  { id: 'st-3', name: 'Yuki Sato', level: 'Avanzado', lastActive: 'Hace 3 días', email: 'yuki.s@dance.jp', pct: 35 },
+  { id: 'st-4', name: 'Carlos Mendoza', level: 'Intermedio', lastActive: 'Hoy', email: 'carlos.m@waacking.es', pct: 62 },
+  { id: 'st-5', name: 'Melissa Roberts', level: 'Principiante', lastActive: 'Hace 5 minutos', email: 'mel@roberts.com', pct: 18 }
+];
+
+const TABS = [
+  { id: 'dashboard', label: 'Dashboard', icon: 'layout-dashboard' },
+  { id: 'students', label: 'Alumnos', icon: 'users', badge: '5' },
+  { id: 'classes', label: 'Clases & Directos', icon: 'calendar' },
+  { id: 'finances', label: 'Finanzas', icon: 'dollar-sign' },
+  { id: 'documents', label: 'Documentos PDF', icon: 'book-marked', badge: '2' },
+  { id: 'methodology', label: 'Metodología & Lab', icon: 'award' },
+  { id: 'publish', label: 'Publicar Cursos', icon: 'circle-plus' },
+  { id: 'podcasts', label: 'Podcasts', icon: 'radio' },
+  { id: 'overview', label: 'Ventas & Actividad', icon: 'shopping-bag' },
+  { id: 'promotion', label: 'Ajustes & Destacados', icon: 'settings' }
+];
+
+const STATS = [
+  { icon: 'users', value: '2,890', label: 'Alumnos alcanzados', color: '236,72,153' },
+  { icon: 'layers', value: '1,387', label: 'Lecciones completadas', color: '59,130,246' },
+  { icon: 'bell-ring', value: '4,017', label: 'Notificaciones enviadas', color: '245,158,11' },
+  { icon: 'shopping-bag', value: '2,033', label: 'Ventas de cursos', color: '168,85,247' }
+];
+
+const SUB_TAB_TITLES = {
+  dashboard: 'Dashboard de Docente',
+  finances: 'Gestión de Finanzas (80/20)',
+  overview: 'Resumen & Notificaciones',
+  publish: 'Cursos, Talleres & Publicaciones',
+  documents: 'Documentos & Guías PDF',
+  students: 'Alumnos & Seguimiento',
+  classes: 'Clases & Directos (Google Meet)',
+  promotion: 'Ajustes & Destacados',
+  methodology: 'Metodología & Freestyle Lab',
+  podcasts: 'Podcasts de Cátedra'
+};
+
+const WORKSPACE = [
+  { title: 'Classroom', sub: 'Sincronizar tareas', icon: 'graduation-cap', color: '#38bdf8' },
+  { title: 'Tasks', sub: 'Pauta & Metas', icon: 'list-todo', color: '#34d399' },
+  { title: 'Gmail', sub: 'Avisos a alumnos', icon: 'mail', color: '#fb7185' },
+  { title: 'Drive Picker', sub: 'Adjuntar recursos', icon: 'hard-drive', color: '#fbbf24' },
+  { title: 'Google Slides', sub: 'Presentaciones', icon: 'presentation', color: '#facc15' }
+];
+
+const MASK = (n) => "background:currentColor;mask:url(https://unpkg.com/lucide-static@0.546.0/icons/" + n + ".svg) center/contain no-repeat;-webkit-mask:url(https://unpkg.com/lucide-static@0.546.0/icons/" + n + ".svg) center/contain no-repeat;display:block";
+
+class Component extends DCLogic {
+  state = { tab: 'dashboard', sel: null, bpm: 124, live: true, draft: '', toast: '' };
+
+  componentDidMount() { this.ball = null; }
+
+  _toast(msg) {
+    this.setState({ toast: msg });
+    clearTimeout(this._tt);
+    this._tt = setTimeout(() => this.setState({ toast: '' }), 3200);
+  }
+
+  _burst() {
+    const el = this._ballEl;
+    if (el && typeof el.burst === 'function') el.burst();
+  }
+
+  renderVals() {
+    const { tab, sel, bpm, live, draft, toast } = this.state;
+    const selStudent = STUDENTS.find(s => s.id === sel) || null;
+
+    const initials = (n) => n.substring(0, 2).toUpperCase();
+
+    return {
+      headerTitle: SUB_TAB_TITLES[tab] || 'Panel de Instructor',
+      isDashboard: tab === 'dashboard',
+      notDashboard: tab !== 'dashboard',
+      bpm,
+      liveAttr: live ? 'on' : 'off',
+      ballRef: (el) => { this._ballEl = el; },
+      liveLabel: live ? 'CLASE EN VIVO' : 'EN PAUSA',
+      livePillStyle: 'display:flex;align-items:center;gap:6px;padding:4px 9px;white-space:nowrap;border-radius:9999px;font-size:9px;font-family:"Geist Mono",monospace;font-weight:700;letter-spacing:.06em;border:1px solid ' +
+        (live ? 'rgba(52,211,153,.45);background:rgba(52,211,153,.14);color:#6ee7b7' : 'rgba(255,255,255,.14);background:rgba(255,255,255,.05);color:#9AA2B2'),
+      liveDotStyle: 'width:6px;height:6px;border-radius:50%;display:block;background:' + (live ? '#34d399;animation:wPulse 1.4s ease-in-out infinite' : '#64748b'),
+      liveBtnLabel: live ? 'Pausar sala' : 'Abrir sala',
+      liveBtnStyle: 'flex:1;padding:9px 10px;border-radius:12px;font-size:11px;font-weight:800;cursor:pointer;font-family:inherit;border:1px solid ' +
+        (live ? 'rgba(236,72,153,.5);background:rgba(236,72,153,.2);color:#f9a8d4' : 'rgba(52,211,153,.5);background:rgba(52,211,153,.18);color:#6ee7b7'),
+
+      bpmUp: () => this.setState(s => ({ bpm: Math.min(200, s.bpm + 2) })),
+      bpmDown: () => this.setState(s => ({ bpm: Math.max(60, s.bpm - 2) })),
+      toggleLive: () => this.setState(s => ({ live: !s.live })),
+      celebrate: () => { this._burst(); this._toast('¡Destello lanzado a la sala!'); },
+
+      tabs: TABS.map(t => ({
+        label: t.label,
+        badge: t.badge,
+        select: () => this.setState({ tab: t.id }),
+        style: 'padding:7px 12px;border-radius:12px;font-weight:700;font-size:12px;display:flex;align-items:center;gap:6px;flex-shrink:0;cursor:pointer;font-family:inherit;border:1px solid ' +
+          (tab === t.id
+            ? 'rgba(244,114,182,.9);background:linear-gradient(90deg,#db2777,#9333ea);color:#fff;box-shadow:0 6px 16px rgba(147,51,234,.35)'
+            : 'rgba(255,255,255,.06);background:rgba(255,255,255,.05);color:#cbd5e1'),
+        iconStyle: 'width:14px;height:14px;flex-shrink:0;' + MASK(t.icon),
+        badgeStyle: 'padding:1px 6px;border-radius:6px;font-size:9px;font-family:"Geist Mono",monospace;font-weight:900;' +
+          (tab === t.id ? 'background:rgba(255,255,255,.2);color:#fff' : 'background:rgba(255,255,255,.1);color:#B0B7C3')
+      })),
+
+      clearFilter: () => this.setState({ sel: null }),
+      allChipStyle: 'padding:5px 10px;border-radius:8px;font-size:10px;font-family:"Geist Mono",monospace;font-weight:700;cursor:pointer;border:1px solid ' +
+        (sel === null ? '#E9C349;background:#E9C349;color:#000' : 'rgba(255,255,255,.1);background:rgba(255,255,255,.05);color:#B0B7C3'),
+      chips: STUDENTS.map(s => ({
+        name: s.name,
+        select: () => this.setState({ sel: sel === s.id ? null : s.id }),
+        style: 'padding:5px 10px;border-radius:8px;font-size:10px;font-family:"Geist Mono",monospace;font-weight:700;display:flex;align-items:center;gap:6px;cursor:pointer;border:1px solid ' +
+          (sel === s.id
+            ? 'rgba(244,114,182,.9);background:linear-gradient(90deg,rgba(236,72,153,.25),rgba(168,85,247,.25));color:#fbcfe8;box-shadow:0 0 12px rgba(236,72,153,.3)'
+            : 'rgba(255,255,255,.1);background:rgba(255,255,255,.05);color:#B0B7C3'),
+        dotStyle: 'width:6px;height:6px;border-radius:50%;display:block;background:' + (sel === s.id ? '#f472b6' : '#64748b')
+      })),
+      filterHint: selStudent ? ('Contexto fijado: ' + selStudent.name) : 'Selecciona un alumno para mantener contexto entre pestañas',
+
+      stats: STATS.map(s => ({
+        value: s.value, label: s.label,
+        cardStyle: 'background:rgba(23,19,42,.8);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:14px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden',
+        iconBox: 'width:32px;height:32px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:rgba(' + s.color + ',.2);border:1px solid rgba(' + s.color + ',.3);color:rgb(' + s.color + ')',
+        icon: 'width:16px;height:16px;' + MASK(s.icon),
+        dot: 'width:8px;height:8px;border-radius:50%;display:block;background:rgb(' + s.color + ');box-shadow:0 0 8px rgb(' + s.color + ')'
+      })),
+
+      topStudents: STUDENTS.slice(0, 3).map(s => ({
+        id: s.id, name: s.name, level: s.level, initials: initials(s.name),
+        select: () => this.setState({ sel: sel === s.id ? null : s.id }),
+        cardStyle: 'padding:10px;border-radius:12px;cursor:pointer;border:1px solid ' +
+          (sel === s.id
+            ? 'rgba(244,114,182,.9);background:rgba(236,72,153,.2);color:#fff;box-shadow:0 0 12px rgba(236,72,153,.25)'
+            : 'rgba(255,255,255,.06);background:rgba(255,255,255,.05);color:#e2e8f0'),
+        avatarStyle: 'width:24px;height:24px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:10px;font-family:"Geist Mono",monospace;font-weight:700;flex-shrink:0;' +
+          (sel === s.id ? 'background:#ec4899;color:#fff' : 'background:rgba(255,255,255,.1);color:#E9C349'),
+        barStyle: 'background:linear-gradient(90deg,#ec4899,#a855f7);height:6px;border-radius:9999px;width:' + s.pct + '%',
+        status: sel === s.id ? '✓ Estudiante Seleccionado' : ('Progreso ' + s.pct + '%'),
+        statusStyle: sel === s.id ? 'color:#f9a8d4;font-weight:700' : 'color:#9AA2B2'
+      })),
+
+      rows: STUDENTS.map(s => ({
+        name: s.name, email: s.email, level: s.level, lastActive: s.lastActive,
+        initials: initials(s.name),
+        selected: sel === s.id,
+        select: () => this.setState({ sel: sel === s.id ? null : s.id }),
+        rowStyle: 'cursor:pointer;border-bottom:1px solid rgba(255,255,255,.05);' + (sel === s.id ? 'background:rgba(236,72,153,.2);color:#fff' : ''),
+        levelStyle: 'font-size:10px;font-family:"Geist Mono",monospace;padding:2px 8px;border-radius:4px;font-weight:700;' +
+          (s.level === 'Avanzado' ? 'background:rgba(239,68,68,.2);color:#fca5a5'
+            : s.level === 'Intermedio' ? 'background:rgba(233,195,73,.2);color:#E9C349'
+              : 'background:rgba(6,182,212,.2);color:#67e8f9'),
+        actionLabel: sel === s.id ? '✓ Activo' : 'Seleccionar',
+        actionStyle: 'display:inline-block;padding:4px 10px;border-radius:8px;font-size:10px;font-family:"Geist Mono",monospace;font-weight:700;border:1px solid ' +
+          (sel === s.id ? '#f472b6;background:#db2777;color:#fff' : 'rgba(255,255,255,.1);background:rgba(255,255,255,.05);color:#cbd5e1')
+      })),
+
+      startLive: () => { this.setState({ live: true }); this._burst(); this._toast('Clase en vivo iniciada. La sala está encendida.'); },
+      broadcastTarget: selStudent ? ('Enviando a ' + selStudent.name) : 'Enviando a los 5 alumnos',
+      draft,
+      setDraft: (e) => this.setState({ draft: e.target.value }),
+      broadcast: () => {
+        if (!draft.trim()) { this._toast('Escribe un mensaje antes de enviarlo.'); return; }
+        this._toast('Mensaje enviado · ' + (selStudent ? selStudent.name : 'todos los alumnos'));
+        this.setState({ draft: '' });
+      },
+      toast,
+      toastStyle: 'min-height:18px;font-size:10px;font-family:"Geist Mono",monospace;color:#E9C349;opacity:' + (toast ? '1' : '0') + ';transition:opacity .2s',
+
+      workspace: WORKSPACE.map(w => ({
+        title: w.title, sub: w.sub,
+        style: 'padding:12px;border-radius:16px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);text-align:left;cursor:pointer;font-family:inherit;display:block;width:100%',
+        icon: 'width:20px;height:20px;background:' + w.color + ';mask:url(https://unpkg.com/lucide-static@0.546.0/icons/' + w.icon + '.svg) center/contain no-repeat;-webkit-mask:url(https://unpkg.com/lucide-static@0.546.0/icons/' + w.icon + '.svg) center/contain no-repeat;display:block'
+      }))
+    };
+  }
+}
+
+</script>
+</body>
+</html>

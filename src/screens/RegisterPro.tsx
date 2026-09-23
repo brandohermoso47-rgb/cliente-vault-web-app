@@ -99,7 +99,7 @@ export default function RegisterPro({ kind, go }: { kind: Kind; go: (view: strin
   return (
     <div style={S.page}>
       <form style={S.card} onSubmit={submit} noValidate>
-        <img src="/uploads/waack_on_gold_3d_depth.png" alt="Waack On" style={S.logo} />
+        <img src={`${import.meta.env.BASE_URL}uploads/waack_on_gold_3d_depth.png`} alt="Waack On" style={S.logo} />
         <h1 style={S.h1}>{isStudio ? 'Registro de estudio o academia' : 'Registro de instructor/a'}</h1>
         <p style={S.sub}>{isStudio ? 'Presenta tu estudio o academia y publica sus clases, cursos y lives en Waack On.' : 'Publica tus clases, cursos y lives en Waack On.'} Revisamos cada solicitud antes de activar el perfil profesional.</p>
 

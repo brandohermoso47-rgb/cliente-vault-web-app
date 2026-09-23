@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<template id="__bundler_thumbnail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#050507"/><circle cx="50" cy="50" r="20" fill="none" stroke="#FF1E7A" stroke-width="7"/></svg></template>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;700;800&amp;family=Sora:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+<script src="./image-slot.js"></script>
+<style>
+
+  :root{--wo-accent-ink:#FF3D8A;--wo-price-1:#FF1E7A;--wo-price-2:#FF7A18;--wo-price-3:#8B5CF6;--wo-price-4:#1FB39C;--wo-bg:#050507;--wo-bg-2:#0A0A10;--wo-bg-rgb:5,5,7;--wo-panel:rgba(14,14,21,.55);--wo-panel-rgb:16,16,22;--wo-ink:#EDEEF0;--wo-ink-rgb:237,238,240;--wo-line-rgb:255,255,255;--wo-shadow-rgb:0,0,0;--wo-blur:blur(22px) saturate(1.5);--wo-h1-a:#FFFFFF;--wo-h1-b:#F1D7DF;--wo-video:.34}
+  html[data-theme="light"]{--wo-bg:#EFEDEC;--wo-bg-2:#F7F5F4;--wo-bg-rgb:243,241,240;--wo-panel:rgba(255,255,255,.52);--wo-panel-rgb:255,255,255;--wo-ink:#1A1820;--wo-ink-rgb:26,24,32;--wo-line-rgb:30,22,48;--wo-shadow-rgb:126,112,150;--wo-h1-a:#2A2333;--wo-h1-b:#8E3358;--wo-video:.18}
+  html[data-theme="light"]{--wo-accent-ink:#C7134F;--wo-price-1:#C7134F;--wo-price-2:#C4530A;--wo-price-3:#6D3ED6;--wo-price-4:#0F7E6C}
+  html[data-theme="light"] body{background-image:radial-gradient(58% 48% at 10% 0%,rgba(255,122,24,.18),transparent 62%),radial-gradient(55% 45% at 92% 8%,rgba(255,30,122,.15),transparent 64%),radial-gradient(75% 60% at 50% 100%,rgba(150,126,255,.14),transparent 66%);background-attachment:fixed}
+  [data-onphoto]{color:#F6F6FA;--wo-ink:#F6F6FA;--wo-ink-rgb:246,246,250;--wo-line-rgb:255,255,255;--wo-shadow-rgb:0,0,0;--wo-bg-2:#0B0B10;--wo-bg:#08080C}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--wo-bg);color:var(--wo-ink);font-family:'Sora',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  a{color:#FF3D8A;text-decoration:none}
+  a:hover{color:#FF8A3D}
+  ::selection{background:#FF1E7A;color:#fff}
+  @keyframes wo-float{0%,100%{transform:translate3d(0,0,0) rotate(-1deg)}50%{transform:translate3d(0,-16px,0) rotate(1deg)}}
+  @keyframes wo-floor{0%{background-position:0 0}100%{background-position:0 160px}}
+  @keyframes wo-shine{0%{transform:translateX(-120%) skewX(-18deg)}55%,100%{transform:translateX(320%) skewX(-18deg)}}
+  @keyframes wo-plan-pop{0%{filter:none}38%{filter:brightness(1.16) saturate(1.3)}100%{filter:none}}
+  @keyframes wo-rise{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
+  @keyframes wo-panel-flip{0%,44%{transform:rotateY(0deg)}50%,94%{transform:rotateY(180deg)}100%{transform:rotateY(360deg)}}
+  [data-reveal]{animation:wo-rise .8s cubic-bezier(.2,.8,.2,1) both}
+  [data-reveal="2"]{animation-delay:.12s}
+  @media (max-width:1180px){
+    [data-r~="nav"]{gap:16px !important;font-size:11.5px !important}
+  }
+  @media (max-width:1040px){
+    [data-r~="nav"]{display:none !important}
+  }
+  @media (max-width:900px){
+    [data-r~="split"]{grid-template-columns:1fr !important;gap:36px !important}
+    [data-r~="pad"]{padding-left:20px !important;padding-right:20px !important}
+    [data-r~="nav"]{display:none !important}
+    [data-tilt],[data-deck]>*{transform:none !important}
+  }
+</style>
+</helmet>
+
+<div style="min-height:100vh;overflow:auto;background:var(--wo-bg)">
+
+  <header data-r="pad" style="position:sticky;top:0;z-index:60;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:14px 40px;background:linear-gradient(180deg,rgba(var(--wo-bg-rgb),.92),rgba(var(--wo-bg-rgb),.6));backdrop-filter:blur(20px);border-bottom:1px solid rgba(var(--wo-line-rgb),.08);box-shadow:0 12px 40px rgba(var(--wo-shadow-rgb),.6)">
+    <a href="#top" style="display:flex;align-items:center;gap:12px"><span style="font-family:'Unbounded',sans-serif;font-weight:800;letter-spacing:-.02em;font-size:21px;text-transform:uppercase;background:linear-gradient(178deg,#FFFFFF 0%,#FFC48A 45%,#FF1E7A 100%);-webkit-background-clip:text;background-clip:text;color:transparent">Waack On</span></a>
+    <nav data-r="nav" style="display:flex;align-items:center;gap:28px;font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:rgba(var(--wo-ink-rgb),.62)">
+      <a href="#lineas" style="color:inherit" style-hover="color:var(--wo-ink)">Líneas</a>
+      <a href="#social" style="color:inherit" style-hover="color:var(--wo-ink)">Comunidad</a>
+      <a href="#pro" style="color:inherit" style-hover="color:var(--wo-ink)">Instructores</a>
+      <a href="#planes" style="color:inherit" style-hover="color:var(--wo-ink)">Planes</a>
+    </nav>
+    <button type="button" onClick="{{ toggleTheme }}" aria-label="Cambiar tema" style="flex:none;display:flex;align-items:center;gap:9px;padding:11px 15px;border-radius:999px;border:1px solid rgba(var(--wo-line-rgb),.22);background:linear-gradient(180deg,rgba(255,255,255,.16),rgba(255,255,255,.04));backdrop-filter:var(--wo-blur);-webkit-backdrop-filter:var(--wo-blur);color:var(--wo-ink);font-family:'Sora',sans-serif;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 8px 18px rgba(var(--wo-shadow-rgb),.4)" style-hover="border-color:rgba(255,122,24,.6)">
+      <span aria-hidden="true" data-no-i18n="" style="font-size:14px;line-height:1">{{ themeIcon }}</span><span data-no-i18n="">{{ themeLabel }}</span>
+    </button>
+    <div style="position:relative;flex:none">
+      <button type="button" onClick="{{ toggleLangMenu }}" aria-label="Cambiar idioma" style="display:flex;align-items:center;gap:8px;padding:11px 16px;border-radius:999px;border:1px solid rgba(var(--wo-line-rgb),.18);background:linear-gradient(180deg,rgba(255,255,255,.12),rgba(255,255,255,.03));color:var(--wo-ink);font-family:'Sora',sans-serif;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 8px 18px rgba(var(--wo-shadow-rgb),.5)" style-hover="border-color:rgba(255,122,24,.6)">
+        <span aria-hidden="true" style="font-size:14px;line-height:1">🌐</span><span data-no-i18n="">{{ langLabel }}</span>
+      </button>
+      <div style="position:absolute;right:0;top:calc(100% + 10px);min-width:172px;padding:8px;border-radius:16px;background:linear-gradient(180deg,rgba(var(--wo-panel-rgb),.98),rgba(var(--wo-panel-rgb),.98));backdrop-filter:blur(18px);border:1px solid rgba(var(--wo-line-rgb),.16);box-shadow:0 24px 50px rgba(var(--wo-shadow-rgb),.7);display:{{ langMenuDisplay }};flex-direction:column;gap:2px;z-index:80">
+        <sc-for list="{{ langOptions }}" as="l" hint-placeholder-count="6">
+          <button type="button" onClick="{{ l.pick }}" style="display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;padding:10px 12px;border:0;border-radius:10px;background:{{ l.bg }};color:{{ l.color }};font-family:'Sora',sans-serif;font-size:13.5px;text-align:left;cursor:pointer" style-hover="background:rgba(255,122,24,.18)">
+            <span>{{ l.name }}</span><span style="font-size:11px;letter-spacing:.14em;opacity:.6">{{ l.code }}</span>
+          </button>
+        </sc-for>
+      </div>
+    </div>
+    <a href="/account" style="flex:none;position:relative;padding:13px 24px;border-radius:999px;background:linear-gradient(180deg,#FF9A3D,#FF7A18 46%,#FF1E7A);color:#fff;font-weight:700;font-size:13px;letter-spacing:.08em;text-transform:uppercase;box-shadow:inset 0 1px 0 rgba(255,255,255,.55),inset 0 -3px 6px rgba(120,0,50,.5),0 8px 0 -2px #8E0B3F,0 16px 30px rgba(255,30,122,.4)" style-hover="transform:translateY(-2px)">Registro gratis</a>
+  </header>
+
+  <section id="top" style="position:relative;min-height:96vh;display:flex;align-items:center;overflow:hidden;border-bottom:1px solid rgba(var(--wo-line-rgb),.08);perspective:1400px">
+    <div style="position:absolute;left:-10%;right:-10%;bottom:-6%;height:58%;transform:rotateX(74deg);transform-origin:bottom center;background-image:linear-gradient(rgba(255,61,138,.5) 1px,transparent 1px),linear-gradient(90deg,rgba(255,122,24,.35) 1px,transparent 1px);background-size:160px 160px,160px 160px;animation:wo-floor 6s linear infinite;mask-image:linear-gradient(to top,#000 0%,transparent 78%);-webkit-mask-image:linear-gradient(to top,#000 0%,transparent 78%);opacity:.55"></div>
+    <div style="position:absolute;inset:0;background:radial-gradient(70% 60% at 22% 40%,rgba(255,30,122,.3),transparent 62%),radial-gradient(60% 50% at 88% 20%,rgba(255,122,24,.22),transparent 60%),linear-gradient(180deg,rgba(var(--wo-bg-rgb),.5),rgba(var(--wo-bg-rgb),.35) 45%,var(--wo-bg) 100%)"></div>
+    <div data-r="split pad" style="position:relative;width:100%;max-width:1280px;margin:0 auto;padding:120px 40px 96px;display:grid;grid-template-columns:1.12fr .88fr;gap:56px;align-items:center">
+      <div style="display:flex;flex-direction:column;align-items:flex-start;gap:26px">
+        <div style="display:inline-flex;align-items:center;gap:10px;padding:9px 16px;border-radius:999px;font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;color:rgba(var(--wo-ink-rgb),.82);background:linear-gradient(180deg,rgba(255,255,255,.14),rgba(255,255,255,.04));border:1px solid rgba(var(--wo-line-rgb),.18);box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 8px 20px rgba(var(--wo-shadow-rgb),.5)">Plataforma de waacking</div>
+        <h1 style="margin:0;font-family:'Unbounded',sans-serif;font-weight:800;letter-spacing:-.02em;font-size:clamp(38px,5.2vw,82px);line-height:.86;letter-spacing:-.015em;text-transform:uppercase;background:linear-gradient(178deg,var(--wo-h1-a) 0%,var(--wo-h1-b) 30%,#FF9A3D 52%,#FF1E7A 78%,#B8134F 100%);-webkit-background-clip:text;background-clip:text;color:transparent;text-wrap:balance">Entrena. Conecta. Domina.</h1>
+        <p style="margin:0;max-width:46ch;font-size:19px;line-height:1.55;color:rgba(var(--wo-ink-rgb),.78);text-wrap:pretty">Mide tus ángulos con precisión real, corrige tus líneas y llévalas más allá de lo que creías posible. Sube tus reels, entra a los en vivos y compite con la comunidad del waacking en todo el mundo. Tu progreso arranca en el primer intento.</p>
+        <div style="display:flex;flex-wrap:wrap;align-items:center;gap:22px">
+          <a href="/account" style="position:relative;overflow:hidden;padding:20px 42px;border-radius:999px;background:linear-gradient(180deg,#FFA84D,#FF7A18 44%,#FF1E7A);color:#fff;font-family:'Unbounded',sans-serif;font-weight:800;letter-spacing:-.02em;font-size:21px;letter-spacing:.06em;text-transform:uppercase;box-shadow:inset 0 2px 0 rgba(255,255,255,.6),inset 0 -4px 8px rgba(120,0,50,.55),0 10px 0 -1px #8E0B3F,0 24px 44px rgba(255,30,122,.45)" style-hover="transform:translateY(-3px)">Crear cuenta gratis<span style="position:absolute;top:0;left:0;width:34%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent);animation:wo-shine 3.6s ease-in-out infinite;pointer-events:none"></span></a>
+          <span style="font-size:13.5px;letter-spacing:.06em;color:rgba(var(--wo-ink-rgb),.6)">Sin tarjeta. Sin costo. Tu primera sesión es hoy.</span>
+        </div>
+      </div>
+      <div data-tilt="" data-depth="34" style="display:grid;place-items:center;gap:8px">
+        <div style="position:relative;width:min(100%,420px);aspect-ratio:1/1;display:grid;place-items:center;touch-action:none;cursor:grab">
+          <canvas id="wo-ball" style="width: 100%; height: 100%; display: block"></canvas>
+          <span style="position:absolute;bottom:2px;left:50%;transform:translateX(-50%);font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:rgba(var(--wo-ink-rgb),.7);pointer-events:none;white-space:nowrap">Arrastra la bola · click para destello</span>
+        </div>
+      </div>
+    </div>
+
+    
+  </section>
+  
+
+  <section data-r="pad" data-reveal="" style="max-width:1280px;margin:0 auto;padding:110px 40px 50px;perspective:1500px">
+    <div style="display:flex;align-items:baseline;gap:18px;margin-bottom:48px">
+      <span style="font-family:'Unbounded',sans-serif;font-weight:800;letter-spacing:-.02em;font-size:13px;letter-spacing:.28em;color:var(--wo-accent-ink)">01</span>
+      <h2 style="font-family:'Unbounded',sans-serif;font-weight:800;letter-spacing:-.02em;font-size:clamp(27px,3.2vw,46px);line-height:.95;text-transform:uppercase;margin:0;letter-spacing:-.01em;text-shadow:0 2px 0 var(--wo-bg-2),0 4px 0 var(--wo-bg),0 12px 26px rgba(var(--wo-shadow-rgb),.8);color:var(--wo-ink)">Elige tu camino. Empieza ahora.</h2>
+    </div>
+    <div data-deck="" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:26px;transform-style:preserve-3d">
+      <div data-onphoto="" style="position: relative; padding: 36px 30px 32px; border-radius: 22px; background: linear-gradient(180deg,rgba(8,7,10,.34) 0%,rgba(8,7,10,.62) 52%,rgba(8,7,10,.86) 100%), url(&quot;./landing-media/waack_on_O_neon_transparent-puedes-hacer-una-version-en-blanco-el-logo-y-la-fo-aadir-brillo-metlico.jpg&quot;) center / cover no-repeat; background-color:#08070A; border: 1px solid rgba(var(--wo-line-rgb),.14); overflow: hidden; transform: rotateY(7deg) rotateX(3deg); transform-origin: right center; transition: transform .45s cubic-bezier(.2,.8,.2,1),box-shadow .45s; box-shadow: inset 0 1px 0 rgba(255,255,255,.35),-16px 22px 46px rgba(var(--wo-shadow-rgb),.6)" style-hover="transform:rotateY(0deg) rotateX(0deg) translateY(-8px)">
+        <div style="font-family:'Unbounded',sans-serif;font-weight:800;letter-spacing:-.02em;font-size:62px;line-height:1;color:rgba(255,255,255,.07);position:absolute;top:12px;right:22px;text-shadow:0 2px 0 rgba(var(--wo-shadow-rgb),.5)">01</div>
+        <div style="font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;color:#FF9A4A;margin-bottom:14px">Bailarines</div>
+        <h3 style="font-family: 'Unbounded', sans-serif; font-weight: 800; letter-spacing: -.02em; font-size: 30px; text-transform: uppercase; margin: 0 0 14px; line-height: 1.02; text-shadow: 0 2px 0 var(--wo-bg-2),0 6px 14px rgba(var(--wo-shadow-rgb),.7)">Domina lo que el espejo nunca te mostró</h3>
+        <p style="margin:0;font-size:15.5px;line-height:1.6;color:rgba(var(--wo-ink-rgb),.72)">Cualquier nivel, cualquier cuerpo. Mide tus ángulos de brazo y torsión al grado exacto, entrena freestyle con ritmos y metrónomo, y ve tu progreso subir cada día con tus rachas.</p>
+      </div>
+      <div data-onphoto="" style="position: relative; padding: 36px 30px 32px; border-radius: 22px; background: linear-gradient(180deg,rgba(8,7,10,.34) 0%,rgba(8,7,10,.62) 52%,rgba(8,7,10,.86) 100%), url(&quot;./landing-media/waack_on_O_neon_transparent-puedes-hacer-una-version-en-blanco-el-logo-y-la-fo-aadir-brillo-metlico.jpg&quot;) center / cover no-repeat; background-color:#08070A; border: 1px solid rgba(var(--wo-line-rgb),.14); overflow: hidden; transform: translateZ(30px); transition: transform .45s cubic-bezier(.2,.8,.2,1),box-shadow .45s; box-shadow: inset 0 1px 0 rgba(255,255,255,.35),0 30px 56px rgba(var(--wo-shadow-rgb),.65)" style-hover="transform:translateZ(30px) translateY(-8px)">
+        <div style="font-family:'Unbounded',sans-serif;font-weight:800;letter-spacing:-.02em;font-size:62px;line-height:1;color:rgba(255,255,255,.07);position:absolute;top:12px;right:22px">02</div>
+        <div style="font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;color:#FF9A4A;margin-bottom:14px">Instructores</div>
+        <h3 style="font-family: 'Unbounded', sans-serif; font-weight: 800; letter-spacing: -.02em; font-size: 30px; text-transform: uppercase; margin: 0 0 14px; line-height: 1.02; text-shadow: 0 2px 0 var(--wo-bg-2),0 6px 14px rgba(var(--wo-shadow-rgb),.7)">Tu clase. Tu precio. El mundo entero.</h3>
+        <p style="margin:0;font-size:15.5px;line-height:1.6;color:rgba(var(--wo-ink-rgb),.72)">Da clases en vivo, vende suscripciones, ebooks y podcasts. Tú fijas el precio, tú controlas alumnos y horarios. Tu talento deja de tener frontera.</p>
+      </div>
+      <div data-onphoto="" style="position: relative; padding: 36px 30px 32px; border-radius: 22px; background: linear-gradient(180deg,rgba(8,7,10,.34) 0%,rgba(8,7,10,.62) 52%,rgba(8,7,10,.86) 100%), url(&quot;./landing-media/waack_on_O_neon_transparent-puedes-hacer-una-version-en-blanco-el-logo-y-la-fo-aadir-brillo-metlico.jpg&quot;) center / cover no-repeat; background-color:#08070A; border: 1px solid rgba(var(--wo-line-rgb),.14); overflow: hidden; transform: rotateY(-7deg) rotateX(3deg); transform-origin: left center; transition: transform .45s cubic-bezier(.2,.8,.2,1),box-shadow .45s; box-shadow: inset 0 1px 0 rgba(255,255,255,.35),16px 22px 46px rgba(var(--wo-shadow-rgb),.6)" style-hover="transform:rotateY(0deg) rotateX(0deg) translateY(-8px)">
+        <div style="font-family:'Unbounded',sans-serif;font-weight:800;letter-spacing:-.02em;font-size:62px;line-height:1;color:rgba(255,255,255,.07);position:absolute;top:12px;right:22px">03</div>
+        <div style="font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;color:#FF9A4A;margin-bottom:14px">Estudios y academias</div>
+        <h3 style="font-family: 'Unbounded', sans-serif; font-weight: 800; letter-spacing: -.02em; font-size: 30px; text-transform: uppercase; margin: 0 0 14px; line-height: 1.02; text-shadow: 0 2px 0 var(--wo-bg-2),0 6px 14px rgba(var(--wo-shadow-rgb),.7)">Tu escuela entera bajo control</h3>
+        <p style="margin:0;font-size:15.5px;line-height:1.6;color:rgba(var(--wo-ink-rgb),.72)">Administra instructores, clases y alumnos desde el primer día. Calendario, personas y cobros en un solo panel: menos gestión, más baile.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="lineas" style="position:relative;margin-top:80px;border-top:1px solid rgba(var(--wo-line-rgb),.08);border-bottom:1px solid rgba(var(--wo-line-rgb),.08);background:linear-gradient(180deg,var(--wo-bg-2),var(--wo-bg))">
+    <div data-r="split pad" style="max-width:1280px;margin:0 auto;padding:110px 40px;display:grid;grid-template-columns:minmax(0,1fr);gap:56px;align-items:start;perspective:1600px">
+      <div>
+        <div style="display:flex;align-items:baseline;gap:18px;margin-bottom:26px">
+          <span style="font-family:'Unbounded',sans-serif;font-weight:800;letter-spacing:-.02em;font-size:13px;letter-spacing:.28em;color:var(--wo-accent-ink)">02</span>
+          <span style="font-size:11.5px;letter-spacing:.22em;text-transform:uppercase;color:rgba(var(--wo-ink-rgb),.55)">El diferenciador</span>
+        </div>
+        <div style="position:relative;display:inline-block;margin-bottom:24px">
+          <span aria-hidden="true" style="position:absolute;left:0;top:0;font-family:'Unbounded',sans-serif;font-weight:800;letter-spacing:-.02em;font-size:clamp(38px,4.8vw,66px);line-height:.92;text-transform:uppercase;color:var(--wo-panel);text-shadow:2px 2px 0 var(--wo-bg-2),4px 5px 0 var(--wo-bg),7px 9px 24px rgba(var(--wo-shadow-rgb),.85)">Freestyle Labs: tus líneas, medidas</span>
+          <span style="position:relative;display:block;font-family:'Unbounded',sans-serif;font-weight:800;letter-spacing:-.02em;font-size:clamp(38px,4.8vw,66px);line-height:.92;text-transform:uppercase;background:linear-gradient(178deg,#FFFFFF 0%,#FDF6F0 30%,#FFC48A 50%,#FF9A3D 62%,#FF1E7A 88%,#FF5FA0 100%);-webkit-background-clip:text;background-clip:text;color:transparent">Freestyle Labs: tus líneas, medidas</span>
+        </div>
+        <p style="font-size:17px;line-height:1.6;color:rgba(var(--wo-ink-rgb),.76);margin:0 0 30px;max-width:46ch;text-wrap:pretty">El waacking se construye sobre líneas: precisión del brazo, ángulo exacto, recorrido limpio. Waack On las dibuja sobre tu video, mide tu apertura y tu torsión, y te dice exactamente dónde ganar precisión. Nada de opiniones: datos.</p>
+        <div style="display:grid;gap:14px;max-width:44ch">
+          <div style="display:flex;gap:14px;align-items:flex-start"><span style="flex:none;width:30px;height:30px;border-radius:10px;background:linear-gradient(180deg,rgba(255,154,74,.35),rgba(255,122,24,.12));border:1px solid rgba(255,122,24,.45);box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 6px 12px rgba(var(--wo-shadow-rgb),.5);display:grid;place-items:center;font-size:13px;color:#FFC79A">↗</span><span style="font-size:15px;line-height:1.5;color:rgba(var(--wo-ink-rgb),.84);padding-top:4px">Ángulos de brazo y torsión de torso, medidos cuadro por cuadro</span></div>
+          <div style="display:flex;gap:14px;align-items:flex-start"><span style="flex:none;width:30px;height:30px;border-radius:10px;background:linear-gradient(180deg,rgba(255,154,74,.35),rgba(255,122,24,.12));border:1px solid rgba(255,122,24,.45);box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 6px 12px rgba(var(--wo-shadow-rgb),.5);display:grid;place-items:center;font-size:13px;color:#FFC79A">♪</span><span style="font-size:15px;line-height:1.5;color:rgba(var(--wo-ink-rgb),.84);padding-top:4px">Ritmos y metrónomo para construir un freestyle que sea tuyo</span></div>
+          <div style="display:flex;gap:14px;align-items:flex-start"><span style="flex:none;width:30px;height:30px;border-radius:10px;background:linear-gradient(180deg,rgba(255,154,74,.35),rgba(255,122,24,.12));border:1px solid rgba(255,122,24,.45);box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 6px 12px rgba(var(--wo-shadow-rgb),.5);display:grid;place-items:center;font-size:13px;color:#FFC79A">⚔</span><span style="font-size:15px;line-height:1.5;color:rgba(var(--wo-ink-rgb),.84);padding-top:4px">Salas de batalla para retar a otros bailarines en vivo</span></div>
+        </div>
+      </div>
+      <div data-tilt="" data-depth="20" style="position:relative;border-radius:26px;overflow:hidden;border:1px solid rgba(var(--wo-line-rgb),.16);background:var(--wo-panel);backdrop-filter:var(--wo-blur);-webkit-backdrop-filter:var(--wo-blur);display:flex;flex-direction:column;box-shadow:inset 0 1px 0 rgba(255,255,255,.3),40px 50px 90px rgba(var(--wo-shadow-rgb),.75)">
+        <div aria-hidden="true" style="display:block;width:100%;aspect-ratio:16/10;background:radial-gradient(120% 100% at 20% 0%,rgba(255,122,24,.28),transparent 62%),radial-gradient(100% 90% at 90% 100%,rgba(255,30,122,.24),transparent 60%),var(--wo-bg-2)"></div>
+        <div style="position:relative;padding:16px;display:grid;gap:12px">
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <div style="padding:10px 15px;border-radius:14px;background:linear-gradient(180deg,rgba(var(--wo-panel-rgb),.85),rgba(var(--wo-panel-rgb),.8));backdrop-filter:blur(10px);border:1px solid rgba(var(--wo-line-rgb),.18);box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 10px 20px rgba(var(--wo-shadow-rgb),.6);font-size:12px;letter-spacing:.1em;text-transform:uppercase">Brazo der. {{ angleText }}</div>
+            <div style="padding:10px 15px;border-radius:14px;background:linear-gradient(180deg,rgba(var(--wo-panel-rgb),.85),rgba(var(--wo-panel-rgb),.8));backdrop-filter:blur(10px);border:1px solid rgba(var(--wo-line-rgb),.18);box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 10px 20px rgba(var(--wo-shadow-rgb),.6);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:{{ verdictColor }}">{{ verdict }}</div>
+          </div>
+          <div style="padding:12px 16px 14px;border-radius:16px;background:linear-gradient(180deg,rgba(var(--wo-panel-rgb),.9),rgba(var(--wo-panel-rgb),.85));backdrop-filter:blur(10px);border:1px solid rgba(var(--wo-line-rgb),.18);box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 12px 24px rgba(var(--wo-shadow-rgb),.6)">
+            <div style="display:flex;justify-content:space-between;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:rgba(var(--wo-ink-rgb),.6);margin-bottom:8px"><span>Mueve la línea</span><span>0° — 180°</span></div>
+            <input type="range" min="0" max="180" value="{{ angle }}" onInput="{{ onAngle }}" aria-label="Ángulo del brazo" style="width:100%;accentColor:#FF1E7A;cursor:grab">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="social" data-r="pad" data-reveal="" style="max-width:1280px;margin:0 auto;padding:110px 40px;perspective:1800px">
+    <div style="display:flex;align-items:baseline;gap:18px;margin-bottom:14px">
+      <span style="font-family:'Unbounded',sans-serif;font-weight:800;letter-spacing:-.02em;font-size:13px;letter-spacing:.28em;color:var(--wo-accent-ink)">03</span>
+      <h2 style="font-family:'Unbounded',sans-serif;font-weight:800;letter-spacing:-.02em;font-size:clamp(27px,3.2vw,46px);line-height:.95;text-transform:uppercase;margin:0;text-shadow:0 2px 0 var(--wo-bg-2),0 4px 0 var(--wo-bg),0 12px 26px rgba(var(--wo-shadow-rgb),.8)">Crea tu cuenta y conecta con waackers de todo el mundo</h2>
+    </div>
+    <p style="max-width:56ch;font-size:16.5px;line-height:1.6;color:rgba(var(--wo-ink-rgb),.74);margin:0 0 46px">Entrenar por tu cuenta no es entrenar solo. Publica tu contenido, entra a los en vivos de la comunidad y descubre escuelas y bailarines en el mapa global.</p>
+    <div data-reel-viewport="" style="position:relative;overflow:hidden;padding:10px 0 6px;perspective:1600px;mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent);-webkit-mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent)">
+      
+    <div data-reel-track="" style="display:flex;gap:22px;align-items:center;transition:transform .6s cubic-bezier(.2,.8,.2,1);will-change:transform;transform-style:preserve-3d">
+      <div data-reel="" style="position:relative;flex:0 0 clamp(190px,22vw,280px);aspect-ratio:9/16;border-radius:20px;overflow:hidden;border:1px solid rgba(var(--wo-line-rgb),.16);background:var(--wo-panel);backdrop-filter:var(--wo-blur);-webkit-backdrop-filter:var(--wo-blur);cursor:pointer;transition:transform .6s cubic-bezier(.2,.8,.2,1),opacity .6s,box-shadow .6s;box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 26px 50px rgba(var(--wo-shadow-rgb),.7)">
+        
+        
+        <video src="landing-media/Reel Clase de Baile.mp4" muted="{{ true }}" loop="{{ true }}" playsInline="{{ true }}" preload="metadata" style="width:100%;height:100%;object-fit:cover"></video>
+        <div style="position:absolute;left:12px;top:12px;padding:6px 12px;border-radius:999px;background:linear-gradient(180deg,#FF5C9A,#E1005F);font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 6px 14px rgba(255,30,122,.5)">En vivo</div>
+        <div style="position:absolute;left:12px;bottom:12px;font-size:13px;font-weight:500;text-shadow:0 2px 6px rgba(var(--wo-shadow-rgb),.8)">@zoe.flow · 1.2k viendo</div>
+      </div>
+      <div data-reel="" style="position:relative;flex:0 0 clamp(190px,22vw,280px);aspect-ratio:9/16;border-radius:20px;overflow:hidden;border:1px solid rgba(var(--wo-line-rgb),.16);background:var(--wo-panel);backdrop-filter:var(--wo-blur);-webkit-backdrop-filter:var(--wo-blur);cursor:pointer;transition:transform .6s cubic-bezier(.2,.8,.2,1),opacity .6s,box-shadow .6s;box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 26px 50px rgba(var(--wo-shadow-rgb),.65)">
+        <div aria-hidden="true" style="width:100%;height:100%;background:linear-gradient(165deg,rgba(139,92,246,.32),rgba(8,7,10,.9))"></div>
+      </div>
+      <div data-reel="" style="position:relative;flex:0 0 clamp(190px,22vw,280px);aspect-ratio:9/16;border-radius:20px;overflow:hidden;border:1px solid rgba(var(--wo-line-rgb),.16);background:var(--wo-panel);backdrop-filter:var(--wo-blur);-webkit-backdrop-filter:var(--wo-blur);cursor:pointer;transition:transform .6s cubic-bezier(.2,.8,.2,1),opacity .6s,box-shadow .6s;box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 26px 50px rgba(var(--wo-shadow-rgb),.65)">
+        <div aria-hidden="true" style="width:100%;height:100%;background:linear-gradient(165deg,rgba(255,30,122,.32),rgba(8,7,10,.9))"></div>
+      </div>
+      <div data-reel="" style="position:relative;flex:0 0 clamp(190px,22vw,280px);aspect-ratio:9/16;border-radius:20px;overflow:hidden;border:1px solid rgba(var(--wo-line-rgb),.16);background:var(--wo-panel);backdrop-filter:var(--wo-blur);-webkit-backdrop-filter:var(--wo-blur);cursor:pointer;transition:transform .6s cubic-bezier(.2,.8,.2,1),opacity .6s,box-shadow .6s;box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 26px 50px rgba(var(--wo-shadow-rgb),.7)">
+        <div aria-hidden="true" style="width:100%;height:100%;background:linear-gradient(165deg,rgba(255,122,24,.32),rgba(8,7,10,.9))"></div>
+        <div style="position:absolute;left:12px;bottom:12px;font-size:13px;font-weight:500;text-shadow:0 2px 6px rgba(var(--wo-shadow-rgb),.8)">@waack.on · Reel destacado</div>
+      </div>
+      <div data-reel="" style="position:relative;flex:0 0 clamp(190px,22vw,280px);aspect-ratio:9/16;border-radius:20px;overflow:hidden;border:1px solid rgba(var(--wo-line-rgb),.16);background:var(--wo-panel);backdrop-filter:var(--wo-blur);-webkit-backdrop-filter:var(--wo-blur);cursor:pointer;transition:transform .6s cubic-bezier(.2,.8,.2,1),opacity .6s,box-shadow .6s;box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 26px 50px rgba(var(--wo-shadow-rgb),.7)">
+        <video src="landing-media/video_limpio_20mb.mp4" muted="{{ true }}" loop="{{ true }}" playsInline="{{ true }}" preload="metadata" style="width:100%;height:100%;object-fit:cover"></video>
+        <div style="position:absolute;left:12px;top:12px;padding:6px 12px;border-radius:999px;background:linear-gradient(180deg,rgba(var(--wo-panel-rgb),.9),rgba(var(--wo-panel-rgb),.85));backdrop-filter:blur(10px);border:1px solid rgba(var(--wo-line-rgb),.2);font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase">Técnica</div>
+        <div style="position:absolute;left:12px;bottom:12px;font-size:13px;font-weight:500;text-shadow:0 2px 6px rgba(var(--wo-shadow-rgb),.8)">Cómo mejorar tus líneas</div>
+      </div>
+      </div></div>
+    <div style="display:flex;align-items:center;justify-content:center;gap:22px;margin-top:26px">
+      <button type="button" onClick="{{ prevReel }}" aria-label="Reel anterior" style="width:46px;height:46px;border-radius:999px;border:1px solid rgba(var(--wo-line-rgb),.2);background:linear-gradient(180deg,#FFA84D,#FF7A18 46%,#FF1E7A);color:#fff;font-size:17px;cursor:pointer;box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 10px 22px rgba(255,30,122,.4)" style-hover="background:linear-gradient(180deg,#FFB86B,#FF8A2E 46%,#FF3D8E);transform:translateY(-2px)">‹</button>
+      <div style="display:flex;align-items:center;gap:10px">
+        <sc-for list="{{ reelDots }}" as="d" hint-placeholder-count="4">
+          <button type="button" onClick="{{ d.go }}" aria-label="Ver este reel" style="width:9px;height:9px;padding:0;border:0;border-radius:999px;cursor:pointer;transition:background .35s,transform .35s;background:{{ d.bg }};transform:{{ d.tf }}"></button>
+        </sc-for>
+      </div>
+      <button type="button" onClick="{{ nextReel }}" aria-label="Siguiente reel" style="width:46px;height:46px;border-radius:999px;border:1px solid rgba(var(--wo-line-rgb),.2);background:linear-gradient(180deg,#FFA84D,#FF7A18 46%,#FF1E7A);color:#fff;font-size:17px;cursor:pointer;box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 10px 22px rgba(255,30,122,.4)" style-hover="background:linear-gradient(180deg,#FFB86B,#FF8A2E 46%,#FF3D8E);transform:translateY(-2px)">›</button>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:22px;margin-top:40px">
+      <div style="display:flex;flex-direction:column;justify-content:center;gap:20px;padding:26px;border-radius:20px;background:linear-gradient(160deg,rgba(255,122,24,.2),rgba(255,30,122,.1));border:1px solid rgba(var(--wo-line-rgb),.16);box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 26px 50px rgba(var(--wo-shadow-rgb),.6)">
+        <div><div style="font-family:'Unbounded',sans-serif;font-weight:800;letter-spacing:-.02em;font-size:40px;line-height:1;text-shadow:0 2px 0 var(--wo-bg-2),0 6px 14px rgba(var(--wo-shadow-rgb),.7)">Mapa</div><div style="font-size:14px;color:rgba(var(--wo-ink-rgb),.76);line-height:1.5">global: escuelas y pistas en cada continente</div></div>
+        <div><div style="font-family:'Unbounded',sans-serif;font-weight:800;letter-spacing:-.02em;font-size:40px;line-height:1;text-shadow:0 2px 0 var(--wo-bg-2),0 6px 14px rgba(var(--wo-shadow-rgb),.7)">Directorio</div><div style="font-size:14px;color:rgba(var(--wo-ink-rgb),.76);line-height:1.5">internacional de perfiles y profesores listos para enseñarte</div></div>
+        <div style="font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#FFB27A">Incluido en la cuenta gratis</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="pro" style="border-top:1px solid rgba(var(--wo-line-rgb),.08);background:linear-gradient(180deg,var(--wo-bg-2),var(--wo-bg))">
+    <div data-r="pad" style="max-width: 1280px; margin: 0 auto; padding: 110px 40px; perspective: 1800px">
+      <div style="display:flex;align-items:baseline;gap:18px;margin-bottom:14px">
+        <span style="font-family:'Unbounded',sans-serif;font-weight:800;letter-spacing:-.02em;font-size:13px;letter-spacing:.28em;color:var(--wo-accent-ink)">04</span>
+        <h2 style="font-family:'Unbounded',sans-serif;font-weight:800;letter-spacing:-.02em;font-size:clamp(27px,3.2vw,46px);line-height:.95;text-transform:uppercase;margin:0;text-shadow:0 2px 0 var(--wo-bg-2),0 4px 0 var(--wo-bg),0 12px 26px rgba(var(--wo-shadow-rgb),.8)">Enseña. Cobra. Escala.</h2>
+      </div>
+      <p style="max-width:58ch;font-size:16.5px;line-height:1.6;color:rgba(var(--wo-ink-rgb),.74);margin:0 0 50px">Instructores independientes y escuelas: clases en vivo, módulos grabados, ebooks, podcasts y suscripciones con tus propios precios. Agenda con Google Meet y Classroom sin salir del panel. Tú enseñas; la plataforma se encarga del resto.</p>
+      <div style="display:grid;gap:26px">
+        <div style="display:grid;gap:26px">
+          <div data-tilt="" data-depth="10" style="border-radius:24px;overflow:hidden;border:1px solid rgba(var(--wo-line-rgb),.16);background:var(--wo-panel);backdrop-filter:var(--wo-blur);-webkit-backdrop-filter:var(--wo-blur);transform:rotateY(-6deg) rotateX(3deg);box-shadow:inset 0 1px 0 rgba(255,255,255,.28),30px 40px 76px rgba(var(--wo-shadow-rgb),.72)">
+            <div style="position:relative;width:100%;aspect-ratio:1408/768;perspective:1600px">
+              <div style="position:absolute;inset:0;transform-style:preserve-3d;animation:wo-panel-flip 14s cubic-bezier(.65,0,.35,1) infinite">
+                <img src="landing-media/waack_on_instructor_dashboard.png" alt="Panel del instructor de Waack On: estadísticas rápidas, gestión de alumnos, hub de comunicación y mensajes" width="1408" height="768" decoding="async" style="position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:cover;backface-visibility:hidden;-webkit-backface-visibility:hidden">
+                <video src="landing-media/Video Vende en Waack-On.mp4" autoPlay="{{ true }}" muted="{{ true }}" loop="{{ true }}" playsInline="{{ true }}" preload="metadata" aria-label="Vende en Waack On" style="position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:cover;background:var(--wo-panel);transform:rotateY(180deg);backface-visibility:hidden;-webkit-backface-visibility:hidden"></video>
+              </div>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+            <div style="padding:22px;border-radius:18px;border:1px solid rgba(var(--wo-line-rgb),.14);background:linear-gradient(158deg,rgba(255,255,255,.1),rgba(255,255,255,.02));box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 16px 32px rgba(var(--wo-shadow-rgb),.55)"><div style="font-family:'Unbounded',sans-serif;font-weight:800;letter-spacing:-.02em;font-size:16px;letter-spacing:.04em;text-transform:uppercase;margin-bottom:8px">Feedback 1 a 1</div><div style="font-size:13.5px;line-height:1.5;color:rgba(var(--wo-ink-rgb),.7)">Correcciones biomecánicas exactas sobre el video de tu alumno</div></div>
+            <div style="padding:22px;border-radius:18px;border:1px solid rgba(var(--wo-line-rgb),.14);background:linear-gradient(158deg,rgba(255,255,255,.1),rgba(255,255,255,.02));box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 16px 32px rgba(var(--wo-shadow-rgb),.55)"><div style="font-family:'Unbounded',sans-serif;font-weight:800;letter-spacing:-.02em;font-size:16px;letter-spacing:.04em;text-transform:uppercase;margin-bottom:8px">Panel de estudio</div><div style="font-size:13.5px;line-height:1.5;color:rgba(var(--wo-ink-rgb),.7)">Instructores, clases y alumnos bajo control, en un solo lugar</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="planes" data-r="pad" data-reveal="" style="max-width: 1280px; margin: 0 auto; padding: 110px 40px; perspective: 2000px">
+    <span style="display:block;width:fit-content;margin:0 0 26px;font-family:'Unbounded',sans-serif;font-weight:800;letter-spacing:-.02em;font-size:34px;text-transform:uppercase;background:linear-gradient(178deg,#FFFFFF 0%,#FFC48A 45%,#FF1E7A 100%);-webkit-background-clip:text;background-clip:text;color:transparent;animation:wo-float 7s ease-in-out infinite;filter:drop-shadow(0 24px 44px rgba(var(--wo-shadow-rgb),.8)) drop-shadow(0 0 44px rgba(255,30,122,.3))">Waack On</span>
+    <div style="display:flex;align-items:baseline;gap:18px;margin-bottom:14px">
+      <span style="font-family:'Unbounded',sans-serif;font-weight:800;letter-spacing:-.02em;font-size:13px;letter-spacing:.28em;color:var(--wo-accent-ink)">05</span>
+      <h2 style="font-family:'Unbounded',sans-serif;font-weight:800;letter-spacing:-.02em;font-size:clamp(27px,3.2vw,46px);line-height:.95;text-transform:uppercase;margin:0;text-shadow:0 2px 0 var(--wo-bg-2),0 4px 0 var(--wo-bg),0 12px 26px rgba(var(--wo-shadow-rgb),.8)">Planes</h2>
+    </div>
+    <p style="font-size:16.5px;color:rgba(var(--wo-ink-rgb),.72);margin:0 0 50px">Empiezas gratis. Subes de plan cuando tu entrenamiento lo exija.</p>
+    <div data-deck="" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(255px,1fr));gap:26px;align-items:start;transform-style:preserve-3d;perspective:1600px">
+      <div style="padding:34px 28px;border-radius:24px;border:1px solid rgba(255,30,122,.55);background:linear-gradient(165deg,rgba(255,30,122,.26),rgba(255,255,255,.05) 58%,rgba(255,30,122,.12));backdrop-filter:var(--wo-blur);-webkit-backdrop-filter:var(--wo-blur);transform:rotateY(5deg) rotateX(4deg) translateZ(44px);transform-origin:center;transition:transform .55s cubic-bezier(.2,.9,.25,1.15),box-shadow .55s,border-color .55s;box-shadow:inset 0 1px 0 rgba(255,255,255,.45),0 30px 62px rgba(var(--wo-shadow-rgb),.6),0 0 46px rgba(255,30,122,.18);will-change:transform" style-hover="transform:rotateY(0deg) rotateX(0deg) translateZ(96px) translateY(-14px) scale(1.03);border-color:rgba(255,30,122,.95);box-shadow:inset 0 1px 0 rgba(255,255,255,.6),0 46px 94px rgba(var(--wo-shadow-rgb),.75),0 0 92px rgba(255,30,122,.45);animation:wo-plan-pop .7s cubic-bezier(.2,.9,.25,1.2);z-index:5">
+        <div style="font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;color:rgba(var(--wo-ink-rgb),.72);margin-bottom:10px">Empieza acá</div>
+        <div style="font-family:'Unbounded',sans-serif;font-weight:800;letter-spacing:-.02em;font-size:19px;text-transform:uppercase;overflow-wrap:anywhere;margin-bottom:6px">Cuenta gratis</div>
+        <div style="font-family:'Unbounded',sans-serif;font-weight:800;letter-spacing:-.02em;font-size:clamp(30px,3.1vw,38px);line-height:1.05;overflow-wrap:anywhere;margin-bottom:22px;color:var(--wo-price-1);text-shadow:0 2px 18px rgba(255,30,122,.45)">$0</div>
+        <ul style="margin:0 0 26px;padding:0;list-style:none;display:grid;gap:10px;font-size:14.5px;line-height:1.45;color:rgba(var(--wo-ink-rgb),.82)">
+          <li>Fleet Explorer por defecto</li>
+          <li>Mapa global: escuelas y pistas en cada continente</li>
+          <li>Directorio internacional de perfiles y profesores listos para enseñarte</li>
+          <li>Expediente automático con rachas e historial de días</li>
+          <li>Feed social completo: ver reels, ver en vivos y subir tu propio contenido</li>
+        </ul>
+        <a href="/account" style="display:block;text-align:center;padding:15px;border-radius:999px;background:linear-gradient(180deg,#FFA84D,#FF7A18 44%,#FF1E7A);color:#fff;font-weight:700;font-size:13.5px;letter-spacing:.1em;text-transform:uppercase;box-shadow:inset 0 2px 0 rgba(255,255,255,.55),0 8px 0 -2px #8E0B3F,0 18px 32px rgba(255,30,122,.4)" style-hover="transform:translateY(-2px)">Registrarme</a>
+      </div>
+      <div style="padding:34px 28px;border-radius:24px;border:1px solid rgba(255,122,24,.55);background:linear-gradient(165deg,rgba(255,122,24,.26),rgba(255,255,255,.05) 58%,rgba(255,122,24,.12));backdrop-filter:var(--wo-blur);-webkit-backdrop-filter:var(--wo-blur);transform:rotateY(3.5deg) rotateX(4deg) translateZ(16px);transform-origin:center;transition:transform .55s cubic-bezier(.2,.9,.25,1.15),box-shadow .55s,border-color .55s;box-shadow:inset 0 1px 0 rgba(255,255,255,.45),0 30px 62px rgba(var(--wo-shadow-rgb),.6),0 0 46px rgba(255,122,24,.18);will-change:transform" style-hover="transform:rotateY(0deg) rotateX(0deg) translateZ(96px) translateY(-14px) scale(1.03);border-color:rgba(255,122,24,.95);box-shadow:inset 0 1px 0 rgba(255,255,255,.6),0 46px 94px rgba(var(--wo-shadow-rgb),.75),0 0 92px rgba(255,122,24,.45);animation:wo-plan-pop .7s cubic-bezier(.2,.9,.25,1.2);z-index:5">
+        <div style="font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;color:rgba(var(--wo-ink-rgb),.72);margin-bottom:10px">Autónomo</div>
+        <div style="font-family:'Unbounded',sans-serif;font-weight:800;letter-spacing:-.02em;font-size:19px;text-transform:uppercase;overflow-wrap:anywhere;margin-bottom:6px">Usuario Premium</div>
+        <div style="display:flex;flex-wrap:wrap;align-items:baseline;gap:6px;margin-bottom:22px"><span style="font-family:'Unbounded',sans-serif;font-weight:800;letter-spacing:-.02em;font-size:clamp(30px,3.1vw,38px);line-height:1.05;overflow-wrap:anywhere;color:var(--wo-price-2);text-shadow:0 2px 18px rgba(255,122,24,.45)">$15</span><span style="font-size:13px;color:rgba(var(--wo-ink-rgb),.55)">/ mes</span></div>
+        <ul style="margin:0 0 26px;padding:0;list-style:none;display:grid;gap:10px;font-size:14.5px;line-height:1.45;color:rgba(var(--wo-ink-rgb),.82)">
+          <li>Todo lo de la cuenta gratis</li>
+          <li>Freestyle Labs ilimitado</li>
+          <li>Biblioteca de ritmos y metrónomo</li>
+          <li>Análisis de postura con IA: ángulos de brazos y torsión</li>
+          <li>Salas de batalla</li>
+          <li>Librería privada con almacenamiento propio</li>
+        </ul>
+        <div style="font-size:12.5px;line-height:1.5;color:rgba(var(--wo-ink-rgb),.5)">Las suscripciones a instructores se pagan aparte: cada instructor pone su precio.</div>
+      </div>
+      <div style="padding:34px 28px;border-radius:24px;border:1px solid rgba(139,92,246,.55);background:linear-gradient(165deg,rgba(139,92,246,.26),rgba(255,255,255,.05) 58%,rgba(139,92,246,.12));backdrop-filter:var(--wo-blur);-webkit-backdrop-filter:var(--wo-blur);transform:rotateY(-3.5deg) rotateX(4deg) translateZ(16px);transform-origin:center;transition:transform .55s cubic-bezier(.2,.9,.25,1.15),box-shadow .55s,border-color .55s;box-shadow:inset 0 1px 0 rgba(255,255,255,.45),0 30px 62px rgba(var(--wo-shadow-rgb),.6),0 0 46px rgba(139,92,246,.18);will-change:transform" style-hover="transform:rotateY(0deg) rotateX(0deg) translateZ(96px) translateY(-14px) scale(1.03);border-color:rgba(139,92,246,.95);box-shadow:inset 0 1px 0 rgba(255,255,255,.6),0 46px 94px rgba(var(--wo-shadow-rgb),.75),0 0 92px rgba(139,92,246,.45);animation:wo-plan-pop .7s cubic-bezier(.2,.9,.25,1.2);z-index:5">
+        <div style="font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;color:rgba(var(--wo-ink-rgb),.72);margin-bottom:10px">Monetiza</div>
+        <div style="font-family:'Unbounded',sans-serif;font-weight:800;letter-spacing:-.02em;font-size:19px;text-transform:uppercase;overflow-wrap:anywhere;margin-bottom:6px">Instructor</div>
+        <div style="display:flex;flex-wrap:wrap;align-items:baseline;gap:6px;margin-bottom:22px"><span style="font-family:'Unbounded',sans-serif;font-weight:800;letter-spacing:-.02em;font-size:clamp(30px,3.1vw,38px);line-height:1.05;overflow-wrap:anywhere;color:var(--wo-price-3);text-shadow:0 2px 18px rgba(139,92,246,.45)">Gratis</span><span style="font-size:13px;color:rgba(var(--wo-ink-rgb),.55)">/ inscripción</span></div>
+        <ul style="margin:0;padding:0;list-style:none;display:grid;gap:10px;font-size:14.5px;line-height:1.45;color:rgba(var(--wo-ink-rgb),.82)">
+          <li>Todo lo anterior</li>
+          <li>Cursos, módulos grabados y transmisiones en vivo</li>
+          <li>Feedback biomecánico uno a uno</li>
+          <li>Panel de instructor: clases y alumnos</li>
+          <li>Google Workspace: Classroom y agenda con Google Meet</li>
+          <li>Freestyle Labs incluido para dar clase con él</li>
+        </ul>
+      </div>
+      <div style="padding:34px 28px;border-radius:24px;border:1px solid rgba(47,200,178,.55);background:linear-gradient(165deg,rgba(47,200,178,.26),rgba(255,255,255,.05) 58%,rgba(47,200,178,.12));backdrop-filter:var(--wo-blur);-webkit-backdrop-filter:var(--wo-blur);transform:rotateY(-5deg) rotateX(4deg) translateZ(44px);transform-origin:center;transition:transform .55s cubic-bezier(.2,.9,.25,1.15),box-shadow .55s,border-color .55s;box-shadow:inset 0 1px 0 rgba(255,255,255,.45),0 30px 62px rgba(var(--wo-shadow-rgb),.6),0 0 46px rgba(47,200,178,.18);will-change:transform" style-hover="transform:rotateY(0deg) rotateX(0deg) translateZ(96px) translateY(-14px) scale(1.03);border-color:rgba(47,200,178,.95);box-shadow:inset 0 1px 0 rgba(255,255,255,.6),0 46px 94px rgba(var(--wo-shadow-rgb),.75),0 0 92px rgba(47,200,178,.45);animation:wo-plan-pop .7s cubic-bezier(.2,.9,.25,1.2);z-index:5">
+        <div style="font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;color:rgba(var(--wo-ink-rgb),.72);margin-bottom:10px">Gestiona</div>
+        <div style="font-family:'Unbounded',sans-serif;font-weight:800;letter-spacing:-.02em;font-size:19px;text-transform:uppercase;overflow-wrap:anywhere;margin-bottom:6px">Estudios y academias</div>
+        <div style="display:flex;flex-wrap:wrap;align-items:baseline;gap:6px;margin-bottom:22px"><span style="font-family:'Unbounded',sans-serif;font-weight:800;letter-spacing:-.02em;font-size:clamp(30px,3.1vw,38px);line-height:1.05;overflow-wrap:anywhere;color:var(--wo-price-4);text-shadow:0 2px 18px rgba(47,200,178,.45)">$30</span><span style="font-size:13px;color:rgba(var(--wo-ink-rgb),.55)">/ mes</span></div>
+        <ul style="margin:0;padding:0;list-style:none;display:grid;gap:10px;font-size:14.5px;line-height:1.45;color:rgba(var(--wo-ink-rgb),.82)">
+          <li>Panel de administración</li>
+          <li>Gestión de instructores conforme se registran</li>
+          <li>Sus clases y sus alumnos, todo desde un mismo lugar</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="dentro" data-reveal="" style="border-top:1px solid rgba(var(--wo-line-rgb),.08);background:linear-gradient(180deg,var(--wo-bg-2),var(--wo-bg))">
+    <div data-r="pad" style="max-width:1280px;margin:0 auto;padding:110px 40px;perspective:1600px">
+      <div style="display:flex;align-items:baseline;gap:18px;margin-bottom:14px">
+        <span style="font-family:'Unbounded',sans-serif;font-weight:800;letter-spacing:-.02em;font-size:13px;letter-spacing:.28em;color:var(--wo-accent-ink)">06</span>
+        <h2 style="font-family:'Unbounded',sans-serif;font-weight:800;letter-spacing:-.02em;font-size:clamp(27px,3.2vw,46px);line-height:.95;text-transform:uppercase;margin:0;text-shadow:0 2px 0 var(--wo-bg-2),0 4px 0 var(--wo-bg),0 12px 26px rgba(var(--wo-shadow-rgb),.8)">Todo lo que hay dentro</h2>
+      </div>
+      <p style="max-width:58ch;font-size:16.5px;line-height:1.6;color:rgba(var(--wo-ink-rgb),.74);margin:0 0 44px">Cuatro núcleos que trabajan juntos: entrenamiento con IA, comunidad global, herramientas profesionales y la cultura que sostiene al waacking.</p>
+      <div data-tilt="" data-depth="12" style="border-radius: 24px; overflow: hidden; border: 1px solid rgba(var(--wo-line-rgb),.16); background: var(--wo-panel); backdrop-filter: var(--wo-blur); -webkit-backdrop-filter: var(--wo-blur); box-shadow: inset 0 1px 0 rgba(255,255,255,.28),0 40px 80px rgba(var(--wo-shadow-rgb),.72); position: relative">
+        
+      <svg width="160" height="80" viewBox="0 0 160 80" preserveAspectRatio="none" style="position: absolute; left: 78px; top: 282px; width: 160px; height: 80px; overflow: visible; fill: none; stroke: #8a8378; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round"><defs><marker id="dc-arrow-head" orient="auto" markerWidth="5" markerHeight="5" refX="0.8" refY="2" overflow="visible"><path d="M-3.2 -1.7 L0.8 0 L-3.2 1.7" transform="translate(0 2)" fill="none" stroke="context-stroke" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"></path></marker></defs><path d="M 0 80 L 160 0" marker-end="url(#dc-arrow-head)"></path></svg><div aria-label="Waack On: entrenamiento de precisión, núcleo social global, hub profesional y preservación cultural" style="display:block;width:100%;aspect-ratio:1300/726;background:radial-gradient(90% 90% at 15% 10%,rgba(255,122,24,.3),transparent 60%),radial-gradient(90% 90% at 85% 90%,rgba(255,30,122,.28),transparent 60%),var(--wo-panel)"></div></div>
+    </div>
+  </section>
+
+  <section id="about" style="position:relative;overflow:hidden;border-top:1px solid rgba(var(--wo-line-rgb),.08);background:var(--wo-bg-2)">
+    <div aria-hidden="true" style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(var(--wo-bg-rgb),.62),rgba(var(--wo-bg-rgb),.34) 45%,rgba(var(--wo-bg-rgb),.66));pointer-events:none"></div>
+    <div data-r="split pad" style="position:relative;max-width:1280px;margin:0 auto;padding:110px 40px;display:grid;grid-template-columns:minmax(240px,.7fr) minmax(340px,1.3fr);gap:70px">
+      <div>
+        <div style="font-size:11.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--wo-accent-ink);margin-bottom:16px">About</div>
+        <div style="position:relative;display:inline-block">
+          <span aria-hidden="true" style="position:absolute;left:0;top:0;font-family:'Unbounded',sans-serif;font-weight:800;letter-spacing:-.02em;font-size:clamp(34px,4.2vw,58px);line-height:.94;text-transform:uppercase;color:var(--wo-panel);text-shadow:2px 2px 0 var(--wo-bg-2),4px 5px 0 var(--wo-bg),7px 9px 22px rgba(var(--wo-shadow-rgb),.85)">Waack On</span>
+          <span style="position:relative;display:block;font-family:'Unbounded',sans-serif;font-weight:800;letter-spacing:-.02em;font-size:clamp(34px,4.2vw,58px);line-height:.94;text-transform:uppercase;background:linear-gradient(178deg,#FFFFFF 0%,#FDF6F0 30%,#FFC48A 50%,#FF9A3D 62%,#FF1E7A 88%,#FF5FA0 100%);-webkit-background-clip:text;background-clip:text;color:transparent">Waack On</span>
+        </div>
+      </div>
+      <div style="display:grid;gap:22px;font-size:17px;line-height:1.62;color:rgba(var(--wo-ink-rgb),.8);max-width:62ch;text-wrap:pretty">
+        <p style="margin:0">Waack On nació de una convicción clara: ningún bailarín debería depender de tener una escuela cerca para crecer.</p>
+        <p style="margin:0">El waacking se construye sobre líneas: la precisión del brazo, el ángulo exacto, la limpieza del recorrido. Hasta ahora, la única forma de corregirlas era tener a alguien delante mirándote. Waack On rompe esa regla: te muestra tus propias líneas, mide tus ángulos y te devuelve lo que un espejo jamás te dirá.</p>
+        <p style="margin:0">Entrenar solo no es entrenar aislado. Dentro de Waack On late una comunidad viva: reels, transmisiones en vivo y salas de batalla donde practicas con bailarines de todo el mundo, y un mapa global que los pone a tu alcance. La cultura del street dance nunca se hizo en soledad.</p>
+        <p style="margin:0">Y para quienes enseñan, Waack On es una plataforma de trabajo real. Instructores que ofrecen sus clases en vivo, sus ebooks, sus podcasts y sus suscripciones con sus propios precios. Estudios y academias que administran instructores, alumnos y horarios desde un solo panel. Todo el ecosistema, en un mismo lugar.</p>
+        <p style="margin:0;font-size:14.5px;color:rgba(var(--wo-ink-rgb),.5)">Waack On es un producto de Monroe Dance Group, LLC.</p>
+      </div>
+    </div>
+    <div data-r="pad" style="position:relative;max-width:1280px;margin:0 auto;padding:0 40px 110px">
+      <div style="border-radius:24px;overflow:hidden;border:1px solid rgba(var(--wo-line-rgb),.14);box-shadow:0 30px 70px rgba(var(--wo-shadow-rgb),.55)">
+        <div aria-label="Waack On: la plataforma de entrenamiento de waacking más completa — clases y cursos, retos y laboratorio freestyle" style="display:block;width:100%;aspect-ratio:1024/576;background:radial-gradient(80% 80% at 25% 20%,rgba(255,122,24,.26),transparent 60%),radial-gradient(80% 80% at 80% 85%,rgba(255,30,122,.24),transparent 60%),var(--wo-bg-2)"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="registro" style="position:relative;overflow:hidden;border-top:1px solid rgba(var(--wo-line-rgb),.08);perspective:1400px">
+    <div style="position:absolute;left:-10%;right:-10%;bottom:-10%;height:70%;transform:rotateX(76deg);transform-origin:bottom center;background-image:linear-gradient(rgba(255,61,138,.45) 1px,transparent 1px),linear-gradient(90deg,rgba(255,122,24,.3) 1px,transparent 1px);background-size:150px 150px,150px 150px;animation:wo-floor 7s linear infinite;mask-image:linear-gradient(to top,#000,transparent 80%);-webkit-mask-image:linear-gradient(to top,#000,transparent 80%);opacity:.5"></div>
+    <div style="position:absolute;inset:0;background:radial-gradient(85% 110% at 50% 118%, rgba(255,30,122,.38), transparent 66%),radial-gradient(65% 85% at 12% 0%, rgba(255,122,24,.2), transparent 62%)"></div>
+    <div aria-hidden="true" style="position:absolute;left:0;right:0;bottom:0;height:52%;background:linear-gradient(180deg,rgba(255,255,255,0) 0%,rgba(255,255,255,.16) 46%,rgba(255,255,255,.62) 78%,#FFFFFF 100%);pointer-events:none"></div>
+    <div data-r="pad" style="position:relative;max-width:1020px;margin:0 auto;padding:130px 40px 140px;text-align:center">
+      <div style="position:relative;display:inline-block;margin-bottom:28px">
+        <span aria-hidden="true" style="position:absolute;left:0;top:0;font-family:'Unbounded',sans-serif;font-weight:800;letter-spacing:-.02em;font-size:clamp(46px,7.4vw,112px);line-height:.88;text-transform:uppercase;color:var(--wo-panel);text-shadow:3px 3px 0 var(--wo-bg-2),6px 7px 0 var(--wo-bg),10px 13px 0 rgba(var(--wo-shadow-rgb),.9),16px 24px 46px rgba(var(--wo-shadow-rgb),.9)">Empieza gratis</span>
+        <span style="position:relative;display:block;font-family:'Unbounded',sans-serif;font-weight:800;letter-spacing:-.02em;font-size:clamp(46px,7.4vw,112px);line-height:.88;text-transform:uppercase;background:linear-gradient(178deg,#FFFFFF 0%,#E3E7EC 24%,#9AA2AC 44%,#5C636C 50%,#FBFDFF 58%,#B9C0C8 74%,#7E858E 100%);-webkit-background-clip:text;background-clip:text;color:transparent">Empieza gratis</span>
+      </div>
+      <p style="font-size:19px;line-height:1.55;color:rgba(var(--wo-ink-rgb),.82);margin:0 auto 44px;max-width:44ch">Sube tu primer reel. Mide tus líneas. Encuentra tu gente.</p>
+      <a href="/account" style="position:relative;overflow:hidden;display:inline-block;padding:22px 50px;border-radius:999px;background:linear-gradient(180deg,#FFA84D,#FF7A18 44%,#FF1E7A);color:#fff;font-family:'Unbounded',sans-serif;font-weight:800;letter-spacing:-.02em;font-size:23px;letter-spacing:.06em;text-transform:uppercase;box-shadow:inset 0 2px 0 rgba(255,255,255,.6),inset 0 -4px 8px rgba(120,0,50,.55),0 12px 0 -2px #8E0B3F,0 28px 50px rgba(255,30,122,.5)" style-hover="transform:translateY(-3px)">Crear cuenta gratis<span style="position:absolute;top:0;left:0;width:34%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent);animation:wo-shine 3.6s ease-in-out infinite;pointer-events:none"></span></a>
+    </div>
+  </section>
+
+  <footer data-r="pad" style="border-top: 1px solid rgba(var(--wo-line-rgb),.08); padding: 38px 40px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 20px; font-size: 12.5px; color: rgba(var(--wo-ink-rgb),.45); background-color: #000000">
+    <span style="font-family:'Unbounded',sans-serif;font-weight:800;letter-spacing:-.02em;font-size:16px;text-transform:uppercase;opacity:.9;background:linear-gradient(178deg,#FFFFFF 0%,#FFC48A 45%,#FF1E7A 100%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 4px 10px rgba(var(--wo-shadow-rgb),.8))">Waack On</span>
+    <div style="display:flex;gap:24px;letter-spacing:.1em;text-transform:uppercase"><a href="#planes" style="color:inherit" style-hover="color:var(--wo-ink)">Planes</a><a href="#about" style="color:inherit" style-hover="color:var(--wo-ink)">About</a><a href="/account" style="color:inherit" style-hover="color:var(--wo-ink)">Registro</a></div>
+    <div>© 2026 Monroe Dance Group, LLC · waack-on.com</div>
+  </footer>
+
+
+</div></x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;reelSoloPlayback&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Carrusel de reels&quot;},&quot;reelAutoRotate&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Carrusel de reels&quot;},&quot;reelIntervalSec&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:6,&quot;min&quot;:2,&quot;max&quot;:15,&quot;step&quot;:1,&quot;unit&quot;:&quot;s&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Carrusel de reels&quot;},&quot;reelSideScale&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:0.88,&quot;min&quot;:0.5,&quot;max&quot;:1,&quot;step&quot;:0.02,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Carrusel de reels&quot;},&quot;reelSideOpacity&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:0.12,&quot;min&quot;:0.1,&quot;max&quot;:1,&quot;step&quot;:0.02,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Carrusel de reels&quot;}}">
+class Component extends DCLogic {
+  state = { angle: 128, reel: 1, lang: 'es', langMenu: false, theme: 'dark' };
+
+  _langs() {
+    return [
+      { code: 'ES', id: 'es', name: 'Español' },
+      { code: 'EN', id: 'en', name: 'English' },
+      { code: 'PT', id: 'pt', name: 'Português' },
+      { code: 'FR', id: 'fr', name: 'Français' },
+      { code: 'KO', id: 'ko', name: '한국어' },
+      { code: 'ZH', id: 'zh', name: '中文' },
+    ];
+  }
+
+  _table() {
+    return {
+      en: ["Lines","Community","Instructors","Plans","Download","Free sign-up","Waacking platform","Train. Connect. Dominate.","Measure your angles with real precision, correct your lines and push them further than you thought possible. Post your reels, join the live streams and compete with the waacking community worldwide. Your progress starts on the very first try.","Create free account","No card. No cost. Your first session is today.","Drag the ball · click for a flash","Choose your path. Start now.","Dancers","Master what the mirror never showed you","Any level, any body. Measure your arm angles and torso rotation to the exact degree, train freestyle with rhythms and a metronome, and watch your progress climb every day with your streaks.","Your class. Your price. The whole world.","Teach live, sell subscriptions, ebooks and podcasts. You set the price, you control students and schedules. Your talent stops having borders.","Studios and academies","Your whole school under control","Manage instructors, classes and students from day one. Calendar, people and payments in a single panel: less admin, more dancing.","The differentiator","Freestyle Labs: your lines, measured","Waacking is built on lines: arm precision, exact angle, clean travel. Waack On draws them over your video, measures your extension and your rotation, and tells you exactly where to gain precision. No opinions: data.","Arm angles and torso rotation, measured frame by frame","Rhythms and a metronome to build a freestyle that is yours","Battle rooms to challenge other dancers live","Move the line","Right arm","Create your account and connect with waackers worldwide","Training on your own is not training alone. Post your content, join the community live streams and discover schools and dancers on the global map.","Live","Technique","How to improve your lines","Map","global: schools and floors on every continent","Directory","international directory of profiles and teachers ready to teach you","Included in the free account","Teach. Get paid. Scale.","Independent instructors and schools: live classes, recorded modules, ebooks, podcasts and subscriptions at your own prices. Schedule with Google Meet and Classroom without leaving the panel. You teach; the platform handles the rest.","1-on-1 feedback","Exact biomechanical corrections on your student's video","Studio panel","Instructors, classes and students under control, in one place","You start free. You move up a plan when your training demands it.","Start here","Free account","Fleet Explorer by default","Global map: schools and floors on every continent","International directory of profiles and teachers ready to teach you","Automatic record with streaks and day history","Full social feed: watch reels, watch live streams and post your own content","Sign me up","Independent","Premium User","/ month","Everything in the free account","Unlimited Freestyle Labs","Rhythm library and metronome","AI posture analysis: arm angles and rotation","Battle rooms","Private library with your own storage","Instructor subscriptions are paid separately: each instructor sets their price.","Monetize","Instructor","Free","/ sign-up","Everything above","Courses, recorded modules and live streams","One-on-one biomechanical feedback","Instructor panel: classes and students","Google Workspace: Classroom and scheduling with Google Meet","Freestyle Labs included to teach with it","Manage","Admin panel","Instructor management as they register","Their classes and their students, all from one place","Everything inside","Four cores working together: AI training, a global community, professional tools and the culture that holds waacking up.","About","Waack On was born from a clear conviction: no dancer should depend on having a school nearby in order to grow.","Waacking is built on lines: the precision of the arm, the exact angle, the cleanness of the travel. Until now, the only way to correct them was having someone in front of you watching. Waack On breaks that rule: it shows you your own lines, measures your angles and gives you back what a mirror will never tell you.","Training alone is not training in isolation. Inside Waack On there is a living community: reels, live streams and battle rooms where you practise with dancers from all over the world, and a global map that puts them within reach. Street dance culture was never made in solitude.","And for those who teach, Waack On is a real working platform. Instructors offering their live classes, their ebooks, their podcasts and their subscriptions at their own prices. Studios and academies managing instructors, students and schedules from a single panel. The whole ecosystem, in one place.","Waack On is a product of Monroe Dance Group, LLC.","Start free","Post your first reel. Measure your lines. Find your people.","Clean line","Open the arm more","Past the line"],
+      pt: ["Linhas","Comunidade","Instrutores","Planos","Download","Cadastro grátis","Plataforma de waacking","Treine. Conecte. Domine.","Meça seus ângulos com precisão real, corrija suas linhas e leve-as além do que você acreditava possível. Publique seus reels, entre nas lives e concorra com a comunidade do waacking no mundo inteiro. Seu progresso começa na primeira tentativa.","Criar conta grátis","Sem cartão. Sem custo. Sua primeira sessão é hoje.","Arraste a bola · clique para o brilho","Escolha seu caminho. Comece agora.","Dançarinos","Domine o que o espelho nunca te mostrou","Qualquer nível, qualquer corpo. Meça seus ângulos de braço e torção no grau exato, treine freestyle com ritmos e metrônomo, e veja seu progresso subir todos os dias com suas sequências.","Sua aula. Seu preço. O mundo inteiro.","Dê aulas ao vivo, venda assinaturas, ebooks e podcasts. Você define o preço, você controla alunos e horários. Seu talento deixa de ter fronteira.","Estúdios e academias","Sua escola inteira sob controle","Administre instrutores, aulas e alunos desde o primeiro dia. Calendário, pessoas e cobranças em um único painel: menos gestão, mais dança.","O diferencial","Freestyle Labs: suas linhas, medidas","O waacking se constrói sobre linhas: precisão do braço, ângulo exato, trajeto limpo. O Waack On as desenha sobre o seu vídeo, mede sua abertura e sua torção, e diz exatamente onde ganhar precisão. Nada de opiniões: dados.","Ângulos de braço e torção de tronco, medidos quadro a quadro","Ritmos e metrônomo para construir um freestyle que seja seu","Salas de batalha para desafiar outros dançarinos ao vivo","Mova a linha","Braço dir.","Crie sua conta e conecte-se com waackers do mundo todo","Treinar por conta própria não é treinar sozinho. Publique seu conteúdo, entre nas lives da comunidade e descubra escolas e dançarinos no mapa global.","Ao vivo","Técnica","Como melhorar suas linhas","Mapa","global: escolas e pistas em cada continente","Diretório","internacional de perfis e professores prontos para ensinar você","Incluído na conta grátis","Ensine. Receba. Cresça.","Instrutores independentes e escolas: aulas ao vivo, módulos gravados, ebooks, podcasts e assinaturas com seus próprios preços. Agende com Google Meet e Classroom sem sair do painel. Você ensina; a plataforma cuida do resto.","Feedback 1 a 1","Correções biomecânicas exatas sobre o vídeo do seu aluno","Painel do estúdio","Instrutores, aulas e alunos sob controle, em um só lugar","Você começa grátis. Sobe de plano quando seu treino exigir.","Comece aqui","Conta grátis","Fleet Explorer por padrão","Mapa global: escolas e pistas em cada continente","Diretório internacional de perfis e professores prontos para ensinar você","Registro automático com sequências e histórico de dias","Feed social completo: ver reels, ver lives e publicar seu próprio conteúdo","Quero me cadastrar","Autônomo","Usuário Premium","/ mês","Tudo da conta grátis","Freestyle Labs ilimitado","Biblioteca de ritmos e metrônomo","Análise de postura com IA: ângulos de braços e torção","Salas de batalha","Biblioteca privada com armazenamento próprio","As assinaturas de instrutores são pagas separadamente: cada instrutor define seu preço.","Monetize","Instrutor","Grátis","/ inscrição","Tudo o anterior","Cursos, módulos gravados e transmissões ao vivo","Feedback biomecânico um a um","Painel do instrutor: aulas e alunos","Google Workspace: Classroom e agenda com Google Meet","Freestyle Labs incluído para dar aula com ele","Gerencie","Painel de administração","Gestão de instrutores conforme se cadastram","As aulas e os alunos deles, tudo em um mesmo lugar","Tudo o que há dentro","Quatro núcleos que trabalham juntos: treino com IA, comunidade global, ferramentas profissionais e a cultura que sustenta o waacking.","Sobre","O Waack On nasceu de uma convicção clara: nenhum dançarino deveria depender de ter uma escola perto para crescer.","O waacking se constrói sobre linhas: a precisão do braço, o ângulo exato, a limpeza do trajeto. Até agora, a única forma de corrigi-las era ter alguém na frente te observando. O Waack On rompe essa regra: mostra suas próprias linhas, mede seus ângulos e devolve o que um espelho jamais vai te dizer.","Treinar sozinho não é treinar isolado. Dentro do Waack On pulsa uma comunidade viva: reels, transmissões ao vivo e salas de batalha onde você pratica com dançarinos de todo o mundo, e um mapa global que os coloca ao seu alcance. A cultura do street dance nunca se fez em solidão.","E para quem ensina, o Waack On é uma plataforma de trabalho real. Instrutores que oferecem suas aulas ao vivo, seus ebooks, seus podcasts e suas assinaturas com seus próprios preços. Estúdios e academias que administram instrutores, alunos e horários em um só painel. Todo o ecossistema, em um mesmo lugar.","O Waack On é um produto da Monroe Dance Group, LLC.","Comece grátis","Publique seu primeiro reel. Meça suas linhas. Encontre sua gente.","Traço limpo","Abra mais o braço","Passou da linha"],
+      fr: ["Lignes","Communauté","Instructeurs","Formules","Télécharger","Inscription gratuite","Plateforme de waacking","Entraîne-toi. Connecte-toi. Domine.","Mesure tes angles avec une précision réelle, corrige tes lignes et pousse-les plus loin que tu ne le croyais possible. Publie tes reels, rejoins les lives et affronte la communauté du waacking dans le monde entier. Ta progression démarre au premier essai.","Créer un compte gratuit","Sans carte. Sans frais. Ta première séance, c'est aujourd'hui.","Fais glisser la boule · clique pour un éclat","Choisis ta voie. Commence maintenant.","Danseurs","Maîtrise ce que le miroir ne t'a jamais montré","Tous les niveaux, tous les corps. Mesure tes angles de bras et ta torsion au degré près, travaille le freestyle avec rythmes et métronome, et vois ta progression monter chaque jour avec tes séries.","Ton cours. Ton prix. Le monde entier.","Donne des cours en direct, vends des abonnements, des ebooks et des podcasts. Tu fixes le prix, tu gères élèves et horaires. Ton talent n'a plus de frontière.","Studios et académies","Toute ton école sous contrôle","Gère instructeurs, cours et élèves dès le premier jour. Calendrier, personnes et paiements dans un seul panneau : moins de gestion, plus de danse.","Le différenciateur","Freestyle Labs : tes lignes, mesurées","Le waacking se construit sur des lignes : précision du bras, angle exact, trajet net. Waack On les dessine sur ta vidéo, mesure ton ouverture et ta torsion, et te dit exactement où gagner en précision. Pas d'opinions : des données.","Angles de bras et torsion du torse, mesurés image par image","Rythmes et métronome pour construire un freestyle qui t'appartient","Salles de battle pour défier d'autres danseurs en direct","Déplace la ligne","Bras dr.","Crée ton compte et connecte-toi avec des waackers du monde entier","S'entraîner seul, ce n'est pas s'entraîner isolé. Publie ton contenu, rejoins les lives de la communauté et découvre écoles et danseurs sur la carte mondiale.","En direct","Technique","Comment améliorer tes lignes","Carte","mondiale : écoles et pistes sur chaque continent","Annuaire","international de profils et de professeurs prêts à t'enseigner","Inclus dans le compte gratuit","Enseigne. Encaisse. Développe.","Instructeurs indépendants et écoles : cours en direct, modules enregistrés, ebooks, podcasts et abonnements à tes propres prix. Planifie avec Google Meet et Classroom sans quitter le panneau. Tu enseignes ; la plateforme s'occupe du reste.","Retour 1 à 1","Corrections biomécaniques exactes sur la vidéo de ton élève","Panneau du studio","Instructeurs, cours et élèves sous contrôle, au même endroit","Tu commences gratuitement. Tu montes de formule quand ton entraînement l'exige.","Commence ici","Compte gratuit","Fleet Explorer par défaut","Carte mondiale : écoles et pistes sur chaque continent","Annuaire international de profils et de professeurs prêts à t'enseigner","Dossier automatique avec séries et historique des jours","Fil social complet : voir les reels, voir les lives et publier ton propre contenu","Je m'inscris","Autonome","Élève","/ mois","Tout le compte gratuit","Freestyle Labs illimité","Bibliothèque de rythmes et métronome","Analyse de posture par IA : angles des bras et torsion","Salles de battle","Bibliothèque privée avec stockage dédié","Les abonnements aux instructeurs se paient à part : chaque instructeur fixe son prix.","Monétise","Instructeur","Gratuit","/ inscription","Tout ce qui précède","Cours, modules enregistrés et diffusions en direct","Retour biomécanique en tête-à-tête","Panneau instructeur : cours et élèves","Google Workspace : Classroom et agenda avec Google Meet","Freestyle Labs inclus pour enseigner avec lui","Gère","Panneau d'administration","Gestion des instructeurs au fil de leurs inscriptions","Leurs cours et leurs élèves, tout au même endroit","Tout ce qu'il y a dedans","Quatre noyaux qui travaillent ensemble : entraînement par IA, communauté mondiale, outils professionnels et la culture qui porte le waacking.","À propos","Waack On est né d'une conviction claire : aucun danseur ne devrait dépendre de la proximité d'une école pour progresser.","Le waacking se construit sur des lignes : la précision du bras, l'angle exact, la netteté du trajet. Jusqu'ici, la seule façon de les corriger était d'avoir quelqu'un devant toi qui te regarde. Waack On brise cette règle : il te montre tes propres lignes, mesure tes angles et te rend ce qu'un miroir ne te dira jamais.","S'entraîner seul, ce n'est pas s'entraîner à l'écart. À l'intérieur de Waack On vit une communauté : reels, diffusions en direct et salles de battle où tu pratiques avec des danseurs du monde entier, et une carte mondiale qui les met à ta portée. La culture du street dance ne s'est jamais faite dans la solitude.","Et pour celles et ceux qui enseignent, Waack On est une véritable plateforme de travail. Des instructeurs qui proposent leurs cours en direct, leurs ebooks, leurs podcasts et leurs abonnements à leurs propres prix. Des studios et des académies qui gèrent instructeurs, élèves et horaires depuis un seul panneau. Tout l'écosystème, au même endroit.","Waack On est un produit de Monroe Dance Group, LLC.","Commence gratuitement","Publie ton premier reel. Mesure tes lignes. Trouve les tiens.","Tracé net","Ouvre plus le bras","Dépasse la ligne"],
+      ko: ["라인","커뮤니티","강사","플랜","다운로드","무료 가입","와킹 플랫폼","훈련하라. 연결하라. 지배하라.","실제 각도를 정밀하게 측정하고 라인을 교정해, 가능하다고 생각한 한계를 넘어서세요. 릴스를 올리고 라이브에 참여하며 전 세계 와킹 커뮤니티와 겨루세요. 첫 시도부터 성장이 시작됩니다.","무료 계정 만들기","카드 없이. 비용 없이. 첫 세션은 오늘.","공을 드래그하세요 · 클릭하면 반짝입니다","길을 선택하고 지금 시작하세요.","댄서","거울이 보여주지 않은 것을 정복하세요","레벨과 체형에 상관없이. 팔 각도와 상체 회전을 정확한 각도로 측정하고, 리듬과 메트로놈으로 프리스타일을 훈련하며, 연속 기록과 함께 매일 성장하는 과정을 확인하세요.","당신의 수업. 당신의 가격. 전 세계.","라이브 수업을 열고 구독, 전자책, 팟캐스트를 판매하세요. 가격도, 수강생과 일정도 당신이 정합니다. 재능에 국경이 사라집니다.","스튜디오와 아카데미","학원 전체를 한눈에 관리","첫날부터 강사, 수업, 수강생을 관리하세요. 일정과 인원, 결제까지 하나의 패널에서: 관리는 줄고 춤은 늘어납니다.","차별점","Freestyle Labs: 측정되는 당신의 라인","와킹은 라인으로 완성됩니다. 팔의 정확도, 정확한 각도, 깔끔한 궤적. Waack On은 영상 위에 라인을 그리고 확장과 회전을 측정해, 어디서 정확도를 높여야 하는지 정확히 알려줍니다. 의견이 아니라 데이터입니다.","팔 각도와 상체 회전을 프레임 단위로 측정","나만의 프리스타일을 만드는 리듬과 메트로놈","다른 댄서와 실시간으로 겨루는 배틀룸","라인을 움직여 보세요","오른팔","계정을 만들고 전 세계 와커들과 연결하세요","혼자 훈련한다고 고립된 것은 아닙니다. 콘텐츠를 올리고 커뮤니티 라이브에 참여하며, 글로벌 맵에서 학원과 댄서를 찾아보세요.","라이브","테크닉","라인을 개선하는 방법","맵","전 세계: 모든 대륙의 학원과 연습 공간","디렉터리","가르칠 준비가 된 프로필과 강사의 국제 디렉터리","무료 계정에 포함","가르치고, 정산받고, 성장하세요.","독립 강사와 학원: 라이브 수업, 녹화 모듈, 전자책, 팟캐스트, 구독을 원하는 가격으로. 패널을 벗어나지 않고 Google Meet과 Classroom으로 일정을 관리하세요. 가르치는 일에 집중하면 나머지는 플랫폼이 맡습니다.","1:1 피드백","수강생 영상에 대한 정확한 생체역학 교정","스튜디오 패널","강사, 수업, 수강생을 한곳에서 관리","무료로 시작하세요. 훈련이 요구할 때 플랜을 올리면 됩니다.","여기서 시작","무료 계정","기본 제공 Fleet Explorer","글로벌 맵: 모든 대륙의 학원과 연습 공간","가르칠 준비가 된 프로필과 강사의 국제 디렉터리","연속 기록과 일자 이력이 담긴 자동 기록","완전한 소셜 피드: 릴스와 라이브 시청, 내 콘텐츠 업로드","가입하기","자율 훈련","수강생","/ 월","무료 계정의 모든 기능","무제한 Freestyle Labs","리듬 라이브러리와 메트로놈","AI 자세 분석: 팔 각도와 회전","배틀룸","전용 저장 공간이 있는 개인 라이브러리","강사 구독은 별도로 결제됩니다. 가격은 각 강사가 정합니다.","수익화","강사","무료","/ 가입","위의 모든 기능","코스, 녹화 모듈, 라이브 방송","일대일 생체역학 피드백","강사 패널: 수업과 수강생","Google Workspace: Classroom과 Google Meet 일정","수업에 활용할 Freestyle Labs 포함","운영","관리자 패널","등록되는 대로 강사 관리","그들의 수업과 수강생을 모두 한곳에서","안에 담긴 모든 것","함께 작동하는 네 개의 축: AI 훈련, 글로벌 커뮤니티, 프로 도구, 그리고 와킹을 지탱하는 문화.","소개","Waack On은 분명한 확신에서 시작했습니다. 성장하기 위해 가까운 학원에 의존해야 하는 댄서는 없어야 한다는 것입니다.","와킹은 라인으로 완성됩니다. 팔의 정확도, 정확한 각도, 깔끔한 궤적. 지금까지 이를 교정하는 유일한 방법은 앞에서 봐주는 사람을 두는 것이었습니다. Waack On은 그 규칙을 깹니다. 자신의 라인을 보여주고 각도를 측정해, 거울이 결코 말해주지 않는 것을 돌려줍니다.","혼자 훈련하는 것이 고립을 뜻하지는 않습니다. Waack On 안에는 살아 있는 커뮤니티가 있습니다. 릴스, 라이브 방송, 전 세계 댄서와 연습하는 배틀룸, 그리고 그들을 가까이 데려오는 글로벌 맵. 스트리트 댄스 문화는 결코 혼자 만들어진 적이 없습니다.","가르치는 사람에게 Waack On은 실제로 일하는 플랫폼입니다. 강사는 라이브 수업과 전자책, 팟캐스트, 구독을 원하는 가격으로 제공합니다. 스튜디오와 아카데미는 강사와 수강생, 일정을 하나의 패널에서 관리합니다. 생태계 전체가 한곳에 있습니다.","Waack On은 Monroe Dance Group, LLC의 제품입니다.","무료로 시작하기","첫 릴스를 올리고, 라인을 측정하고, 당신의 사람들을 만나세요.","깔끔한 라인","팔을 더 펴세요","라인을 넘었어요"],
+      zh: ["线条","社区","导师","方案","下载","免费注册","Waacking 平台","训练。连接。掌控。","以真实精度测量你的角度，修正你的线条，把它推到你以为不可能的地方。上传你的 Reels，加入直播，与全球 Waacking 社区同场竞技。你的进步从第一次尝试开始。","创建免费账户","无需银行卡。零费用。今天就开始第一次训练。","拖动镜面球 · 点击产生闪光","选择你的路径，现在开始。","舞者","掌握镜子从未告诉你的部分","任何水平，任何身形。以精确的度数测量手臂角度与躯干旋转，用节奏与节拍器练习 freestyle，并通过连续记录看到自己每天的进步。","你的课。你的价格。整个世界。","开直播课，销售订阅、电子书与播客。价格由你定，学员与排课由你掌控。你的才华不再有国界。","舞室与学院","整所学校尽在掌控","从第一天起管理导师、课程与学员。日程、人员与收款集中在一个面板：更少管理，更多跳舞。","核心差异","Freestyle Labs：被测量的线条","Waacking 建立在线条之上：手臂的精度、准确的角度、干净的路径。Waack On 会把它们画在你的视频上，测量你的展开与旋转，并明确指出该在哪里提升精度。不谈感觉，只看数据。","逐帧测量手臂角度与躯干旋转","用节奏库与节拍器建立属于你的 freestyle","实时挑战其他舞者的对战房","移动这条线","右臂","创建账号，连接全世界的 waacker","独自训练并不等于孤立训练。发布你的内容，加入社区直播，在全球地图上发现舞室与舞者。","直播中","技术","如何改进你的线条","地图","全球：每个大洲的舞室与场地","名录","面向全球的档案与导师名录，随时可以教你","已包含在免费账户中","教学。收款。扩展。","独立导师与学校：直播课、录制模块、电子书、播客与订阅，价格由你决定。在面板内用 Google Meet 与 Classroom 安排日程。你负责教学，其余交给平台。","一对一反馈","针对学员视频的精确生物力学修正","舞室面板","导师、课程与学员集中管理","从免费开始。当训练需要时再升级方案。","从这里开始","免费账户","默认包含 Fleet Explorer","全球地图：每个大洲的舞室与场地","面向全球的档案与导师名录，随时可以教你","含连续记录与日程历史的自动档案","完整社交动态：观看 Reels、观看直播并上传自己的内容","立即注册","自主训练","学员","/ 月","包含免费账户的全部功能","无限次 Freestyle Labs","节奏库与节拍器","AI 体态分析：手臂角度与旋转","对战房","带独立存储的私人资料库","导师订阅需单独付费：价格由各位导师自行设定。","变现","导师","免费","/ 注册","以上全部功能","课程、录制模块与直播","一对一生物力学反馈","导师面板：课程与学员","Google Workspace：Classroom 与 Google Meet 日程","包含 Freestyle Labs 用于授课","运营","管理面板","随导师注册进行管理","他们的课程与学员，全在同一处","内部的一切","四个协同运作的核心：AI 训练、全球社区、专业工具，以及支撑 Waacking 的文化。","关于","Waack On 源于一个明确的信念：没有舞者应该因为身边没有舞室而无法成长。","Waacking 建立在线条之上：手臂的精度、准确的角度、干净的路径。在此之前，修正它们的唯一方式是有人站在你面前看着。Waack On 打破了这条规则：它让你看见自己的线条，测量你的角度，并把镜子永远不会告诉你的东西交还给你。","独自训练不等于与世隔绝。Waack On 内部有一个鲜活的社区：Reels、直播，以及与世界各地舞者一起练习的对战房，还有把他们带到你身边的全球地图。街舞文化从来不是在孤独中形成的。","对教学者而言，Waack On 是一个真正的工作平台。导师以自己的价格提供直播课、电子书、播客与订阅。舞室与学院在同一个面板中管理导师、学员与排课。整个生态，集中在一处。","Waack On 是 Monroe Dance Group, LLC 的产品。","免费开始","上传你的第一条 Reel，测量你的线条，找到你的同伴。","线条干净","手臂再打开一些","超过线条了"],
+    };
+  }
+
+  _dict(lang) {
+    if (lang === 'es') return null;
+    if (!this._dictCache) this._dictCache = {};
+    if (!this._dictCache[lang]) {
+      const keys = this._keys(), vals = (this._table()[lang] || []);
+      const m = {};
+      keys.forEach((k, i) => { if (vals[i]) m[k] = vals[i]; });
+      this._dictCache[lang] = m;
+    }
+    return this._dictCache[lang];
+  }
+
+  _t(s) {
+    const d = this._dict(this.state.lang);
+    return (d && d[s]) || s;
+  }
+
+  _snapshotText() {
+    const root = document.querySelector('#dc-root') || document.body;
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+    if (!this._origs) this._origs = new WeakMap();
+    const list = [];
+    let n;
+    while ((n = walker.nextNode())) {
+      const cur = n.nodeValue;
+      if (!cur || !cur.trim()) continue;
+      const p = n.parentElement;
+      if (!p || p.closest('script,style,[data-no-i18n]')) continue;
+      let raw = this._origs.get(n);
+      if (raw == null) { raw = cur; this._origs.set(n, raw); }
+      list.push({ node: n, raw, key: raw.trim() });
+    }
+    this._textNodes = list;
+  }
+
+  _applyLang() {
+    this._snapshotText();
+    const d = this._dict(this.state.lang);
+    for (const it of this._textNodes) {
+      if (!it.node.parentElement) continue;
+      const hit = d && d[it.key];
+      if (!hit) { if (it.node.nodeValue !== it.raw) it.node.nodeValue = it.raw; continue; }
+      const lead = it.raw.match(/^\s*/)[0], tail = it.raw.match(/\s*$/)[0];
+      it.node.nodeValue = lead + hit + tail;
+    }
+    document.documentElement.lang = this.state.lang;
+  }
+
+  _applyTheme(mode) {
+    this.setState({ theme: mode });
+    document.documentElement.setAttribute('data-theme', mode);
+    try { localStorage.setItem('wo-theme', mode); } catch (e) {}
+  }
+
+  _setLang(id) {
+    this.setState({ lang: id, langMenu: false }, () => this._applyLang());
+    try { localStorage.setItem('wo-lang', id); } catch (e) {}
+  }
+
+  _keys() {
+    return ["Líneas","Comunidad","Instructores","Planes","Descarga","Registro gratis","Plataforma de waacking","Entrena. Conecta. Domina.","Mide tus ángulos con precisión real, corrige tus líneas y llévalas más allá de lo que creías posible. Sube tus reels, entra a los en vivos y compite con la comunidad del waacking en todo el mundo. Tu progreso arranca en el primer intento.","Crear cuenta gratis","Sin tarjeta. Sin costo. Tu primera sesión es hoy.","Arrastra la bola · click para destello","Elige tu camino. Empieza ahora.","Bailarines","Domina lo que el espejo nunca te mostró","Cualquier nivel, cualquier cuerpo. Mide tus ángulos de brazo y torsión al grado exacto, entrena freestyle con ritmos y metrónomo, y ve tu progreso subir cada día con tus rachas.","Tu clase. Tu precio. El mundo entero.","Da clases en vivo, vende suscripciones, ebooks y podcasts. Tú fijas el precio, tú controlas alumnos y horarios. Tu talento deja de tener frontera.","Estudios y academias","Tu escuela entera bajo control","Administra instructores, clases y alumnos desde el primer día. Calendario, personas y cobros en un solo panel: menos gestión, más baile.","El diferenciador","Freestyle Labs: tus líneas, medidas","El waacking se construye sobre líneas: precisión del brazo, ángulo exacto, recorrido limpio. Waack On las dibuja sobre tu video, mide tu apertura y tu torsión, y te dice exactamente dónde ganar precisión. Nada de opiniones: datos.","Ángulos de brazo y torsión de torso, medidos cuadro por cuadro","Ritmos y metrónomo para construir un freestyle que sea tuyo","Salas de batalla para retar a otros bailarines en vivo","Mueve la línea","Brazo der.","Crea tu cuenta y conecta con waackers de todo el mundo","Entrenar por tu cuenta no es entrenar solo. Publica tu contenido, entra a los en vivos de la comunidad y descubre escuelas y bailarines en el mapa global.","En vivo","Técnica","Cómo mejorar tus líneas","Mapa","global: escuelas y pistas en cada continente","Directorio","internacional de perfiles y profesores listos para enseñarte","Incluido en la cuenta gratis","Enseña. Cobra. Escala.","Instructores independientes y escuelas: clases en vivo, módulos grabados, ebooks, podcasts y suscripciones con tus propios precios. Agenda con Google Meet y Classroom sin salir del panel. Tú enseñas; la plataforma se encarga del resto.","Feedback 1 a 1","Correcciones biomecánicas exactas sobre el video de tu alumno","Panel de estudio","Instructores, clases y alumnos bajo control, en un solo lugar","Empiezas gratis. Subes de plan cuando tu entrenamiento lo exija.","Empieza acá","Cuenta gratis","Fleet Explorer por defecto","Mapa global: escuelas y pistas en cada continente","Directorio internacional de perfiles y profesores listos para enseñarte","Expediente automático con rachas e historial de días","Feed social completo: ver reels, ver en vivos y subir tu propio contenido","Registrarme","Autónomo","Usuario Premium","/ mes","Todo lo de la cuenta gratis","Freestyle Labs ilimitado","Biblioteca de ritmos y metrónomo","Análisis de postura con IA: ángulos de brazos y torsión","Salas de batalla","Librería privada con almacenamiento propio","Las suscripciones a instructores se pagan aparte: cada instructor pone su precio.","Monetiza","Instructor","Gratis","/ inscripción","Todo lo anterior","Cursos, módulos grabados y transmisiones en vivo","Feedback biomecánico uno a uno","Panel de instructor: clases y alumnos","Google Workspace: Classroom y agenda con Google Meet","Freestyle Labs incluido para dar clase con él","Gestiona","Panel de administración","Gestión de instructores conforme se registran","Sus clases y sus alumnos, todo desde un mismo lugar","Todo lo que hay dentro","Cuatro núcleos que trabajan juntos: entrenamiento con IA, comunidad global, herramientas profesionales y la cultura que sostiene al waacking.","About","Waack On nació de una convicción clara: ningún bailarín debería depender de tener una escuela cerca para crecer.","El waacking se construye sobre líneas: la precisión del brazo, el ángulo exacto, la limpieza del recorrido. Hasta ahora, la única forma de corregirlas era tener a alguien delante mirándote. Waack On rompe esa regla: te muestra tus propias líneas, mide tus ángulos y te devuelve lo que un espejo jamás te dirá.","Entrenar solo no es entrenar aislado. Dentro de Waack On late una comunidad viva: reels, transmisiones en vivo y salas de batalla donde practicas con bailarines de todo el mundo, y un mapa global que los pone a tu alcance. La cultura del street dance nunca se hizo en soledad.","Y para quienes enseñan, Waack On es una plataforma de trabajo real. Instructores que ofrecen sus clases en vivo, sus ebooks, sus podcasts y sus suscripciones con sus propios precios. Estudios y academias que administran instructores, alumnos y horarios desde un solo panel. Todo el ecosistema, en un mismo lugar.","Waack On es un producto de Monroe Dance Group, LLC.","Empieza gratis","Sube tu primer reel. Mide tus líneas. Encuentra tu gente.","Trazo limpio","Abre más el brazo","Se pasa de la línea"];
+  }
+  componentDidMount() {
+    const links = [...document.querySelectorAll('nav a[href^="#"]')];
+    this._spy = new IntersectionObserver((entries) => {
+      entries.forEach((en) => {
+        if (!en.isIntersecting) return;
+        links.forEach((a) => {
+          const on = a.getAttribute('href') === '#' + en.target.id;
+          a.style.color = on ? '#fff' : '';
+          a.style.textShadow = on ? '0 0 18px rgba(255,30,122,.9)' : '';
+        });
+      });
+    }, { rootMargin: '-45% 0px -45% 0px' });
+    ['lineas', 'social', 'pro', 'planes'].forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) this._spy.observe(el);
+    });
+
+    this._initBall();
+    this._initReels();
+    this._snapshotText();
+    let th = null;
+    try { th = localStorage.getItem('wo-theme'); } catch (e) {}
+    this._applyTheme(th === 'light' ? 'light' : 'dark');
+    let saved = null;
+    try { saved = localStorage.getItem('wo-lang'); } catch (e) {}
+    if (saved && saved !== 'es' && this._table()[saved]) this._setLang(saved);
+    this._onDocClick = (e) => {
+      if (this.state.langMenu && !e.target.closest('[aria-label="Cambiar idioma"]')) this.setState({ langMenu: false });
+    };
+    document.addEventListener('click', this._onDocClick);
+
+    document.querySelectorAll('video').forEach((v) => { v.muted = true; v.volume = 0; v.removeAttribute('controls'); });
+
+    if (window.matchMedia('(max-width:900px)').matches) return;
+    this._onMove = (e) => {
+      const nx = (e.clientX / window.innerWidth - 0.5) * 2;
+      const ny = (e.clientY / window.innerHeight - 0.5) * 2;
+      document.querySelectorAll('[data-tilt]').forEach((el) => {
+        const d = parseFloat(el.getAttribute('data-depth') || '12');
+        const base = el.getAttribute('data-base') || (el.setAttribute('data-base', el.style.transform || ''), el.style.transform || '');
+        el.style.transform = base + ` translate3d(${(-nx * d).toFixed(2)}px,${(-ny * d * .5).toFixed(2)}px,0) rotateY(${(nx * 3).toFixed(2)}deg) rotateX(${(-ny * 2).toFixed(2)}deg)`;
+      });
+    };
+    window.addEventListener('pointermove', this._onMove, { passive: true });
+  }
+  _initReels() {
+    const track = document.querySelector('[data-reel-track]');
+    if (!track) return;
+    this._track = track;
+    this._cards = Array.from(track.querySelectorAll('[data-reel]'));
+    this._cards.forEach((c, i) => c.addEventListener('click', (e) => {
+      if (e.target.tagName === 'VIDEO' && i === this.state.reel) return;
+      this._goReel(i);
+    }));
+    this._layoutReels();
+    this._reelResize = () => this._layoutReels();
+    window.addEventListener('resize', this._reelResize);
+    if (window.ResizeObserver) {
+      this._reelRO = new ResizeObserver(() => this._layoutReels());
+      this._reelRO.observe(track.parentElement);
+    }
+    this._armReelTimer();
+    // props can change without componentDidUpdate firing in some hosts
+    this._reelPoll = setInterval(() => {
+      const sig = [this.props.reelSoloPlayback, this.props.reelSideScale, this.props.reelSideOpacity].join('|');
+      if (sig !== this._reelSig) { this._reelSig = sig; this._layoutReels(); }
+      const tsig = [this.props.reelAutoRotate, this.props.reelIntervalSec].join('|');
+      if (tsig !== this._reelTSig) { this._reelTSig = tsig; this._armReelTimer(); }
+    }, 400);
+  }
+  _armReelTimer() {
+    if (this._reelTimer) clearInterval(this._reelTimer);
+    if (this.props.reelAutoRotate === false) return;
+    const secs = Math.max(2, this.props.reelIntervalSec ?? 6);
+    this._reelTimer = setInterval(() => {
+      const cur = this._reelIdx == null ? this.state.reel : this._reelIdx;
+      this._goReel(cur + 1);
+    }, secs * 1000);
+  }
+  _goReel(i) {
+    const n = (this._cards || []).length || 1;
+    const next = ((i % n) + n) % n;
+    this.setState({ reel: next }, () => this._layoutReels(next));
+    requestAnimationFrame(() => this._layoutReels(next));
+    this._armReelTimer();
+  }
+  _layoutReels(index) {
+    const track = this._track, cards = this._cards;
+    if (!track || !cards || !cards.length) return;
+    const vp = track.parentElement;
+    const raw = index == null ? this.state.reel : index;
+    const idx = Math.max(0, Math.min(raw, cards.length - 1));
+    const solo = this.props.reelSoloPlayback !== false;
+    const sideScale = this.props.reelSideScale ?? 0.8;
+    const sideOpacity = this.props.reelSideOpacity ?? 0.42;
+    this._reelIdx = idx;
+    const active = cards[idx];
+    const offset = vp.clientWidth / 2 - (active.offsetLeft + active.offsetWidth / 2);
+    track.style.transform = 'translate3d(' + offset.toFixed(1) + 'px,0,0)';
+    cards.forEach((c, i) => {
+      const d = i - idx;
+      const on = i === idx;
+      const rot = Math.max(-14, Math.min(14, -d * 9));
+      c.style.transform = 'perspective(1200px) rotateY(' + rot + 'deg) scale(' + (on ? 1 : sideScale) + ')';
+      c.style.opacity = on ? '1' : String(sideOpacity);
+      c.style.zIndex = on ? '3' : '1';
+      c.style.boxShadow = on
+        ? 'inset 0 1px 0 rgba(255,255,255,.35),0 34px 64px rgba(0,0,0,.75),0 0 60px rgba(255,30,122,.22)'
+        : 'inset 0 1px 0 rgba(255,255,255,.22),0 20px 40px rgba(0,0,0,.6)';
+      const v = c.querySelector('video');
+      if (!v) return;
+      if (on || !solo) { const p = v.play(); if (p && p.catch) p.catch(() => {}); }
+      else { v.pause(); v.muted = true; }
+    });
+  }
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.lang !== 'es') {
+      if (this._langRaf) cancelAnimationFrame(this._langRaf);
+      this._langRaf = requestAnimationFrame(() => this._applyLang());
+    }
+    if (prevState.reel !== this.state.reel) this._layoutReels();
+    if (prevProps.reelSoloPlayback !== this.props.reelSoloPlayback
+      || prevProps.reelSideScale !== this.props.reelSideScale
+      || prevProps.reelSideOpacity !== this.props.reelSideOpacity) this._layoutReels();
+    if (prevProps.reelAutoRotate !== this.props.reelAutoRotate
+      || prevProps.reelIntervalSec !== this.props.reelIntervalSec) this._armReelTimer();
+  }
+  _initBall() {
+    const cv = document.getElementById('wo-ball');
+    if (!cv) return;
+    const ctx = cv.getContext('2d');
+    const wrap = cv.parentElement;
+    let W = 0, H = 0;
+    const dpr = Math.max(1, Math.min(window.devicePixelRatio || 1, 2));
+    const resize = () => {
+      const r = wrap.getBoundingClientRect();
+      const w = Math.round(r.width), h = Math.round(r.height);
+      if (!w || !h) return;
+      W = w; H = h;
+      cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    };
+    resize();
+    this._ballResize = resize;
+    window.addEventListener('resize', resize);
+    if (window.ResizeObserver) {
+      this._ballRO = new ResizeObserver(resize);
+      this._ballRO.observe(wrap);
+    }
+
+    // facet grid on a sphere
+    const rows = 22, tiles = [];
+    for (let i = 0; i < rows; i++) {
+      const phi = Math.PI * (i + 0.5) / rows;
+      const cols = Math.max(4, Math.round(Math.sin(phi) * rows * 2.1));
+      for (let j = 0; j < cols; j++) {
+        const theta = 2 * Math.PI * (j + (i % 2 ? 0.5 : 0)) / cols;
+        tiles.push({
+          x: Math.sin(phi) * Math.cos(theta),
+          y: Math.cos(phi),
+          z: Math.sin(phi) * Math.sin(theta),
+          w: 2.05 / rows * Math.min(1.6, 1 / Math.max(0.22, Math.sin(phi))) * 0.9,
+          h: 2.0 / rows * 0.9,
+          hue: (i * 7 + j * 13) % 360,
+          ph: Math.random() * Math.PI * 2,
+        });
+      }
+    }
+
+    let yaw = 0.6, pitch = -0.22, vYaw = 0.006, vPitch = 0, flash = 0, t = 0;
+    let dragging = false, lx = 0, ly = 0;
+
+    const down = (e) => { dragging = true; lx = e.clientX; ly = e.clientY; wrap.style.cursor = 'grabbing'; cv.setPointerCapture && cv.setPointerCapture(e.pointerId); };
+    const move = (e) => {
+      if (!dragging) return;
+      vYaw = (e.clientX - lx) * 0.0006 + vYaw * 0.4;
+      vPitch = -(e.clientY - ly) * 0.0004 + vPitch * 0.4;
+      yaw += (e.clientX - lx) * 0.006;
+      pitch = Math.max(-1.1, Math.min(1.1, pitch - (e.clientY - ly) * 0.004));
+      lx = e.clientX; ly = e.clientY;
+    };
+    const up = () => { dragging = false; wrap.style.cursor = 'grab'; };
+    cv.addEventListener('pointerdown', down);
+    cv.addEventListener('pointermove', move);
+    cv.addEventListener('pointerup', up);
+    cv.addEventListener('pointercancel', up);
+    cv.addEventListener('click', () => { flash = 1; vYaw += 0.02; });
+    this._ballCleanup = () => {
+      cv.removeEventListener('pointerdown', down);
+      cv.removeEventListener('pointermove', move);
+      cv.removeEventListener('pointerup', up);
+      cv.removeEventListener('pointercancel', up);
+    };
+
+    const draw = () => {
+      this._ballRaf = requestAnimationFrame(draw);
+      if (!W || !H) { resize(); if (!W || !H) return; }
+      t += 1 / 60;
+      if (!dragging) { yaw += vYaw; pitch += vPitch; }
+      vYaw += (0.006 - vYaw) * 0.02;
+      vPitch *= 0.94;
+      pitch = Math.max(-1.1, Math.min(1.1, pitch));
+      flash *= 0.93;
+
+      const cx = W / 2, cy = H / 2, R = Math.min(W, H) * 0.36;
+      ctx.clearRect(0, 0, W, H);
+
+      // beams
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.globalCompositeOperation = 'lighter';
+      const beams = 14;
+      for (let i = 0; i < beams; i++) {
+        const a = (i / beams) * Math.PI * 2 + t * 0.28;
+        const len = R * (2.6 + Math.sin(t * 1.4 + i) * 0.5);
+        const g = ctx.createLinearGradient(0, 0, Math.cos(a) * len, Math.sin(a) * len);
+        const hot = i % 3 === 0;
+        g.addColorStop(0, hot ? 'rgba(236,241,248,' + (0.26 + flash * 0.34) + ')' : 'rgba(176,190,208,' + (0.15 + flash * 0.26) + ')');
+        g.addColorStop(1, 'rgba(198,208,222,0)');
+        ctx.fillStyle = g;
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.lineTo(Math.cos(a - 0.045) * len, Math.sin(a - 0.045) * len);
+        ctx.lineTo(Math.cos(a + 0.045) * len, Math.sin(a + 0.045) * len);
+        ctx.closePath();
+        ctx.fill();
+      }
+      ctx.restore();
+
+      // hanging cord
+      const cordG = ctx.createLinearGradient(cx, 0, cx, cy - R);
+      cordG.addColorStop(0, 'rgba(226,232,240,.10)');
+      cordG.addColorStop(1, 'rgba(226,232,240,.42)');
+      ctx.strokeStyle = cordG;
+      ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(cx, 0); ctx.lineTo(cx, cy - R * 1.02); ctx.stroke();
+      // cap / mount
+      ctx.fillStyle = 'rgba(206,214,226,.55)';
+      ctx.fillRect(cx - R * 0.07, cy - R * 1.09, R * 0.14, R * 0.09);
+
+      // globe base shade
+      ctx.save();
+      ctx.beginPath(); ctx.arc(cx, cy, R * 1.02, 0, Math.PI * 2);
+      const bg = ctx.createRadialGradient(cx - R * 0.3, cy - R * 0.35, R * 0.1, cx, cy, R * 1.02);
+      bg.addColorStop(0, 'rgba(196,203,214,.42)');
+      bg.addColorStop(0.55, 'rgba(96,104,118,.5)');
+      bg.addColorStop(1, 'rgba(10,12,16,.96)');
+      ctx.fillStyle = bg; ctx.fill();
+      ctx.restore();
+
+      const cyaw = Math.cos(yaw), syaw = Math.sin(yaw);
+      const cp = Math.cos(pitch), sp = Math.sin(pitch);
+      const proj = [];
+      for (const tl of tiles) {
+        let x = tl.x * cyaw + tl.z * syaw;
+        let z = -tl.x * syaw + tl.z * cyaw;
+        const y = tl.y * cp - z * sp;
+        z = tl.y * sp + z * cp;
+        if (z < -0.02) continue;
+        proj.push({ x, y, z, tl });
+      }
+      proj.sort((a, b) => a.z - b.z);
+
+      ctx.save();
+      ctx.translate(cx, cy);
+      let glints = 0;
+      for (const p of proj) {
+        const persp = 1 / (1 - p.z * 0.22);
+        const px = p.x * R * persp, py = p.y * R * persp;
+        const nx = p.x, ny = p.y, nz = p.z;
+        // light from upper-left front
+        const lx2 = -0.5, ly2 = -0.6, lz2 = 0.62;
+        const dot = Math.max(0, nx * lx2 + ny * ly2 + nz * lz2);
+        const spec = Math.pow(dot, 7);
+        const twinkle = 0.5 + 0.5 * Math.sin(t * 2.4 + p.tl.ph);
+        // silver: cool ambient + neutral diffuse + hard white specular
+        const lum = Math.min(1.05, 0.13 + dot * 0.42 + spec * (0.6 + flash * 0.4) * twinkle);
+        const w = p.tl.w * R * persp, h = p.tl.h * R * persp;
+        const fw = Math.max(1.2, w), fh = Math.max(1.2, h);
+        const x0 = px - w / 2, y0 = py - h / 2;
+        const cool = 1 - dot * 0.5;
+        const r2 = (214 + 30 * spec * twinkle) * lum;
+        const g2 = (220 + 28 * spec * twinkle) * lum;
+        const b2 = (228 + 22 * cool + 24 * spec * twinkle) * lum;
+        ctx.fillStyle = 'rgb(' + Math.min(255, r2 | 0) + ',' + Math.min(255, g2 | 0) + ',' + Math.min(255, b2 | 0) + ')';
+        ctx.fillRect(x0, y0, fw, fh);
+        // bevel: lit top edge, shaded bottom edge — reads as cut glass
+        if (fw > 3 && fh > 3) {
+          ctx.fillStyle = 'rgba(255,255,255,' + Math.min(0.5, 0.10 + dot * 0.3 + spec * 0.5) + ')';
+          ctx.fillRect(x0, y0, fw, Math.max(0.8, fh * 0.16));
+          ctx.fillStyle = 'rgba(8,10,14,.34)';
+          ctx.fillRect(x0, y0 + fh - Math.max(0.8, fh * 0.14), fw, Math.max(0.8, fh * 0.14));
+        }
+        // occasional hard glint
+        if (glints < 5 && spec > 0.7 && twinkle > 0.95) {
+          glints++;
+          ctx.save();
+          ctx.globalCompositeOperation = 'lighter';
+          const gr = fw * 1.4;
+          const gg = ctx.createRadialGradient(px, py, 0, px, py, gr);
+          gg.addColorStop(0, 'rgba(255,255,255,.34)');
+          gg.addColorStop(1, 'rgba(226,234,246,0)');
+          ctx.fillStyle = gg;
+          ctx.beginPath(); ctx.arc(px, py, gr, 0, Math.PI * 2); ctx.fill();
+          ctx.restore();
+        }
+      }
+      ctx.restore();
+
+      // bloom
+      ctx.save();
+      ctx.globalCompositeOperation = 'lighter';
+      const bl = ctx.createRadialGradient(cx, cy, R * 0.2, cx, cy, R * 2.1);
+      bl.addColorStop(0, 'rgba(214,226,242,' + (0.14 + flash * 0.3) + ')');
+      bl.addColorStop(1, 'rgba(190,204,224,0)');
+      ctx.fillStyle = bl;
+      ctx.fillRect(0, 0, W, H);
+      ctx.restore();
+
+      // chrome rim + ambient occlusion under the sphere
+      ctx.save();
+      ctx.beginPath(); ctx.arc(cx, cy, R * 1.015, 0, Math.PI * 2);
+      const rim = ctx.createLinearGradient(cx - R, cy - R, cx + R, cy + R);
+      rim.addColorStop(0, 'rgba(255,255,255,.30)');
+      rim.addColorStop(0.5, 'rgba(255,255,255,.05)');
+      rim.addColorStop(1, 'rgba(120,132,150,.22)');
+      ctx.strokeStyle = rim; ctx.lineWidth = 1.4; ctx.stroke();
+      ctx.restore();
+    };
+    draw();
+  }
+  componentWillUnmount() {
+    if (this._ballRaf) cancelAnimationFrame(this._ballRaf);
+    if (this._ballResize) window.removeEventListener('resize', this._ballResize);
+    if (this._ballRO) this._ballRO.disconnect();
+    if (this._ballCleanup) this._ballCleanup();
+    if (this._onMove) window.removeEventListener('pointermove', this._onMove);
+    if (this._spy) this._spy.disconnect();
+    if (this._onDocClick) document.removeEventListener('click', this._onDocClick);
+    if (this._reelTimer) clearInterval(this._reelTimer);
+    if (this._reelPoll) clearInterval(this._reelPoll);
+    if (this._reelResize) window.removeEventListener('resize', this._reelResize);
+    if (this._reelRO) this._reelRO.disconnect();
+  }
+  renderVals() {
+    const a = this.state.angle;
+    const rad = (180 - a) * Math.PI / 180;
+    const R = 172, cx = 196, cy = 176;
+    const armX = +(cx + Math.cos(rad) * R).toFixed(1);
+    const armY = +(cy - Math.sin(rad) * R).toFixed(1);
+    const r = 64;
+    const ax = cx + Math.cos(rad) * r, ay = cy - Math.sin(rad) * r;
+    const bx = cx + Math.cos(Math.PI * 0.82) * r, by = cy - Math.sin(Math.PI * 0.82) * r;
+    const clean = a >= 118 && a <= 142;
+    const n = (this._cards || []).length || 4;
+    const reelDots = Array.from({ length: n }, (_, i) => ({
+      bg: i === this.state.reel ? 'var(--wo-accent-ink)' : 'rgba(var(--wo-ink-rgb),.3)',
+      tf: i === this.state.reel ? 'scale(1.5)' : 'scale(1)',
+      go: () => this._goReel(i),
+    }));
+    const langs = this._langs();
+    const cur = langs.find((l) => l.id === this.state.lang) || langs[0];
+    return {
+      angle: a,
+      reelDots,
+      langLabel: cur.code,
+      themeIcon: this.state.theme === 'light' ? '☀' : '☾',
+      themeLabel: this.state.theme === 'light' ? 'Claro' : 'Oscuro',
+      toggleTheme: () => this._applyTheme(this.state.theme === 'light' ? 'dark' : 'light'),
+      langMenuDisplay: this.state.langMenu ? 'flex' : 'none',
+      langOptions: langs.map((l) => ({
+        name: l.name,
+        code: l.code,
+        bg: l.id === this.state.lang ? 'rgba(255,30,122,.26)' : 'transparent',
+        color: l.id === this.state.lang ? 'var(--wo-ink)' : 'rgba(var(--wo-ink-rgb),.82)',
+        pick: () => this._setLang(l.id),
+      })),
+      toggleLangMenu: (e) => { e.stopPropagation(); this.setState((s) => ({ langMenu: !s.langMenu })); },
+      prevReel: () => this._goReel(this.state.reel - 1),
+      nextReel: () => this._goReel(this.state.reel + 1),
+      armX, armY,
+      angleText: a + '°',
+      arcPath: `M${cx} ${cy} L${ax.toFixed(1)} ${ay.toFixed(1)} A${r} ${r} 0 0 0 ${bx.toFixed(1)} ${by.toFixed(1)} Z`,
+      verdict: this._t(clean ? 'Trazo limpio' : (a < 118 ? 'Abre más el brazo' : 'Se pasa de la línea')),
+      verdictColor: clean ? '#7CFFB2' : '#FFB27A',
+      onAngle: (e) => this.setState({ angle: parseInt(e.target.value, 10) }),
+    };
+  }
+}
+
+</script>
+</body>
+</html>

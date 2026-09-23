@@ -58,7 +58,7 @@ export default function Register({ go }: { go: (view: string) => void }) {
   return (
     <div style={S.page}>
       <form style={S.card} onSubmit={submit} noValidate>
-        <img src="/uploads/waack_on_gold_3d_depth.png" alt="Waack On" style={S.logo} />
+        <img src={`${import.meta.env.BASE_URL}uploads/waack_on_gold_3d_depth.png`} alt="Waack On" style={S.logo} />
         <h1 style={S.h1}>Crea tu cuenta</h1>
         <p style={S.sub}>Únete gratis a Waack On. Tendrás tu perfil y tu propio almacenamiento para fotos y videos.</p>
 

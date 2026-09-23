@@ -8,7 +8,8 @@
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
     "convert": "node tools/convert.mjs",
-    "deploy": "npm run build && firebase deploy",
+    "build:deploy": "npm run build && node tools/build-deploy.mjs",
+    "deploy": "npm run build:deploy && firebase deploy",
     "test": "vitest run",
     "test:rules": "node rules-tests/run.mjs",
     "scan:secrets": "node tools/scan-secrets.mjs"

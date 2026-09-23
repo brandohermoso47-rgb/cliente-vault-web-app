@@ -61,7 +61,7 @@ export default function LegalPage({ docs }: { docs: Record<Lang, Doc> }) {
       <div style={box}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>
           <a href="/" style={{ display: 'inline-flex', alignItems: 'center', gap: 10, textDecoration: 'none', color: 'var(--ink)' }}>
-            <img src="/uploads/waack_on_gold_3d_depth.png" alt="Waack On" style={{ width: 54, height: 54, objectFit: 'contain' }} />
+            <img src={`${import.meta.env.BASE_URL}uploads/waack_on_gold_3d_depth.png`} alt="Waack On" style={{ width: 54, height: 54, objectFit: 'contain' }} />
             <span style={{ fontFamily: "'Geist Mono',monospace", fontSize: 11, letterSpacing: '.2em', textTransform: 'uppercase', color: 'var(--ink-2)' }}>{d.back}</span>
           </a>
           <div style={{ display: 'flex', gap: 4, padding: 4, borderRadius: 999, border: '1px solid var(--hair)', background: 'var(--glass-2)' }} role="group" aria-label="Language">
