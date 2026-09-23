@@ -4,7 +4,7 @@ import { auth, firebaseConfigured } from '../lib/firebase';
 import { pending } from '../lib/session';
 import { emailOk, handleOk, passwordOk, PASSWORD_HELP, TERMS_VERSION } from '../lib/validators';
 import { authMessage } from '../lib/authErrors';
-import { S, GoogleIcon } from './authStyles';
+import { S, GoogleG } from './authStyles';
 import RegisterTabs from './RegisterTabs';
 import { countryList, countryName, guessCountryCode } from '../lib/countries';
 
@@ -101,7 +101,7 @@ export default function Register({ go }: { go: (view: string) => void }) {
         <button type="submit" disabled={busy} style={{ ...S.primary, opacity: busy ? 0.6 : 1 }}>{busy ? 'Creando cuenta…' : 'Crear cuenta'}</button>
         <div style={{ height: 12 }} />
         <div style={S.secondary} onClick={google} role="button">
-          <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#fff" d={GoogleIcon} /></svg>
+          <GoogleG />
           <span>Registrarme con Google</span>
         </div>
 

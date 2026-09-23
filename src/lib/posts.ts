@@ -61,6 +61,6 @@ export function subscribeFeed(authorIds: string[], cb: (posts: Post[]) => void) 
     onSnapshot(query(collection(db, 'posts'), where('authorId', 'in', chunk), orderBy('createdAt', 'desc')), (snap) => {
       byChunk.set(i, snap.docs.map((d) => ({ id: d.id, ...(d.data() as any) })));
       emit();
-    }, () => { byChunk.set(i, []); emit(); }));
+    }, (err) => { console.error('subscribeFeed', err); byChunk.set(i, []); emit(); }));
   return () => unsubs.forEach((u) => u());
 }
