@@ -167,6 +167,7 @@ import { publishReel } from './lib/reels';
 import { watchFollowCounts, watchMyMedia, watchMyPostCount } from './lib/profileStats';
 import { BattleCall, declineCall, goLive, stopLive, watchIncomingCalls } from './lib/battle';
 import { STUDY_MODULES, watchStudyProgress, toggleTechniqueItem, saveReflectionAnswer, saveQuizScoreAndComplete } from './lib/studyPlan';
+import { publishAnnouncement, subscribeAnnouncements } from './lib/announcements';
 
 `;
 const render = `

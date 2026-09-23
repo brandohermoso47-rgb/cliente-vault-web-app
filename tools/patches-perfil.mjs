@@ -9,13 +9,13 @@ export default function patchesPerfil(s) {
 
   rep(`      onSnapshot(doc(db, 'users', auth.currentUser!.uid), (snap: any) => {
         const d: any = snap.data() ?? {};
-        this.myProfile = { displayName: d.displayName ?? null, photoURL: d.photoURL ?? null, photoPath: d.photoPath ?? null, handle: d.handle ?? null, bio: d.bio ?? null };
+        this.myProfile = { displayName: d.displayName ?? null, photoURL: d.photoURL ?? null, photoPath: d.photoPath ?? null, handle: d.handle ?? null, bio: d.bio ?? null, role: d.role ?? 'usuario' };
         this.forceUpdate();
       }, () => {}),
     ];
   }`, `      onSnapshot(doc(db, 'users', auth.currentUser!.uid), (snap: any) => {
         const d: any = snap.data() ?? {};
-        this.myProfile = { displayName: d.displayName ?? null, photoURL: d.photoURL ?? null, photoPath: d.photoPath ?? null, handle: d.handle ?? null, bio: d.bio ?? null };
+        this.myProfile = { displayName: d.displayName ?? null, photoURL: d.photoURL ?? null, photoPath: d.photoPath ?? null, handle: d.handle ?? null, bio: d.bio ?? null, role: d.role ?? 'usuario' };
         this.forceUpdate();
       }, () => {}),
     ];

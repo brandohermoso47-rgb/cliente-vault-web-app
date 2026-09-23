@@ -5,6 +5,7 @@ import patchesFeed from './patches-feed.mjs';
 import patchesReels from './patches-reels.mjs';
 import patchesPerfil from './patches-perfil.mjs';
 import patchesLives from './patches-lives.mjs';
+import patchesAnuncios from './patches-anuncios.mjs';
 import patchesStudy from './patches-study.mjs';
 
 export default function patches(s) {
@@ -37,5 +38,5 @@ export default function patches(s) {
   // Perfil + solicitud profesional al crearse la cuenta
   rep("if (!(await getDoc(ref)).exists()) await setDoc(ref, { email: user.email, displayName: user.displayName ?? null, role: 'usuario', createdAt: serverTimestamp() });",
       "const p = takePending();\n          const isNewAccount = !(await getDoc(ref)).exists();\n          if (isNewAccount) await setDoc(ref, { displayName: user.displayName ?? null, photoURL: user.photoURL ?? null, ...(p.profile || {}), role: 'usuario', createdAt: serverTimestamp() });\n          this.signupData = p;\n          this.isNewAccount = isNewAccount;");
-  return patchesStudy(patchesLives(patchesPerfil(patchesReels(patchesFeed(patchesProfile(patchesPayments(s)))))));
+  return patchesAnuncios(patchesStudy(patchesLives(patchesPerfil(patchesReels(patchesFeed(patchesProfile(patchesPayments(s))))))));
 }

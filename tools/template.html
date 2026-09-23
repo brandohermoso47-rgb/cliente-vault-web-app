@@ -711,9 +711,9 @@
                   <h2 style="margin:10px 0 8px;font-family:'Instrument Serif',Georgia,serif;font-size:31px;font-weight:400;letter-spacing:-0.01em;color:var(--ink)">Novedades &amp; convocatorias</h2>
                   <p style="margin:0;font-size:13px;color:var(--ink-2);max-width:520px;text-wrap:pretty">Competencias, sesiones de entrenamiento, clases especiales y comunicados publicados por el equipo docente.</p>
                 </div>
-                <div style="display:inline-flex;align-items:center;gap:9px;padding:11px 18px;border-radius:999px;border:1px solid var(--hair);background:var(--glass);backdrop-filter:var(--lg-blur);-webkit-backdrop-filter:var(--lg-blur);box-shadow:var(--lg-edge);font-size:12px;font-weight:600;color:var(--ink-2);white-space:nowrap;cursor:pointer" style-hover="color:var(--ink);border-color:var(--purple)">
+                <div onClick="{{ onAnnBadgeClick }}" style="{{ annBadgeStyle }}" style-hover="color:var(--ink);border-color:var(--purple)">
                   <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 11l16-6-6 16-2-8z"></path></svg>
-                  Publicación limitada a instructores
+                  {{ annBadgeLabel }}
                 </div>
               </div>
 
@@ -725,6 +725,28 @@
                   </div>
                 </sc-for>
               </div>
+
+              <sc-if value="{{ annCreateOpen }}">
+                <div style="border-radius:22px;border:1px solid var(--hair);background:var(--glass);backdrop-filter:var(--lg-blur);-webkit-backdrop-filter:var(--lg-blur);box-shadow:var(--lg-edge);padding:20px;display:flex;flex-direction:column;gap:12px">
+                  <div style="font-size:14px;font-weight:700;color:var(--ink)">Publicar un anuncio</div>
+                  <div style="display:flex;gap:8px;flex-wrap:wrap">
+                    <sc-for list="{{ annCatPicker }}" as="c" hint-placeholder-count="4">
+                      <div onClick="{{ c.pick }}" style="{{ c.style }}">{{ c.label }}</div>
+                    </sc-for>
+                  </div>
+                  <input value="{{ annTitleValue }}" onChange="{{ annTitleChange }}" placeholder="Título del anuncio" style="width:100%;box-sizing:border-box;padding:11px 14px;border-radius:14px;border:1px solid var(--hair);background:var(--glass-2);color:var(--ink);font-size:13px;outline:none" />
+                  <textarea value="{{ annBodyValue }}" onChange="{{ annBodyChange }}" placeholder="Describe el anuncio…" rows="3" style="width:100%;box-sizing:border-box;padding:11px 14px;border-radius:14px;border:1px solid var(--hair);background:var(--glass-2);color:var(--ink);font-family:inherit;font-size:13px;outline:none;resize:vertical"></textarea>
+                  <input id="ann-image-input" type="file" accept="image/*" onChange="{{ annOnImage }}" style="display:none" />
+                  <div onClick="{{ annPickImage }}" style="padding:12px 14px;border-radius:14px;border:1px dashed var(--hair);text-align:center;color:var(--ink-2);font-size:12.5px;cursor:pointer">{{ annImageLabel }}</div>
+                  <sc-if value="{{ annErr }}">
+                    <div style="font-size:11.5px;color:var(--pink)">{{ annErr }}</div>
+                  </sc-if>
+                  <div style="display:flex;gap:10px">
+                    <div onClick="{{ annCancelCreate }}" style="flex:1;text-align:center;padding:12px;border-radius:999px;font-size:12.5px;font-weight:700;color:var(--ink-2);border:1px solid var(--hair);cursor:pointer">Cancelar</div>
+                    <div onClick="{{ annSubmit }}" style="flex:1;text-align:center;padding:12px;border-radius:999px;font-size:12.5px;font-weight:700;color:#1A1400;background:linear-gradient(90deg,var(--gold-hi),var(--gold-lo));cursor:pointer">{{ annSubmitLabel }}</div>
+                  </div>
+                </div>
+              </sc-if>
 
               <div style="{{ cardGrid }}">
                 <sc-for list="{{ annCards }}" as="a" hint-placeholder-count="3">
@@ -739,11 +761,11 @@
                         <span style="padding:4px 10px;border-radius:999px;background:var(--purple);color:#fff;font-family:'Geist Mono',monospace;font-size:8px;font-weight:700;letter-spacing:.12em;white-space:nowrap">FIJADO</span>
                       </sc-if>
                     </div>
-                    <div style="padding:0 16px">
+                    <div style="{{ a.cover }}"></div>
+                    <div style="padding:14px 16px 0">
                       <h3 style="margin:0 0 8px;font-size:15px;font-weight:700;color:var(--ink);text-wrap:pretty">{{ a.title }}</h3>
                       <p style="margin:0 0 14px;font-size:13px;line-height:1.6;color:var(--ink-2);text-wrap:pretty">{{ a.body }}</p>
                     </div>
-                    <div style="{{ a.cover }}"></div>
                     <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px">
                       <span style="font-family:'Geist Mono',monospace;font-size:10px;color:var(--ink-3);white-space:nowrap">{{ a.date }}</span>
                       <span style="display:inline-flex;align-items:center;gap:7px;padding:10px 17px;border-radius:999px;font-size:12px;font-weight:700;color:#1A1400;background:linear-gradient(90deg,var(--gold-hi),var(--gold-lo));box-shadow:inset 0 1px 0 rgba(255,255,255,.5);cursor:pointer;white-space:nowrap">{{ a.cta }}</span>

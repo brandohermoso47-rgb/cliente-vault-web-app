@@ -229,11 +229,13 @@ export default function Cursos({ v }: { v: any }) {
               {"Competencias, sesiones de entrenamiento, clases especiales y comunicados publicados por el equipo docente."}
             </p>
           </div>
-          <div style={{"display":"inline-flex","alignItems":"center","gap":"9px","padding":"11px 18px","borderRadius":"999px","border":"1px solid var(--hair)","background":"var(--glass)","backdropFilter":"var(--lg-blur)","WebkitBackdropFilter":"var(--lg-blur)","boxShadow":"var(--lg-edge)","fontSize":"12px","fontWeight":"600","color":"var(--ink-2)","whiteSpace":"nowrap","cursor":"pointer"}} className={cx(pc("hover", "color:var(--ink);border-color:var(--purple)"))}>
+          <div onClick={v.onAnnBadgeClick} style={sty(v.annBadgeStyle)} className={cx(pc("hover", "color:var(--ink);border-color:var(--purple)"))}>
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
               <path d="M4 11l16-6-6 16-2-8z"></path>
             </svg>
-            {" Publicación limitada a instructores "}
+            {" "}
+            {v.annBadgeLabel}
+            {" "}
           </div>
         </div>
         <div style={{"display":"flex","alignItems":"center","gap":"9px","flexWrap":"wrap"}}>
@@ -251,6 +253,45 @@ export default function Cursos({ v }: { v: any }) {
             </Fragment>
           ))}
         </div>
+        {v.annCreateOpen && (
+          <>
+            <div style={{"borderRadius":"22px","border":"1px solid var(--hair)","background":"var(--glass)","backdropFilter":"var(--lg-blur)","WebkitBackdropFilter":"var(--lg-blur)","boxShadow":"var(--lg-edge)","padding":"20px","display":"flex","flexDirection":"column","gap":"12px"}}>
+              <div style={{"fontSize":"14px","fontWeight":"700","color":"var(--ink)"}}>
+                {"Publicar un anuncio"}
+              </div>
+              <div style={{"display":"flex","gap":"8px","flexWrap":"wrap"}}>
+                {(v.annCatPicker ?? []).map((c: any, $index: number) => (
+                  <Fragment key={$index}>
+                    <div onClick={c?.pick} style={sty(c?.style)}>
+                      {c?.label}
+                    </div>
+                  </Fragment>
+                ))}
+              </div>
+              <input value={v.annTitleValue} onChange={v.annTitleChange} placeholder="Título del anuncio" style={{"width":"100%","boxSizing":"border-box","padding":"11px 14px","borderRadius":"14px","border":"1px solid var(--hair)","background":"var(--glass-2)","color":"var(--ink)","fontSize":"13px","outline":"none"}} />
+              <textarea value={v.annBodyValue} onChange={v.annBodyChange} placeholder="Describe el anuncio…" rows="3" style={{"width":"100%","boxSizing":"border-box","padding":"11px 14px","borderRadius":"14px","border":"1px solid var(--hair)","background":"var(--glass-2)","color":"var(--ink)","fontFamily":"inherit","fontSize":"13px","outline":"none","resize":"vertical"}}></textarea>
+              <input id="ann-image-input" type="file" accept="image/*" onChange={v.annOnImage} style={{"display":"none"}} />
+              <div onClick={v.annPickImage} style={{"padding":"12px 14px","borderRadius":"14px","border":"1px dashed var(--hair)","textAlign":"center","color":"var(--ink-2)","fontSize":"12.5px","cursor":"pointer"}}>
+                {v.annImageLabel}
+              </div>
+              {v.annErr && (
+                <>
+                  <div style={{"fontSize":"11.5px","color":"var(--pink)"}}>
+                    {v.annErr}
+                  </div>
+                </>
+              )}
+              <div style={{"display":"flex","gap":"10px"}}>
+                <div onClick={v.annCancelCreate} style={{"flex":"1","textAlign":"center","padding":"12px","borderRadius":"999px","fontSize":"12.5px","fontWeight":"700","color":"var(--ink-2)","border":"1px solid var(--hair)","cursor":"pointer"}}>
+                  {"Cancelar"}
+                </div>
+                <div onClick={v.annSubmit} style={{"flex":"1","textAlign":"center","padding":"12px","borderRadius":"999px","fontSize":"12.5px","fontWeight":"700","color":"#1A1400","background":"linear-gradient(90deg,var(--gold-hi),var(--gold-lo))","cursor":"pointer"}}>
+                  {v.annSubmitLabel}
+                </div>
+              </div>
+            </div>
+          </>
+        )}
         <div style={sty(v.cardGrid)}>
           {(v.annCards ?? []).map((a: any, $index: number) => (
             <Fragment key={$index}>
@@ -273,7 +314,8 @@ export default function Cursos({ v }: { v: any }) {
                     </>
                   )}
                 </div>
-                <div style={{"padding":"0 16px"}}>
+                <div style={sty(a?.cover)}></div>
+                <div style={{"padding":"14px 16px 0"}}>
                   <h3 style={{"margin":"0 0 8px","fontSize":"15px","fontWeight":"700","color":"var(--ink)","textWrap":"pretty"}}>
                     {a?.title}
                   </h3>
@@ -281,7 +323,6 @@ export default function Cursos({ v }: { v: any }) {
                     {a?.body}
                   </p>
                 </div>
-                <div style={sty(a?.cover)}></div>
                 <div style={{"display":"flex","alignItems":"center","justifyContent":"space-between","gap":"12px","padding":"14px 16px"}}>
                   <span style={{"fontFamily":"'Geist Mono',monospace","fontSize":"10px","color":"var(--ink-3)","whiteSpace":"nowrap"}}>
                     {a?.date}
