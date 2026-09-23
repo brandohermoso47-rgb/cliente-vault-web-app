@@ -1,9 +1,10 @@
-// Ebooks.tsx — Recursos y Literatura con diseño 5a + 6a
-// Tienda Premium, gestor de contenido para instructores, y libros de estudio
-/* eslint-disable */
-// @ts-nocheck
-import { Fragment, useState } from 'react';
+// Ebooks.tsx — Recursos y Literatura (5a + 6a) con Firebase Integration
+// Tienda Premium + Gestor de contenido para instructores
+import { Fragment, useState, useEffect } from 'react';
 import { cx, pc, sty } from '../lib/dc';
+import { api } from '../lib/api';
+import { auth } from '../lib/firebase';
+import { useShoppingCart, useInstructorDocuments, useStoreProducts } from './EbooksIntegration';
 
 interface Product {
   id: string;
@@ -13,7 +14,7 @@ interface Product {
   price: number;
   desc: string;
   spine: string;
-  inCart: boolean;
+  inCart?: boolean;
 }
 
 interface DocItem {
@@ -25,10 +26,15 @@ interface DocItem {
 }
 
 export default function Ebooks({ v }: { v: any }) {
-  const [role, setRole] = useState<'student' | 'instructor'>('student');
+  const user = auth?.currentUser;
+  const userId = user?.uid || '';
+  const isInstructor = v?.isInstructor || false; // Viene de la app shell
+
+  const [role, setRole] = useState<'student' | 'instructor'>(isInstructor ? 'instructor' : 'student');
   const [tab, setTab] = useState<'store' | 'libros' | 'gestion'>('store');
-  const [cart, setCart] = useState<Set<string>>(new Set());
   const [filters, setFilters] = useState<Set<string>>(new Set());
+  const [loading, setLoading] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [isEditing, setIsEditing] = useState(false);
   const [editingDocId, setEditingDocId] = useState<string | null>(null);
@@ -44,71 +50,29 @@ export default function Ebooks({ v }: { v: any }) {
   });
 
   const [toast, setToast] = useState('');
-  const [docs, setDocs] = useState<DocItem[]>([
-    { id: '1', title: 'Guía de Iniciación al Waacking', author: 'María López', format: 'PDF', spine: '#E9C349' },
-    { id: '2', title: 'Historia del Waacking', author: 'Carlos Rodríguez', format: 'Texto', spine: '#ff2d95' },
-  ]);
 
-  const products: Product[] = [
-    {
-      id: 'p1',
-      title: 'Arm Roll: Técnica Avanzada',
-      author: 'Prof. García',
-      format: 'PDF',
-      price: 14.99,
-      desc: 'Guía completa sobre la técnica del arm roll con ejercicios paso a paso.',
-      spine: '#ff2d95',
-      inCart: cart.has('p1'),
-    },
-    {
-      id: 'p2',
-      title: 'Historia del Waacking',
-      author: 'Historiador López',
-      format: 'Epub',
-      price: 9.99,
-      desc: 'Recorrido histórico desde los orígenes hasta la actualidad.',
-      spine: '#a855f7',
-      inCart: cart.has('p2'),
-    },
-    {
-      id: 'p3',
-      title: 'Anatomía del Movimiento',
-      author: 'Dr. Martínez',
-      format: 'PDF',
-      price: 19.99,
-      desc: 'Análisis biomecánico de cada movimiento del waacking.',
-      spine: '#2ed9ff',
-      inCart: cart.has('p3'),
-    },
-    {
-      id: 'p4',
-      title: 'Coreografía Nivel Avanzado',
-      author: 'Coreógrafa Silva',
-      format: 'Video',
-      price: 24.99,
-      desc: 'Video tutorial de una coreografía profesional completa.',
-      spine: '#39ff88',
-      inCart: cart.has('p4'),
-    },
-  ];
+  // Hooks de Firebase
+  const { products, loading: productsLoading } = useStoreProducts();
+  const { cart, updateCart, checkout, syncing: cartSyncing, total } = useShoppingCart(userId);
+  const { docs, loading: docsLoading, uploadDocument, updateDocument } = useInstructorDocuments(userId);
 
-  const filteredProducts = products.filter((p) => {
+  // Actualizar productos con estado del carrito
+  const productsWithCart = products.map((p) => ({
+    ...p,
+    inCart: cart.has(p.id),
+  }));
+
+  const filteredProducts = productsWithCart.filter((p) => {
     if (filters.size === 0) return true;
     return filters.has(p.format.toLowerCase());
   });
 
-  const totalPrice = filteredProducts
-    .filter((p) => cart.has(p.id))
-    .reduce((sum, p) => sum + p.price, 0);
-
-  const handleToggleCart = (productId: string) => {
-    const newCart = new Set(cart);
-    if (newCart.has(productId)) {
-      newCart.delete(productId);
+  const handleToggleCart = async (productId: string) => {
+    if (cart.has(productId)) {
+      updateCart(productId, 0); // Remover
     } else {
-      newCart.add(productId);
+      updateCart(productId, 1); // Agregar
     }
-    setCart(newCart);
   };
 
   const handleToggleFilter = (format: string) => {
@@ -135,7 +99,7 @@ export default function Ebooks({ v }: { v: any }) {
     return null;
   };
 
-  const handlePublish = () => {
+  const handlePublish = async () => {
     const error = validateForm();
     if (error) {
       setToast(error);
@@ -143,18 +107,38 @@ export default function Ebooks({ v }: { v: any }) {
       return;
     }
 
-    const newDoc: DocItem = {
-      id: Date.now().toString(),
-      title: formData.title,
-      author: 'Tú',
-      format: uploadMode === 'pdf' ? 'PDF' : uploadMode === 'write' ? 'Texto' : 'Slides',
-      spine: formData.dest === 'tienda' ? '#E9C349' : '#9dffc8',
-    };
+    try {
+      setIsSubmitting(true);
+      await uploadDocument({
+        title: formData.title,
+        body: formData.body,
+        file: formData.file || undefined,
+        cover: formData.cover || undefined,
+        format: uploadMode === 'pdf' ? 'PDF' : uploadMode === 'write' ? 'Texto' : 'Slides',
+        dest: formData.dest,
+        price: formData.dest === 'tienda' ? parseFloat(formData.price) : 0,
+      });
+      setFormData({ title: '', body: '', file: null, cover: null, price: '', dest: 'libros' });
+      setToast('✓ Contenido publicado correctamente');
+      setTimeout(() => setToast(''), 3000);
+    } catch (err) {
+      setToast(`Error: ${err instanceof Error ? err.message : 'Error desconocido'}`);
+      setTimeout(() => setToast(''), 4000);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
-    setDocs([...docs, newDoc]);
-    setFormData({ title: '', body: '', file: null, cover: null, price: '', dest: 'libros' });
-    setToast('✓ Contenido publicado correctamente');
-    setTimeout(() => setToast(''), 3000);
+  const handleCheckout = async () => {
+    try {
+      setIsSubmitting(true);
+      await checkout();
+    } catch (err) {
+      setToast(`Error: ${err instanceof Error ? err.message : 'Error desconocido'}`);
+      setTimeout(() => setToast(''), 4000);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleEdit = (docId: string) => {
@@ -167,7 +151,6 @@ export default function Ebooks({ v }: { v: any }) {
     setEditingDocId(null);
   };
 
-  // Vista del diseño nuevo: 5a + 6a (Glass Morphism + Fluorescentes)
   return (
     <div
       style={{
@@ -440,70 +423,74 @@ export default function Ebooks({ v }: { v: any }) {
                   </div>
 
                   {/* Grid de productos */}
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 20 }}>
-                    {filteredProducts.map((p) => (
-                      <div
-                        key={p.id}
-                        style={{
-                          position: 'relative',
-                          overflow: 'hidden',
-                          borderRadius: 20,
-                          padding: '18px 18px 18px 26px',
-                          display: 'flex',
-                          flexDirection: 'column',
-                          gap: 10,
-                          background: 'linear-gradient(150deg, rgba(255,255,255,.14), rgba(255,255,255,.04))',
-                          backdropFilter: 'blur(26px) saturate(170%)',
-                          WebkitBackdropFilter: 'blur(26px) saturate(170%)',
-                          border: '1px solid rgba(255,255,255,.16)',
-                          boxShadow: 'inset 0 1px 0 rgba(255,255,255,.32), 0 24px 44px -22px rgba(0,0,0,.95)',
-                        }}
-                      >
+                  {productsLoading ? (
+                    <div style={{ textAlign: 'center', color: 'rgba(255,255,255,.6)' }}>Cargando productos...</div>
+                  ) : (
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 20 }}>
+                      {filteredProducts.map((p) => (
                         <div
+                          key={p.id}
                           style={{
-                            position: 'absolute',
-                            left: 0,
-                            top: 0,
-                            bottom: 0,
-                            width: 6,
-                            background: p.spine,
+                            position: 'relative',
+                            overflow: 'hidden',
+                            borderRadius: 20,
+                            padding: '18px 18px 18px 26px',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: 10,
+                            background: 'linear-gradient(150deg, rgba(255,255,255,.14), rgba(255,255,255,.04))',
+                            backdropFilter: 'blur(26px) saturate(170%)',
+                            WebkitBackdropFilter: 'blur(26px) saturate(170%)',
+                            border: '1px solid rgba(255,255,255,.16)',
+                            boxShadow: 'inset 0 1px 0 rgba(255,255,255,.32), 0 24px 44px -22px rgba(0,0,0,.95)',
                           }}
-                        />
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8 }}>
-                          <span style={{ font: '700 8.5px Geist Mono, monospace', letterSpacing: '.07em', textTransform: 'uppercase', padding: '3px 9px', borderRadius: 99, border: '1px solid rgba(255,255,255,.28)', color: '#fff', background: 'rgba(255,255,255,.1)' }}>
-                            {p.format}
-                          </span>
-                          <span style={{ whiteSpace: 'nowrap', font: '700 9.5px Geist Mono, monospace', color: 'rgba(255,255,255,.6)' }}>por {p.author}</span>
-                        </div>
-                        <h3 style={{ margin: 0, font: '700 16px/1.25 Geist, sans-serif', textTransform: 'uppercase', color: '#fff' }}>
-                          {p.title}
-                        </h3>
-                        <p style={{ margin: 0, font: '500 11.5px/1.55 Geist, sans-serif', color: 'rgba(255,255,255,.76)' }}>{p.desc}</p>
-                        <div style={{ marginTop: 6, paddingTop: 14, borderTop: '1px solid rgba(255,255,255,.14)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
-                          <span style={{ font: '700 18px Geist, sans-serif', color: '#f3dd93' }}>€{p.price.toFixed(2)}</span>
+                        >
                           <div
-                            onClick={() => handleToggleCart(p.id)}
                             style={{
-                              cursor: 'pointer',
-                              display: 'flex',
-                              alignItems: 'center',
-                              gap: 6,
-                              padding: '8px 15px',
-                              borderRadius: 99,
-                              font: '800 10.5px Geist, sans-serif',
-                              letterSpacing: '.06em',
-                              textTransform: 'uppercase',
-                              background: p.inCart ? 'rgba(233,195,73,.24)' : 'transparent',
-                              color: p.inCart ? '#E9C349' : '#fff',
-                              border: '1px solid rgba(255,255,255,.4)',
+                              position: 'absolute',
+                              left: 0,
+                              top: 0,
+                              bottom: 0,
+                              width: 6,
+                              background: p.spine,
                             }}
-                          >
-                            {p.inCart ? '✓ En carrito' : '+ Agregar'}
+                          />
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8 }}>
+                            <span style={{ font: '700 8.5px Geist Mono, monospace', letterSpacing: '.07em', textTransform: 'uppercase', padding: '3px 9px', borderRadius: 99, border: '1px solid rgba(255,255,255,.28)', color: '#fff', background: 'rgba(255,255,255,.1)' }}>
+                              {p.format}
+                            </span>
+                            <span style={{ whiteSpace: 'nowrap', font: '700 9.5px Geist Mono, monospace', color: 'rgba(255,255,255,.6)' }}>por {p.author}</span>
+                          </div>
+                          <h3 style={{ margin: 0, font: '700 16px/1.25 Geist, sans-serif', textTransform: 'uppercase', color: '#fff' }}>
+                            {p.title}
+                          </h3>
+                          <p style={{ margin: 0, font: '500 11.5px/1.55 Geist, sans-serif', color: 'rgba(255,255,255,.76)' }}>{p.desc}</p>
+                          <div style={{ marginTop: 6, paddingTop: 14, borderTop: '1px solid rgba(255,255,255,.14)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
+                            <span style={{ font: '700 18px Geist, sans-serif', color: '#f3dd93' }}>€{p.price.toFixed(2)}</span>
+                            <div
+                              onClick={() => handleToggleCart(p.id)}
+                              style={{
+                                cursor: 'pointer',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: 6,
+                                padding: '8px 15px',
+                                borderRadius: 99,
+                                font: '800 10.5px Geist, sans-serif',
+                                letterSpacing: '.06em',
+                                textTransform: 'uppercase',
+                                background: p.inCart ? 'rgba(233,195,73,.24)' : 'transparent',
+                                color: p.inCart ? '#E9C349' : '#fff',
+                                border: '1px solid rgba(255,255,255,.4)',
+                              }}
+                            >
+                              {p.inCart ? '✓ En carrito' : '+ Agregar'}
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    ))}
-                  </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
 
                 {/* Carrito lateral */}
@@ -544,11 +531,12 @@ export default function Ebooks({ v }: { v: any }) {
                         <span style={{ font: '700 10px Geist Mono, monospace', letterSpacing: '.1em', textTransform: 'uppercase', color: 'rgba(255,255,255,.6)' }}>
                           TOTAL
                         </span>
-                        <span style={{ font: '700 22px Geist, sans-serif', color: '#fff' }}>€{totalPrice.toFixed(2)}</span>
+                        <span style={{ font: '700 22px Geist, sans-serif', color: '#fff' }}>€{total.toFixed(2)}</span>
                       </div>
                       <div
+                        onClick={handleCheckout}
                         style={{
-                          cursor: 'pointer',
+                          cursor: cartSyncing || isSubmitting ? 'not-allowed' : 'pointer',
                           textAlign: 'center',
                           padding: '11px 16px',
                           borderRadius: 99,
@@ -559,9 +547,10 @@ export default function Ebooks({ v }: { v: any }) {
                           letterSpacing: '.06em',
                           textTransform: 'uppercase',
                           color: '#1e1707',
+                          opacity: cartSyncing || isSubmitting ? 0.6 : 1,
                         }}
                       >
-                        Pagar
+                        {isSubmitting ? 'Procesando...' : 'Pagar'}
                       </div>
                       <span style={{ font: '500 10.5px/1.5 Geist, sans-serif', color: 'rgba(255,255,255,.55)' }}>
                         Los títulos comprados aparecen en Libros de Estudio.
@@ -575,44 +564,50 @@ export default function Ebooks({ v }: { v: any }) {
             {/* TAB: LIBROS DE ESTUDIO (Ambos roles) */}
             {tab === 'libros' && (
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: 18 }}>
-                {docs.map((d) => (
-                  <div
-                    key={d.id}
-                    style={{
-                      position: 'relative',
-                      overflow: 'hidden',
-                      borderRadius: 18,
-                      padding: '16px 16px 16px 24px',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      gap: 8,
-                      background: 'linear-gradient(150deg, rgba(255,255,255,.14), rgba(255,255,255,.04))',
-                      backdropFilter: 'blur(26px)',
-                      WebkitBackdropFilter: 'blur(26px)',
-                      border: '1px solid rgba(255,255,255,.16)',
-                    }}
-                  >
+                {docsLoading ? (
+                  <div style={{ gridColumn: '1/-1', textAlign: 'center', color: 'rgba(255,255,255,.6)' }}>Cargando libros...</div>
+                ) : docs.length === 0 ? (
+                  <div style={{ gridColumn: '1/-1', textAlign: 'center', color: 'rgba(255,255,255,.6)' }}>No hay libros disponibles.</div>
+                ) : (
+                  docs.map((d) => (
                     <div
+                      key={d.id}
                       style={{
-                        position: 'absolute',
-                        left: 0,
-                        top: 0,
-                        bottom: 0,
-                        width: 6,
-                        background: d.spine,
+                        position: 'relative',
+                        overflow: 'hidden',
+                        borderRadius: 18,
+                        padding: '16px 16px 16px 24px',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: 8,
+                        background: 'linear-gradient(150deg, rgba(255,255,255,.14), rgba(255,255,255,.04))',
+                        backdropFilter: 'blur(26px)',
+                        WebkitBackdropFilter: 'blur(26px)',
+                        border: '1px solid rgba(255,255,255,.16)',
                       }}
-                    />
-                    <span style={{ font: '700 8.5px Geist Mono, monospace', letterSpacing: '.07em', textTransform: 'uppercase', color: 'rgba(255,255,255,.65)' }}>
-                      {d.format}
-                    </span>
-                    <h3 style={{ margin: 0, font: '700 14px/1.3 Geist, sans-serif', textTransform: 'uppercase', color: '#fff' }}>
-                      {d.title}
-                    </h3>
-                    <span style={{ font: '700 9.5px Geist Mono, monospace', textTransform: 'uppercase', color: 'rgba(255,255,255,.5)' }}>
-                      {d.author}
-                    </span>
-                  </div>
-                ))}
+                    >
+                      <div
+                        style={{
+                          position: 'absolute',
+                          left: 0,
+                          top: 0,
+                          bottom: 0,
+                          width: 6,
+                          background: d.spine,
+                        }}
+                      />
+                      <span style={{ font: '700 8.5px Geist Mono, monospace', letterSpacing: '.07em', textTransform: 'uppercase', color: 'rgba(255,255,255,.65)' }}>
+                        {d.format}
+                      </span>
+                      <h3 style={{ margin: 0, font: '700 14px/1.3 Geist, sans-serif', textTransform: 'uppercase', color: '#fff' }}>
+                        {d.title}
+                      </h3>
+                      <span style={{ font: '700 9.5px Geist Mono, monospace', textTransform: 'uppercase', color: 'rgba(255,255,255,.5)' }}>
+                        {d.author}
+                      </span>
+                    </div>
+                  ))
+                )}
               </div>
             )}
 
@@ -813,7 +808,7 @@ export default function Ebooks({ v }: { v: any }) {
                   <div
                     onClick={handlePublish}
                     style={{
-                      cursor: 'pointer',
+                      cursor: isSubmitting ? 'not-allowed' : 'pointer',
                       textAlign: 'center',
                       padding: '12px 16px',
                       borderRadius: 99,
@@ -824,9 +819,10 @@ export default function Ebooks({ v }: { v: any }) {
                       letterSpacing: '.06em',
                       textTransform: 'uppercase',
                       color: '#fff',
+                      opacity: isSubmitting ? 0.6 : 1,
                     }}
                   >
-                    Publicar
+                    {isSubmitting ? 'Publicando...' : 'Publicar'}
                   </div>
                 </div>
 
@@ -835,56 +831,60 @@ export default function Ebooks({ v }: { v: any }) {
                   <span style={{ font: '700 10px Geist Mono, monospace', letterSpacing: '.14em', textTransform: 'uppercase', color: '#E9C349' }}>
                     Mis documentos · {docs.length}
                   </span>
-                  {docs.map((d) => (
-                    <div
-                      key={d.id}
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: 12,
-                        padding: 14,
-                        borderRadius: 16,
-                        background: 'linear-gradient(150deg, rgba(255,255,255,.13), rgba(255,255,255,.04))',
-                        backdropFilter: 'blur(26px)',
-                        WebkitBackdropFilter: 'blur(26px)',
-                        border: '1px solid rgba(255,255,255,.16)',
-                      }}
-                    >
+                  {docsLoading ? (
+                    <div style={{ color: 'rgba(255,255,255,.6)', font: '500 12px Geist' }}>Cargando...</div>
+                  ) : (
+                    docs.map((d) => (
                       <div
+                        key={d.id}
                         style={{
-                          width: 6,
-                          alignSelf: 'stretch',
-                          borderRadius: 3,
-                          background: d.spine,
-                        }}
-                      />
-                      <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 4 }}>
-                        <span style={{ font: '700 12.5px/1.3 Geist, sans-serif', textTransform: 'uppercase', color: '#fff' }}>
-                          {d.title}
-                        </span>
-                        <span style={{ font: '700 9px Geist Mono, monospace', letterSpacing: '.06em', textTransform: 'uppercase', color: 'rgba(255,255,255,.55)' }}>
-                          {d.format}
-                        </span>
-                      </div>
-                      <div
-                        onClick={() => handleEdit(d.id)}
-                        style={{
-                          cursor: 'pointer',
-                          flex: 'none',
-                          padding: '7px 13px',
-                          borderRadius: 99,
-                          border: '1px solid rgba(233,195,73,.55)',
-                          background: 'rgba(233,195,73,.14)',
-                          font: '700 10px Geist Mono, monospace',
-                          letterSpacing: '.06em',
-                          textTransform: 'uppercase',
-                          color: '#f3dd93',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: 12,
+                          padding: 14,
+                          borderRadius: 16,
+                          background: 'linear-gradient(150deg, rgba(255,255,255,.13), rgba(255,255,255,.04))',
+                          backdropFilter: 'blur(26px)',
+                          WebkitBackdropFilter: 'blur(26px)',
+                          border: '1px solid rgba(255,255,255,.16)',
                         }}
                       >
-                        Editar
+                        <div
+                          style={{
+                            width: 6,
+                            alignSelf: 'stretch',
+                            borderRadius: 3,
+                            background: d.spine,
+                          }}
+                        />
+                        <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 4 }}>
+                          <span style={{ font: '700 12.5px/1.3 Geist, sans-serif', textTransform: 'uppercase', color: '#fff' }}>
+                            {d.title}
+                          </span>
+                          <span style={{ font: '700 9px Geist Mono, monospace', letterSpacing: '.06em', textTransform: 'uppercase', color: 'rgba(255,255,255,.55)' }}>
+                            {d.format}
+                          </span>
+                        </div>
+                        <div
+                          onClick={() => handleEdit(d.id)}
+                          style={{
+                            cursor: 'pointer',
+                            flex: 'none',
+                            padding: '7px 13px',
+                            borderRadius: 99,
+                            border: '1px solid rgba(233,195,73,.55)',
+                            background: 'rgba(233,195,73,.14)',
+                            font: '700 10px Geist Mono, monospace',
+                            letterSpacing: '.06em',
+                            textTransform: 'uppercase',
+                            color: '#f3dd93',
+                          }}
+                        >
+                          Editar
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ))
+                  )}
                 </div>
               </div>
             )}
@@ -1005,7 +1005,7 @@ export default function Ebooks({ v }: { v: any }) {
                       setTimeout(() => setToast(''), 2000);
                     }}
                     style={{
-                      cursor: 'pointer',
+                      cursor: isSubmitting ? 'not-allowed' : 'pointer',
                       padding: '10px 18px',
                       borderRadius: 99,
                       background: 'linear-gradient(120deg, #E9C349, #ffdd7a 45%, #c8a63f)',
@@ -1014,6 +1014,7 @@ export default function Ebooks({ v }: { v: any }) {
                       letterSpacing: '.06em',
                       textTransform: 'uppercase',
                       color: '#1e1707',
+                      opacity: isSubmitting ? 0.6 : 1,
                     }}
                   >
                     Guardar cambios
