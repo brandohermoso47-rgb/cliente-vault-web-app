@@ -7,7 +7,8 @@ service firebase.storage {
       allow read: if request.auth != null;
       allow create: if request.auth != null && request.auth.uid == uid
         && ((request.resource.contentType.matches('image/(jpeg|png|webp|gif)') && request.resource.size < 10 * 1024 * 1024)
-         || (request.resource.contentType.matches('video/(mp4|webm|quicktime)') && request.resource.size < 200 * 1024 * 1024));
+         || (request.resource.contentType.matches('video/(mp4|webm|quicktime)') && request.resource.size < 200 * 1024 * 1024)
+         || (request.resource.contentType == 'application/pdf' && request.resource.size < 50 * 1024 * 1024));
       allow delete: if request.auth != null && request.auth.uid == uid;
       allow update: if false;
     }

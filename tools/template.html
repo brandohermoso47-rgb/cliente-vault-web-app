@@ -2507,16 +2507,48 @@
             </sc-if>
 
             <sc-if value="{{ insIsDocs }}">
-              <div style="display:flex;flex-direction:column;gap:10px">
-                <sc-for list="{{ insDocList }}" as="d" hint-placeholder-count="3">
-                  <div style="display:flex;align-items:center;gap:14px;padding:17px 19px;border-radius:20px;border:1px solid var(--hair);background:var(--glass);backdrop-filter:var(--lg-blur);-webkit-backdrop-filter:var(--lg-blur);box-shadow:var(--lg-edge);flex-wrap:wrap">
-                    <div style="flex:1;min-width:200px">
-                      <div style="font-size:14px;font-weight:700;color:var(--ink)">{{ d.title }}</div>
-                      <div style="font-family:'Geist Mono',monospace;font-size:10px;color:var(--ink-3);margin-top:5px">{{ d.meta }}</div>
-                    </div>
-                    <span style="{{ d.badge }}">{{ d.state }}</span>
+              <div style="display:flex;flex-direction:column;gap:20px">
+                <div style="display:flex;flex-direction:column;gap:12px;padding:20px;border-radius:22px;border:1px solid var(--hair);background:var(--glass);backdrop-filter:var(--lg-blur);-webkit-backdrop-filter:var(--lg-blur);box-shadow:var(--lg-edge)">
+                  <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+                    <div style="font-size:14px;font-weight:700;color:var(--ink)">Subir un manual</div>
+                    <span style="padding:4px 10px;border-radius:999px;background:var(--purple);color:#fff;font-family:'Geist Mono',monospace;font-size:8px;font-weight:700;letter-spacing:.12em;white-space:nowrap">SOLO INSTRUCTOR</span>
                   </div>
-                </sc-for>
+                  <div style="display:flex;gap:8px;flex-wrap:wrap">
+                    <sc-for list="{{ ebCatPicker }}" as="c" hint-placeholder-count="2">
+                      <div onClick="{{ c.pick }}" style="{{ c.style }}">{{ c.label }}</div>
+                    </sc-for>
+                  </div>
+                  <input value="{{ ebTitleValue }}" onChange="{{ ebTitleChange }}" placeholder="Título del manual" style="width:100%;box-sizing:border-box;padding:11px 14px;border-radius:14px;border:1px solid var(--hair);background:var(--glass-2);color:var(--ink);font-size:13px;outline:none" />
+                  <input value="{{ ebMetaValue }}" onChange="{{ ebMetaChange }}" placeholder="Detalle (ej. 48 páginas) · opcional" style="width:100%;box-sizing:border-box;padding:11px 14px;border-radius:14px;border:1px solid var(--hair);background:var(--glass-2);color:var(--ink);font-size:13px;outline:none" />
+                  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px">
+                    <div>
+                      <div style="font-family:'Geist Mono',monospace;font-size:9px;letter-spacing:.14em;color:var(--ink-3);text-transform:uppercase;margin-bottom:8px">Imagen de portada · opcional</div>
+                      <input id="eb-cover-input" type="file" accept="image/*" onChange="{{ ebOnCover }}" style="display:none" />
+                      <div onClick="{{ ebPickCover }}" style="padding:14px;border-radius:14px;border:1px dashed var(--hair);text-align:center;color:var(--ink-2);font-size:12px;cursor:pointer">{{ ebCoverLabel }}</div>
+                    </div>
+                    <div>
+                      <div style="font-family:'Geist Mono',monospace;font-size:9px;letter-spacing:.14em;color:var(--ink-3);text-transform:uppercase;margin-bottom:8px">Archivo PDF</div>
+                      <input id="eb-pdf-input" type="file" accept="application/pdf" onChange="{{ ebOnPdf }}" style="display:none" />
+                      <div onClick="{{ ebPickPdf }}" style="padding:14px;border-radius:14px;border:1px dashed var(--hair);text-align:center;color:var(--ink-2);font-size:12px;cursor:pointer">{{ ebPdfLabel }}</div>
+                    </div>
+                  </div>
+                  <sc-if value="{{ ebErr }}">
+                    <div style="font-size:11.5px;color:var(--pink)">{{ ebErr }}</div>
+                  </sc-if>
+                  <div onClick="{{ ebSubmit }}" style="align-self:flex-start;padding:12px 22px;border-radius:999px;font-size:12.5px;font-weight:700;color:#1A1400;background:linear-gradient(90deg,var(--gold-hi),var(--gold-lo));box-shadow:inset 0 1px 0 rgba(255,255,255,.5);cursor:pointer">{{ ebSubmitLabel }}</div>
+                </div>
+
+                <div style="display:flex;flex-direction:column;gap:10px">
+                  <sc-for list="{{ insDocList }}" as="d" hint-placeholder-count="3">
+                    <div style="display:flex;align-items:center;gap:14px;padding:17px 19px;border-radius:20px;border:1px solid var(--hair);background:var(--glass);backdrop-filter:var(--lg-blur);-webkit-backdrop-filter:var(--lg-blur);box-shadow:var(--lg-edge);flex-wrap:wrap">
+                      <div style="flex:1;min-width:200px">
+                        <div style="font-size:14px;font-weight:700;color:var(--ink)">{{ d.title }}</div>
+                        <div style="font-family:'Geist Mono',monospace;font-size:10px;color:var(--ink-3);margin-top:5px">{{ d.meta }}</div>
+                      </div>
+                      <span style="{{ d.badge }}">{{ d.state }}</span>
+                    </div>
+                  </sc-for>
+                </div>
               </div>
             </sc-if>
 

@@ -52,7 +52,7 @@ deny('otro usuario NO lee la galería privada', 'get', 'users/user1/media/m1', {
 deny('otro usuario NO escribe en la galería ajena', 'create', 'users/user1/media/m2', { uid: 'user2', incoming: { url: 'x' } });
 
 // contenido de instructores/estudios/admin
-for (const col of ['teachers', 'lives', 'lessons']) {
+for (const col of ['teachers', 'lives', 'lessons', 'ebooks']) {
   allow(`${col}: lectura con sesión`, 'get', `${col}/c1`, { uid: 'user1', data: { ownerId: 'inst1' } });
   deny(`${col}: anónimo no lee`, 'get', `${col}/c1`, { data: { ownerId: 'inst1' } });
   deny(`${col}: un usuario normal NO publica`, 'create', `${col}/c1`, { uid: 'user1', incoming: { ownerId: 'user1' } });
@@ -203,7 +203,8 @@ st('video de más de 200 MB', 'DENY', 'create', 'users/user1/media/v.mp4', { uid
 st('SVG (puede llevar scripts) denegado', 'DENY', 'create', 'users/user1/media/x.svg', { uid: 'user1', file: { contentType: 'image/svg+xml', size: 1000 } });
 st('HTML denegado', 'DENY', 'create', 'users/user1/media/x.html', { uid: 'user1', file: { contentType: 'text/html', size: 1000 } });
 st('ejecutable denegado', 'DENY', 'create', 'users/user1/media/x.exe', { uid: 'user1', file: { contentType: 'application/octet-stream', size: 1000 } });
-st('PDF denegado', 'DENY', 'create', 'users/user1/media/x.pdf', { uid: 'user1', file: { contentType: 'application/pdf', size: 1000 } });
+st('el dueño sube un PDF de manual (ebook)', 'ALLOW', 'create', 'users/user1/ebooks/x.pdf', { uid: 'user1', file: { contentType: 'application/pdf', size: 30 * MB } });
+st('PDF de más de 50 MB denegado', 'DENY', 'create', 'users/user1/media/x.pdf', { uid: 'user1', file: { contentType: 'application/pdf', size: 51 * MB } });
 st('fuera de users/ todo denegado', 'DENY', 'create', 'publico/a.png', { uid: 'user1', file: png() });
 st('un admin tampoco sube fuera de su carpeta', 'DENY', 'create', 'users/user1/media/a.png', { uid: 'admin1', file: png() });
 st('usuario con sesión puede ver archivos', 'ALLOW', 'get', 'users/user1/avatar/a.png', { uid: 'user2' });

@@ -219,24 +219,77 @@ export default function Instructor({ v }: { v: any }) {
       )}
       {v.insIsDocs && (
         <>
-          <div style={{"display":"flex","flexDirection":"column","gap":"10px"}}>
-            {(v.insDocList ?? []).map((d: any, $index: number) => (
-              <Fragment key={$index}>
-                <div style={{"display":"flex","alignItems":"center","gap":"14px","padding":"17px 19px","borderRadius":"20px","border":"1px solid var(--hair)","background":"var(--glass)","backdropFilter":"var(--lg-blur)","WebkitBackdropFilter":"var(--lg-blur)","boxShadow":"var(--lg-edge)","flexWrap":"wrap"}}>
-                  <div style={{"flex":"1","minWidth":"200px"}}>
-                    <div style={{"fontSize":"14px","fontWeight":"700","color":"var(--ink)"}}>
-                      {d?.title}
-                    </div>
-                    <div style={{"fontFamily":"'Geist Mono',monospace","fontSize":"10px","color":"var(--ink-3)","marginTop":"5px"}}>
-                      {d?.meta}
-                    </div>
-                  </div>
-                  <span style={sty(d?.badge)}>
-                    {d?.state}
-                  </span>
+          <div style={{"display":"flex","flexDirection":"column","gap":"20px"}}>
+            <div style={{"display":"flex","flexDirection":"column","gap":"12px","padding":"20px","borderRadius":"22px","border":"1px solid var(--hair)","background":"var(--glass)","backdropFilter":"var(--lg-blur)","WebkitBackdropFilter":"var(--lg-blur)","boxShadow":"var(--lg-edge)"}}>
+              <div style={{"display":"flex","alignItems":"center","justifyContent":"space-between","gap":"12px","flexWrap":"wrap"}}>
+                <div style={{"fontSize":"14px","fontWeight":"700","color":"var(--ink)"}}>
+                  {"Subir un manual"}
                 </div>
-              </Fragment>
-            ))}
+                <span style={{"padding":"4px 10px","borderRadius":"999px","background":"var(--purple)","color":"#fff","fontFamily":"'Geist Mono',monospace","fontSize":"8px","fontWeight":"700","letterSpacing":".12em","whiteSpace":"nowrap"}}>
+                  {"SOLO INSTRUCTOR"}
+                </span>
+              </div>
+              <div style={{"display":"flex","gap":"8px","flexWrap":"wrap"}}>
+                {(v.ebCatPicker ?? []).map((c: any, $index: number) => (
+                  <Fragment key={$index}>
+                    <div onClick={c?.pick} style={sty(c?.style)}>
+                      {c?.label}
+                    </div>
+                  </Fragment>
+                ))}
+              </div>
+              <input value={v.ebTitleValue} onChange={v.ebTitleChange} placeholder="Título del manual" style={{"width":"100%","boxSizing":"border-box","padding":"11px 14px","borderRadius":"14px","border":"1px solid var(--hair)","background":"var(--glass-2)","color":"var(--ink)","fontSize":"13px","outline":"none"}} />
+              <input value={v.ebMetaValue} onChange={v.ebMetaChange} placeholder="Detalle (ej. 48 páginas) · opcional" style={{"width":"100%","boxSizing":"border-box","padding":"11px 14px","borderRadius":"14px","border":"1px solid var(--hair)","background":"var(--glass-2)","color":"var(--ink)","fontSize":"13px","outline":"none"}} />
+              <div style={{"display":"grid","gridTemplateColumns":"repeat(auto-fit,minmax(220px,1fr))","gap":"12px"}}>
+                <div>
+                  <div style={{"fontFamily":"'Geist Mono',monospace","fontSize":"9px","letterSpacing":".14em","color":"var(--ink-3)","textTransform":"uppercase","marginBottom":"8px"}}>
+                    {"Imagen de portada · opcional"}
+                  </div>
+                  <input id="eb-cover-input" type="file" accept="image/*" onChange={v.ebOnCover} style={{"display":"none"}} />
+                  <div onClick={v.ebPickCover} style={{"padding":"14px","borderRadius":"14px","border":"1px dashed var(--hair)","textAlign":"center","color":"var(--ink-2)","fontSize":"12px","cursor":"pointer"}}>
+                    {v.ebCoverLabel}
+                  </div>
+                </div>
+                <div>
+                  <div style={{"fontFamily":"'Geist Mono',monospace","fontSize":"9px","letterSpacing":".14em","color":"var(--ink-3)","textTransform":"uppercase","marginBottom":"8px"}}>
+                    {"Archivo PDF"}
+                  </div>
+                  <input id="eb-pdf-input" type="file" accept="application/pdf" onChange={v.ebOnPdf} style={{"display":"none"}} />
+                  <div onClick={v.ebPickPdf} style={{"padding":"14px","borderRadius":"14px","border":"1px dashed var(--hair)","textAlign":"center","color":"var(--ink-2)","fontSize":"12px","cursor":"pointer"}}>
+                    {v.ebPdfLabel}
+                  </div>
+                </div>
+              </div>
+              {v.ebErr && (
+                <>
+                  <div style={{"fontSize":"11.5px","color":"var(--pink)"}}>
+                    {v.ebErr}
+                  </div>
+                </>
+              )}
+              <div onClick={v.ebSubmit} style={{"alignSelf":"flex-start","padding":"12px 22px","borderRadius":"999px","fontSize":"12.5px","fontWeight":"700","color":"#1A1400","background":"linear-gradient(90deg,var(--gold-hi),var(--gold-lo))","boxShadow":"inset 0 1px 0 rgba(255,255,255,.5)","cursor":"pointer"}}>
+                {v.ebSubmitLabel}
+              </div>
+            </div>
+            <div style={{"display":"flex","flexDirection":"column","gap":"10px"}}>
+              {(v.insDocList ?? []).map((d: any, $index: number) => (
+                <Fragment key={$index}>
+                  <div style={{"display":"flex","alignItems":"center","gap":"14px","padding":"17px 19px","borderRadius":"20px","border":"1px solid var(--hair)","background":"var(--glass)","backdropFilter":"var(--lg-blur)","WebkitBackdropFilter":"var(--lg-blur)","boxShadow":"var(--lg-edge)","flexWrap":"wrap"}}>
+                    <div style={{"flex":"1","minWidth":"200px"}}>
+                      <div style={{"fontSize":"14px","fontWeight":"700","color":"var(--ink)"}}>
+                        {d?.title}
+                      </div>
+                      <div style={{"fontFamily":"'Geist Mono',monospace","fontSize":"10px","color":"var(--ink-3)","marginTop":"5px"}}>
+                        {d?.meta}
+                      </div>
+                    </div>
+                    <span style={sty(d?.badge)}>
+                      {d?.state}
+                    </span>
+                  </div>
+                </Fragment>
+              ))}
+            </div>
           </div>
         </>
       )}
