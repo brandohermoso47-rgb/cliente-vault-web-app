@@ -90,6 +90,10 @@
             <span style="display:flex;align-items:center;justify-content:center;width:28px;height:28px;flex:0 0 28px;border-radius:9px;color:color-mix(in oklch, var(--blue) 50%, var(--purple));border:1px solid color-mix(in oklch, var(--blue) 50%, var(--purple));background:color-mix(in oklch, color-mix(in oklch, var(--blue) 50%, var(--purple)) 16%, transparent)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 5v14"></path><path d="M18 5v14"></path><path d="M4 9h4"></path><path d="M16 9h4"></path><path d="M4 15h4"></path><path d="M16 15h4"></path></svg></span>
             <span style="{{ navLabel }}">Cuerpo & Estiramientos</span>
           </div>
+          <div onClick="{{ goStudy }}" style="{{ navStudy }}">
+            <span style="display:flex;align-items:center;justify-content:center;width:28px;height:28px;flex:0 0 28px;border-radius:9px;color:var(--yellow);border:1px solid var(--yellow);background:color-mix(in oklch, var(--yellow) 16%, transparent)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"></path></svg></span>
+            <span style="{{ navLabel }}">Plan de Estudio</span>
+          </div>
           <div onClick="{{ goEbooks }}" style="{{ navEbooks }}">
             <span style="display:flex;align-items:center;justify-content:center;width:28px;height:28px;flex:0 0 28px;border-radius:9px;color:color-mix(in oklch, var(--yellow) 60%, var(--gold));border:1px solid color-mix(in oklch, var(--yellow) 60%, var(--gold));background:color-mix(in oklch, color-mix(in oklch, var(--yellow) 60%, var(--gold)) 16%, transparent)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"></path></svg></span>
             <span style="{{ navLabel }}">Manuales</span>
@@ -1567,6 +1571,181 @@
                 </div>
               </sc-for>
             </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ isStudy }}">
+          <div style="display:flex;flex-direction:column;gap:26px;max-width:1180px">
+
+            <div>
+              <div style="font-family:'Geist Mono',monospace;font-size:10px;letter-spacing:.2em;color:var(--ink-3);text-transform:uppercase">Plan de Estudio</div>
+              <div style="font-family:'Instrument Serif',Georgia,serif;font-size:32px;color:var(--ink);margin-top:6px">Historia y técnica del Waacking</div>
+              <div style="font-size:13.5px;color:var(--ink-2);margin-top:6px;max-width:640px;text-wrap:pretty">Seis módulos interactivos, en el orden en que se van desbloqueando: historia, técnica, significado cultural, figuras notables, waacking vs. voguing, y revival global.</div>
+            </div>
+
+            <sc-if value="{{ studyLocked }}">
+              <div style="display:flex;align-items:center;gap:18px;padding:24px;border-radius:22px;border:1px solid var(--hair);background:var(--glass-2);backdrop-filter:var(--lg-blur);-webkit-backdrop-filter:var(--lg-blur);box-shadow:var(--lg-edge);flex-wrap:wrap">
+                <span style="display:flex;align-items:center;justify-content:center;width:48px;height:48px;flex:0 0 48px;border-radius:14px;color:var(--yellow);border:1px solid var(--yellow);background:color-mix(in oklch, var(--yellow) 16%, transparent)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="10" rx="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></span>
+                <div style="flex:1;min-width:220px">
+                  <div style="font-size:15px;font-weight:700;color:var(--ink)">Disponible con Usuario Premium</div>
+                  <div style="font-size:12.5px;color:var(--ink-2);margin-top:4px;text-wrap:pretty">El Plan de Estudio Interactivo es parte de la suscripción de plataforma ($15/mes). Incluye los 6 módulos, los quizzes y tu progreso guardado en tu cuenta.</div>
+                </div>
+                <div onClick="{{ goPlanes }}" style="padding:12px 20px;border-radius:999px;font-size:12.5px;font-weight:700;color:#14111A;background:linear-gradient(90deg,var(--gold-hi),var(--gold-lo));cursor:pointer;white-space:nowrap" style-hover="transform:translateY(-1px)">Suscribirme</div>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ hasPlatform }}">
+              <div style="{{ cardGrid }}">
+                <sc-for list="{{ studyModuleList }}" as="m" hint-placeholder-count="6">
+                  <div onClick="{{ m.pick }}" style="{{ m.card }}">
+                    <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
+                      <div style="font-family:'Geist Mono',monospace;font-size:9px;letter-spacing:.16em;color:var(--ink-3);text-transform:uppercase">Módulo {{ m.order }}</div>
+                      <sc-if value="{{ m.showBadge }}"><span style="{{ m.badgeStyle }}">{{ m.badge }}</span></sc-if>
+                    </div>
+                    <div style="font-size:15px;font-weight:700;color:var(--ink)">{{ m.title }}</div>
+                    <div style="font-size:12.5px;color:var(--ink-2);text-wrap:pretty">{{ m.description }}</div>
+                  </div>
+                </sc-for>
+              </div>
+
+              <sc-if value="{{ studyHasActive }}">
+                <div style="display:flex;flex-direction:column;gap:20px;padding:24px;border-radius:24px;border:1px solid var(--hair);background:var(--glass-2);backdrop-filter:var(--lg-blur);-webkit-backdrop-filter:var(--lg-blur);box-shadow:var(--lg-edge)">
+                  <div>
+                    <div style="font-size:18px;font-weight:700;color:var(--ink)">{{ studyActiveTitle }}</div>
+                    <div style="font-size:12.5px;color:var(--ink-2);margin-top:4px;text-wrap:pretty">{{ studyActiveDescription }}</div>
+                  </div>
+
+                  <sc-if value="{{ studyShowTimeline }}">
+                    <div style="display:flex;flex-direction:column;gap:14px">
+                      <div style="display:flex;gap:10px;flex-wrap:wrap">
+                        <sc-for list="{{ studyTimelinePills }}" as="t" hint-placeholder-count="4">
+                          <div onClick="{{ t.pick }}" style="{{ t.style }}">{{ t.year }} · {{ t.title }}</div>
+                        </sc-for>
+                      </div>
+                      <div style="padding:18px;border-radius:16px;background:var(--glass);border:1px solid var(--hair-soft)">
+                        <div style="font-family:'Geist Mono',monospace;font-size:10px;color:var(--ink-3)">{{ studyTimelineDetailYear }}</div>
+                        <div style="font-size:14px;font-weight:700;color:var(--ink);margin-top:4px">{{ studyTimelineDetailTitle }}</div>
+                        <div style="font-size:13px;color:var(--ink-2);margin-top:8px;text-wrap:pretty">{{ studyTimelineDetailText }}</div>
+                      </div>
+                    </div>
+                  </sc-if>
+
+                  <sc-if value="{{ studyShowChecklist }}">
+                    <div style="display:flex;flex-direction:column;gap:12px">
+                      <div style="font-family:'Geist Mono',monospace;font-size:11px;color:var(--ink-3)">{{ studyChecklistDoneLabel }}</div>
+                      <sc-for list="{{ studyChecklist }}" as="c" hint-placeholder-count="6">
+                        <div style="display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:16px;border:1px solid var(--hair);background:var(--glass);flex-wrap:wrap">
+                          <div style="flex:1;min-width:180px">
+                            <div style="font-size:13.5px;font-weight:700;color:var(--ink)">{{ c.name }}</div>
+                            <div style="font-size:12px;color:var(--ink-2);margin-top:3px;text-wrap:pretty">{{ c.text }}</div>
+                          </div>
+                          <div onClick="{{ c.toggle }}" style="{{ c.btn }}">{{ c.btnLabel }}</div>
+                        </div>
+                      </sc-for>
+                    </div>
+                  </sc-if>
+
+                  <sc-if value="{{ studyShowReflection }}">
+                    <div style="display:flex;flex-direction:column;gap:14px">
+                      <sc-for list="{{ studyReflectionCards }}" as="r" hint-placeholder-count="4">
+                        <div style="display:flex;flex-direction:column;gap:10px;padding:16px;border-radius:18px;border:1px solid var(--hair);background:var(--glass)">
+                          <div style="font-size:13.5px;font-weight:700;color:var(--ink)">{{ r.question }}</div>
+                          <textarea value="{{ r.value }}" onChange="{{ r.change }}" placeholder="Escribe tu respuesta…" rows="3" style="width:100%;box-sizing:border-box;padding:12px;border-radius:12px;border:1px solid var(--hair);background:var(--glass-2);color:var(--ink);font-family:inherit;font-size:13px;outline:none;resize:vertical"></textarea>
+                          <div onClick="{{ r.save }}" style="align-self:flex-end;padding:9px 16px;border-radius:999px;font-size:12px;font-weight:700;color:var(--ink);border:1px solid var(--hair);background:var(--glass);cursor:pointer">Guardar</div>
+                        </div>
+                      </sc-for>
+                    </div>
+                  </sc-if>
+
+                  <sc-if value="{{ studyShowGallery }}">
+                    <div style="display:flex;flex-direction:column;gap:16px">
+                      <div style="font-family:'Geist Mono',monospace;font-size:11px;color:var(--ink-3)">{{ studyMatchCountLabel }}</div>
+                      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px">
+                        <div style="display:flex;flex-direction:column;gap:12px">
+                          <div style="font-family:'Geist Mono',monospace;font-size:9px;letter-spacing:.16em;color:var(--ink-3);text-transform:uppercase">Pioneros</div>
+                          <sc-for list="{{ studyPioneers }}" as="p" hint-placeholder-count="4">
+                            <div onClick="{{ p.pick }}" style="{{ p.card }}">
+                              <div style="font-size:13.5px;font-weight:700;color:var(--ink)">{{ p.name }}</div>
+                              <div style="font-size:11.5px;color:var(--ink-2)">{{ p.role }}</div>
+                              <div style="font-size:11.5px;color:var(--ink-3);text-wrap:pretty">{{ p.bio }}</div>
+                            </div>
+                          </sc-for>
+                        </div>
+                        <div style="display:flex;flex-direction:column;gap:12px">
+                          <div style="font-family:'Geist Mono',monospace;font-size:9px;letter-spacing:.16em;color:var(--ink-3);text-transform:uppercase">Íconos modernos</div>
+                          <sc-for list="{{ studyModernIcons }}" as="i" hint-placeholder-count="4">
+                            <div onClick="{{ i.pick }}" style="{{ i.card }}">
+                              <div style="font-size:13.5px;font-weight:700;color:var(--ink)">{{ i.name }}</div>
+                              <div style="font-size:11.5px;color:var(--ink-2)">{{ i.role }}</div>
+                              <div style="font-size:11.5px;color:var(--ink-3);text-wrap:pretty">{{ i.bio }}</div>
+                            </div>
+                          </sc-for>
+                        </div>
+                      </div>
+                    </div>
+                  </sc-if>
+
+                  <sc-if value="{{ studyShowCompare }}">
+                    <div style="display:flex;flex-direction:column;gap:16px">
+                      <div style="display:flex;gap:10px">
+                        <div onClick="{{ studySetWaack }}" style="{{ studyCompareWaackBtn }}">Waacking</div>
+                        <div onClick="{{ studySetVogue }}" style="{{ studyCompareVogueBtn }}">Voguing</div>
+                      </div>
+                      <sc-for list="{{ studyCompareRows }}" as="row" hint-placeholder-count="4">
+                        <div style="display:grid;grid-template-columns:140px 1fr 1fr;gap:14px;padding:14px 16px;border-radius:14px;border:1px solid var(--hair);background:var(--glass)">
+                          <div style="font-family:'Geist Mono',monospace;font-size:10px;color:var(--ink-3)">{{ row.axis }}</div>
+                          <div style="{{ row.waackingStyle }}">{{ row.waacking }}</div>
+                          <div style="{{ row.voguingStyle }}">{{ row.voguing }}</div>
+                        </div>
+                      </sc-for>
+                    </div>
+                  </sc-if>
+
+                  <sc-if value="{{ studyShowMap }}">
+                    <div style="display:flex;flex-direction:column;gap:16px">
+                      <div style="display:flex;gap:10px;flex-wrap:wrap">
+                        <sc-for list="{{ studyHubs }}" as="h" hint-placeholder-count="4">
+                          <div onClick="{{ h.pick }}" style="{{ h.style }}">{{ h.place }}</div>
+                        </sc-for>
+                      </div>
+                      <div style="padding:16px;border-radius:16px;background:var(--glass);border:1px solid var(--hair-soft);font-size:13px;color:var(--ink-2);text-wrap:pretty">{{ studyHubDetail }}</div>
+                      <div style="font-family:'Geist Mono',monospace;font-size:9px;letter-spacing:.16em;color:var(--ink-3);text-transform:uppercase;margin-top:6px">Línea de tiempo del revival</div>
+                      <sc-for list="{{ studyRevivalList }}" as="rv" hint-placeholder-count="4">
+                        <div style="display:flex;gap:14px;align-items:baseline">
+                          <div style="font-family:'Geist Mono',monospace;font-size:11px;font-weight:700;color:var(--yellow);min-width:60px">{{ rv.year }}</div>
+                          <div style="font-size:12.5px;color:var(--ink-2)">{{ rv.text }}</div>
+                        </div>
+                      </sc-for>
+                    </div>
+                  </sc-if>
+
+                  <div style="display:flex;flex-direction:column;gap:14px;padding-top:18px;border-top:1px solid var(--hair-soft)">
+                    <div style="font-family:'Geist Mono',monospace;font-size:9px;letter-spacing:.16em;color:var(--ink-3);text-transform:uppercase">Quiz corto</div>
+                    <sc-for list="{{ studyQuizList }}" as="q" hint-placeholder-count="3">
+                      <div style="display:flex;flex-direction:column;gap:8px">
+                        <div style="font-size:13.5px;font-weight:700;color:var(--ink)">{{ q.text }}</div>
+                        <div style="display:flex;flex-direction:column;gap:8px">
+                          <sc-for list="{{ q.options }}" as="opt" hint-placeholder-count="3">
+                            <div onClick="{{ opt.pick }}" style="{{ opt.style }}">{{ opt.label }}</div>
+                          </sc-for>
+                        </div>
+                      </div>
+                    </sc-for>
+                    <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+                      <sc-if value="{{ studyQuizNotSubmitted }}">
+                        <div onClick="{{ studySubmitQuizClick }}" style="padding:11px 20px;border-radius:999px;font-size:12.5px;font-weight:700;color:#14111A;background:var(--yellow);cursor:pointer">Enviar respuestas</div>
+                      </sc-if>
+                      <sc-if value="{{ studyQuizSubmitted }}">
+                        <div style="font-family:'Geist Mono',monospace;font-size:12px;color:var(--yellow);font-weight:700">{{ studyQuizScoreLabel }}</div>
+                        <sc-if value="{{ studyHasNextModule }}">
+                          <div onClick="{{ studyGoNextClick }}" style="padding:11px 20px;border-radius:999px;font-size:12.5px;font-weight:700;color:#14111A;background:var(--yellow);cursor:pointer">Módulo completado · Siguiente →</div>
+                        </sc-if>
+                      </sc-if>
+                    </div>
+                  </div>
+                </div>
+              </sc-if>
+            </sc-if>
           </div>
         </sc-if>
 

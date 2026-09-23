@@ -96,6 +96,12 @@ service cloud.firestore {
       allow delete: if signedIn() && request.auth.uid == uid;
     }
 
+    // ── Progreso del Plan de Estudio de Waacking (solo el dueño lo ve y lo edita):
+    //    { completedModules: [...], quizScores: {...}, checklist: {...}, reflections: {...}, updatedAt } ──
+    match /study_progress/{uid} {
+      allow read, write: if signedIn() && request.auth.uid == uid;
+    }
+
     // ── Comunidad (público para usuarios con sesión): cada quien solo publica y edita lo suyo ──
     match /community_messages/{id} {
       allow read: if signedIn();

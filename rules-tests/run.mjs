@@ -116,6 +116,14 @@ allow('cualquiera con sesión ve quién está en vivo', 'get', 'live_sessions/us
 allow('termina su propia transmisión', 'delete', 'live_sessions/user1', { uid: 'user1', data: { uid: 'user1' } });
 deny('NO termina la transmisión de otra persona', 'delete', 'live_sessions/user1', { uid: 'user2', data: { uid: 'user1' } });
 
+// Plan de Estudio de Waacking (progreso privado del usuario)
+allow('guarda su propio progreso del plan de estudio', 'create', 'study_progress/user1', { uid: 'user1', incoming: { completedModules: ['historia'] } });
+allow('actualiza su propio progreso del plan de estudio', 'update', 'study_progress/user1', { uid: 'user1', incoming: { completedModules: ['historia', 'tecnica'] } });
+deny('NO guarda progreso en el documento de otra persona', 'create', 'study_progress/user1', { uid: 'user2', incoming: { completedModules: ['historia'] } });
+allow('lee su propio progreso del plan de estudio', 'get', 'study_progress/user1', { uid: 'user1', data: { completedModules: [] } });
+deny('NO lee el progreso de otra persona', 'get', 'study_progress/user1', { uid: 'user2', data: { completedModules: [] } });
+deny('NO borra el progreso de otra persona', 'delete', 'study_progress/user1', { uid: 'user2', data: { completedModules: [] } });
+
 // comunidad
 allow('publica en el muro con su uid', 'create', 'community_messages/m1', { uid: 'user1', incoming: { uid: 'user1', text: 'hola' } });
 deny('NO publica suplantando a otro', 'create', 'community_messages/m1', { uid: 'user1', incoming: { uid: 'user2', text: 'hola' } });

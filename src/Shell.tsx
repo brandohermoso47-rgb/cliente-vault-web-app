@@ -12,6 +12,7 @@ import Podcast from './views/Podcast';
 import Lives from './views/Lives';
 import Reels from './views/Reels';
 import Lab from './views/Lab';
+import Study from './views/Study';
 import Fisico from './views/Fisico';
 import Perfil from './views/Perfil';
 import Ebooks from './views/Ebooks';
@@ -127,6 +128,18 @@ export default function Shell({ v }: { v: any }) {
               {' '}
               <span style={sty(v.navLabel)}>
                 {"Cuerpo & Estiramientos"}
+              </span>
+            </div>
+            <div onClick={v.goStudy} style={sty(v.navStudy)}>
+              <span style={{"display":"flex","alignItems":"center","justifyContent":"center","width":"28px","height":"28px","flex":"0 0 28px","borderRadius":"9px","color":"var(--yellow)","border":"1px solid var(--yellow)","background":"color-mix(in oklch, var(--yellow) 16%, transparent)"}}>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                  <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                  <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"></path>
+                </svg>
+              </span>
+              {' '}
+              <span style={sty(v.navLabel)}>
+                {"Plan de Estudio"}
               </span>
             </div>
             <div onClick={v.goEbooks} style={sty(v.navEbooks)}>
@@ -449,6 +462,7 @@ export default function Shell({ v }: { v: any }) {
         {v.isLives && <Lives v={v} />}
         {v.isReels && <Reels v={v} />}
         {v.isLab && <Lab v={v} />}
+        {v.isStudy && <Study v={v} />}
         {v.isFisico && <Fisico v={v} />}
         {v.isPerfil && <Perfil v={v} />}
         {v.isEbooks && <Ebooks v={v} />}
