@@ -27,8 +27,10 @@ service cloud.firestore {
         && request.resource.data.keys().hasOnly(['displayName', 'photoURL', 'photoPath', 'handle', 'country', 'countryCode', 'bio', 'accountType', 'role', 'createdAt', 'updatedAt', 'email'])
         && shortText('bio', 280) && shortText('displayName', 80) && shortText('handle', 20);
       // El dueño edita su perfil pero no su rol; solo un admin cambia roles.
+      // Se revisan solo los campos que de verdad cambian (diff), no todo el documento: así un perfil
+      // viejo con algún campo heredado no bloquea futuras ediciones (p. ej. subir la foto).
       allow update: if (isOwner(userId) && roleUnchanged()
-          && request.resource.data.keys().hasOnly(['displayName', 'photoURL', 'photoPath', 'handle', 'country', 'countryCode', 'bio', 'accountType', 'role', 'createdAt', 'updatedAt', 'email'])
+          && only(['displayName', 'photoURL', 'photoPath', 'handle', 'country', 'countryCode', 'bio', 'accountType', 'role', 'createdAt', 'updatedAt', 'email'])
           && shortText('bio', 280) && shortText('displayName', 80) && shortText('handle', 20))
         || isAdmin();
       allow delete: if isAdmin();

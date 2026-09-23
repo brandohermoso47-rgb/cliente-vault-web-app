@@ -46,6 +46,9 @@ allow('edita su propio perfil sin tocar el rol', 'update', 'users/user1', { uid:
 deny('NO puede subirse el rol a admin', 'update', 'users/user1', { uid: 'user1', data: validProfile, incoming: { ...validProfile, role: 'admin' } });
 deny('NO puede editar el perfil de otro', 'update', 'users/user2', { uid: 'user1', data: validProfile, incoming: { ...validProfile, bio: 'hackeado' } });
 allow('un admin sí puede cambiar roles', 'update', 'users/user2', { uid: 'admin1', data: validProfile, incoming: { ...validProfile, role: 'instructor' } });
+// Un perfil viejo con un campo heredado (fuera de la lista actual) no debe bloquear futuras ediciones,
+// como subir la foto: solo se revisan los campos que cambian, no todo el documento.
+allow('sube la foto aunque el perfil tenga un campo heredado', 'update', 'users/user1', { uid: 'user1', data: { ...validProfile, legacyField: 'x' }, incoming: { ...validProfile, legacyField: 'x', photoURL: 'https://x', photoPath: 'users/user1/avatar/1.png' } });
 deny('nadie borra perfiles salvo admin', 'delete', 'users/user2', { uid: 'user1', data: validProfile });
 allow('el dueño lee su galería privada', 'get', 'users/user1/media/m1', { uid: 'user1', data: { url: 'x' } });
 deny('otro usuario NO lee la galería privada', 'get', 'users/user1/media/m1', { uid: 'user2', data: { url: 'x' } });
