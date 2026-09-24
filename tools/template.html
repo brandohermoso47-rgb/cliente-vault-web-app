@@ -2472,36 +2472,72 @@
             </sc-if>
 
             <sc-if value="{{ insIsClasses }}">
-              <div style="display:flex;flex-direction:column;gap:10px">
-                <sc-for list="{{ insClassList }}" as="c" hint-placeholder-count="3">
-                  <div style="display:flex;align-items:center;gap:14px;padding:17px 19px;border-radius:20px;border:1px solid var(--hair);background:var(--glass);backdrop-filter:var(--lg-blur);-webkit-backdrop-filter:var(--lg-blur);box-shadow:var(--lg-edge);flex-wrap:wrap">
-                    <div style="flex:1;min-width:200px">
-                      <div style="font-size:14px;font-weight:700;color:var(--ink)">{{ c.title }}</div>
-                      <div style="font-family:'Geist Mono',monospace;font-size:10px;color:var(--ink-3);margin-top:5px">{{ c.when }} · {{ c.who }}</div>
-                    </div>
-                    <span style="{{ c.badge }}">{{ c.state }}</span>
-                    <span style="padding:10px 17px;border-radius:999px;font-size:12px;font-weight:700;color:var(--ink);border:1px solid var(--hair);background:var(--glass-2);cursor:pointer;white-space:nowrap" style-hover="border-color:var(--pink)">Abrir sala</span>
+              <div style="display:flex;flex-direction:column;gap:20px">
+                <!-- Create class form -->
+                <div style="display:flex;flex-direction:column;gap:12px;padding:20px;border-radius:22px;border:1px solid var(--hair);background:var(--glass);backdrop-filter:var(--lg-blur);-webkit-backdrop-filter:var(--lg-blur);box-shadow:var(--lg-edge)">
+                  <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+                    <div style="font-size:14px;font-weight:700;color:var(--ink)">Crear nueva clase</div>
                   </div>
-                </sc-for>
+                  <input value="{{ insClassTitleValue }}" onChange="{{ insClassTitleChange }}" placeholder="Título de la clase" style="width:100%;box-sizing:border-box;padding:11px 14px;border-radius:14px;border:1px solid var(--hair);background:var(--glass-2);color:var(--ink);font-size:13px;outline:none" />
+                  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px">
+                    <input value="{{ insClassScheduleDayValue }}" onChange="{{ insClassScheduleDayChange }}" placeholder="Día (ej. Lunes)" style="box-sizing:border-box;padding:11px 14px;border-radius:14px;border:1px solid var(--hair);background:var(--glass-2);color:var(--ink);font-size:13px;outline:none" />
+                    <input value="{{ insClassScheduleTimeValue }}" onChange="{{ insClassScheduleTimeChange }}" placeholder="Hora (ej. 19:00)" style="box-sizing:border-box;padding:11px 14px;border-radius:14px;border:1px solid var(--hair);background:var(--glass-2);color:var(--ink);font-size:13px;outline:none" />
+                    <input type="number" value="{{ insClassCapacityValue }}" onChange="{{ insClassCapacityChange }}" placeholder="Capacidad" min="1" style="box-sizing:border-box;padding:11px 14px;border-radius:14px;border:1px solid var(--hair);background:var(--glass-2);color:var(--ink);font-size:13px;outline:none" />
+                  </div>
+                  <input value="{{ insClassDescriptionValue }}" onChange="{{ insClassDescriptionChange }}" placeholder="Descripción (opcional)" style="width:100%;box-sizing:border-box;padding:11px 14px;border-radius:14px;border:1px solid var(--hair);background:var(--glass-2);color:var(--ink);font-size:13px;outline:none" />
+                  <sc-if value="{{ insClassErr }}">
+                    <div style="font-size:12px;color:#FF9A7A">{{ insClassErr }}</div>
+                  </sc-if>
+                  <div onClick="{{ insClassSubmit }}" style="padding:10px 17px;border-radius:999px;font-size:12px;font-weight:700;color:#14111A;background:var(--pink);box-shadow:0 8px 18px -8px var(--pink), inset 0 1px 0 rgba(255,255,255,.3);cursor:pointer;white-space:nowrap;text-align:center" style-hover="opacity:.9">{{ insClassLabel }}</div>
+                </div>
+                <!-- Class list -->
+                <div style="display:flex;flex-direction:column;gap:10px">
+                  <sc-for list="{{ insClassList }}" as="c" hint-placeholder-count="3">
+                    <div style="display:flex;align-items:center;gap:14px;padding:17px 19px;border-radius:20px;border:1px solid var(--hair);background:var(--glass);backdrop-filter:var(--lg-blur);-webkit-backdrop-filter:var(--lg-blur);box-shadow:var(--lg-edge);flex-wrap:wrap">
+                      <div style="flex:1;min-width:200px">
+                        <div style="font-size:14px;font-weight:700;color:var(--ink)">{{ c.title }}</div>
+                        <div style="font-family:'Geist Mono',monospace;font-size:10px;color:var(--ink-3);margin-top:5px">{{ c.when }} · {{ c.who }}</div>
+                      </div>
+                      <span style="{{ c.badge }}">{{ c.state }}</span>
+                      <span style="padding:10px 17px;border-radius:999px;font-size:12px;font-weight:700;color:var(--ink);border:1px solid var(--hair);background:var(--glass-2);cursor:pointer;white-space:nowrap" style-hover="border-color:var(--pink)">Abrir sala</span>
+                    </div>
+                  </sc-for>
+                </div>
               </div>
             </sc-if>
 
             <sc-if value="{{ insIsFinances }}">
-              <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px">
-                <div style="{{ statCard }}">
-                  <div style="font-family:'Geist Mono',monospace;font-size:9px;letter-spacing:.2em;color:var(--ink-3);text-transform:uppercase">Tu parte · 80%</div>
-                  <div style="margin-top:12px;font-family:'Instrument Serif',Georgia,serif;font-size:44px;color:var(--ink)">6.184 €</div>
-                  <div style="font-size:13px;color:var(--ink-2);margin-top:8px">Acumulado del trimestre</div>
+              <div style="display:flex;flex-direction:column;gap:20px">
+                <!-- Bank account form -->
+                <div style="display:flex;flex-direction:column;gap:12px;padding:20px;border-radius:22px;border:1px solid var(--hair);background:var(--glass);backdrop-filter:var(--lg-blur);-webkit-backdrop-filter:var(--lg-blur);box-shadow:var(--lg-edge)">
+                  <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+                    <div style="font-size:14px;font-weight:700;color:var(--ink)">Datos bancarios</div>
+                  </div>
+                  <input value="{{ insFinancesIbanValue }}" onChange="{{ insFinancesIbanChange }}" placeholder="IBAN" style="width:100%;box-sizing:border-box;padding:11px 14px;border-radius:14px;border:1px solid var(--hair);background:var(--glass-2);color:var(--ink);font-size:13px;outline:none" />
+                  <input value="{{ insFinancesAccountHolderValue }}" onChange="{{ insFinancesAccountHolderChange }}" placeholder="Titular de la cuenta" style="width:100%;box-sizing:border-box;padding:11px 14px;border-radius:14px;border:1px solid var(--hair);background:var(--glass-2);color:var(--ink);font-size:13px;outline:none" />
+                  <input value="{{ insFinancesBankNameValue }}" onChange="{{ insFinancesBankNameChange }}" placeholder="Nombre del banco" style="width:100%;box-sizing:border-box;padding:11px 14px;border-radius:14px;border:1px solid var(--hair);background:var(--glass-2);color:var(--ink);font-size:13px;outline:none" />
+                  <sc-if value="{{ insFinancesErr }}">
+                    <div style="font-size:12px;color:#FF9A7A">{{ insFinancesErr }}</div>
+                  </sc-if>
+                  <div onClick="{{ insFinancesSubmit }}" style="padding:10px 17px;border-radius:999px;font-size:12px;font-weight:700;color:#14111A;background:var(--pink);box-shadow:0 8px 18px -8px var(--pink), inset 0 1px 0 rgba(255,255,255,.3);cursor:pointer;white-space:nowrap;text-align:center" style-hover="opacity:.9">{{ insFinancesLabel }}</div>
                 </div>
-                <div style="{{ statCard }}">
-                  <div style="font-family:'Geist Mono',monospace;font-size:9px;letter-spacing:.2em;color:var(--ink-3);text-transform:uppercase">Plataforma · 20%</div>
-                  <div style="margin-top:12px;font-family:'Instrument Serif',Georgia,serif;font-size:44px;color:var(--ink)">1.546 €</div>
-                  <div style="font-size:13px;color:var(--ink-2);margin-top:8px">Comisión de Waack ON</div>
-                </div>
-                <div style="{{ statCard }}">
-                  <div style="font-family:'Geist Mono',monospace;font-size:9px;letter-spacing:.2em;color:var(--ink-3);text-transform:uppercase">Próximo pago</div>
-                  <div style="margin-top:12px;font-family:'Instrument Serif',Georgia,serif;font-size:44px;color:var(--ink)">1 oct</div>
-                  <div style="font-size:13px;color:var(--ink-2);margin-top:8px">Transferencia · ES·· 8842</div>
+                <!-- Finance stats -->
+                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px">
+                  <div style="{{ statCard }}">
+                    <div style="font-family:'Geist Mono',monospace;font-size:9px;letter-spacing:.2em;color:var(--ink-3);text-transform:uppercase">Tu parte · 80%</div>
+                    <div style="margin-top:12px;font-family:'Instrument Serif',Georgia,serif;font-size:44px;color:var(--ink)">6.184 €</div>
+                    <div style="font-size:13px;color:var(--ink-2);margin-top:8px">Acumulado del trimestre</div>
+                  </div>
+                  <div style="{{ statCard }}">
+                    <div style="font-family:'Geist Mono',monospace;font-size:9px;letter-spacing:.2em;color:var(--ink-3);text-transform:uppercase">Plataforma · 20%</div>
+                    <div style="margin-top:12px;font-family:'Instrument Serif',Georgia,serif;font-size:44px;color:var(--ink)">1.546 €</div>
+                    <div style="font-size:13px;color:var(--ink-2);margin-top:8px">Comisión de Waack ON</div>
+                  </div>
+                  <div style="{{ statCard }}">
+                    <div style="font-family:'Geist Mono',monospace;font-size:9px;letter-spacing:.2em;color:var(--ink-3);text-transform:uppercase">Próximo pago</div>
+                    <div style="margin-top:12px;font-family:'Instrument Serif',Georgia,serif;font-size:44px;color:var(--ink)">1 oct</div>
+                    <div style="font-size:13px;color:var(--ink-2);margin-top:8px">Transferencia · ES·· 8842</div>
+                  </div>
                 </div>
               </div>
             </sc-if>
@@ -2553,31 +2589,61 @@
             </sc-if>
 
             <sc-if value="{{ insIsPublish }}">
-              <div style="display:flex;flex-direction:column;gap:10px">
-                <sc-for list="{{ insCourseList }}" as="d" hint-placeholder-count="3">
-                  <div style="display:flex;align-items:center;gap:14px;padding:17px 19px;border-radius:20px;border:1px solid var(--hair);background:var(--glass);backdrop-filter:var(--lg-blur);-webkit-backdrop-filter:var(--lg-blur);box-shadow:var(--lg-edge);flex-wrap:wrap">
-                    <div style="flex:1;min-width:200px">
-                      <div style="font-size:14px;font-weight:700;color:var(--ink)">{{ d.title }}</div>
-                      <div style="font-family:'Geist Mono',monospace;font-size:10px;color:var(--ink-3);margin-top:5px">{{ d.meta }}</div>
-                    </div>
-                    <span style="{{ d.badge }}">{{ d.state }}</span>
-                    <span style="padding:10px 17px;border-radius:999px;font-size:12px;font-weight:700;color:#1A1400;background:linear-gradient(90deg,var(--gold-hi),var(--gold-lo));box-shadow:inset 0 1px 0 rgba(255,255,255,.5);cursor:pointer;white-space:nowrap">Editar</span>
+              <div style="display:flex;flex-direction:column;gap:20px">
+                <!-- Create course form -->
+                <div style="display:flex;flex-direction:column;gap:12px;padding:20px;border-radius:22px;border:1px solid var(--hair);background:var(--glass);backdrop-filter:var(--lg-blur);-webkit-backdrop-filter:var(--lg-blur);box-shadow:var(--lg-edge)">
+                  <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+                    <div style="font-size:14px;font-weight:700;color:var(--ink)">Crear nuevo curso</div>
                   </div>
-                </sc-for>
+                  <input value="{{ insCoursetTitleValue }}" onChange="{{ insCoursetTitleChange }}" placeholder="Título del curso" style="width:100%;box-sizing:border-box;padding:11px 14px;border-radius:14px;border:1px solid var(--hair);background:var(--glass-2);color:var(--ink);font-size:13px;outline:none" />
+                  <input value="{{ insCourseDescValue }}" onChange="{{ insCourseDescChange }}" placeholder="Descripción del curso" style="width:100%;box-sizing:border-box;padding:11px 14px;border-radius:14px;border:1px solid var(--hair);background:var(--glass-2);color:var(--ink);font-size:13px;outline:none" />
+                  <sc-if value="{{ insCourseErr }}">
+                    <div style="font-size:12px;color:#FF9A7A">{{ insCourseErr }}</div>
+                  </sc-if>
+                  <div onClick="{{ insCourseSubmit }}" style="padding:10px 17px;border-radius:999px;font-size:12px;font-weight:700;color:#14111A;background:var(--pink);box-shadow:0 8px 18px -8px var(--pink), inset 0 1px 0 rgba(255,255,255,.3);cursor:pointer;white-space:nowrap;text-align:center" style-hover="opacity:.9">{{ insCourseLabel }}</div>
+                </div>
+                <!-- Course list -->
+                <div style="display:flex;flex-direction:column;gap:10px">
+                  <sc-for list="{{ insCourseList }}" as="d" hint-placeholder-count="3">
+                    <div style="display:flex;align-items:center;gap:14px;padding:17px 19px;border-radius:20px;border:1px solid var(--hair);background:var(--glass);backdrop-filter:var(--lg-blur);-webkit-backdrop-filter:var(--lg-blur);box-shadow:var(--lg-edge);flex-wrap:wrap">
+                      <div style="flex:1;min-width:200px">
+                        <div style="font-size:14px;font-weight:700;color:var(--ink)">{{ d.title }}</div>
+                        <div style="font-family:'Geist Mono',monospace;font-size:10px;color:var(--ink-3);margin-top:5px">{{ d.meta }}</div>
+                      </div>
+                      <span style="{{ d.badge }}">{{ d.state }}</span>
+                      <span style="padding:10px 17px;border-radius:999px;font-size:12px;font-weight:700;color:#1A1400;background:linear-gradient(90deg,var(--gold-hi),var(--gold-lo));box-shadow:inset 0 1px 0 rgba(255,255,255,.5);cursor:pointer;white-space:nowrap">Editar</span>
+                    </div>
+                  </sc-for>
+                </div>
               </div>
             </sc-if>
 
             <sc-if value="{{ insIsPods }}">
-              <div style="display:flex;flex-direction:column;gap:10px">
-                <sc-for list="{{ insPodList }}" as="d" hint-placeholder-count="3">
-                  <div style="display:flex;align-items:center;gap:14px;padding:17px 19px;border-radius:20px;border:1px solid var(--hair);background:var(--glass);backdrop-filter:var(--lg-blur);-webkit-backdrop-filter:var(--lg-blur);box-shadow:var(--lg-edge)">
-                    <span style="display:flex;align-items:center;justify-content:center;width:40px;height:40px;flex:0 0 40px;border-radius:13px;background:linear-gradient(135deg,var(--pink),var(--purple));color:#fff"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"></path></svg></span>
-                    <div style="flex:1;min-width:0">
-                      <div style="font-size:14px;font-weight:700;color:var(--ink)">{{ d.title }}</div>
-                      <div style="font-family:'Geist Mono',monospace;font-size:10px;color:var(--ink-3);margin-top:5px">{{ d.meta }}</div>
-                    </div>
+              <div style="display:flex;flex-direction:column;gap:20px">
+                <!-- Create podcast form -->
+                <div style="display:flex;flex-direction:column;gap:12px;padding:20px;border-radius:22px;border:1px solid var(--hair);background:var(--glass);backdrop-filter:var(--lg-blur);-webkit-backdrop-filter:var(--lg-blur);box-shadow:var(--lg-edge)">
+                  <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+                    <div style="font-size:14px;font-weight:700;color:var(--ink)">Crear nuevo podcast</div>
                   </div>
-                </sc-for>
+                  <input value="{{ insPodcastTitleValue }}" onChange="{{ insPodcastTitleChange }}" placeholder="Título del podcast" style="width:100%;box-sizing:border-box;padding:11px 14px;border-radius:14px;border:1px solid var(--hair);background:var(--glass-2);color:var(--ink);font-size:13px;outline:none" />
+                  <input value="{{ insPodcastDescValue }}" onChange="{{ insPodcastDescChange }}" placeholder="Descripción del podcast" style="width:100%;box-sizing:border-box;padding:11px 14px;border-radius:14px;border:1px solid var(--hair);background:var(--glass-2);color:var(--ink);font-size:13px;outline:none" />
+                  <sc-if value="{{ insPodcastErr }}">
+                    <div style="font-size:12px;color:#FF9A7A">{{ insPodcastErr }}</div>
+                  </sc-if>
+                  <div onClick="{{ insPodcastSubmit }}" style="padding:10px 17px;border-radius:999px;font-size:12px;font-weight:700;color:#14111A;background:var(--pink);box-shadow:0 8px 18px -8px var(--pink), inset 0 1px 0 rgba(255,255,255,.3);cursor:pointer;white-space:nowrap;text-align:center" style-hover="opacity:.9">{{ insPodcastLabel }}</div>
+                </div>
+                <!-- Podcast list -->
+                <div style="display:flex;flex-direction:column;gap:10px">
+                  <sc-for list="{{ insPodList }}" as="d" hint-placeholder-count="3">
+                    <div style="display:flex;align-items:center;gap:14px;padding:17px 19px;border-radius:20px;border:1px solid var(--hair);background:var(--glass);backdrop-filter:var(--lg-blur);-webkit-backdrop-filter:var(--lg-blur);box-shadow:var(--lg-edge)">
+                      <span style="display:flex;align-items:center;justify-content:center;width:40px;height:40px;flex:0 0 40px;border-radius:13px;background:linear-gradient(135deg,var(--pink),var(--purple));color:#fff"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"></path></svg></span>
+                      <div style="flex:1;min-width:0">
+                        <div style="font-size:14px;font-weight:700;color:var(--ink)">{{ d.title }}</div>
+                        <div style="font-family:'Geist Mono',monospace;font-size:10px;color:var(--ink-3);margin-top:5px">{{ d.meta }}</div>
+                      </div>
+                    </div>
+                  </sc-for>
+                </div>
               </div>
             </sc-if>
 
