@@ -134,6 +134,46 @@ export function billingRouter(deps: Deps) {
     return { body: { priceMonthlyCents, currency: cur } };
   }));
 
+  // Resumen real de dinero del instructor: suscriptores activos, ingreso estimado con el reparto
+  // 75/25, y el saldo disponible/pendiente + último pago de su cuenta Stripe Connect (si ya la activó).
+  r.get('/billing/instructor-earnings', withAuth(deps), handle(deps, 'user', async ({ req, db }) => {
+    const user = req.user!;
+    if (!['instructor', 'estudio', 'admin'].includes(user.role)) throw new HttpError(403, 'forbidden', 'Solo instructores y estudios tienen finanzas.');
+
+    const [payout] = await db.select().from(payoutAccounts).where(eq(payoutAccounts.userId, user.id)).limit(1);
+    const [pricing] = await db.select().from(instructorPricing).where(eq(instructorPricing.userId, user.id)).limit(1);
+    // Las filas de `subscriptions` son de quien se suscribió (userId), no del instructor; con RLS solo se ven
+    // las propias, así que contar a los suscriptores de este instructor necesita la excepción de solo lectura.
+    const activeSubs = await elevate(db, async () => db.select({ id: subscriptions.id }).from(subscriptions)
+      .where(and(eq(subscriptions.instructorId, user.id), inArray(subscriptions.status, ['active', 'trialing', 'past_due']))));
+    const activeSubscribers = activeSubs.length;
+    const monthlyGrossCents = pricing ? activeSubscribers * pricing.priceMonthlyCents : 0;
+    const monthlyNetCents = Math.round((monthlyGrossCents * (100 - INSTRUCTOR_FEE_PERCENT)) / 100);
+    const base = {
+      activeSubscribers, monthlyGrossCents, monthlyNetCents, feePercent: INSTRUCTOR_FEE_PERCENT,
+      currency: pricing?.currency ?? 'usd', priceMonthlyCents: pricing?.priceMonthlyCents ?? null,
+    };
+
+    if (!payout) return { body: { ...base, onboarded: false, chargesEnabled: false, payoutsEnabled: false, available: [], pending: [], lastPayout: null } };
+
+    let available: { amount: number; currency: string }[] = [];
+    let pending: { amount: number; currency: string }[] = [];
+    let lastPayout: { amount: number; currency: string; arrivalDate: number; status: string } | null = null;
+    if (payout.chargesEnabled) {
+      try {
+        const stripe = needStripe(deps);
+        const balance = await stripe.balance.retrieve({}, { stripeAccount: payout.stripeAccountId });
+        available = balance.available.map((b) => ({ amount: b.amount, currency: b.currency }));
+        pending = balance.pending.map((b) => ({ amount: b.amount, currency: b.currency }));
+        const payouts = await stripe.payouts.list({ limit: 1 }, { stripeAccount: payout.stripeAccountId });
+        const p = payouts.data[0];
+        if (p) lastPayout = { amount: p.amount, currency: p.currency, arrivalDate: p.arrival_date, status: p.status };
+      } catch { /* si Stripe Connect falla, igual se muestra el resto de la información */ }
+    }
+
+    return { body: { ...base, onboarded: true, chargesEnabled: payout.chargesEnabled, payoutsEnabled: payout.payoutsEnabled, available, pending, lastPayout } };
+  }));
+
   r.post('/billing/portal', withAuth(deps), handle(deps, 'user', async ({ req, db }) => {
     const stripe = needStripe(deps);
     const [row] = await db.select().from(stripeCustomers).where(eq(stripeCustomers.userId, req.user!.id)).limit(1);

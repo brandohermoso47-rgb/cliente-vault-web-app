@@ -15,6 +15,7 @@ const roleMock = (uid, role) => ({ function: 'get', args: [{ exactValue: DOC(`us
 // Roles conocidos en las pruebas
 const MOCKS = [
   roleMock('admin1', 'admin'), roleMock('inst1', 'instructor'), roleMock('estu1', 'estudio'), roleMock('user1', 'usuario'), roleMock('user2', 'usuario'),
+  { function: 'get', args: [{ exactValue: DOC('groups/g1') }], result: { value: { data: { ownerId: 'inst1', memberIds: ['inst1', 'user1'] } } } },
   { function: 'get', args: [{ exactValue: DOC('battle_calls/call1') }], result: { value: { data: { callerId: 'user1', calleeId: 'user2' } } } },
 ];
 const auth = (uid) => ({ uid, token: { email_verified: true } });
@@ -176,6 +177,44 @@ allow('crea una batalla como anfitrión', 'create', 'battles/b1', { uid: 'user1'
 deny('NO crea batallas a nombre de otro', 'create', 'battles/b1', { uid: 'user1', incoming: { hostId: 'user2', participants: ['user2'] } });
 deny('un no participante NO edita la batalla', 'update', 'battles/b1', { uid: 'user2', data: { hostId: 'user1', participants: ['user1'] }, incoming: { hostId: 'user1', participants: ['user1', 'user2'] } });
 deny('NO cambia el anfitrión de la batalla', 'update', 'battles/b1', { uid: 'user1', data: { hostId: 'user1', participants: ['user1'] }, incoming: { hostId: 'user2', participants: ['user1'] } });
+
+// posts del dashboard (publicar foto/video)
+const post = { authorId: 'user1', authorName: 'Ana', authorHandle: '@ana', authorPhotoURL: null, text: 'hola', mediaUrl: 'https://x/y.jpg', mediaType: 'image', likesCount: 0, commentsCount: 0, createdAt: 1 };
+allow('posts: cualquiera con sesión publica una foto propia', 'create', 'posts/p1', { uid: 'user1', incoming: post });
+deny('posts: NO publica a nombre de otro', 'create', 'posts/p1', { uid: 'user2', incoming: post });
+deny('posts: campos desconocidos', 'create', 'posts/p1', { uid: 'user1', incoming: { ...post, extra: 1 } });
+allow('posts: lectura con sesión', 'get', 'posts/p1', { uid: 'user2', data: post });
+deny('posts: anónimo no lee', 'get', 'posts/p1', { data: post });
+
+// grupos (chat de grupo / clase grupal)
+const g = { name: 'Clase', description: 'x', kind: 'clase', ownerId: 'inst1', memberIds: ['inst1', 'user1'], createdAt: 1 };
+allow('grupos: cualquiera crea un grupo normal', 'create', 'groups/g2', { uid: 'user1', incoming: { name: 'Crew', description: '', kind: 'grupo', ownerId: 'user1', memberIds: ['user1'] } });
+deny('grupos: un usuario normal NO crea un grupo de clase', 'create', 'groups/g2', { uid: 'user1', incoming: { name: 'Crew', kind: 'clase', ownerId: 'user1', memberIds: ['user1'] } });
+allow('grupos: un instructor SÍ crea un grupo de clase', 'create', 'groups/g2', { uid: 'inst1', incoming: { name: 'Clase', kind: 'clase', ownerId: 'inst1', memberIds: ['inst1'] } });
+deny('grupos: NO se crea a nombre de otro', 'create', 'groups/g2', { uid: 'user1', incoming: { name: 'Crew', ownerId: 'user2', memberIds: ['user2'] } });
+deny('grupos: NO se crea con más miembros', 'create', 'groups/g2', { uid: 'user1', incoming: { name: 'Crew', ownerId: 'user1', memberIds: ['user1', 'user2'] } });
+allow('grupos: un miembro lee', 'get', 'groups/g1', { uid: 'user1', data: g });
+deny('grupos: quien no es miembro NO lee', 'get', 'groups/g1', { uid: 'user2', data: g });
+allow('grupos: se une agregándose a sí mismo', 'update', 'groups/g1', { uid: 'user2', data: g, incoming: { ...g, memberIds: ['inst1', 'user1', 'user2'] } });
+deny('grupos: NO mete a otra persona', 'update', 'groups/g1', { uid: 'user2', data: g, incoming: { ...g, memberIds: ['inst1', 'user1', 'admin1'] } });
+deny('grupos: unirse no cambia otros campos', 'update', 'groups/g1', { uid: 'user2', data: g, incoming: { ...g, name: 'hack', memberIds: ['inst1', 'user1', 'user2'] } });
+allow('grupos: un miembro se sale', 'update', 'groups/g1', { uid: 'user1', data: g, incoming: { ...g, memberIds: ['inst1'] } });
+deny('grupos: el dueño NO se sale', 'update', 'groups/g1', { uid: 'inst1', data: g, incoming: { ...g, memberIds: ['user1'] } });
+allow('grupos: el dueño edita el nombre', 'update', 'groups/g1', { uid: 'inst1', data: g, incoming: { ...g, name: 'Nuevo' } });
+deny('grupos: un miembro NO edita el nombre', 'update', 'groups/g1', { uid: 'user1', data: g, incoming: { ...g, name: 'Nuevo' } });
+allow('grupos: el dueño borra', 'delete', 'groups/g1', { uid: 'inst1', data: g });
+deny('grupos: un miembro NO borra', 'delete', 'groups/g1', { uid: 'user1', data: g });
+allow('grupos: un miembro lee mensajes', 'get', 'groups/g1/messages/m1', { uid: 'user1', data: { uid: 'inst1', text: 'hola' } });
+deny('grupos: un no miembro NO lee mensajes', 'get', 'groups/g1/messages/m1', { uid: 'user2', data: { uid: 'inst1', text: 'hola' } });
+allow('grupos: un miembro escribe', 'create', 'groups/g1/messages/m1', { uid: 'user1', incoming: { uid: 'user1', name: 'A', text: 'hola', kind: 'msg' } });
+deny('grupos: un no miembro NO escribe', 'create', 'groups/g1/messages/m1', { uid: 'user2', incoming: { uid: 'user2', name: 'A', text: 'hola' } });
+deny('grupos: NO escribe a nombre de otro', 'create', 'groups/g1/messages/m1', { uid: 'user1', incoming: { uid: 'inst1', name: 'A', text: 'hola' } });
+deny('grupos: un alumno NO publica el resumen de clase', 'create', 'groups/g1/messages/m1', { uid: 'user1', incoming: { uid: 'user1', name: 'A', text: 'resumen', kind: 'resumen' } });
+allow('grupos: el instructor SÍ publica el resumen', 'create', 'groups/g1/messages/m1', { uid: 'inst1', incoming: { uid: 'inst1', name: 'I', text: 'resumen', kind: 'resumen' } });
+deny('grupos: mensaje de más de 2000 caracteres', 'create', 'groups/g1/messages/m1', { uid: 'user1', incoming: { uid: 'user1', name: 'A', text: 'x'.repeat(2001) } });
+allow('grupos: borra su propio mensaje', 'delete', 'groups/g1/messages/m1', { uid: 'user1', data: { uid: 'user1' } });
+allow('grupos: el dueño modera (borra)', 'delete', 'groups/g1/messages/m1', { uid: 'inst1', data: { uid: 'user1' } });
+deny('grupos: NO borra mensajes ajenos', 'delete', 'groups/g1/messages/m1', { uid: 'user1', data: { uid: 'inst1' } });
 
 // colecciones eliminadas o inexistentes: todo denegado por defecto
 deny('subscriptions ya no es accesible', 'get', 'subscriptions/s1', { uid: 'user1', data: { uid: 'user1' } });

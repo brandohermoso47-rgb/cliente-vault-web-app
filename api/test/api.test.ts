@@ -180,6 +180,28 @@ describe('planes y checkout', () => {
     expect((await t.call('POST', '/api/v1/billing/checkout', { token: tok('ana'), body })).status).toBe(400); // a sí mismo
   });
 
+  it('finanzas del instructor: suscriptores, reparto y saldo real de Stripe Connect', async () => {
+    expect((await t.call('GET', '/api/v1/billing/instructor-earnings', { token: tok('alice') })).status).toBe(403); // no es instructor
+
+    // El checkout de arriba abrió la sesión; la suscripción en sí la crea el webhook al confirmarse el pago.
+    // Se usa un alumno nuevo (no "alice") para no ensuciar sus propias suscripciones en otras pruebas.
+    await t.call('POST', '/api/v1/session', { token: tok('finn') });
+    const finn = (await t.call('GET', '/api/v1/me', { token: tok('finn') })).json.user;
+    const ana = (await t.call('GET', '/api/v1/me', { token: tok('ana') })).json.user;
+    const sub = { id: 'sub_ana1', customer: 'cus_test_finn', status: 'active', currency: 'usd', cancel_at_period_end: false,
+      metadata: { userId: finn.id, planId: 'catedra', instructorId: ana.id }, items: { data: [{ price: { id: 'price_test1' }, current_period_end: 1893456000 }] } };
+    await t.call('POST', '/api/v1/webhooks/stripe', { raw: JSON.stringify({ id: 'evt_ana_sub1', type: 'customer.subscription.created', data: { object: sub } }), headers: { 'stripe-signature': 'good' } });
+
+    const earn = await t.call('GET', '/api/v1/billing/instructor-earnings', { token: tok('ana') });
+    expect(earn.status).toBe(200);
+    expect(earn.json).toMatchObject({
+      onboarded: true, chargesEnabled: true, activeSubscribers: 1, feePercent: 25,
+      priceMonthlyCents: 2900, monthlyGrossCents: 2900, monthlyNetCents: 2175,
+      available: [{ amount: 4200, currency: 'usd' }], pending: [{ amount: 1500, currency: 'usd' }],
+      lastPayout: { amount: 3000, currency: 'usd', status: 'paid' },
+    });
+  });
+
   it('el instructor también se puede identificar por su UID de Firebase', async () => {
     await t.call('POST', '/api/v1/session', { token: tok('dave') });
     const ok = await t.call('POST', '/api/v1/billing/checkout', { token: tok('dave'), body: { planId: 'catedra', interval: 'month', instructorId: 'ana' } });

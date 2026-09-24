@@ -16,10 +16,12 @@ import Study from './views/Study';
 import Fisico from './views/Fisico';
 import Perfil from './views/Perfil';
 import Ebooks from './views/Ebooks';
+import Grupos from './views/Grupos';
 import Muro from './views/Muro';
 import Ranking from './views/Ranking';
 import Planes from './views/Planes';
 import Support from './views/Support';
+import InstructorLocked from './views/InstructorLocked';
 import Instructor from './views/Instructor';
 import Account from './screens/Account';
 
@@ -285,27 +287,45 @@ export default function Shell({ v }: { v: any }) {
                 {"3"}
               </span>
             </div>
-            <div onClick={v.goInstructor} style={sty(v.navInstructor)}>
-              <span style={{"display":"flex","alignItems":"center","justifyContent":"center","width":"28px","height":"28px","flex":"0 0 28px","borderRadius":"9px","color":"color-mix(in oklch, var(--purple) 60%, var(--pink))","border":"1px solid color-mix(in oklch, var(--purple) 60%, var(--pink))","background":"color-mix(in oklch, color-mix(in oklch, var(--purple) 60%, var(--pink)) 16%, transparent)"}}>
+            <div onClick={v.goGrupos} style={sty(v.navGrupos)}>
+              <span style={{"display":"flex","alignItems":"center","justifyContent":"center","width":"28px","height":"28px","flex":"0 0 28px","borderRadius":"9px","color":"var(--blue)","border":"1px solid var(--blue)","background":"color-mix(in oklch, var(--blue) 16%, transparent)"}}>
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-                  <path d="M12 3 2 8l10 5 10-5-10-5Z"></path>
-                  <path d="M6 11v5c0 1 2.7 2.5 6 2.5s6-1.5 6-2.5v-5"></path>
-                  <path d="M22 8v6"></path>
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="10" cy="7" r="4"></circle>
+                  <path d="M21 21v-2a4 4 0 0 0-3-3.9"></path>
+                  <path d="M16 3.1a4 4 0 0 1 0 7.8"></path>
                 </svg>
               </span>
               {' '}
               <span style={sty(v.navLabel)}>
-                {"Panel de Instructor"}
+                {"Grupos"}
               </span>
-              {' '}
-              {v.navOpen && (
-                <>
-                  <span style={{"fontFamily":"'Geist Mono',monospace","fontSize":"8px","fontWeight":"700","letterSpacing":".1em","color":"#fff","background":"var(--purple)","padding":"3px 7px","borderRadius":"999px"}}>
-                    {"DOCENTE"}
-                  </span>
-                </>
-              )}
             </div>
+            {v.isRealInstructor && (
+              <>
+                <div onClick={v.goInstructor} style={sty(v.navInstructor)}>
+                  <span style={{"display":"flex","alignItems":"center","justifyContent":"center","width":"28px","height":"28px","flex":"0 0 28px","borderRadius":"9px","color":"color-mix(in oklch, var(--purple) 60%, var(--pink))","border":"1px solid color-mix(in oklch, var(--purple) 60%, var(--pink))","background":"color-mix(in oklch, color-mix(in oklch, var(--purple) 60%, var(--pink)) 16%, transparent)"}}>
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                      <path d="M12 3 2 8l10 5 10-5-10-5Z"></path>
+                      <path d="M6 11v5c0 1 2.7 2.5 6 2.5s6-1.5 6-2.5v-5"></path>
+                      <path d="M22 8v6"></path>
+                    </svg>
+                  </span>
+                  {' '}
+                  <span style={sty(v.navLabel)}>
+                    {"Panel de Instructor"}
+                  </span>
+                  {' '}
+                  {v.navOpen && (
+                    <>
+                      <span style={{"fontFamily":"'Geist Mono',monospace","fontSize":"8px","fontWeight":"700","letterSpacing":".1em","color":"#fff","background":"var(--purple)","padding":"3px 7px","borderRadius":"999px"}}>
+                        {"DOCENTE"}
+                      </span>
+                    </>
+                  )}
+                </div>
+              </>
+            )}
             <div onClick={v.goSupport} style={sty(v.navSupport)}>
               <span style={{"display":"flex","alignItems":"center","justifyContent":"center","width":"28px","height":"28px","flex":"0 0 28px","borderRadius":"9px","color":"color-mix(in oklch, var(--blue) 55%, var(--yellow))","border":"1px solid color-mix(in oklch, var(--blue) 55%, var(--yellow))","background":"color-mix(in oklch, color-mix(in oklch, var(--blue) 55%, var(--yellow)) 16%, transparent)"}}>
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
@@ -466,10 +486,12 @@ export default function Shell({ v }: { v: any }) {
         {v.isFisico && <Fisico v={v} />}
         {v.isPerfil && <Perfil v={v} />}
         {v.isEbooks && <Ebooks v={v} />}
+        {v.isGrupos && <Grupos v={v} />}
         {v.isMuro && <Muro v={v} />}
         {v.isRanking && <Ranking v={v} />}
         {v.isPlanes && <Planes v={v} />}
         {v.isSupport && <Support v={v} />}
+        {v.isInstructorLocked && <InstructorLocked v={v} />}
         {v.isInstructor && <Instructor v={v} />}
         {v.isCuenta && <Account go={v.goView} />}
         </div>

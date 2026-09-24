@@ -21,6 +21,93 @@ export default function Lives({ v }: { v: any }) {
           </div>
         </div>
       </div>
+      <div style={{"display":"flex","flexDirection":"column","gap":"14px","padding":"22px","borderRadius":"24px","border":"1px solid var(--hair)","background":"var(--glass)","backdropFilter":"blur(30px)"}}>
+        <div style={{"display":"flex","alignItems":"center","justifyContent":"space-between","gap":"12px","flexWrap":"wrap"}}>
+          <div style={{"fontFamily":"'Geist Mono',monospace","fontSize":"10px","letterSpacing":".18em","color":"var(--ink-3)","textTransform":"uppercase"}}>
+            {"Transmitir en vivo"}
+          </div>
+          <div onClick={v.liveToggle} style={sty(v.liveToggleStyle)}>
+            {v.liveToggleLabel}
+          </div>
+        </div>
+        {v.liveErr && (
+          <>
+            <div style={{"padding":"10px 14px","borderRadius":"12px","background":"color-mix(in oklch, var(--pink) 14%, transparent)","color":"var(--pink)","fontSize":"12px"}}>
+              {v.liveErr}
+            </div>
+          </>
+        )}
+        {v.liveOn && (
+          <>
+            <div style={{"position":"relative","aspectRatio":"16/9","maxWidth":"640px","borderRadius":"18px","overflow":"hidden","background":"#000"}}>
+              <video ref={v.setLivePreviewEl} autoPlay="" muted="" playsInline="" style={{"width":"100%","height":"100%","objectFit":"cover","transform":"scaleX(-1)"}}></video>
+              {' '}
+              <span style={{"position":"absolute","top":"10px","left":"10px","padding":"4px 10px","borderRadius":"999px","background":"var(--pink)","color":"#fff","fontFamily":"'Geist Mono',monospace","fontSize":"9px","fontWeight":"700","letterSpacing":".12em"}}>
+                {"EN VIVO"}
+              </span>
+            </div>
+            <div style={{"fontSize":"12px","color":"var(--ink-3)"}}>
+              {v.liveViewersLabel}
+            </div>
+          </>
+        )}
+        {!v.liveOn && (
+          <>
+            <div style={{"fontSize":"12.5px","lineHeight":"1.6","color":"var(--ink-2)","maxWidth":"560px"}}>
+              {"Enciende tu cámara y micrófono para transmitir. Cualquier usuario puede ver tu transmisión desde esta pantalla. Tu navegador te pedirá permiso."}
+            </div>
+          </>
+        )}
+      </div>
+      <div style={{"display":"flex","flexDirection":"column","gap":"14px","padding":"22px","borderRadius":"24px","border":"1px solid var(--hair)","background":"var(--glass)","backdropFilter":"blur(30px)"}}>
+        <div style={{"fontFamily":"'Geist Mono',monospace","fontSize":"10px","letterSpacing":".18em","color":"var(--ink-3)","textTransform":"uppercase"}}>
+          {"En vivo ahora"}
+        </div>
+        {v.liveIsWatching && (
+          <>
+            <div style={{"position":"relative","aspectRatio":"16/9","maxWidth":"760px","borderRadius":"18px","overflow":"hidden","background":"#000"}}>
+              <video ref={v.setLiveWatchEl} autoPlay="" playsInline="" style={{"width":"100%","height":"100%","objectFit":"contain"}}></video>
+              {' '}
+              <span style={{"position":"absolute","top":"10px","left":"10px","padding":"4px 10px","borderRadius":"999px","background":"var(--pink)","color":"#fff","fontFamily":"'Geist Mono',monospace","fontSize":"9px","fontWeight":"700","letterSpacing":".12em"}}>
+                {v.liveWatchStatus}
+              </span>
+              {' '}
+              <span style={{"position":"absolute","top":"10px","right":"10px","padding":"4px 10px","borderRadius":"999px","background":"rgba(0,0,0,.55)","color":"#fff","fontSize":"11px"}}>
+                {v.liveWatchName}
+              </span>
+            </div>
+            <div onClick={v.liveLeave} style={{"alignSelf":"flex-start","padding":"10px 18px","borderRadius":"999px","fontSize":"12px","fontWeight":"700","color":"var(--ink)","border":"1px solid var(--hair)","background":"var(--glass-2)","cursor":"pointer"}}>
+              {"Dejar de ver"}
+            </div>
+          </>
+        )}
+        {v.liveHasList && (
+          <>
+            <div style={{"display":"flex","flexDirection":"column","gap":"8px"}}>
+              {(v.liveList ?? []).map((lv: any, $index: number) => (
+                <Fragment key={$index}>
+                  <div onClick={lv?.watch} style={{"display":"flex","alignItems":"center","gap":"12px","padding":"12px 16px","borderRadius":"14px","border":"1px solid var(--hair)","background":"var(--glass-2)","cursor":"pointer"}} className={cx(pc("hover", "border-color:var(--pink)"))}>
+                    <span style={{"width":"8px","height":"8px","borderRadius":"50%","background":"var(--pink)"}}></span>
+                    <span style={{"flex":"1","fontSize":"13px","color":"var(--ink)"}}>
+                      {lv?.name}
+                    </span>
+                    <span style={{"fontSize":"11.5px","color":"var(--pink)","fontWeight":"700"}}>
+                      {"Ver"}
+                    </span>
+                  </div>
+                </Fragment>
+              ))}
+            </div>
+          </>
+        )}
+        {!v.liveHasList && (
+          <>
+            <div style={{"fontSize":"12.5px","color":"var(--ink-3)"}}>
+              {"Nadie está transmitiendo ahora mismo."}
+            </div>
+          </>
+        )}
+      </div>
       {v.battlePanelOpen && (
         <>
           <div style={{"borderRadius":"24px","border":"1px solid var(--hair)","background":"var(--glass)","backdropFilter":"blur(30px)","padding":"22px"}}>
