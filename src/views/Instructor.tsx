@@ -152,8 +152,29 @@ export default function Instructor({ v }: { v: any }) {
       )}
       {v.insIsClasses && (
         <>
-          <div style={{"display":"flex","flexDirection":"column","gap":"10px"}}>
-            {(v.insClassList ?? []).map((c: any, $index: number) => (
+          <div style={{"display":"flex","flexDirection":"column","gap":"20px"}}>
+            {/* Create class form */}
+            <div style={{"display":"flex","flexDirection":"column","gap":"12px","padding":"20px","borderRadius":"22px","border":"1px solid var(--hair)","background":"var(--glass)","backdropFilter":"var(--lg-blur)","WebkitBackdropFilter":"var(--lg-blur)","boxShadow":"var(--lg-edge)"}}>
+              <div style={{"display":"flex","alignItems":"center","justifyContent":"space-between","gap":"12px","flexWrap":"wrap"}}>
+                <div style={{"fontSize":"14px","fontWeight":"700","color":"var(--ink)"}}>{"Crear nueva clase"}</div>
+              </div>
+              <input value={v.insClassTitleValue ?? ""} onChange={v.insClassTitleChange} placeholder="Título de la clase" style={{"width":"100%","boxSizing":"border-box","padding":"11px 14px","borderRadius":"14px","border":"1px solid var(--hair)","background":"var(--glass-2)","color":"var(--ink)","fontSize":"13px","outline":"none"}} />
+              <div style={{"display":"grid","gridTemplateColumns":"repeat(auto-fit,minmax(200px,1fr))","gap":"12px"}}>
+                <input value={v.insClassScheduleDayValue ?? ""} onChange={v.insClassScheduleDayChange} placeholder="Día (ej. Lunes)" style={{"boxSizing":"border-box","padding":"11px 14px","borderRadius":"14px","border":"1px solid var(--hair)","background":"var(--glass-2)","color":"var(--ink)","fontSize":"13px","outline":"none"}} />
+                <input value={v.insClassScheduleTimeValue ?? ""} onChange={v.insClassScheduleTimeChange} placeholder="Hora (ej. 19:00)" style={{"boxSizing":"border-box","padding":"11px 14px","borderRadius":"14px","border":"1px solid var(--hair)","background":"var(--glass-2)","color":"var(--ink)","fontSize":"13px","outline":"none"}} />
+                <input type="number" value={v.insClassCapacityValue ?? ""} onChange={v.insClassCapacityChange} placeholder="Capacidad" min="1" style={{"boxSizing":"border-box","padding":"11px 14px","borderRadius":"14px","border":"1px solid var(--hair)","background":"var(--glass-2)","color":"var(--ink)","fontSize":"13px","outline":"none"}} />
+              </div>
+              <input value={v.insClassDescriptionValue ?? ""} onChange={v.insClassDescriptionChange} placeholder="Descripción (opcional)" style={{"width":"100%","boxSizing":"border-box","padding":"11px 14px","borderRadius":"14px","border":"1px solid var(--hair)","background":"var(--glass-2)","color":"var(--ink)","fontSize":"13px","outline":"none"}} />
+              {v.insClassErr && (
+                <div style={{"fontSize":"12px","color":"#FF9A7A"}}>{v.insClassErr}</div>
+              )}
+              <div onClick={v.insClassSubmit} style={{"padding":"10px 17px","borderRadius":"999px","fontSize":"12px","fontWeight":"700","color":"#14111A","background":"var(--pink)","boxShadow":"0 8px 18px -8px var(--pink), inset 0 1px 0 rgba(255,255,255,.3)","cursor":"pointer","whiteSpace":"nowrap","textAlign":"center"}} className={cx(pc("hover", "opacity:.9"))}>
+                {v.insClassLabel}
+              </div>
+            </div>
+            {/* Class list */}
+            <div style={{"display":"flex","flexDirection":"column","gap":"10px"}}>
+              {(v.insClassList ?? []).map((c: any, $index: number) => (
               <Fragment key={$index}>
                 <div style={{"display":"flex","alignItems":"center","gap":"14px","padding":"17px 19px","borderRadius":"20px","border":"1px solid var(--hair)","background":"var(--glass)","backdropFilter":"var(--lg-blur)","WebkitBackdropFilter":"var(--lg-blur)","boxShadow":"var(--lg-edge)","flexWrap":"wrap"}}>
                   <div style={{"flex":"1","minWidth":"200px"}}>
@@ -175,12 +196,30 @@ export default function Instructor({ v }: { v: any }) {
                 </div>
               </Fragment>
             ))}
+            </div>
           </div>
         </>
       )}
       {v.insIsFinances && (
         <>
-          <div style={{"display":"grid","gridTemplateColumns":"repeat(auto-fit,minmax(260px,1fr))","gap":"20px"}}>
+          <div style={{"display":"flex","flexDirection":"column","gap":"20px"}}>
+            {/* Bank account form */}
+            <div style={{"display":"flex","flexDirection":"column","gap":"12px","padding":"20px","borderRadius":"22px","border":"1px solid var(--hair)","background":"var(--glass)","backdropFilter":"var(--lg-blur)","WebkitBackdropFilter":"var(--lg-blur)","boxShadow":"var(--lg-edge)"}}>
+              <div style={{"display":"flex","alignItems":"center","justifyContent":"space-between","gap":"12px","flexWrap":"wrap"}}>
+                <div style={{"fontSize":"14px","fontWeight":"700","color":"var(--ink)"}}>{"Datos bancarios"}</div>
+              </div>
+              <input value={v.insFinancesIbanValue ?? ""} onChange={v.insFinancesIbanChange} placeholder="IBAN" style={{"width":"100%","boxSizing":"border-box","padding":"11px 14px","borderRadius":"14px","border":"1px solid var(--hair)","background":"var(--glass-2)","color":"var(--ink)","fontSize":"13px","outline":"none"}} />
+              <input value={v.insFinancesAccountHolderValue ?? ""} onChange={v.insFinancesAccountHolderChange} placeholder="Titular de la cuenta" style={{"width":"100%","boxSizing":"border-box","padding":"11px 14px","borderRadius":"14px","border":"1px solid var(--hair)","background":"var(--glass-2)","color":"var(--ink)","fontSize":"13px","outline":"none"}} />
+              <input value={v.insFinancesBankNameValue ?? ""} onChange={v.insFinancesBankNameChange} placeholder="Nombre del banco" style={{"width":"100%","boxSizing":"border-box","padding":"11px 14px","borderRadius":"14px","border":"1px solid var(--hair)","background":"var(--glass-2)","color":"var(--ink)","fontSize":"13px","outline":"none"}} />
+              {v.insFinancesErr && (
+                <div style={{"fontSize":"12px","color":"#FF9A7A"}}>{v.insFinancesErr}</div>
+              )}
+              <div onClick={v.insFinancesSubmit} style={{"padding":"10px 17px","borderRadius":"999px","fontSize":"12px","fontWeight":"700","color":"#14111A","background":"var(--pink)","boxShadow":"0 8px 18px -8px var(--pink), inset 0 1px 0 rgba(255,255,255,.3)","cursor":"pointer","whiteSpace":"nowrap","textAlign":"center"}} className={cx(pc("hover", "opacity:.9"))}>
+                {v.insFinancesLabel}
+              </div>
+            </div>
+            {/* Finance stats */}
+            <div style={{"display":"grid","gridTemplateColumns":"repeat(auto-fit,minmax(260px,1fr))","gap":"20px"}}>
             <div style={sty(v.statCard)}>
               <div style={{"fontFamily":"'Geist Mono',monospace","fontSize":"9px","letterSpacing":".2em","color":"var(--ink-3)","textTransform":"uppercase"}}>
                 {"Tu parte · 80%"}
@@ -213,6 +252,7 @@ export default function Instructor({ v }: { v: any }) {
               <div style={{"fontSize":"13px","color":"var(--ink-2)","marginTop":"8px"}}>
                 {"Transferencia · ES·· 8842"}
               </div>
+            </div>
             </div>
           </div>
         </>
@@ -295,7 +335,23 @@ export default function Instructor({ v }: { v: any }) {
       )}
       {v.insIsPublish && (
         <>
-          <div style={{"display":"flex","flexDirection":"column","gap":"10px"}}>
+          <div style={{"display":"flex","flexDirection":"column","gap":"20px"}}>
+            {/* Create course form */}
+            <div style={{"display":"flex","flexDirection":"column","gap":"12px","padding":"20px","borderRadius":"22px","border":"1px solid var(--hair)","background":"var(--glass)","backdropFilter":"var(--lg-blur)","WebkitBackdropFilter":"var(--lg-blur)","boxShadow":"var(--lg-edge)"}}>
+              <div style={{"display":"flex","alignItems":"center","justifyContent":"space-between","gap":"12px","flexWrap":"wrap"}}>
+                <div style={{"fontSize":"14px","fontWeight":"700","color":"var(--ink)"}}>{"Crear nuevo curso"}</div>
+              </div>
+              <input value={v.insCoursetTitleValue ?? ""} onChange={v.insCoursetTitleChange} placeholder="Título del curso" style={{"width":"100%","boxSizing":"border-box","padding":"11px 14px","borderRadius":"14px","border":"1px solid var(--hair)","background":"var(--glass-2)","color":"var(--ink)","fontSize":"13px","outline":"none"}} />
+              <input value={v.insCourseDescValue ?? ""} onChange={v.insCourseDescChange} placeholder="Descripción (opcional)" style={{"width":"100%","boxSizing":"border-box","padding":"11px 14px","borderRadius":"14px","border":"1px solid var(--hair)","background":"var(--glass-2)","color":"var(--ink)","fontSize":"13px","outline":"none"}} />
+              {v.insCourseErr && (
+                <div style={{"fontSize":"12px","color":"#FF9A7A"}}>{v.insCourseErr}</div>
+              )}
+              <div onClick={v.insCourseSubmit} style={{"padding":"10px 17px","borderRadius":"999px","fontSize":"12px","fontWeight":"700","color":"#14111A","background":"var(--pink)","boxShadow":"0 8px 18px -8px var(--pink), inset 0 1px 0 rgba(255,255,255,.3)","cursor":"pointer","whiteSpace":"nowrap","textAlign":"center"}} className={cx(pc("hover", "opacity:.9"))}>
+                {v.insCourseLabel}
+              </div>
+            </div>
+            {/* Course list */}
+            <div style={{"display":"flex","flexDirection":"column","gap":"10px"}}>
             {(v.insCourseList ?? []).map((d: any, $index: number) => (
               <Fragment key={$index}>
                 <div style={{"display":"flex","alignItems":"center","gap":"14px","padding":"17px 19px","borderRadius":"20px","border":"1px solid var(--hair)","background":"var(--glass)","backdropFilter":"var(--lg-blur)","WebkitBackdropFilter":"var(--lg-blur)","boxShadow":"var(--lg-edge)","flexWrap":"wrap"}}>
@@ -316,12 +372,29 @@ export default function Instructor({ v }: { v: any }) {
                 </div>
               </Fragment>
             ))}
+            </div>
           </div>
         </>
       )}
       {v.insIsPods && (
         <>
-          <div style={{"display":"flex","flexDirection":"column","gap":"10px"}}>
+          <div style={{"display":"flex","flexDirection":"column","gap":"20px"}}>
+            {/* Create podcast form */}
+            <div style={{"display":"flex","flexDirection":"column","gap":"12px","padding":"20px","borderRadius":"22px","border":"1px solid var(--hair)","background":"var(--glass)","backdropFilter":"var(--lg-blur)","WebkitBackdropFilter":"var(--lg-blur)","boxShadow":"var(--lg-edge)"}}>
+              <div style={{"display":"flex","alignItems":"center","justifyContent":"space-between","gap":"12px","flexWrap":"wrap"}}>
+                <div style={{"fontSize":"14px","fontWeight":"700","color":"var(--ink)"}}>{"Crear nuevo podcast"}</div>
+              </div>
+              <input value={v.insPodcastTitleValue ?? ""} onChange={v.insPodcastTitleChange} placeholder="Título del podcast" style={{"width":"100%","boxSizing":"border-box","padding":"11px 14px","borderRadius":"14px","border":"1px solid var(--hair)","background":"var(--glass-2)","color":"var(--ink)","fontSize":"13px","outline":"none"}} />
+              <input value={v.insPodcastDescValue ?? ""} onChange={v.insPodcastDescChange} placeholder="Descripción (opcional)" style={{"width":"100%","boxSizing":"border-box","padding":"11px 14px","borderRadius":"14px","border":"1px solid var(--hair)","background":"var(--glass-2)","color":"var(--ink)","fontSize":"13px","outline":"none"}} />
+              {v.insPodcastErr && (
+                <div style={{"fontSize":"12px","color":"#FF9A7A"}}>{v.insPodcastErr}</div>
+              )}
+              <div onClick={v.insPodcastSubmit} style={{"padding":"10px 17px","borderRadius":"999px","fontSize":"12px","fontWeight":"700","color":"#14111A","background":"var(--pink)","boxShadow":"0 8px 18px -8px var(--pink), inset 0 1px 0 rgba(255,255,255,.3)","cursor":"pointer","whiteSpace":"nowrap","textAlign":"center"}} className={cx(pc("hover", "opacity:.9"))}>
+                {v.insPodcastLabel}
+              </div>
+            </div>
+            {/* Podcast list */}
+            <div style={{"display":"flex","flexDirection":"column","gap":"10px"}}>
             {(v.insPodList ?? []).map((d: any, $index: number) => (
               <Fragment key={$index}>
                 <div style={{"display":"flex","alignItems":"center","gap":"14px","padding":"17px 19px","borderRadius":"20px","border":"1px solid var(--hair)","background":"var(--glass)","backdropFilter":"var(--lg-blur)","WebkitBackdropFilter":"var(--lg-blur)","boxShadow":"var(--lg-edge)"}}>
@@ -341,6 +414,7 @@ export default function Instructor({ v }: { v: any }) {
                 </div>
               </Fragment>
             ))}
+            </div>
           </div>
         </>
       )}
