@@ -1208,6 +1208,9 @@ class App extends Component<any, any> {
     { v: '2,033', l: 'Ventas de cursos', d: '+21% vs. mes previo', c: 'var(--purple)' }
   ];
 
+  // El rol real viene de la API (/me); si la API no responde, se usa el rol del perfil de Firestore (solo un admin puede cambiarlo).
+  isDocente() { return !!this.subs.docente || ['instructor', 'estudio', 'admin'].includes(this.myProfile?.role); }
+
   insEarnings = null;
   insEarningsBusy = false;
   insEarningsErr = '';
@@ -1250,7 +1253,7 @@ class App extends Component<any, any> {
 
   setInsTab(id) {
     this.insTab = id;
-    if (id === 'finances' && this.subs.docente && !this.insEarnings) this.loadInsEarnings();
+    if (id === 'finances' && this.isDocente() && !this.insEarnings) this.loadInsEarnings();
     this.forceUpdate();
   }
   setStudent(id) { this.insStudent = this.insStudent === id ? null : id; this.forceUpdate(); }
@@ -2017,7 +2020,7 @@ class App extends Component<any, any> {
     if (this.gBusy) return;
     this.gBusy = true; this.gErr = ''; this.forceUpdate();
     try {
-      const id = await createGroup({ uid: auth.currentUser!.uid, name: this.gName, description: this.gDesc, kind: this.gKind === 'clase' && this.subs.docente ? 'clase' : 'grupo' });
+      const id = await createGroup({ uid: auth.currentUser!.uid, name: this.gName, description: this.gDesc, kind: this.gKind === 'clase' && this.isDocente() ? 'clase' : 'grupo' });
       this.gName = ''; this.gDesc = ''; this.gMode = 'list';
       this.gOpen(id);
     } catch (e: any) { this.gErr = e?.message || 'No se pudo crear el grupo.'; }
@@ -2925,7 +2928,7 @@ class App extends Component<any, any> {
       insLive: this.insLive,
       toggleInsLive: this.toggleInsLive,
       insLiveLabel: this.insLive ? 'Terminar clase en vivo' : 'Abrir sala en vivo',
-      isRealInstructor: this.subs.docente,
+      isRealInstructor: this.isDocente(),
       liveOn: !!this.liveStream,
       liveToggle: this.liveToggle,
       liveToggleLabel: this.liveBusy ? 'Abriendo cámara…' : (this.liveStream ? 'Terminar transmisión' : 'Encender cámara e ir en vivo'),
@@ -2958,7 +2961,7 @@ class App extends Component<any, any> {
       gGoCreate: () => { this.gKind = 'grupo'; this.gSetMode('create'); },
       gGoJoin: () => this.gSetMode('join'),
       gBack: this.gBack,
-      gCanClase: this.subs.docente,
+      gCanClase: this.isDocente(),
       gKindPicker: [['grupo', 'Grupo de amigos'], ['clase', 'Clase grupal']].map(([k, label]) => ({
         key: k, label, pick: () => this.gSetKind(k as any),
         style: 'padding:9px 16px;border-radius:999px;font-size:12px;cursor:pointer;' + (this.gKind === k
@@ -2968,7 +2971,7 @@ class App extends Component<any, any> {
       gNameValue: this.gName, gDescValue: this.gDesc, gJoinValue: this.gJoinCode, gTextValue: this.gText,
       gNameChange: this.gNameChange, gDescChange: this.gDescChange, gJoinChange: this.gJoinChange, gTextChange: this.gTextChange,
       gCreate: this.gCreate, gJoin: this.gJoin,
-      gCreateLabel: this.gBusy ? 'Creando…' : (this.gKind === 'clase' && this.subs.docente ? 'Crear grupo de clase' : 'Crear grupo'),
+      gCreateLabel: this.gBusy ? 'Creando…' : (this.gKind === 'clase' && this.isDocente() ? 'Crear grupo de clase' : 'Crear grupo'),
       gJoinLabel: this.gBusy ? 'Uniéndome…' : 'Unirme al grupo',
       gErr: this.gErr,
       gTitle: this.gActive()?.name || '',
@@ -3004,7 +3007,7 @@ class App extends Component<any, any> {
       gSendMsg: () => this.gSend('msg'), gSendResumen: () => this.gSend('resumen'),
       gSendLabel: this.gBusy ? 'Enviando…' : 'Enviar',
       gLeave: this.gLeave, gDelete: this.gDelete,
-      isInstructorLocked: v === 'instructor' && !this.subs.docente,
+      isInstructorLocked: v === 'instructor' && !this.isDocente(),
       insStudentMgmt: this.buildInsStudentMgmt(),
       insCommHub: this.buildInsCommHub(),
       insLiveShortLabel: this.insLive ? 'Terminar clase' : 'Start Live Class',

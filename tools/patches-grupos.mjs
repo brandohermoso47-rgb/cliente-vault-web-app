@@ -88,7 +88,7 @@ export default function patchesGrupos(s) {
     if (this.gBusy) return;
     this.gBusy = true; this.gErr = ''; this.forceUpdate();
     try {
-      const id = await createGroup({ uid: auth.currentUser!.uid, name: this.gName, description: this.gDesc, kind: this.gKind === 'clase' && this.subs.docente ? 'clase' : 'grupo' });
+      const id = await createGroup({ uid: auth.currentUser!.uid, name: this.gName, description: this.gDesc, kind: this.gKind === 'clase' && this.isDocente() ? 'clase' : 'grupo' });
       this.gName = ''; this.gDesc = ''; this.gMode = 'list';
       this.gOpen(id);
     } catch (e: any) { this.gErr = e?.message || 'No se pudo crear el grupo.'; }
@@ -155,7 +155,7 @@ export default function patchesGrupos(s) {
   myEbooks() {`);
 
   // Valores para la pantalla.
-  rep(`      isRealInstructor: this.subs.docente,`, `      isRealInstructor: this.subs.docente,
+  rep(`      isRealInstructor: this.isDocente(),`, `      isRealInstructor: this.isDocente(),
       gShowList: !this.gActiveId && this.gMode === 'list',
       gShowCreate: !this.gActiveId && this.gMode === 'create',
       gShowJoin: !this.gActiveId && this.gMode === 'join',
@@ -170,7 +170,7 @@ export default function patchesGrupos(s) {
       gGoCreate: () => { this.gKind = 'grupo'; this.gSetMode('create'); },
       gGoJoin: () => this.gSetMode('join'),
       gBack: this.gBack,
-      gCanClase: this.subs.docente,
+      gCanClase: this.isDocente(),
       gKindPicker: [['grupo', 'Grupo de amigos'], ['clase', 'Clase grupal']].map(([k, label]) => ({
         key: k, label, pick: () => this.gSetKind(k as any),
         style: 'padding:9px 16px;border-radius:999px;font-size:12px;cursor:pointer;' + (this.gKind === k
@@ -180,7 +180,7 @@ export default function patchesGrupos(s) {
       gNameValue: this.gName, gDescValue: this.gDesc, gJoinValue: this.gJoinCode, gTextValue: this.gText,
       gNameChange: this.gNameChange, gDescChange: this.gDescChange, gJoinChange: this.gJoinChange, gTextChange: this.gTextChange,
       gCreate: this.gCreate, gJoin: this.gJoin,
-      gCreateLabel: this.gBusy ? 'Creando…' : (this.gKind === 'clase' && this.subs.docente ? 'Crear grupo de clase' : 'Crear grupo'),
+      gCreateLabel: this.gBusy ? 'Creando…' : (this.gKind === 'clase' && this.isDocente() ? 'Crear grupo de clase' : 'Crear grupo'),
       gJoinLabel: this.gBusy ? 'Uniéndome…' : 'Unirme al grupo',
       gErr: this.gErr,
       gTitle: this.gActive()?.name || '',

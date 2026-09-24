@@ -11,8 +11,8 @@ export default function patchesInstructor(s) {
   rep(
     `      insLiveLabel: this.insLive ? 'Terminar clase en vivo' : 'Abrir sala en vivo',`,
     `      insLiveLabel: this.insLive ? 'Terminar clase en vivo' : 'Abrir sala en vivo',
-      isRealInstructor: this.subs.docente,
-      isInstructorLocked: v === 'instructor' && !this.subs.docente,
+      isRealInstructor: this.isDocente(),
+      isInstructorLocked: v === 'instructor' && !this.isDocente(),
       insStudentMgmt: this.buildInsStudentMgmt(),
       insCommHub: this.buildInsCommHub(),
       insLiveShortLabel: this.insLive ? 'Terminar clase' : 'Start Live Class',
@@ -35,7 +35,10 @@ export default function patchesInstructor(s) {
   // Datos + carga real de finanzas, y las listas del Dashboard.
   rep(
     `  setInsTab(id) { this.insTab = id; this.forceUpdate(); }`,
-    `  insEarnings = null;
+    `  // El rol real viene de la API (/me); si la API no responde, se usa el rol del perfil de Firestore (solo un admin puede cambiarlo).
+  isDocente() { return !!this.subs.docente || ['instructor', 'estudio', 'admin'].includes(this.myProfile?.role); }
+
+  insEarnings = null;
   insEarningsBusy = false;
   insEarningsErr = '';
 
@@ -77,7 +80,7 @@ export default function patchesInstructor(s) {
 
   setInsTab(id) {
     this.insTab = id;
-    if (id === 'finances' && this.subs.docente && !this.insEarnings) this.loadInsEarnings();
+    if (id === 'finances' && this.isDocente() && !this.insEarnings) this.loadInsEarnings();
     this.forceUpdate();
   }`
   );
