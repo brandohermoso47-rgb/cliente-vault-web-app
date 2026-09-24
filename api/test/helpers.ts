@@ -27,6 +27,8 @@ export async function makeTestApp(env: Record<string, string> = {}) {
     accountLinks: { create: async (p: any) => { stripeCalls.links.push(p); return { url: 'https://connect.stripe.test/l1' }; } },
     products: { create: async (p: any) => { stripeCalls.products.push(p); return { id: `prod_test${stripeCalls.products.length}` }; } },
     prices: { create: async (p: any) => { stripeCalls.prices.push(p); return { id: `price_test${stripeCalls.prices.length}` }; } },
+    balance: { retrieve: async () => ({ available: [{ amount: 4200, currency: 'usd' }], pending: [{ amount: 1500, currency: 'usd' }] }) },
+    payouts: { list: async () => ({ data: [{ amount: 3000, currency: 'usd', arrival_date: 1735689600, status: 'paid' }] }) },
     webhooks: {
       // La "firma" válida es la cadena "good"; el cuerpo es el evento en JSON.
       constructEvent: (body: Buffer, sig: string) => { if (sig !== 'good') throw new Error('bad signature'); return JSON.parse(body.toString()); },

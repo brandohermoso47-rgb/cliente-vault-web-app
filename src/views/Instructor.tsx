@@ -98,6 +98,11 @@ export default function Instructor({ v }: { v: any }) {
                 <div style={{"position":"absolute","inset":"0","background":"radial-gradient(70% 60% at 50% 38%, rgba(8,6,11,.15), rgba(8,6,11,.8) 78%)"}}></div>
                 <div style={{"position":"absolute","left":"50%","top":"42%","width":"34%","aspectRatio":"1","marginLeft":"-17%","borderRadius":"50%","background":"radial-gradient(circle at 34% 30%, #fff, rgba(233,196,226,.8) 30%, rgba(120,90,150,.7) 70%, rgba(20,14,26,.9))","boxShadow":"0 0 70px -10px rgba(255,190,240,.85)","animation":"metroBeat 1.6s ease-in-out infinite"}}></div>
                 <div style={{"position":"absolute","inset":"0","backgroundImage":"linear-gradient(rgba(255,196,240,.14) 1px, transparent 1px), linear-gradient(90deg, rgba(255,196,240,.14) 1px, transparent 1px)","backgroundSize":"44px 44px","maskImage":"linear-gradient(transparent, #000)","WebkitMaskImage":"linear-gradient(transparent, #000)"}}></div>
+                {v.insLive && (
+                  <>
+                    <video ref={v.setLivePreviewEl} autoPlay="" muted="" playsInline="" style={{"position":"absolute","inset":"0","width":"100%","height":"100%","objectFit":"cover","transform":"scaleX(-1)"}}></video>
+                  </>
+                )}
               </div>
               <div style={{"display":"flex","alignItems":"center","gap":"14px","flexWrap":"wrap"}}>
                 <span style={{"fontFamily":"'Geist Mono',monospace","fontSize":"10px","letterSpacing":".18em","color":"var(--ink-3)","textTransform":"uppercase"}}>
@@ -110,6 +115,78 @@ export default function Instructor({ v }: { v: any }) {
               </div>
               <div onClick={v.toggleInsLive} style={{"textAlign":"center","padding":"14px 20px","borderRadius":"999px","fontSize":"13px","fontWeight":"700","color":"#1A1400","background":"linear-gradient(90deg,var(--gold-hi),var(--gold-lo))","boxShadow":"inset 0 1px 0 rgba(255,255,255,.5)","cursor":"pointer"}}>
                 {v.insLiveLabel}
+              </div>
+            </div>
+          </div>
+          <div style={{"display":"grid","gridTemplateColumns":"minmax(0,1.15fr) minmax(0,1fr)","gap":"22px","alignItems":"start"}}>
+            <div style={{"display":"flex","flexDirection":"column","gap":"16px","padding":"24px","borderRadius":"26px","border":"1px solid var(--hair)","background":"var(--glass)","backdropFilter":"var(--lg-blur)","WebkitBackdropFilter":"var(--lg-blur)","boxShadow":"var(--lg-edge)"}}>
+              <div style={{"fontFamily":"'Geist Mono',monospace","fontSize":"9px","letterSpacing":".2em","color":"var(--ink-3)","textTransform":"uppercase"}}>
+                {"Student Management"}
+              </div>
+              {(v.insStudentMgmt ?? []).map((m: any, $index: number) => (
+                <Fragment key={$index}>
+                  <div style={{"display":"flex","flexDirection":"column","gap":"8px"}}>
+                    <div style={{"display":"flex","alignItems":"baseline","justifyContent":"space-between","gap":"10px"}}>
+                      <span style={{"fontSize":"13.5px","fontWeight":"700","color":"var(--ink)"}}>
+                        {m?.name}
+                      </span>
+                      <span style={{"fontFamily":"'Geist Mono',monospace","fontSize":"10.5px","color":"var(--ink-3)","whiteSpace":"nowrap"}}>
+                        {m?.fraction}
+                      </span>
+                    </div>
+                    <div style={{"height":"6px","borderRadius":"999px","background":"var(--hair)","overflow":"hidden"}}>
+                      <div style={sty(m?.bar)}></div>
+                    </div>
+                    <div style={{"fontSize":"11px","color":"var(--ink-3)"}}>
+                      {m?.pctLabel}
+                    </div>
+                  </div>
+                </Fragment>
+              ))}
+            </div>
+            <div style={{"display":"flex","flexDirection":"column","gap":"12px","padding":"24px","borderRadius":"26px","border":"1px solid var(--hair)","background":"var(--glass)","backdropFilter":"var(--lg-blur)","WebkitBackdropFilter":"var(--lg-blur)","boxShadow":"var(--lg-edge)"}}>
+              <div style={{"display":"flex","alignItems":"center","justifyContent":"space-between","gap":"12px"}}>
+                <div style={{"fontFamily":"'Geist Mono',monospace","fontSize":"9px","letterSpacing":".2em","color":"var(--ink-3)","textTransform":"uppercase"}}>
+                  {"Communication Hub"}
+                </div>
+                <div onClick={v.toggleInsLive} style={{"padding":"9px 16px","borderRadius":"999px","fontSize":"11.5px","fontWeight":"700","color":"#fff","background":"var(--pink)","cursor":"pointer","whiteSpace":"nowrap"}}>
+                  {v.insLiveShortLabel}
+                </div>
+              </div>
+              {(v.insCommHub ?? []).map((c: any, $index: number) => (
+                <Fragment key={$index}>
+                  <div style={{"display":"flex","alignItems":"center","gap":"12px","padding":"9px 0","borderTop":"1px solid var(--hair-soft)"}}>
+                    <span style={sty(c?.avatar)}></span>
+                    <div style={{"flex":"1","minWidth":"0"}}>
+                      <div style={{"fontSize":"13px","fontWeight":"700","color":"var(--ink)","whiteSpace":"nowrap","overflow":"hidden","textOverflow":"ellipsis"}}>
+                        {c?.name}
+                      </div>
+                      <div style={{"fontFamily":"'Geist Mono',monospace","fontSize":"9.5px","color":"var(--ink-3)","marginTop":"2px"}}>
+                        {c?.level}
+                      </div>
+                    </div>
+                    <span style={{"display":"inline-flex","alignItems":"center","gap":"5px","fontFamily":"'Geist Mono',monospace","fontSize":"9.5px","color":"var(--ink-3)","whiteSpace":"nowrap"}}>
+                      <span style={{"width":"5px","height":"5px","borderRadius":"50%","background":"var(--blue)"}}></span>
+                      {c?.last}
+                    </span>
+                  </div>
+                </Fragment>
+              ))}
+            </div>
+          </div>
+          <div style={{"display":"flex","flexDirection":"column","gap":"12px","padding":"22px 24px","borderRadius":"26px","border":"1px solid var(--hair)","background":"var(--glass)","backdropFilter":"var(--lg-blur)","WebkitBackdropFilter":"var(--lg-blur)","boxShadow":"var(--lg-edge)"}}>
+            <div style={{"fontFamily":"'Geist Mono',monospace","fontSize":"9px","letterSpacing":".2em","color":"var(--ink-3)","textTransform":"uppercase"}}>
+              {"Message · Grupos de clase"}
+            </div>
+            <p style={{"margin":"0","fontSize":"13px","lineHeight":"1.6","color":"var(--ink-2)"}}>
+              {"Crea un grupo para tu clase grupal: comparte el código con tus alumnos, chatea con ellos, comparte fotos y videos, y publica el resumen de la clase."}
+            </p>
+            <div style={{"display":"flex","gap":"10px","flexWrap":"wrap"}}>
+              <div onClick={v.goGruposClase} style={{"padding":"11px 20px","borderRadius":"999px","fontSize":"12.5px","fontWeight":"700","color":"#1A1400","background":"linear-gradient(90deg,var(--gold-hi),var(--gold-lo))","cursor":"pointer"}}>
+                {"Crear grupo de clase"}
+              </div>
+              <div onClick={v.goGrupos} style={{"padding":"11px 20px","borderRadius":"999px","fontSize":"12.5px","fontWeight":"700","color":"var(--ink)","border":"1px solid var(--hair)","background":"var(--glass-2)","cursor":"pointer"}}>
+                {"Ver mis grupos"}
               </div>
             </div>
           </div>
@@ -152,6 +229,41 @@ export default function Instructor({ v }: { v: any }) {
       )}
       {v.insIsClasses && (
         <>
+          <div style={{"display":"flex","flexDirection":"column","gap":"12px","padding":"20px","borderRadius":"22px","border":"1px solid var(--hair)","background":"var(--glass)","backdropFilter":"var(--lg-blur)","WebkitBackdropFilter":"var(--lg-blur)","boxShadow":"var(--lg-edge)","marginBottom":"6px"}}>
+            <div style={{"fontSize":"14px","fontWeight":"700","color":"var(--ink)"}}>
+              {"Programar una clase en el calendario"}
+            </div>
+            <input value={v.evTitleValue} onChange={v.evTitleChange} placeholder="Título de la clase" maxlength="100" style={{"width":"100%","boxSizing":"border-box","padding":"11px 14px","borderRadius":"14px","border":"1px solid var(--hair)","background":"var(--glass-2)","color":"var(--ink)","fontSize":"13px","outline":"none"}} />
+            <div style={{"display":"flex","gap":"10px","flexWrap":"wrap"}}>
+              <input type="datetime-local" value={v.evWhenValue} onChange={v.evWhenChange} style={{"flex":"1","minWidth":"200px","width":"100%","boxSizing":"border-box","padding":"11px 14px","borderRadius":"14px","border":"1px solid var(--hair)","background":"var(--glass-2)","color":"var(--ink)","fontSize":"13px","outline":"none"}} />
+              <input type="number" min="10" max="480" value={v.evDurationValue} onChange={v.evDurationChange} placeholder="Minutos" style={{"width":"100%","boxSizing":"border-box","padding":"11px 14px","borderRadius":"14px","border":"1px solid var(--hair)","background":"var(--glass-2)","color":"var(--ink)","fontSize":"13px","outline":"none"}} />
+            </div>
+            <textarea value={v.evDescValue} onChange={v.evDescChange} placeholder="Descripción (opcional)" rows="2" maxlength="500" style={{"width":"100%","boxSizing":"border-box","padding":"11px 14px","borderRadius":"14px","border":"1px solid var(--hair)","background":"var(--glass-2)","color":"var(--ink)","fontSize":"13px","outline":"none","fontFamily":"inherit","resize":"vertical"}}></textarea>
+            {v.evErr && (
+              <>
+                <div style={{"fontSize":"11.5px","color":"var(--pink)"}}>
+                  {v.evErr}
+                </div>
+              </>
+            )}
+            <div onClick={v.evSubmit} style={{"alignSelf":"flex-start","padding":"12px 22px","borderRadius":"999px","fontSize":"12.5px","fontWeight":"700","color":"#1A1400","background":"linear-gradient(90deg,var(--gold-hi),var(--gold-lo))","cursor":"pointer"}}>
+              {v.evSubmitLabel}
+            </div>
+            {(v.evMine ?? []).map((em: any, $index: number) => (
+              <Fragment key={$index}>
+                <div style={{"display":"flex","alignItems":"center","gap":"10px","fontSize":"12.5px","color":"var(--ink-2)"}}>
+                  <span style={{"flex":"1"}}>
+                    {em?.title}
+                    {" · "}
+                    {em?.when}
+                  </span>
+                  <span onClick={em?.del} style={{"cursor":"pointer","color":"var(--pink)"}}>
+                    {"Borrar"}
+                  </span>
+                </div>
+              </Fragment>
+            ))}
+          </div>
           <div style={{"display":"flex","flexDirection":"column","gap":"10px"}}>
             {(v.insClassList ?? []).map((c: any, $index: number) => (
               <Fragment key={$index}>
@@ -180,38 +292,83 @@ export default function Instructor({ v }: { v: any }) {
       )}
       {v.insIsFinances && (
         <>
-          <div style={{"display":"grid","gridTemplateColumns":"repeat(auto-fit,minmax(260px,1fr))","gap":"20px"}}>
-            <div style={sty(v.statCard)}>
-              <div style={{"fontFamily":"'Geist Mono',monospace","fontSize":"9px","letterSpacing":".2em","color":"var(--ink-3)","textTransform":"uppercase"}}>
-                {"Tu parte · 80%"}
+          <div style={{"display":"flex","flexDirection":"column","gap":"20px"}}>
+            {v.insFinBanner && (
+              <>
+                <div style={{"padding":"16px 18px","borderRadius":"18px","border":"1px solid var(--hair)","background":"var(--glass-2)","display":"flex","alignItems":"center","justifyContent":"space-between","gap":"14px","flexWrap":"wrap"}}>
+                  <span style={{"fontSize":"13px","color":"var(--ink-2)"}}>
+                    {v.insFinBannerText}
+                  </span>
+                  <div onClick={v.insFinConnect} style={{"padding":"10px 18px","borderRadius":"999px","fontSize":"12px","fontWeight":"700","color":"#1A1400","background":"linear-gradient(90deg,var(--gold-hi),var(--gold-lo))","cursor":"pointer","whiteSpace":"nowrap"}}>
+                    {"Configurar cobros"}
+                  </div>
+                </div>
+              </>
+            )}
+            {v.insEarningsErr && (
+              <>
+                <div style={{"fontSize":"12.5px","color":"var(--pink)"}}>
+                  {v.insEarningsErr}
+                </div>
+              </>
+            )}
+            <div style={{"display":"grid","gridTemplateColumns":"repeat(auto-fit,minmax(260px,1fr))","gap":"20px"}}>
+              <div style={sty(v.statCard)}>
+                <div style={{"fontFamily":"'Geist Mono',monospace","fontSize":"9px","letterSpacing":".2em","color":"var(--ink-3)","textTransform":"uppercase"}}>
+                  {v.insFinYourShareLabel}
+                </div>
+                <div style={{"marginTop":"12px","fontFamily":"'Instrument Serif',Georgia,serif","fontSize":"44px","color":"var(--ink)"}}>
+                  {v.insFinNet}
+                </div>
+                <div style={{"fontSize":"13px","color":"var(--ink-2)","marginTop":"8px"}}>
+                  {"Estimado al mes · "}
+                  {v.insFinSubs}
+                  {" suscriptores activos"}
+                </div>
               </div>
-              <div style={{"marginTop":"12px","fontFamily":"'Instrument Serif',Georgia,serif","fontSize":"44px","color":"var(--ink)"}}>
-                {"6.184 €"}
+              <div style={sty(v.statCard)}>
+                <div style={{"fontFamily":"'Geist Mono',monospace","fontSize":"9px","letterSpacing":".2em","color":"var(--ink-3)","textTransform":"uppercase"}}>
+                  {v.insFinPlatformShareLabel}
+                </div>
+                <div style={{"marginTop":"12px","fontFamily":"'Instrument Serif',Georgia,serif","fontSize":"44px","color":"var(--ink)"}}>
+                  {v.insFinGross}
+                </div>
+                <div style={{"fontSize":"13px","color":"var(--ink-2)","marginTop":"8px"}}>
+                  {"Comisión de Waack ON"}
+                </div>
               </div>
-              <div style={{"fontSize":"13px","color":"var(--ink-2)","marginTop":"8px"}}>
-                {"Acumulado del trimestre"}
+              <div style={sty(v.statCard)}>
+                <div style={{"fontFamily":"'Geist Mono',monospace","fontSize":"9px","letterSpacing":".2em","color":"var(--ink-3)","textTransform":"uppercase"}}>
+                  {"Disponible para retirar"}
+                </div>
+                <div style={{"marginTop":"12px","fontFamily":"'Instrument Serif',Georgia,serif","fontSize":"44px","color":"var(--ink)"}}>
+                  {v.insFinAvailable}
+                </div>
+                <div style={{"fontSize":"13px","color":"var(--ink-2)","marginTop":"8px"}}>
+                  {"Saldo en tu cuenta Stripe Connect"}
+                </div>
               </div>
-            </div>
-            <div style={sty(v.statCard)}>
-              <div style={{"fontFamily":"'Geist Mono',monospace","fontSize":"9px","letterSpacing":".2em","color":"var(--ink-3)","textTransform":"uppercase"}}>
-                {"Plataforma · 20%"}
+              <div style={sty(v.statCard)}>
+                <div style={{"fontFamily":"'Geist Mono',monospace","fontSize":"9px","letterSpacing":".2em","color":"var(--ink-3)","textTransform":"uppercase"}}>
+                  {"Pendiente de liquidar"}
+                </div>
+                <div style={{"marginTop":"12px","fontFamily":"'Instrument Serif',Georgia,serif","fontSize":"44px","color":"var(--ink)"}}>
+                  {v.insFinPending}
+                </div>
+                <div style={{"fontSize":"13px","color":"var(--ink-2)","marginTop":"8px"}}>
+                  {"Se libera en unos días"}
+                </div>
               </div>
-              <div style={{"marginTop":"12px","fontFamily":"'Instrument Serif',Georgia,serif","fontSize":"44px","color":"var(--ink)"}}>
-                {"1.546 €"}
-              </div>
-              <div style={{"fontSize":"13px","color":"var(--ink-2)","marginTop":"8px"}}>
-                {"Comisión de Waack ON"}
-              </div>
-            </div>
-            <div style={sty(v.statCard)}>
-              <div style={{"fontFamily":"'Geist Mono',monospace","fontSize":"9px","letterSpacing":".2em","color":"var(--ink-3)","textTransform":"uppercase"}}>
-                {"Próximo pago"}
-              </div>
-              <div style={{"marginTop":"12px","fontFamily":"'Instrument Serif',Georgia,serif","fontSize":"44px","color":"var(--ink)"}}>
-                {"1 oct"}
-              </div>
-              <div style={{"fontSize":"13px","color":"var(--ink-2)","marginTop":"8px"}}>
-                {"Transferencia · ES·· 8842"}
+              <div style={sty(v.statCard)}>
+                <div style={{"fontFamily":"'Geist Mono',monospace","fontSize":"9px","letterSpacing":".2em","color":"var(--ink-3)","textTransform":"uppercase"}}>
+                  {"Último pago"}
+                </div>
+                <div style={{"marginTop":"12px","fontFamily":"'Instrument Serif',Georgia,serif","fontSize":"44px","color":"var(--ink)"}}>
+                  {v.insFinLastPayout}
+                </div>
+                <div style={{"fontSize":"13px","color":"var(--ink-2)","marginTop":"8px"}}>
+                  {v.insFinLastPayoutDate}
+                </div>
               </div>
             </div>
           </div>
