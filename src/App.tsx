@@ -25,6 +25,30 @@ import { BattleCall, declineCall, goLive, stopLive, watchIncomingCalls } from '.
 import { STUDY_MODULES, watchStudyProgress, toggleTechniqueItem, saveReflectionAnswer, saveQuizScoreAndComplete } from './lib/studyPlan';
 import { publishAnnouncement, subscribeAnnouncements } from './lib/announcements';
 import { publishEbook, subscribeEbooks } from './lib/ebooks';
+import {
+  subscribeInstructorClasses,
+  subscribeInstructorStudents,
+  subscribeInstructorFinances,
+  subscribeClassEnrollments,
+  subscribeClassGroups,
+  subscribeInstructorCourses,
+  subscribeInstructorDocuments,
+  subscribeInstructorPodcasts,
+  subscribeInstructorAnnouncements,
+  createClass,
+  updateClass,
+  deleteClass,
+  addStudentToInstructor,
+  enrollStudent,
+  createStudentPlan,
+  createClassGroup,
+  updateFinances,
+  createCourse,
+  publishCourse,
+  uploadDocument,
+  createPodcast,
+  createAnnouncement,
+} from './lib/instructor';
 
 import { sty } from './lib/dc';
 
@@ -1343,6 +1367,184 @@ class App extends Component<any, any> {
     }));
   }
 
+  /* ==================== INSTRUCTOR DATA (DYNAMIC) ==================== */
+  // Firestore subscriptions
+  insClassesData: any[] = [];
+  insStudentsData: any[] = [];
+  insFinancesData: any = {};
+  insCoursesData: any[] = [];
+  insDocumentsData: any[] = [];
+  insPodcastsData: any[] = [];
+
+  // Form states
+  insClassTitle = '';
+  insClassScheduleDay = '';
+  insClassScheduleTime = '';
+  insClassCapacity = 10;
+  insClassDescription = '';
+  insClassErr = '';
+  insClassBusy = false;
+
+  insFinancesIban = '';
+  insFinancesAccountHolder = '';
+  insFinancesBankName = '';
+  insFinancesErr = '';
+  insFinancesBusy = false;
+
+  insCourseTitle = '';
+  insCourseDesc = '';
+  insCourseErr = '';
+  insCourseBusy = false;
+
+  insPodcastTitle = '';
+  insPodcastDesc = '';
+  insPodcastErr = '';
+  insPodcastBusy = false;
+
+  // Unsubs
+  insDataUnsubs: any[] = [];
+
+  startInsData() {
+    if (!this.state.user?.uid || !this.subs.docente) return;
+    this.stopInsData();
+    const uid = this.state.user.uid;
+
+    this.insDataUnsubs.push(
+      subscribeInstructorClasses(uid, (classes) => {
+        this.insClassesData = classes;
+        this.forceUpdate();
+      }),
+      subscribeInstructorStudents(uid, (students) => {
+        this.insStudentsData = students;
+        this.forceUpdate();
+      }),
+      subscribeInstructorFinances(uid, (finances) => {
+        this.insFinancesData = finances;
+        this.forceUpdate();
+      }),
+      subscribeInstructorCourses(uid, (courses) => {
+        this.insCoursesData = courses;
+        this.forceUpdate();
+      }),
+      subscribeInstructorDocuments(uid, (documents) => {
+        this.insDocumentsData = documents;
+        this.forceUpdate();
+      }),
+      subscribeInstructorPodcasts(uid, (podcasts) => {
+        this.insPodcastsData = podcasts;
+        this.forceUpdate();
+      })
+    );
+  }
+
+  stopInsData() {
+    this.insDataUnsubs.forEach(unsub => unsub && unsub());
+    this.insDataUnsubs = [];
+  }
+
+  // Form handlers
+  insClassTitleChange = (e) => { this.insClassTitle = e.target.value; this.forceUpdate(); };
+  insClassScheduleDayChange = (e) => { this.insClassScheduleDay = e.target.value; this.forceUpdate(); };
+  insClassScheduleTimeChange = (e) => { this.insClassScheduleTime = e.target.value; this.forceUpdate(); };
+  insClassCapacityChange = (e) => { this.insClassCapacity = Number(e.target.value); this.forceUpdate(); };
+  insClassDescriptionChange = (e) => { this.insClassDescription = e.target.value; this.forceUpdate(); };
+
+  insClassSubmit = async () => {
+    this.insClassErr = '';
+    this.insClassBusy = true;
+    try {
+      await createClass(this.state.user.uid, {
+        title: this.insClassTitle,
+        description: this.insClassDescription,
+        schedule: {
+          day: this.insClassScheduleDay,
+          time: this.insClassScheduleTime,
+          timezone: 'CET',
+        },
+        capacity: this.insClassCapacity,
+        status: 'scheduled',
+      });
+      this.insClassTitle = '';
+      this.insClassScheduleDay = '';
+      this.insClassScheduleTime = '';
+      this.insClassCapacity = 10;
+      this.insClassDescription = '';
+    } catch (err) {
+      this.insClassErr = err instanceof Error ? err.message : 'Error desconocido';
+    }
+    this.insClassBusy = false;
+    this.forceUpdate();
+  };
+
+  insFinancesIbanChange = (e) => { this.insFinancesIban = e.target.value; this.forceUpdate(); };
+  insFinancesAccountHolderChange = (e) => { this.insFinancesAccountHolder = e.target.value; this.forceUpdate(); };
+  insFinancesBankNameChange = (e) => { this.insFinancesBankName = e.target.value; this.forceUpdate(); };
+
+  insFinancesSubmit = async () => {
+    this.insFinancesErr = '';
+    this.insFinancesBusy = true;
+    try {
+      if (!this.insFinancesIban.trim()) throw new Error('IBAN requerido');
+      if (!this.insFinancesAccountHolder.trim()) throw new Error('Titular requerido');
+
+      await updateFinances(this.state.user.uid, {
+        bankAccount: {
+          iban: this.insFinancesIban,
+          accountHolder: this.insFinancesAccountHolder,
+          bankName: this.insFinancesBankName,
+          verificationStatus: 'pending',
+        },
+      });
+      this.insFinancesIban = '';
+      this.insFinancesAccountHolder = '';
+      this.insFinancesBankName = '';
+    } catch (err) {
+      this.insFinancesErr = err instanceof Error ? err.message : 'Error desconocido';
+    }
+    this.insFinancesBusy = false;
+    this.forceUpdate();
+  };
+
+  insCoursetTitleChange = (e) => { this.insCourseTitle = e.target.value; this.forceUpdate(); };
+  insCourseDescChange = (e) => { this.insCourseDesc = e.target.value; this.forceUpdate(); };
+
+  insCourseSubmit = async () => {
+    this.insCourseErr = '';
+    this.insCourseBusy = true;
+    try {
+      await createCourse(this.state.user.uid, {
+        title: this.insCourseTitle,
+        description: this.insCourseDesc,
+      });
+      this.insCourseTitle = '';
+      this.insCourseDesc = '';
+    } catch (err) {
+      this.insCourseErr = err instanceof Error ? err.message : 'Error desconocido';
+    }
+    this.insCourseBusy = false;
+    this.forceUpdate();
+  };
+
+  insPodcastTitleChange = (e) => { this.insPodcastTitle = e.target.value; this.forceUpdate(); };
+  insPodcastDescChange = (e) => { this.insPodcastDesc = e.target.value; this.forceUpdate(); };
+
+  insPodcastSubmit = async () => {
+    this.insPodcastErr = '';
+    this.insPodcastBusy = true;
+    try {
+      await createPodcast(this.state.user.uid, {
+        title: this.insPodcastTitle,
+        description: this.insPodcastDesc,
+      });
+      this.insPodcastTitle = '';
+      this.insPodcastDesc = '';
+    } catch (err) {
+      this.insPodcastErr = err instanceof Error ? err.message : 'Error desconocido';
+    }
+    this.insPodcastBusy = false;
+    this.forceUpdate();
+  }
+
   hero(v) {
     const map = {
       dashboard: { kicker: 'Tu sesión de hoy', accent: 'var(--blue)', title: 'Nivel 1 · Fundamentos & Arm Rolls', sub: 'Continúa donde lo dejaste. Te faltan dos lecciones para desbloquear Nivel 2: Ritmo & Expresión Disco.', cta: 'Continuar entrenamiento' },
@@ -1400,7 +1602,7 @@ class App extends Component<any, any> {
     if (!firebaseConfigured) { this.setState({ authReady: true }); return; }
     this.unsubAuth = onAuthStateChanged(auth, async (user) => {
       this.setState((st: any) => ({ user, authReady: true, view: user ? (['login', 'register', 'registerInstructor', 'registerStudio'].includes(st.view) ? (/[?&](checkout|connect)=/.test(location.search) ? 'cuenta' : 'dashboard') : st.view) : (['register', 'registerInstructor', 'registerStudio'].includes(st.view) ? st.view : 'login') }));
-      if (user) this.startData(); else this.stopData();
+      if (user) { this.startData(); if (this.subs.docente) this.startInsData(); } else { this.stopData(); this.stopInsData(); }
       if (user) {
         try {
           const ref = doc(db, 'users', user.uid);
@@ -1415,7 +1617,7 @@ class App extends Component<any, any> {
       }
     });
   }
-  componentWillUnmount() { clearInterval(this._podTimer); this.fisClearTimer && this.fisClearTimer(); this.unsubAuth && this.unsubAuth(); this.stopData(); }
+  componentWillUnmount() { clearInterval(this._podTimer); this.fisClearTimer && this.fisClearTimer(); this.unsubAuth && this.unsubAuth(); this.stopData(); this.stopInsData(); }
 
   /* ---------- Datos en vivo desde Firestore (reels, teachers, lives) ----------
      Si una colección está vacía se conservan los datos de ejemplo del prototipo. */
@@ -2665,6 +2867,57 @@ class App extends Component<any, any> {
       insLive: this.insLive,
       toggleInsLive: this.toggleInsLive,
       insLiveLabel: this.insLive ? 'Terminar clase en vivo' : 'Abrir sala en vivo',
+      // Class form
+      insClassTitleValue: this.insClassTitle,
+      insClassScheduleDayValue: this.insClassScheduleDay,
+      insClassScheduleTimeValue: this.insClassScheduleTime,
+      insClassCapacityValue: this.insClassCapacity,
+      insClassDescriptionValue: this.insClassDescription,
+      insClassTitleChange: this.insClassTitleChange,
+      insClassScheduleDayChange: this.insClassScheduleDayChange,
+      insClassScheduleTimeChange: this.insClassScheduleTimeChange,
+      insClassCapacityChange: this.insClassCapacityChange,
+      insClassDescriptionChange: this.insClassDescriptionChange,
+      insClassSubmit: this.insClassSubmit,
+      insClassErr: this.insClassErr,
+      insClassBusy: this.insClassBusy,
+      insClassLabel: this.insClassBusy ? 'Creando clase…' : 'Crear clase',
+      // Finance form
+      insFinancesIbanValue: this.insFinancesIban,
+      insFinancesAccountHolderValue: this.insFinancesAccountHolder,
+      insFinancesBankNameValue: this.insFinancesBankName,
+      insFinancesIbanChange: this.insFinancesIbanChange,
+      insFinancesAccountHolderChange: this.insFinancesAccountHolderChange,
+      insFinancesBankNameChange: this.insFinancesBankNameChange,
+      insFinancesSubmit: this.insFinancesSubmit,
+      insFinancesErr: this.insFinancesErr,
+      insFinancesBusy: this.insFinancesBusy,
+      insFinancesLabel: this.insFinancesBusy ? 'Guardando…' : 'Guardar datos bancarios',
+      // Course form
+      insCoursetTitleValue: this.insCourseTitle,
+      insCourseDescValue: this.insCourseDesc,
+      insCoursetTitleChange: this.insCoursetTitleChange,
+      insCourseDescChange: this.insCourseDescChange,
+      insCourseSubmit: this.insCourseSubmit,
+      insCourseErr: this.insCourseErr,
+      insCourseBusy: this.insCourseBusy,
+      insCourseLabel: this.insCourseBusy ? 'Creando curso…' : 'Crear curso',
+      // Podcast form
+      insPodcastTitleValue: this.insPodcastTitle,
+      insPodcastDescValue: this.insPodcastDesc,
+      insPodcastTitleChange: this.insPodcastTitleChange,
+      insPodcastDescChange: this.insPodcastDescChange,
+      insPodcastSubmit: this.insPodcastSubmit,
+      insPodcastErr: this.insPodcastErr,
+      insPodcastBusy: this.insPodcastBusy,
+      insPodcastLabel: this.insPodcastBusy ? 'Creando podcast…' : 'Crear podcast',
+      // Data lists
+      insClassesDataList: this.insClassesData,
+      insStudentsDataList: this.insStudentsData,
+      insFinancesDataList: this.insFinancesData,
+      insCoursesDataList: this.insCoursesData,
+      insDocumentsDataList: this.insDocumentsData,
+      insPodcastsDataList: this.insPodcastsData,
       roleName: this.role().name,
       roleShort: this.role().short,
       roleDesc: this.role().desc,
