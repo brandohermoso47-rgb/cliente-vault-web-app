@@ -56,7 +56,7 @@ deny('otro usuario NO lee la galería privada', 'get', 'users/user1/media/m1', {
 deny('otro usuario NO escribe en la galería ajena', 'create', 'users/user1/media/m2', { uid: 'user2', incoming: { url: 'x' } });
 
 // contenido de instructores/estudios/admin
-for (const col of ['teachers', 'lives', 'lessons', 'ebooks']) {
+for (const col of ['teachers', 'lives', 'lessons', 'ebooks', 'events']) {
   allow(`${col}: lectura con sesión`, 'get', `${col}/c1`, { uid: 'user1', data: { ownerId: 'inst1' } });
   deny(`${col}: anónimo no lee`, 'get', `${col}/c1`, { data: { ownerId: 'inst1' } });
   deny(`${col}: un usuario normal NO publica`, 'create', `${col}/c1`, { uid: 'user1', incoming: { ownerId: 'user1' } });

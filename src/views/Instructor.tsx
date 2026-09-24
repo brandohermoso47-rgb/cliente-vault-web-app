@@ -229,6 +229,41 @@ export default function Instructor({ v }: { v: any }) {
       )}
       {v.insIsClasses && (
         <>
+          <div style={{"display":"flex","flexDirection":"column","gap":"12px","padding":"20px","borderRadius":"22px","border":"1px solid var(--hair)","background":"var(--glass)","backdropFilter":"var(--lg-blur)","WebkitBackdropFilter":"var(--lg-blur)","boxShadow":"var(--lg-edge)","marginBottom":"6px"}}>
+            <div style={{"fontSize":"14px","fontWeight":"700","color":"var(--ink)"}}>
+              {"Programar una clase en el calendario"}
+            </div>
+            <input value={v.evTitleValue} onChange={v.evTitleChange} placeholder="Título de la clase" maxlength="100" style={{"width":"100%","boxSizing":"border-box","padding":"11px 14px","borderRadius":"14px","border":"1px solid var(--hair)","background":"var(--glass-2)","color":"var(--ink)","fontSize":"13px","outline":"none"}} />
+            <div style={{"display":"flex","gap":"10px","flexWrap":"wrap"}}>
+              <input type="datetime-local" value={v.evWhenValue} onChange={v.evWhenChange} style={{"flex":"1","minWidth":"200px","width":"100%","boxSizing":"border-box","padding":"11px 14px","borderRadius":"14px","border":"1px solid var(--hair)","background":"var(--glass-2)","color":"var(--ink)","fontSize":"13px","outline":"none"}} />
+              <input type="number" min="10" max="480" value={v.evDurationValue} onChange={v.evDurationChange} placeholder="Minutos" style={{"width":"100%","boxSizing":"border-box","padding":"11px 14px","borderRadius":"14px","border":"1px solid var(--hair)","background":"var(--glass-2)","color":"var(--ink)","fontSize":"13px","outline":"none"}} />
+            </div>
+            <textarea value={v.evDescValue} onChange={v.evDescChange} placeholder="Descripción (opcional)" rows="2" maxlength="500" style={{"width":"100%","boxSizing":"border-box","padding":"11px 14px","borderRadius":"14px","border":"1px solid var(--hair)","background":"var(--glass-2)","color":"var(--ink)","fontSize":"13px","outline":"none","fontFamily":"inherit","resize":"vertical"}}></textarea>
+            {v.evErr && (
+              <>
+                <div style={{"fontSize":"11.5px","color":"var(--pink)"}}>
+                  {v.evErr}
+                </div>
+              </>
+            )}
+            <div onClick={v.evSubmit} style={{"alignSelf":"flex-start","padding":"12px 22px","borderRadius":"999px","fontSize":"12.5px","fontWeight":"700","color":"#1A1400","background":"linear-gradient(90deg,var(--gold-hi),var(--gold-lo))","cursor":"pointer"}}>
+              {v.evSubmitLabel}
+            </div>
+            {(v.evMine ?? []).map((em: any, $index: number) => (
+              <Fragment key={$index}>
+                <div style={{"display":"flex","alignItems":"center","gap":"10px","fontSize":"12.5px","color":"var(--ink-2)"}}>
+                  <span style={{"flex":"1"}}>
+                    {em?.title}
+                    {" · "}
+                    {em?.when}
+                  </span>
+                  <span onClick={em?.del} style={{"cursor":"pointer","color":"var(--pink)"}}>
+                    {"Borrar"}
+                  </span>
+                </div>
+              </Fragment>
+            ))}
+          </div>
           <div style={{"display":"flex","flexDirection":"column","gap":"10px"}}>
             {(v.insClassList ?? []).map((c: any, $index: number) => (
               <Fragment key={$index}>

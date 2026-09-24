@@ -169,6 +169,8 @@ import { BattleCall, declineCall, goLive, stopLive, watchIncomingCalls, watchLiv
 import { STUDY_MODULES, watchStudyProgress, toggleTechniqueItem, saveReflectionAnswer, saveQuizScoreAndComplete } from './lib/studyPlan';
 import { publishAnnouncement, subscribeAnnouncements } from './lib/announcements';
 import { publishEbook, subscribeEbooks } from './lib/ebooks';
+import { createEvent, deleteEvent, downloadIcs, googleCalendarUrl, subscribeEvents } from './lib/events';
+import { CAPTION_LANGS, speechSupported, startCaptions, translateText, translatorSupported } from './lib/captions';
 import { checkGroupFile, cleanGroupCode, createGroup, deleteGroup, deleteMessage, joinGroup, leaveGroup, sendMessage, watchMessages, watchMyGroups } from './lib/groups';
 
 `;

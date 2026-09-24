@@ -10,6 +10,8 @@ import patchesEbooks from './patches-ebooks.mjs';
 import patchesInstructor from './patches-instructor.mjs';
 import patchesGrupos from './patches-grupos.mjs';
 import patchesCamara from './patches-camara.mjs';
+import patchesSubtitulos from './patches-subtitulos.mjs';
+import patchesCalendario from './patches-calendario.mjs';
 import patchesStudy from './patches-study.mjs';
 
 export default function patches(s) {
@@ -42,5 +44,5 @@ export default function patches(s) {
   // Perfil + solicitud profesional al crearse la cuenta
   rep("if (!(await getDoc(ref)).exists()) await setDoc(ref, { email: user.email, displayName: user.displayName ?? null, role: 'usuario', createdAt: serverTimestamp() });",
       "const p = takePending();\n          const isNewAccount = !(await getDoc(ref)).exists();\n          if (isNewAccount) await setDoc(ref, { displayName: user.displayName ?? null, photoURL: user.photoURL ?? null, ...(p.profile || {}), role: 'usuario', createdAt: serverTimestamp() });\n          this.signupData = p;\n          this.isNewAccount = isNewAccount;");
-  return patchesCamara(patchesGrupos(patchesInstructor(patchesEbooks(patchesAnuncios(patchesStudy(patchesLives(patchesPerfil(patchesReels(patchesFeed(patchesProfile(patchesPayments(s))))))))))));
+  return patchesCalendario(patchesSubtitulos(patchesCamara(patchesGrupos(patchesInstructor(patchesEbooks(patchesAnuncios(patchesStudy(patchesLives(patchesPerfil(patchesReels(patchesFeed(patchesProfile(patchesPayments(s))))))))))))));
 }

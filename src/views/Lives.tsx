@@ -22,6 +22,49 @@ export default function Lives({ v }: { v: any }) {
         </div>
       </div>
       <div style={{"display":"flex","flexDirection":"column","gap":"14px","padding":"22px","borderRadius":"24px","border":"1px solid var(--hair)","background":"var(--glass)","backdropFilter":"blur(30px)"}}>
+        <div style={{"fontFamily":"'Geist Mono',monospace","fontSize":"10px","letterSpacing":".18em","color":"var(--ink-3)","textTransform":"uppercase"}}>
+          {"Próximas clases"}
+        </div>
+        {v.evHasUpcoming && (
+          <>
+            <div style={{"display":"flex","flexDirection":"column","gap":"10px"}}>
+              {(v.evUpcomingList ?? []).map((ev: any, $index: number) => (
+                <Fragment key={$index}>
+                  <div style={{"display":"flex","alignItems":"center","gap":"12px","flexWrap":"wrap","padding":"14px 16px","borderRadius":"16px","border":"1px solid var(--hair)","background":"var(--glass-2)"}}>
+                    <div style={{"flex":"1","minWidth":"200px"}}>
+                      <div style={{"fontSize":"14px","fontWeight":"700","color":"var(--ink)"}}>
+                        {ev?.title}
+                      </div>
+                      <div style={{"fontFamily":"'Geist Mono',monospace","fontSize":"10px","color":"var(--ink-3)","marginTop":"4px"}}>
+                        {ev?.when}
+                        {" · "}
+                        {ev?.author}
+                      </div>
+                      <div style={{"fontSize":"12px","color":"var(--ink-2)","marginTop":"4px"}}>
+                        {ev?.desc}
+                      </div>
+                    </div>
+                    <div onClick={ev?.ics} style={{"padding":"9px 14px","borderRadius":"999px","fontSize":"11.5px","fontWeight":"700","color":"var(--ink)","border":"1px solid var(--hair)","background":"var(--glass-2)","cursor":"pointer"}}>
+                      {"Agregar a mi calendario"}
+                    </div>
+                    <div onClick={ev?.gcal} style={{"padding":"9px 14px","borderRadius":"999px","fontSize":"11.5px","fontWeight":"700","color":"var(--ink)","border":"1px solid var(--hair)","background":"var(--glass-2)","cursor":"pointer"}}>
+                      {"Google Calendar"}
+                    </div>
+                  </div>
+                </Fragment>
+              ))}
+            </div>
+          </>
+        )}
+        {!v.evHasUpcoming && (
+          <>
+            <div style={{"fontSize":"12.5px","color":"var(--ink-3)"}}>
+              {"Todavía no hay clases programadas."}
+            </div>
+          </>
+        )}
+      </div>
+      <div style={{"display":"flex","flexDirection":"column","gap":"14px","padding":"22px","borderRadius":"24px","border":"1px solid var(--hair)","background":"var(--glass)","backdropFilter":"blur(30px)"}}>
         <div style={{"display":"flex","alignItems":"center","justifyContent":"space-between","gap":"12px","flexWrap":"wrap"}}>
           <div style={{"fontFamily":"'Geist Mono',monospace","fontSize":"10px","letterSpacing":".18em","color":"var(--ink-3)","textTransform":"uppercase"}}>
             {"Transmitir en vivo"}
@@ -49,6 +92,25 @@ export default function Lives({ v }: { v: any }) {
             <div style={{"fontSize":"12px","color":"var(--ink-3)"}}>
               {v.liveViewersLabel}
             </div>
+            <div style={{"display":"flex","alignItems":"center","gap":"8px","flexWrap":"wrap"}}>
+              {v.ccSupported && (
+                <>
+                  <div onClick={v.ccToggle} style={{"padding":"9px 16px","borderRadius":"999px","fontSize":"12px","fontWeight":"700","color":"var(--ink)","border":"1px solid var(--hair)","background":"var(--glass-2)","cursor":"pointer"}}>
+                    {v.ccToggleLabel}
+                  </div>
+                </>
+              )}
+              {(v.ccLangs ?? []).map((cl: any, $index: number) => (
+                <Fragment key={$index}>
+                  <span onClick={cl?.pick} style={sty(cl?.style)}>
+                    {cl?.label}
+                  </span>
+                </Fragment>
+              ))}
+            </div>
+            <div style={{"fontSize":"11.5px","color":"var(--ink-3)"}}>
+              {"Elige el idioma en el que hablas. Tus espectadores verán los subtítulos y podrán traducirlos."}
+            </div>
           </>
         )}
         {!v.liveOn && (
@@ -75,6 +137,31 @@ export default function Lives({ v }: { v: any }) {
               <span style={{"position":"absolute","top":"10px","right":"10px","padding":"4px 10px","borderRadius":"999px","background":"rgba(0,0,0,.55)","color":"#fff","fontSize":"11px"}}>
                 {v.liveWatchName}
               </span>
+              {' '}
+              {v.ccHasText && (
+                <>
+                  <div style={{"position":"absolute","left":"0","right":"0","bottom":"14px","textAlign":"center","padding":"0 16px"}}>
+                    <span style={{"display":"inline-block","maxWidth":"92%","padding":"6px 12px","borderRadius":"10px","background":"rgba(0,0,0,.72)","color":"#fff","fontSize":"15px","lineHeight":"1.4"}}>
+                      {v.ccText}
+                    </span>
+                  </div>
+                </>
+              )}
+            </div>
+            <div style={{"display":"flex","alignItems":"center","gap":"8px","flexWrap":"wrap"}}>
+              <span style={{"fontFamily":"'Geist Mono',monospace","fontSize":"9px","letterSpacing":".14em","color":"var(--ink-3)","textTransform":"uppercase"}}>
+                {"Ver subtítulos en"}
+              </span>
+              {(v.ccTargets ?? []).map((ct: any, $index: number) => (
+                <Fragment key={$index}>
+                  <span onClick={ct?.pick} style={sty(ct?.style)}>
+                    {ct?.label}
+                  </span>
+                </Fragment>
+              ))}
+            </div>
+            <div style={{"fontSize":"11px","color":"var(--ink-3)"}}>
+              {v.ccTranslateNote}
             </div>
             <div onClick={v.liveLeave} style={{"alignSelf":"flex-start","padding":"10px 18px","borderRadius":"999px","fontSize":"12px","fontWeight":"700","color":"var(--ink)","border":"1px solid var(--hair)","background":"var(--glass-2)","cursor":"pointer"}}>
               {"Dejar de ver"}

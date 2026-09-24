@@ -44,13 +44,13 @@ service cloud.firestore {
     // ── Contenido de instructores/estudios/admin: lo lee cualquiera con sesión ──
     match /{content}/{docId} {
       allow read: if signedIn()
-        && content in ['teachers', 'lives', 'lessons', 'announcements', 'presentations', 'ebooks',
+        && content in ['teachers', 'lives', 'lessons', 'announcements', 'presentations', 'ebooks', 'events',
                        'instructor_playlists', 'instructor_tracks', 'instructor_drive_tracks'];
       // Publica el personal, pero solo edita/borra lo suyo (ownerId); el admin edita todo.
-      allow create: if content in ['teachers', 'lives', 'lessons', 'announcements', 'presentations', 'ebooks',
+      allow create: if content in ['teachers', 'lives', 'lessons', 'announcements', 'presentations', 'ebooks', 'events',
                                    'instructor_playlists', 'instructor_tracks', 'instructor_drive_tracks']
         && (isAdmin() || (isStaff() && request.resource.data.get('ownerId', '') == request.auth.uid));
-      allow update, delete: if content in ['teachers', 'lives', 'lessons', 'announcements', 'presentations', 'ebooks',
+      allow update, delete: if content in ['teachers', 'lives', 'lessons', 'announcements', 'presentations', 'ebooks', 'events',
                                           'instructor_playlists', 'instructor_tracks', 'instructor_drive_tracks']
         && (isAdmin() || (isStaff() && resource.data.get('ownerId', '') == request.auth.uid));
     }

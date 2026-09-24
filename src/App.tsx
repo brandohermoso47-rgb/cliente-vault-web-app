@@ -25,6 +25,8 @@ import { BattleCall, declineCall, goLive, stopLive, watchIncomingCalls, watchLiv
 import { STUDY_MODULES, watchStudyProgress, toggleTechniqueItem, saveReflectionAnswer, saveQuizScoreAndComplete } from './lib/studyPlan';
 import { publishAnnouncement, subscribeAnnouncements } from './lib/announcements';
 import { publishEbook, subscribeEbooks } from './lib/ebooks';
+import { createEvent, deleteEvent, downloadIcs, googleCalendarUrl, subscribeEvents } from './lib/events';
+import { CAPTION_LANGS, speechSupported, startCaptions, translateText, translatorSupported } from './lib/captions';
 import { checkGroupFile, cleanGroupCode, createGroup, deleteGroup, deleteMessage, joinGroup, leaveGroup, sendMessage, watchMessages, watchMyGroups } from './lib/groups';
 
 import { sty } from './lib/dc';
@@ -1621,6 +1623,7 @@ class App extends Component<any, any> {
     this.unsubGroups && this.unsubGroups(); this.unsubGroups = null;
     this.unsubGroupMsgs && this.unsubGroupMsgs(); this.unsubGroupMsgs = null;
     this.unsubLiveSessions && this.unsubLiveSessions(); this.unsubLiveSessions = null;
+    this.unsubEvents && this.unsubEvents(); this.unsubEvents = null;
     this.liveStop(); this.liveLeave();
   }
 
@@ -1884,6 +1887,51 @@ class App extends Component<any, any> {
     'Guía': ['var(--purple)', 'var(--pink)'],
   };
 
+  unsubEvents: any = null;
+  liveEvents: any[] = [];
+  evTitle = '';
+  evDesc = '';
+  evWhen = '';
+  evDuration = '60';
+  evBusy = false;
+  evErr = '';
+
+  evTitleChange = (e: any) => { this.evTitle = e?.target?.value ?? ''; this.forceUpdate(); };
+  evDescChange = (e: any) => { this.evDesc = e?.target?.value ?? ''; this.forceUpdate(); };
+  evWhenChange = (e: any) => { this.evWhen = e?.target?.value ?? ''; this.forceUpdate(); };
+  evDurationChange = (e: any) => { this.evDuration = e?.target?.value ?? '60'; this.forceUpdate(); };
+  evSubmit = async () => {
+    if (this.evBusy || !auth.currentUser || !this.isDocente()) return;
+    this.evBusy = true; this.evErr = ''; this.forceUpdate();
+    try {
+      await createEvent({
+        uid: auth.currentUser.uid, author: this.myProfile?.displayName || this.state.user?.displayName || 'Instructor',
+        title: this.evTitle, description: this.evDesc, startsAt: new Date(this.evWhen), durationMin: Number(this.evDuration),
+      });
+      this.evTitle = ''; this.evDesc = ''; this.evWhen = '';
+    } catch (e: any) { this.evErr = e?.message || 'No se pudo programar la clase.'; }
+    this.evBusy = false; this.forceUpdate();
+  };
+
+  evFmt(ts: any) {
+    const d: Date | null = ts?.toDate ? ts.toDate() : null;
+    return d ? d.toLocaleString('es-ES', { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) : '';
+  }
+  evUpcoming() {
+    const now = Date.now() - 3600_000;
+    return this.liveEvents.filter((e: any) => e.startsAt?.toDate && e.startsAt.toDate().getTime() >= now);
+  }
+  evRow(e: any) {
+    const mine = e.ownerId === auth.currentUser?.uid;
+    return {
+      key: e.id, title: e.title, desc: e.description || '', author: e.author || 'Instructor',
+      when: this.evFmt(e.startsAt) + ' · ' + e.durationMin + ' min',
+      ics: () => downloadIcs(e),
+      gcal: () => window.open(googleCalendarUrl(e), '_blank', 'noopener'),
+      canDelete: mine, del: () => { if (window.confirm('¿Borrar esta clase del calendario?')) deleteEvent(e.id).catch(() => { this.evErr = 'No se pudo borrar.'; this.forceUpdate(); }); },
+    };
+  }
+
   unsubLiveSessions: any = null;
   liveSessions: any[] = [];
   liveStream: MediaStream | null = null;
@@ -1927,7 +1975,42 @@ class App extends Component<any, any> {
     this.liveBusy = false; this.forceUpdate();
   };
 
+  ccStopFn: any = null;
+  ccOn = false;
+  ccLang = 'es';
+  ccTarget = 'es';
+  ccTranslated = '';
+  ccLastRaw = '';
+
+  ccToggle = () => {
+    if (this.ccOn) { this.ccStopFn && this.ccStopFn(); this.ccStopFn = null; this.ccOn = false; this.forceUpdate(); return; }
+    if (!auth.currentUser || !this.liveStream) return;
+    this.ccOn = true;
+    this.ccStopFn = startCaptions(auth.currentUser.uid, this.ccLang, (m: string) => { this.liveErr = m; this.ccOn = false; this.ccStopFn = null; this.forceUpdate(); });
+    this.forceUpdate();
+  };
+  ccPickLang = (l: string) => {
+    this.ccLang = l;
+    if (this.ccOn) { this.ccStopFn && this.ccStopFn(); this.ccOn = false; this.ccToggle(); }
+    this.forceUpdate();
+  };
+  ccPickTarget = (l: string) => { this.ccTarget = l; this.ccLastRaw = ''; this.ccTranslated = ''; this.forceUpdate(); };
+
+  // Subtítulo actual de la transmisión que estás viendo (y su traducción, si elegiste otro idioma).
+  ccCurrent() {
+    const w: any = this.liveWatching && this.liveSessions.find((x: any) => x.uid === this.liveWatching.uid);
+    const raw: string = (w && w.caption) || '';
+    const from = (w && w.captionLang) || 'es';
+    if (raw !== this.ccLastRaw) {
+      this.ccLastRaw = raw;
+      if (this.ccTarget === from || !raw) this.ccTranslated = raw;
+      else translateText(raw, from, this.ccTarget).then((t: string) => { if (this.ccLastRaw === raw) { this.ccTranslated = t; this.forceUpdate(); } });
+    }
+    return this.ccTarget === from ? raw : (this.ccTranslated || raw);
+  }
+
   liveStop() {
+    this.ccStopFn && this.ccStopFn(); this.ccStopFn = null; this.ccOn = false;
     this.liveViewers.forEach((c: any) => c.hangUp()); this.liveViewers.clear(); this.liveServed.clear();
     const had = !!this.liveStream;
     this.liveStream?.getTracks().forEach((t: any) => t.stop()); this.liveStream = null;
@@ -2151,6 +2234,8 @@ class App extends Component<any, any> {
     this.unsubEbooks = subscribeEbooks((rows: any) => { this.liveEbooks = rows; this.forceUpdate(); });
     this.unsubGroups && this.unsubGroups();
     this.unsubGroups = watchMyGroups(meUid, (rows: any) => { this.gList = rows; if (this.gActiveId && !rows.some((g: any) => g.id === this.gActiveId)) this.gBack(); this.forceUpdate(); });
+    this.unsubEvents && this.unsubEvents();
+    this.unsubEvents = subscribeEvents((rows: any) => { this.liveEvents = rows; this.forceUpdate(); });
     this.unsubLiveSessions && this.unsubLiveSessions();
     this.unsubLiveSessions = watchLiveSessions((rows: any) => { this.liveSessions = rows; this.forceUpdate(); });
     const invite = new URLSearchParams(location.search).get('grupo');
@@ -2944,6 +3029,21 @@ class App extends Component<any, any> {
         .map((x: any) => ({ key: x.uid, name: x.displayName || 'Alguien', watch: () => this.liveWatch(x.uid, x.displayName || 'Alguien') })),
       liveHasList: this.liveSessions.some((x: any) => x.uid !== this.state.user?.uid && (!x.startedAt?.seconds || Date.now() / 1000 - x.startedAt.seconds < 43200)),
       liveIsWatching: !!this.liveWatching,
+      evUpcomingList: this.evUpcoming().map((e: any) => this.evRow(e)),
+      evHasUpcoming: this.evUpcoming().length > 0,
+      evMine: this.evUpcoming().filter((e: any) => e.ownerId === auth.currentUser?.uid).map((e: any) => this.evRow(e)),
+      evTitleValue: this.evTitle, evDescValue: this.evDesc, evWhenValue: this.evWhen, evDurationValue: this.evDuration,
+      evTitleChange: this.evTitleChange, evDescChange: this.evDescChange, evWhenChange: this.evWhenChange, evDurationChange: this.evDurationChange,
+      evSubmit: this.evSubmit, evSubmitLabel: this.evBusy ? 'Programando…' : 'Programar clase', evErr: this.evErr,
+      ccOn: this.ccOn,
+      ccToggle: this.ccToggle,
+      ccToggleLabel: this.ccOn ? 'Subtítulos: activados' : 'Activar subtítulos',
+      ccSupported: speechSupported(),
+      ccLangs: CAPTION_LANGS.map(([k, label]) => ({ key: k, label, pick: () => this.ccPickLang(k), style: 'padding:6px 12px;border-radius:999px;font-size:11px;cursor:pointer;' + (this.ccLang === k ? 'font-weight:700;color:#fff;background:var(--purple)' : 'color:var(--ink-2);border:1px solid var(--hair);background:var(--glass-2)') })),
+      ccTargets: CAPTION_LANGS.map(([k, label]) => ({ key: k, label, pick: () => this.ccPickTarget(k), style: 'padding:6px 12px;border-radius:999px;font-size:11px;cursor:pointer;' + (this.ccTarget === k ? 'font-weight:700;color:#fff;background:var(--blue)' : 'color:var(--ink-2);border:1px solid var(--hair);background:var(--glass-2)') })),
+      ccText: this.liveWatching ? this.ccCurrent() : '',
+      ccHasText: !!(this.liveWatching && this.ccCurrent()),
+      ccTranslateNote: translatorSupported() ? 'La traducción se hace en tu dispositivo.' : 'Para traducir en vivo usa Chrome o Edge actualizados; sin eso verás los subtítulos en el idioma original.',
       liveWatchName: this.liveWatching?.name || '',
       liveWatchStatus: this.liveWatching?.connected ? 'EN VIVO' : 'Conectando…',
       liveLeave: this.liveLeave,
