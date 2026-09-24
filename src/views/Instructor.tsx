@@ -1,494 +1,1012 @@
-// GENERADO por tools/convert.mjs a partir del prototipo de Claude Design. No editar a mano: edita la plantilla y vuelve a correr `npm run convert`.
-/* eslint-disable */
-// @ts-nocheck
-import { Fragment } from 'react';
+// Instructor Panel - Disco Ball 3D Design
+// Adapted for integration with App.tsx state management
+import React, { Fragment, useRef } from 'react';
 import { cx, pc, sty } from '../lib/dc';
+import DiscoBallWidget, { type DiscoBallWidgetHandle } from '../components/DiscoBallWidget';
 
 export default function Instructor({ v }: { v: any }) {
+  const discoBallRef = useRef<DiscoBallWidgetHandle>(null);
+
   return (
-    <>
-    <div style={{"display":"flex","flexDirection":"column","gap":"24px","maxWidth":"1180px"}}>
-      <div style={{"display":"flex","gap":"9px","flexWrap":"wrap"}}>
+    <div style={{
+      display: 'flex',
+      flexDirection: 'column',
+      gap: '24px',
+      maxWidth: '1400px',
+      margin: '0 auto',
+      padding: '20px',
+    }}>
+      {/* Header */}
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        gap: '20px',
+        paddingBottom: '20px',
+        borderBottom: '1px solid var(--hair)',
+      }}>
+        <div>
+          <div style={{
+            fontFamily: "'Instrument Serif', Georgia, serif",
+            fontSize: '32px',
+            fontWeight: '700',
+            color: 'var(--ink)',
+            letterSpacing: '-0.01em',
+          }}>
+            Laboratorio del Instructor
+          </div>
+          <div style={{
+            fontSize: '14px',
+            color: 'var(--ink-2)',
+            marginTop: '6px',
+          }}>
+            Administra tu cátedra, crea tus clases y haz crecer tus ingresos
+          </div>
+        </div>
+      </div>
+
+      {/* Tab Navigation */}
+      <div style={{
+        display: 'flex',
+        gap: '12px',
+        flexWrap: 'wrap',
+        borderBottom: '1px solid var(--hair)',
+        paddingBottom: '12px',
+      }}>
         {(v.insTabList ?? []).map((t: any, $index: number) => (
           <Fragment key={$index}>
-            <div onClick={t?.pick} style={sty(t?.style)}>
-              <span>
-                {t?.label}
-              </span>
-              {' '}
+            <button
+              onClick={t?.pick}
+              style={{
+                padding: '10px 16px',
+                borderRadius: '12px',
+                border: 'none',
+                background: t?.active ? 'var(--pink)' : 'var(--glass)',
+                color: t?.active ? '#fff' : 'var(--ink-2)',
+                fontSize: '13px',
+                fontWeight: '600',
+                cursor: 'pointer',
+                transition: 'all 0.2s',
+              }}
+              className={cx(pc("hover", "opacity:.9"))}
+            >
+              {t?.label}
               {t?.hasBadge && (
-                <>
-                  <span style={{"fontFamily":"'Geist Mono',monospace","fontSize":"9px","opacity":".75"}}>
-                    {t?.badge}
-                  </span>
-                </>
+                <span style={{
+                  marginLeft: '6px',
+                  fontFamily: "'Geist Mono', monospace",
+                  fontSize: '11px',
+                  opacity: 0.75,
+                }}>
+                  {t?.badge}
+                </span>
               )}
-            </div>
+            </button>
           </Fragment>
         ))}
       </div>
-      <div style={{"display":"flex","flexDirection":"column","gap":"11px","padding":"16px 18px","borderRadius":"22px","border":"1px solid var(--hair)","background":"var(--glass)","backdropFilter":"var(--lg-blur)","WebkitBackdropFilter":"var(--lg-blur)","boxShadow":"var(--lg-edge)"}}>
-        <div style={{"fontFamily":"'Geist Mono',monospace","fontSize":"9px","letterSpacing":".2em","color":"var(--gold-text)","fontWeight":"700","textTransform":"uppercase"}}>
-          {"Estudiante filtrado"}
+
+      {/* Dashboard View */}
+      {v.insIsDashboard && (
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'minmax(0, 2fr) minmax(0, 1fr)',
+          gap: '24px',
+          alignItems: 'start',
+        }}>
+          {/* Stats Grid */}
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+            gap: '16px',
+          }}>
+            {(v.insStatCards ?? []).map((s: any, $index: number) => (
+              <Fragment key={$index}>
+                <div style={{
+                  padding: '20px',
+                  borderRadius: '16px',
+                  border: '1px solid var(--hair)',
+                  background: 'var(--glass)',
+                  backdropFilter: 'var(--lg-blur)',
+                  WebkitBackdropFilter: 'var(--lg-blur)',
+                  boxShadow: 'var(--lg-edge)',
+                }}>
+                  <div style={{
+                    fontFamily: "'Geist Mono', monospace",
+                    fontSize: '11px',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.1em',
+                    color: 'var(--ink-3)',
+                    marginBottom: '12px',
+                  }}>
+                    {s?.label}
+                  </div>
+                  <div style={{
+                    fontFamily: "'Instrument Serif', Georgia, serif",
+                    fontSize: '28px',
+                    fontWeight: '700',
+                    color: 'var(--ink)',
+                    marginBottom: '8px',
+                  }}>
+                    {s?.value}
+                  </div>
+                  {s?.delta && (
+                    <div style={{
+                      fontSize: '12px',
+                      color: 'var(--pink)',
+                    }}>
+                      {s?.delta}
+                    </div>
+                  )}
+                </div>
+              </Fragment>
+            ))}
+          </div>
+
+          {/* Disco Ball Widget */}
+          <div style={{
+            padding: '24px',
+            borderRadius: '20px',
+            border: '1px solid var(--hair)',
+            background: 'var(--glass)',
+            backdropFilter: 'var(--lg-blur)',
+            WebkitBackdropFilter: 'var(--lg-blur)',
+            boxShadow: 'var(--lg-edge)',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '16px',
+          }}>
+            <div>
+              <div style={{
+                fontFamily: "'Geist Mono', monospace",
+                fontSize: '10px',
+                letterSpacing: '0.2em',
+                color: 'var(--pink)',
+                fontWeight: '700',
+                textTransform: 'uppercase',
+                marginBottom: '8px',
+              }}>
+                Sala de Clase
+              </div>
+              <div style={{
+                fontFamily: "'Instrument Serif', Georgia, serif",
+                fontSize: '24px',
+                letterSpacing: '-0.01em',
+                color: 'var(--ink)',
+              }}>
+                Bola Disco 3D
+              </div>
+            </div>
+
+            <div style={{
+              aspectRatio: '1',
+              borderRadius: '16px',
+              overflow: 'hidden',
+              border: '1px solid var(--hair)',
+            }}>
+              <DiscoBallWidget
+                ref={discoBallRef}
+                bpm={v.insBpm ?? 120}
+                live={v.insLive ?? false}
+              />
+            </div>
+
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '12px',
+            }}>
+              <label style={{
+                fontFamily: "'Geist Mono', monospace",
+                fontSize: '11px',
+                color: 'var(--ink-3)',
+                textTransform: 'uppercase',
+                fontWeight: '600',
+              }}>
+                Tempo:
+              </label>
+              <input
+                type="range"
+                min="80"
+                max="150"
+                step="1"
+                value={v.insBpm ?? 120}
+                onChange={v.setInsBpm}
+                style={{
+                  flex: 1,
+                  accentColor: 'var(--pink)',
+                  cursor: 'pointer',
+                }}
+              />
+              <span style={{
+                fontFamily: "'Instrument Serif', Georgia, serif",
+                fontSize: '18px',
+                color: 'var(--ink)',
+                minWidth: '40px',
+                textAlign: 'right',
+              }}>
+                {v.insBpm ?? 120}
+              </span>
+            </div>
+
+            <button
+              onClick={v.toggleInsLive}
+              style={{
+                padding: '12px 20px',
+                borderRadius: '999px',
+                fontSize: '13px',
+                fontWeight: '700',
+                color: '#1A1400',
+                background: v.insLive ? 'var(--pink)' : 'var(--gold-hi)',
+                border: 'none',
+                cursor: 'pointer',
+                boxShadow: 'inset 0 1px 0 rgba(255,255,255,.3)',
+                transition: 'all 0.2s',
+              }}
+              className={cx(pc("hover", "opacity:.9"))}
+            >
+              {v.insLiveLabel || (v.insLive ? 'Clase en Vivo' : 'Iniciar Clase')}
+            </button>
+          </div>
         </div>
-        <div style={{"display":"flex","gap":"9px","flexWrap":"wrap"}}>
-          {(v.insChips ?? []).map((c: any, $index: number) => (
+      )}
+
+      {/* Students View */}
+      {v.insIsStudents && (
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '12px',
+        }}>
+          {(v.insStudentsList ?? []).map((r: any, $index: number) => (
             <Fragment key={$index}>
-              <div onClick={c?.pick} style={sty(c?.style)}>
-                {c?.name}
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '14px',
+                padding: '16px 18px',
+                borderRadius: '16px',
+                border: '1px solid var(--hair)',
+                background: 'var(--glass)',
+                backdropFilter: 'var(--lg-blur)',
+                WebkitBackdropFilter: 'var(--lg-blur)',
+                boxShadow: 'var(--lg-edge)',
+              }}>
+                <div style={{
+                  flex: 1,
+                  minWidth: '200px',
+                }}>
+                  <div style={{
+                    fontSize: '14px',
+                    fontWeight: '700',
+                    color: 'var(--ink)',
+                  }}>
+                    {r?.name}
+                  </div>
+                  <div style={{
+                    fontFamily: "'Geist Mono', monospace",
+                    fontSize: '11px',
+                    color: 'var(--ink-3)',
+                    marginTop: '4px',
+                  }}>
+                    {r?.email}
+                  </div>
+                </div>
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '12px',
+                  width: '160px',
+                }}>
+                  <div style={{
+                    flex: 1,
+                    height: '5px',
+                    borderRadius: '999px',
+                    background: 'var(--hair)',
+                    overflow: 'hidden',
+                  }}>
+                    <div style={{
+                      width: `${r?.progress ?? 0}%`,
+                      height: '100%',
+                      background: 'var(--pink)',
+                      transition: 'width 0.3s',
+                    }} />
+                  </div>
+                  <span style={{
+                    fontFamily: "'Geist Mono', monospace",
+                    fontSize: '11px',
+                    fontWeight: '700',
+                    color: 'var(--ink)',
+                  }}>
+                    {r?.progress ?? 0}%
+                  </span>
+                </div>
               </div>
             </Fragment>
           ))}
         </div>
-        <div style={{"fontSize":"12.5px","color":"var(--ink-2)"}}>
-          {"Selecciona un alumno para mantener el contexto entre pestañas."}
-        </div>
-      </div>
-      {v.insIsDashboard && (
-        <>
-          <div style={{"display":"grid","gridTemplateColumns":"minmax(0,1.15fr) minmax(0,1fr)","gap":"22px","alignItems":"start"}}>
-            <div style={{"display":"flex","flexDirection":"column","gap":"14px"}}>
-              <div style={{"display":"flex","alignItems":"baseline","justifyContent":"space-between","gap":"12px"}}>
-                <div style={{"fontFamily":"'Geist Mono',monospace","fontSize":"9px","letterSpacing":".2em","color":"var(--ink-3)","textTransform":"uppercase"}}>
-                  {"Quick stats"}
-                </div>
-                <div style={{"fontFamily":"'Geist Mono',monospace","fontSize":"10px","color":"var(--ink-3)","whiteSpace":"nowrap"}}>
-                  {"últimos 30 días"}
-                </div>
-              </div>
-              <div style={{"display":"grid","gridTemplateColumns":"repeat(auto-fit,minmax(190px,1fr))","gap":"16px","perspective":"1400px"}}>
-                {(v.insStatCards ?? []).map((s: any, $index: number) => (
-                  <Fragment key={$index}>
-                    <div style={sty(s?.card)} className={cx(pc("hover", "transform:perspective(1200px) translateZ(calc(26px * var(--z3d, 1))) rotateX(-3deg)"))}>
-                      <div style={sty(s?.dot)}></div>
-                      <div style={{"marginTop":"22px","fontFamily":"'Instrument Serif',Georgia,serif","fontSize":"42px","letterSpacing":"-0.01em","color":"var(--ink)"}}>
-                        {s?.value}
-                      </div>
-                      <div style={{"fontSize":"13px","color":"var(--ink-2)","marginTop":"6px"}}>
-                        {s?.label}
-                      </div>
-                      <div style={sty(s?.deltaStyle)}>
-                        {s?.delta}
-                      </div>
-                    </div>
-                  </Fragment>
-                ))}
-              </div>
-            </div>
-            <div style={{"display":"flex","flexDirection":"column","gap":"16px","padding":"24px","borderRadius":"26px","border":"1px solid var(--hair)","background":"var(--glass)","backdropFilter":"var(--lg-blur)","WebkitBackdropFilter":"var(--lg-blur)","boxShadow":"var(--lg-edge)"}}>
-              <div style={{"display":"flex","alignItems":"flex-start","justifyContent":"space-between","gap":"14px"}}>
-                <div>
-                  <div style={{"fontFamily":"'Geist Mono',monospace","fontSize":"9px","letterSpacing":".2em","color":"var(--pink)","fontWeight":"700","textTransform":"uppercase"}}>
-                    {"Sala de clase"}
-                  </div>
-                  <div style={{"marginTop":"8px","fontFamily":"'Instrument Serif',Georgia,serif","fontSize":"30px","letterSpacing":"-0.01em","color":"var(--ink)"}}>
-                    {"Bola disco de sala"}
-                  </div>
-                </div>
-                {v.insLive && (
-                  <>
-                    <span style={{"display":"inline-flex","alignItems":"center","gap":"6px","padding":"6px 12px","borderRadius":"999px","background":"var(--pink)","color":"#fff","fontFamily":"'Geist Mono',monospace","fontSize":"8.5px","fontWeight":"700","letterSpacing":".12em","whiteSpace":"nowrap"}}>
-                      <span style={{"width":"4px","height":"4px","borderRadius":"50%","background":"#fff","animation":"livePulse 1.2s ease-in-out infinite"}}></span>
-                      {"CLASE EN VIVO"}
-                    </span>
-                  </>
-                )}
-              </div>
-              <div style={{"position":"relative","aspectRatio":"16/10","borderRadius":"20px","overflow":"hidden","border":"1px solid var(--hair)","background":"radial-gradient(70% 60% at 50% 38%, rgba(255,190,240,.32), rgba(8,6,11,.9) 72%)"}}>
-                <div style={{"position":"absolute","inset":"0","background":"radial-gradient(70% 60% at 50% 38%, rgba(8,6,11,.15), rgba(8,6,11,.8) 78%)"}}></div>
-                <div style={{"position":"absolute","left":"50%","top":"42%","width":"34%","aspectRatio":"1","marginLeft":"-17%","borderRadius":"50%","background":"radial-gradient(circle at 34% 30%, #fff, rgba(233,196,226,.8) 30%, rgba(120,90,150,.7) 70%, rgba(20,14,26,.9))","boxShadow":"0 0 70px -10px rgba(255,190,240,.85)","animation":"metroBeat 1.6s ease-in-out infinite"}}></div>
-                <div style={{"position":"absolute","inset":"0","backgroundImage":"linear-gradient(rgba(255,196,240,.14) 1px, transparent 1px), linear-gradient(90deg, rgba(255,196,240,.14) 1px, transparent 1px)","backgroundSize":"44px 44px","maskImage":"linear-gradient(transparent, #000)","WebkitMaskImage":"linear-gradient(transparent, #000)"}}></div>
-              </div>
-              <div style={{"display":"flex","alignItems":"center","gap":"14px","flexWrap":"wrap"}}>
-                <span style={{"fontFamily":"'Geist Mono',monospace","fontSize":"10px","letterSpacing":".18em","color":"var(--ink-3)","textTransform":"uppercase"}}>
-                  {"Tempo"}
-                </span>
-                <span style={{"fontFamily":"'Instrument Serif',Georgia,serif","fontSize":"28px","color":"var(--ink)"}}>
-                  {v.insBpmLabel}
-                </span>
-                <input type="range" min="80" max="150" step="1" value={v.insBpm} onChange={v.setInsBpm} style={{"flex":"1","minWidth":"140px","accentColor":"var(--pink)"}} />
-              </div>
-              <div onClick={v.toggleInsLive} style={{"textAlign":"center","padding":"14px 20px","borderRadius":"999px","fontSize":"13px","fontWeight":"700","color":"#1A1400","background":"linear-gradient(90deg,var(--gold-hi),var(--gold-lo))","boxShadow":"inset 0 1px 0 rgba(255,255,255,.5)","cursor":"pointer"}}>
-                {v.insLiveLabel}
-              </div>
-            </div>
-          </div>
-        </>
       )}
-      {v.insIsStudents && (
-        <>
-          <div style={{"display":"flex","flexDirection":"column","gap":"10px"}}>
-            {(v.insRows ?? []).map((r: any, $index: number) => (
-              <Fragment key={$index}>
-                <div style={{"display":"flex","alignItems":"center","gap":"14px","padding":"16px 18px","borderRadius":"20px","border":"1px solid var(--hair)","background":"var(--glass)","backdropFilter":"var(--lg-blur)","WebkitBackdropFilter":"var(--lg-blur)","boxShadow":"var(--lg-edge)","flexWrap":"wrap"}}>
-                  <span style={sty(r?.avatar)}></span>
-                  <div style={{"flex":"1","minWidth":"180px"}}>
-                    <div style={{"fontSize":"14px","fontWeight":"700","color":"var(--ink)"}}>
-                      {r?.name}
-                    </div>
-                    <div style={{"fontFamily":"'Geist Mono',monospace","fontSize":"10px","color":"var(--ink-3)","marginTop":"4px"}}>
-                      {r?.mail}
-                    </div>
-                  </div>
-                  <span style={{"padding":"6px 12px","borderRadius":"999px","border":"1px solid var(--hair)","background":"var(--glass-2)","fontSize":"11.5px","color":"var(--ink-2)","whiteSpace":"nowrap"}}>
-                    {r?.level}
-                  </span>
-                  <span style={{"fontFamily":"'Geist Mono',monospace","fontSize":"10px","color":"var(--ink-3)","whiteSpace":"nowrap"}}>
-                    {r?.last}
-                  </span>
-                  <div style={{"display":"flex","alignItems":"center","gap":"10px","width":"170px"}}>
-                    <div style={{"flex":"1","height":"5px","borderRadius":"999px","background":"var(--hair)","overflow":"hidden"}}>
-                      <div style={sty(r?.bar)}></div>
-                    </div>
-                    <span style={{"fontFamily":"'Geist Mono',monospace","fontSize":"11px","fontWeight":"700","color":"var(--ink)"}}>
-                      {r?.pct}
-                    </span>
-                  </div>
-                </div>
-              </Fragment>
-            ))}
-          </div>
-        </>
-      )}
+
+      {/* Classes View */}
       {v.insIsClasses && (
-        <>
-          <div style={{"display":"flex","flexDirection":"column","gap":"20px"}}>
-            {/* Create class form */}
-            <div style={{"display":"flex","flexDirection":"column","gap":"12px","padding":"20px","borderRadius":"22px","border":"1px solid var(--hair)","background":"var(--glass)","backdropFilter":"var(--lg-blur)","WebkitBackdropFilter":"var(--lg-blur)","boxShadow":"var(--lg-edge)"}}>
-              <div style={{"display":"flex","alignItems":"center","justifyContent":"space-between","gap":"12px","flexWrap":"wrap"}}>
-                <div style={{"fontSize":"14px","fontWeight":"700","color":"var(--ink)"}}>{"Crear nueva clase"}</div>
-              </div>
-              <input value={v.insClassTitleValue ?? ""} onChange={v.insClassTitleChange} placeholder="Título de la clase" style={{"width":"100%","boxSizing":"border-box","padding":"11px 14px","borderRadius":"14px","border":"1px solid var(--hair)","background":"var(--glass-2)","color":"var(--ink)","fontSize":"13px","outline":"none"}} />
-              <div style={{"display":"grid","gridTemplateColumns":"repeat(auto-fit,minmax(200px,1fr))","gap":"12px"}}>
-                <input value={v.insClassScheduleDayValue ?? ""} onChange={v.insClassScheduleDayChange} placeholder="Día (ej. Lunes)" style={{"boxSizing":"border-box","padding":"11px 14px","borderRadius":"14px","border":"1px solid var(--hair)","background":"var(--glass-2)","color":"var(--ink)","fontSize":"13px","outline":"none"}} />
-                <input value={v.insClassScheduleTimeValue ?? ""} onChange={v.insClassScheduleTimeChange} placeholder="Hora (ej. 19:00)" style={{"boxSizing":"border-box","padding":"11px 14px","borderRadius":"14px","border":"1px solid var(--hair)","background":"var(--glass-2)","color":"var(--ink)","fontSize":"13px","outline":"none"}} />
-                <input type="number" value={v.insClassCapacityValue ?? ""} onChange={v.insClassCapacityChange} placeholder="Capacidad" min="1" style={{"boxSizing":"border-box","padding":"11px 14px","borderRadius":"14px","border":"1px solid var(--hair)","background":"var(--glass-2)","color":"var(--ink)","fontSize":"13px","outline":"none"}} />
-              </div>
-              <input value={v.insClassDescriptionValue ?? ""} onChange={v.insClassDescriptionChange} placeholder="Descripción (opcional)" style={{"width":"100%","boxSizing":"border-box","padding":"11px 14px","borderRadius":"14px","border":"1px solid var(--hair)","background":"var(--glass-2)","color":"var(--ink)","fontSize":"13px","outline":"none"}} />
-              {v.insClassErr && (
-                <div style={{"fontSize":"12px","color":"#FF9A7A"}}>{v.insClassErr}</div>
-              )}
-              <div onClick={v.insClassSubmit} style={{"padding":"10px 17px","borderRadius":"999px","fontSize":"12px","fontWeight":"700","color":"#14111A","background":"var(--pink)","boxShadow":"0 8px 18px -8px var(--pink), inset 0 1px 0 rgba(255,255,255,.3)","cursor":"pointer","whiteSpace":"nowrap","textAlign":"center"}} className={cx(pc("hover", "opacity:.9"))}>
-                {v.insClassLabel}
-              </div>
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '20px',
+        }}>
+          {/* Create Class Form */}
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '12px',
+            padding: '20px',
+            borderRadius: '16px',
+            border: '1px solid var(--hair)',
+            background: 'var(--glass)',
+            backdropFilter: 'var(--lg-blur)',
+            WebkitBackdropFilter: 'var(--lg-blur)',
+            boxShadow: 'var(--lg-edge)',
+          }}>
+            <div style={{
+              fontSize: '14px',
+              fontWeight: '700',
+              color: 'var(--ink)',
+              marginBottom: '8px',
+            }}>
+              Crear Nueva Clase
             </div>
-            {/* Class list */}
-            <div style={{"display":"flex","flexDirection":"column","gap":"10px"}}>
-              {(v.insClassList ?? []).map((c: any, $index: number) => (
+            <input
+              value={v.insClassTitleValue ?? ''}
+              onChange={v.insClassTitleChange}
+              placeholder="Título de la clase"
+              style={{
+                width: '100%',
+                boxSizing: 'border-box',
+                padding: '11px 14px',
+                borderRadius: '12px',
+                border: '1px solid var(--hair)',
+                background: 'var(--glass-2)',
+                color: 'var(--ink)',
+                fontSize: '13px',
+                outline: 'none',
+              }}
+            />
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
+              gap: '12px',
+            }}>
+              <input
+                value={v.insClassScheduleDayValue ?? ''}
+                onChange={v.insClassScheduleDayChange}
+                placeholder="Día (ej. Lunes)"
+                style={{
+                  boxSizing: 'border-box',
+                  padding: '11px 14px',
+                  borderRadius: '12px',
+                  border: '1px solid var(--hair)',
+                  background: 'var(--glass-2)',
+                  color: 'var(--ink)',
+                  fontSize: '13px',
+                  outline: 'none',
+                }}
+              />
+              <input
+                value={v.insClassScheduleTimeValue ?? ''}
+                onChange={v.insClassScheduleTimeChange}
+                placeholder="Hora (ej. 19:00)"
+                style={{
+                  boxSizing: 'border-box',
+                  padding: '11px 14px',
+                  borderRadius: '12px',
+                  border: '1px solid var(--hair)',
+                  background: 'var(--glass-2)',
+                  color: 'var(--ink)',
+                  fontSize: '13px',
+                  outline: 'none',
+                }}
+              />
+              <input
+                type="number"
+                value={v.insClassCapacityValue ?? 10}
+                onChange={v.insClassCapacityChange}
+                placeholder="Capacidad"
+                min="1"
+                style={{
+                  boxSizing: 'border-box',
+                  padding: '11px 14px',
+                  borderRadius: '12px',
+                  border: '1px solid var(--hair)',
+                  background: 'var(--glass-2)',
+                  color: 'var(--ink)',
+                  fontSize: '13px',
+                  outline: 'none',
+                }}
+              />
+            </div>
+            <input
+              value={v.insClassDescriptionValue ?? ''}
+              onChange={v.insClassDescriptionChange}
+              placeholder="Descripción (opcional)"
+              style={{
+                width: '100%',
+                boxSizing: 'border-box',
+                padding: '11px 14px',
+                borderRadius: '12px',
+                border: '1px solid var(--hair)',
+                background: 'var(--glass-2)',
+                color: 'var(--ink)',
+                fontSize: '13px',
+                outline: 'none',
+              }}
+            />
+            {v.insClassErr && (
+              <div style={{
+                fontSize: '12px',
+                color: '#FF9A7A',
+                padding: '8px 12px',
+                borderRadius: '8px',
+                background: 'rgba(255, 154, 122, 0.1)',
+              }}>
+                {v.insClassErr}
+              </div>
+            )}
+            <button
+              onClick={v.insClassSubmit}
+              style={{
+                padding: '11px 20px',
+                borderRadius: '999px',
+                fontSize: '12px',
+                fontWeight: '700',
+                color: '#1A1400',
+                background: 'var(--pink)',
+                border: 'none',
+                cursor: 'pointer',
+                boxShadow: '0 4px 12px -4px var(--pink), inset 0 1px 0 rgba(255,255,255,.3)',
+                transition: 'all 0.2s',
+                opacity: v.insClassBusy ? 0.7 : 1,
+              }}
+              disabled={v.insClassBusy}
+              className={cx(pc("hover", "opacity:.9"))}
+            >
+              {v.insClassLabel || 'Crear Clase'}
+            </button>
+          </div>
+
+          {/* Classes List */}
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '10px',
+          }}>
+            {(v.insClassList ?? []).map((c: any, $index: number) => (
               <Fragment key={$index}>
-                <div style={{"display":"flex","alignItems":"center","gap":"14px","padding":"17px 19px","borderRadius":"20px","border":"1px solid var(--hair)","background":"var(--glass)","backdropFilter":"var(--lg-blur)","WebkitBackdropFilter":"var(--lg-blur)","boxShadow":"var(--lg-edge)","flexWrap":"wrap"}}>
-                  <div style={{"flex":"1","minWidth":"200px"}}>
-                    <div style={{"fontSize":"14px","fontWeight":"700","color":"var(--ink)"}}>
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '14px',
+                  padding: '16px 18px',
+                  borderRadius: '16px',
+                  border: '1px solid var(--hair)',
+                  background: 'var(--glass)',
+                  backdropFilter: 'var(--lg-blur)',
+                  WebkitBackdropFilter: 'var(--lg-blur)',
+                  boxShadow: 'var(--lg-edge)',
+                }}>
+                  <div style={{
+                    flex: 1,
+                    minWidth: '200px',
+                  }}>
+                    <div style={{
+                      fontSize: '14px',
+                      fontWeight: '700',
+                      color: 'var(--ink)',
+                    }}>
                       {c?.title}
                     </div>
-                    <div style={{"fontFamily":"'Geist Mono',monospace","fontSize":"10px","color":"var(--ink-3)","marginTop":"5px"}}>
-                      {c?.when}
-                      {" · "}
-                      {c?.who}
+                    <div style={{
+                      fontFamily: "'Geist Mono', monospace",
+                      fontSize: '11px',
+                      color: 'var(--ink-3)',
+                      marginTop: '4px',
+                    }}>
+                      {c?.schedule} · {c?.capacity} estudiantes
                     </div>
                   </div>
-                  <span style={sty(c?.badge)}>
-                    {c?.state}
-                  </span>
-                  <span style={{"padding":"10px 17px","borderRadius":"999px","fontSize":"12px","fontWeight":"700","color":"var(--ink)","border":"1px solid var(--hair)","background":"var(--glass-2)","cursor":"pointer","whiteSpace":"nowrap"}} className={cx(pc("hover", "border-color:var(--pink)"))}>
-                    {"Abrir sala"}
-                  </span>
+                  <button
+                    style={{
+                      padding: '8px 14px',
+                      borderRadius: '999px',
+                      fontSize: '12px',
+                      fontWeight: '600',
+                      color: 'var(--ink)',
+                      border: '1px solid var(--hair)',
+                      background: 'var(--glass-2)',
+                      cursor: 'pointer',
+                      transition: 'all 0.2s',
+                    }}
+                    className={cx(pc("hover", "border-color:var(--pink)"))}
+                  >
+                    Abrir
+                  </button>
                 </div>
               </Fragment>
             ))}
-            </div>
           </div>
-        </>
+        </div>
       )}
+
+      {/* Finances View */}
       {v.insIsFinances && (
-        <>
-          <div style={{"display":"flex","flexDirection":"column","gap":"20px"}}>
-            {/* Bank account form */}
-            <div style={{"display":"flex","flexDirection":"column","gap":"12px","padding":"20px","borderRadius":"22px","border":"1px solid var(--hair)","background":"var(--glass)","backdropFilter":"var(--lg-blur)","WebkitBackdropFilter":"var(--lg-blur)","boxShadow":"var(--lg-edge)"}}>
-              <div style={{"display":"flex","alignItems":"center","justifyContent":"space-between","gap":"12px","flexWrap":"wrap"}}>
-                <div style={{"fontSize":"14px","fontWeight":"700","color":"var(--ink)"}}>{"Datos bancarios"}</div>
-              </div>
-              <input value={v.insFinancesIbanValue ?? ""} onChange={v.insFinancesIbanChange} placeholder="IBAN" style={{"width":"100%","boxSizing":"border-box","padding":"11px 14px","borderRadius":"14px","border":"1px solid var(--hair)","background":"var(--glass-2)","color":"var(--ink)","fontSize":"13px","outline":"none"}} />
-              <input value={v.insFinancesAccountHolderValue ?? ""} onChange={v.insFinancesAccountHolderChange} placeholder="Titular de la cuenta" style={{"width":"100%","boxSizing":"border-box","padding":"11px 14px","borderRadius":"14px","border":"1px solid var(--hair)","background":"var(--glass-2)","color":"var(--ink)","fontSize":"13px","outline":"none"}} />
-              <input value={v.insFinancesBankNameValue ?? ""} onChange={v.insFinancesBankNameChange} placeholder="Nombre del banco" style={{"width":"100%","boxSizing":"border-box","padding":"11px 14px","borderRadius":"14px","border":"1px solid var(--hair)","background":"var(--glass-2)","color":"var(--ink)","fontSize":"13px","outline":"none"}} />
-              {v.insFinancesErr && (
-                <div style={{"fontSize":"12px","color":"#FF9A7A"}}>{v.insFinancesErr}</div>
-              )}
-              <div onClick={v.insFinancesSubmit} style={{"padding":"10px 17px","borderRadius":"999px","fontSize":"12px","fontWeight":"700","color":"#14111A","background":"var(--pink)","boxShadow":"0 8px 18px -8px var(--pink), inset 0 1px 0 rgba(255,255,255,.3)","cursor":"pointer","whiteSpace":"nowrap","textAlign":"center"}} className={cx(pc("hover", "opacity:.9"))}>
-                {v.insFinancesLabel}
-              </div>
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '20px',
+        }}>
+          {/* Bank Account Form */}
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '12px',
+            padding: '20px',
+            borderRadius: '16px',
+            border: '1px solid var(--hair)',
+            background: 'var(--glass)',
+            backdropFilter: 'var(--lg-blur)',
+            WebkitBackdropFilter: 'var(--lg-blur)',
+            boxShadow: 'var(--lg-edge)',
+          }}>
+            <div style={{
+              fontSize: '14px',
+              fontWeight: '700',
+              color: 'var(--ink)',
+              marginBottom: '8px',
+            }}>
+              Datos Bancarios
             </div>
-            {/* Finance stats */}
-            <div style={{"display":"grid","gridTemplateColumns":"repeat(auto-fit,minmax(260px,1fr))","gap":"20px"}}>
-            <div style={sty(v.statCard)}>
-              <div style={{"fontFamily":"'Geist Mono',monospace","fontSize":"9px","letterSpacing":".2em","color":"var(--ink-3)","textTransform":"uppercase"}}>
-                {"Tu parte · 80%"}
+            <input
+              value={v.insFinancesIbanValue ?? ''}
+              onChange={v.insFinancesIbanChange}
+              placeholder="IBAN"
+              style={{
+                width: '100%',
+                boxSizing: 'border-box',
+                padding: '11px 14px',
+                borderRadius: '12px',
+                border: '1px solid var(--hair)',
+                background: 'var(--glass-2)',
+                color: 'var(--ink)',
+                fontSize: '13px',
+                outline: 'none',
+              }}
+            />
+            <input
+              value={v.insFinancesAccountHolderValue ?? ''}
+              onChange={v.insFinancesAccountHolderChange}
+              placeholder="Titular de la cuenta"
+              style={{
+                width: '100%',
+                boxSizing: 'border-box',
+                padding: '11px 14px',
+                borderRadius: '12px',
+                border: '1px solid var(--hair)',
+                background: 'var(--glass-2)',
+                color: 'var(--ink)',
+                fontSize: '13px',
+                outline: 'none',
+              }}
+            />
+            <input
+              value={v.insFinancesBankNameValue ?? ''}
+              onChange={v.insFinancesBankNameChange}
+              placeholder="Nombre del banco"
+              style={{
+                width: '100%',
+                boxSizing: 'border-box',
+                padding: '11px 14px',
+                borderRadius: '12px',
+                border: '1px solid var(--hair)',
+                background: 'var(--glass-2)',
+                color: 'var(--ink)',
+                fontSize: '13px',
+                outline: 'none',
+              }}
+            />
+            {v.insFinancesErr && (
+              <div style={{
+                fontSize: '12px',
+                color: '#FF9A7A',
+                padding: '8px 12px',
+                borderRadius: '8px',
+                background: 'rgba(255, 154, 122, 0.1)',
+              }}>
+                {v.insFinancesErr}
               </div>
-              <div style={{"marginTop":"12px","fontFamily":"'Instrument Serif',Georgia,serif","fontSize":"44px","color":"var(--ink)"}}>
-                {"6.184 €"}
-              </div>
-              <div style={{"fontSize":"13px","color":"var(--ink-2)","marginTop":"8px"}}>
-                {"Acumulado del trimestre"}
-              </div>
-            </div>
-            <div style={sty(v.statCard)}>
-              <div style={{"fontFamily":"'Geist Mono',monospace","fontSize":"9px","letterSpacing":".2em","color":"var(--ink-3)","textTransform":"uppercase"}}>
-                {"Plataforma · 20%"}
-              </div>
-              <div style={{"marginTop":"12px","fontFamily":"'Instrument Serif',Georgia,serif","fontSize":"44px","color":"var(--ink)"}}>
-                {"1.546 €"}
-              </div>
-              <div style={{"fontSize":"13px","color":"var(--ink-2)","marginTop":"8px"}}>
-                {"Comisión de Waack ON"}
-              </div>
-            </div>
-            <div style={sty(v.statCard)}>
-              <div style={{"fontFamily":"'Geist Mono',monospace","fontSize":"9px","letterSpacing":".2em","color":"var(--ink-3)","textTransform":"uppercase"}}>
-                {"Próximo pago"}
-              </div>
-              <div style={{"marginTop":"12px","fontFamily":"'Instrument Serif',Georgia,serif","fontSize":"44px","color":"var(--ink)"}}>
-                {"1 oct"}
-              </div>
-              <div style={{"fontSize":"13px","color":"var(--ink-2)","marginTop":"8px"}}>
-                {"Transferencia · ES·· 8842"}
-              </div>
-            </div>
-            </div>
+            )}
+            <button
+              onClick={v.insFinancesSubmit}
+              style={{
+                padding: '11px 20px',
+                borderRadius: '999px',
+                fontSize: '12px',
+                fontWeight: '700',
+                color: '#1A1400',
+                background: 'var(--pink)',
+                border: 'none',
+                cursor: 'pointer',
+                boxShadow: '0 4px 12px -4px var(--pink), inset 0 1px 0 rgba(255,255,255,.3)',
+                transition: 'all 0.2s',
+                opacity: v.insFinancesBusy ? 0.7 : 1,
+              }}
+              disabled={v.insFinancesBusy}
+              className={cx(pc("hover", "opacity:.9"))}
+            >
+              {v.insFinancesLabel || 'Guardar Datos'}
+            </button>
           </div>
-        </>
-      )}
-      {v.insIsDocs && (
-        <>
-          <div style={{"display":"flex","flexDirection":"column","gap":"20px"}}>
-            <div style={{"display":"flex","flexDirection":"column","gap":"12px","padding":"20px","borderRadius":"22px","border":"1px solid var(--hair)","background":"var(--glass)","backdropFilter":"var(--lg-blur)","WebkitBackdropFilter":"var(--lg-blur)","boxShadow":"var(--lg-edge)"}}>
-              <div style={{"display":"flex","alignItems":"center","justifyContent":"space-between","gap":"12px","flexWrap":"wrap"}}>
-                <div style={{"fontSize":"14px","fontWeight":"700","color":"var(--ink)"}}>
-                  {"Subir un manual"}
-                </div>
-                <span style={{"padding":"4px 10px","borderRadius":"999px","background":"var(--purple)","color":"#fff","fontFamily":"'Geist Mono',monospace","fontSize":"8px","fontWeight":"700","letterSpacing":".12em","whiteSpace":"nowrap"}}>
-                  {"SOLO INSTRUCTOR"}
-                </span>
-              </div>
-              <div style={{"display":"flex","gap":"8px","flexWrap":"wrap"}}>
-                {(v.ebCatPicker ?? []).map((c: any, $index: number) => (
-                  <Fragment key={$index}>
-                    <div onClick={c?.pick} style={sty(c?.style)}>
-                      {c?.label}
+
+          {/* Finance Stats */}
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
+            gap: '16px',
+          }}>
+            {(v.insFinancesStats ?? []).map((stat: any, $index: number) => (
+              <Fragment key={$index}>
+                <div style={{
+                  padding: '20px',
+                  borderRadius: '16px',
+                  border: '1px solid var(--hair)',
+                  background: 'var(--glass)',
+                  backdropFilter: 'var(--lg-blur)',
+                  WebkitBackdropFilter: 'var(--lg-blur)',
+                  boxShadow: 'var(--lg-edge)',
+                }}>
+                  <div style={{
+                    fontFamily: "'Geist Mono', monospace",
+                    fontSize: '10px',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.1em',
+                    color: 'var(--ink-3)',
+                    marginBottom: '12px',
+                  }}>
+                    {stat?.label}
+                  </div>
+                  <div style={{
+                    fontFamily: "'Instrument Serif', Georgia, serif",
+                    fontSize: '28px',
+                    fontWeight: '700',
+                    color: 'var(--ink)',
+                  }}>
+                    {stat?.value}
+                  </div>
+                  {stat?.description && (
+                    <div style={{
+                      fontSize: '12px',
+                      color: 'var(--ink-2)',
+                      marginTop: '8px',
+                    }}>
+                      {stat?.description}
                     </div>
-                  </Fragment>
-                ))}
-              </div>
-              <input value={v.ebTitleValue} onChange={v.ebTitleChange} placeholder="Título del manual" style={{"width":"100%","boxSizing":"border-box","padding":"11px 14px","borderRadius":"14px","border":"1px solid var(--hair)","background":"var(--glass-2)","color":"var(--ink)","fontSize":"13px","outline":"none"}} />
-              <input value={v.ebMetaValue} onChange={v.ebMetaChange} placeholder="Detalle (ej. 48 páginas) · opcional" style={{"width":"100%","boxSizing":"border-box","padding":"11px 14px","borderRadius":"14px","border":"1px solid var(--hair)","background":"var(--glass-2)","color":"var(--ink)","fontSize":"13px","outline":"none"}} />
-              <div style={{"display":"grid","gridTemplateColumns":"repeat(auto-fit,minmax(220px,1fr))","gap":"12px"}}>
-                <div>
-                  <div style={{"fontFamily":"'Geist Mono',monospace","fontSize":"9px","letterSpacing":".14em","color":"var(--ink-3)","textTransform":"uppercase","marginBottom":"8px"}}>
-                    {"Imagen de portada · opcional"}
-                  </div>
-                  <input id="eb-cover-input" type="file" accept="image/*" onChange={v.ebOnCover} style={{"display":"none"}} />
-                  <div onClick={v.ebPickCover} style={{"padding":"14px","borderRadius":"14px","border":"1px dashed var(--hair)","textAlign":"center","color":"var(--ink-2)","fontSize":"12px","cursor":"pointer"}}>
-                    {v.ebCoverLabel}
-                  </div>
+                  )}
                 </div>
-                <div>
-                  <div style={{"fontFamily":"'Geist Mono',monospace","fontSize":"9px","letterSpacing":".14em","color":"var(--ink-3)","textTransform":"uppercase","marginBottom":"8px"}}>
-                    {"Archivo PDF"}
-                  </div>
-                  <input id="eb-pdf-input" type="file" accept="application/pdf" onChange={v.ebOnPdf} style={{"display":"none"}} />
-                  <div onClick={v.ebPickPdf} style={{"padding":"14px","borderRadius":"14px","border":"1px dashed var(--hair)","textAlign":"center","color":"var(--ink-2)","fontSize":"12px","cursor":"pointer"}}>
-                    {v.ebPdfLabel}
-                  </div>
-                </div>
-              </div>
-              {v.ebErr && (
-                <>
-                  <div style={{"fontSize":"11.5px","color":"var(--pink)"}}>
-                    {v.ebErr}
-                  </div>
-                </>
-              )}
-              <div onClick={v.ebSubmit} style={{"alignSelf":"flex-start","padding":"12px 22px","borderRadius":"999px","fontSize":"12.5px","fontWeight":"700","color":"#1A1400","background":"linear-gradient(90deg,var(--gold-hi),var(--gold-lo))","boxShadow":"inset 0 1px 0 rgba(255,255,255,.5)","cursor":"pointer"}}>
-                {v.ebSubmitLabel}
-              </div>
-            </div>
-            <div style={{"display":"flex","flexDirection":"column","gap":"10px"}}>
-              {(v.insDocList ?? []).map((d: any, $index: number) => (
-                <Fragment key={$index}>
-                  <div style={{"display":"flex","alignItems":"center","gap":"14px","padding":"17px 19px","borderRadius":"20px","border":"1px solid var(--hair)","background":"var(--glass)","backdropFilter":"var(--lg-blur)","WebkitBackdropFilter":"var(--lg-blur)","boxShadow":"var(--lg-edge)","flexWrap":"wrap"}}>
-                    <div style={{"flex":"1","minWidth":"200px"}}>
-                      <div style={{"fontSize":"14px","fontWeight":"700","color":"var(--ink)"}}>
-                        {d?.title}
-                      </div>
-                      <div style={{"fontFamily":"'Geist Mono',monospace","fontSize":"10px","color":"var(--ink-3)","marginTop":"5px"}}>
-                        {d?.meta}
-                      </div>
-                    </div>
-                    <span style={sty(d?.badge)}>
-                      {d?.state}
-                    </span>
-                  </div>
-                </Fragment>
-              ))}
-            </div>
+              </Fragment>
+            ))}
           </div>
-        </>
+        </div>
       )}
+
+      {/* Courses View */}
       {v.insIsPublish && (
-        <>
-          <div style={{"display":"flex","flexDirection":"column","gap":"20px"}}>
-            {/* Create course form */}
-            <div style={{"display":"flex","flexDirection":"column","gap":"12px","padding":"20px","borderRadius":"22px","border":"1px solid var(--hair)","background":"var(--glass)","backdropFilter":"var(--lg-blur)","WebkitBackdropFilter":"var(--lg-blur)","boxShadow":"var(--lg-edge)"}}>
-              <div style={{"display":"flex","alignItems":"center","justifyContent":"space-between","gap":"12px","flexWrap":"wrap"}}>
-                <div style={{"fontSize":"14px","fontWeight":"700","color":"var(--ink)"}}>{"Crear nuevo curso"}</div>
-              </div>
-              <input value={v.insCoursetTitleValue ?? ""} onChange={v.insCoursetTitleChange} placeholder="Título del curso" style={{"width":"100%","boxSizing":"border-box","padding":"11px 14px","borderRadius":"14px","border":"1px solid var(--hair)","background":"var(--glass-2)","color":"var(--ink)","fontSize":"13px","outline":"none"}} />
-              <input value={v.insCourseDescValue ?? ""} onChange={v.insCourseDescChange} placeholder="Descripción (opcional)" style={{"width":"100%","boxSizing":"border-box","padding":"11px 14px","borderRadius":"14px","border":"1px solid var(--hair)","background":"var(--glass-2)","color":"var(--ink)","fontSize":"13px","outline":"none"}} />
-              {v.insCourseErr && (
-                <div style={{"fontSize":"12px","color":"#FF9A7A"}}>{v.insCourseErr}</div>
-              )}
-              <div onClick={v.insCourseSubmit} style={{"padding":"10px 17px","borderRadius":"999px","fontSize":"12px","fontWeight":"700","color":"#14111A","background":"var(--pink)","boxShadow":"0 8px 18px -8px var(--pink), inset 0 1px 0 rgba(255,255,255,.3)","cursor":"pointer","whiteSpace":"nowrap","textAlign":"center"}} className={cx(pc("hover", "opacity:.9"))}>
-                {v.insCourseLabel}
-              </div>
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '20px',
+        }}>
+          {/* Create Course Form */}
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '12px',
+            padding: '20px',
+            borderRadius: '16px',
+            border: '1px solid var(--hair)',
+            background: 'var(--glass)',
+            backdropFilter: 'var(--lg-blur)',
+            WebkitBackdropFilter: 'var(--lg-blur)',
+            boxShadow: 'var(--lg-edge)',
+          }}>
+            <div style={{
+              fontSize: '14px',
+              fontWeight: '700',
+              color: 'var(--ink)',
+              marginBottom: '8px',
+            }}>
+              Crear Nuevo Curso
             </div>
-            {/* Course list */}
-            <div style={{"display":"flex","flexDirection":"column","gap":"10px"}}>
-            {(v.insCourseList ?? []).map((d: any, $index: number) => (
+            <input
+              value={v.insCoursetTitleValue ?? ''}
+              onChange={v.insCoursetTitleChange}
+              placeholder="Título del curso"
+              style={{
+                width: '100%',
+                boxSizing: 'border-box',
+                padding: '11px 14px',
+                borderRadius: '12px',
+                border: '1px solid var(--hair)',
+                background: 'var(--glass-2)',
+                color: 'var(--ink)',
+                fontSize: '13px',
+                outline: 'none',
+              }}
+            />
+            <input
+              value={v.insCourseDescValue ?? ''}
+              onChange={v.insCourseDescChange}
+              placeholder="Descripción (opcional)"
+              style={{
+                width: '100%',
+                boxSizing: 'border-box',
+                padding: '11px 14px',
+                borderRadius: '12px',
+                border: '1px solid var(--hair)',
+                background: 'var(--glass-2)',
+                color: 'var(--ink)',
+                fontSize: '13px',
+                outline: 'none',
+              }}
+            />
+            {v.insCourseErr && (
+              <div style={{
+                fontSize: '12px',
+                color: '#FF9A7A',
+                padding: '8px 12px',
+                borderRadius: '8px',
+                background: 'rgba(255, 154, 122, 0.1)',
+              }}>
+                {v.insCourseErr}
+              </div>
+            )}
+            <button
+              onClick={v.insCourseSubmit}
+              style={{
+                padding: '11px 20px',
+                borderRadius: '999px',
+                fontSize: '12px',
+                fontWeight: '700',
+                color: '#1A1400',
+                background: 'var(--pink)',
+                border: 'none',
+                cursor: 'pointer',
+                boxShadow: '0 4px 12px -4px var(--pink), inset 0 1px 0 rgba(255,255,255,.3)',
+                transition: 'all 0.2s',
+                opacity: v.insCourseBusy ? 0.7 : 1,
+              }}
+              disabled={v.insCourseBusy}
+              className={cx(pc("hover", "opacity:.9"))}
+            >
+              {v.insCourseLabel || 'Crear Curso'}
+            </button>
+          </div>
+
+          {/* Courses List */}
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '10px',
+          }}>
+            {(v.insCourseList ?? []).map((course: any, $index: number) => (
               <Fragment key={$index}>
-                <div style={{"display":"flex","alignItems":"center","gap":"14px","padding":"17px 19px","borderRadius":"20px","border":"1px solid var(--hair)","background":"var(--glass)","backdropFilter":"var(--lg-blur)","WebkitBackdropFilter":"var(--lg-blur)","boxShadow":"var(--lg-edge)","flexWrap":"wrap"}}>
-                  <div style={{"flex":"1","minWidth":"200px"}}>
-                    <div style={{"fontSize":"14px","fontWeight":"700","color":"var(--ink)"}}>
-                      {d?.title}
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '14px',
+                  padding: '16px 18px',
+                  borderRadius: '16px',
+                  border: '1px solid var(--hair)',
+                  background: 'var(--glass)',
+                  backdropFilter: 'var(--lg-blur)',
+                  WebkitBackdropFilter: 'var(--lg-blur)',
+                  boxShadow: 'var(--lg-edge)',
+                }}>
+                  <div style={{
+                    flex: 1,
+                  }}>
+                    <div style={{
+                      fontSize: '14px',
+                      fontWeight: '700',
+                      color: 'var(--ink)',
+                    }}>
+                      {course?.title}
                     </div>
-                    <div style={{"fontFamily":"'Geist Mono',monospace","fontSize":"10px","color":"var(--ink-3)","marginTop":"5px"}}>
-                      {d?.meta}
-                    </div>
+                    {course?.description && (
+                      <div style={{
+                        fontSize: '12px',
+                        color: 'var(--ink-2)',
+                        marginTop: '4px',
+                      }}>
+                        {course?.description}
+                      </div>
+                    )}
                   </div>
-                  <span style={sty(d?.badge)}>
-                    {d?.state}
-                  </span>
-                  <span style={{"padding":"10px 17px","borderRadius":"999px","fontSize":"12px","fontWeight":"700","color":"#1A1400","background":"linear-gradient(90deg,var(--gold-hi),var(--gold-lo))","boxShadow":"inset 0 1px 0 rgba(255,255,255,.5)","cursor":"pointer","whiteSpace":"nowrap"}}>
-                    {"Editar"}
-                  </span>
+                  <button
+                    style={{
+                      padding: '8px 14px',
+                      borderRadius: '999px',
+                      fontSize: '12px',
+                      fontWeight: '600',
+                      color: '#1A1400',
+                      background: 'linear-gradient(90deg, var(--gold-hi), var(--gold-lo))',
+                      border: 'none',
+                      cursor: 'pointer',
+                      boxShadow: 'inset 0 1px 0 rgba(255,255,255,.3)',
+                      transition: 'all 0.2s',
+                    }}
+                    className={cx(pc("hover", "opacity:.9"))}
+                  >
+                    Editar
+                  </button>
                 </div>
               </Fragment>
             ))}
-            </div>
           </div>
-        </>
+        </div>
       )}
+
+      {/* Podcasts View */}
       {v.insIsPods && (
-        <>
-          <div style={{"display":"flex","flexDirection":"column","gap":"20px"}}>
-            {/* Create podcast form */}
-            <div style={{"display":"flex","flexDirection":"column","gap":"12px","padding":"20px","borderRadius":"22px","border":"1px solid var(--hair)","background":"var(--glass)","backdropFilter":"var(--lg-blur)","WebkitBackdropFilter":"var(--lg-blur)","boxShadow":"var(--lg-edge)"}}>
-              <div style={{"display":"flex","alignItems":"center","justifyContent":"space-between","gap":"12px","flexWrap":"wrap"}}>
-                <div style={{"fontSize":"14px","fontWeight":"700","color":"var(--ink)"}}>{"Crear nuevo podcast"}</div>
-              </div>
-              <input value={v.insPodcastTitleValue ?? ""} onChange={v.insPodcastTitleChange} placeholder="Título del podcast" style={{"width":"100%","boxSizing":"border-box","padding":"11px 14px","borderRadius":"14px","border":"1px solid var(--hair)","background":"var(--glass-2)","color":"var(--ink)","fontSize":"13px","outline":"none"}} />
-              <input value={v.insPodcastDescValue ?? ""} onChange={v.insPodcastDescChange} placeholder="Descripción (opcional)" style={{"width":"100%","boxSizing":"border-box","padding":"11px 14px","borderRadius":"14px","border":"1px solid var(--hair)","background":"var(--glass-2)","color":"var(--ink)","fontSize":"13px","outline":"none"}} />
-              {v.insPodcastErr && (
-                <div style={{"fontSize":"12px","color":"#FF9A7A"}}>{v.insPodcastErr}</div>
-              )}
-              <div onClick={v.insPodcastSubmit} style={{"padding":"10px 17px","borderRadius":"999px","fontSize":"12px","fontWeight":"700","color":"#14111A","background":"var(--pink)","boxShadow":"0 8px 18px -8px var(--pink), inset 0 1px 0 rgba(255,255,255,.3)","cursor":"pointer","whiteSpace":"nowrap","textAlign":"center"}} className={cx(pc("hover", "opacity:.9"))}>
-                {v.insPodcastLabel}
-              </div>
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '20px',
+        }}>
+          {/* Create Podcast Form */}
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '12px',
+            padding: '20px',
+            borderRadius: '16px',
+            border: '1px solid var(--hair)',
+            background: 'var(--glass)',
+            backdropFilter: 'var(--lg-blur)',
+            WebkitBackdropFilter: 'var(--lg-blur)',
+            boxShadow: 'var(--lg-edge)',
+          }}>
+            <div style={{
+              fontSize: '14px',
+              fontWeight: '700',
+              color: 'var(--ink)',
+              marginBottom: '8px',
+            }}>
+              Crear Nuevo Podcast
             </div>
-            {/* Podcast list */}
-            <div style={{"display":"flex","flexDirection":"column","gap":"10px"}}>
-            {(v.insPodList ?? []).map((d: any, $index: number) => (
+            <input
+              value={v.insPodcastTitleValue ?? ''}
+              onChange={v.insPodcastTitleChange}
+              placeholder="Título del podcast"
+              style={{
+                width: '100%',
+                boxSizing: 'border-box',
+                padding: '11px 14px',
+                borderRadius: '12px',
+                border: '1px solid var(--hair)',
+                background: 'var(--glass-2)',
+                color: 'var(--ink)',
+                fontSize: '13px',
+                outline: 'none',
+              }}
+            />
+            <input
+              value={v.insPodcastDescValue ?? ''}
+              onChange={v.insPodcastDescChange}
+              placeholder="Descripción (opcional)"
+              style={{
+                width: '100%',
+                boxSizing: 'border-box',
+                padding: '11px 14px',
+                borderRadius: '12px',
+                border: '1px solid var(--hair)',
+                background: 'var(--glass-2)',
+                color: 'var(--ink)',
+                fontSize: '13px',
+                outline: 'none',
+              }}
+            />
+            {v.insPodcastErr && (
+              <div style={{
+                fontSize: '12px',
+                color: '#FF9A7A',
+                padding: '8px 12px',
+                borderRadius: '8px',
+                background: 'rgba(255, 154, 122, 0.1)',
+              }}>
+                {v.insPodcastErr}
+              </div>
+            )}
+            <button
+              onClick={v.insPodcastSubmit}
+              style={{
+                padding: '11px 20px',
+                borderRadius: '999px',
+                fontSize: '12px',
+                fontWeight: '700',
+                color: '#1A1400',
+                background: 'var(--pink)',
+                border: 'none',
+                cursor: 'pointer',
+                boxShadow: '0 4px 12px -4px var(--pink), inset 0 1px 0 rgba(255,255,255,.3)',
+                transition: 'all 0.2s',
+                opacity: v.insPodcastBusy ? 0.7 : 1,
+              }}
+              disabled={v.insPodcastBusy}
+              className={cx(pc("hover", "opacity:.9"))}
+            >
+              {v.insPodcastLabel || 'Crear Podcast'}
+            </button>
+          </div>
+
+          {/* Podcasts List */}
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '10px',
+          }}>
+            {(v.insPodList ?? []).map((podcast: any, $index: number) => (
               <Fragment key={$index}>
-                <div style={{"display":"flex","alignItems":"center","gap":"14px","padding":"17px 19px","borderRadius":"20px","border":"1px solid var(--hair)","background":"var(--glass)","backdropFilter":"var(--lg-blur)","WebkitBackdropFilter":"var(--lg-blur)","boxShadow":"var(--lg-edge)"}}>
-                  <span style={{"display":"flex","alignItems":"center","justifyContent":"center","width":"40px","height":"40px","flex":"0 0 40px","borderRadius":"13px","background":"linear-gradient(135deg,var(--pink),var(--purple))","color":"#fff"}}>
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M8 5v14l11-7z"></path>
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '14px',
+                  padding: '16px 18px',
+                  borderRadius: '16px',
+                  border: '1px solid var(--hair)',
+                  background: 'var(--glass)',
+                  backdropFilter: 'var(--lg-blur)',
+                  WebkitBackdropFilter: 'var(--lg-blur)',
+                  boxShadow: 'var(--lg-edge)',
+                }}>
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    width: '40px',
+                    height: '40px',
+                    borderRadius: '12px',
+                    background: 'linear-gradient(135deg, var(--pink), var(--purple))',
+                    color: '#fff',
+                    flex: '0 0 40px',
+                  }}>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M8 5v14l11-7z" />
                     </svg>
-                  </span>
-                  <div style={{"flex":"1","minWidth":"0"}}>
-                    <div style={{"fontSize":"14px","fontWeight":"700","color":"var(--ink)"}}>
-                      {d?.title}
+                  </div>
+                  <div style={{
+                    flex: 1,
+                  }}>
+                    <div style={{
+                      fontSize: '14px',
+                      fontWeight: '700',
+                      color: 'var(--ink)',
+                    }}>
+                      {podcast?.title}
                     </div>
-                    <div style={{"fontFamily":"'Geist Mono',monospace","fontSize":"10px","color":"var(--ink-3)","marginTop":"5px"}}>
-                      {d?.meta}
-                    </div>
+                    {podcast?.description && (
+                      <div style={{
+                        fontSize: '12px',
+                        color: 'var(--ink-2)',
+                        marginTop: '4px',
+                      }}>
+                        {podcast?.description}
+                      </div>
+                    )}
                   </div>
                 </div>
               </Fragment>
             ))}
-            </div>
           </div>
-        </>
-      )}
-      {v.insIsMethod && (
-        <>
-          <div style={{"display":"grid","gridTemplateColumns":"repeat(auto-fit,minmax(260px,1fr))","gap":"20px"}}>
-            <div style={sty(v.statCard)}>
-              <div style={{"fontFamily":"'Geist Mono',monospace","fontSize":"9px","letterSpacing":".2em","color":"var(--ink-3)","textTransform":"uppercase"}}>
-                {"Metodología publicada"}
-              </div>
-              <p style={{"margin":"14px 0 0","fontSize":"13.5px","lineHeight":"1.65","color":"var(--ink-2)","textWrap":"pretty"}}>
-                {"Cuatro niveles, cada uno con su pauta de evaluación y su ficha somática. Los alumnos ven la pauta; tú ves el histórico."}
-              </p>
-            </div>
-            <div style={sty(v.statCard)}>
-              <div style={{"fontFamily":"'Geist Mono',monospace","fontSize":"9px","letterSpacing":".2em","color":"var(--ink-3)","textTransform":"uppercase"}}>
-                {"Freestyle Lab"}
-              </div>
-              <p style={{"margin":"14px 0 0","fontSize":"13.5px","lineHeight":"1.65","color":"var(--ink-2)","textWrap":"pretty"}}>
-                {"Los drills que publiques aquí aparecen en el Laboratorio de tus alumnos con tu tempo recomendado."}
-              </p>
-            </div>
-          </div>
-        </>
-      )}
-      {v.insIsOverview && (
-        <>
-          <div style={sty(v.statCard)}>
-            <div style={{"fontFamily":"'Geist Mono',monospace","fontSize":"9px","letterSpacing":".2em","color":"var(--ink-3)","textTransform":"uppercase"}}>
-              {"Ventas por semana"}
-            </div>
-            <div style={{"display":"flex","alignItems":"flex-end","gap":"12px","height":"150px","marginTop":"22px"}}>
-              <div style={{"flex":"1","height":"42%","borderRadius":"9px 9px 3px 3px","background":"var(--purple)","opacity":".5"}}></div>
-              <div style={{"flex":"1","height":"66%","borderRadius":"9px 9px 3px 3px","background":"var(--purple)","opacity":".65"}}></div>
-              <div style={{"flex":"1","height":"38%","borderRadius":"9px 9px 3px 3px","background":"var(--purple)","opacity":".45"}}></div>
-              <div style={{"flex":"1","height":"88%","borderRadius":"9px 9px 3px 3px","background":"var(--purple)"}}></div>
-              <div style={{"flex":"1","height":"72%","borderRadius":"9px 9px 3px 3px","background":"var(--purple)","opacity":".7"}}></div>
-            </div>
-          </div>
-        </>
-      )}
-      {v.insIsPromo && (
-        <>
-          <div style={{"display":"flex","flexDirection":"column","gap":"10px"}}>
-            <div style={{"display":"flex","alignItems":"center","justifyContent":"space-between","gap":"14px","padding":"17px 19px","borderRadius":"20px","border":"1px solid var(--hair)","background":"var(--glass)","backdropFilter":"var(--lg-blur)","WebkitBackdropFilter":"var(--lg-blur)","boxShadow":"var(--lg-edge)","flexWrap":"wrap"}}>
-              <div>
-                <div style={{"fontSize":"14px","fontWeight":"700","color":"var(--ink)"}}>
-                  {"Cátedra destacada en portada"}
-                </div>
-                <div style={{"fontSize":"12.5px","color":"var(--ink-2)","marginTop":"5px"}}>
-                  {"Aparece en la portada pública durante 7 días."}
-                </div>
-              </div>
-              <span style={{"padding":"10px 17px","borderRadius":"999px","fontSize":"12px","fontWeight":"700","color":"#1A1400","background":"linear-gradient(90deg,var(--gold-hi),var(--gold-lo))","boxShadow":"inset 0 1px 0 rgba(255,255,255,.5)","cursor":"pointer","whiteSpace":"nowrap"}}>
-                {"Activar"}
-              </span>
-            </div>
-            <div style={{"display":"flex","alignItems":"center","justifyContent":"space-between","gap":"14px","padding":"17px 19px","borderRadius":"20px","border":"1px solid var(--hair)","background":"var(--glass)","backdropFilter":"var(--lg-blur)","WebkitBackdropFilter":"var(--lg-blur)","boxShadow":"var(--lg-edge)","flexWrap":"wrap"}}>
-              <div>
-                <div style={{"fontSize":"14px","fontWeight":"700","color":"var(--ink)"}}>
-                  {"Avisos automáticos a alumnos"}
-                </div>
-                <div style={{"fontSize":"12.5px","color":"var(--ink-2)","marginTop":"5px"}}>
-                  {"Notifica cada nueva lección publicada."}
-                </div>
-              </div>
-              <span style={{"padding":"10px 17px","borderRadius":"999px","fontSize":"12px","fontWeight":"700","color":"var(--ink)","border":"1px solid var(--hair)","background":"var(--glass-2)","cursor":"pointer","whiteSpace":"nowrap"}}>
-                {"Configurar"}
-              </span>
-            </div>
-          </div>
-        </>
+        </div>
       )}
     </div>
-    </>
   );
 }
