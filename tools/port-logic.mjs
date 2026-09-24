@@ -169,6 +169,7 @@ import { BattleCall, declineCall, goLive, stopLive, watchIncomingCalls } from '.
 import { STUDY_MODULES, watchStudyProgress, toggleTechniqueItem, saveReflectionAnswer, saveQuizScoreAndComplete } from './lib/studyPlan';
 import { publishAnnouncement, subscribeAnnouncements } from './lib/announcements';
 import { publishEbook, subscribeEbooks } from './lib/ebooks';
+import { markAllNotificationsRead, markNotificationRead, watchMyNotifications, type AppNotification } from './lib/notifications';
 
 `;
 const render = `

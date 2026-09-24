@@ -157,7 +157,7 @@ service cloud.firestore {
     }
     match /{content}/{docId}/comments/{id} {
       allow read: if signedIn();
-      allow create: if signedIn() && content in ['reels', 'lives']
+      allow create: if signedIn() && content in ['reels', 'lives', 'posts']
         && request.resource.data.get('uid', '') == request.auth.uid && shortText('text', 500);
       allow update: if false;
       allow delete: if isAdmin() || (signedIn() && resource.data.get('uid', '') == request.auth.uid);

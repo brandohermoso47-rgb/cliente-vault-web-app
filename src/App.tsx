@@ -25,6 +25,7 @@ import { BattleCall, declineCall, goLive, stopLive, watchIncomingCalls } from '.
 import { STUDY_MODULES, watchStudyProgress, toggleTechniqueItem, saveReflectionAnswer, saveQuizScoreAndComplete } from './lib/studyPlan';
 import { publishAnnouncement, subscribeAnnouncements } from './lib/announcements';
 import { publishEbook, subscribeEbooks } from './lib/ebooks';
+import { markAllNotificationsRead, markNotificationRead, watchMyNotifications, type AppNotification } from './lib/notifications';
 
 import { sty } from './lib/dc';
 
@@ -619,12 +620,11 @@ class App extends Component<any, any> {
   ];
   dirSetQ = (e) => { this.dirState.q = e.target.value; this.forceUpdate(); };
 
-  notifData = [
-    { t: 'Lorena publicó una clase nueva', x: 'Cátedra Nivel 2 — bloque de arm control disponible ahora.', w: 'hace 12 min', c: '--pink', unread: true },
-    { t: 'Tu clase empieza en 1 h', x: 'Taller de musicalidad con Ibuki Imata, sala virtual 3.', w: 'hace 40 min', c: '--yellow', unread: true },
-    { t: 'Nueva insignia desbloqueada', x: 'Retadora: participaste en tres retos semanales.', w: 'ayer', c: '--blue', unread: true },
-    { t: '14 me gusta en tu clip', x: 'Tu reel del reto #34 sigue subiendo en el muro.', w: 'hace 2 días', c: '--purple', unread: false }
-  ];
+  liveNotifs: AppNotification[] = [];
+  unsubNotifs: any = null;
+  notifTypeColor: Record<string, string> = {
+    like: '--pink', comment: '--blue', follow: '--purple', friend_request: '--purple', friend_accept: '--purple', announcement: '--gold',
+  };
   perfState = { tab: 'Todo', upload: false, kind: 'Vídeo', draft: '', following: 342, agTab: 'Próximas', agOpen: 0 };
   agendaData = [
     { id: 1, when: 'next', day: 'JUE 24', hour: '19:00', dur: '60 min', title: 'Cátedra de Waacking — Nivel 2', teacher: 'Lorena "WaackQueen"', mode: 'En vivo', place: 'Sala virtual 1', accent: '--pink', note: 'Bloque de arm control y rotaciones. Lleva rodilleras y agua.' },
@@ -1470,6 +1470,12 @@ class App extends Component<any, any> {
   unsubFeed: any = null;
   friendRows: any[] = [];
   livePosts: any[] = [];
+  postLikes: Record<string, { count: number; liked: boolean }> = {};
+  postLikesLoading: Record<string, boolean> = {};
+  postCommentsOpen: Record<string, boolean> = {};
+  postComments: Record<string, any[]> = {};
+  postCommentDraft: Record<string, string> = {};
+  unsubPostComments: Record<string, () => void> = {};
   feedComposerText = '';
   feedComposerFile: File | null = null;
   feedComposerBusy = false;
@@ -1478,6 +1484,49 @@ class App extends Component<any, any> {
   friendSearchBusy = false;
   friendSearchErr = '';
   friendSearchResult: any = null;
+
+  ensurePostLikeInfo = (postId: string) => {
+    const uid = this.state.user?.uid;
+    if (!uid || this.postLikes[postId] || this.postLikesLoading[postId]) return;
+    this.postLikesLoading[postId] = true;
+    likeInfo('posts', postId, uid).then((r) => {
+      this.postLikes[postId] = r;
+      delete this.postLikesLoading[postId];
+      this.forceUpdate();
+    }).catch(() => { delete this.postLikesLoading[postId]; });
+  };
+  postToggleLike = async (postId: string) => {
+    const uid = this.state.user?.uid;
+    if (!uid) return;
+    const cur = this.postLikes[postId] ?? { count: 0, liked: false };
+    const next = { count: cur.count + (cur.liked ? -1 : 1), liked: !cur.liked };
+    this.postLikes[postId] = next;
+    this.forceUpdate();
+    try { await toggleLike('posts', postId, uid, cur.liked); }
+    catch { this.postLikes[postId] = cur; this.forceUpdate(); }
+  };
+  postToggleComments = (postId: string) => {
+    const opening = !this.postCommentsOpen[postId];
+    this.postCommentsOpen[postId] = opening;
+    if (opening && !this.unsubPostComments[postId]) {
+      this.unsubPostComments[postId] = watchComments('posts', postId, (rows) => {
+        this.postComments[postId] = rows;
+        this.forceUpdate();
+      });
+    }
+    this.forceUpdate();
+  };
+  postCommentChange = (postId: string, e: any) => { this.postCommentDraft[postId] = e.target.value; this.forceUpdate(); };
+  postCommentSend = async (postId: string) => {
+    const uid = this.state.user?.uid;
+    const text = (this.postCommentDraft[postId] || '').trim();
+    if (!uid || !text) return;
+    this.postCommentDraft[postId] = '';
+    this.forceUpdate();
+    try {
+      await addComment('posts', postId, uid, this.myProfile?.displayName || this.state.user?.displayName || 'Sin nombre', text);
+    } catch { /* si falla, el borrador ya se perdió; el usuario puede volver a escribirlo */ }
+  };
 
   timeAgo = (ts: any) => {
     const secs = ts?.seconds ? (Date.now() / 1000 - ts.seconds) : null;
@@ -1569,6 +1618,9 @@ class App extends Component<any, any> {
     this.battleHangUp();
     this.unsubStudyProgress && this.unsubStudyProgress(); this.unsubStudyProgress = null;
     this.unsubAnnouncements && this.unsubAnnouncements(); this.unsubAnnouncements = null;
+    this.unsubNotifs && this.unsubNotifs(); this.unsubNotifs = null;
+    Object.values(this.unsubPostComments).forEach((u: any) => u());
+    this.unsubPostComments = {};
     this.unsubEbooks && this.unsubEbooks(); this.unsubEbooks = null;
   }
 
@@ -1889,6 +1941,8 @@ class App extends Component<any, any> {
     this.unsubMyMedia = watchMyMedia(meUid, (tiles: any) => { this.myMedia = tiles; this.forceUpdate(); });
     this.unsubMyPostCount && this.unsubMyPostCount();
     this.unsubMyPostCount = watchMyPostCount(meUid, (n: any) => { this.myPostCount = n; this.forceUpdate(); });
+    this.unsubNotifs && this.unsubNotifs();
+    this.unsubNotifs = watchMyNotifications(meUid, (rows: any) => { this.liveNotifs = rows; this.forceUpdate(); });
     this.unsubIncomingCalls && this.unsubIncomingCalls();
     this.unsubIncomingCalls = watchIncomingCalls(meUid, (calls: any) => { this.battleIncoming = calls; this.forceUpdate(); });
     this.unsubStudyProgress && this.unsubStudyProgress();
@@ -2293,17 +2347,34 @@ class App extends Component<any, any> {
           ? 'padding:9px 17px;border-radius:999px;font-size:12px;font-weight:700;color:#14111A;background:var(--pink);box-shadow:0 8px 18px -8px var(--pink), inset 0 1px 0 rgba(255,255,255,.3);cursor:pointer;transition:transform .2s cubic-bezier(.2,.85,.25,1)'
           : 'padding:9px 17px;border-radius:999px;font-size:12px;font-weight:600;color:var(--ink-2);border:1px solid var(--hair);background:var(--glass-2);box-shadow:var(--lg-edge);cursor:pointer;transition:transform .2s cubic-bezier(.2,.85,.25,1), color .2s ease'
       })),
-      feedPosts: (this.livePosts.length ? this.livePosts : this.feedPostData).map((p) => ({
-        name: p.name ?? p.authorName, handle: p.handle ?? p.authorHandle,
-        time: p.time ?? this.timeAgo(p.createdAt), text: p.text, tags: p.tags ?? '',
-        likes: p.likes ?? p.likesCount ?? 0, comments: p.comments ?? p.commentsCount ?? 0,
-        mediaUrl: p.mediaUrl ?? null, isImage: p.mediaType === 'image', isVideo: p.mediaType === 'video',
-        media: p.g ? this.tvGrad(p.g) : 'linear-gradient(135deg,var(--pink),var(--purple))',
-        avatar: (p.authorPhotoURL || p.avatarUrl)
-          ? `width:42px;height:42px;flex:0 0 42px;border-radius:50%;background:center/cover no-repeat url('${p.authorPhotoURL || p.avatarUrl}')`
-          : 'width:42px;height:42px;flex:0 0 42px;border-radius:50%;background:' + (p.g ? this.tvGrad(p.g) : 'linear-gradient(135deg,var(--pink),var(--purple))'),
-        card: 'border-radius:24px;overflow:hidden;' + glassCard
-      })),
+      feedPosts: (this.livePosts.length ? this.livePosts : this.feedPostData).map((p) => {
+        const isReal = !!p.id && this.livePosts.length > 0;
+        if (isReal) this.ensurePostLikeInfo(p.id);
+        const likeState = isReal ? this.postLikes[p.id] : null;
+        const commentsOpen = isReal && !!this.postCommentsOpen[p.id];
+        return {
+          id: p.id,
+          name: p.name ?? p.authorName, handle: p.handle ?? p.authorHandle,
+          time: p.time ?? this.timeAgo(p.createdAt), text: p.text, tags: p.tags ?? '',
+          likes: likeState ? likeState.count : (p.likes ?? p.likesCount ?? 0),
+          liked: !!likeState?.liked,
+          comments: isReal ? (this.postComments[p.id]?.length ?? p.commentsCount ?? 0) : (p.comments ?? 0),
+          canInteract: isReal,
+          onLike: isReal ? () => this.postToggleLike(p.id) : undefined,
+          onToggleComments: isReal ? () => this.postToggleComments(p.id) : undefined,
+          commentsOpen,
+          commentRows: commentsOpen ? (this.postComments[p.id] ?? []) : [],
+          commentDraft: this.postCommentDraft[p.id] ?? '',
+          onCommentChange: isReal ? (e: any) => this.postCommentChange(p.id, e) : undefined,
+          onCommentSend: isReal ? () => this.postCommentSend(p.id) : undefined,
+          mediaUrl: p.mediaUrl ?? null, isImage: p.mediaType === 'image', isVideo: p.mediaType === 'video',
+          media: p.g ? this.tvGrad(p.g) : 'linear-gradient(135deg,var(--pink),var(--purple))',
+          avatar: (p.authorPhotoURL || p.avatarUrl)
+            ? `width:42px;height:42px;flex:0 0 42px;border-radius:50%;background:center/cover no-repeat url('${p.authorPhotoURL || p.avatarUrl}')`
+            : 'width:42px;height:42px;flex:0 0 42px;border-radius:50%;background:' + (p.g ? this.tvGrad(p.g) : 'linear-gradient(135deg,var(--pink),var(--purple))'),
+          card: 'border-radius:24px;overflow:hidden;' + glassCard
+        };
+      }),
       friendPending: this.friendRows.filter((f: any) => f.status === 'pending' && f.requesterId !== this.state.user?.uid).map((f: any) => ({
         id: f.id, other: this.resolveUserName(f.users.find((u: string) => u !== this.state.user?.uid)),
         accept: () => this.friendAccept(f.id), decline: () => this.friendDecline(f.id)
@@ -2680,18 +2751,22 @@ class App extends Component<any, any> {
       notifOpen: !!this.state.notif,
       notifToggle: () => this.setState({ notif: !this.state.notif, acct: false }),
       notifClose: () => this.setState({ notif: false }),
-      notifReadAll: () => { this.notifData.forEach((n) => { n.unread = false; }); this.forceUpdate(); },
-      notifList: this.notifData.map((n, i) => ({
-        title: n.t, text: n.x, time: n.w,
-        row: 'display:flex;gap:11px;align-items:flex-start;padding:11px 12px;border-radius:16px;cursor:pointer;transition:background .18s ease;' + (n.unread ? 'background:color-mix(in oklch, var(--blue) 8%, transparent)' : ''),
-        dot: 'width:8px;height:8px;flex:0 0 8px;margin-top:5px;border-radius:50%;background:' + (n.unread ? 'var(' + n.c + ')' : 'var(--hair)'),
-        read: () => { this.notifData[i].unread = false; this.forceUpdate(); }
+      notifUnreadCount: this.liveNotifs.filter((n) => !n.read).length,
+      notifReadAll: () => markAllNotificationsRead(this.liveNotifs).catch(() => {}),
+      notifEmpty: this.liveNotifs.length === 0,
+      notifList: this.liveNotifs.map((n) => ({
+        title: n.title, text: n.text, time: this.timeAgo(n.createdAt),
+        row: 'display:flex;gap:11px;align-items:flex-start;padding:11px 12px;border-radius:16px;cursor:pointer;transition:background .18s ease;' + (!n.read ? 'background:color-mix(in oklch, var(--blue) 8%, transparent)' : ''),
+        dot: 'width:8px;height:8px;flex:0 0 8px;margin-top:5px;border-radius:50%;background:' + (!n.read ? 'var(' + (this.notifTypeColor[n.type] || '--pink') + ')' : 'var(--hair)'),
+        read: () => { if (!n.read) markNotificationRead(n.id).catch(() => {}); }
       })),
       acctToggle: () => this.setState({ acct: !this.state.acct }),
       acctClose: () => this.setState({ acct: false }),
       acctAvatar: 'width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#fff;background:' + (this.myProfile?.photoURL ? `center/cover no-repeat url('${this.myProfile.photoURL}')` : 'linear-gradient(135deg,var(--purple),var(--pink))') + ';cursor:pointer;transition:box-shadow .2s ease;box-shadow:' + (this.state.acct ? '0 0 0 2px var(--ground), 0 0 0 4px var(--pink)' : 'var(--lg-edge)'),
       myInitial: this.myProfile?.photoURL ? '' : (this.myProfile?.displayName || this.state.user?.displayName || this.state.user?.email || '?').trim().slice(0, 1).toUpperCase(),
       myDropAvatar: 'width:44px;height:44px;flex:0 0 44px;border-radius:50%;background:' + (this.myProfile?.photoURL ? `center/cover no-repeat url('${this.myProfile.photoURL}')` : 'linear-gradient(135deg,var(--purple),var(--pink))') + ';display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;color:#fff',
+      navAvatar: 'width:34px;height:34px;flex:0 0 34px;border-radius:50%;background:' + (this.myProfile?.photoURL ? `center/cover no-repeat url('${this.myProfile.photoURL}')` : 'linear-gradient(135deg,var(--purple),var(--pink))') + ';display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff',
+      myComposerAvatar: 'width:38px;height:38px;flex:0 0 38px;border-radius:50%;background:' + (this.myProfile?.photoURL ? `center/cover no-repeat url('${this.myProfile.photoURL}')` : 'linear-gradient(135deg,var(--purple),var(--pink))') + ';display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#fff',
       myDisplayName: this.myProfile?.displayName || this.state.user?.displayName || 'Sin nombre',
       myHandle: this.myProfile?.handle ? '@' + this.myProfile.handle : (this.state.user?.email ? '@' + this.state.user.email.split('@')[0] : '@usuario'),
       perfAvatarStyle: 'width:100%;height:100%;border-radius:50%;border:3px solid var(--ground);display:flex;align-items:center;justify-content:center;font-size:40px;font-weight:800;color:#fff;letter-spacing:-.02em;cursor:pointer;background:' + (this.myProfile?.photoURL ? `center/cover no-repeat url('${this.myProfile.photoURL}')` : 'linear-gradient(135deg,var(--purple),var(--pink))'),
@@ -2701,7 +2776,6 @@ class App extends Component<any, any> {
       onMyAvatarPick: this.onMyAvatarPick,
       onMyAvatarFile: this.onMyAvatarFile,
       acctLinks: [
-        { label: 'Mi cuenta', view: 'cuenta' },
         { label: 'Mi perfil', view: 'perfil' },
         { label: 'Panel de instructor', view: 'instructor' },
         { label: 'Planes & Membresía', view: 'planes' },
@@ -2779,6 +2853,7 @@ class App extends Component<any, any> {
       goStudy: () => this.setState({ view: 'study' }),
       goFisico: () => this.setState({ view: 'fisico' }),
       goPerfil: () => this.setState({ view: 'perfil' }),
+      goCuenta: () => this.setState({ view: 'cuenta' }),
       navPerfil: this.nav(v === 'perfil', 'var(--pink)'),
       goEbooks: () => { this.libTab = 'Manual'; this.setState({ view: 'ebooks' }); },
       goPodcasts: () => { this.libTab = 'Podcast'; this.setState({ view: 'podcasts' }); },
