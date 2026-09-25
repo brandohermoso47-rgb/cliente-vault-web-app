@@ -146,17 +146,11 @@
             <span style="{{ navLabel }}">Notificaciones</span>
             <span style="font-family:'Geist Mono',monospace;font-size:8px;font-weight:700;color:#fff;background:var(--purple);padding:3px 7px;border-radius:999px">3</span>
           </div>
-          <div onClick="{{ goGrupos }}" style="{{ navGrupos }}">
-            <span style="display:flex;align-items:center;justify-content:center;width:28px;height:28px;flex:0 0 28px;border-radius:9px;color:var(--blue);border:1px solid var(--blue);background:color-mix(in oklch, var(--blue) 16%, transparent)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"></path><circle cx="10" cy="7" r="4"></circle><path d="M21 21v-2a4 4 0 0 0-3-3.9"></path><path d="M16 3.1a4 4 0 0 1 0 7.8"></path></svg></span>
-            <span style="{{ navLabel }}">Grupos</span>
-          </div>
-          <sc-if value="{{ isRealInstructor }}" hint-placeholder-val="{{ true }}">
           <div onClick="{{ goInstructor }}" style="{{ navInstructor }}">
             <span style="display:flex;align-items:center;justify-content:center;width:28px;height:28px;flex:0 0 28px;border-radius:9px;color:color-mix(in oklch, var(--purple) 60%, var(--pink));border:1px solid color-mix(in oklch, var(--purple) 60%, var(--pink));background:color-mix(in oklch, color-mix(in oklch, var(--purple) 60%, var(--pink)) 16%, transparent)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 3 2 8l10 5 10-5-10-5Z"></path><path d="M6 11v5c0 1 2.7 2.5 6 2.5s6-1.5 6-2.5v-5"></path><path d="M22 8v6"></path></svg></span>
             <span style="{{ navLabel }}">Panel de Instructor</span>
             <sc-if value="{{ navOpen }}" hint-placeholder-val="{{ true }}"><span style="font-family:'Geist Mono',monospace;font-size:8px;font-weight:700;letter-spacing:.1em;color:#fff;background:var(--purple);padding:3px 7px;border-radius:999px">DOCENTE</span></sc-if>
           </div>
-          </sc-if>
           <div onClick="{{ goSupport }}" style="{{ navSupport }}">
             <span style="display:flex;align-items:center;justify-content:center;width:28px;height:28px;flex:0 0 28px;border-radius:9px;color:color-mix(in oklch, var(--blue) 55%, var(--yellow));border:1px solid color-mix(in oklch, var(--blue) 55%, var(--yellow));background:color-mix(in oklch, color-mix(in oklch, var(--blue) 55%, var(--yellow)) 16%, transparent)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3"></path><path d="M12 17h.01"></path></svg></span>
             <span style="{{ navLabel }}">Ayuda &amp; Legal</span>
@@ -1125,73 +1119,6 @@
                 <div style="{{ chipOff }}" style-hover="{{ chipHover3d }}">Practice Room</div>
                 <div onClick="{{ onBattleChip }}" style="{{ battleChipStyle }}" style-hover="{{ chipHover3d }}">Batallas</div>
               </div>
-            </div>
-
-            <div style="display:flex;flex-direction:column;gap:14px;padding:22px;border-radius:24px;border:1px solid var(--hair);background:var(--glass);backdrop-filter:blur(30px)">
-              <div style="font-family:'Geist Mono',monospace;font-size:10px;letter-spacing:.18em;color:var(--ink-3);text-transform:uppercase">Próximas clases</div>
-              <sc-if value="{{ evHasUpcoming }}">
-                <div style="display:flex;flex-direction:column;gap:10px">
-                  <sc-for list="{{ evUpcomingList }}" as="ev" hint-placeholder-count="2">
-                    <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:14px 16px;border-radius:16px;border:1px solid var(--hair);background:var(--glass-2)">
-                      <div style="flex:1;min-width:200px"><div style="font-size:14px;font-weight:700;color:var(--ink)">{{ ev.title }}</div><div style="font-family:'Geist Mono',monospace;font-size:10px;color:var(--ink-3);margin-top:4px">{{ ev.when }} · {{ ev.author }}</div><div style="font-size:12px;color:var(--ink-2);margin-top:4px">{{ ev.desc }}</div></div>
-                      <div onClick="{{ ev.ics }}" style="padding:9px 14px;border-radius:999px;font-size:11.5px;font-weight:700;color:var(--ink);border:1px solid var(--hair);background:var(--glass-2);cursor:pointer">Agregar a mi calendario</div>
-                      <div onClick="{{ ev.gcal }}" style="padding:9px 14px;border-radius:999px;font-size:11.5px;font-weight:700;color:var(--ink);border:1px solid var(--hair);background:var(--glass-2);cursor:pointer">Google Calendar</div>
-                    </div>
-                  </sc-for>
-                </div>
-              </sc-if>
-              <sc-if value="{{ !evHasUpcoming }}"><div style="font-size:12.5px;color:var(--ink-3)">Todavía no hay clases programadas.</div></sc-if>
-            </div>
-            <div style="display:flex;flex-direction:column;gap:14px;padding:22px;border-radius:24px;border:1px solid var(--hair);background:var(--glass);backdrop-filter:blur(30px)">
-              <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
-                <div style="font-family:'Geist Mono',monospace;font-size:10px;letter-spacing:.18em;color:var(--ink-3);text-transform:uppercase">Transmitir en vivo</div>
-                <div onClick="{{ liveToggle }}" style="{{ liveToggleStyle }}">{{ liveToggleLabel }}</div>
-              </div>
-              <sc-if value="{{ liveErr }}"><div style="padding:10px 14px;border-radius:12px;background:color-mix(in oklch, var(--pink) 14%, transparent);color:var(--pink);font-size:12px">{{ liveErr }}</div></sc-if>
-              <sc-if value="{{ liveOn }}">
-                <div style="position:relative;aspect-ratio:16/9;max-width:640px;border-radius:18px;overflow:hidden;background:#000">
-                  <video ref="{{ setLivePreviewEl }}" autoPlay muted playsInline style="width:100%;height:100%;object-fit:cover;transform:scaleX(-1)"></video>
-                  <span style="position:absolute;top:10px;left:10px;padding:4px 10px;border-radius:999px;background:var(--pink);color:#fff;font-family:'Geist Mono',monospace;font-size:9px;font-weight:700;letter-spacing:.12em">EN VIVO</span>
-                </div>
-                <div style="font-size:12px;color:var(--ink-3)">{{ liveViewersLabel }}</div>
-                <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-                  <sc-if value="{{ ccSupported }}"><div onClick="{{ ccToggle }}" style="padding:9px 16px;border-radius:999px;font-size:12px;font-weight:700;color:var(--ink);border:1px solid var(--hair);background:var(--glass-2);cursor:pointer">{{ ccToggleLabel }}</div></sc-if>
-                  <sc-for list="{{ ccLangs }}" as="cl" hint-placeholder-count="4"><span onClick="{{ cl.pick }}" style="{{ cl.style }}">{{ cl.label }}</span></sc-for>
-                </div>
-                <div style="font-size:11.5px;color:var(--ink-3)">Elige el idioma en el que hablas. Tus espectadores verán los subtítulos y podrán traducirlos.</div>
-              </sc-if>
-              <sc-if value="{{ !liveOn }}">
-                <div style="font-size:12.5px;line-height:1.6;color:var(--ink-2);max-width:560px">Enciende tu cámara y micrófono para transmitir. Cualquier usuario puede ver tu transmisión desde esta pantalla. Tu navegador te pedirá permiso.</div>
-              </sc-if>
-            </div>
-
-            <div style="display:flex;flex-direction:column;gap:14px;padding:22px;border-radius:24px;border:1px solid var(--hair);background:var(--glass);backdrop-filter:blur(30px)">
-              <div style="font-family:'Geist Mono',monospace;font-size:10px;letter-spacing:.18em;color:var(--ink-3);text-transform:uppercase">En vivo ahora</div>
-              <sc-if value="{{ liveIsWatching }}">
-                <div style="position:relative;aspect-ratio:16/9;max-width:760px;border-radius:18px;overflow:hidden;background:#000">
-                  <video ref="{{ setLiveWatchEl }}" autoPlay playsInline style="width:100%;height:100%;object-fit:contain"></video>
-                  <span style="position:absolute;top:10px;left:10px;padding:4px 10px;border-radius:999px;background:var(--pink);color:#fff;font-family:'Geist Mono',monospace;font-size:9px;font-weight:700;letter-spacing:.12em">{{ liveWatchStatus }}</span>
-                  <span style="position:absolute;top:10px;right:10px;padding:4px 10px;border-radius:999px;background:rgba(0,0,0,.55);color:#fff;font-size:11px">{{ liveWatchName }}</span>
-                  <sc-if value="{{ ccHasText }}"><div style="position:absolute;left:0;right:0;bottom:14px;text-align:center;padding:0 16px"><span style="display:inline-block;max-width:92%;padding:6px 12px;border-radius:10px;background:rgba(0,0,0,.72);color:#fff;font-size:15px;line-height:1.4">{{ ccText }}</span></div></sc-if>
-                </div>
-                <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><span style="font-family:'Geist Mono',monospace;font-size:9px;letter-spacing:.14em;color:var(--ink-3);text-transform:uppercase">Ver subtítulos en</span><sc-for list="{{ ccTargets }}" as="ct" hint-placeholder-count="4"><span onClick="{{ ct.pick }}" style="{{ ct.style }}">{{ ct.label }}</span></sc-for></div>
-                <div style="font-size:11px;color:var(--ink-3)">{{ ccTranslateNote }}</div>
-                <div onClick="{{ liveLeave }}" style="align-self:flex-start;padding:10px 18px;border-radius:999px;font-size:12px;font-weight:700;color:var(--ink);border:1px solid var(--hair);background:var(--glass-2);cursor:pointer">Dejar de ver</div>
-              </sc-if>
-              <sc-if value="{{ liveHasList }}">
-                <div style="display:flex;flex-direction:column;gap:8px">
-                  <sc-for list="{{ liveList }}" as="lv" hint-placeholder-count="2">
-                    <div onClick="{{ lv.watch }}" style="display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:14px;border:1px solid var(--hair);background:var(--glass-2);cursor:pointer" style-hover="border-color:var(--pink)">
-                      <span style="width:8px;height:8px;border-radius:50%;background:var(--pink)"></span>
-                      <span style="flex:1;font-size:13px;color:var(--ink)">{{ lv.name }}</span>
-                      <span style="font-size:11.5px;color:var(--pink);font-weight:700">Ver</span>
-                    </div>
-                  </sc-for>
-                </div>
-              </sc-if>
-              <sc-if value="{{ !liveHasList }}">
-                <div style="font-size:12.5px;color:var(--ink-3)">Nadie está transmitiendo ahora mismo.</div>
-              </sc-if>
             </div>
 
             <sc-if value="{{ battlePanelOpen }}">
@@ -2207,129 +2134,6 @@
           </div>
         </sc-if>
 
-        <sc-if value="{{ isGrupos }}">
-          <div style="display:flex;flex-direction:column;gap:22px;max-width:980px">
-
-            <sc-if value="{{ gShowList }}">
-              <p style="margin:0;font-size:13px;line-height:1.6;color:var(--ink-2);max-width:620px">Crea un grupo para chatear, compartir fotos y videos, y conectarte fácil con tu crew o tu clase. Comparte el código o el enlace y quien lo reciba entra con un toque.</p>
-              <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
-                <div onClick="{{ gGoCreate }}" style="padding:12px 20px;border-radius:999px;font-size:12.5px;font-weight:700;color:#1A1400;background:linear-gradient(90deg,var(--gold-hi),var(--gold-lo));box-shadow:inset 0 1px 0 rgba(255,255,255,.5);cursor:pointer">Crear grupo</div>
-                <div onClick="{{ gGoJoin }}" style="padding:12px 20px;border-radius:999px;font-size:12.5px;font-weight:700;color:var(--ink);border:1px solid var(--hair);background:var(--glass-2);cursor:pointer">Unirme con código</div>
-              </div>
-              <sc-if value="{{ gHasGroups }}">
-                <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px">
-                  <sc-for list="{{ gGroups }}" as="g" hint-placeholder-count="2">
-                    <div onClick="{{ g.open }}" style="{{ g.card }}" style-hover="border-color:var(--blue)">
-                      <div style="font-family:'Geist Mono',monospace;font-size:9px;letter-spacing:.16em;color:var(--ink-3);text-transform:uppercase">{{ g.meta }}</div>
-                      <div style="font-size:16px;font-weight:700;color:var(--ink)">{{ g.name }}</div>
-                      <div style="font-size:12.5px;color:var(--ink-2)">{{ g.desc }}</div>
-                    </div>
-                  </sc-for>
-                </div>
-              </sc-if>
-              <sc-if value="{{ !gHasGroups }}">
-                <div style="padding:28px;border-radius:22px;border:1px dashed var(--hair);text-align:center;font-size:13px;color:var(--ink-3)">Todavía no estás en ningún grupo. Crea uno o únete con un código.</div>
-              </sc-if>
-            </sc-if>
-
-            <sc-if value="{{ gShowCreate }}">
-              <div style="display:flex;flex-direction:column;gap:12px;padding:22px;border-radius:24px;border:1px solid var(--hair);background:var(--glass);backdrop-filter:var(--lg-blur);-webkit-backdrop-filter:var(--lg-blur);box-shadow:var(--lg-edge)">
-                <div style="font-size:15px;font-weight:700;color:var(--ink)">Crear un grupo</div>
-                <sc-if value="{{ gCanClase }}">
-                  <div style="display:flex;gap:8px;flex-wrap:wrap">
-                    <sc-for list="{{ gKindPicker }}" as="k" hint-placeholder-count="2">
-                      <div onClick="{{ k.pick }}" style="{{ k.style }}">{{ k.label }}</div>
-                    </sc-for>
-                  </div>
-                  <div style="font-size:11.5px;color:var(--ink-3)">Una clase grupal es un grupo donde solo tú (instructor) publicas el resumen de la clase; tus alumnos chatean y comparten.</div>
-                </sc-if>
-                <input value="{{ gNameValue }}" onChange="{{ gNameChange }}" placeholder="Nombre del grupo" maxlength="60" style="width:100%;box-sizing:border-box;padding:11px 14px;border-radius:14px;border:1px solid var(--hair);background:var(--glass-2);color:var(--ink);font-size:13px;outline:none" />
-                <textarea value="{{ gDescValue }}" onChange="{{ gDescChange }}" placeholder="Descripción (opcional)" rows="2" maxlength="280" style="width:100%;box-sizing:border-box;padding:11px 14px;border-radius:14px;border:1px solid var(--hair);background:var(--glass-2);color:var(--ink);font-family:inherit;font-size:13px;outline:none;resize:vertical"></textarea>
-                <sc-if value="{{ gErr }}"><div style="font-size:11.5px;color:var(--pink)">{{ gErr }}</div></sc-if>
-                <div style="display:flex;gap:10px">
-                  <div onClick="{{ gGoList }}" style="flex:1;text-align:center;padding:12px;border-radius:999px;font-size:12.5px;font-weight:700;color:var(--ink-2);border:1px solid var(--hair);cursor:pointer">Cancelar</div>
-                  <div onClick="{{ gCreate }}" style="flex:1;text-align:center;padding:12px;border-radius:999px;font-size:12.5px;font-weight:700;color:#1A1400;background:linear-gradient(90deg,var(--gold-hi),var(--gold-lo));cursor:pointer">{{ gCreateLabel }}</div>
-                </div>
-              </div>
-            </sc-if>
-
-            <sc-if value="{{ gShowJoin }}">
-              <div style="display:flex;flex-direction:column;gap:12px;padding:22px;border-radius:24px;border:1px solid var(--hair);background:var(--glass);backdrop-filter:var(--lg-blur);-webkit-backdrop-filter:var(--lg-blur);box-shadow:var(--lg-edge)">
-                <div style="font-size:15px;font-weight:700;color:var(--ink)">Unirme a un grupo</div>
-                <div style="font-size:12.5px;color:var(--ink-2)">Pega el código de 10 letras y números, o el enlace de invitación que te enviaron.</div>
-                <input value="{{ gJoinValue }}" onChange="{{ gJoinChange }}" placeholder="Código o enlace del grupo" style="width:100%;box-sizing:border-box;padding:11px 14px;border-radius:14px;border:1px solid var(--hair);background:var(--glass-2);color:var(--ink);font-family:'Geist Mono',monospace;font-size:13px;outline:none" />
-                <sc-if value="{{ gErr }}"><div style="font-size:11.5px;color:var(--pink)">{{ gErr }}</div></sc-if>
-                <div style="display:flex;gap:10px">
-                  <div onClick="{{ gGoList }}" style="flex:1;text-align:center;padding:12px;border-radius:999px;font-size:12.5px;font-weight:700;color:var(--ink-2);border:1px solid var(--hair);cursor:pointer">Cancelar</div>
-                  <div onClick="{{ gJoin }}" style="flex:1;text-align:center;padding:12px;border-radius:999px;font-size:12.5px;font-weight:700;color:#1A1400;background:linear-gradient(90deg,var(--gold-hi),var(--gold-lo));cursor:pointer">{{ gJoinLabel }}</div>
-                </div>
-              </div>
-            </sc-if>
-
-            <sc-if value="{{ gShowChat }}">
-              <div style="display:flex;flex-direction:column;gap:14px;padding:20px 22px;border-radius:24px;border:1px solid var(--hair);background:var(--glass);backdrop-filter:var(--lg-blur);-webkit-backdrop-filter:var(--lg-blur);box-shadow:var(--lg-edge)">
-                <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap">
-                  <div style="min-width:0">
-                    <div style="font-family:'Geist Mono',monospace;font-size:9px;letter-spacing:.18em;color:var(--purple);font-weight:700">{{ gKindLabel }}</div>
-                    <div style="margin-top:6px;font-family:'Instrument Serif',Georgia,serif;font-size:30px;letter-spacing:-0.01em;color:var(--ink)">{{ gTitle }}</div>
-                    <div style="margin-top:4px;font-size:12.5px;color:var(--ink-2)">{{ gDescription }}</div>
-                  </div>
-                  <div onClick="{{ gBack }}" style="padding:9px 16px;border-radius:999px;font-size:12px;font-weight:700;color:var(--ink-2);border:1px solid var(--hair);cursor:pointer;white-space:nowrap">← Mis grupos</div>
-                </div>
-                <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-                  <span style="padding:8px 12px;border-radius:12px;border:1px solid var(--hair);background:var(--glass-2);font-family:'Geist Mono',monospace;font-size:12px;color:var(--ink)">{{ gCode }}</span>
-                  <div onClick="{{ gCopyCode }}" style="padding:9px 14px;border-radius:999px;font-size:11.5px;font-weight:700;color:var(--ink);border:1px solid var(--hair);background:var(--glass-2);cursor:pointer">{{ gCopyCodeLabel }}</div>
-                  <div onClick="{{ gCopyLink }}" style="padding:9px 14px;border-radius:999px;font-size:11.5px;font-weight:700;color:var(--ink);border:1px solid var(--hair);background:var(--glass-2);cursor:pointer">{{ gCopyLinkLabel }}</div>
-                  <div onClick="{{ gShare }}" style="padding:9px 14px;border-radius:999px;font-size:11.5px;font-weight:700;color:#1A1400;background:linear-gradient(90deg,var(--gold-hi),var(--gold-lo));cursor:pointer">Invitar / Compartir</div>
-                </div>
-                <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-                  <span style="font-family:'Geist Mono',monospace;font-size:9px;letter-spacing:.14em;color:var(--ink-3);text-transform:uppercase">{{ gMembersLabel }}</span>
-                  <sc-for list="{{ gMembers }}" as="mb" hint-placeholder-count="3">
-                    <span style="padding:5px 11px;border-radius:999px;border:1px solid var(--hair);background:var(--glass-2);font-size:11.5px;color:var(--ink-2)">{{ mb.name }}</span>
-                  </sc-for>
-                </div>
-              </div>
-
-              <div style="display:flex;flex-direction:column-reverse;gap:10px;min-height:260px;max-height:520px;overflow-y:auto;padding:6px 2px">
-                <sc-for list="{{ gMsgs }}" as="m" hint-placeholder-count="3">
-                  <div style="{{ m.wrap }}">
-                    <div style="{{ m.bubble }}">
-                      <div style="display:flex;align-items:center;gap:8px;font-size:11px;color:var(--ink-3);margin-bottom:4px">
-                        <sc-if value="{{ m.isResumen }}"><span style="font-family:'Geist Mono',monospace;font-size:8px;font-weight:700;letter-spacing:.12em;color:#1A1400;background:var(--gold);padding:2px 7px;border-radius:999px">RESUMEN DE LA CLASE</span></sc-if>
-                        <span style="font-weight:700;color:var(--ink-2)">{{ m.name }}</span>
-                        <span>{{ m.time }}</span>
-                        <sc-if value="{{ m.canDelete }}"><span onClick="{{ m.del }}" style="cursor:pointer;color:var(--pink)">Borrar</span></sc-if>
-                      </div>
-                      <sc-if value="{{ m.hasText }}"><div style="font-size:13.5px;line-height:1.55;color:var(--ink);white-space:pre-wrap;word-break:break-word">{{ m.text }}</div></sc-if>
-                      <sc-if value="{{ m.hasImage }}"><img src="{{ m.mediaUrl }}" alt="" style="margin-top:8px;max-width:100%;max-height:340px;border-radius:14px;display:block" /></sc-if>
-                      <sc-if value="{{ m.hasVideo }}"><video src="{{ m.mediaUrl }}" controls playsInline style="margin-top:8px;max-width:100%;max-height:340px;border-radius:14px;display:block"></video></sc-if>
-                    </div>
-                  </div>
-                </sc-for>
-                <sc-if value="{{ !gHasMsgs }}"><div style="text-align:center;font-size:12.5px;color:var(--ink-3);padding:30px 0">Aún no hay mensajes. ¡Escribe el primero!</div></sc-if>
-              </div>
-
-              <div style="display:flex;flex-direction:column;gap:10px;padding:16px 18px;border-radius:22px;border:1px solid var(--hair);background:var(--glass);backdrop-filter:var(--lg-blur);-webkit-backdrop-filter:var(--lg-blur);box-shadow:var(--lg-edge)">
-                <textarea value="{{ gTextValue }}" onChange="{{ gTextChange }}" placeholder="Escribe un mensaje…" rows="2" style="width:100%;box-sizing:border-box;padding:11px 14px;border-radius:14px;border:1px solid var(--hair);background:var(--glass-2);color:var(--ink);font-family:inherit;font-size:13px;outline:none;resize:vertical"></textarea>
-                <sc-if value="{{ gFileName }}"><div style="font-size:11.5px;color:var(--ink-2)">📎 {{ gFileName }} <span onClick="{{ gClearFile }}" style="cursor:pointer;color:var(--pink);margin-left:6px">Quitar</span></div></sc-if>
-                <sc-if value="{{ gErr }}"><div style="font-size:11.5px;color:var(--pink)">{{ gErr }}</div></sc-if>
-                <input id="group-media-input" type="file" accept="image/*,video/*" onChange="{{ gOnFile }}" style="display:none" />
-                <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-                  <div onClick="{{ gPickFile }}" style="padding:10px 16px;border-radius:999px;font-size:12px;font-weight:700;color:var(--ink);border:1px solid var(--hair);background:var(--glass-2);cursor:pointer">📷 Foto o video</div>
-                  <div style="flex:1"></div>
-                  <sc-if value="{{ gCanResumen }}"><div onClick="{{ gSendResumen }}" style="padding:10px 16px;border-radius:999px;font-size:12px;font-weight:700;color:var(--ink);border:1px solid var(--gold);cursor:pointer">Publicar como resumen de la clase</div></sc-if>
-                  <div onClick="{{ gSendMsg }}" style="padding:10px 22px;border-radius:999px;font-size:12.5px;font-weight:700;color:#1A1400;background:linear-gradient(90deg,var(--gold-hi),var(--gold-lo));cursor:pointer">{{ gSendLabel }}</div>
-                </div>
-                <div style="display:flex;gap:14px;flex-wrap:wrap;font-size:11.5px">
-                  <sc-if value="{{ gIsNotOwner }}"><span onClick="{{ gLeave }}" style="cursor:pointer;color:var(--ink-3)">Salir del grupo</span></sc-if>
-                  <sc-if value="{{ gIsOwner }}"><span onClick="{{ gDelete }}" style="cursor:pointer;color:var(--pink)">Borrar el grupo para todos</span></sc-if>
-                </div>
-              </div>
-            </sc-if>
-
-          </div>
-        </sc-if>
-
         <sc-if value="{{ isMuro }}">
           <div style="display:flex;flex-direction:column;gap:26px;max-width:1180px">
 
@@ -2576,15 +2380,6 @@
           </div>
         </sc-if>
 
-        <sc-if value="{{ isInstructorLocked }}">
-          <div style="display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center;max-width:520px;margin:60px auto;padding:36px 30px;border-radius:26px;border:1px solid var(--hair);background:var(--glass);backdrop-filter:var(--lg-blur);-webkit-backdrop-filter:var(--lg-blur);box-shadow:var(--lg-edge)">
-            <span style="display:flex;align-items:center;justify-content:center;width:52px;height:52px;border-radius:16px;color:var(--purple);border:1px solid var(--purple);background:color-mix(in oklch, var(--purple) 16%, transparent)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="4" y="11" width="16" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 018 0v4"></path></svg></span>
-            <h2 style="margin:0;font-family:'Instrument Serif',Georgia,serif;font-size:26px;font-weight:400;color:var(--ink)">Esto es solo para instructores</h2>
-            <p style="margin:0;font-size:13px;line-height:1.6;color:var(--ink-2)">El Panel de Instructor (dashboard, alumnos, finanzas y contenido) solo se administra desde una cuenta de instructor o estudio aprobada. Solicita convertirte en instructor desde Planes &amp; Membresía.</p>
-            <div onClick="{{ goPlanes }}" style="margin-top:6px;padding:12px 22px;border-radius:999px;font-size:12.5px;font-weight:700;color:#1A1400;background:linear-gradient(90deg,var(--gold-hi),var(--gold-lo));box-shadow:inset 0 1px 0 rgba(255,255,255,.5);cursor:pointer">Ver Planes &amp; Membresía</div>
-          </div>
-        </sc-if>
-
         <sc-if value="{{ isInstructor }}">
           <div style="display:flex;flex-direction:column;gap:24px;max-width:1180px">
 
@@ -2643,7 +2438,6 @@
                     <div style="position:absolute;inset:0;background:radial-gradient(70% 60% at 50% 38%, rgba(8,6,11,.15), rgba(8,6,11,.8) 78%)"></div>
                     <div style="position:absolute;left:50%;top:42%;width:34%;aspect-ratio:1;margin-left:-17%;border-radius:50%;background:radial-gradient(circle at 34% 30%, #fff, rgba(233,196,226,.8) 30%, rgba(120,90,150,.7) 70%, rgba(20,14,26,.9));box-shadow:0 0 70px -10px rgba(255,190,240,.85);animation:metroBeat 1.6s ease-in-out infinite"></div>
                     <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(255,196,240,.14) 1px, transparent 1px), linear-gradient(90deg, rgba(255,196,240,.14) 1px, transparent 1px);background-size:44px 44px;mask-image:linear-gradient(transparent, #000);-webkit-mask-image:linear-gradient(transparent, #000)"></div>
-                    <sc-if value="{{ insLive }}"><video ref="{{ setLivePreviewEl }}" autoPlay muted playsInline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scaleX(-1)"></video></sc-if>
                   </div>
 
                   <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
@@ -2653,48 +2447,6 @@
                   </div>
 
                   <div onClick="{{ toggleInsLive }}" style="text-align:center;padding:14px 20px;border-radius:999px;font-size:13px;font-weight:700;color:#1A1400;background:linear-gradient(90deg,var(--gold-hi),var(--gold-lo));box-shadow:inset 0 1px 0 rgba(255,255,255,.5);cursor:pointer">{{ insLiveLabel }}</div>
-                </div>
-              </div>
-
-              <div style="display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:22px;align-items:start">
-                <div style="display:flex;flex-direction:column;gap:16px;padding:24px;border-radius:26px;border:1px solid var(--hair);background:var(--glass);backdrop-filter:var(--lg-blur);-webkit-backdrop-filter:var(--lg-blur);box-shadow:var(--lg-edge)">
-                  <div style="font-family:'Geist Mono',monospace;font-size:9px;letter-spacing:.2em;color:var(--ink-3);text-transform:uppercase">Student Management</div>
-                  <sc-for list="{{ insStudentMgmt }}" as="m" hint-placeholder-count="3">
-                    <div style="display:flex;flex-direction:column;gap:8px">
-                      <div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px">
-                        <span style="font-size:13.5px;font-weight:700;color:var(--ink)">{{ m.name }}</span>
-                        <span style="font-family:'Geist Mono',monospace;font-size:10.5px;color:var(--ink-3);white-space:nowrap">{{ m.fraction }}</span>
-                      </div>
-                      <div style="height:6px;border-radius:999px;background:var(--hair);overflow:hidden"><div style="{{ m.bar }}"></div></div>
-                      <div style="font-size:11px;color:var(--ink-3)">{{ m.pctLabel }}</div>
-                    </div>
-                  </sc-for>
-                </div>
-
-                <div style="display:flex;flex-direction:column;gap:12px;padding:24px;border-radius:26px;border:1px solid var(--hair);background:var(--glass);backdrop-filter:var(--lg-blur);-webkit-backdrop-filter:var(--lg-blur);box-shadow:var(--lg-edge)">
-                  <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
-                    <div style="font-family:'Geist Mono',monospace;font-size:9px;letter-spacing:.2em;color:var(--ink-3);text-transform:uppercase">Communication Hub</div>
-                    <div onClick="{{ toggleInsLive }}" style="padding:9px 16px;border-radius:999px;font-size:11.5px;font-weight:700;color:#fff;background:var(--pink);cursor:pointer;white-space:nowrap">{{ insLiveShortLabel }}</div>
-                  </div>
-                  <sc-for list="{{ insCommHub }}" as="c" hint-placeholder-count="3">
-                    <div style="display:flex;align-items:center;gap:12px;padding:9px 0;border-top:1px solid var(--hair-soft)">
-                      <span style="{{ c.avatar }}"></span>
-                      <div style="flex:1;min-width:0">
-                        <div style="font-size:13px;font-weight:700;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ c.name }}</div>
-                        <div style="font-family:'Geist Mono',monospace;font-size:9.5px;color:var(--ink-3);margin-top:2px">{{ c.level }}</div>
-                      </div>
-                      <span style="display:inline-flex;align-items:center;gap:5px;font-family:'Geist Mono',monospace;font-size:9.5px;color:var(--ink-3);white-space:nowrap"><span style="width:5px;height:5px;border-radius:50%;background:var(--blue)"></span>{{ c.last }}</span>
-                    </div>
-                  </sc-for>
-                </div>
-              </div>
-
-              <div style="display:flex;flex-direction:column;gap:12px;padding:22px 24px;border-radius:26px;border:1px solid var(--hair);background:var(--glass);backdrop-filter:var(--lg-blur);-webkit-backdrop-filter:var(--lg-blur);box-shadow:var(--lg-edge)">
-                <div style="font-family:'Geist Mono',monospace;font-size:9px;letter-spacing:.2em;color:var(--ink-3);text-transform:uppercase">Message · Grupos de clase</div>
-                <p style="margin:0;font-size:13px;line-height:1.6;color:var(--ink-2)">Crea un grupo para tu clase grupal: comparte el código con tus alumnos, chatea con ellos, comparte fotos y videos, y publica el resumen de la clase.</p>
-                <div style="display:flex;gap:10px;flex-wrap:wrap">
-                  <div onClick="{{ goGruposClase }}" style="padding:11px 20px;border-radius:999px;font-size:12.5px;font-weight:700;color:#1A1400;background:linear-gradient(90deg,var(--gold-hi),var(--gold-lo));cursor:pointer">Crear grupo de clase</div>
-                  <div onClick="{{ goGrupos }}" style="padding:11px 20px;border-radius:999px;font-size:12.5px;font-weight:700;color:var(--ink);border:1px solid var(--hair);background:var(--glass-2);cursor:pointer">Ver mis grupos</div>
                 </div>
               </div>
             </sc-if>
@@ -2720,68 +2472,71 @@
             </sc-if>
 
             <sc-if value="{{ insIsClasses }}">
-              <div style="display:flex;flex-direction:column;gap:12px;padding:20px;border-radius:22px;border:1px solid var(--hair);background:var(--glass);backdrop-filter:var(--lg-blur);-webkit-backdrop-filter:var(--lg-blur);box-shadow:var(--lg-edge);margin-bottom:6px">
-                <div style="font-size:14px;font-weight:700;color:var(--ink)">Programar una clase en el calendario</div>
-                <input value="{{ evTitleValue }}" onChange="{{ evTitleChange }}" placeholder="Título de la clase" maxlength="100" style="width:100%;box-sizing:border-box;padding:11px 14px;border-radius:14px;border:1px solid var(--hair);background:var(--glass-2);color:var(--ink);font-size:13px;outline:none" />
-                <div style="display:flex;gap:10px;flex-wrap:wrap">
-                  <input type="datetime-local" value="{{ evWhenValue }}" onChange="{{ evWhenChange }}" style="flex:1;min-width:200px;width:100%;box-sizing:border-box;padding:11px 14px;border-radius:14px;border:1px solid var(--hair);background:var(--glass-2);color:var(--ink);font-size:13px;outline:none" />
-                  <input type="number" min="10" max="480" value="{{ evDurationValue }}" onChange="{{ evDurationChange }}" placeholder="Minutos" style="width:120px;width:100%;box-sizing:border-box;padding:11px 14px;border-radius:14px;border:1px solid var(--hair);background:var(--glass-2);color:var(--ink);font-size:13px;outline:none" />
-                </div>
-                <textarea value="{{ evDescValue }}" onChange="{{ evDescChange }}" placeholder="Descripción (opcional)" rows="2" maxlength="500" style="width:100%;box-sizing:border-box;padding:11px 14px;border-radius:14px;border:1px solid var(--hair);background:var(--glass-2);color:var(--ink);font-size:13px;outline:none;font-family:inherit;resize:vertical"></textarea>
-                <sc-if value="{{ evErr }}"><div style="font-size:11.5px;color:var(--pink)">{{ evErr }}</div></sc-if>
-                <div onClick="{{ evSubmit }}" style="align-self:flex-start;padding:12px 22px;border-radius:999px;font-size:12.5px;font-weight:700;color:#1A1400;background:linear-gradient(90deg,var(--gold-hi),var(--gold-lo));cursor:pointer">{{ evSubmitLabel }}</div>
-                <sc-for list="{{ evMine }}" as="em" hint-placeholder-count="1"><div style="display:flex;align-items:center;gap:10px;font-size:12.5px;color:var(--ink-2)"><span style="flex:1">{{ em.title }} · {{ em.when }}</span><span onClick="{{ em.del }}" style="cursor:pointer;color:var(--pink)">Borrar</span></div></sc-for>
-              </div>
-              <div style="display:flex;flex-direction:column;gap:10px">
-                <sc-for list="{{ insClassList }}" as="c" hint-placeholder-count="3">
-                  <div style="display:flex;align-items:center;gap:14px;padding:17px 19px;border-radius:20px;border:1px solid var(--hair);background:var(--glass);backdrop-filter:var(--lg-blur);-webkit-backdrop-filter:var(--lg-blur);box-shadow:var(--lg-edge);flex-wrap:wrap">
-                    <div style="flex:1;min-width:200px">
-                      <div style="font-size:14px;font-weight:700;color:var(--ink)">{{ c.title }}</div>
-                      <div style="font-family:'Geist Mono',monospace;font-size:10px;color:var(--ink-3);margin-top:5px">{{ c.when }} · {{ c.who }}</div>
-                    </div>
-                    <span style="{{ c.badge }}">{{ c.state }}</span>
-                    <span style="padding:10px 17px;border-radius:999px;font-size:12px;font-weight:700;color:var(--ink);border:1px solid var(--hair);background:var(--glass-2);cursor:pointer;white-space:nowrap" style-hover="border-color:var(--pink)">Abrir sala</span>
+              <div style="display:flex;flex-direction:column;gap:20px">
+                <!-- Create class form -->
+                <div style="display:flex;flex-direction:column;gap:12px;padding:20px;border-radius:22px;border:1px solid var(--hair);background:var(--glass);backdrop-filter:var(--lg-blur);-webkit-backdrop-filter:var(--lg-blur);box-shadow:var(--lg-edge)">
+                  <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+                    <div style="font-size:14px;font-weight:700;color:var(--ink)">Crear nueva clase</div>
                   </div>
-                </sc-for>
+                  <input value="{{ insClassTitleValue }}" onChange="{{ insClassTitleChange }}" placeholder="Título de la clase" style="width:100%;box-sizing:border-box;padding:11px 14px;border-radius:14px;border:1px solid var(--hair);background:var(--glass-2);color:var(--ink);font-size:13px;outline:none" />
+                  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px">
+                    <input value="{{ insClassScheduleDayValue }}" onChange="{{ insClassScheduleDayChange }}" placeholder="Día (ej. Lunes)" style="box-sizing:border-box;padding:11px 14px;border-radius:14px;border:1px solid var(--hair);background:var(--glass-2);color:var(--ink);font-size:13px;outline:none" />
+                    <input value="{{ insClassScheduleTimeValue }}" onChange="{{ insClassScheduleTimeChange }}" placeholder="Hora (ej. 19:00)" style="box-sizing:border-box;padding:11px 14px;border-radius:14px;border:1px solid var(--hair);background:var(--glass-2);color:var(--ink);font-size:13px;outline:none" />
+                    <input type="number" value="{{ insClassCapacityValue }}" onChange="{{ insClassCapacityChange }}" placeholder="Capacidad" min="1" style="box-sizing:border-box;padding:11px 14px;border-radius:14px;border:1px solid var(--hair);background:var(--glass-2);color:var(--ink);font-size:13px;outline:none" />
+                  </div>
+                  <input value="{{ insClassDescriptionValue }}" onChange="{{ insClassDescriptionChange }}" placeholder="Descripción (opcional)" style="width:100%;box-sizing:border-box;padding:11px 14px;border-radius:14px;border:1px solid var(--hair);background:var(--glass-2);color:var(--ink);font-size:13px;outline:none" />
+                  <sc-if value="{{ insClassErr }}">
+                    <div style="font-size:12px;color:#FF9A7A">{{ insClassErr }}</div>
+                  </sc-if>
+                  <div onClick="{{ insClassSubmit }}" style="padding:10px 17px;border-radius:999px;font-size:12px;font-weight:700;color:#14111A;background:var(--pink);box-shadow:0 8px 18px -8px var(--pink), inset 0 1px 0 rgba(255,255,255,.3);cursor:pointer;white-space:nowrap;text-align:center" style-hover="opacity:.9">{{ insClassLabel }}</div>
+                </div>
+                <!-- Class list -->
+                <div style="display:flex;flex-direction:column;gap:10px">
+                  <sc-for list="{{ insClassList }}" as="c" hint-placeholder-count="3">
+                    <div style="display:flex;align-items:center;gap:14px;padding:17px 19px;border-radius:20px;border:1px solid var(--hair);background:var(--glass);backdrop-filter:var(--lg-blur);-webkit-backdrop-filter:var(--lg-blur);box-shadow:var(--lg-edge);flex-wrap:wrap">
+                      <div style="flex:1;min-width:200px">
+                        <div style="font-size:14px;font-weight:700;color:var(--ink)">{{ c.title }}</div>
+                        <div style="font-family:'Geist Mono',monospace;font-size:10px;color:var(--ink-3);margin-top:5px">{{ c.when }} · {{ c.who }}</div>
+                      </div>
+                      <span style="{{ c.badge }}">{{ c.state }}</span>
+                      <span style="padding:10px 17px;border-radius:999px;font-size:12px;font-weight:700;color:var(--ink);border:1px solid var(--hair);background:var(--glass-2);cursor:pointer;white-space:nowrap" style-hover="border-color:var(--pink)">Abrir sala</span>
+                    </div>
+                  </sc-for>
+                </div>
               </div>
             </sc-if>
 
             <sc-if value="{{ insIsFinances }}">
               <div style="display:flex;flex-direction:column;gap:20px">
-                <sc-if value="{{ insFinBanner }}">
-                  <div style="padding:16px 18px;border-radius:18px;border:1px solid var(--hair);background:var(--glass-2);display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap">
-                    <span style="font-size:13px;color:var(--ink-2)">{{ insFinBannerText }}</span>
-                    <div onClick="{{ insFinConnect }}" style="padding:10px 18px;border-radius:999px;font-size:12px;font-weight:700;color:#1A1400;background:linear-gradient(90deg,var(--gold-hi),var(--gold-lo));cursor:pointer;white-space:nowrap">Configurar cobros</div>
+                <!-- Bank account form -->
+                <div style="display:flex;flex-direction:column;gap:12px;padding:20px;border-radius:22px;border:1px solid var(--hair);background:var(--glass);backdrop-filter:var(--lg-blur);-webkit-backdrop-filter:var(--lg-blur);box-shadow:var(--lg-edge)">
+                  <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+                    <div style="font-size:14px;font-weight:700;color:var(--ink)">Datos bancarios</div>
                   </div>
-                </sc-if>
-                <sc-if value="{{ insEarningsErr }}">
-                  <div style="font-size:12.5px;color:var(--pink)">{{ insEarningsErr }}</div>
-                </sc-if>
+                  <input value="{{ insFinancesIbanValue }}" onChange="{{ insFinancesIbanChange }}" placeholder="IBAN" style="width:100%;box-sizing:border-box;padding:11px 14px;border-radius:14px;border:1px solid var(--hair);background:var(--glass-2);color:var(--ink);font-size:13px;outline:none" />
+                  <input value="{{ insFinancesAccountHolderValue }}" onChange="{{ insFinancesAccountHolderChange }}" placeholder="Titular de la cuenta" style="width:100%;box-sizing:border-box;padding:11px 14px;border-radius:14px;border:1px solid var(--hair);background:var(--glass-2);color:var(--ink);font-size:13px;outline:none" />
+                  <input value="{{ insFinancesBankNameValue }}" onChange="{{ insFinancesBankNameChange }}" placeholder="Nombre del banco" style="width:100%;box-sizing:border-box;padding:11px 14px;border-radius:14px;border:1px solid var(--hair);background:var(--glass-2);color:var(--ink);font-size:13px;outline:none" />
+                  <sc-if value="{{ insFinancesErr }}">
+                    <div style="font-size:12px;color:#FF9A7A">{{ insFinancesErr }}</div>
+                  </sc-if>
+                  <div onClick="{{ insFinancesSubmit }}" style="padding:10px 17px;border-radius:999px;font-size:12px;font-weight:700;color:#14111A;background:var(--pink);box-shadow:0 8px 18px -8px var(--pink), inset 0 1px 0 rgba(255,255,255,.3);cursor:pointer;white-space:nowrap;text-align:center" style-hover="opacity:.9">{{ insFinancesLabel }}</div>
+                </div>
+                <!-- Finance stats -->
                 <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px">
                   <div style="{{ statCard }}">
-                    <div style="font-family:'Geist Mono',monospace;font-size:9px;letter-spacing:.2em;color:var(--ink-3);text-transform:uppercase">{{ insFinYourShareLabel }}</div>
-                    <div style="margin-top:12px;font-family:'Instrument Serif',Georgia,serif;font-size:44px;color:var(--ink)">{{ insFinNet }}</div>
-                    <div style="font-size:13px;color:var(--ink-2);margin-top:8px">Estimado al mes · {{ insFinSubs }} suscriptores activos</div>
+                    <div style="font-family:'Geist Mono',monospace;font-size:9px;letter-spacing:.2em;color:var(--ink-3);text-transform:uppercase">Tu parte · 80%</div>
+                    <div style="margin-top:12px;font-family:'Instrument Serif',Georgia,serif;font-size:44px;color:var(--ink)">6.184 €</div>
+                    <div style="font-size:13px;color:var(--ink-2);margin-top:8px">Acumulado del trimestre</div>
                   </div>
                   <div style="{{ statCard }}">
-                    <div style="font-family:'Geist Mono',monospace;font-size:9px;letter-spacing:.2em;color:var(--ink-3);text-transform:uppercase">{{ insFinPlatformShareLabel }}</div>
-                    <div style="margin-top:12px;font-family:'Instrument Serif',Georgia,serif;font-size:44px;color:var(--ink)">{{ insFinGross }}</div>
+                    <div style="font-family:'Geist Mono',monospace;font-size:9px;letter-spacing:.2em;color:var(--ink-3);text-transform:uppercase">Plataforma · 20%</div>
+                    <div style="margin-top:12px;font-family:'Instrument Serif',Georgia,serif;font-size:44px;color:var(--ink)">1.546 €</div>
                     <div style="font-size:13px;color:var(--ink-2);margin-top:8px">Comisión de Waack ON</div>
                   </div>
                   <div style="{{ statCard }}">
-                    <div style="font-family:'Geist Mono',monospace;font-size:9px;letter-spacing:.2em;color:var(--ink-3);text-transform:uppercase">Disponible para retirar</div>
-                    <div style="margin-top:12px;font-family:'Instrument Serif',Georgia,serif;font-size:44px;color:var(--ink)">{{ insFinAvailable }}</div>
-                    <div style="font-size:13px;color:var(--ink-2);margin-top:8px">Saldo en tu cuenta Stripe Connect</div>
-                  </div>
-                  <div style="{{ statCard }}">
-                    <div style="font-family:'Geist Mono',monospace;font-size:9px;letter-spacing:.2em;color:var(--ink-3);text-transform:uppercase">Pendiente de liquidar</div>
-                    <div style="margin-top:12px;font-family:'Instrument Serif',Georgia,serif;font-size:44px;color:var(--ink)">{{ insFinPending }}</div>
-                    <div style="font-size:13px;color:var(--ink-2);margin-top:8px">Se libera en unos días</div>
-                  </div>
-                  <div style="{{ statCard }}">
-                    <div style="font-family:'Geist Mono',monospace;font-size:9px;letter-spacing:.2em;color:var(--ink-3);text-transform:uppercase">Último pago</div>
-                    <div style="margin-top:12px;font-family:'Instrument Serif',Georgia,serif;font-size:44px;color:var(--ink)">{{ insFinLastPayout }}</div>
-                    <div style="font-size:13px;color:var(--ink-2);margin-top:8px">{{ insFinLastPayoutDate }}</div>
+                    <div style="font-family:'Geist Mono',monospace;font-size:9px;letter-spacing:.2em;color:var(--ink-3);text-transform:uppercase">Próximo pago</div>
+                    <div style="margin-top:12px;font-family:'Instrument Serif',Georgia,serif;font-size:44px;color:var(--ink)">1 oct</div>
+                    <div style="font-size:13px;color:var(--ink-2);margin-top:8px">Transferencia · ES·· 8842</div>
                   </div>
                 </div>
               </div>
@@ -2834,31 +2589,61 @@
             </sc-if>
 
             <sc-if value="{{ insIsPublish }}">
-              <div style="display:flex;flex-direction:column;gap:10px">
-                <sc-for list="{{ insCourseList }}" as="d" hint-placeholder-count="3">
-                  <div style="display:flex;align-items:center;gap:14px;padding:17px 19px;border-radius:20px;border:1px solid var(--hair);background:var(--glass);backdrop-filter:var(--lg-blur);-webkit-backdrop-filter:var(--lg-blur);box-shadow:var(--lg-edge);flex-wrap:wrap">
-                    <div style="flex:1;min-width:200px">
-                      <div style="font-size:14px;font-weight:700;color:var(--ink)">{{ d.title }}</div>
-                      <div style="font-family:'Geist Mono',monospace;font-size:10px;color:var(--ink-3);margin-top:5px">{{ d.meta }}</div>
-                    </div>
-                    <span style="{{ d.badge }}">{{ d.state }}</span>
-                    <span style="padding:10px 17px;border-radius:999px;font-size:12px;font-weight:700;color:#1A1400;background:linear-gradient(90deg,var(--gold-hi),var(--gold-lo));box-shadow:inset 0 1px 0 rgba(255,255,255,.5);cursor:pointer;white-space:nowrap">Editar</span>
+              <div style="display:flex;flex-direction:column;gap:20px">
+                <!-- Create course form -->
+                <div style="display:flex;flex-direction:column;gap:12px;padding:20px;border-radius:22px;border:1px solid var(--hair);background:var(--glass);backdrop-filter:var(--lg-blur);-webkit-backdrop-filter:var(--lg-blur);box-shadow:var(--lg-edge)">
+                  <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+                    <div style="font-size:14px;font-weight:700;color:var(--ink)">Crear nuevo curso</div>
                   </div>
-                </sc-for>
+                  <input value="{{ insCoursetTitleValue }}" onChange="{{ insCoursetTitleChange }}" placeholder="Título del curso" style="width:100%;box-sizing:border-box;padding:11px 14px;border-radius:14px;border:1px solid var(--hair);background:var(--glass-2);color:var(--ink);font-size:13px;outline:none" />
+                  <input value="{{ insCourseDescValue }}" onChange="{{ insCourseDescChange }}" placeholder="Descripción del curso" style="width:100%;box-sizing:border-box;padding:11px 14px;border-radius:14px;border:1px solid var(--hair);background:var(--glass-2);color:var(--ink);font-size:13px;outline:none" />
+                  <sc-if value="{{ insCourseErr }}">
+                    <div style="font-size:12px;color:#FF9A7A">{{ insCourseErr }}</div>
+                  </sc-if>
+                  <div onClick="{{ insCourseSubmit }}" style="padding:10px 17px;border-radius:999px;font-size:12px;font-weight:700;color:#14111A;background:var(--pink);box-shadow:0 8px 18px -8px var(--pink), inset 0 1px 0 rgba(255,255,255,.3);cursor:pointer;white-space:nowrap;text-align:center" style-hover="opacity:.9">{{ insCourseLabel }}</div>
+                </div>
+                <!-- Course list -->
+                <div style="display:flex;flex-direction:column;gap:10px">
+                  <sc-for list="{{ insCourseList }}" as="d" hint-placeholder-count="3">
+                    <div style="display:flex;align-items:center;gap:14px;padding:17px 19px;border-radius:20px;border:1px solid var(--hair);background:var(--glass);backdrop-filter:var(--lg-blur);-webkit-backdrop-filter:var(--lg-blur);box-shadow:var(--lg-edge);flex-wrap:wrap">
+                      <div style="flex:1;min-width:200px">
+                        <div style="font-size:14px;font-weight:700;color:var(--ink)">{{ d.title }}</div>
+                        <div style="font-family:'Geist Mono',monospace;font-size:10px;color:var(--ink-3);margin-top:5px">{{ d.meta }}</div>
+                      </div>
+                      <span style="{{ d.badge }}">{{ d.state }}</span>
+                      <span style="padding:10px 17px;border-radius:999px;font-size:12px;font-weight:700;color:#1A1400;background:linear-gradient(90deg,var(--gold-hi),var(--gold-lo));box-shadow:inset 0 1px 0 rgba(255,255,255,.5);cursor:pointer;white-space:nowrap">Editar</span>
+                    </div>
+                  </sc-for>
+                </div>
               </div>
             </sc-if>
 
             <sc-if value="{{ insIsPods }}">
-              <div style="display:flex;flex-direction:column;gap:10px">
-                <sc-for list="{{ insPodList }}" as="d" hint-placeholder-count="3">
-                  <div style="display:flex;align-items:center;gap:14px;padding:17px 19px;border-radius:20px;border:1px solid var(--hair);background:var(--glass);backdrop-filter:var(--lg-blur);-webkit-backdrop-filter:var(--lg-blur);box-shadow:var(--lg-edge)">
-                    <span style="display:flex;align-items:center;justify-content:center;width:40px;height:40px;flex:0 0 40px;border-radius:13px;background:linear-gradient(135deg,var(--pink),var(--purple));color:#fff"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"></path></svg></span>
-                    <div style="flex:1;min-width:0">
-                      <div style="font-size:14px;font-weight:700;color:var(--ink)">{{ d.title }}</div>
-                      <div style="font-family:'Geist Mono',monospace;font-size:10px;color:var(--ink-3);margin-top:5px">{{ d.meta }}</div>
-                    </div>
+              <div style="display:flex;flex-direction:column;gap:20px">
+                <!-- Create podcast form -->
+                <div style="display:flex;flex-direction:column;gap:12px;padding:20px;border-radius:22px;border:1px solid var(--hair);background:var(--glass);backdrop-filter:var(--lg-blur);-webkit-backdrop-filter:var(--lg-blur);box-shadow:var(--lg-edge)">
+                  <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+                    <div style="font-size:14px;font-weight:700;color:var(--ink)">Crear nuevo podcast</div>
                   </div>
-                </sc-for>
+                  <input value="{{ insPodcastTitleValue }}" onChange="{{ insPodcastTitleChange }}" placeholder="Título del podcast" style="width:100%;box-sizing:border-box;padding:11px 14px;border-radius:14px;border:1px solid var(--hair);background:var(--glass-2);color:var(--ink);font-size:13px;outline:none" />
+                  <input value="{{ insPodcastDescValue }}" onChange="{{ insPodcastDescChange }}" placeholder="Descripción del podcast" style="width:100%;box-sizing:border-box;padding:11px 14px;border-radius:14px;border:1px solid var(--hair);background:var(--glass-2);color:var(--ink);font-size:13px;outline:none" />
+                  <sc-if value="{{ insPodcastErr }}">
+                    <div style="font-size:12px;color:#FF9A7A">{{ insPodcastErr }}</div>
+                  </sc-if>
+                  <div onClick="{{ insPodcastSubmit }}" style="padding:10px 17px;border-radius:999px;font-size:12px;font-weight:700;color:#14111A;background:var(--pink);box-shadow:0 8px 18px -8px var(--pink), inset 0 1px 0 rgba(255,255,255,.3);cursor:pointer;white-space:nowrap;text-align:center" style-hover="opacity:.9">{{ insPodcastLabel }}</div>
+                </div>
+                <!-- Podcast list -->
+                <div style="display:flex;flex-direction:column;gap:10px">
+                  <sc-for list="{{ insPodList }}" as="d" hint-placeholder-count="3">
+                    <div style="display:flex;align-items:center;gap:14px;padding:17px 19px;border-radius:20px;border:1px solid var(--hair);background:var(--glass);backdrop-filter:var(--lg-blur);-webkit-backdrop-filter:var(--lg-blur);box-shadow:var(--lg-edge)">
+                      <span style="display:flex;align-items:center;justify-content:center;width:40px;height:40px;flex:0 0 40px;border-radius:13px;background:linear-gradient(135deg,var(--pink),var(--purple));color:#fff"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"></path></svg></span>
+                      <div style="flex:1;min-width:0">
+                        <div style="font-size:14px;font-weight:700;color:var(--ink)">{{ d.title }}</div>
+                        <div style="font-family:'Geist Mono',monospace;font-size:10px;color:var(--ink-3);margin-top:5px">{{ d.meta }}</div>
+                      </div>
+                    </div>
+                  </sc-for>
+                </div>
               </div>
             </sc-if>
 
