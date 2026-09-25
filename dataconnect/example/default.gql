@@ -7,7 +7,10 @@ mutation CreatePost($mediaUrl: String!, $caption: String!) @auth(level: USER, in
 }
 
 mutation DeletePost($id: UUID!) @auth(level: USER, insecureReason: "Required for this demo app: users may delete their own posts.") @transaction {
-  post_delete(key: {id: $id}) @check(expr: "this.authorId == auth.uid", message: "You can only delete your own post.")
+  post_result: post(id: $id) {
+    authorId
+  }
+  post_delete(key: {id: $id}) @check(expr: "response.post_result.authorId == auth.uid", message: "You can only delete your own post.")
 }
 
 query ListPosts @auth(level: USER, insecureReason: "Required for this demo app: only authenticated users can view the feed.") {
