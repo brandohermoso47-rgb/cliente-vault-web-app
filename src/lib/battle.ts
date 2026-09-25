@@ -1,22 +1,23 @@
 // Modo Practice / Battle Training: videollamada real 1 a 1 usando WebRTC, con Firestore solo como
 // "buzón" para intercambiar la oferta/respuesta y los candidatos de red (patrón estándar de señalización;
 // el video y audio viajan directo entre los dos navegadores, nunca pasan por nuestro servidor).
-// Importante: esto es 1 a 1. Para transmitir a muchos espectadores a la vez hace falta un servidor de
-// medios (SFU) que este proyecto no tiene todavía — "Ir en vivo" de esta función es una señal de
-// presencia + tu cámara local, no una transmisión masiva.
+// Importante: es peer-to-peer. "Ir en vivo" enciende la cámara y cada espectador se conecta directo con quien
+// transmite (tope de pocos espectadores a la vez, ver LIVE_MAX_VIEWERS en el patch). Para audiencias grandes
+// hace falta un servidor de medios (SFU) que este proyecto no tiene todavía.
 import { addDoc, collection, deleteDoc, doc, onSnapshot, orderBy, query, serverTimestamp, setDoc, updateDoc, where } from 'firebase/firestore';
 import { db } from './firebase';
 
 const RTC_CONFIG: RTCConfiguration = { iceServers: [{ urls: ['stun:stun.l.google.com:19302', 'stun:stun1.l.google.com:19302'] }] };
 
 export type Round = { phase: 'idle' | 'countdown' | 'turn1' | 'turn2' | 'done'; startedAt?: any };
-export type CallDoc = { id: string; callerId: string; calleeId: string; mode: 'practice' | 'battle'; status: 'ringing' | 'accepted' | 'declined' | 'ended'; offer?: any; answer?: any; round?: Round };
+export type CallDoc = { id: string; callerId: string; calleeId: string; mode: 'practice' | 'battle' | 'live'; status: 'ringing' | 'accepted' | 'declined' | 'ended'; offer?: any; answer?: any; round?: Round };
 
 export class BattleCall {
   pc: RTCPeerConnection;
   callId: string | null = null;
   isCaller = false;
   localStream: MediaStream | null = null;
+  private ownsStream = true;
   remoteStream = new MediaStream();
   private unsubs: Array<() => void> = [];
   onRemoteTrack?: () => void;
@@ -36,7 +37,28 @@ export class BattleCall {
     return this.localStream;
   }
 
-  async call(otherUid: string, mode: 'practice' | 'battle') {
+  // Enciende la cámara y el micrófono (para transmitir en vivo o para que te vean en una llamada).
+  async useCamera() {
+    this.localStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user', width: { ideal: 1280 }, height: { ideal: 720 } }, audio: true });
+    this.localStream.getTracks().forEach((t) => this.pc.addTrack(t, this.localStream!));
+    return this.localStream;
+  }
+
+  // Reutiliza la cámara ya encendida de quien transmite (varios espectadores comparten los mismos tracks).
+  attachStream(stream: MediaStream) {
+    this.ownsStream = false;
+    this.localStream = stream;
+    stream.getTracks().forEach((t) => this.pc.addTrack(t, stream));
+  }
+
+  // Ver la transmisión de otra persona: solo recibe (no envía nada).
+  async watchLive(broadcasterUid: string) {
+    this.pc.addTransceiver('video', { direction: 'recvonly' });
+    this.pc.addTransceiver('audio', { direction: 'recvonly' });
+    return this.call(broadcasterUid, 'live');
+  }
+
+  async call(otherUid: string, mode: 'practice' | 'battle' | 'live') {
     this.isCaller = true;
     const offer = await this.pc.createOffer();
     await this.pc.setLocalDescription(offer);
@@ -81,7 +103,7 @@ export class BattleCall {
   async hangUp() {
     if (this.callId) await updateDoc(doc(db, 'battle_calls', this.callId), { status: 'ended' }).catch(() => {});
     this.unsubs.forEach((u) => u());
-    this.localStream?.getTracks().forEach((t) => t.stop());
+    if (this.ownsStream) this.localStream?.getTracks().forEach((t) => t.stop());
     this.pc.close();
   }
 }
@@ -96,4 +118,8 @@ export const declineCall = (id: string) => updateDoc(doc(db, 'battle_calls', id)
 
 // "Ir en vivo" libre: presencia + tu cámara, no una transmisión a muchos espectadores (ver nota arriba).
 export const goLive = (uid: string, displayName: string) => setDoc(doc(db, 'live_sessions', uid), { uid, displayName, startedAt: serverTimestamp() });
+export type LiveSession = { uid: string; displayName: string; startedAt?: any };
+export function watchLiveSessions(cb: (rows: LiveSession[]) => void) {
+  return onSnapshot(collection(db, 'live_sessions'), (snap) => cb(snap.docs.map((d) => d.data() as LiveSession)), () => cb([]));
+}
 export const stopLive = (uid: string) => deleteDoc(doc(db, 'live_sessions', uid)).catch(() => {});

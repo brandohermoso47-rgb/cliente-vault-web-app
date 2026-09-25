@@ -18,3 +18,20 @@ export const startCheckout = (planId: string, interval: 'month' | 'year', instru
   redirect('/billing/checkout', { planId, interval, instructorId });
 export const openBillingPortal = () => redirect('/billing/portal');
 export const startConnectOnboarding = () => redirect('/connect/onboarding');
+
+export interface InstructorEarnings {
+  onboarded: boolean;
+  chargesEnabled: boolean;
+  payoutsEnabled: boolean;
+  activeSubscribers: number;
+  monthlyGrossCents: number;
+  monthlyNetCents: number;
+  feePercent: number;
+  currency: string;
+  priceMonthlyCents: number | null;
+  available: { amount: number; currency: string }[];
+  pending: { amount: number; currency: string }[];
+  lastPayout: { amount: number; currency: string; arrivalDate: number; status: string } | null;
+}
+
+export const getInstructorEarnings = () => api<InstructorEarnings>('GET', '/billing/instructor-earnings');
