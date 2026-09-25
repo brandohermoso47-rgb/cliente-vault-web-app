@@ -6,7 +6,7 @@ mutation CreatePost($mediaUrl: String!, $caption: String!) @auth(level: USER, in
   post_insert(data: {mediaUrl: $mediaUrl, caption: $caption, createdAt_expr: "request.time", author: {id_expr: "auth.uid"}})
 }
 
-mutation DeletePost($id: UUID!) @auth(level: USER, insecureReason: "Required for this demo app: users may delete their own posts.") {
+mutation DeletePost($id: UUID!) @auth(level: USER, insecureReason: "Required for this demo app: users may delete their own posts.") @transaction {
   post_delete(key: {id: $id}) @check(expr: "this.author.id == auth.uid", message: "You can only delete your own post.")
 }
 
