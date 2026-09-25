@@ -3,6 +3,7 @@
 // @ts-nocheck
 import { Fragment } from 'react';
 import { cx, pc, sty } from '../lib/dc';
+import EntrenarEstilos from './EntrenarEstilos';
 
 export default function Lab({ v }: { v: any }) {
   return (
@@ -308,6 +309,7 @@ export default function Lab({ v }: { v: any }) {
           </Fragment>
         ))}
       </div>
+      <EntrenarEstilos />
     </div>
     </>
   );
