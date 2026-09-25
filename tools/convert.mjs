@@ -212,3 +212,17 @@ const shell = shellBody.replace(/\s*\{"@@CONTENT@@"\}\n/, `\n${viewJsx}\n`);
 writeFileSync(join(root, 'src/Shell.tsx'), `${HEADER('./lib/')}${viewImports}\nimport Account from './screens/Account';\n\nexport default function Shell({ v }: { v: any }) {\n  return (\n    <>\n${shell}    </>\n  );\n}\n`);
 writeFileSync(join(root, 'src/toggle.txt'), nodes(toggleBlock.children, new Set(), 0));
 console.log('vistas:', viewNames.map((x) => x.name).join(', '), others.length ? `(+${others.length} nodos sueltos en contenido)` : '');
+
+// "Entrenar con otros estilos" es una vista escrita a mano (src/views/EntrenarEstilos.tsx), no sale de la
+// plantilla. Se monta al final del Laboratorio Freestyle; este paso es idempotente para que `npm run convert`
+// no la pierda al regenerar Lab.tsx.
+{
+  const labPath = join(root, 'src/views/Lab.tsx');
+  let lab = readFileSync(labPath, 'utf8');
+  if (!lab.includes('EntrenarEstilos')) {
+    lab = lab.replace("import { cx, pc, sty } from '../lib/dc';", "import { cx, pc, sty } from '../lib/dc';\nimport EntrenarEstilos from './EntrenarEstilos';");
+    lab = lab.replace(/\n    <\/div>\n    <\/>\n  \);\n\}\n$/, '\n      <EntrenarEstilos />\n    </div>\n    </>\n  );\n}\n');
+    if (!lab.includes('<EntrenarEstilos />')) throw new Error('No se encontró dónde montar EntrenarEstilos en Lab.tsx');
+    writeFileSync(labPath, lab);
+  }
+}
