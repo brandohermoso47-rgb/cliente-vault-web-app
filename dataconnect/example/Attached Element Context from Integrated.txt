@@ -1,0 +1,62 @@
+Attached Element Context from Integrated Browser
+
+Element: div
+
+URL: https://buoyant-objective-fwjkk.web.app/
+
+HTML Path: div#root > div > div > main > div > div > div > div > div > div
+
+Outer HTML:
+```html
+<div style="width: 100%; height: 100%; border-radius: 50%; border: 3px solid var(--ground); background: linear-gradient(135deg,var(--purple),var(--pink)); display: flex; align-items: center; justify-content: center; font-size: 40px; font-weight: 800; color: rgb(255, 255, 255); letter-spacing: -0.02em;">SM</div>
+```
+
+Dimensions:
+- top: 129px
+- left: 325px
+- width: 126px
+- height: 126px
+
+CSS:
+```css
+element { width: 100%; height: 100%; border-radius: 50%; border: 3px solid var(--ground); background: linear-gradient(135deg,var(--purple),var(--pink)); display: flex; align-items: center; justify-content: center; font-size: 40px; font-weight: 800; color: rgb(255, 255, 255); letter-spacing: -0.02em; }
+* { box-sizing:border-box }
+
+/* Pseudo-elements */
+::-webkit-scrollbar { width:8px;height:8px }
+::-webkit-scrollbar-thumb { background:#e4b94d4d;border-radius:999px }
+::-webkit-scrollbar-track { background:0 0 }
+
+/* Inherited */
+html, body { color:var(--ink); font-family:Geist,system-ui,sans-serif }
+
+/* Resolved values */
+border-radius: 50%;
+align-items: center;
+background-attachment: scroll;
+background-clip: border-box;
+background-color: rgba(0, 0, 0, 0);
+background-image: linear-gradient(135deg, rgb(255, 79, 176), rgb(255, 30, 142));
+background-origin: padding-box;
+background-position-x: 0%;
+background-position-y: 0%;
+background-repeat: repeat;
+background-size: auto;
+box-sizing: border-box;
+color: rgb(255, 255, 255);
+display: flex;
+font-family: Geist, system-ui, sans-serif;
+font-size: 40px;
+font-weight: 800;
+height: 126px;
+justify-content: center;
+letter-spacing: -0.8px;
+unicode-bidi: isolate /*UA*/;
+width: 126px;
+
+/* CSS variables */
+--pink: #FF1E8E;
+--purple: #FF4FB0;
+--ground: #000;
+--ink: #fff;
+```
