@@ -28,6 +28,7 @@ import { publishEbook, subscribeEbooks } from './lib/ebooks';
 import { createEvent, deleteEvent, downloadIcs, googleCalendarUrl, subscribeEvents } from './lib/events';
 import { CAPTION_LANGS, speechSupported, startCaptions, translateText, translatorSupported } from './lib/captions';
 import { checkGroupFile, cleanGroupCode, createGroup, deleteGroup, deleteMessage, joinGroup, leaveGroup, sendMessage, watchMessages, watchMyGroups } from './lib/groups';
+import { handleSpotifyReturnIfPresent } from './lib/spotify';
 
 import { sty } from './lib/dc';
 
@@ -1462,6 +1463,7 @@ class App extends Component<any, any> {
         } catch (e) { console.warn('No se pudo crear el perfil en Firestore', e); }
         await this.syncSession(user);
         if (this.isNewAccount) { this.isNewAccount = false; if (!user.photoURL) this.setState({ view: 'setupPhoto' }); }
+        if (await handleSpotifyReturnIfPresent()) this.setState({ view: 'musica' });
       }
     });
   }
@@ -2526,7 +2528,7 @@ class App extends Component<any, any> {
 
   renderVals() {
     const v = this.state.view;
-    const crumbs = { perfil:'Mi perfil', cuenta:'Mi cuenta', grupos:'Grupos', dashboard:'Dashboard', cursos:'Clases & Cursos', lives:'Lives / En Vivo', reels:'Waack Reels', tv:'Waack On TV', podcast:'Waack On Radio', entrenamiento:'Laboratorio Freestyle', fisico:'Cuerpo & Estiramientos', ebooks:'Manuales', podcasts:'Podcasts', comunidad:'Muro & Retos', ranking:'Ranking & Insignias', planes:'Planes & Membresía', support:'Ayuda & Legal', instructor:'Panel de Instructor' };
+    const crumbs = { perfil:'Mi perfil', cuenta:'Mi cuenta', grupos:'Grupos', dashboard:'Dashboard', cursos:'Clases & Cursos', lives:'Lives / En Vivo', reels:'Waack Reels', tv:'Waack On TV', podcast:'Waack On Radio', entrenamiento:'Laboratorio Freestyle', fisico:'Cuerpo & Estiramientos', ebooks:'Manuales', podcasts:'Podcasts', comunidad:'Muro & Retos', ranking:'Ranking & Insignias', planes:'Planes & Membresía', support:'Ayuda & Legal', instructor:'Panel de Instructor', musica:'Música' };
     const pill = 'flex:1;text-align:center;padding:8px 12px;border-radius:999px;font-size:11px;font-weight:700;cursor:pointer;transition:all .18s ease;';
     const on = pill + 'background:var(--glass);color:var(--ink);border:1px solid var(--hair);box-shadow:var(--lg-edge);';
     const off = pill + 'color:var(--ink-2);border:1px solid transparent;';
@@ -2592,6 +2594,7 @@ class App extends Component<any, any> {
       isRegisterStudio: v === 'registerStudio',
       isSetupPhoto: v === 'setupPhoto',
       isCuenta: v === 'cuenta',
+      isMusica: v === 'musica',
       goView: (view) => this.setState({ view }),
       goRegisterPro: () => this.setState({ view: 'registerInstructor' }),
       ambientLayer: dark
@@ -3166,6 +3169,7 @@ class App extends Component<any, any> {
         { label: 'Panel de instructor', view: 'instructor' },
         { label: 'Planes & Membresía', view: 'planes' },
         { label: 'Cuerpo & Estiramientos', view: 'fisico' },
+        { label: 'Música', view: 'musica' },
         { label: 'Ayuda & Legal', view: 'support' }
       ].map((l) => ({
         label: l.label,

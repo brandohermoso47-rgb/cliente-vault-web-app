@@ -26,6 +26,13 @@ const Env = z.object({
   STRIPE_SECRET_KEY: z.string().optional(),
   STRIPE_WEBHOOK_SECRET: z.string().optional(),
 
+  // OAuth de Spotify (developer.spotify.com/dashboard). El Redirect URI apunta al FRONTEND (no a la API):
+  // Firebase Hosting sirve index.html en cualquier ruta, la app lee ?code&state al arrancar y llama a
+  // POST /v1/spotify/exchange ya autenticada. Debe coincidir EXACTO con el del dashboard, p. ej. APP_URL.
+  SPOTIFY_CLIENT_ID: z.string().optional(),
+  SPOTIFY_CLIENT_SECRET: z.string().optional(),
+  SPOTIFY_REDIRECT_URI: z.string().optional(),
+
   // Correos (verificados en Firebase) que se convierten en admin al iniciar sesión. Separados por comas.
   BOOTSTRAP_ADMIN_EMAILS: z.string().default(''),
 
