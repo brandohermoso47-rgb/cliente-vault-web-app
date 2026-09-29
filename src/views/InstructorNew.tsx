@@ -98,6 +98,7 @@ import GoogleSlidesView from './GoogleSlidesView';
 import Logo from './Logo';
 
 import InstructorPlaylistsManager from './instructor/InstructorPlaylistsManager';
+import { MotionEditor } from '../components/MotionEditor';
 
 interface InstructorViewProps {
   currentUser: User;
@@ -493,7 +494,7 @@ export default function InstructorView({
   onOpenDocsModal
 }: InstructorViewProps) {
   const [activeSubTab, setActiveSubTab] = useState<
-    'dashboard' | 'finances' | 'overview' | 'publish' | 'documents' | 'students' | 'classes' | 'promotion' | 'methodology' | 'soundcloud' | 'podcasts' | 'workspace_classroom' | 'workspace_tasks' | 'workspace_gmail' | 'workspace_drive'
+    'dashboard' | 'finances' | 'overview' | 'publish' | 'documents' | 'students' | 'classes' | 'promotion' | 'methodology' | 'soundcloud' | 'podcasts' | 'workspace_classroom' | 'workspace_tasks' | 'workspace_gmail' | 'workspace_drive' | 'motion-editor'
   >((initialSubTab as any) || 'dashboard');
 
   // Google Workspace Integrated Modal Tool State
@@ -1809,6 +1810,7 @@ Semana 3-4 (Progresión):
             { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
             { id: 'students', label: 'Alumnos', icon: Users, badge: students.length },
             { id: 'classes', label: 'Clases & Directos', icon: Calendar },
+            { id: 'motion-editor', label: '🎬 Motion Editor', icon: Sparkles },
             { id: 'finances', label: 'Finanzas', icon: DollarSign },
             { id: 'documents', label: 'Documentos PDF', icon: BookMarked, badge: instructorDocuments.length },
             { id: 'methodology', label: 'Metodología & Lab', icon: Award },
@@ -4854,6 +4856,64 @@ Semana 3-4 (Progresión):
                 </form>
               </motion.div>
             </div>
+          )}
+
+          {activeSubTab === 'motion-editor' && (
+            <motion.div
+              key="motion-editor-panel"
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+              className="space-y-6"
+            >
+              {/* Motion Editor Header */}
+              <div className="bg-[#121212] border border-white/10 rounded-[28px] p-5 sm:p-6 shadow-2xl relative overflow-hidden">
+                <div className="absolute right-0 top-0 w-64 h-64 bg-purple-500/5 rounded-full blur-3xl pointer-events-none" />
+
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-white/5 pb-5">
+                  <div>
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="px-2.5 py-0.5 rounded-full bg-purple-500/10 border border-purple-500/30 text-purple-300 text-[10px] font-mono font-black uppercase tracking-wider flex items-center gap-1.5">
+                        <Sparkles className="w-3.5 h-3.5" />
+                        EDITOR DE EFECTOS DE MOVIMIENTO
+                      </span>
+                      {selectedStudent && (
+                        <span className="px-2.5 py-0.5 rounded-full bg-pink-500/20 border border-pink-500/40 text-pink-300 text-[10px] font-mono font-bold flex items-center gap-1">
+                          <UserCheck className="w-3 h-3" />
+                          Enfoque: {selectedStudent.name}
+                        </span>
+                      )}
+                    </div>
+                    <h2 className="text-xl sm:text-2xl font-black text-white uppercase tracking-tight">
+                      {language === 'es' ? 'Reconocimiento de Movimiento & Efectos Visuales' : 'Motion Recognition & Visual Effects'}
+                    </h2>
+                    <p className="text-xs text-slate-400 font-medium mt-1">
+                      {language === 'es'
+                        ? 'Detecta poses automáticamente en videos de enseñanza y añade gráficos educativos (cuadrículas, líneas de brazo, ángulos de codo). Edita, personaliza y publica para tus estudiantes.'
+                        : 'Automatically detect poses in teaching videos and overlay educational graphics (grids, arm lines, elbow angles). Edit, customize, and publish for your students.'}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Motion Editor Component */}
+              <div className="bg-[#121212] border border-white/10 rounded-[24px] p-6 overflow-hidden">
+                <MotionEditor
+                  videoUrl="https://via.placeholder.com/1280x720?text=Upload+Video"
+                  videoDurationMs={180000}
+                  classId="demo-class"
+                  instructorId={currentUser?.id || 'demo-instructor'}
+                  initialData={undefined}
+                  onSave={async (data) => {
+                    console.log('Motion data saved:', data);
+                    alert(language === 'es'
+                      ? '✓ Datos de movimiento guardados correctamente'
+                      : '✓ Motion data saved successfully');
+                  }}
+                  onCancel={() => setActiveSubTab('classes')}
+                />
+              </div>
+            </motion.div>
           )}
 
           {activeSubTab === 'promotion' && (
