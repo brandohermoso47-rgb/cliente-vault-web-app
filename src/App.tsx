@@ -14,45 +14,21 @@ import Register from './screens/Register';
 import RegisterPro from './screens/RegisterPro';
 import SetupPhoto from './screens/SetupPhoto';
 import { takePending } from './lib/session';
-import { startCheckout } from './lib/payments';
+import { startCheckout, startConnectOnboarding, getInstructorEarnings } from './lib/payments';
 import { api } from './lib/api';
 import { acceptFriend, declineFriend, myFriendIds, removeFriend, sendFriendRequest } from './lib/friends';
 import { publishPost, subscribeFeed } from './lib/posts';
 import { addComment, likeInfo, toggleFollow, toggleLike, watchComments } from './lib/social';
 import { publishReel } from './lib/reels';
 import { watchFollowCounts, watchMyMedia, watchMyPostCount } from './lib/profileStats';
-import { BattleCall, declineCall, goLive, stopLive, watchIncomingCalls } from './lib/battle';
+import { BattleCall, declineCall, goLive, stopLive, watchIncomingCalls, watchLiveSessions } from './lib/battle';
 import { STUDY_MODULES, watchStudyProgress, toggleTechniqueItem, saveReflectionAnswer, saveQuizScoreAndComplete } from './lib/studyPlan';
 import { publishAnnouncement, subscribeAnnouncements } from './lib/announcements';
 import { publishEbook, subscribeEbooks } from './lib/ebooks';
 import { createEvent, deleteEvent, downloadIcs, googleCalendarUrl, subscribeEvents } from './lib/events';
 import { CAPTION_LANGS, speechSupported, startCaptions, translateText, translatorSupported } from './lib/captions';
 import { checkGroupFile, cleanGroupCode, createGroup, deleteGroup, deleteMessage, joinGroup, leaveGroup, sendMessage, watchMessages, watchMyGroups } from './lib/groups';
-import { handleSpotifyReturnIfPresent } from './lib/spotify';
-import {
-  subscribeInstructorClasses,
-  subscribeInstructorStudents,
-  subscribeInstructorFinances,
-  subscribeClassEnrollments,
-  subscribeClassGroups,
-  subscribeInstructorCourses,
-  subscribeInstructorDocuments,
-  subscribeInstructorPodcasts,
-  subscribeInstructorAnnouncements,
-  createClass,
-  updateClass,
-  deleteClass,
-  addStudentToInstructor,
-  enrollStudent,
-  createStudentPlan,
-  createClassGroup,
-  updateFinances,
-  createCourse,
-  publishCourse,
-  uploadDocument,
-  createPodcast,
-  createAnnouncement,
-} from './lib/instructor';
+import { markAllNotificationsRead, markNotificationRead, watchMyNotifications, type AppNotification } from './lib/notifications';
 
 import { sty } from './lib/dc';
 
@@ -647,12 +623,11 @@ class App extends Component<any, any> {
   ];
   dirSetQ = (e) => { this.dirState.q = e.target.value; this.forceUpdate(); };
 
-  notifData = [
-    { t: 'Lorena publicó una clase nueva', x: 'Cátedra Nivel 2 — bloque de arm control disponible ahora.', w: 'hace 12 min', c: '--pink', unread: true },
-    { t: 'Tu clase empieza en 1 h', x: 'Taller de musicalidad con Ibuki Imata, sala virtual 3.', w: 'hace 40 min', c: '--yellow', unread: true },
-    { t: 'Nueva insignia desbloqueada', x: 'Retadora: participaste en tres retos semanales.', w: 'ayer', c: '--blue', unread: true },
-    { t: '14 me gusta en tu clip', x: 'Tu reel del reto #34 sigue subiendo en el muro.', w: 'hace 2 días', c: '--purple', unread: false }
-  ];
+  liveNotifs: AppNotification[] = [];
+  unsubNotifs: any = null;
+  notifTypeColor: Record<string, string> = {
+    like: '--pink', comment: '--blue', follow: '--purple', friend_request: '--purple', friend_accept: '--purple', announcement: '--gold',
+  };
   perfState = { tab: 'Todo', upload: false, kind: 'Vídeo', draft: '', following: 342, agTab: 'Próximas', agOpen: 0 };
   agendaData = [
     { id: 1, when: 'next', day: 'JUE 24', hour: '19:00', dur: '60 min', title: 'Cátedra de Waacking — Nivel 2', teacher: 'Lorena "WaackQueen"', mode: 'En vivo', place: 'Sala virtual 1', accent: '--pink', note: 'Bloque de arm control y rotaciones. Lleva rodilleras y agua.' },
@@ -1235,7 +1210,54 @@ class App extends Component<any, any> {
     { v: '2,033', l: 'Ventas de cursos', d: '+21% vs. mes previo', c: 'var(--purple)' }
   ];
 
-  setInsTab(id) { this.insTab = id; this.forceUpdate(); }
+  // El rol real viene de la API (/me); si la API no responde, se usa el rol del perfil de Firestore (solo un admin puede cambiarlo).
+  isDocente() { return !!this.subs.docente || ['instructor', 'estudio', 'admin'].includes(this.myProfile?.role); }
+
+  insEarnings = null;
+  insEarningsBusy = false;
+  insEarningsErr = '';
+
+  async loadInsEarnings() {
+    if (this.insEarningsBusy) return;
+    this.insEarningsBusy = true; this.insEarningsErr = ''; this.forceUpdate();
+    try { this.insEarnings = await getInstructorEarnings(); }
+    catch (e) { this.insEarningsErr = e.message || 'No se pudo cargar tu información de pagos.'; }
+    this.insEarningsBusy = false; this.forceUpdate();
+  }
+
+  fmtCents(cents, currency) {
+    if (cents == null || !currency) return '—';
+    try { return new Intl.NumberFormat('es-ES', { style: 'currency', currency: currency.toUpperCase() }).format(cents / 100); }
+    catch { return (cents / 100).toFixed(2) + ' ' + currency.toUpperCase(); }
+  }
+
+  sumMinor(list) { return Array.isArray(list) && list.length ? list.reduce((n, x) => n + x.amount, 0) : (list ? 0 : null); }
+
+  buildInsStudentMgmt() {
+    return this.students.slice(0, 3).map((st, i) => ({
+      key: st.id,
+      name: st.n,
+      fraction: Math.round(st.pct / 10) + ' / 10',
+      pctLabel: 'Progreso ' + st.pct + '%',
+      bar: 'width:' + st.pct + '%;height:100%;border-radius:999px;background:linear-gradient(90deg,' + st.c1 + ',' + st.c2 + ')'
+    }));
+  }
+
+  buildInsCommHub() {
+    return this.students.slice(0, 3).map((st) => ({
+      key: st.id,
+      name: st.n,
+      level: st.lv,
+      last: st.last,
+      avatar: 'width:36px;height:36px;flex:0 0 36px;border-radius:13px;border:1px solid var(--hair);background:linear-gradient(135deg, color-mix(in oklch, ' + st.c1 + ' 72%, #fff 8%), color-mix(in oklch, ' + st.c2 + ' 70%, #000 18%))'
+    }));
+  }
+
+  setInsTab(id) {
+    this.insTab = id;
+    if (id === 'finances' && this.isDocente() && !this.insEarnings) this.loadInsEarnings();
+    this.forceUpdate();
+  }
   setStudent(id) { this.insStudent = this.insStudent === id ? null : id; this.forceUpdate(); }
 
   buildInsTabs() {
@@ -1299,9 +1321,9 @@ class App extends Component<any, any> {
   }
 
   insBpm = 124;
-  insLive = true;
+  insLive = false;
   setInsBpm = (e) => { this.insBpm = Number(e.target.value); this.forceUpdate(); };
-  toggleInsLive = () => { this.insLive = !this.insLive; this.forceUpdate(); };
+  toggleInsLive = () => { this.liveToggle(); };
 
   insClasses = [
     { t: 'Fundamentos · Grupo A', when: 'Hoy · 19:00 CET', who: '18 inscritos', state: 'En vivo', live: true },
@@ -1371,184 +1393,6 @@ class App extends Component<any, any> {
     }));
   }
 
-  /* ==================== INSTRUCTOR DATA (DYNAMIC) ==================== */
-  // Firestore subscriptions
-  insClassesData: any[] = [];
-  insStudentsData: any[] = [];
-  insFinancesData: any = {};
-  insCoursesData: any[] = [];
-  insDocumentsData: any[] = [];
-  insPodcastsData: any[] = [];
-
-  // Form states
-  insClassTitle = '';
-  insClassScheduleDay = '';
-  insClassScheduleTime = '';
-  insClassCapacity = 10;
-  insClassDescription = '';
-  insClassErr = '';
-  insClassBusy = false;
-
-  insFinancesIban = '';
-  insFinancesAccountHolder = '';
-  insFinancesBankName = '';
-  insFinancesErr = '';
-  insFinancesBusy = false;
-
-  insCourseTitle = '';
-  insCourseDesc = '';
-  insCourseErr = '';
-  insCourseBusy = false;
-
-  insPodcastTitle = '';
-  insPodcastDesc = '';
-  insPodcastErr = '';
-  insPodcastBusy = false;
-
-  // Unsubs
-  insDataUnsubs: any[] = [];
-
-  startInsData() {
-    if (!this.state.user?.uid || !this.subs.docente) return;
-    this.stopInsData();
-    const uid = this.state.user.uid;
-
-    this.insDataUnsubs.push(
-      subscribeInstructorClasses(uid, (classes) => {
-        this.insClassesData = classes;
-        this.forceUpdate();
-      }),
-      subscribeInstructorStudents(uid, (students) => {
-        this.insStudentsData = students;
-        this.forceUpdate();
-      }),
-      subscribeInstructorFinances(uid, (finances) => {
-        this.insFinancesData = finances;
-        this.forceUpdate();
-      }),
-      subscribeInstructorCourses(uid, (courses) => {
-        this.insCoursesData = courses;
-        this.forceUpdate();
-      }),
-      subscribeInstructorDocuments(uid, (documents) => {
-        this.insDocumentsData = documents;
-        this.forceUpdate();
-      }),
-      subscribeInstructorPodcasts(uid, (podcasts) => {
-        this.insPodcastsData = podcasts;
-        this.forceUpdate();
-      })
-    );
-  }
-
-  stopInsData() {
-    this.insDataUnsubs.forEach(unsub => unsub && unsub());
-    this.insDataUnsubs = [];
-  }
-
-  // Form handlers
-  insClassTitleChange = (e) => { this.insClassTitle = e.target.value; this.forceUpdate(); };
-  insClassScheduleDayChange = (e) => { this.insClassScheduleDay = e.target.value; this.forceUpdate(); };
-  insClassScheduleTimeChange = (e) => { this.insClassScheduleTime = e.target.value; this.forceUpdate(); };
-  insClassCapacityChange = (e) => { this.insClassCapacity = Number(e.target.value); this.forceUpdate(); };
-  insClassDescriptionChange = (e) => { this.insClassDescription = e.target.value; this.forceUpdate(); };
-
-  insClassSubmit = async () => {
-    this.insClassErr = '';
-    this.insClassBusy = true;
-    try {
-      await createClass(this.state.user.uid, {
-        title: this.insClassTitle,
-        description: this.insClassDescription,
-        schedule: {
-          day: this.insClassScheduleDay,
-          time: this.insClassScheduleTime,
-          timezone: 'CET',
-        },
-        capacity: this.insClassCapacity,
-        status: 'scheduled',
-      });
-      this.insClassTitle = '';
-      this.insClassScheduleDay = '';
-      this.insClassScheduleTime = '';
-      this.insClassCapacity = 10;
-      this.insClassDescription = '';
-    } catch (err) {
-      this.insClassErr = err instanceof Error ? err.message : 'Error desconocido';
-    }
-    this.insClassBusy = false;
-    this.forceUpdate();
-  };
-
-  insFinancesIbanChange = (e) => { this.insFinancesIban = e.target.value; this.forceUpdate(); };
-  insFinancesAccountHolderChange = (e) => { this.insFinancesAccountHolder = e.target.value; this.forceUpdate(); };
-  insFinancesBankNameChange = (e) => { this.insFinancesBankName = e.target.value; this.forceUpdate(); };
-
-  insFinancesSubmit = async () => {
-    this.insFinancesErr = '';
-    this.insFinancesBusy = true;
-    try {
-      if (!this.insFinancesIban.trim()) throw new Error('IBAN requerido');
-      if (!this.insFinancesAccountHolder.trim()) throw new Error('Titular requerido');
-
-      await updateFinances(this.state.user.uid, {
-        bankAccount: {
-          iban: this.insFinancesIban,
-          accountHolder: this.insFinancesAccountHolder,
-          bankName: this.insFinancesBankName,
-          verificationStatus: 'pending',
-        },
-      });
-      this.insFinancesIban = '';
-      this.insFinancesAccountHolder = '';
-      this.insFinancesBankName = '';
-    } catch (err) {
-      this.insFinancesErr = err instanceof Error ? err.message : 'Error desconocido';
-    }
-    this.insFinancesBusy = false;
-    this.forceUpdate();
-  };
-
-  insCoursetTitleChange = (e) => { this.insCourseTitle = e.target.value; this.forceUpdate(); };
-  insCourseDescChange = (e) => { this.insCourseDesc = e.target.value; this.forceUpdate(); };
-
-  insCourseSubmit = async () => {
-    this.insCourseErr = '';
-    this.insCourseBusy = true;
-    try {
-      await createCourse(this.state.user.uid, {
-        title: this.insCourseTitle,
-        description: this.insCourseDesc,
-      });
-      this.insCourseTitle = '';
-      this.insCourseDesc = '';
-    } catch (err) {
-      this.insCourseErr = err instanceof Error ? err.message : 'Error desconocido';
-    }
-    this.insCourseBusy = false;
-    this.forceUpdate();
-  };
-
-  insPodcastTitleChange = (e) => { this.insPodcastTitle = e.target.value; this.forceUpdate(); };
-  insPodcastDescChange = (e) => { this.insPodcastDesc = e.target.value; this.forceUpdate(); };
-
-  insPodcastSubmit = async () => {
-    this.insPodcastErr = '';
-    this.insPodcastBusy = true;
-    try {
-      await createPodcast(this.state.user.uid, {
-        title: this.insPodcastTitle,
-        description: this.insPodcastDesc,
-      });
-      this.insPodcastTitle = '';
-      this.insPodcastDesc = '';
-    } catch (err) {
-      this.insPodcastErr = err instanceof Error ? err.message : 'Error desconocido';
-    }
-    this.insPodcastBusy = false;
-    this.forceUpdate();
-  }
-
   hero(v) {
     const map = {
       dashboard: { kicker: 'Tu sesión de hoy', accent: 'var(--blue)', title: 'Nivel 1 · Fundamentos & Arm Rolls', sub: 'Continúa donde lo dejaste. Te faltan dos lecciones para desbloquear Nivel 2: Ritmo & Expresión Disco.', cta: 'Continuar entrenamiento' },
@@ -1606,7 +1450,7 @@ class App extends Component<any, any> {
     if (!firebaseConfigured) { this.setState({ authReady: true }); return; }
     this.unsubAuth = onAuthStateChanged(auth, async (user) => {
       this.setState((st: any) => ({ user, authReady: true, view: user ? (['login', 'register', 'registerInstructor', 'registerStudio'].includes(st.view) ? (/[?&](checkout|connect)=/.test(location.search) ? 'cuenta' : 'dashboard') : st.view) : (['register', 'registerInstructor', 'registerStudio'].includes(st.view) ? st.view : 'login') }));
-      if (user) { this.startData(); if (this.subs.docente) this.startInsData(); } else { this.stopData(); this.stopInsData(); }
+      if (user) this.startData(); else this.stopData();
       if (user) {
         try {
           const ref = doc(db, 'users', user.uid);
@@ -1622,7 +1466,7 @@ class App extends Component<any, any> {
       }
     });
   }
-  componentWillUnmount() { clearInterval(this._podTimer); this.fisClearTimer && this.fisClearTimer(); this.unsubAuth && this.unsubAuth(); this.stopData(); this.stopInsData(); }
+  componentWillUnmount() { clearInterval(this._podTimer); this.fisClearTimer && this.fisClearTimer(); this.unsubAuth && this.unsubAuth(); this.stopData(); }
 
   /* ---------- Datos en vivo desde Firestore (reels, teachers, lives) ----------
      Si una colección está vacía se conservan los datos de ejemplo del prototipo. */
@@ -1677,6 +1521,12 @@ class App extends Component<any, any> {
   unsubFeed: any = null;
   friendRows: any[] = [];
   livePosts: any[] = [];
+  postLikes: Record<string, { count: number; liked: boolean }> = {};
+  postLikesLoading: Record<string, boolean> = {};
+  postCommentsOpen: Record<string, boolean> = {};
+  postComments: Record<string, any[]> = {};
+  postCommentDraft: Record<string, string> = {};
+  unsubPostComments: Record<string, () => void> = {};
   feedComposerText = '';
   feedComposerFile: File | null = null;
   feedComposerBusy = false;
@@ -1685,6 +1535,49 @@ class App extends Component<any, any> {
   friendSearchBusy = false;
   friendSearchErr = '';
   friendSearchResult: any = null;
+
+  ensurePostLikeInfo = (postId: string) => {
+    const uid = this.state.user?.uid;
+    if (!uid || this.postLikes[postId] || this.postLikesLoading[postId]) return;
+    this.postLikesLoading[postId] = true;
+    likeInfo('posts', postId, uid).then((r) => {
+      this.postLikes[postId] = r;
+      delete this.postLikesLoading[postId];
+      this.forceUpdate();
+    }).catch(() => { delete this.postLikesLoading[postId]; });
+  };
+  postToggleLike = async (postId: string) => {
+    const uid = this.state.user?.uid;
+    if (!uid) return;
+    const cur = this.postLikes[postId] ?? { count: 0, liked: false };
+    const next = { count: cur.count + (cur.liked ? -1 : 1), liked: !cur.liked };
+    this.postLikes[postId] = next;
+    this.forceUpdate();
+    try { await toggleLike('posts', postId, uid, cur.liked); }
+    catch { this.postLikes[postId] = cur; this.forceUpdate(); }
+  };
+  postToggleComments = (postId: string) => {
+    const opening = !this.postCommentsOpen[postId];
+    this.postCommentsOpen[postId] = opening;
+    if (opening && !this.unsubPostComments[postId]) {
+      this.unsubPostComments[postId] = watchComments('posts', postId, (rows) => {
+        this.postComments[postId] = rows;
+        this.forceUpdate();
+      });
+    }
+    this.forceUpdate();
+  };
+  postCommentChange = (postId: string, e: any) => { this.postCommentDraft[postId] = e.target.value; this.forceUpdate(); };
+  postCommentSend = async (postId: string) => {
+    const uid = this.state.user?.uid;
+    const text = (this.postCommentDraft[postId] || '').trim();
+    if (!uid || !text) return;
+    this.postCommentDraft[postId] = '';
+    this.forceUpdate();
+    try {
+      await addComment('posts', postId, uid, this.myProfile?.displayName || this.state.user?.displayName || 'Sin nombre', text);
+    } catch { /* si falla, el borrador ya se perdió; el usuario puede volver a escribirlo */ }
+  };
 
   timeAgo = (ts: any) => {
     const secs = ts?.seconds ? (Date.now() / 1000 - ts.seconds) : null;
@@ -1776,7 +1669,15 @@ class App extends Component<any, any> {
     this.battleHangUp();
     this.unsubStudyProgress && this.unsubStudyProgress(); this.unsubStudyProgress = null;
     this.unsubAnnouncements && this.unsubAnnouncements(); this.unsubAnnouncements = null;
+    this.unsubNotifs && this.unsubNotifs(); this.unsubNotifs = null;
+    Object.values(this.unsubPostComments).forEach((u: any) => u());
+    this.unsubPostComments = {};
     this.unsubEbooks && this.unsubEbooks(); this.unsubEbooks = null;
+    this.unsubGroups && this.unsubGroups(); this.unsubGroups = null;
+    this.unsubGroupMsgs && this.unsubGroupMsgs(); this.unsubGroupMsgs = null;
+    this.unsubLiveSessions && this.unsubLiveSessions(); this.unsubLiveSessions = null;
+    this.unsubEvents && this.unsubEvents(); this.unsubEvents = null;
+    this.liveStop(); this.liveLeave();
   }
 
   battlePanel: 'off' | 'menu' | 'pick' | 'call' = 'off';
@@ -2039,6 +1940,286 @@ class App extends Component<any, any> {
     'Guía': ['var(--purple)', 'var(--pink)'],
   };
 
+  unsubEvents: any = null;
+  liveEvents: any[] = [];
+  evTitle = '';
+  evDesc = '';
+  evWhen = '';
+  evDuration = '60';
+  evBusy = false;
+  evErr = '';
+
+  evTitleChange = (e: any) => { this.evTitle = e?.target?.value ?? ''; this.forceUpdate(); };
+  evDescChange = (e: any) => { this.evDesc = e?.target?.value ?? ''; this.forceUpdate(); };
+  evWhenChange = (e: any) => { this.evWhen = e?.target?.value ?? ''; this.forceUpdate(); };
+  evDurationChange = (e: any) => { this.evDuration = e?.target?.value ?? '60'; this.forceUpdate(); };
+  evSubmit = async () => {
+    if (this.evBusy || !auth.currentUser || !this.isDocente()) return;
+    this.evBusy = true; this.evErr = ''; this.forceUpdate();
+    try {
+      await createEvent({
+        uid: auth.currentUser.uid, author: this.myProfile?.displayName || this.state.user?.displayName || 'Instructor',
+        title: this.evTitle, description: this.evDesc, startsAt: new Date(this.evWhen), durationMin: Number(this.evDuration),
+      });
+      this.evTitle = ''; this.evDesc = ''; this.evWhen = '';
+    } catch (e: any) { this.evErr = e?.message || 'No se pudo programar la clase.'; }
+    this.evBusy = false; this.forceUpdate();
+  };
+
+  evFmt(ts: any) {
+    const d: Date | null = ts?.toDate ? ts.toDate() : null;
+    return d ? d.toLocaleString('es-ES', { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) : '';
+  }
+  evUpcoming() {
+    const now = Date.now() - 3600_000;
+    return this.liveEvents.filter((e: any) => e.startsAt?.toDate && e.startsAt.toDate().getTime() >= now);
+  }
+  evRow(e: any) {
+    const mine = e.ownerId === auth.currentUser?.uid;
+    return {
+      key: e.id, title: e.title, desc: e.description || '', author: e.author || 'Instructor',
+      when: this.evFmt(e.startsAt) + ' · ' + e.durationMin + ' min',
+      ics: () => downloadIcs(e),
+      gcal: () => window.open(googleCalendarUrl(e), '_blank', 'noopener'),
+      canDelete: mine, del: () => { if (window.confirm('¿Borrar esta clase del calendario?')) deleteEvent(e.id).catch(() => { this.evErr = 'No se pudo borrar.'; this.forceUpdate(); }); },
+    };
+  }
+
+  unsubLiveSessions: any = null;
+  liveSessions: any[] = [];
+  liveStream: MediaStream | null = null;
+  liveViewers = new Map<string, any>();
+  liveServed = new Set<string>();
+  liveErr = '';
+  liveBusy = false;
+  liveWatchCall: any = null;
+  liveWatching: any = null;
+  livePreviewEl: any = null;
+  liveWatchEl: any = null;
+  LIVE_MAX_VIEWERS = 6;
+
+  setLivePreviewEl = (el: any) => { this.livePreviewEl = el; if (el && this.liveStream && el.srcObject !== this.liveStream) el.srcObject = this.liveStream; };
+  setLiveWatchEl = (el: any) => { this.liveWatchEl = el; if (el && this.liveWatchCall && el.srcObject !== this.liveWatchCall.remoteStream) el.srcObject = this.liveWatchCall.remoteStream; };
+
+  liveCameraError(e: any) {
+    if (!navigator.mediaDevices?.getUserMedia) return 'Tu navegador no permite usar la cámara aquí (hace falta una conexión segura https).';
+    const n = e?.name;
+    if (n === 'NotAllowedError' || n === 'SecurityError') return 'Debes permitir el acceso a la cámara y al micrófono (icono junto a la barra de direcciones) y volver a intentarlo.';
+    if (n === 'NotFoundError' || n === 'OverconstrainedError') return 'No encontramos una cámara en este dispositivo.';
+    if (n === 'NotReadableError') return 'Otra aplicación está usando tu cámara. Ciérrala e inténtalo de nuevo.';
+    return 'No se pudo encender la cámara. Inténtalo de nuevo.';
+  }
+
+  liveToggle = async () => {
+    if (this.liveBusy) return;
+    this.liveErr = '';
+    if (this.liveStream) { this.liveStop(); this.forceUpdate(); return; }
+    this.liveBusy = true; this.forceUpdate();
+    try {
+      this.liveStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user', width: { ideal: 1280 }, height: { ideal: 720 } }, audio: true });
+      this.liveStream.getVideoTracks()[0]?.addEventListener('ended', () => { this.liveStop(); this.forceUpdate(); });
+      await goLive(auth.currentUser!.uid, this.myProfile?.displayName || this.state.user?.displayName || 'Alguien');
+      this.battleIsLive = true; this.insLive = true;
+      this.liveHandleIncoming(this.battleIncoming);
+    } catch (e: any) {
+      this.liveStream?.getTracks().forEach((t: any) => t.stop()); this.liveStream = null;
+      this.liveErr = this.liveCameraError(e);
+    }
+    this.liveBusy = false; this.forceUpdate();
+  };
+
+  ccStopFn: any = null;
+  ccOn = false;
+  ccLang = 'es';
+  ccTarget = 'es';
+  ccTranslated = '';
+  ccLastRaw = '';
+
+  ccToggle = () => {
+    if (this.ccOn) { this.ccStopFn && this.ccStopFn(); this.ccStopFn = null; this.ccOn = false; this.forceUpdate(); return; }
+    if (!auth.currentUser || !this.liveStream) return;
+    this.ccOn = true;
+    this.ccStopFn = startCaptions(auth.currentUser.uid, this.ccLang, (m: string) => { this.liveErr = m; this.ccOn = false; this.ccStopFn = null; this.forceUpdate(); });
+    this.forceUpdate();
+  };
+  ccPickLang = (l: string) => {
+    this.ccLang = l;
+    if (this.ccOn) { this.ccStopFn && this.ccStopFn(); this.ccOn = false; this.ccToggle(); }
+    this.forceUpdate();
+  };
+  ccPickTarget = (l: string) => { this.ccTarget = l; this.ccLastRaw = ''; this.ccTranslated = ''; this.forceUpdate(); };
+
+  // Subtítulo actual de la transmisión que estás viendo (y su traducción, si elegiste otro idioma).
+  ccCurrent() {
+    const w: any = this.liveWatching && this.liveSessions.find((x: any) => x.uid === this.liveWatching.uid);
+    const raw: string = (w && w.caption) || '';
+    const from = (w && w.captionLang) || 'es';
+    if (raw !== this.ccLastRaw) {
+      this.ccLastRaw = raw;
+      if (this.ccTarget === from || !raw) this.ccTranslated = raw;
+      else translateText(raw, from, this.ccTarget).then((t: string) => { if (this.ccLastRaw === raw) { this.ccTranslated = t; this.forceUpdate(); } });
+    }
+    return this.ccTarget === from ? raw : (this.ccTranslated || raw);
+  }
+
+  liveStop() {
+    this.ccStopFn && this.ccStopFn(); this.ccStopFn = null; this.ccOn = false;
+    this.liveViewers.forEach((c: any) => c.hangUp()); this.liveViewers.clear(); this.liveServed.clear();
+    const had = !!this.liveStream;
+    this.liveStream?.getTracks().forEach((t: any) => t.stop()); this.liveStream = null;
+    if (had && auth.currentUser) stopLive(auth.currentUser.uid);
+    this.battleIsLive = false; this.insLive = false;
+  }
+
+  liveHandleIncoming(calls: any[]) {
+    const uid = auth.currentUser?.uid;
+    if (!uid) return;
+    calls.filter((c: any) => c.mode === 'live' && !this.liveServed.has(c.id)).forEach((c: any) => {
+      this.liveServed.add(c.id);
+      if (!this.liveStream || this.liveViewers.size >= this.LIVE_MAX_VIEWERS) { declineCall(c.id); return; }
+      const call = new BattleCall(uid);
+      call.attachStream(this.liveStream);
+      call.onEnded = () => { this.liveViewers.delete(c.id); this.forceUpdate(); };
+      this.liveViewers.set(c.id, call);
+      call.answer(c.id, c.offer).catch(() => { this.liveViewers.delete(c.id); this.forceUpdate(); });
+      this.forceUpdate();
+    });
+  }
+
+  liveWatch = async (uid: string, name: string) => {
+    if (this.liveWatchCall) this.liveLeave();
+    this.liveErr = '';
+    const call = new BattleCall(auth.currentUser!.uid);
+    this.liveWatchCall = call; this.liveWatching = { uid, name, connected: false };
+    call.onRemoteTrack = () => { this.liveWatching = { ...this.liveWatching, connected: true }; if (this.liveWatchEl) this.liveWatchEl.srcObject = call.remoteStream; this.forceUpdate(); };
+    call.onEnded = () => { if (this.liveWatchCall === call) { this.liveErr = 'La transmisión terminó.'; this.liveLeave(); } };
+    this.forceUpdate();
+    setTimeout(() => { if (this.liveWatchCall === call && !this.liveWatching?.connected) { this.liveErr = 'No se pudo conectar. Puede que la transmisión ya haya terminado.'; this.liveLeave(); } }, 20000);
+    try { await call.watchLive(uid); } catch (e) { this.liveErr = 'No se pudo conectar a la transmisión.'; this.liveLeave(); }
+  };
+
+  liveLeave = () => {
+    const c = this.liveWatchCall;
+    this.liveWatchCall = null; this.liveWatching = null;
+    c?.hangUp();
+    this.forceUpdate();
+  };
+
+  unsubGroups: any = null;
+  unsubGroupMsgs: any = null;
+  gList: any[] = [];
+  gMessages: any[] = [];
+  gActiveId: string | null = null;
+  gMode: 'list' | 'create' | 'join' = 'list';
+  gKind: 'grupo' | 'clase' = 'grupo';
+  gName = '';
+  gDesc = '';
+  gJoinCode = '';
+  gText = '';
+  gFile: File | null = null;
+  gBusy = false;
+  gErr = '';
+  gCopied = '';
+
+  gActive() { return this.gList.find((g: any) => g.id === this.gActiveId) || null; }
+
+  gOpen = (id: string) => {
+    this.unsubGroupMsgs && this.unsubGroupMsgs();
+    this.gActiveId = id; this.gMessages = []; this.gText = ''; this.gFile = null; this.gErr = ''; this.gCopied = '';
+    this.unsubGroupMsgs = watchMessages(id, (rows: any) => { this.gMessages = rows; this.forceUpdate(); });
+    this.forceUpdate();
+  };
+  gBack = () => {
+    this.unsubGroupMsgs && this.unsubGroupMsgs(); this.unsubGroupMsgs = null;
+    this.gActiveId = null; this.gMessages = []; this.gMode = 'list'; this.gErr = ''; this.gName = ''; this.gDesc = ''; this.gJoinCode = '';
+    this.gKind = 'grupo';
+    this.forceUpdate();
+  };
+  gSetMode = (m: 'list' | 'create' | 'join') => { this.gMode = m; this.gErr = ''; this.forceUpdate(); };
+  gSetKind = (k: 'grupo' | 'clase') => { this.gKind = k; this.forceUpdate(); };
+  gNameChange = (e: any) => { this.gName = e?.target?.value ?? ''; this.forceUpdate(); };
+  gDescChange = (e: any) => { this.gDesc = e?.target?.value ?? ''; this.forceUpdate(); };
+  gJoinChange = (e: any) => { this.gJoinCode = e?.target?.value ?? ''; this.forceUpdate(); };
+  gTextChange = (e: any) => { this.gText = e?.target?.value ?? ''; this.forceUpdate(); };
+  gPickFile = () => { (document.getElementById('group-media-input') as HTMLInputElement | null)?.click(); };
+  gOnFile = (e: any) => {
+    const f = e?.target?.files?.[0];
+    if (e?.target) e.target.value = '';
+    if (!f) return;
+    const kind = checkGroupFile(f);
+    if (kind !== 'image' && kind !== 'video') { this.gErr = kind; this.forceUpdate(); return; }
+    this.gErr = ''; this.gFile = f; this.forceUpdate();
+  };
+  gClearFile = () => { this.gFile = null; this.forceUpdate(); };
+
+  gCreate = async () => {
+    if (this.gBusy) return;
+    this.gBusy = true; this.gErr = ''; this.forceUpdate();
+    try {
+      const id = await createGroup({ uid: auth.currentUser!.uid, name: this.gName, description: this.gDesc, kind: this.gKind === 'clase' && this.isDocente() ? 'clase' : 'grupo' });
+      this.gName = ''; this.gDesc = ''; this.gMode = 'list';
+      this.gOpen(id);
+    } catch (e: any) { this.gErr = e?.message || 'No se pudo crear el grupo.'; }
+    this.gBusy = false; this.forceUpdate();
+  };
+
+  gJoin = async () => {
+    if (this.gBusy) return;
+    const code = cleanGroupCode(this.gJoinCode);
+    if (code.length < 10) { this.gErr = 'El código tiene 10 letras y números.'; this.forceUpdate(); return; }
+    this.gBusy = true; this.gErr = ''; this.forceUpdate();
+    try {
+      await joinGroup(code, auth.currentUser!.uid);
+      this.gJoinCode = ''; this.gMode = 'list';
+      this.gOpen(code);
+    } catch (e: any) { this.gErr = 'No se encontró ese grupo, o está lleno (máx. 50 personas). Revisa el código.'; }
+    this.gBusy = false; this.forceUpdate();
+  };
+
+  gSend = async (kind: 'msg' | 'resumen') => {
+    const g = this.gActive();
+    if (!g || this.gBusy) return;
+    this.gBusy = true; this.gErr = ''; this.forceUpdate();
+    try {
+      await sendMessage({
+        groupId: g.id, uid: auth.currentUser!.uid, kind,
+        name: this.myProfile?.displayName || this.state.user?.displayName || 'Sin nombre',
+        text: this.gText, file: this.gFile,
+      });
+      this.gText = ''; this.gFile = null;
+    } catch (e: any) { this.gErr = e?.message || 'No se pudo enviar.'; }
+    this.gBusy = false; this.forceUpdate();
+  };
+
+  gLeave = async () => {
+    const g = this.gActive();
+    if (!g || !window.confirm('¿Salir de este grupo?')) return;
+    try { await leaveGroup(g.id, auth.currentUser!.uid); this.gBack(); } catch (e) { this.gErr = 'No se pudo salir del grupo.'; this.forceUpdate(); }
+  };
+  gDelete = async () => {
+    const g = this.gActive();
+    if (!g || !window.confirm('¿Borrar el grupo para todos? Esto no se puede deshacer.')) return;
+    try { await deleteGroup(g.id); this.gBack(); } catch (e) { this.gErr = 'No se pudo borrar el grupo.'; this.forceUpdate(); }
+  };
+
+  gLink() { const g = this.gActive(); return g ? location.origin + '/?grupo=' + g.id : ''; }
+  gCopy = async (what: 'code' | 'link') => {
+    const g = this.gActive();
+    if (!g) return;
+    try { await navigator.clipboard.writeText(what === 'code' ? g.id : this.gLink()); this.gCopied = what; }
+    catch (e) { this.gErr = 'No se pudo copiar. Selecciona el código y cópialo a mano.'; }
+    this.forceUpdate();
+    setTimeout(() => { this.gCopied = ''; this.forceUpdate(); }, 2000);
+  };
+  gShare = async () => {
+    const g = this.gActive();
+    if (!g) return;
+    if ((navigator as any).share) {
+      try { await (navigator as any).share({ title: g.name, text: 'Únete a mi grupo en Waack On', url: this.gLink() }); return; } catch (e) { /* canceló */ }
+    }
+    this.gCopy('link');
+  };
+
   myEbooks() {
     const uid = this.state.user && this.state.user.uid;
     return this.liveEbooks.filter((r: any) => r.ownerId === uid);
@@ -2096,14 +2277,28 @@ class App extends Component<any, any> {
     this.unsubMyMedia = watchMyMedia(meUid, (tiles: any) => { this.myMedia = tiles; this.forceUpdate(); });
     this.unsubMyPostCount && this.unsubMyPostCount();
     this.unsubMyPostCount = watchMyPostCount(meUid, (n: any) => { this.myPostCount = n; this.forceUpdate(); });
+    this.unsubNotifs && this.unsubNotifs();
+    this.unsubNotifs = watchMyNotifications(meUid, (rows: any) => { this.liveNotifs = rows; this.forceUpdate(); });
     this.unsubIncomingCalls && this.unsubIncomingCalls();
-    this.unsubIncomingCalls = watchIncomingCalls(meUid, (calls: any) => { this.battleIncoming = calls; this.forceUpdate(); });
+    this.unsubIncomingCalls = watchIncomingCalls(meUid, (calls: any) => { this.battleIncoming = calls.filter((c: any) => c.mode !== 'live'); this.liveHandleIncoming(calls); this.forceUpdate(); });
     this.unsubStudyProgress && this.unsubStudyProgress();
     this.unsubStudyProgress = watchStudyProgress(meUid, (p: any) => { this.studyProgress = p; this.forceUpdate(); });
     this.unsubAnnouncements && this.unsubAnnouncements();
     this.unsubAnnouncements = subscribeAnnouncements((rows: any) => { this.liveAnnouncements = rows; this.forceUpdate(); });
     this.unsubEbooks && this.unsubEbooks();
     this.unsubEbooks = subscribeEbooks((rows: any) => { this.liveEbooks = rows; this.forceUpdate(); });
+    this.unsubGroups && this.unsubGroups();
+    this.unsubGroups = watchMyGroups(meUid, (rows: any) => { this.gList = rows; if (this.gActiveId && !rows.some((g: any) => g.id === this.gActiveId)) this.gBack(); this.forceUpdate(); });
+    this.unsubEvents && this.unsubEvents();
+    this.unsubEvents = subscribeEvents((rows: any) => { this.liveEvents = rows; this.forceUpdate(); });
+    this.unsubLiveSessions && this.unsubLiveSessions();
+    this.unsubLiveSessions = watchLiveSessions((rows: any) => { this.liveSessions = rows; this.forceUpdate(); });
+    const invite = new URLSearchParams(location.search).get('grupo');
+    if (invite) {
+      this.gJoinCode = cleanGroupCode(invite); this.gMode = 'join';
+      try { history.replaceState(null, '', location.pathname); } catch (e) { /* sin historial */ }
+      this.setState({ view: 'grupos' });
+    }
   }
 
   studyProgress: any = { completedModules: [], quizScores: {}, checklist: {}, reflections: {} };
@@ -2386,7 +2581,7 @@ class App extends Component<any, any> {
 
   renderVals() {
     const v = this.state.view;
-    const crumbs = { perfil:'Mi perfil', cuenta:'Mi cuenta', dashboard:'Dashboard', cursos:'Clases & Cursos', lives:'Lives / En Vivo', reels:'Waack Reels', tv:'Waack On TV', podcast:'Waack On Radio', entrenamiento:'Laboratorio Freestyle', fisico:'Cuerpo & Estiramientos', ebooks:'Manuales', podcasts:'Podcasts', comunidad:'Muro & Retos', ranking:'Ranking & Insignias', planes:'Planes & Membresía', support:'Ayuda & Legal', instructor:'Panel de Instructor', musica:'Música' };
+    const crumbs = { perfil:'Mi perfil', cuenta:'Mi cuenta', grupos:'Grupos', dashboard:'Dashboard', cursos:'Clases & Cursos', lives:'Lives / En Vivo', reels:'Waack Reels', tv:'Waack On TV', podcast:'Waack On Radio', entrenamiento:'Laboratorio Freestyle', fisico:'Cuerpo & Estiramientos', ebooks:'Manuales', podcasts:'Podcasts', comunidad:'Muro & Retos', ranking:'Ranking & Insignias', planes:'Planes & Membresía', support:'Ayuda & Legal', instructor:'Panel de Instructor' };
     const pill = 'flex:1;text-align:center;padding:8px 12px;border-radius:999px;font-size:11px;font-weight:700;cursor:pointer;transition:all .18s ease;';
     const on = pill + 'background:var(--glass);color:var(--ink);border:1px solid var(--hair);box-shadow:var(--lg-edge);';
     const off = pill + 'color:var(--ink-2);border:1px solid transparent;';
@@ -2501,17 +2696,34 @@ class App extends Component<any, any> {
           ? 'padding:9px 17px;border-radius:999px;font-size:12px;font-weight:700;color:#14111A;background:var(--pink);box-shadow:0 8px 18px -8px var(--pink), inset 0 1px 0 rgba(255,255,255,.3);cursor:pointer;transition:transform .2s cubic-bezier(.2,.85,.25,1)'
           : 'padding:9px 17px;border-radius:999px;font-size:12px;font-weight:600;color:var(--ink-2);border:1px solid var(--hair);background:var(--glass-2);box-shadow:var(--lg-edge);cursor:pointer;transition:transform .2s cubic-bezier(.2,.85,.25,1), color .2s ease'
       })),
-      feedPosts: (this.livePosts.length ? this.livePosts : this.feedPostData).map((p) => ({
-        name: p.name ?? p.authorName, handle: p.handle ?? p.authorHandle,
-        time: p.time ?? this.timeAgo(p.createdAt), text: p.text, tags: p.tags ?? '',
-        likes: p.likes ?? p.likesCount ?? 0, comments: p.comments ?? p.commentsCount ?? 0,
-        mediaUrl: p.mediaUrl ?? null, isImage: p.mediaType === 'image', isVideo: p.mediaType === 'video',
-        media: p.g ? this.tvGrad(p.g) : 'linear-gradient(135deg,var(--pink),var(--purple))',
-        avatar: (p.authorPhotoURL || p.avatarUrl)
-          ? `width:42px;height:42px;flex:0 0 42px;border-radius:50%;background:center/cover no-repeat url('${p.authorPhotoURL || p.avatarUrl}')`
-          : 'width:42px;height:42px;flex:0 0 42px;border-radius:50%;background:' + (p.g ? this.tvGrad(p.g) : 'linear-gradient(135deg,var(--pink),var(--purple))'),
-        card: 'border-radius:24px;overflow:hidden;' + glassCard
-      })),
+      feedPosts: (this.livePosts.length ? this.livePosts : this.feedPostData).map((p) => {
+        const isReal = !!p.id && this.livePosts.length > 0;
+        if (isReal) this.ensurePostLikeInfo(p.id);
+        const likeState = isReal ? this.postLikes[p.id] : null;
+        const commentsOpen = isReal && !!this.postCommentsOpen[p.id];
+        return {
+          id: p.id,
+          name: p.name ?? p.authorName, handle: p.handle ?? p.authorHandle,
+          time: p.time ?? this.timeAgo(p.createdAt), text: p.text, tags: p.tags ?? '',
+          likes: likeState ? likeState.count : (p.likes ?? p.likesCount ?? 0),
+          liked: !!likeState?.liked,
+          comments: isReal ? (this.postComments[p.id]?.length ?? p.commentsCount ?? 0) : (p.comments ?? 0),
+          canInteract: isReal,
+          onLike: isReal ? () => this.postToggleLike(p.id) : undefined,
+          onToggleComments: isReal ? () => this.postToggleComments(p.id) : undefined,
+          commentsOpen,
+          commentRows: commentsOpen ? (this.postComments[p.id] ?? []) : [],
+          commentDraft: this.postCommentDraft[p.id] ?? '',
+          onCommentChange: isReal ? (e: any) => this.postCommentChange(p.id, e) : undefined,
+          onCommentSend: isReal ? () => this.postCommentSend(p.id) : undefined,
+          mediaUrl: p.mediaUrl ?? null, isImage: p.mediaType === 'image', isVideo: p.mediaType === 'video',
+          media: p.g ? this.tvGrad(p.g) : 'linear-gradient(135deg,var(--pink),var(--purple))',
+          avatar: (p.authorPhotoURL || p.avatarUrl)
+            ? `width:42px;height:42px;flex:0 0 42px;border-radius:50%;background:center/cover no-repeat url('${p.authorPhotoURL || p.avatarUrl}')`
+            : 'width:42px;height:42px;flex:0 0 42px;border-radius:50%;background:' + (p.g ? this.tvGrad(p.g) : 'linear-gradient(135deg,var(--pink),var(--purple))'),
+          card: 'border-radius:24px;overflow:hidden;' + glassCard
+        };
+      }),
       friendPending: this.friendRows.filter((f: any) => f.status === 'pending' && f.requesterId !== this.state.user?.uid).map((f: any) => ({
         id: f.id, other: this.resolveUserName(f.users.find((u: string) => u !== this.state.user?.uid)),
         accept: () => this.friendAccept(f.id), decline: () => this.friendDecline(f.id)
@@ -2599,6 +2811,7 @@ class App extends Component<any, any> {
       goPodcast: () => this.setState({ view: 'podcast' }),
       isLab: v === 'entrenamiento',
       isStudy: v === 'study',
+      isGrupos: v === 'grupos',
       isFisico: v === 'fisico',
       fisPlate: platePad,
       fisPart: this.fisState.part,
@@ -2873,57 +3086,118 @@ class App extends Component<any, any> {
       insLive: this.insLive,
       toggleInsLive: this.toggleInsLive,
       insLiveLabel: this.insLive ? 'Terminar clase en vivo' : 'Abrir sala en vivo',
-      // Class form
-      insClassTitleValue: this.insClassTitle,
-      insClassScheduleDayValue: this.insClassScheduleDay,
-      insClassScheduleTimeValue: this.insClassScheduleTime,
-      insClassCapacityValue: this.insClassCapacity,
-      insClassDescriptionValue: this.insClassDescription,
-      insClassTitleChange: this.insClassTitleChange,
-      insClassScheduleDayChange: this.insClassScheduleDayChange,
-      insClassScheduleTimeChange: this.insClassScheduleTimeChange,
-      insClassCapacityChange: this.insClassCapacityChange,
-      insClassDescriptionChange: this.insClassDescriptionChange,
-      insClassSubmit: this.insClassSubmit,
-      insClassErr: this.insClassErr,
-      insClassBusy: this.insClassBusy,
-      insClassLabel: this.insClassBusy ? 'Creando clase…' : 'Crear clase',
-      // Finance form
-      insFinancesIbanValue: this.insFinancesIban,
-      insFinancesAccountHolderValue: this.insFinancesAccountHolder,
-      insFinancesBankNameValue: this.insFinancesBankName,
-      insFinancesIbanChange: this.insFinancesIbanChange,
-      insFinancesAccountHolderChange: this.insFinancesAccountHolderChange,
-      insFinancesBankNameChange: this.insFinancesBankNameChange,
-      insFinancesSubmit: this.insFinancesSubmit,
-      insFinancesErr: this.insFinancesErr,
-      insFinancesBusy: this.insFinancesBusy,
-      insFinancesLabel: this.insFinancesBusy ? 'Guardando…' : 'Guardar datos bancarios',
-      // Course form
-      insCoursetTitleValue: this.insCourseTitle,
-      insCourseDescValue: this.insCourseDesc,
-      insCoursetTitleChange: this.insCoursetTitleChange,
-      insCourseDescChange: this.insCourseDescChange,
-      insCourseSubmit: this.insCourseSubmit,
-      insCourseErr: this.insCourseErr,
-      insCourseBusy: this.insCourseBusy,
-      insCourseLabel: this.insCourseBusy ? 'Creando curso…' : 'Crear curso',
-      // Podcast form
-      insPodcastTitleValue: this.insPodcastTitle,
-      insPodcastDescValue: this.insPodcastDesc,
-      insPodcastTitleChange: this.insPodcastTitleChange,
-      insPodcastDescChange: this.insPodcastDescChange,
-      insPodcastSubmit: this.insPodcastSubmit,
-      insPodcastErr: this.insPodcastErr,
-      insPodcastBusy: this.insPodcastBusy,
-      insPodcastLabel: this.insPodcastBusy ? 'Creando podcast…' : 'Crear podcast',
-      // Data lists
-      insClassesDataList: this.insClassesData,
-      insStudentsDataList: this.insStudentsData,
-      insFinancesDataList: this.insFinancesData,
-      insCoursesDataList: this.insCoursesData,
-      insDocumentsDataList: this.insDocumentsData,
-      insPodcastsDataList: this.insPodcastsData,
+      isRealInstructor: this.isDocente(),
+      liveOn: !!this.liveStream,
+      liveToggle: this.liveToggle,
+      liveToggleLabel: this.liveBusy ? 'Abriendo cámara…' : (this.liveStream ? 'Terminar transmisión' : 'Encender cámara e ir en vivo'),
+      liveToggleStyle: 'padding:12px 22px;border-radius:999px;font-size:12.5px;font-weight:700;cursor:pointer;' + (this.liveStream
+        ? 'color:#fff;background:var(--pink)'
+        : 'color:#1A1400;background:linear-gradient(90deg,var(--gold-hi),var(--gold-lo));box-shadow:inset 0 1px 0 rgba(255,255,255,.5)'),
+      liveViewersLabel: this.liveViewers.size + (this.liveViewers.size === 1 ? ' espectador conectado' : ' espectadores conectados') + ' · máx. ' + this.LIVE_MAX_VIEWERS,
+      liveErr: this.liveErr,
+      setLivePreviewEl: this.setLivePreviewEl,
+      setLiveWatchEl: this.setLiveWatchEl,
+      liveList: this.liveSessions
+        .filter((x: any) => x.uid !== this.state.user?.uid && (!x.startedAt?.seconds || Date.now() / 1000 - x.startedAt.seconds < 43200))
+        .map((x: any) => ({ key: x.uid, name: x.displayName || 'Alguien', watch: () => this.liveWatch(x.uid, x.displayName || 'Alguien') })),
+      liveHasList: this.liveSessions.some((x: any) => x.uid !== this.state.user?.uid && (!x.startedAt?.seconds || Date.now() / 1000 - x.startedAt.seconds < 43200)),
+      liveIsWatching: !!this.liveWatching,
+      evUpcomingList: this.evUpcoming().map((e: any) => this.evRow(e)),
+      evHasUpcoming: this.evUpcoming().length > 0,
+      evMine: this.evUpcoming().filter((e: any) => e.ownerId === auth.currentUser?.uid).map((e: any) => this.evRow(e)),
+      evTitleValue: this.evTitle, evDescValue: this.evDesc, evWhenValue: this.evWhen, evDurationValue: this.evDuration,
+      evTitleChange: this.evTitleChange, evDescChange: this.evDescChange, evWhenChange: this.evWhenChange, evDurationChange: this.evDurationChange,
+      evSubmit: this.evSubmit, evSubmitLabel: this.evBusy ? 'Programando…' : 'Programar clase', evErr: this.evErr,
+      ccOn: this.ccOn,
+      ccToggle: this.ccToggle,
+      ccToggleLabel: this.ccOn ? 'Subtítulos: activados' : 'Activar subtítulos',
+      ccSupported: speechSupported(),
+      ccLangs: CAPTION_LANGS.map(([k, label]) => ({ key: k, label, pick: () => this.ccPickLang(k), style: 'padding:6px 12px;border-radius:999px;font-size:11px;cursor:pointer;' + (this.ccLang === k ? 'font-weight:700;color:#fff;background:var(--purple)' : 'color:var(--ink-2);border:1px solid var(--hair);background:var(--glass-2)') })),
+      ccTargets: CAPTION_LANGS.map(([k, label]) => ({ key: k, label, pick: () => this.ccPickTarget(k), style: 'padding:6px 12px;border-radius:999px;font-size:11px;cursor:pointer;' + (this.ccTarget === k ? 'font-weight:700;color:#fff;background:var(--blue)' : 'color:var(--ink-2);border:1px solid var(--hair);background:var(--glass-2)') })),
+      ccText: this.liveWatching ? this.ccCurrent() : '',
+      ccHasText: !!(this.liveWatching && this.ccCurrent()),
+      ccTranslateNote: translatorSupported() ? 'La traducción se hace en tu dispositivo.' : 'Para traducir en vivo usa Chrome o Edge actualizados; sin eso verás los subtítulos en el idioma original.',
+      liveWatchName: this.liveWatching?.name || '',
+      liveWatchStatus: this.liveWatching?.connected ? 'EN VIVO' : 'Conectando…',
+      liveLeave: this.liveLeave,
+      gShowList: !this.gActiveId && this.gMode === 'list',
+      gShowCreate: !this.gActiveId && this.gMode === 'create',
+      gShowJoin: !this.gActiveId && this.gMode === 'join',
+      gShowChat: !!this.gActive(),
+      gHasGroups: this.gList.length > 0,
+      gGroups: this.gList.map((g: any) => ({
+        id: g.id, name: g.name, desc: g.description || '', open: () => this.gOpen(g.id),
+        meta: (g.kind === 'clase' ? 'Clase · ' : 'Grupo · ') + (g.memberIds || []).length + (((g.memberIds || []).length === 1) ? ' miembro' : ' miembros'),
+        card: 'display:flex;flex-direction:column;gap:6px;padding:18px 20px;border-radius:22px;border:1px solid var(--hair);background:var(--glass);backdrop-filter:var(--lg-blur);-webkit-backdrop-filter:var(--lg-blur);box-shadow:var(--lg-edge);cursor:pointer'
+      })),
+      gGoList: () => this.gSetMode('list'),
+      gGoCreate: () => { this.gKind = 'grupo'; this.gSetMode('create'); },
+      gGoJoin: () => this.gSetMode('join'),
+      gBack: this.gBack,
+      gCanClase: this.isDocente(),
+      gKindPicker: [['grupo', 'Grupo de amigos'], ['clase', 'Clase grupal']].map(([k, label]) => ({
+        key: k, label, pick: () => this.gSetKind(k as any),
+        style: 'padding:9px 16px;border-radius:999px;font-size:12px;cursor:pointer;' + (this.gKind === k
+          ? 'font-weight:700;color:#fff;background:var(--purple);'
+          : 'font-weight:600;color:var(--ink-2);border:1px solid var(--hair);background:var(--glass-2);')
+      })),
+      gNameValue: this.gName, gDescValue: this.gDesc, gJoinValue: this.gJoinCode, gTextValue: this.gText,
+      gNameChange: this.gNameChange, gDescChange: this.gDescChange, gJoinChange: this.gJoinChange, gTextChange: this.gTextChange,
+      gCreate: this.gCreate, gJoin: this.gJoin,
+      gCreateLabel: this.gBusy ? 'Creando…' : (this.gKind === 'clase' && this.isDocente() ? 'Crear grupo de clase' : 'Crear grupo'),
+      gJoinLabel: this.gBusy ? 'Uniéndome…' : 'Unirme al grupo',
+      gErr: this.gErr,
+      gTitle: this.gActive()?.name || '',
+      gDescription: this.gActive()?.description || '',
+      gKindLabel: this.gActive()?.kind === 'clase' ? 'CLASE GRUPAL' : 'GRUPO',
+      gCode: this.gActive()?.id || '',
+      gIsOwner: this.gActive()?.ownerId === this.state.user?.uid,
+      gIsNotOwner: this.gActive() ? this.gActive().ownerId !== this.state.user?.uid : false,
+      gCanResumen: !!this.gActive() && this.gActive().kind === 'clase' && this.gActive().ownerId === this.state.user?.uid,
+      gCopyCodeLabel: this.gCopied === 'code' ? '¡Código copiado!' : 'Copiar código',
+      gCopyLinkLabel: this.gCopied === 'link' ? '¡Enlace copiado!' : 'Copiar enlace',
+      gCopyCode: () => this.gCopy('code'), gCopyLink: () => this.gCopy('link'), gShare: this.gShare,
+      gMembers: (this.gActive()?.memberIds || []).map((u: string) => ({
+        key: u, name: this.resolveUserName(u) + (u === this.gActive()?.ownerId ? ' · ' + (this.gActive()?.kind === 'clase' ? 'instructor' : 'creador') : '')
+      })),
+      gMembersLabel: (this.gActive()?.memberIds || []).length + ' en el grupo',
+      gMsgs: this.gMessages.map((m: any) => {
+        const mine = m.uid === this.state.user?.uid;
+        const resumen = m.kind === 'resumen';
+        return {
+          key: m.id, name: m.uid === this.state.user?.uid ? 'Tú' : (m.name || this.resolveUserName(m.uid)), text: m.text || '',
+          hasText: !!m.text, time: this.timeAgo(m.createdAt), isResumen: resumen,
+          hasImage: m.mediaType === 'image', hasVideo: m.mediaType === 'video', mediaUrl: m.mediaUrl || '',
+          canDelete: mine || this.gActive()?.ownerId === this.state.user?.uid,
+          del: () => deleteMessage(this.gActive()!.id, m.id).catch(() => { this.gErr = 'No se pudo borrar el mensaje.'; this.forceUpdate(); }),
+          wrap: 'display:flex;flex-direction:column;max-width:82%;align-self:' + (mine ? 'flex-end' : 'flex-start'),
+          bubble: 'padding:11px 14px;border-radius:18px;border:1px solid ' + (resumen ? 'var(--gold)' : 'var(--hair)') + ';background:' + (resumen ? 'color-mix(in oklch, var(--gold) 14%, transparent)' : (mine ? 'color-mix(in oklch, var(--blue) 18%, transparent)' : 'var(--glass-2)'))
+        };
+      }),
+      gHasMsgs: this.gMessages.length > 0,
+      gFileName: this.gFile ? this.gFile.name : '',
+      gPickFile: this.gPickFile, gOnFile: this.gOnFile, gClearFile: this.gClearFile,
+      gSendMsg: () => this.gSend('msg'), gSendResumen: () => this.gSend('resumen'),
+      gSendLabel: this.gBusy ? 'Enviando…' : 'Enviar',
+      gLeave: this.gLeave, gDelete: this.gDelete,
+      isInstructorLocked: v === 'instructor' && !this.isDocente(),
+      insStudentMgmt: this.buildInsStudentMgmt(),
+      insCommHub: this.buildInsCommHub(),
+      insLiveShortLabel: this.insLive ? 'Terminar clase' : 'Start Live Class',
+      insFinBanner: !!this.insEarnings && !this.insEarnings.chargesEnabled,
+      insFinBannerText: this.insEarnings && !this.insEarnings.onboarded
+        ? 'Todavía no activaste tus cobros. Actívalos para poder retirar tu dinero.'
+        : 'Tu cuenta de cobros está en revisión de Stripe. En cuanto se active, verás tu saldo real aquí.',
+      insFinConnect: () => startConnectOnboarding().catch((e) => { this.insEarningsErr = e.message; this.forceUpdate(); }),
+      insFinYourShareLabel: 'Tu parte · ' + (this.insEarnings ? (100 - this.insEarnings.feePercent) : 75) + '%',
+      insFinPlatformShareLabel: 'Plataforma · ' + (this.insEarnings ? this.insEarnings.feePercent : 25) + '%',
+      insFinNet: this.fmtCents(this.insEarnings?.monthlyNetCents, this.insEarnings?.currency),
+      insFinGross: this.fmtCents(this.insEarnings ? this.insEarnings.monthlyGrossCents - this.insEarnings.monthlyNetCents : null, this.insEarnings?.currency),
+      insFinAvailable: this.fmtCents(this.sumMinor(this.insEarnings?.available), this.insEarnings?.currency),
+      insFinPending: this.fmtCents(this.sumMinor(this.insEarnings?.pending), this.insEarnings?.currency),
+      insFinSubs: this.insEarnings ? this.insEarnings.activeSubscribers : '—',
+      insFinLastPayout: this.insEarnings?.lastPayout ? this.fmtCents(this.insEarnings.lastPayout.amount, this.insEarnings.lastPayout.currency) : '—',
+      insFinLastPayoutDate: this.insEarnings?.lastPayout ? ('Pagado · ' + new Date(this.insEarnings.lastPayout.arrivalDate * 1000).toLocaleDateString('es-ES')) : (this.insEarningsBusy ? 'Cargando…' : 'Sin pagos todavía'),
       roleName: this.role().name,
       roleShort: this.role().short,
       roleDesc: this.role().desc,
@@ -2939,18 +3213,22 @@ class App extends Component<any, any> {
       notifOpen: !!this.state.notif,
       notifToggle: () => this.setState({ notif: !this.state.notif, acct: false }),
       notifClose: () => this.setState({ notif: false }),
-      notifReadAll: () => { this.notifData.forEach((n) => { n.unread = false; }); this.forceUpdate(); },
-      notifList: this.notifData.map((n, i) => ({
-        title: n.t, text: n.x, time: n.w,
-        row: 'display:flex;gap:11px;align-items:flex-start;padding:11px 12px;border-radius:16px;cursor:pointer;transition:background .18s ease;' + (n.unread ? 'background:color-mix(in oklch, var(--blue) 8%, transparent)' : ''),
-        dot: 'width:8px;height:8px;flex:0 0 8px;margin-top:5px;border-radius:50%;background:' + (n.unread ? 'var(' + n.c + ')' : 'var(--hair)'),
-        read: () => { this.notifData[i].unread = false; this.forceUpdate(); }
+      notifUnreadCount: this.liveNotifs.filter((n) => !n.read).length,
+      notifReadAll: () => markAllNotificationsRead(this.liveNotifs).catch(() => {}),
+      notifEmpty: this.liveNotifs.length === 0,
+      notifList: this.liveNotifs.map((n) => ({
+        title: n.title, text: n.text, time: this.timeAgo(n.createdAt),
+        row: 'display:flex;gap:11px;align-items:flex-start;padding:11px 12px;border-radius:16px;cursor:pointer;transition:background .18s ease;' + (!n.read ? 'background:color-mix(in oklch, var(--blue) 8%, transparent)' : ''),
+        dot: 'width:8px;height:8px;flex:0 0 8px;margin-top:5px;border-radius:50%;background:' + (!n.read ? 'var(' + (this.notifTypeColor[n.type] || '--pink') + ')' : 'var(--hair)'),
+        read: () => { if (!n.read) markNotificationRead(n.id).catch(() => {}); }
       })),
       acctToggle: () => this.setState({ acct: !this.state.acct }),
       acctClose: () => this.setState({ acct: false }),
       acctAvatar: 'width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#fff;background:' + (this.myProfile?.photoURL ? `center/cover no-repeat url('${this.myProfile.photoURL}')` : 'linear-gradient(135deg,var(--purple),var(--pink))') + ';cursor:pointer;transition:box-shadow .2s ease;box-shadow:' + (this.state.acct ? '0 0 0 2px var(--ground), 0 0 0 4px var(--pink)' : 'var(--lg-edge)'),
       myInitial: this.myProfile?.photoURL ? '' : (this.myProfile?.displayName || this.state.user?.displayName || this.state.user?.email || '?').trim().slice(0, 1).toUpperCase(),
       myDropAvatar: 'width:44px;height:44px;flex:0 0 44px;border-radius:50%;background:' + (this.myProfile?.photoURL ? `center/cover no-repeat url('${this.myProfile.photoURL}')` : 'linear-gradient(135deg,var(--purple),var(--pink))') + ';display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;color:#fff',
+      navAvatar: 'width:34px;height:34px;flex:0 0 34px;border-radius:50%;background:' + (this.myProfile?.photoURL ? `center/cover no-repeat url('${this.myProfile.photoURL}')` : 'linear-gradient(135deg,var(--purple),var(--pink))') + ';display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff',
+      myComposerAvatar: 'width:38px;height:38px;flex:0 0 38px;border-radius:50%;background:' + (this.myProfile?.photoURL ? `center/cover no-repeat url('${this.myProfile.photoURL}')` : 'linear-gradient(135deg,var(--purple),var(--pink))') + ';display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#fff',
       myDisplayName: this.myProfile?.displayName || this.state.user?.displayName || 'Sin nombre',
       myHandle: this.myProfile?.handle ? '@' + this.myProfile.handle : (this.state.user?.email ? '@' + this.state.user.email.split('@')[0] : '@usuario'),
       perfAvatarStyle: 'width:100%;height:100%;border-radius:50%;border:3px solid var(--ground);display:flex;align-items:center;justify-content:center;font-size:40px;font-weight:800;color:#fff;letter-spacing:-.02em;cursor:pointer;background:' + (this.myProfile?.photoURL ? `center/cover no-repeat url('${this.myProfile.photoURL}')` : 'linear-gradient(135deg,var(--purple),var(--pink))'),
@@ -2960,7 +3238,6 @@ class App extends Component<any, any> {
       onMyAvatarPick: this.onMyAvatarPick,
       onMyAvatarFile: this.onMyAvatarFile,
       acctLinks: [
-        { label: 'Mi cuenta', view: 'cuenta' },
         { label: 'Mi perfil', view: 'perfil' },
         { label: 'Panel de instructor', view: 'instructor' },
         { label: 'Planes & Membresía', view: 'planes' },
@@ -3028,6 +3305,7 @@ class App extends Component<any, any> {
       navIdle: this.nav(false),
       navLab: this.nav(v === 'entrenamiento', 'var(--blue)'),
       navStudy: this.nav(v === 'study', 'var(--yellow)'),
+      navGrupos: this.nav(v === 'grupos', 'var(--blue)'),
       navFisico: this.nav(v === 'fisico', 'var(--blue)'),
       navEbooks: this.nav(v === 'ebooks', 'var(--blue)'),
       navPodcasts: this.nav(v === 'podcasts' || v === 'podcast', 'var(--pink)'),
@@ -3037,8 +3315,11 @@ class App extends Component<any, any> {
       navSupport: this.nav(v === 'support', 'var(--purple)'),
       goLab: () => this.setState({ view: 'entrenamiento' }),
       goStudy: () => this.setState({ view: 'study' }),
+      goGrupos: () => { this.gBack(); this.setState({ view: 'grupos' }); },
+      goGruposClase: () => { this.gBack(); this.gMode = 'create'; this.gKind = 'clase'; this.setState({ view: 'grupos' }); },
       goFisico: () => this.setState({ view: 'fisico' }),
       goPerfil: () => this.setState({ view: 'perfil' }),
+      goCuenta: () => this.setState({ view: 'cuenta' }),
       navPerfil: this.nav(v === 'perfil', 'var(--pink)'),
       goEbooks: () => { this.libTab = 'Manual'; this.setState({ view: 'ebooks' }); },
       goPodcasts: () => { this.libTab = 'Podcast'; this.setState({ view: 'podcasts' }); },
@@ -3158,8 +3439,8 @@ class App extends Component<any, any> {
       battleShowMenu: this.battlePanel === 'menu',
       battleShowPick: this.battlePanel === 'pick',
       battleShowCall: this.battlePanel === 'call',
-      battleLiveLabel: this.battleIsLive ? 'Terminar transmisión' : 'Ir en vivo',
-      onBattleGoLive: this.battleGoLive,
+      battleLiveLabel: this.liveStream ? 'Terminar transmisión' : 'Ir en vivo con mi cámara',
+      onBattleGoLive: this.liveToggle,
       battlePracticeEnabled: this.myInstructorList().length > 0,
       battlePracticeCardStyle: 'flex:1;min-width:220px;padding:18px;border-radius:18px;border:1px solid var(--hair);background:var(--glass-2);' + (this.myInstructorList().length > 0 ? 'cursor:pointer' : 'cursor:default;opacity:.5'),
       onBattleOpenPractice: this.battleOpenPractice,
