@@ -1462,6 +1462,7 @@ class App extends Component<any, any> {
         } catch (e) { console.warn('No se pudo crear el perfil en Firestore', e); }
         await this.syncSession(user);
         if (this.isNewAccount) { this.isNewAccount = false; if (!user.photoURL) this.setState({ view: 'setupPhoto' }); }
+        if (await handleSpotifyReturnIfPresent()) this.setState({ view: 'musica' });
       }
     });
   }
@@ -2646,6 +2647,7 @@ class App extends Component<any, any> {
       isRegisterStudio: v === 'registerStudio',
       isSetupPhoto: v === 'setupPhoto',
       isCuenta: v === 'cuenta',
+      isMusica: v === 'musica',
       goView: (view) => this.setState({ view }),
       goRegisterPro: () => this.setState({ view: 'registerInstructor' }),
       ambientLayer: dark
@@ -3240,6 +3242,7 @@ class App extends Component<any, any> {
         { label: 'Panel de instructor', view: 'instructor' },
         { label: 'Planes & Membresía', view: 'planes' },
         { label: 'Cuerpo & Estiramientos', view: 'fisico' },
+        { label: 'Música', view: 'musica' },
         { label: 'Ayuda & Legal', view: 'support' }
       ].map((l) => ({
         label: l.label,

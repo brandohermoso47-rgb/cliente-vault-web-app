@@ -88,6 +88,20 @@ export const payoutAccounts = pgTable('payout_accounts', {
   updatedAt: updatedAt(),
 });
 
+// Conexión de cada persona con su cuenta de Spotify (OAuth). El token de acceso se refresca al vuelo;
+// el de refresco es el único secreto de larga vida y solo lo lee/escribe el propio usuario o el sistema.
+export const spotifyConnections = pgTable('spotify_connections', {
+  userId: uuid('user_id').primaryKey().references(() => users.id, { onDelete: 'cascade' }),
+  spotifyUserId: text('spotify_user_id').notNull(),
+  accessToken: text('access_token').notNull(),
+  refreshToken: text('refresh_token').notNull(),
+  expiresAt: timestamp('expires_at', { withTimezone: true }).notNull(),
+  scope: text('scope').notNull(),
+  product: text('product'), // 'premium' | 'free' (Spotify solo permite reproducir audio completo con Premium)
+  createdAt: createdAt(),
+  updatedAt: updatedAt(),
+});
+
 export const subscriptions = pgTable('subscriptions', {
   id: uuid('id').primaryKey().default(sql`gen_random_uuid()`),
   stripeSubscriptionId: text('stripe_subscription_id').notNull().unique(),

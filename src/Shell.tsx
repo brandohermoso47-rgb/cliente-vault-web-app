@@ -24,6 +24,7 @@ import Support from './views/Support';
 import InstructorLocked from './views/InstructorLocked';
 import Instructor from './views/Instructor';
 import Account from './screens/Account';
+import Musica from './views/Musica';
 
 export default function Shell({ v }: { v: any }) {
   return (
@@ -509,6 +510,7 @@ export default function Shell({ v }: { v: any }) {
         {v.isInstructorLocked && <InstructorLocked v={v} />}
         {v.isInstructor && <Instructor v={v} />}
         {v.isCuenta && <Account go={v.goView} />}
+        {v.isMusica && <Musica go={v.goView} />}
         </div>
       </main>
     </div>
