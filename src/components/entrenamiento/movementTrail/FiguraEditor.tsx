@@ -1,10 +1,15 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { Check, X } from 'lucide-react';
 import type { Language } from '../../../lib/translations';
-import type { MovementFigure } from './types';
+import type { MovementFigure, MovementPoint } from './types';
 import { FIGURE_COLORS } from './types';
-import { drawTrail, mirrorPoints, simplifyPoints, trimPoints } from './trailEngine';
+import { drawTrail, mirrorPoints, revealPoints, simplifyPoints, trimPoints } from './trailEngine';
 import TrailCanvas from './TrailCanvas';
+import { useTrailReplay } from './useTrailReplay';
+
+function getDuration(points: MovementPoint[]): number {
+  return points.length ? points[points.length - 1].t : 0;
+}
 
 export interface FiguraEditorProps {
   figure: MovementFigure;
@@ -33,23 +38,29 @@ export default function FiguraEditor({ figure, language, title, onSave, onCancel
     return simplifyPoints(trimmed, maxPoints);
   }, [figure.points, trimStart, trimEnd, maxPoints]);
 
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    const ctx = canvas?.getContext('2d');
-    if (!ctx || !canvas) return;
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    drawTrail(ctx, previewPoints, canvas.width, canvas.height, { color, strokeWidth });
-    if (mirrored) {
-      drawTrail(ctx, mirrorPoints(previewPoints, mirrorAxisX), canvas.width, canvas.height, {
-        color: '#d9a9ff',
-        strokeWidth,
-        globalAlpha: 0.85,
-      });
-    }
-  }, [previewPoints, color, strokeWidth, mirrored, mirrorAxisX]);
+  useTrailReplay({
+    durationMs: getDuration(previewPoints),
+    resetKeys: [previewPoints, color, strokeWidth, mirrored, mirrorAxisX],
+    elementRef: canvasRef,
+    onFrame: (elapsedMs) => {
+      const canvas = canvasRef.current;
+      const ctx = canvas?.getContext('2d');
+      if (!ctx || !canvas) return;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const visible = revealPoints(previewPoints, elapsedMs);
+      drawTrail(ctx, visible, canvas.width, canvas.height, { color, strokeWidth });
+      if (mirrored) {
+        drawTrail(ctx, mirrorPoints(visible, mirrorAxisX), canvas.width, canvas.height, {
+          color: '#d9a9ff',
+          strokeWidth,
+          globalAlpha: 0.85,
+        });
+      }
+    },
+  });
 
   const handleSave = () => {
-    const duration = previewPoints.length ? previewPoints[previewPoints.length - 1].t : 0;
+    const duration = getDuration(previewPoints);
     const finalFigure: MovementFigure = {
       ...figure,
       name: name.trim() || figure.name,

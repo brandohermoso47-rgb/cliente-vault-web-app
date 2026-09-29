@@ -132,6 +132,11 @@ export function drawTrail(
   ctx.restore();
 }
 
+/** Porción del trazo ya "revelada" hasta elapsedMs, para reproducción/loop animado. */
+export function revealPoints(points: MovementPoint[], elapsedMs: number): MovementPoint[] {
+  return points.filter((p) => p.t <= elapsedMs);
+}
+
 /** Dibuja únicamente la porción del trazo ya "revelada" hasta elapsedMs — usado en la reproducción fantasma de la práctica. */
 export function drawGhostReveal(
   ctx: CanvasRenderingContext2D,
@@ -141,7 +146,7 @@ export function drawGhostReveal(
   elapsedMs: number,
   opts: { color?: string; strokeWidth?: number } = {}
 ) {
-  const visible = points.filter((p) => p.t <= elapsedMs);
+  const visible = revealPoints(points, elapsedMs);
   drawTrail(ctx, visible, width, height, {
     color: opts.color ?? '#d9a9ff',
     strokeWidth: opts.strokeWidth ?? 3,
