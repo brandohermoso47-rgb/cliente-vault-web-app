@@ -23,7 +23,7 @@ export const onAnnouncementCreated = onDocumentCreated(
     for (let i = 0; i < recipients.length; i += BATCH_SIZE) {
       const batch = db.batch();
       for (const uid of recipients.slice(i, i + BATCH_SIZE)) {
-        const ref = db.collection('notifications').doc();
+        const ref = db.collection('notifications').doc(`${event.params.id}_${uid}`);
         batch.set(ref, {
           userId: uid,
           actorId: data.ownerId ?? null,
