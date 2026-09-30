@@ -23,9 +23,19 @@ const EFFECT_COLORS: Record<string, string> = {
   arm_line: '#FF00FF',
   elbow_triangle: '#FFAA00',
   grid_points: '#00FF00',
-  rotation_arc: '#FF6B9D',
-  wrist_trail: '#C41E3A',
-  pose_echo: '#FFD700',
+  rotation_arc: '#FFD400',
+  wrist_trail: '#00FFFF',
+  pose_echo: '#FFAA00',
+};
+
+const EFFECT_DESCRIPTIONS: Record<string, string> = {
+  torso_grid: 'Grid anchored to shoulders & hips',
+  arm_line: 'Extended arm visualization',
+  elbow_triangle: '~90° elbow angle marker',
+  grid_points: 'Grid intersection points',
+  rotation_arc: 'Wrist rotation sweep',
+  wrist_trail: 'Motion trail of wrist',
+  pose_echo: 'Ghost pose silhouettes',
 };
 
 export default function MotionEditorLayersPanel({
@@ -126,100 +136,118 @@ function EventRow({
     >
       {/* Header row */}
       <div
-        className="flex items-center gap-2 cursor-pointer"
+        className="flex items-center gap-2 cursor-pointer hover:opacity-80 transition"
         onClick={onSelect}
       >
         {/* Color indicator */}
         <div
-          className="w-3 h-3 rounded-full flex-shrink-0"
+          className="w-4 h-4 rounded-full flex-shrink-0 shadow-lg"
           style={{ backgroundColor: event.color || EFFECT_COLORS[event.type] || '#888' }}
         />
 
         {/* Info */}
         <div className="flex-1 min-w-0">
-          <p className="text-xs font-medium text-ink-1 capitalize">
-            {event.type.replace(/_/g, ' ')} {event.side && `(${event.side})`}
-          </p>
-          <p className="text-xs text-ink-3">
+          <div className="flex items-center gap-2">
+            <p className="text-xs font-bold text-white capitalize">
+              {event.type.replace(/_/g, ' ')} {event.side && `(${event.side})`}
+            </p>
+            {event.editedManually && (
+              <span className="text-xs bg-yellow-600/50 text-yellow-200 px-1.5 py-0.5 rounded">✎ Edited</span>
+            )}
+            {event.detectedAutomatically && !event.editedManually && (
+              <span className="text-xs bg-blue-600/50 text-blue-200 px-1.5 py-0.5 rounded">✓ Auto</span>
+            )}
+          </div>
+          <p className="text-xs text-slate-400 mt-0.5">
             {formatTime(event.startMs)} → {formatTime(event.endMs)} ({formatDuration(event.endMs - event.startMs)})
           </p>
-        </div>
-
-        {/* Status badge */}
-        <div className="flex-shrink-0">
-          {event.detectedAutomatically && !event.editedManually && (
-            <span className="text-xs bg-blue text-white px-2 py-1 rounded">Auto</span>
-          )}
-          {event.editedManually && (
-            <span className="text-xs bg-purple text-white px-2 py-1 rounded">Edited</span>
-          )}
+          <p className="text-xs text-slate-500">
+            {EFFECT_DESCRIPTIONS[event.type] || 'Motion effect'}
+          </p>
         </div>
       </div>
 
       {/* Action buttons (always visible for selected item) */}
       {isSelected && (
-        <div className="flex gap-1 mt-2 pt-2 border-t border-ink-3">
+        <div className="flex gap-2 mt-3 pt-3 border-t border-slate-700/50">
           {event.detectedAutomatically && (
             <button
               onClick={onAccept}
-              className="flex-1 px-2 py-1.5 rounded text-xs bg-green text-white hover:bg-green-bright flex items-center justify-center gap-1 transition"
-              title="Mark as accepted"
+              className="flex-1 px-3 py-2 rounded-lg text-xs bg-emerald-600 hover:bg-emerald-700 text-white font-semibold flex items-center justify-center gap-1.5 transition shadow-lg shadow-emerald-600/20"
+              title="Mark as accepted (no longer auto-detected)"
             >
-              <Check size={12} />
+              <Check size={14} />
               Accept
             </button>
           )}
           <button
             onClick={onDelete}
-            className="flex-1 px-2 py-1.5 rounded text-xs bg-red text-white hover:bg-red-bright flex items-center justify-center gap-1 transition"
+            className="flex-1 px-3 py-2 rounded-lg text-xs bg-red-600 hover:bg-red-700 text-white font-semibold flex items-center justify-center gap-1.5 transition shadow-lg shadow-red-600/20"
             title="Delete this effect"
           >
-            <Trash2 size={12} />
+            <Trash2 size={14} />
             Delete
           </button>
         </div>
       )}
 
-      {/* Timing adjustments (for selected item) */}
+      {/* Customization section (for selected item) */}
       {isSelected && (
-        <div className="mt-2 pt-2 border-t border-ink-3 space-y-2">
-          <div>
-            <label className="text-xs text-ink-2 block mb-1">Start (ms)</label>
-            <input
-              type="number"
-              value={event.startMs}
-              onChange={(e) => onUpdate({ startMs: Number(e.target.value) })}
-              className="w-full px-2 py-1 rounded text-xs bg-ink-3 text-ink-1 border border-hair"
-            />
+        <div className="mt-3 pt-3 border-t border-slate-700/50 space-y-3">
+          <div className="grid grid-cols-2 gap-2">
+            <div>
+              <label className="text-xs text-slate-400 block mb-1.5 font-semibold">Start</label>
+              <div className="flex items-center gap-1">
+                <input
+                  type="number"
+                  value={Math.round(event.startMs)}
+                  onChange={(e) => onUpdate({ startMs: Number(e.target.value) })}
+                  className="flex-1 px-2 py-1.5 rounded text-xs bg-slate-700 text-white border border-slate-600 focus:border-purple-500 focus:outline-none"
+                />
+                <span className="text-xs text-slate-400">ms</span>
+              </div>
+            </div>
+            <div>
+              <label className="text-xs text-slate-400 block mb-1.5 font-semibold">End</label>
+              <div className="flex items-center gap-1">
+                <input
+                  type="number"
+                  value={Math.round(event.endMs)}
+                  onChange={(e) => onUpdate({ endMs: Number(e.target.value) })}
+                  className="flex-1 px-2 py-1.5 rounded text-xs bg-slate-700 text-white border border-slate-600 focus:border-purple-500 focus:outline-none"
+                />
+                <span className="text-xs text-slate-400">ms</span>
+              </div>
+            </div>
           </div>
+
           <div>
-            <label className="text-xs text-ink-2 block mb-1">End (ms)</label>
-            <input
-              type="number"
-              value={event.endMs}
-              onChange={(e) => onUpdate({ endMs: Number(e.target.value) })}
-              className="w-full px-2 py-1 rounded text-xs bg-ink-3 text-ink-1 border border-hair"
-            />
+            <label className="text-xs text-slate-400 block mb-1.5 font-semibold">Color</label>
+            <div className="flex items-center gap-2">
+              <input
+                type="color"
+                value={event.color || EFFECT_COLORS[event.type] || '#888'}
+                onChange={(e) => onUpdate({ color: e.target.value })}
+                className="w-10 h-8 rounded cursor-pointer border border-slate-600"
+              />
+              <span className="text-xs text-slate-400 font-mono">
+                {(event.color || EFFECT_COLORS[event.type] || '#888').toUpperCase()}
+              </span>
+            </div>
           </div>
+
           <div>
-            <label className="text-xs text-ink-2 block mb-1">Color</label>
-            <input
-              type="color"
-              value={event.color || EFFECT_COLORS[event.type] || '#888'}
-              onChange={(e) => onUpdate({ color: e.target.value })}
-              className="w-full px-2 py-1 rounded text-xs bg-ink-3 border border-hair h-8"
-            />
-          </div>
-          <div>
-            <label className="text-xs text-ink-2 block mb-1">Opacity</label>
+            <label className="text-xs text-slate-400 block mb-1.5 font-semibold">
+              Opacity: {Math.round((event.opacity ?? 0.8) * 100)}%
+            </label>
             <input
               type="range"
               min="0"
               max="1"
-              step="0.1"
+              step="0.05"
               value={event.opacity ?? 0.8}
               onChange={(e) => onUpdate({ opacity: Number(e.target.value) })}
-              className="w-full"
+              className="w-full cursor-pointer"
             />
           </div>
         </div>
