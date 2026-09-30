@@ -109,6 +109,25 @@ gcloud run deploy waack-api --source . --region $REGION --project $PROJECT --all
 ```
 `--allow-unauthenticated` es correcto: la API se protege con el ID token de Firebase, no con IAM.
 
+### Spotify (opcional: conectar cuenta y reproducir música)
+
+App en [developer.spotify.com/dashboard](https://developer.spotify.com/dashboard). El Redirect URI
+**debe** ser una ruta bajo `/account/**` (es donde Hosting sirve la app; la raíz `/` sirve la landing
+estática) — nunca `/api/...`, porque Spotify hace un GET normal del navegador sin sesión y esa ruta
+de la API exige el token de Firebase. Regístralo tal cual en el dashboard y en `SPOTIFY_REDIRECT_URI`:
+
+```bash
+printf '%s' '<CLIENT_SECRET_DE_SPOTIFY>' | gcloud secrets create SPOTIFY_CLIENT_SECRET --data-file=- --project $PROJECT
+gcloud projects add-iam-policy-binding $PROJECT --member=serviceAccount:waack-api@$PROJECT.iam.gserviceaccount.com --role=roles/secretmanager.secretAccessor --condition=None
+
+gcloud run services update waack-api --region $REGION --project $PROJECT \
+  --update-env-vars SPOTIFY_CLIENT_ID=<CLIENT_ID_DE_SPOTIFY>,SPOTIFY_REDIRECT_URI=https://waack-on.com/account/ \
+  --update-secrets SPOTIFY_CLIENT_SECRET=SPOTIFY_CLIENT_SECRET:latest
+```
+
+No hace falta ninguna variable de entorno en el frontend: el Client ID solo lo usa el backend para
+armar la URL de autorización (`GET /v1/spotify/login`); el frontend solo recibe esa URL ya armada.
+
 Luego, en `firebase.json` añade **antes** del rewrite `**` y despliega Hosting:
 ```json
 { "source": "/api/**", "run": { "serviceId": "waack-api", "region": "us-central1" } }
