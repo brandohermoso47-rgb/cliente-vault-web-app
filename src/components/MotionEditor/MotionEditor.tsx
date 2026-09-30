@@ -210,27 +210,33 @@ export default function MotionEditor({
   const visibleEvents = state.events.filter((e) => state.visibleEffectTypes.has(e.type));
 
   return (
-    <div className="flex flex-col h-screen bg-dark-1">
-      {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b border-hair">
-        <h1 className="text-xl font-bold text-ink-1">Motion Recognition Editor</h1>
+    <div className="flex flex-col h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
+      {/* Header with improved styling */}
+      <div className="flex items-center justify-between p-5 border-b border-purple-500/20 bg-black/40 backdrop-blur">
+        <div>
+          <h1 className="text-2xl font-black text-white">🎬 Motion Recognition Editor</h1>
+          <p className="text-xs text-slate-400 mt-1">
+            {state.events.length} effect{state.events.length !== 1 ? 's' : ''} detected
+            {state.isDetecting && ` • Detecting... ${Math.round(state.detectionProgress * 100)}%`}
+          </p>
+        </div>
         <div className="flex gap-2">
           <button
             onClick={() => runDetection()}
             disabled={state.isDetecting}
-            className="px-4 py-2 rounded-lg bg-blue text-white disabled:opacity-50"
+            className="px-4 py-2 rounded-lg bg-purple-600 text-white hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed font-semibold transition"
           >
-            {state.isDetecting ? `Detecting... ${Math.round(state.detectionProgress * 100)}%` : 'Re-detect'}
+            {state.isDetecting ? `Detecting...` : '🔄 Re-detect'}
           </button>
           <button
             onClick={handleSave}
-            className="px-4 py-2 rounded-lg bg-green text-white hover:bg-green-bright"
+            className="px-4 py-2 rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 font-semibold transition shadow-lg shadow-emerald-500/30"
           >
-            Save & Publish
+            ✓ Save & Publish
           </button>
           <button
             onClick={onCancel}
-            className="px-4 py-2 rounded-lg bg-ink-3 text-ink-1 hover:bg-ink-2"
+            className="px-4 py-2 rounded-lg bg-slate-700 text-slate-200 hover:bg-slate-600 font-semibold transition"
           >
             Cancel
           </button>
@@ -238,28 +244,38 @@ export default function MotionEditor({
       </div>
 
       {state.detectionError && (
-        <div className="bg-red-900 border-b border-red-500 text-red-100 p-3">
-          {state.detectionError}
+        <div className="bg-red-900/80 border-b border-red-500 text-red-100 p-4 backdrop-blur">
+          <div className="flex items-center gap-2">
+            <span className="text-lg">⚠️</span>
+            <span><strong>Detection Error:</strong> {state.detectionError}</span>
+          </div>
         </div>
       )}
 
       {/* Main content */}
       <div className="flex flex-1 overflow-hidden gap-4 p-4">
         {/* Video player with overlay (left) */}
-        <div className="flex-1 flex flex-col gap-2 min-w-0">
-          <div className="relative bg-black rounded-lg overflow-hidden aspect-video">
-            <video
-              ref={videoRef}
-              src={videoUrl}
-              onTimeUpdate={handleTimeUpdate}
-              className="w-full h-full"
-            />
-            <canvas
-              ref={canvasRef}
-              className="absolute inset-0 w-full h-full"
-              width={1280}
-              height={720}
-            />
+        <div className="flex-1 flex flex-col gap-3 min-w-0">
+          <div className="relative bg-black rounded-xl overflow-hidden shadow-2xl border border-purple-500/30">
+            <div className="relative aspect-video">
+              <video
+                ref={videoRef}
+                src={videoUrl}
+                onTimeUpdate={handleTimeUpdate}
+                className="w-full h-full"
+              />
+              <canvas
+                ref={canvasRef}
+                className="absolute inset-0 w-full h-full"
+                width={1280}
+                height={720}
+              />
+
+              {/* Current time indicator */}
+              <div className="absolute bottom-3 right-3 px-2 py-1 rounded bg-black/70 text-white text-xs font-mono">
+                {formatTime(state.currentTimeMs)}
+              </div>
+            </div>
 
             {/* Playback overlay */}
             <MotionPlayerOverlay
@@ -272,32 +288,82 @@ export default function MotionEditor({
           </div>
 
           {/* Playback controls */}
-          <div className="flex items-center gap-2">
-            <button
-              onClick={togglePlayPause}
-              className="p-2 rounded-lg bg-glass hover:bg-glass-bright"
-            >
-              {state.isPlaying ? <Pause size={20} /> : <Play size={20} />}
-            </button>
-            <div className="flex-1">
-              <input
-                type="range"
-                min="0"
-                max={videoDurationMs}
-                value={state.currentTimeMs}
-                onChange={(e) => handleTimelineClick(Number(e.target.value))}
-                className="w-full"
-              />
+          <div className="bg-slate-800/50 backdrop-blur rounded-lg p-3 border border-slate-700/50">
+            <div className="flex items-center gap-3 mb-2">
+              <button
+                onClick={togglePlayPause}
+                className="p-2 rounded-lg bg-purple-600 hover:bg-purple-700 text-white transition"
+                title={state.isPlaying ? 'Pause' : 'Play'}
+              >
+                {state.isPlaying ? <Pause size={20} /> : <Play size={20} />}
+              </button>
+              <div className="flex-1">
+                <input
+                  type="range"
+                  min="0"
+                  max={videoDurationMs}
+                  value={state.currentTimeMs}
+                  onChange={(e) => handleTimelineClick(Number(e.target.value))}
+                  className="w-full cursor-pointer"
+                />
+              </div>
+              <span className="text-sm font-mono text-slate-300 whitespace-nowrap">
+                {formatTime(state.currentTimeMs)} / {formatTime(videoDurationMs)}
+              </span>
             </div>
-            <span className="text-sm text-ink-2">
-              {formatTime(state.currentTimeMs)} / {formatTime(videoDurationMs)}
-            </span>
+
+            {/* Speed controls */}
+            <div className="flex gap-2">
+              {[0.5, 0.75, 1, 1.5].map((speed) => (
+                <button
+                  key={speed}
+                  onClick={() => {
+                    const video = videoRef.current;
+                    if (video) video.playbackRate = speed;
+                  }}
+                  className="text-xs px-3 py-1 rounded bg-slate-700 hover:bg-slate-600 text-slate-200 transition"
+                >
+                  {speed}×
+                </button>
+              ))}
+            </div>
           </div>
         </div>
 
         {/* Layers panel (right) */}
-        <div className="w-72 flex flex-col gap-2 bg-glass rounded-lg p-4 overflow-y-auto">
-          <h2 className="font-semibold text-ink-1 mb-2">Effects ({state.events.length})</h2>
+        <div className="w-80 flex flex-col gap-3 bg-slate-800/50 backdrop-blur rounded-xl p-4 overflow-y-auto border border-slate-700/50 shadow-xl">
+          <div className="flex items-center justify-between mb-2">
+            <h2 className="font-bold text-white text-lg">Effects Panel</h2>
+            <span className="px-2 py-1 rounded-full bg-purple-600/30 text-purple-300 text-xs font-mono font-bold">
+              {state.events.length} total
+            </span>
+          </div>
+
+          {/* Effect type visibility toggles */}
+          <div className="grid grid-cols-2 gap-2 pb-2 border-b border-slate-700/50">
+            {[
+              { type: 'torso_grid' as const, label: 'Grid', emoji: '📦' },
+              { type: 'arm_line' as const, label: 'Arm Line', emoji: '📍' },
+              { type: 'elbow_triangle' as const, label: 'Elbow 90°', emoji: '△' },
+              { type: 'grid_points' as const, label: 'Points', emoji: '●' },
+              { type: 'rotation_arc' as const, label: 'Arc', emoji: '◯' },
+              { type: 'wrist_trail' as const, label: 'Trail', emoji: '✨' },
+              { type: 'pose_echo' as const, label: 'Echo', emoji: '👻' },
+            ].map(({ type, label, emoji }) => (
+              <button
+                key={type}
+                onClick={() => toggleEffectType(type)}
+                className={`text-xs px-2 py-1.5 rounded-lg font-semibold transition ${
+                  state.visibleEffectTypes.has(type)
+                    ? 'bg-purple-600 text-white shadow-lg'
+                    : 'bg-slate-700 text-slate-400 hover:bg-slate-600'
+                }`}
+                title={`Toggle ${label}`}
+              >
+                {emoji} {label}
+              </button>
+            ))}
+          </div>
 
           <MotionEditorLayersPanel
             events={state.events}
@@ -311,13 +377,13 @@ export default function MotionEditor({
           />
 
           {state.events.length === 0 && (
-            <div className="text-center py-8 text-ink-3">
-              <p>No effects detected yet.</p>
+            <div className="text-center py-8">
+              <p className="text-slate-400 text-sm mb-3">No effects detected yet</p>
               <button
                 onClick={() => runDetection()}
-                className="mt-3 px-3 py-2 bg-blue text-white rounded hover:bg-blue-bright text-sm"
+                className="w-full px-3 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-lg hover:from-purple-700 hover:to-indigo-700 text-sm font-semibold transition"
               >
-                Run Detection
+                🔍 Run Detection
               </button>
             </div>
           )}
@@ -325,7 +391,7 @@ export default function MotionEditor({
       </div>
 
       {/* Timeline (bottom) */}
-      <div className="border-t border-hair p-4 bg-glass">
+      <div className="border-t border-purple-500/20 p-4 bg-slate-900/50 backdrop-blur">
         <MotionEditorTimeline
           events={state.events}
           currentTimeMs={state.currentTimeMs}
