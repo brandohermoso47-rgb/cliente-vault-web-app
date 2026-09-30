@@ -121,7 +121,7 @@ printf '%s' '<CLIENT_SECRET_DE_SPOTIFY>' | gcloud secrets create SPOTIFY_CLIENT_
 gcloud projects add-iam-policy-binding $PROJECT --member=serviceAccount:waack-api@$PROJECT.iam.gserviceaccount.com --role=roles/secretmanager.secretAccessor --condition=None
 
 gcloud run services update waack-api --region $REGION --project $PROJECT \
-  --update-env-vars SPOTIFY_CLIENT_ID=<CLIENT_ID_DE_SPOTIFY>,SPOTIFY_REDIRECT_URI=https://waack-on.com/account/ \
+  --update-env-vars "SPOTIFY_CLIENT_ID=<CLIENT_ID_DE_SPOTIFY>,SPOTIFY_REDIRECT_URI=https://waack-on.com/account/" \
   --update-secrets SPOTIFY_CLIENT_SECRET=SPOTIFY_CLIENT_SECRET:latest
 ```
 
