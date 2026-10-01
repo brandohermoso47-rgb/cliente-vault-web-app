@@ -9,7 +9,7 @@ import {
   doc,
   serverTimestamp,
   orderBy,
-  getDocs,
+  getDoc,
 } from 'firebase/firestore';
 import { db } from './firebase';
 import {
@@ -32,7 +32,7 @@ export function subscribeInstructorClasses(
   callback: (classes: IClass[]) => void
 ) {
   const q = query(
-    collection(db, `users/${uid}/instructorData/classes`),
+    collection(db, `users/${uid}/classes`),
     orderBy('createdAt', 'desc')
   );
 
@@ -61,7 +61,7 @@ export async function createClass(
   if ((data.capacity || 0) < 1) throw new Error('Capacidad debe ser ≥ 1');
 
   const docRef = await addDoc(
-    collection(db, `users/${uid}/instructorData/classes`),
+    collection(db, `users/${uid}/classes`),
     {
       ...data,
       enrolled: 0,
@@ -78,7 +78,7 @@ export async function updateClass(
   updates: Partial<IClass>
 ): Promise<void> {
   await updateDoc(
-    doc(db, `users/${uid}/instructorData/classes`, classId),
+    doc(db, `users/${uid}/classes`, classId),
     {
       ...updates,
       updatedAt: serverTimestamp(),
@@ -87,7 +87,7 @@ export async function updateClass(
 }
 
 export async function deleteClass(uid: string, classId: string): Promise<void> {
-  await deleteDoc(doc(db, `users/${uid}/instructorData/classes`, classId));
+  await deleteDoc(doc(db, `users/${uid}/classes`, classId));
 }
 
 // ==================== STUDENTS (ALUMNOS) ====================
@@ -565,7 +565,7 @@ export async function saveMotionRecognitionData(
   if (!classId) throw new Error('ID de clase requerido');
 
   await updateDoc(
-    doc(db, `users/${uid}/instructorData/classes`, classId),
+    doc(db, `users/${uid}/classes`, classId),
     {
       motionRecognitionData: {
         events: data.events || [],
@@ -582,16 +582,8 @@ export async function getMotionRecognitionData(
   classId: string
 ): Promise<any | null> {
   try {
-    const classRef = doc(db, `users/${uid}/instructorData/classes`, classId);
-    const snap = await getDocs(collection(db, `users/${uid}/instructorData/classes`));
-
-    for (const doc of snap.docs) {
-      if (doc.id === classId) {
-        const data = doc.data();
-        return data.motionRecognitionData || null;
-      }
-    }
-    return null;
+    const snap = await getDoc(doc(db, `users/${uid}/classes`, classId));
+    return snap.exists() ? snap.data().motionRecognitionData || null : null;
   } catch (err) {
     console.error('Error loading motion recognition data:', err);
     return null;
@@ -603,7 +595,7 @@ export function subscribeMotionRecognitionData(
   classId: string,
   callback: (data: any | null) => void
 ) {
-  const docRef = doc(db, `users/${uid}/instructorData/classes`, classId);
+  const docRef = doc(db, `users/${uid}/classes`, classId);
 
   return onSnapshot(
     docRef,
