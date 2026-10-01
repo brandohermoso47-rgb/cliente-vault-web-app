@@ -273,10 +273,10 @@
                 </div>
               </sc-if>
             </div>
-            <div onClick="{{ heroCtaGo }}" style="position:relative;overflow:hidden;display:inline-flex;align-items:center;gap:10px;padding:15px 26px;border-radius:999px;font-size:13px;font-weight:700;color:#1A1400;background:linear-gradient(90deg,var(--gold-hi),var(--gold-lo));box-shadow:0 12px 30px -8px rgba(201,152,46,0.45), inset 0 1px 0 rgba(255,255,255,.5);cursor:pointer;transform-style:preserve-3d;transition:transform .22s cubic-bezier(.2,.85,.25,1), box-shadow .22s ease" style-hover="transform:perspective(700px) translateZ(calc(26px * var(--z3d, 1))) translateY(-4px) rotateX(-7deg);box-shadow:0 24px 44px -12px rgba(201,152,46,.6), inset 0 1px 0 rgba(255,255,255,.6)">
+            <button type="button" onClick="{{ heroCtaGo }}" style="position:relative;overflow:hidden;display:inline-flex;align-items:center;gap:10px;padding:15px 26px;border:0;border-radius:999px;font:inherit;font-size:13px;font-weight:700;color:#1A1400;background:linear-gradient(90deg,var(--gold-hi),var(--gold-lo));box-shadow:0 12px 30px -8px rgba(201,152,46,0.45), inset 0 1px 0 rgba(255,255,255,.5);cursor:pointer;transform-style:preserve-3d;transition:transform .22s cubic-bezier(.2,.85,.25,1), box-shadow .22s ease" style-hover="transform:perspective(700px) translateZ(calc(26px * var(--z3d, 1))) translateY(-4px) rotateX(-7deg);box-shadow:0 24px 44px -12px rgba(201,152,46,.6), inset 0 1px 0 rgba(255,255,255,.6)">
               <span style="position:absolute;top:0;bottom:0;width:44px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.75),transparent);animation:goldSweep 3.2s linear infinite"></span>
               <span style="position:relative;white-space:nowrap">{{ heroCta }}</span>
-            </div>
+            </button>
           </div>
         </div>
 
@@ -288,14 +288,14 @@
           <div style="position:relative;overflow:hidden">
           <div style="display:flex;width:max-content;gap:14px;padding:0 18px;animation:adMarquee 34s linear infinite">
             <sc-for list="{{ adTiles }}" as="a" hint-placeholder-count="8">
-              <div onClick="{{ a.go }}" style="{{ a.card }}" style-hover="transform:perspective(900px) translateZ(calc(18px * var(--z3d, 1))) translateY(-3px)">
+              <button type="button" onClick="{{ a.go }}" style="{{ a.card }}" style-hover="transform:perspective(900px) translateZ(calc(18px * var(--z3d, 1))) translateY(-3px)">
                 <div style="{{ a.thumb }}"></div>
                 <div style="flex:1;min-width:0">
                   <div style="font-family:'Geist Mono',monospace;font-size:8px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3)">{{ a.kind }}</div>
                   <div style="font-size:12.5px;font-weight:700;color:var(--ink);margin-top:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ a.title }}</div>
                   <div style="font-size:11.5px;color:var(--ink-2);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ a.meta }}</div>
                 </div>
-              </div>
+              </button>
             </sc-for>
           </div>
           <div style="position:absolute;left:0;top:0;bottom:0;width:70px;background:linear-gradient(90deg, var(--ground), transparent);pointer-events:none"></div>
@@ -596,29 +596,29 @@
           <div style="display:flex;flex-direction:column;gap:26px;max-width:1180px">
 
             <div style="{{ statGrid }}">
-              <div onClick="{{ goRanking }}" style="{{ statCard1 }}" style-hover="transform:perspective(1200px) translateZ(calc(26px * var(--z3d, 1))) rotateX(-3deg);border-color:color-mix(in oklch, var(--blue) 55%, transparent)">
+              <button type="button" onClick="{{ goRanking }}" style="{{ statCard1 }}" style-hover="transform:perspective(1200px) translateZ(calc(26px * var(--z3d, 1))) rotateX(-3deg);border-color:color-mix(in oklch, var(--blue) 55%, transparent)">
                 <div style="font-family:'Geist Mono',monospace;font-size:9px;letter-spacing:.2em;color:var(--ink-3);text-transform:uppercase">Puntos totales</div>
                 <div style="margin-top:10px;font-family:'Instrument Serif',Georgia,serif;font-size:38px;font-weight:400;letter-spacing:-0.01em;color:var(--ink)">100</div>
-              </div>
-              <div onClick="{{ goPerfil }}" style="{{ statCard2 }}" style-hover="transform:perspective(1200px) translateZ(calc(26px * var(--z3d, 1))) rotateX(-3deg);border-color:color-mix(in oklch, var(--blue) 55%, transparent)">
+              </button>
+              <button type="button" onClick="{{ goPerfil }}" style="{{ statCard2 }}" style-hover="transform:perspective(1200px) translateZ(calc(26px * var(--z3d, 1))) rotateX(-3deg);border-color:color-mix(in oklch, var(--blue) 55%, transparent)">
                 <div style="font-family:'Geist Mono',monospace;font-size:9px;letter-spacing:.2em;color:var(--ink-3);text-transform:uppercase">Racha</div>
                 <div style="margin-top:10px;font-family:'Instrument Serif',Georgia,serif;font-size:38px;font-weight:400;letter-spacing:-0.01em;color:var(--ink)">4 días</div>
-              </div>
-              <div onClick="{{ goPerfil }}" style="{{ statCard3 }}" style-hover="transform:perspective(1200px) translateZ(calc(26px * var(--z3d, 1))) rotateX(-3deg);border-color:color-mix(in oklch, var(--blue) 55%, transparent)">
+              </button>
+              <button type="button" onClick="{{ goPerfil }}" style="{{ statCard3 }}" style-hover="transform:perspective(1200px) translateZ(calc(26px * var(--z3d, 1))) rotateX(-3deg);border-color:color-mix(in oklch, var(--blue) 55%, transparent)">
                 <div style="font-family:'Geist Mono',monospace;font-size:9px;letter-spacing:.2em;color:var(--ink-3);text-transform:uppercase">Lecciones</div>
                 <div style="margin-top:10px;font-family:'Instrument Serif',Georgia,serif;font-size:38px;font-weight:400;letter-spacing:-0.01em;color:var(--ink)">2 / 9</div>
-              </div>
-              <div onClick="{{ goRanking }}" style="{{ statCard4 }}" style-hover="transform:perspective(1200px) translateZ(calc(26px * var(--z3d, 1))) rotateX(-3deg);border-color:color-mix(in oklch, var(--blue) 55%, transparent)">
+              </button>
+              <button type="button" onClick="{{ goRanking }}" style="{{ statCard4 }}" style-hover="transform:perspective(1200px) translateZ(calc(26px * var(--z3d, 1))) rotateX(-3deg);border-color:color-mix(in oklch, var(--blue) 55%, transparent)">
                 <div style="font-family:'Geist Mono',monospace;font-size:9px;letter-spacing:.2em;color:var(--ink-3);text-transform:uppercase">Insignias</div>
                 <div style="margin-top:10px;font-family:'Instrument Serif',Georgia,serif;font-size:38px;font-weight:400;letter-spacing:-0.01em;color:var(--ink)">6</div>
-              </div>
+              </button>
             </div>
 
             <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:22px;align-items:start">
               <div style="display:flex;flex-direction:column;gap:14px">
                 <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px">
                   <h2 style="margin:0;font-family:'Instrument Serif',Georgia,serif;font-size:22px;font-weight:400;letter-spacing:0;color:var(--ink)">Transmisión de hoy</h2>
-                  <span onClick="{{ goLives }}" style="font-size:12px;color:var(--ink-2);cursor:pointer" style-hover="color:var(--ink)">Ver calendario</span>
+                  <button type="button" onClick="{{ goLives }}" style="border:0;padding:0;font:inherit;font-size:12px;color:var(--ink-2);background:transparent;cursor:pointer" style-hover="color:var(--ink)">Ver calendario</button>
                 </div>
                 <div style="border-radius:24px;overflow:hidden;border:1px solid var(--hair);background:var(--glass);backdrop-filter:var(--lg-blur);box-shadow:var(--lg-edge)">
                   <div style="height:190px;background:linear-gradient(135deg, color-mix(in oklch, var(--pink) 55%, #000 22%), color-mix(in oklch, var(--purple) 60%, #000 28%));position:relative">
@@ -628,7 +628,7 @@
                     <div style="font-family:'Geist Mono',monospace;font-size:10px;letter-spacing:.16em;color:var(--ink-3);text-transform:uppercase">Brando Hermoso · 128 BPM</div>
                     <h3 style="margin:8px 0;font-size:17px;font-weight:700;color:var(--ink)">Masterclass: Aceleración de Rolls &amp; Técnica Disco</h3>
                     <p style="margin:0 0 18px;font-size:13px;line-height:1.6;color:var(--ink-2);text-wrap:pretty">Corrección postural en vivo, fijación de escápula y aceleración progresiva de rolls.</p>
-                    <div onClick="{{ goLives }}" style="display:inline-flex;padding:12px 22px;border-radius:999px;font-size:12px;font-weight:700;color:#fff;background:var(--pink);box-shadow:inset 0 1px 0 rgba(255,255,255,.35);cursor:pointer">Entrar a la transmisión</div>
+                    <button type="button" onClick="{{ goLives }}" style="display:inline-flex;padding:12px 22px;border:0;border-radius:999px;font:inherit;font-size:12px;font-weight:700;color:#fff;background:var(--pink);box-shadow:inset 0 1px 0 rgba(255,255,255,.35);cursor:pointer">Entrar a la transmisión</button>
                   </div>
                 </div>
               </div>
@@ -636,30 +636,30 @@
               <div style="display:flex;flex-direction:column;gap:14px">
                 <h2 style="margin:0;font-family:'Instrument Serif',Georgia,serif;font-size:22px;font-weight:400;letter-spacing:0;color:var(--ink)">Próximas en cartelera</h2>
                 <div style="display:flex;flex-direction:column;gap:10px">
-                  <div onClick="{{ goLives }}" style="{{ listCard }}">
+                  <button type="button" onClick="{{ goLives }}" style="{{ listCard }}">
                     <div style="width:44px;height:44px;flex:0 0 44px;border-radius:14px;background:linear-gradient(135deg,var(--purple),var(--blue))"></div>
                     <div style="min-width:0">
                       <div style="font-size:13px;font-weight:700;color:var(--ink)">Ibuki Imata</div>
                       <div style="font-size:12px;color:var(--ink-2);margin-top:3px">Speed Drills &amp; Sincronía · 135 BPM</div>
                       <div style="font-family:'Geist Mono',monospace;font-size:10px;color:var(--ink-3);margin-top:6px">Hoy · 21:00</div>
                     </div>
-                  </div>
-                  <div onClick="{{ goLives }}" style="{{ listCard }}">
+                  </button>
+                  <button type="button" onClick="{{ goLives }}" style="{{ listCard }}">
                     <div style="width:44px;height:44px;flex:0 0 44px;border-radius:14px;background:linear-gradient(135deg,var(--pink),var(--yellow))"></div>
                     <div style="min-width:0">
                       <div style="font-size:13px;font-weight:700;color:var(--ink)">Yoon Ji Kim</div>
                       <div style="font-size:12px;color:var(--ink-2);margin-top:3px">Análisis de Musicalidad K-Groove</div>
                       <div style="font-family:'Geist Mono',monospace;font-size:10px;color:var(--ink-3);margin-top:6px">Mañana · 19:30</div>
                     </div>
-                  </div>
-                  <div onClick="{{ goLives }}" style="{{ listCard }}">
+                  </button>
+                  <button type="button" onClick="{{ goLives }}" style="{{ listCard }}">
                     <div style="width:44px;height:44px;flex:0 0 44px;border-radius:14px;background:linear-gradient(135deg,var(--blue),var(--purple))"></div>
                     <div style="min-width:0">
                       <div style="font-size:13px;font-weight:700;color:var(--ink)">Lorena "WaackQueen"</div>
                       <div style="font-size:12px;color:var(--ink-2);margin-top:3px">Posing &amp; Geometría Espacial</div>
                       <div style="font-family:'Geist Mono',monospace;font-size:10px;color:var(--ink-3);margin-top:6px">Jueves · 20:00</div>
                     </div>
-                  </div>
+                  </button>
                 </div>
               </div>
             </div>
@@ -672,7 +672,7 @@
                 </div>
                 <div style="{{ plateRow }}">
                   <sc-for list="{{ trackList }}" as="t" hint-placeholder-count="3">
-                    <div onClick="{{ t.open }}" style="{{ t.card }}" style-hover="transform:perspective(1200px) translateZ(calc(22px * var(--z3d, 1))) rotateX(-3deg)">
+                    <button type="button" onClick="{{ t.open }}" style="{{ t.card }}" style-hover="transform:perspective(1200px) translateZ(calc(22px * var(--z3d, 1))) rotateX(-3deg)">
                       <span style="{{ t.thumb }}">
                         <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"></path></svg>
                       </span>
@@ -683,7 +683,7 @@
                       <sc-if value="{{ t.isPlaying }}" hint-placeholder-val="{{ true }}">
                         <span style="display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:999px;background:var(--pink);color:#fff;font-family:'Geist Mono',monospace;font-size:8px;font-weight:700;letter-spacing:.12em;white-space:nowrap"><span style="width:4px;height:4px;border-radius:50%;background:#fff;animation:livePulse 1.2s ease-in-out infinite"></span>SUENA</span>
                       </sc-if>
-                    </div>
+                    </button>
                   </sc-for>
                 </div>
               </div>
@@ -775,7 +775,7 @@
                     </div>
                     <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px">
                       <span style="font-family:'Geist Mono',monospace;font-size:10px;color:var(--ink-3);white-space:nowrap">{{ a.date }}</span>
-                      <span onClick="{{ a.go }}" style="display:inline-flex;align-items:center;gap:7px;padding:10px 17px;border-radius:999px;font-size:12px;font-weight:700;color:#1A1400;background:linear-gradient(90deg,var(--gold-hi),var(--gold-lo));box-shadow:inset 0 1px 0 rgba(255,255,255,.5);cursor:pointer;white-space:nowrap">{{ a.cta }}</span>
+                      <button type="button" onClick="{{ a.go }}" style="display:inline-flex;align-items:center;gap:7px;padding:10px 17px;border:0;border-radius:999px;font:inherit;font-size:12px;font-weight:700;color:#1A1400;background:linear-gradient(90deg,var(--gold-hi),var(--gold-lo));box-shadow:inset 0 1px 0 rgba(255,255,255,.5);cursor:pointer;white-space:nowrap">{{ a.cta }}</button>
                     </div>
                   </div>
                 </sc-for>
@@ -837,7 +837,7 @@
                       <div style="font-size:12px;color:var(--ink-2);margin-top:3px">{{ l.role }}</div>
                       <div style="font-family:'Geist Mono',monospace;font-size:10px;color:var(--ink-3);margin-top:6px">{{ l.price }}</div>
                     </div>
-                    <div onClick="{{ goPlanes }}" style="padding:11px 18px;border-radius:999px;font-size:12px;font-weight:700;color:var(--ink);border:1px solid var(--hair);background:var(--glass);box-shadow:var(--lg-edge);cursor:pointer;white-space:nowrap" style-hover="border-color:var(--blue)">Suscribirme</div>
+                    <button type="button" onClick="{{ goPlanes }}" style="padding:11px 18px;border-radius:999px;border-width:1px;font:inherit;font-size:12px;font-weight:700;color:var(--ink);border-color:var(--hair);background:var(--glass);box-shadow:var(--lg-edge);cursor:pointer;white-space:nowrap" style-hover="border-color:var(--blue)">Suscribirme</button>
                   </div>
                 </sc-for>
               </div>
