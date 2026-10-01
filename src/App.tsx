@@ -1408,7 +1408,7 @@ class App extends Component<any, any> {
       title: a.t,
       meta: a.m,
       thumb: 'width:44px;height:44px;flex:0 0 44px;border-radius:14px;background:linear-gradient(135deg, color-mix(in oklch, ' + a.c1 + ' 70%, #000 10%), color-mix(in oklch, ' + a.c2 + ' 66%, #000 24%))',
-      card: 'display:flex;align-items:center;gap:12px;width:262px;flex:0 0 262px;padding:12px 14px;border-radius:18px;cursor:pointer;transform-style:preserve-3d;transition:transform .24s cubic-bezier(.2,.85,.25,1);' + (skin || '') + (blur || '')
+      card: 'text-align:left;font:inherit;color:inherit;display:flex;align-items:center;gap:12px;width:262px;flex:0 0 262px;padding:12px 14px;border-radius:18px;cursor:pointer;transform-style:preserve-3d;transition:transform .24s cubic-bezier(.2,.85,.25,1);' + (skin || '') + (blur || '')
     }));
   }
 
@@ -3431,11 +3431,11 @@ class App extends Component<any, any> {
       cardGrid: grid3d + 'grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px;',
       reelGrid: grid3d + 'grid-template-columns:repeat(auto-fill,minmax(210px,1fr));',
       statCard: 'padding:22px;border-radius:22px;' + glassCard,
-      statCard1: 'padding:22px;border-radius:22px;' + glassCard + rise(0),
-      statCard2: 'padding:22px;border-radius:22px;' + glassCard + rise(1),
-      statCard3: 'padding:22px;border-radius:22px;' + glassCard + rise(2),
-      statCard4: 'padding:22px;border-radius:22px;' + glassCard + rise(3),
-      listCard: 'display:flex;gap:12px;padding:14px;border-radius:20px;cursor:pointer;' + glassCard,
+      statCard1: 'text-align:left;font:inherit;color:inherit;padding:22px;border-radius:22px;' + glassCard + rise(0),
+      statCard2: 'text-align:left;font:inherit;color:inherit;padding:22px;border-radius:22px;' + glassCard + rise(1),
+      statCard3: 'text-align:left;font:inherit;color:inherit;padding:22px;border-radius:22px;' + glassCard + rise(2),
+      statCard4: 'text-align:left;font:inherit;color:inherit;padding:22px;border-radius:22px;' + glassCard + rise(3),
+      listCard: 'text-align:left;font:inherit;color:inherit;display:flex;gap:12px;padding:14px;border-radius:20px;cursor:pointer;' + glassCard,
       courseCard: 'border-radius:24px;overflow:hidden;cursor:pointer;' + glassCard,
       courseCard1: 'border-radius:24px;overflow:hidden;cursor:pointer;' + glassCard + rise(0),
       courseCard2: 'border-radius:24px;overflow:hidden;cursor:pointer;' + glassCard + rise(1),

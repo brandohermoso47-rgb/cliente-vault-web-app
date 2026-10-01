@@ -41,12 +41,12 @@ export default function Hero({ v }: { v: any }) {
             </>
           )}
         </div>
-        <div onClick={v.heroCtaGo} style={{"position":"relative","overflow":"hidden","display":"inline-flex","alignItems":"center","gap":"10px","padding":"15px 26px","borderRadius":"999px","fontSize":"13px","fontWeight":"700","color":"#1A1400","background":"linear-gradient(90deg,var(--gold-hi),var(--gold-lo))","boxShadow":"0 12px 30px -8px rgba(201,152,46,0.45), inset 0 1px 0 rgba(255,255,255,.5)","cursor":"pointer","transformStyle":"preserve-3d","transition":"transform .22s cubic-bezier(.2,.85,.25,1), box-shadow .22s ease"}} className={cx(pc("hover", "transform:perspective(700px) translateZ(calc(26px * var(--z3d, 1))) translateY(-4px) rotateX(-7deg);box-shadow:0 24px 44px -12px rgba(201,152,46,.6), inset 0 1px 0 rgba(255,255,255,.6)"))}>
+        <button type="button" onClick={v.heroCtaGo} style={{"position":"relative","overflow":"hidden","display":"inline-flex","alignItems":"center","gap":"10px","padding":"15px 26px","border":"0","borderRadius":"999px","font":"inherit","fontSize":"13px","fontWeight":"700","color":"#1A1400","background":"linear-gradient(90deg,var(--gold-hi),var(--gold-lo))","boxShadow":"0 12px 30px -8px rgba(201,152,46,0.45), inset 0 1px 0 rgba(255,255,255,.5)","cursor":"pointer","transformStyle":"preserve-3d","transition":"transform .22s cubic-bezier(.2,.85,.25,1), box-shadow .22s ease"}} className={cx(pc("hover", "transform:perspective(700px) translateZ(calc(26px * var(--z3d, 1))) translateY(-4px) rotateX(-7deg);box-shadow:0 24px 44px -12px rgba(201,152,46,.6), inset 0 1px 0 rgba(255,255,255,.6)"))}>
           <span style={{"position":"absolute","top":"0","bottom":"0","width":"44px","background":"linear-gradient(90deg,transparent,rgba(255,255,255,.75),transparent)","animation":"goldSweep 3.2s linear infinite"}}></span>
           <span style={{"position":"relative","whiteSpace":"nowrap"}}>
             {v.heroCta}
           </span>
-        </div>
+        </button>
       </div>
     </div>
     <div style={sty(v.adsBanner)}>
@@ -62,7 +62,7 @@ export default function Hero({ v }: { v: any }) {
         <div style={{"display":"flex","width":"max-content","gap":"14px","padding":"0 18px","animation":"adMarquee 34s linear infinite"}}>
           {(v.adTiles ?? []).map((a: any, $index: number) => (
             <Fragment key={$index}>
-              <div onClick={a?.go} style={sty(a?.card)} className={cx(pc("hover", "transform:perspective(900px) translateZ(calc(18px * var(--z3d, 1))) translateY(-3px)"))}>
+              <button type="button" onClick={a?.go} style={sty(a?.card)} className={cx(pc("hover", "transform:perspective(900px) translateZ(calc(18px * var(--z3d, 1))) translateY(-3px)"))}>
                 <div style={sty(a?.thumb)}></div>
                 <div style={{"flex":"1","minWidth":"0"}}>
                   <div style={{"fontFamily":"'Geist Mono',monospace","fontSize":"8px","letterSpacing":".16em","textTransform":"uppercase","color":"var(--ink-3)"}}>
@@ -75,7 +75,7 @@ export default function Hero({ v }: { v: any }) {
                     {a?.meta}
                   </div>
                 </div>
-              </div>
+              </button>
             </Fragment>
           ))}
         </div>
