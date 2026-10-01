@@ -294,7 +294,7 @@
             <span style="font-family:'Geist Mono',monospace;font-size:9px;letter-spacing:.14em;color:var(--ink-3);text-transform:uppercase">Contenido patrocinado</span>
           </div>
           <div style="position:relative;overflow:hidden">
-          <div style="display:flex;width:max-content;gap:14px;padding:0 18px;animation:adMarquee 34s linear infinite">
+          <div class="ad-marquee-track" style="display:flex;width:max-content;gap:14px;padding:0 18px;animation:adMarquee 34s linear infinite">
             <sc-for list="{{ adTiles }}" as="a" hint-placeholder-count="8">
               <button type="button" onClick="{{ a.go }}" style="{{ a.card }}" style-hover="transform:perspective(900px) translateZ(calc(18px * var(--z3d, 1))) translateY(-3px)">
                 <div style="{{ a.thumb }}"></div>

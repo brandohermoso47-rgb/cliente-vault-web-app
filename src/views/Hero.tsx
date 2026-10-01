@@ -73,7 +73,7 @@ export default function Hero({ v }: { v: any }) {
         </span>
       </div>
       <div style={{"position":"relative","overflow":"hidden"}}>
-        <div style={{"display":"flex","width":"max-content","gap":"14px","padding":"0 18px","animation":"adMarquee 34s linear infinite"}}>
+        <div className="ad-marquee-track" style={{"display":"flex","width":"max-content","gap":"14px","padding":"0 18px","animation":"adMarquee 34s linear infinite"}}>
           {(v.adTiles ?? []).map((a: any, $index: number) => (
             <Fragment key={$index}>
               <button type="button" onClick={a?.go} style={sty(a?.card)} className={cx(pc("hover", "transform:perspective(900px) translateZ(calc(18px * var(--z3d, 1))) translateY(-3px)"))}>
