@@ -9,7 +9,7 @@ import {
   doc,
   serverTimestamp,
   orderBy,
-  getDocs,
+  getDoc,
 } from 'firebase/firestore';
 import { db } from './firebase';
 import {
