@@ -543,6 +543,7 @@ class App extends Component<any, any> {
         body: a.body,
         date: a.date,
         cta: a.cta || 'Ver más',
+        go: this.annDestination(a.cat),
         isPinned: !!a.pinned,
         avatar: 'width:34px;height:34px;flex:0 0 34px;border-radius:12px;border:1px solid var(--hair);background:linear-gradient(135deg, color-mix(in oklch, ' + c1 + ' 72%, #fff 8%), color-mix(in oklch, ' + c2 + ' 70%, #000 18%))',
         cover: a.imageUrl
@@ -563,6 +564,22 @@ class App extends Component<any, any> {
 
   playTrack(i) { this.playingIndex = i; this.forceUpdate(); }
 
+  goNovedades = () => {
+    const scroll = () => setTimeout(() => document.getElementById('novedades')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 60);
+    if (this.state.view === 'cursos') scroll(); else this.setState({ view: 'cursos' }, scroll);
+  };
+
+  // Destino de cada tipo de anuncio: batallas, jams y clases especiales viven en Lives; el podcast en Radio; lo demás en Novedades.
+  adDestination(kind: string) {
+    if (kind === 'Batalla' || kind === 'Jam' || kind === 'Masterclass') return () => this.setState({ view: 'lives' });
+    if (kind === 'Podcast') return () => this.setState({ view: 'podcast' }, () => this.podGo(0));
+    return this.goNovedades;
+  }
+  annDestination(cat: string) {
+    if (cat === 'Competencias' || cat === 'Sesiones & Jams' || cat === 'Clases Especiales') return () => this.setState({ view: 'lives' });
+    return undefined;
+  }
+
   buildTracks() {
     return this.trackData.map((t, i) => ({
       key: 't' + i,
@@ -571,6 +588,7 @@ class App extends Component<any, any> {
       tag: t.tag,
       isPlaying: this.playingIndex === i,
       play: () => this.playTrack(i),
+      open: () => { this.playTrack(i); this.setState({ view: 'entrenamiento' }); },
       thumb: 'display:flex;align-items:center;justify-content:center;width:40px;height:40px;flex:0 0 40px;border-radius:13px;color:#fff;background:linear-gradient(135deg, color-mix(in oklch, ' + t.c1 + ' 70%, #000 10%), color-mix(in oklch, ' + t.c2 + ' 66%, #000 22%))',
       card: 'display:flex;align-items:center;gap:12px;padding:13px 15px;border-radius:20px;border:1px solid ' + (this.playingIndex === i ? 'color-mix(in oklch, var(--pink) 55%, transparent)' : 'var(--hair)') + ';background:var(--glass);backdrop-filter:var(--lg-blur);-webkit-backdrop-filter:var(--lg-blur);box-shadow:var(--lg-edge);cursor:pointer;transform-style:preserve-3d;transition:transform .26s cubic-bezier(.2,.85,.25,1), border-color .2s ease;animation:rise3d .8s cubic-bezier(.2,.85,.25,1) ' + (0.06 * i).toFixed(2) + 's backwards'
     }));
@@ -1359,6 +1377,7 @@ class App extends Component<any, any> {
     const base = this.adData.concat(this.adData);
     return base.map((a, i) => ({
       key: 'ad' + i,
+      go: this.adDestination(a.k),
       kind: a.k,
       title: a.t,
       meta: a.m,
@@ -3029,6 +3048,7 @@ class App extends Component<any, any> {
       navPlanes: this.nav(v === 'planes', 'var(--purple)'),
       navSupport: this.nav(v === 'support', 'var(--purple)'),
       goLab: () => this.setState({ view: 'entrenamiento' }),
+      heroCtaGo: v === 'cursos' ? () => this.setState({ view: 'planes' }) : undefined,
       goStudy: () => this.setState({ view: 'study' }),
       goFisico: () => this.setState({ view: 'fisico' }),
       goPerfil: () => this.setState({ view: 'perfil' }),
