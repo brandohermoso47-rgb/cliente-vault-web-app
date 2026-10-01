@@ -33,6 +33,7 @@ interface FrameRenderContext {
   ctx: CanvasRenderingContext2D;
   videoW: number;
   videoH: number;
+  sourceCrop: { x: number; y: number; width: number; height: number };
   currentTimeMs: number;
 }
 
@@ -41,7 +42,8 @@ interface FrameRenderContext {
  */
 function initializeCanvas(
   width: number,
-  height: number
+  height: number,
+  sourceCrop: FrameRenderContext['sourceCrop']
 ): FrameRenderContext {
   const canvas = document.createElement('canvas');
   canvas.width = width;
@@ -57,23 +59,34 @@ function initializeCanvas(
     ctx,
     videoW: width,
     videoH: height,
+    sourceCrop,
     currentTimeMs: 0,
   };
+}
+
+function captureVideoStream(video: HTMLVideoElement): MediaStream | null {
+  const capture = (video as HTMLVideoElement & {
+    captureStream?: () => MediaStream;
+    mozCaptureStream?: () => MediaStream;
+  }).captureStream ?? (video as HTMLVideoElement & {
+    mozCaptureStream?: () => MediaStream;
+  }).mozCaptureStream;
+  return capture?.call(video) ?? null;
 }
 
 /**
  * Render single frame with effects
  */
-async function renderFrame(
+function drawFrame(
   video: HTMLVideoElement,
   context: FrameRenderContext,
   events: FigureEvent[],
   visibleTypes: Set<string>
-): Promise<Blob> {
-  const { ctx, canvas, videoW, videoH, currentTimeMs } = context;
+): void {
+  const { ctx, videoW, videoH, currentTimeMs, sourceCrop } = context;
 
   // Draw video frame
-  ctx.drawImage(video, 0, 0, videoW, videoH);
+  ctx.drawImage(video, sourceCrop.x, sourceCrop.y, sourceCrop.width, sourceCrop.height, 0, 0, videoW, videoH);
 
   // Render active effects
   const activeEvents = events.filter(
@@ -90,16 +103,6 @@ async function renderFrame(
     }
   }
 
-  return new Promise((resolve, reject) => {
-    canvas.toBlob(
-      (blob) => {
-        if (blob) resolve(blob);
-        else reject(new Error('Failed to create frame blob'));
-      },
-      'image/webp',
-      0.95
-    );
-  });
 }
 
 /**
@@ -166,10 +169,19 @@ export async function exportVideoWithEffects(
         );
 
         // Initialize canvas
-        const context = initializeCanvas(dims.width, dims.height);
+        const context = initializeCanvas(dims.width, dims.height, dims);
 
         // Create MediaRecorder
         const stream = context.canvas.captureStream(opts.fps!);
+        if (opts.includeAudio) {
+          const sourceStream = captureVideoStream(video);
+          if (!sourceStream) {
+            URL.revokeObjectURL(objectUrl);
+            reject(new Error('Audio capture is not supported by this browser'));
+            return;
+          }
+          sourceStream.getAudioTracks().forEach((track) => stream.addTrack(track));
+        }
         const mediaRecorder = new MediaRecorder(stream, {
           mimeType: 'video/webm;codecs=vp9',
           videoBitsPerSecond: parseInt(opts.bitrate!.replace('M', '')) * 1000000,
@@ -185,11 +197,13 @@ export async function exportVideoWithEffects(
 
         mediaRecorder.onstop = () => {
           const blob = new Blob(chunks, { type: 'video/webm' });
+          stream.getTracks().forEach((track) => track.stop());
           URL.revokeObjectURL(objectUrl);
           resolve(blob);
         };
 
         mediaRecorder.onerror = (event) => {
+          stream.getTracks().forEach((track) => track.stop());
           URL.revokeObjectURL(objectUrl);
           reject(event.error);
         };
@@ -219,6 +233,7 @@ export async function exportVideoWithEffects(
             };
             video.addEventListener('seeked', handler);
           });
+          drawFrame(video, context, motionData.events, visibleTypes);
 
           currentTime += frameInterval;
 
@@ -252,11 +267,7 @@ export async function exportPreviewGIF(
   startMs: number = 0,
   durationMs: number = 3000
 ): Promise<Blob> {
-  // This would require gif.js library
-  // For now, return placeholder
-  return new Blob(['GIF preview not yet implemented'], {
-    type: 'image/gif',
-  });
+  throw new Error('GIF preview export is not implemented');
 }
 
 /**
@@ -276,9 +287,11 @@ export async function createShortClip(
   return new Promise((resolve, reject) => {
     video.onloadedmetadata = async () => {
       try {
-        const context = initializeCanvas(1080, 1920); // 9:16 for Reels/TikTok
+        const sourceCrop = calculateDimensions(video.videoWidth, video.videoHeight, '9:16');
+        const context = initializeCanvas(1080, 1920, sourceCrop);
 
         const stream = context.canvas.captureStream(30);
+        captureVideoStream(video)?.getAudioTracks().forEach((track) => stream.addTrack(track));
         const mediaRecorder = new MediaRecorder(stream, {
           mimeType: 'video/webm',
         });
@@ -293,6 +306,7 @@ export async function createShortClip(
 
         mediaRecorder.onstop = () => {
           const blob = new Blob(chunks, { type: 'video/webm' });
+          stream.getTracks().forEach((track) => track.stop());
           URL.revokeObjectURL(objectUrl);
           resolve(blob);
         };
@@ -319,6 +333,7 @@ export async function createShortClip(
             };
             video.addEventListener('seeked', handler);
           });
+          drawFrame(video, context, Array.from(motionData.events), visibleTypes);
 
           currentTime += 1000 / 30; // 30 fps
           requestAnimationFrame(renderFrame);

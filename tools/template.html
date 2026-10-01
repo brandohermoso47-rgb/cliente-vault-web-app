@@ -411,17 +411,33 @@
                     <video src="{{ p.mediaUrl }}" controls style="aspect-ratio:16/10;width:100%;display:block;background:#000"></video>
                   </sc-if>
                   <div style="display:flex;align-items:center;gap:18px;padding:14px 20px">
-                    <div style="display:flex;align-items:center;gap:7px;font-size:12px;font-weight:600;color:var(--ink-2);cursor:pointer" style-hover="color:var(--pink)">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M20.8 5.6a5 5 0 0 0-7.1 0L12 7.3l-1.7-1.7a5 5 0 1 0-7.1 7.1L12 21.5l8.8-8.8a5 5 0 0 0 0-7.1Z"></path></svg>
+                    <div onClick="{{ p.onLike }}" style="display:flex;align-items:center;gap:7px;font-size:12px;font-weight:600;color:var(--ink-2);cursor:pointer" style-hover="color:var(--pink)">
+                      <sc-if value="{{ p.liked }}">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M20.8 5.6a5 5 0 0 0-7.1 0L12 7.3l-1.7-1.7a5 5 0 1 0-7.1 7.1L12 21.5l8.8-8.8a5 5 0 0 0 0-7.1Z"></path></svg>
+                      </sc-if>
+                      <sc-if value="{{ !p.liked }}">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M20.8 5.6a5 5 0 0 0-7.1 0L12 7.3l-1.7-1.7a5 5 0 1 0-7.1 7.1L12 21.5l8.8-8.8a5 5 0 0 0 0-7.1Z"></path></svg>
+                      </sc-if>
                       {{ p.likes }}
                     </div>
-                    <div style="display:flex;align-items:center;gap:7px;font-size:12px;font-weight:600;color:var(--ink-2);cursor:pointer" style-hover="color:var(--pink)">
+                    <div onClick="{{ p.onToggleComments }}" style="display:flex;align-items:center;gap:7px;font-size:12px;font-weight:600;color:var(--ink-2);cursor:pointer" style-hover="color:var(--pink)">
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M21 12a8 8 0 0 1-11.5 7.2L3 21l1.8-6.5A8 8 0 1 1 21 12Z"></path></svg>
                       {{ p.comments }}
                     </div>
                     <div style="flex:1"></div>
                     <div style="font-size:12px;font-weight:600;color:var(--ink-2);cursor:pointer" style-hover="color:var(--ink)">Guardar</div>
                   </div>
+                  <sc-if value="{{ p.commentsOpen }}">
+                    <div style="padding:0 20px 18px;display:flex;flex-direction:column;gap:10px">
+                      <sc-for list="{{ p.commentRows }}" as="c" hint-placeholder-count="0">
+                        <div style="font-size:12.5px;line-height:1.5;color:var(--ink-2)"><span style="font-weight:700;color:var(--ink)">{{ c.authorName }}</span> {{ c.text }}</div>
+                      </sc-for>
+                      <div style="display:flex;gap:8px">
+                        <input value="{{ p.commentDraft }}" onChange="{{ p.onCommentChange }}" placeholder="Escribe un comentario…" style="flex:1;min-width:0;padding:9px 12px;border-radius:999px;border:1px solid var(--hair);background:var(--glass-2);color:var(--ink);font-size:12px;font-family:inherit;outline:none" />
+                        <div onClick="{{ p.onCommentSend }}" style="padding:9px 16px;border-radius:999px;font-size:11.5px;font-weight:700;color:#14111A;background:var(--pink);cursor:pointer;white-space:nowrap">Enviar</div>
+                      </div>
+                    </div>
+                  </sc-if>
                 </div>
               </sc-for>
             </div>
@@ -1994,6 +2010,16 @@
               </sc-if>
             </div>
 
+            <sc-if value="{{ !isInstructor }}">
+              <div style="display:flex;gap:16px;align-items:center;padding:20px 22px;border-radius:22px;border:1px solid var(--hair);background:var(--glass);backdrop-filter:blur(34px);-webkit-backdrop-filter:blur(34px)">
+                <div style="flex:1">
+                  <div style="font-size:13.5px;font-weight:700;color:var(--ink)">¿Quieres convertirte en instructor?</div>
+                  <div style="font-size:12px;line-height:1.5;color:var(--ink-2);margin-top:6px">Accede al panel completo de instructor: administra clases, estudiantes, ingresos y publica contenido.</div>
+                </div>
+                <div onClick="{{ perfBecomeInstructorClick }}" style="padding:11px 20px;border-radius:999px;font-size:12.5px;font-weight:700;color:#14111A;background:linear-gradient(90deg,var(--gold-hi),var(--gold-lo));box-shadow:inset 0 1px 0 rgba(255,255,255,.5);cursor:pointer;flex:0 0 auto;white-space:nowrap;transition:transform .18s ease" style-hover="transform:translateY(-1px)">Solicitar acceso</div>
+              </div>
+            </sc-if>
+
             <div style="position:relative;z-index:40;align-self:flex-start">
               <div onClick="{{ agPanelToggle }}" style="{{ agPanelBtn }}" style-hover="border-color:color-mix(in oklch, var(--pink) 50%, transparent)">
                 <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="var(--pink)" stroke-width="1.8" stroke-linecap="round" style="flex:0 0 17px"><rect x="3" y="5" width="18" height="16" rx="3"></rect><path d="M3 10h18M8 3v4M16 3v4"></path></svg>
@@ -2114,6 +2140,26 @@
                   <div style="display:flex;gap:10px;margin-top:20px">
                     <div onClick="{{ perfCloseUpload }}" style="flex:1;padding:13px 18px;border-radius:999px;text-align:center;font-size:12.5px;font-weight:700;color:var(--ink-2);border:1px solid var(--hair);background:var(--glass-2);cursor:pointer" style-hover="color:var(--ink)">Cancelar</div>
                     <div onClick="{{ perfPublish }}" style="flex:1;padding:13px 18px;border-radius:999px;text-align:center;font-size:12.5px;font-weight:700;color:#14111A;background:var(--pink);box-shadow:0 10px 22px -10px var(--pink), inset 0 1px 0 rgba(255,255,255,.3);cursor:pointer;transition:transform .18s ease" style-hover="transform:translateY(-1px)">Publicar</div>
+                  </div>
+                </div>
+              </div>
+            </sc-if>
+            <sc-if value="{{ perfInstructorModalOpen }}">
+              <div onClick="{{ perfCloseInstructorModal }}" style="position:fixed;inset:0;z-index:90;background:rgba(10,8,14,.72);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);display:flex;align-items:center;justify-content:center;padding:28px">
+                <div onClick="{{ stopProp }}" style="width:100%;max-width:520px;border-radius:28px;border:1px solid var(--hair);background:var(--glass);box-shadow:0 40px 90px -40px rgba(0,0,0,.8),var(--lg-edge);padding:28px">
+                  <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:20px">
+                    <span style="font-family:'Geist Mono',monospace;font-size:9px;letter-spacing:.2em;color:var(--ink-3);text-transform:uppercase">Solicitud de instructor</span>
+                    <div onClick="{{ perfCloseInstructorModal }}" style="font-size:20px;line-height:1;color:var(--ink-3);cursor:pointer;padding:2px 6px" style-hover="color:var(--pink)">×</div>
+                  </div>
+                  <h2 style="margin:0 0 12px;font-size:22px;font-weight:700;color:var(--ink)">Convertirse en instructor</h2>
+                  <p style="margin:0 0 20px;font-size:13px;line-height:1.6;color:var(--ink-2)">Cuéntanos por qué te gustaría ser instructor en Waack ON. Nuestro equipo revisará tu solicitud en 24-48 horas.</p>
+                  <textarea value="{{ perfInstructorReason }}" onChange="{{ perfSetInstructorReason }}" placeholder="Explica tu experiencia, especialidad y por qué quieres enseñar en Waack ON..." style="width:100%;min-height:120px;padding:13px 16px;border-radius:15px;border:1px solid var(--hair);background:var(--glass-2);color:var(--ink);font-size:12.5px;font-family:inherit;outline:none;box-sizing:border-box;resize:vertical"></textarea>
+                  <sc-if value="{{ perfInstructorErr }}">
+                    <div style="margin-top:12px;font-size:11.5px;color:var(--pink)">{{ perfInstructorErr }}</div>
+                  </sc-if>
+                  <div style="display:flex;gap:10px;margin-top:20px">
+                    <div onClick="{{ perfCloseInstructorModal }}" style="flex:1;padding:13px 18px;border-radius:999px;text-align:center;font-size:12.5px;font-weight:700;color:var(--ink-2);border:1px solid var(--hair);background:var(--glass-2);cursor:pointer" style-hover="color:var(--ink)">Cancelar</div>
+                    <div onClick="{{ perfSubmitInstructorRequest }}" style="flex:1;padding:13px 18px;border-radius:999px;text-align:center;font-size:12.5px;font-weight:700;color:#14111A;background:linear-gradient(90deg,var(--gold-hi),var(--gold-lo));box-shadow:0 10px 22px -10px var(--pink),inset 0 1px 0 rgba(255,255,255,.3);cursor:pointer;transition:transform .18s ease">Enviar solicitud</div>
                   </div>
                 </div>
               </div>

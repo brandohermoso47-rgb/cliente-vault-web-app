@@ -1,6 +1,7 @@
 // Escribe notificaciones reales en la colección `notifications`. Las reglas de Firestore bloquean
 // la escritura desde el cliente (allow create: if false) a propósito: solo el servidor (aquí) puede
 // crearlas, así nadie puede falsificar un "te dio me gusta" o "te siguió" que nunca pasó.
+import { createHash } from 'node:crypto';
 import { FieldValue } from 'firebase-admin/firestore';
 import { db } from './db.js';
 
@@ -19,6 +20,7 @@ const actorLabel = async (uid: string): Promise<string> => {
 };
 
 export async function notify(opts: {
+  eventId: string;
   userId: string;
   actorId?: string;
   type: NotificationType;
@@ -26,7 +28,8 @@ export async function notify(opts: {
   text: string;
 }) {
   if (opts.actorId && opts.actorId === opts.userId) return; // nunca notificarse a uno mismo
-  await db.collection('notifications').add({
+  const notificationId = createHash('sha256').update(opts.eventId).digest('hex');
+  await db.collection('notifications').doc(notificationId).set({
     userId: opts.userId,
     actorId: opts.actorId ?? null,
     type: opts.type,

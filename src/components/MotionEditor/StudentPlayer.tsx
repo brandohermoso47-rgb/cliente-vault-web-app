@@ -34,6 +34,8 @@ interface PlayerState {
   isMuted: boolean;
   playbackRate: number;
   visibleEffectTypes: Set<string>;
+  videoWidth: number;
+  videoHeight: number;
 }
 
 export default function StudentPlayer({
@@ -52,6 +54,8 @@ export default function StudentPlayer({
     volume: 1,
     isMuted: false,
     playbackRate: 1,
+    videoWidth: 0,
+    videoHeight: 0,
     visibleEffectTypes: new Set(
       motionData?.events.map((e) => e.type) || []
     ),
@@ -92,7 +96,12 @@ export default function StudentPlayer({
   function handleLoadedMetadata() {
     const video = videoRef.current;
     if (video) {
-      setState((s) => ({ ...s, duration: video.duration * 1000 }));
+      setState((s) => ({
+        ...s,
+        duration: video.duration * 1000,
+        videoWidth: video.videoWidth,
+        videoHeight: video.videoHeight,
+      }));
     }
   }
 
@@ -157,8 +166,8 @@ export default function StudentPlayer({
         <MotionPlayerOverlay
           events={visibleEvents}
           currentTimeMs={state.currentTimeMs}
-          videoWidth={1280}
-          videoHeight={720}
+          videoWidth={state.videoWidth}
+          videoHeight={state.videoHeight}
           canvasRef={canvasRef}
         />
 

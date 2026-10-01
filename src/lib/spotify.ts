@@ -7,7 +7,11 @@ export type SpotifyStatus = { connected: boolean; premium?: boolean; spotifyUser
 
 export const spotifyStatus = () => api<SpotifyStatus>('GET', '/spotify/status');
 
-export const spotifyDisconnect = () => api<{ connected: false }>('DELETE', '/spotify/connection');
+export const spotifyDisconnect = async () => {
+  const result = await api<{ connected: false }>('DELETE', '/spotify/connection');
+  clearSpotifyTokenCache();
+  return result;
+};
 
 // Igual que startCheckout/startConnectOnboarding en lib/payments.ts: navega fuera de la app y Spotify
 // devuelve al navegador aquí mismo (ver handleSpotifyReturnIfPresent, que recoge ?code&state al volver).
