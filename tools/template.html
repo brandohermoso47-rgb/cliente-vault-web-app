@@ -273,10 +273,18 @@
                 </div>
               </sc-if>
             </div>
+            <sc-if value="{{ heroHasGo }}">
             <button type="button" onClick="{{ heroCtaGo }}" style="position:relative;overflow:hidden;display:inline-flex;align-items:center;gap:10px;padding:15px 26px;border:0;border-radius:999px;font:inherit;font-size:13px;font-weight:700;color:#1A1400;background:linear-gradient(90deg,var(--gold-hi),var(--gold-lo));box-shadow:0 12px 30px -8px rgba(201,152,46,0.45), inset 0 1px 0 rgba(255,255,255,.5);cursor:pointer;transform-style:preserve-3d;transition:transform .22s cubic-bezier(.2,.85,.25,1), box-shadow .22s ease" style-hover="transform:perspective(700px) translateZ(calc(26px * var(--z3d, 1))) translateY(-4px) rotateX(-7deg);box-shadow:0 24px 44px -12px rgba(201,152,46,.6), inset 0 1px 0 rgba(255,255,255,.6)">
               <span style="position:absolute;top:0;bottom:0;width:44px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.75),transparent);animation:goldSweep 3.2s linear infinite"></span>
               <span style="position:relative;white-space:nowrap">{{ heroCta }}</span>
             </button>
+            </sc-if>
+            <sc-if value="{{ heroNoGo }}">
+            <div style="position:relative;overflow:hidden;display:inline-flex;align-items:center;gap:10px;padding:15px 26px;border-radius:999px;font-size:13px;font-weight:700;color:#1A1400;background:linear-gradient(90deg,var(--gold-hi),var(--gold-lo));box-shadow:0 12px 30px -8px rgba(201,152,46,0.45), inset 0 1px 0 rgba(255,255,255,.5);transform-style:preserve-3d;transition:transform .22s cubic-bezier(.2,.85,.25,1), box-shadow .22s ease" style-hover="transform:perspective(700px) translateZ(calc(26px * var(--z3d, 1))) translateY(-4px) rotateX(-7deg);box-shadow:0 24px 44px -12px rgba(201,152,46,.6), inset 0 1px 0 rgba(255,255,255,.6)">
+              <span style="position:absolute;top:0;bottom:0;width:44px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.75),transparent);animation:goldSweep 3.2s linear infinite"></span>
+              <span style="position:relative;white-space:nowrap">{{ heroCta }}</span>
+            </div>
+            </sc-if>
           </div>
         </div>
 
@@ -775,7 +783,9 @@
                     </div>
                     <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px">
                       <span style="font-family:'Geist Mono',monospace;font-size:10px;color:var(--ink-3);white-space:nowrap">{{ a.date }}</span>
+                      <sc-if value="{{ a.go }}">
                       <button type="button" onClick="{{ a.go }}" style="display:inline-flex;align-items:center;gap:7px;padding:10px 17px;border:0;border-radius:999px;font:inherit;font-size:12px;font-weight:700;color:#1A1400;background:linear-gradient(90deg,var(--gold-hi),var(--gold-lo));box-shadow:inset 0 1px 0 rgba(255,255,255,.5);cursor:pointer;white-space:nowrap">{{ a.cta }}</button>
+                      </sc-if>
                     </div>
                   </div>
                 </sc-for>

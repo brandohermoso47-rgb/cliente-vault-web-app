@@ -327,9 +327,13 @@ export default function Cursos({ v }: { v: any }) {
                   <span style={{"fontFamily":"'Geist Mono',monospace","fontSize":"10px","color":"var(--ink-3)","whiteSpace":"nowrap"}}>
                     {a?.date}
                   </span>
-                  <button type="button" onClick={a?.go} style={{"display":"inline-flex","alignItems":"center","gap":"7px","padding":"10px 17px","border":"0","borderRadius":"999px","font":"inherit","fontSize":"12px","fontWeight":"700","color":"#1A1400","background":"linear-gradient(90deg,var(--gold-hi),var(--gold-lo))","boxShadow":"inset 0 1px 0 rgba(255,255,255,.5)","cursor":"pointer","whiteSpace":"nowrap"}}>
-                    {a?.cta}
-                  </button>
+                  {a?.go && (
+                    <>
+                      <button type="button" onClick={a?.go} style={{"display":"inline-flex","alignItems":"center","gap":"7px","padding":"10px 17px","border":"0","borderRadius":"999px","font":"inherit","fontSize":"12px","fontWeight":"700","color":"#1A1400","background":"linear-gradient(90deg,var(--gold-hi),var(--gold-lo))","boxShadow":"inset 0 1px 0 rgba(255,255,255,.5)","cursor":"pointer","whiteSpace":"nowrap"}}>
+                        {a?.cta}
+                      </button>
+                    </>
+                  )}
                 </div>
               </div>
             </Fragment>

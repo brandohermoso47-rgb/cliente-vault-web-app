@@ -1412,7 +1412,7 @@ Semana 3-4 (Progresión):
       try {
         await openBillingPortal();
       } catch (error: any) {
-        setAlertText(error?.message || (language === 'es' ? 'No pudimos abrir el portal de facturación. Inténtalo de nuevo.' : 'Could not open the billing portal. Please try again.'));
+        setAlertText(language === 'es' ? (error?.message || 'No pudimos abrir el portal de facturación. Inténtalo de nuevo.') : 'Could not open the billing portal. Please try again.');
         setTimeout(() => setAlertText(null), 4000);
       }
     }
@@ -5225,7 +5225,7 @@ Semana 3-4 (Progresión):
                             try {
                               await openBillingPortal();
                             } catch (error: any) {
-                              setAlertText(error?.message || (language === 'es' ? 'No pudimos abrir el portal de facturación. Inténtalo de nuevo.' : 'Could not open the billing portal. Please try again.'));
+                              setAlertText(language === 'es' ? (error?.message || 'No pudimos abrir el portal de facturación. Inténtalo de nuevo.') : 'Could not open the billing portal. Please try again.');
                               setTimeout(() => setAlertText(null), 4000);
                             }
                           }

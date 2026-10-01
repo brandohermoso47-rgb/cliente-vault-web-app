@@ -3334,6 +3334,8 @@ class App extends Component<any, any> {
       navSupport: this.nav(v === 'support', 'var(--purple)'),
       goLab: () => this.setState({ view: 'entrenamiento' }),
       heroCtaGo: v === 'cursos' ? () => this.setState({ view: 'planes' }) : undefined,
+      heroHasGo: v === 'cursos',
+      heroNoGo: v !== 'cursos',
       goStudy: () => this.setState({ view: 'study' }),
       goGrupos: () => { this.gBack(); this.setState({ view: 'grupos' }); },
       goGruposClase: () => { this.gBack(); this.gMode = 'create'; this.gKind = 'clase'; this.setState({ view: 'grupos' }); },
