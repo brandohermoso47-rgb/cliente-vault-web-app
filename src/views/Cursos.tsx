@@ -9,38 +9,38 @@ export default function Cursos({ v }: { v: any }) {
     <>
     <div style={{"display":"flex","flexDirection":"column","gap":"26px","maxWidth":"1180px"}}>
       <div style={sty(v.statGrid)}>
-        <div style={sty(v.statCard1)} className={cx(pc("hover", "transform:perspective(1200px) translateZ(calc(26px * var(--z3d, 1))) rotateX(-3deg);border-color:color-mix(in oklch, var(--blue) 55%, transparent)"))}>
+        <button type="button" onClick={v.goRanking} style={sty(v.statCard1)} className={cx(pc("hover", "transform:perspective(1200px) translateZ(calc(26px * var(--z3d, 1))) rotateX(-3deg);border-color:color-mix(in oklch, var(--blue) 55%, transparent)"))}>
           <div style={{"fontFamily":"'Geist Mono',monospace","fontSize":"9px","letterSpacing":".2em","color":"var(--ink-3)","textTransform":"uppercase"}}>
             {"Puntos totales"}
           </div>
           <div style={{"marginTop":"10px","fontFamily":"'Instrument Serif',Georgia,serif","fontSize":"38px","fontWeight":"400","letterSpacing":"-0.01em","color":"var(--ink)"}}>
             {"100"}
           </div>
-        </div>
-        <div style={sty(v.statCard2)} className={cx(pc("hover", "transform:perspective(1200px) translateZ(calc(26px * var(--z3d, 1))) rotateX(-3deg);border-color:color-mix(in oklch, var(--blue) 55%, transparent)"))}>
+        </button>
+        <button type="button" onClick={v.goPerfil} style={sty(v.statCard2)} className={cx(pc("hover", "transform:perspective(1200px) translateZ(calc(26px * var(--z3d, 1))) rotateX(-3deg);border-color:color-mix(in oklch, var(--blue) 55%, transparent)"))}>
           <div style={{"fontFamily":"'Geist Mono',monospace","fontSize":"9px","letterSpacing":".2em","color":"var(--ink-3)","textTransform":"uppercase"}}>
             {"Racha"}
           </div>
           <div style={{"marginTop":"10px","fontFamily":"'Instrument Serif',Georgia,serif","fontSize":"38px","fontWeight":"400","letterSpacing":"-0.01em","color":"var(--ink)"}}>
             {"4 días"}
           </div>
-        </div>
-        <div style={sty(v.statCard3)} className={cx(pc("hover", "transform:perspective(1200px) translateZ(calc(26px * var(--z3d, 1))) rotateX(-3deg);border-color:color-mix(in oklch, var(--blue) 55%, transparent)"))}>
+        </button>
+        <button type="button" onClick={v.goPerfil} style={sty(v.statCard3)} className={cx(pc("hover", "transform:perspective(1200px) translateZ(calc(26px * var(--z3d, 1))) rotateX(-3deg);border-color:color-mix(in oklch, var(--blue) 55%, transparent)"))}>
           <div style={{"fontFamily":"'Geist Mono',monospace","fontSize":"9px","letterSpacing":".2em","color":"var(--ink-3)","textTransform":"uppercase"}}>
             {"Lecciones"}
           </div>
           <div style={{"marginTop":"10px","fontFamily":"'Instrument Serif',Georgia,serif","fontSize":"38px","fontWeight":"400","letterSpacing":"-0.01em","color":"var(--ink)"}}>
             {"2 / 9"}
           </div>
-        </div>
-        <div style={sty(v.statCard4)} className={cx(pc("hover", "transform:perspective(1200px) translateZ(calc(26px * var(--z3d, 1))) rotateX(-3deg);border-color:color-mix(in oklch, var(--blue) 55%, transparent)"))}>
+        </button>
+        <button type="button" onClick={v.goRanking} style={sty(v.statCard4)} className={cx(pc("hover", "transform:perspective(1200px) translateZ(calc(26px * var(--z3d, 1))) rotateX(-3deg);border-color:color-mix(in oklch, var(--blue) 55%, transparent)"))}>
           <div style={{"fontFamily":"'Geist Mono',monospace","fontSize":"9px","letterSpacing":".2em","color":"var(--ink-3)","textTransform":"uppercase"}}>
             {"Insignias"}
           </div>
           <div style={{"marginTop":"10px","fontFamily":"'Instrument Serif',Georgia,serif","fontSize":"38px","fontWeight":"400","letterSpacing":"-0.01em","color":"var(--ink)"}}>
             {"6"}
           </div>
-        </div>
+        </button>
       </div>
       <div style={{"display":"grid","gridTemplateColumns":"repeat(auto-fit,minmax(320px,1fr))","gap":"22px","alignItems":"start"}}>
         <div style={{"display":"flex","flexDirection":"column","gap":"14px"}}>
@@ -48,9 +48,9 @@ export default function Cursos({ v }: { v: any }) {
             <h2 style={{"margin":"0","fontFamily":"'Instrument Serif',Georgia,serif","fontSize":"22px","fontWeight":"400","letterSpacing":"0","color":"var(--ink)"}}>
               {"Transmisión de hoy"}
             </h2>
-            <span style={{"fontSize":"12px","color":"var(--ink-2)","cursor":"pointer"}}>
+            <button type="button" onClick={v.goLives} style={{"border":"0","padding":"0","font":"inherit","fontSize":"12px","color":"var(--ink-2)","background":"transparent","cursor":"pointer"}} className={cx(pc("hover", "color:var(--ink)"))}>
               {"Ver calendario"}
-            </span>
+            </button>
           </div>
           <div style={{"borderRadius":"24px","overflow":"hidden","border":"1px solid var(--hair)","background":"var(--glass)","backdropFilter":"var(--lg-blur)","boxShadow":"var(--lg-edge)"}}>
             <div style={{"height":"190px","background":"linear-gradient(135deg, color-mix(in oklch, var(--pink) 55%, #000 22%), color-mix(in oklch, var(--purple) 60%, #000 28%))","position":"relative"}}>
@@ -69,9 +69,9 @@ export default function Cursos({ v }: { v: any }) {
               <p style={{"margin":"0 0 18px","fontSize":"13px","lineHeight":"1.6","color":"var(--ink-2)","textWrap":"pretty"}}>
                 {"Corrección postural en vivo, fijación de escápula y aceleración progresiva de rolls."}
               </p>
-              <div style={{"display":"inline-flex","padding":"12px 22px","borderRadius":"999px","fontSize":"12px","fontWeight":"700","color":"#fff","background":"var(--pink)","boxShadow":"inset 0 1px 0 rgba(255,255,255,.35)","cursor":"pointer"}}>
+              <button type="button" onClick={v.goLives} style={{"display":"inline-flex","padding":"12px 22px","border":"0","borderRadius":"999px","font":"inherit","fontSize":"12px","fontWeight":"700","color":"#fff","background":"var(--pink)","boxShadow":"inset 0 1px 0 rgba(255,255,255,.35)","cursor":"pointer"}}>
                 {"Entrar a la transmisión"}
-              </div>
+              </button>
             </div>
           </div>
         </div>
@@ -80,7 +80,7 @@ export default function Cursos({ v }: { v: any }) {
             {"Próximas en cartelera"}
           </h2>
           <div style={{"display":"flex","flexDirection":"column","gap":"10px"}}>
-            <div style={sty(v.listCard)}>
+            <button type="button" onClick={v.goLives} style={sty(v.listCard)}>
               <div style={{"width":"44px","height":"44px","flex":"0 0 44px","borderRadius":"14px","background":"linear-gradient(135deg,var(--purple),var(--blue))"}}></div>
               <div style={{"minWidth":"0"}}>
                 <div style={{"fontSize":"13px","fontWeight":"700","color":"var(--ink)"}}>
@@ -93,8 +93,8 @@ export default function Cursos({ v }: { v: any }) {
                   {"Hoy · 21:00"}
                 </div>
               </div>
-            </div>
-            <div style={sty(v.listCard)}>
+            </button>
+            <button type="button" onClick={v.goLives} style={sty(v.listCard)}>
               <div style={{"width":"44px","height":"44px","flex":"0 0 44px","borderRadius":"14px","background":"linear-gradient(135deg,var(--pink),var(--yellow))"}}></div>
               <div style={{"minWidth":"0"}}>
                 <div style={{"fontSize":"13px","fontWeight":"700","color":"var(--ink)"}}>
@@ -107,8 +107,8 @@ export default function Cursos({ v }: { v: any }) {
                   {"Mañana · 19:30"}
                 </div>
               </div>
-            </div>
-            <div style={sty(v.listCard)}>
+            </button>
+            <button type="button" onClick={v.goLives} style={sty(v.listCard)}>
               <div style={{"width":"44px","height":"44px","flex":"0 0 44px","borderRadius":"14px","background":"linear-gradient(135deg,var(--blue),var(--purple))"}}></div>
               <div style={{"minWidth":"0"}}>
                 <div style={{"fontSize":"13px","fontWeight":"700","color":"var(--ink)"}}>
@@ -121,7 +121,7 @@ export default function Cursos({ v }: { v: any }) {
                   {"Jueves · 20:00"}
                 </div>
               </div>
-            </div>
+            </button>
           </div>
         </div>
       </div>
@@ -138,7 +138,7 @@ export default function Cursos({ v }: { v: any }) {
           <div style={sty(v.plateRow)}>
             {(v.trackList ?? []).map((t: any, $index: number) => (
               <Fragment key={$index}>
-                <div onClick={t?.play} style={sty(t?.card)} className={cx(pc("hover", "transform:perspective(1200px) translateZ(calc(22px * var(--z3d, 1))) rotateX(-3deg)"))}>
+                <button type="button" onClick={t?.open} style={sty(t?.card)} className={cx(pc("hover", "transform:perspective(1200px) translateZ(calc(22px * var(--z3d, 1))) rotateX(-3deg)"))}>
                   <span style={sty(t?.thumb)}>
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
                       <path d="M8 5v14l11-7z"></path>
@@ -163,7 +163,7 @@ export default function Cursos({ v }: { v: any }) {
                       </span>
                     </>
                   )}
-                </div>
+                </button>
               </Fragment>
             ))}
           </div>
@@ -219,7 +219,7 @@ export default function Cursos({ v }: { v: any }) {
       <div style={{"display":"flex","flexDirection":"column","gap":"18px","paddingTop":"8px","borderTop":"1px solid var(--hair-soft)"}}>
         <div style={{"display":"flex","alignItems":"flex-end","justifyContent":"space-between","gap":"18px","flexWrap":"wrap"}}>
           <div>
-            <div style={{"fontFamily":"'Geist Mono',monospace","fontSize":"10px","letterSpacing":".22em","color":"var(--purple)","fontWeight":"700","textTransform":"uppercase"}}>
+            <div id="novedades" style={{"fontFamily":"'Geist Mono',monospace","fontSize":"10px","letterSpacing":".22em","color":"var(--purple)","fontWeight":"700","textTransform":"uppercase","scrollMarginTop":"24px"}}>
               {"Anuncios"}
             </div>
             <h2 style={{"margin":"10px 0 8px","fontFamily":"'Instrument Serif',Georgia,serif","fontSize":"31px","fontWeight":"400","letterSpacing":"-0.01em","color":"var(--ink)"}}>
@@ -327,9 +327,13 @@ export default function Cursos({ v }: { v: any }) {
                   <span style={{"fontFamily":"'Geist Mono',monospace","fontSize":"10px","color":"var(--ink-3)","whiteSpace":"nowrap"}}>
                     {a?.date}
                   </span>
-                  <span style={{"display":"inline-flex","alignItems":"center","gap":"7px","padding":"10px 17px","borderRadius":"999px","fontSize":"12px","fontWeight":"700","color":"#1A1400","background":"linear-gradient(90deg,var(--gold-hi),var(--gold-lo))","boxShadow":"inset 0 1px 0 rgba(255,255,255,.5)","cursor":"pointer","whiteSpace":"nowrap"}}>
-                    {a?.cta}
-                  </span>
+                  {a?.go && (
+                    <>
+                      <button type="button" onClick={a?.go} style={{"display":"inline-flex","alignItems":"center","gap":"7px","padding":"10px 17px","border":"0","borderRadius":"999px","font":"inherit","fontSize":"12px","fontWeight":"700","color":"#1A1400","background":"linear-gradient(90deg,var(--gold-hi),var(--gold-lo))","boxShadow":"inset 0 1px 0 rgba(255,255,255,.5)","cursor":"pointer","whiteSpace":"nowrap"}}>
+                        {a?.cta}
+                      </button>
+                    </>
+                  )}
                 </div>
               </div>
             </Fragment>

@@ -207,9 +207,10 @@ content.children = [marker];
 const shellBody = nodes(appBlock.children, new Set(), 2);
 content.children = savedKids;
 const viewImports = viewNames.map((x) => `import ${x.name} from './views/${x.name}';`).join('\n');
-const viewJsx = viewNames.map((x) => `        {${expr(x.cond, new Set())} && <${x.name} v={v} />}`).join('\n') + '\n        {v.isCuenta && <Account go={v.goView} />}';
+const viewJsx = viewNames.map((x) => `        {${expr(x.cond, new Set())} && <${x.name} v={v} />}`).join('\n')
+  + '\n        {v.isMusica && <Musica go={v.goView} />}\n        {v.isCuenta && <Account go={v.goView} />}';
 const shell = shellBody.replace(/\s*\{"@@CONTENT@@"\}\n/, `\n${viewJsx}\n`);
-writeFileSync(join(root, 'src/Shell.tsx'), `${HEADER('./lib/')}${viewImports}\nimport Account from './screens/Account';\n\nexport default function Shell({ v }: { v: any }) {\n  return (\n    <>\n${shell}    </>\n  );\n}\n`);
+writeFileSync(join(root, 'src/Shell.tsx'), `${HEADER('./lib/')}${viewImports}\nimport Account from './screens/Account';\nimport Musica from './views/Musica';\n\nexport default function Shell({ v }: { v: any }) {\n  return (\n    <>\n${shell}    </>\n  );\n}\n`);
 writeFileSync(join(root, 'src/toggle.txt'), nodes(toggleBlock.children, new Set(), 0));
 console.log('vistas:', viewNames.map((x) => x.name).join(', '), others.length ? `(+${others.length} nodos sueltos en contenido)` : '');
 

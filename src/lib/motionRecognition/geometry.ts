@@ -57,7 +57,7 @@ export function checkAngle(
     angle: actual,
     confidence,
     isApprox: (tgt: number, tol: number = tolerance) => {
-      return Math.abs(Math.abs(actual - tgt) - 180) <= tol;
+      return Math.abs(actual - tgt) <= tol;
     },
   };
 }
@@ -148,13 +148,14 @@ export function arcPath(params: ArcParams): Point2D[] {
   const path: Point2D[] = [];
   const resolution = Math.max(10, Math.ceil(params.radius / 5)); // ~5px segments
   const { startAngleDeg: start, endAngleDeg: end } = params;
+  const direction = params.direction ?? 'cw';
 
   let current = start;
-  const step = params.direction === 'ccw' ? -2 : 2; // degrees per point
+  const step = direction === 'ccw' ? -2 : 2; // degrees per point
 
   while (
-    (params.direction === 'cw' && current <= end) ||
-    (params.direction === 'ccw' && current >= end)
+    (direction === 'cw' && current <= end) ||
+    (direction === 'ccw' && current >= end)
   ) {
     const rad = (current * Math.PI) / 180;
     path.push({

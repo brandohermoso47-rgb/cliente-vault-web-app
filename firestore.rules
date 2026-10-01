@@ -15,6 +15,13 @@ service cloud.firestore {
       return request.resource.data.get('role', 'usuario') == resource.data.get('role', 'usuario');
     }
     function shortText(field, max) { return request.resource.data.get(field, '').size() <= max; }
+    // Campos de facturación/dinero: solo los escribe el Admin SDK (webhook); ni el dueño ni un admin desde el cliente.
+    function billingUntouched() {
+      return !request.resource.data.diff(resource.data).affectedKeys()
+        .hasAny(['billingStatus', 'subscriptionTier', 'subscribedInstructorIds',
+                 'instructorSubscriptionStatus', 'isFeaturedInstructor', 'featuredPlan', 'featuredExpiry',
+                 'stripeCustomerId', 'stripeAccountId', 'isConnectVerified']);
+    }
     function only(fields) { return request.resource.data.diff(resource.data).affectedKeys().hasOnly(fields); }
 
     // ── Perfiles ─────────────────────────────────────────────────────────
@@ -36,11 +43,14 @@ service cloud.firestore {
                         'stripeCustomerId', 'stripeAccountId', 'isConnectVerified'])
           && only(['displayName', 'photoURL', 'photoPath', 'handle', 'country', 'countryCode', 'bio', 'accountType', 'role', 'createdAt', 'updatedAt', 'email'])
           && shortText('bio', 280) && shortText('displayName', 80) && shortText('handle', 20))
-        || isAdmin();
+        || (isAdmin() && billingUntouched());
       allow delete: if isAdmin();
 
       // Datos privados del usuario (galería, playlists, favoritos, práctica…): solo el dueño.
       match /{sub}/{docId} {
+        allow read, write: if isOwner(userId);
+      }
+      match /{sub}/{docId}/{nested=**} {
         allow read, write: if isOwner(userId);
       }
     }

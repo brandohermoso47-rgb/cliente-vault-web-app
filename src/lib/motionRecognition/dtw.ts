@@ -196,22 +196,12 @@ export function scoreStudentPerformance(
  */
 function calculateAverageConfidence(poses: SmoothedLandmarks[]): number {
   let totalConfidence = 0;
-  let count = 0;
 
   for (const pose of poses) {
-    const joints = Object.keys(pose) as (keyof SmoothedLandmarks)[];
-    for (const joint of joints) {
-      if (
-        typeof pose[joint] === 'object' &&
-        'confidence' in pose[joint]
-      ) {
-        totalConfidence += (pose[joint] as any).confidence || 0;
-        count++;
-      }
-    }
+    totalConfidence += pose.confidence;
   }
 
-  return count > 0 ? totalConfidence / count : 0;
+  return poses.length > 0 ? totalConfidence / poses.length : 0;
 }
 
 /**

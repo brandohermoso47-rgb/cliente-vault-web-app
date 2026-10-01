@@ -44,6 +44,8 @@ a:hover{color:var(--pink)}
 }
 @keyframes metroBeat{0%{transform:scale(1)}18%{transform:scale(1.16)}100%{transform:scale(1)}}
 @keyframes adMarquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.ad-marquee-track:hover,.ad-marquee-track:focus-within{animation-play-state:paused!important}
+@media (prefers-reduced-motion:reduce){.ad-marquee-track{animation:none!important}}
 @keyframes livePulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(.65)}}
 @keyframes rise3d{
   0%{opacity:0;transform:perspective(1200px) rotateX(-22deg) translateZ(-140px) translateY(46px)}
@@ -71,4 +73,4 @@ a:hover{color:var(--pink)}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:rgba(228,185,77,0.3);border-radius:999px}
 @keyframes dirScroll{from{transform:translateY(0)}to{transform:translateY(-50%)}}
-.dir-marquee:hover .dir-track{animation-play-state:paused}
+.dir-marquee:hover .dir-track{animation-play-state:paused!important}

@@ -114,13 +114,14 @@ export function frameFocusEnergy(curr: NormalizedPoint[], prev: NormalizedPoint[
     if (!a || !b) return 0;
     return Math.hypot(a.x - b.x, a.y - b.y);
   };
-  const hipYAvg = ((curr[IDX.leftHip]?.y ?? 0.55) + (curr[IDX.rightHip]?.y ?? 0.55)) / 2;
+  const currentHipYAvg = ((curr[IDX.leftHip]?.y ?? 0.55) + (curr[IDX.rightHip]?.y ?? 0.55)) / 2;
+  const previousHipYAvg = ((prev[IDX.leftHip]?.y ?? 0.55) + (prev[IDX.rightHip]?.y ?? 0.55)) / 2;
   return {
     brazos: velocity(IDX.leftWrist) + velocity(IDX.rightWrist) + velocity(IDX.leftElbow) + velocity(IDX.rightElbow),
     piernas: velocity(IDX.leftAnkle) + velocity(IDX.rightAnkle) + velocity(IDX.leftKnee) + velocity(IDX.rightKnee),
     torso: velocity(IDX.leftShoulder) + velocity(IDX.rightShoulder),
     cabeza: velocity(IDX.nose),
-    niveles: Math.abs(hipYAvg - 0.55) * 2
+    niveles: Math.abs(currentHipYAvg - previousHipYAvg) * 2
   };
 }
 

@@ -27,6 +27,7 @@ export const onLikeCreated = onDocumentCreated(
     if (!ownerId || ownerId === likerUid) return;
     const who = await actorLabel(likerUid);
     await notify({
+      eventId: event.id,
       userId: ownerId,
       actorId: likerUid,
       type: 'like',
@@ -41,13 +42,14 @@ export const onCommentCreated = onDocumentCreated(
   async (event) => {
     const { content, docId } = event.params as Record<string, string>;
     if (!LIKEABLE.has(content)) return;
-    const data = event.data?.data() as { uid?: string; authorName?: string; text?: string } | undefined;
+    const data = event.data?.data() as { uid?: string; text?: string } | undefined;
     const commenterUid = data?.uid;
     if (!commenterUid) return;
     const ownerId = await ownerOf(content, docId);
     if (!ownerId || ownerId === commenterUid) return;
-    const who = data.authorName || (await actorLabel(commenterUid));
+    const who = await actorLabel(commenterUid);
     await notify({
+      eventId: event.id,
       userId: ownerId,
       actorId: commenterUid,
       type: 'comment',
