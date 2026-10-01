@@ -26,10 +26,14 @@ service cloud.firestore {
         && request.resource.data.get('role', 'usuario') == 'usuario'
         && request.resource.data.keys().hasOnly(['displayName', 'photoURL', 'photoPath', 'handle', 'country', 'countryCode', 'bio', 'accountType', 'role', 'createdAt', 'updatedAt', 'email'])
         && shortText('bio', 280) && shortText('displayName', 80) && shortText('handle', 20);
-      // El dueño edita su perfil pero no su rol; solo un admin cambia roles.
+      // El dueño edita su perfil pero no su rol ni campos de facturación/dinero; solo el Admin SDK (webhook) los modifica.
       // Se revisan solo los campos que de verdad cambian (diff), no todo el documento: así un perfil
       // viejo con algún campo heredado no bloquea futuras ediciones (p. ej. subir la foto).
-      allow update: if (isOwner(userId) && roleUnchanged()
+      allow update: if (isOwner(userId)
+          && !request.resource.data.diff(resource.data).affectedKeys()
+               .hasAny(['role', 'billingStatus', 'subscriptionTier', 'subscribedInstructorIds',
+                        'instructorSubscriptionStatus', 'isFeaturedInstructor', 'featuredPlan', 'featuredExpiry',
+                        'stripeCustomerId', 'stripeAccountId', 'isConnectVerified'])
           && only(['displayName', 'photoURL', 'photoPath', 'handle', 'country', 'countryCode', 'bio', 'accountType', 'role', 'createdAt', 'updatedAt', 'email'])
           && shortText('bio', 280) && shortText('displayName', 80) && shortText('handle', 20))
         || isAdmin();
@@ -197,7 +201,7 @@ service cloud.firestore {
     }
     match /{content}/{docId}/comments/{id} {
       allow read: if signedIn();
-      allow create: if signedIn() && content in ['reels', 'lives']
+      allow create: if signedIn() && content in ['reels', 'lives', 'posts']
         && request.resource.data.get('uid', '') == request.auth.uid && shortText('text', 500);
       allow update: if false;
       allow delete: if isAdmin() || (signedIn() && resource.data.get('uid', '') == request.auth.uid);

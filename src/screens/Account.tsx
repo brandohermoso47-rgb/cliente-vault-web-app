@@ -7,6 +7,7 @@ import { countryList, countryName } from '../lib/countries';
 import { api, ApiError } from '../lib/api';
 import { openBillingPortal, startConnectOnboarding } from '../lib/payments';
 import { IMAGE_TYPES, VIDEO_TYPES, MAX_IMAGE_MB, MAX_VIDEO_MB, MAX_TOTAL_MB } from '../lib/validators';
+import AvatarEditor from '../components/AvatarEditor';
 
 const card: CSSProperties = { border: '1px solid var(--hair)', background: 'var(--glass)', backdropFilter: 'var(--lg-blur)', WebkitBackdropFilter: 'var(--lg-blur)', boxShadow: 'var(--lg-edge), var(--lg-lift)', borderRadius: 22, padding: 24 };
 const label: CSSProperties = { display: 'block', fontFamily: "'Geist Mono',monospace", fontSize: 9.5, letterSpacing: '.16em', textTransform: 'uppercase', color: 'var(--ink-2)', margin: '0 0 6px 2px' };
@@ -38,6 +39,7 @@ export default function Account({ go }: { go: (view: string) => void }) {
   const [busy, setBusy] = useState(false);
   const avatarInput = useRef<HTMLInputElement>(null);
   const mediaInput = useRef<HTMLInputElement>(null);
+  const [editingAvatar, setEditingAvatar] = useState<File | null>(null);
 
   useEffect(() => {
     if (!uid) return;
@@ -142,13 +144,19 @@ export default function Account({ go }: { go: (view: string) => void }) {
     if (mediaInput.current) mediaInput.current.value = '';
   };
 
-  const onAvatar = (files: FileList | null) => {
+  const onAvatarPick = (files: FileList | null) => {
     const f = files?.[0];
     if (avatarInput.current) avatarInput.current.value = '';
     if (!f) return;
     const kind = checkFile(f, true);
     if (kind !== 'image') return say(false, kind);
     setMsg(null);
+    setEditingAvatar(f);
+  };
+
+  const onAvatarSave = (blob: Blob) => {
+    setEditingAvatar(null);
+    const f = new File([blob], 'avatar.png', { type: 'image/png' });
     const old = profile?.photoPath as string | undefined;
     upload(f, 'avatar', async (path, url) => {
       await updateDoc(doc(db, 'users', uid), { photoURL: url, photoPath: path, updatedAt: serverTimestamp() });
@@ -198,10 +206,10 @@ export default function Account({ go }: { go: (view: string) => void }) {
           <div style={{ width: 84, height: 84, borderRadius: '50%', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 28, fontWeight: 800, color: '#fff', background: 'linear-gradient(135deg,var(--purple),var(--pink))', border: '2px solid var(--hair)' }}>
             {photo ? <img src={photo} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : initials}
           </div>
-          <div onClick={() => avatarInput.current?.click()} title="Cambiar foto" style={{ position: 'absolute', right: -4, bottom: -4, width: 30, height: 30, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--pink)', color: '#fff', cursor: 'pointer', border: '2px solid var(--ground)' }}>
+          <div onClick={() => avatarInput.current?.click()} title="Cambiar o editar foto" style={{ position: 'absolute', right: -4, bottom: -4, width: 30, height: 30, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--pink)', color: '#fff', cursor: 'pointer', border: '2px solid var(--ground)' }}>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2Z" /><circle cx="12" cy="13" r="4" /></svg>
           </div>
-          <input ref={avatarInput} type="file" accept={IMAGE_TYPES.join(',')} hidden onChange={(e) => onAvatar(e.target.files)} />
+          <input ref={avatarInput} type="file" accept={IMAGE_TYPES.join(',')} hidden onChange={(e) => onAvatarPick(e.target.files)} />
         </div>
         <div style={{ flex: 1, minWidth: 200 }}>
           <div style={{ fontSize: 20, fontWeight: 800 }}>{form.displayName || 'Sin nombre'}</div>
@@ -340,6 +348,10 @@ export default function Account({ go }: { go: (view: string) => void }) {
           <button style={ghost} onClick={() => signOut(auth)}>Cerrar sesión</button>
         </div>
       </div>
+
+      {editingAvatar && (
+        <AvatarEditor file={editingAvatar} onCancel={() => setEditingAvatar(null)} onSave={onAvatarSave} />
+      )}
     </div>
   );
 }

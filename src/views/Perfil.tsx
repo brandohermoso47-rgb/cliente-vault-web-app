@@ -48,7 +48,7 @@ export default function Perfil({ v }: { v: any }) {
               <div onClick={v.perfOpenUpload} style={{"padding":"11px 20px","borderRadius":"999px","fontSize":"12.5px","fontWeight":"700","color":"#14111A","background":"var(--pink)","boxShadow":"0 10px 22px -10px var(--pink), inset 0 1px 0 rgba(255,255,255,.3)","cursor":"pointer","whiteSpace":"nowrap","transition":"transform .18s ease"}} className={cx(pc("hover", "transform:translateY(-1px)"))}>
                 {"Subir contenido"}
               </div>
-              <div style={{"padding":"11px 20px","borderRadius":"999px","fontSize":"12.5px","fontWeight":"600","color":"var(--ink-2)","border":"1px solid var(--hair)","background":"var(--glass-2)","cursor":"pointer","whiteSpace":"nowrap","transition":"color .18s ease"}} className={cx(pc("hover", "color:var(--ink)"))}>
+              <div onClick={v.goCuenta} style={{"padding":"11px 20px","borderRadius":"999px","fontSize":"12.5px","fontWeight":"600","color":"var(--ink-2)","border":"1px solid var(--hair)","background":"var(--glass-2)","cursor":"pointer","whiteSpace":"nowrap","transition":"color .18s ease"}} className={cx(pc("hover", "color:var(--ink)"))}>
                 {"Editar perfil"}
               </div>
             </div>

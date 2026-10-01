@@ -1,0 +1,9 @@
+{
+    "recommendations": [
+        "googlecloudtools.firebase-dataconnect-vscode",
+        "google.gemini-cli-vscode-ide-companion",
+        "github.codespaces",
+        "google.google-antigravity",
+        "graphql.vscode-graphql-syntax"
+    ]
+}

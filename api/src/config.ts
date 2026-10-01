@@ -26,6 +26,16 @@ const Env = z.object({
   STRIPE_SECRET_KEY: z.string().optional(),
   STRIPE_WEBHOOK_SECRET: z.string().optional(),
 
+  // OAuth de Spotify (developer.spotify.com/dashboard). El Redirect URI apunta al FRONTEND, NUNCA a la API:
+  // Spotify hace un GET normal del navegador sin token de sesión, así que no puede ir directo a
+  // POST /v1/spotify/exchange (exige Authorization). Debe ser una ruta bajo /account/** (firebase.json
+  // solo sirve el index.html de la app ahí; la raíz "/" sirve la landing estática, no la SPA), p. ej.
+  // https://waack-on.com/account/ — esa página lee ?code&state al arrancar y llama a /v1/spotify/exchange
+  // ya autenticada (ver src/lib/spotify.ts:handleSpotifyReturnIfPresent). Debe coincidir EXACTO con el del dashboard.
+  SPOTIFY_CLIENT_ID: z.string().optional(),
+  SPOTIFY_CLIENT_SECRET: z.string().optional(),
+  SPOTIFY_REDIRECT_URI: z.string().optional(),
+
   // Correos (verificados en Firebase) que se convierten en admin al iniciar sesión. Separados por comas.
   BOOTSTRAP_ADMIN_EMAILS: z.string().default(''),
 

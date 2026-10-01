@@ -473,6 +473,8 @@ export const UI: Record<Lang, Record<string, any>> = {
    "Estilos",
    "Ruta waacking",
    "Calentamiento",
+   "Autoevaluación",
+   "Plan de clase",
    "Quiz"
   ],
   "studio_h": "Estudio de 8 tiempos",
@@ -526,6 +528,44 @@ export const UI: Record<Lang, Record<string, any>> = {
    "Viernes",
    "Sábado"
   ],
+  "clase_h": "Plan de clase",
+  "clase_lead": "Ajusta los minutos de cada bloque y mira a qué hora termina cada parte. Un punto de partida para clases de 75 minutos.",
+  "starts": "Empieza",
+  "total": "Total",
+  "ends": "Termina",
+  "min": "{n} min",
+  "less": "Menos 5 minutos en {b}",
+  "more": "Más 5 minutos en {b}",
+  "blocks": [
+   [
+    "Calentamiento",
+    "Movilidad, isolations suaves y pulso con la música."
+   ],
+   [
+    "Grooves y fundamentos",
+    "Bounce, rock y el paso base del estilo del día."
+   ],
+   [
+    "Cross-training",
+    "Un ejercicio de otro estilo que aporte al principal (ver Ruta waacking)."
+   ],
+   [
+    "Drill técnico",
+    "Un solo elemento repetido con variaciones (ver Estilos)."
+   ],
+   [
+    "Combinación",
+    "Frase de 8–16 counts aprendida en espejo, por partes."
+   ],
+   [
+    "Cypher / freestyle",
+    "En círculo: cada alumno entra 8 counts. Aplauso obligatorio."
+   ],
+   [
+    "Enfriamiento y feedback",
+    "Estiramiento y una cosa que salió bien y una a mejorar."
+   ]
+  ],
   "quiz_h": "Quiz de fundamentos",
   "quiz_lead": "Cinco preguntas al azar para que tus alumnos conecten pasos, pioneros y estilos.",
   "result": "Resultado",
@@ -541,11 +581,41 @@ export const UI: Record<Lang, Record<string, any>> = {
   "qmove": "El paso “{m}” pertenece a…",
   "qpio": "Se asocia con: {p}. ¿Qué estilo es?",
   "qsuf": " ¿De qué estilo se trata?",
+  "cam_h": "Autoevaluación con cámara",
+  "cam_lead": "Mírate en vivo, compara con la metodología del estilo y califícate. La cámara solo se ve en tu pantalla: el video no se guarda ni se envía a ningún lado.",
+  "cam_start": "Encender cámara",
+  "cam_stop": "Apagar cámara",
+  "cam_hint": "La cámara está apagada. Enciéndela para verte.",
+  "cam_err": "No se pudo acceder a la cámara. Permite el acceso en el navegador o abre el enlace directamente en una pestaña.",
+  "cam_mirror": "Espejo",
+  "cam_grid": "Cuadrícula",
+  "cam_delay": "Espejo con retraso",
+  "cam_freeze": "Congelar",
+  "cam_unfreeze": "Reanudar",
+  "cam_sec": "{n} s",
+  "ev_method": "Metodología en práctica",
+  "ev_style": "Estilo",
+  "ev_drill": "Ejercicio del estilo",
+  "ev_wdrill": "Ejercicio para tu waacking",
+  "ev_crit_h": "Autoevaluación (1–5)",
+  "ev_crit": [
+   "Va al ritmo (musicalidad)",
+   "Control y limpieza",
+   "Postura y alineación",
+   "Actitud y expresión",
+   "Uso del espacio"
+  ],
+  "ev_save": "Guardar evaluación",
+  "ev_saved": "Evaluación guardada",
+  "ev_log": "Historial",
+  "ev_empty": "Aún no hay evaluaciones. Califícate después de cada ejercicio.",
+  "ev_avg": "Promedio {n}",
   "wu_h": "Calentamiento: ejercicios",
   "wu_lead": "Siete ejercicios de un minuto cada uno, en orden. Pulsa Iniciar para el cronómetro de cada uno.",
   "wu_start": "Iniciar",
   "wu_stop": "Detener",
   "wu_done": "¡Listo!",
+  "wu_novid": "Video próximamente",
   "wu": [
    [
     "Movilidad articular",
@@ -576,6 +646,38 @@ export const UI: Record<Lang, Record<string, any>> = {
     "Onda lenta de pies a cabeza y de cabeza a pies, 2 veces. Termina soltando todo el cuerpo."
    ]
   ],
+  "an_h": "Análisis de movimiento",
+  "an_lead": "Baila 30 segundos al pulso del metrónomo. La app mide tu movimiento en la cámara y sugiere una calificación. Es una estimación aproximada: no reconoce pasos ni poses concretas.",
+  "an_start": "Iniciar análisis",
+  "an_stop": "Detener y ver resultado",
+  "an_metro": "Metrónomo con sonido",
+  "an_run": "Analizando… baila al pulso ({s} s)",
+  "an_sync": "Al ritmo",
+  "an_sharp": "Nitidez",
+  "an_pause": "Pausas",
+  "an_space": "Espacio usado",
+  "an_prof": "Perfil de movimiento (aproximado)",
+  "an_apply": "Usar como sugerencia",
+  "an_need": "Enciende la cámara primero.",
+  "an_few": "Se detectó muy poco movimiento. Muévete más o acércate a la cámara.",
+  "an_profiles": {
+   "hits": "golpes y pausas marcadas (parecido a popping o locking)",
+   "flow": "brazos amplios y continuos (parecido a waacking o voguing)",
+   "hips": "cadera y torso bajo (parecido a twerking o dancehall)",
+   "feet": "pies y desplazamiento (parecido a house, breaking o hip hop)"
+  },
+  "an_match": "Coincide con el estilo elegido: {name}.",
+  "an_nomatch": "Se parece más a otro perfil que a {name}.",
+  "ai_h": "Corrección de postura con IA",
+  "ai_lead": "Reconocimiento corporal real (no aproximado): mientras bailas freestyle frente a la cámara, la IA rastrea tus articulaciones y te da correcciones de postura en vivo, además de ideas creativas de movimiento.",
+  "ai_loading": "Cargando motor de reconocimiento corporal...",
+  "ai_error": "No se pudo cargar el motor de IA. Puedes seguir usando el análisis de movimiento aproximado de arriba.",
+  "ai_no_person": "No detectamos tu cuerpo completo en cuadro. Ubícate de cuerpo completo frente a la cámara.",
+  "ai_tips_h": "Correcciones en vivo",
+  "ai_tips_empty": "Aún no hay observaciones. ¡Sigue bailando frente a la cámara!",
+  "ai_idea_h": "Chispa creativa",
+  "ai_idea_new": "Nueva idea",
+  "ai_idea_hint": "Se genera automáticamente cuando tu energía baja, priorizando la zona del cuerpo que menos has usado.",
   "wu_yt": "Buscar video en YouTube",
   "wu_ref": "Referencia animada (esquema)",
   "ent_h": "Entrenar con otros estilos",
@@ -589,6 +691,8 @@ export const UI: Record<Lang, Record<string, any>> = {
    "Styles",
    "Waacking path",
    "Warm-up",
+   "Self-check",
+   "Class plan",
    "Quiz"
   ],
   "studio_h": "8-count studio",
@@ -642,6 +746,44 @@ export const UI: Record<Lang, Record<string, any>> = {
    "Friday",
    "Saturday"
   ],
+  "clase_h": "Class plan",
+  "clase_lead": "Adjust the minutes of each block and see when each part ends. A starting point for 75-minute classes.",
+  "starts": "Starts",
+  "total": "Total",
+  "ends": "Ends",
+  "min": "{n} min",
+  "less": "5 fewer minutes for {b}",
+  "more": "5 more minutes for {b}",
+  "blocks": [
+   [
+    "Warm-up",
+    "Mobility, gentle isolations and feeling the pulse of the music."
+   ],
+   [
+    "Grooves and foundations",
+    "Bounce, rock and the base step of the day’s style."
+   ],
+   [
+    "Cross-training",
+    "One drill from another style that helps the main one (see Waacking path)."
+   ],
+   [
+    "Technical drill",
+    "A single element repeated with variations (see Styles)."
+   ],
+   [
+    "Combo",
+    "An 8–16 count phrase learned in mirror, in parts."
+   ],
+   [
+    "Cypher / freestyle",
+    "In a circle: each student enters for 8 counts. Applause is mandatory."
+   ],
+   [
+    "Cool-down and feedback",
+    "Stretching, one thing that went well and one to improve."
+   ]
+  ],
   "quiz_h": "Foundations quiz",
   "quiz_lead": "Five random questions so your students connect moves, pioneers and styles.",
   "result": "Result",
@@ -657,11 +799,41 @@ export const UI: Record<Lang, Record<string, any>> = {
   "qmove": "The move “{m}” belongs to…",
   "qpio": "Associated with: {p}. Which style is it?",
   "qsuf": " Which style is it?",
+  "cam_h": "Camera self-check",
+  "cam_lead": "Watch yourself live, compare with the style’s methodology and rate yourself. The camera only shows on your screen: the video is never saved or sent anywhere.",
+  "cam_start": "Turn camera on",
+  "cam_stop": "Turn camera off",
+  "cam_hint": "The camera is off. Turn it on to see yourself.",
+  "cam_err": "Could not access the camera. Allow access in your browser or open the link directly in a tab.",
+  "cam_mirror": "Mirror",
+  "cam_grid": "Grid",
+  "cam_delay": "Delayed mirror",
+  "cam_freeze": "Freeze",
+  "cam_unfreeze": "Resume",
+  "cam_sec": "{n} s",
+  "ev_method": "Methodology in practice",
+  "ev_style": "Style",
+  "ev_drill": "Style drill",
+  "ev_wdrill": "Drill for your waacking",
+  "ev_crit_h": "Self-rating (1–5)",
+  "ev_crit": [
+   "On the beat (musicality)",
+   "Control and cleanliness",
+   "Posture and alignment",
+   "Attitude and expression",
+   "Use of space"
+  ],
+  "ev_save": "Save rating",
+  "ev_saved": "Rating saved",
+  "ev_log": "History",
+  "ev_empty": "No ratings yet. Rate yourself after each drill.",
+  "ev_avg": "Average {n}",
   "wu_h": "Warm-up: exercises",
   "wu_lead": "Seven one-minute exercises, in order. Press Start for each one’s timer.",
   "wu_start": "Start",
   "wu_stop": "Stop",
   "wu_done": "Done!",
+  "wu_novid": "Video coming soon",
   "wu": [
    [
     "Joint mobility",
@@ -692,6 +864,38 @@ export const UI: Record<Lang, Record<string, any>> = {
     "Slow wave from feet to head and head to feet, twice. Finish by shaking out the whole body."
    ]
   ],
+  "an_h": "Motion analysis",
+  "an_lead": "Dance for 30 seconds to the metronome pulse. The app measures your movement on camera and suggests a rating. It is a rough estimate: it does not recognize specific steps or poses.",
+  "an_start": "Start analysis",
+  "an_stop": "Stop and see result",
+  "an_metro": "Metronome sound",
+  "an_run": "Analyzing… dance to the pulse ({s} s)",
+  "an_sync": "On the beat",
+  "an_sharp": "Sharpness",
+  "an_pause": "Pauses",
+  "an_space": "Space used",
+  "an_prof": "Movement profile (approximate)",
+  "an_apply": "Use as suggestion",
+  "an_need": "Turn the camera on first.",
+  "an_few": "Very little movement detected. Move more or get closer to the camera.",
+  "an_profiles": {
+   "hits": "marked hits and pauses (similar to popping or locking)",
+   "flow": "wide, continuous arms (similar to waacking or voguing)",
+   "hips": "hips and low torso (similar to twerking or dancehall)",
+   "feet": "feet and travel (similar to house, breaking or hip hop)"
+  },
+  "an_match": "Matches the chosen style: {name}.",
+  "an_nomatch": "It looks more like another profile than {name}.",
+  "ai_h": "AI Posture Correction",
+  "ai_lead": "Real body recognition (not approximate): while you freestyle in front of the camera, the AI tracks your joints and gives live posture corrections, plus creative movement ideas.",
+  "ai_loading": "Loading body-tracking engine...",
+  "ai_error": "Couldn't load the AI engine. You can still use the approximate motion analysis above.",
+  "ai_no_person": "We can't see your full body in frame. Stand full-body in front of the camera.",
+  "ai_tips_h": "Live corrections",
+  "ai_tips_empty": "No observations yet. Keep dancing in front of the camera!",
+  "ai_idea_h": "Creative spark",
+  "ai_idea_new": "New idea",
+  "ai_idea_hint": "Generated automatically when your energy dips, prioritizing the body part you've used the least.",
   "wu_yt": "Find a video on YouTube",
   "wu_ref": "Animated reference (schematic)",
   "ent_h": "Train with other styles",
@@ -705,6 +909,8 @@ export const UI: Record<Lang, Record<string, any>> = {
    "Styles",
    "Parcours waacking",
    "Échauffement",
+   "Auto-évaluation",
+   "Plan de cours",
    "Quiz"
   ],
   "studio_h": "Studio en 8 temps",
@@ -758,6 +964,44 @@ export const UI: Record<Lang, Record<string, any>> = {
    "Vendredi",
    "Samedi"
   ],
+  "clase_h": "Plan de cours",
+  "clase_lead": "Ajuste les minutes de chaque bloc et vois à quelle heure chaque partie se termine. Une base pour des cours de 75 minutes.",
+  "starts": "Début",
+  "total": "Total",
+  "ends": "Fin",
+  "min": "{n} min",
+  "less": "5 minutes de moins pour {b}",
+  "more": "5 minutes de plus pour {b}",
+  "blocks": [
+   [
+    "Échauffement",
+    "Mobilité, isolations douces et pulsation avec la musique."
+   ],
+   [
+    "Grooves et fondamentaux",
+    "Bounce, rock et le pas de base du style du jour."
+   ],
+   [
+    "Cross-training",
+    "Un exercice d’un autre style qui aide le style principal (voir Parcours waacking)."
+   ],
+   [
+    "Drill technique",
+    "Un seul élément répété avec des variations (voir Styles)."
+   ],
+   [
+    "Enchaînement",
+    "Phrase de 8–16 temps apprise en miroir, par parties."
+   ],
+   [
+    "Cypher / freestyle",
+    "En cercle : chaque élève entre pour 8 temps. Applaudissements obligatoires."
+   ],
+   [
+    "Retour au calme et feedback",
+    "Étirements, une chose réussie et une à améliorer."
+   ]
+  ],
   "quiz_h": "Quiz des fondamentaux",
   "quiz_lead": "Cinq questions au hasard pour que tes élèves relient mouvements, pionniers et styles.",
   "result": "Résultat",
@@ -773,11 +1017,41 @@ export const UI: Record<Lang, Record<string, any>> = {
   "qmove": "Le mouvement « {m} » appartient à…",
   "qpio": "Associé à : {p}. De quel style s’agit-il ?",
   "qsuf": " De quel style s’agit-il ?",
+  "cam_h": "Auto-évaluation par caméra",
+  "cam_lead": "Regarde-toi en direct, compare avec la méthodologie du style et note-toi. La caméra n’apparaît que sur ton écran : la vidéo n’est ni enregistrée ni envoyée.",
+  "cam_start": "Activer la caméra",
+  "cam_stop": "Éteindre la caméra",
+  "cam_hint": "La caméra est éteinte. Active-la pour te voir.",
+  "cam_err": "Impossible d’accéder à la caméra. Autorise l’accès dans le navigateur ou ouvre le lien directement dans un onglet.",
+  "cam_mirror": "Miroir",
+  "cam_grid": "Grille",
+  "cam_delay": "Miroir différé",
+  "cam_freeze": "Figer",
+  "cam_unfreeze": "Reprendre",
+  "cam_sec": "{n} s",
+  "ev_method": "Méthodologie en pratique",
+  "ev_style": "Style",
+  "ev_drill": "Exercice du style",
+  "ev_wdrill": "Exercice pour ton waacking",
+  "ev_crit_h": "Auto-évaluation (1–5)",
+  "ev_crit": [
+   "Sur le rythme (musicalité)",
+   "Contrôle et propreté",
+   "Posture et alignement",
+   "Attitude et expression",
+   "Utilisation de l’espace"
+  ],
+  "ev_save": "Enregistrer la note",
+  "ev_saved": "Note enregistrée",
+  "ev_log": "Historique",
+  "ev_empty": "Aucune évaluation pour l’instant. Note-toi après chaque exercice.",
+  "ev_avg": "Moyenne {n}",
   "wu_h": "Échauffement : exercices",
   "wu_lead": "Sept exercices d’une minute chacun, dans l’ordre. Appuie sur Démarrer pour le minuteur de chacun.",
   "wu_start": "Démarrer",
   "wu_stop": "Arrêter",
   "wu_done": "Terminé !",
+  "wu_novid": "Vidéo bientôt disponible",
   "wu": [
    [
     "Mobilité articulaire",
@@ -808,6 +1082,38 @@ export const UI: Record<Lang, Record<string, any>> = {
     "Vague lente des pieds à la tête et de la tête aux pieds, 2 fois. Termine en relâchant tout le corps."
    ]
   ],
+  "an_h": "Analyse du mouvement",
+  "an_lead": "Danse 30 secondes sur le pouls du métronome. L’app mesure ton mouvement à la caméra et suggère une note. C’est une estimation approximative : elle ne reconnaît pas de pas ni de poses précis.",
+  "an_start": "Lancer l’analyse",
+  "an_stop": "Arrêter et voir le résultat",
+  "an_metro": "Métronome sonore",
+  "an_run": "Analyse… danse sur le pouls ({s} s)",
+  "an_sync": "Sur le rythme",
+  "an_sharp": "Netteté",
+  "an_pause": "Pauses",
+  "an_space": "Espace utilisé",
+  "an_prof": "Profil de mouvement (approximatif)",
+  "an_apply": "Utiliser comme suggestion",
+  "an_need": "Active d’abord la caméra.",
+  "an_few": "Très peu de mouvement détecté. Bouge davantage ou rapproche-toi de la caméra.",
+  "an_profiles": {
+   "hits": "hits et pauses marqués (proche du popping ou du locking)",
+   "flow": "bras amples et continus (proche du waacking ou du voguing)",
+   "hips": "hanches et bas du buste (proche du twerking ou du dancehall)",
+   "feet": "pieds et déplacement (proche de la house, du breaking ou du hip hop)"
+  },
+  "an_match": "Correspond au style choisi : {name}.",
+  "an_nomatch": "Ressemble plus à un autre profil qu’à {name}.",
+  "ai_h": "Correction de posture par IA",
+  "ai_lead": "Reconnaissance corporelle réelle (pas approximative) : pendant que tu danses en freestyle devant la caméra, l'IA suit tes articulations et te donne des corrections de posture en direct, ainsi que des idées créatives de mouvement.",
+  "ai_loading": "Chargement du moteur de reconnaissance corporelle...",
+  "ai_error": "Impossible de charger le moteur IA. Tu peux continuer avec l'analyse de mouvement approximative ci-dessus.",
+  "ai_no_person": "Nous ne voyons pas tout ton corps dans le cadre. Place-toi en entier devant la caméra.",
+  "ai_tips_h": "Corrections en direct",
+  "ai_tips_empty": "Pas encore d'observations. Continue à danser devant la caméra !",
+  "ai_idea_h": "Étincelle créative",
+  "ai_idea_new": "Nouvelle idée",
+  "ai_idea_hint": "Générée automatiquement quand ton énergie baisse, en priorisant la partie du corps la moins utilisée.",
   "wu_yt": "Chercher une vidéo sur YouTube",
   "wu_ref": "Référence animée (schéma)",
   "ent_h": "S’entraîner avec d’autres styles",
@@ -821,6 +1127,8 @@ export const UI: Record<Lang, Record<string, any>> = {
    "스타일",
    "웨이킹 로드맵",
    "워밍업",
+   "셀프 체크",
+   "수업 계획",
    "퀴즈"
   ],
   "studio_h": "8카운트 스튜디오",
@@ -874,6 +1182,44 @@ export const UI: Record<Lang, Record<string, any>> = {
    "금요일",
    "토요일"
   ],
+  "clase_h": "수업 계획",
+  "clase_lead": "각 블록의 시간을 조정하고 끝나는 시각을 확인하세요. 75분 수업의 기본 구성입니다.",
+  "starts": "시작",
+  "total": "합계",
+  "ends": "종료",
+  "min": "{n}분",
+  "less": "{b} 5분 줄이기",
+  "more": "{b} 5분 늘리기",
+  "blocks": [
+   [
+    "워밍업",
+    "가동성, 부드러운 아이솔레이션, 음악의 맥박 느끼기."
+   ],
+   [
+    "그루브와 기본기",
+    "바운스, 락, 그날 스타일의 기본 스텝."
+   ],
+   [
+    "크로스 트레이닝",
+    "주 스타일에 도움이 되는 다른 스타일의 연습(웨이킹 로드맵 참고)."
+   ],
+   [
+    "테크닉 드릴",
+    "하나의 요소를 변형하며 반복(스타일 참고)."
+   ],
+   [
+    "콤비네이션",
+    "거울로 8–16카운트 프레이즈를 나눠서 배우기."
+   ],
+   [
+    "싸이퍼 / 프리스타일",
+    "원으로 서서 각자 8카운트씩 들어갑니다. 박수는 필수."
+   ],
+   [
+    "쿨다운과 피드백",
+    "스트레칭, 잘한 점 하나와 개선할 점 하나."
+   ]
+  ],
   "quiz_h": "기초 퀴즈",
   "quiz_lead": "학생들이 동작, 선구자, 스타일을 연결하도록 무작위 5문제를 냅니다.",
   "result": "결과",
@@ -889,11 +1235,41 @@ export const UI: Record<Lang, Record<string, any>> = {
   "qmove": "“{m}” 동작은 어느 스타일일까요?",
   "qpio": "관련 인물: {p}. 어떤 스타일일까요?",
   "qsuf": " 어떤 스타일일까요?",
+  "cam_h": "카메라 셀프 체크",
+  "cam_lead": "실시간으로 자신을 보고, 스타일의 방법론과 비교하며 스스로 평가하세요. 카메라는 내 화면에만 보이며 영상은 저장되거나 전송되지 않습니다.",
+  "cam_start": "카메라 켜기",
+  "cam_stop": "카메라 끄기",
+  "cam_hint": "카메라가 꺼져 있습니다. 켜서 자신을 확인하세요.",
+  "cam_err": "카메라에 접근할 수 없습니다. 브라우저에서 접근을 허용하거나 링크를 새 탭에서 직접 여세요.",
+  "cam_mirror": "거울",
+  "cam_grid": "격자",
+  "cam_delay": "지연 거울",
+  "cam_freeze": "정지",
+  "cam_unfreeze": "재개",
+  "cam_sec": "{n}초",
+  "ev_method": "실습 중인 방법론",
+  "ev_style": "스타일",
+  "ev_drill": "스타일 연습법",
+  "ev_wdrill": "웨이킹을 위한 연습",
+  "ev_crit_h": "자기 평가 (1–5)",
+  "ev_crit": [
+   "리듬에 맞음(음악성)",
+   "컨트롤과 깔끔함",
+   "자세와 정렬",
+   "태도와 표현",
+   "공간 활용"
+  ],
+  "ev_save": "평가 저장",
+  "ev_saved": "평가가 저장되었습니다",
+  "ev_log": "기록",
+  "ev_empty": "아직 평가가 없습니다. 연습 후마다 스스로 평가해 보세요.",
+  "ev_avg": "평균 {n}",
   "wu_h": "워밍업: 운동 목록",
   "wu_lead": "각 1분씩 7가지 운동을 순서대로. 각 운동의 타이머는 시작을 누르세요.",
   "wu_start": "시작",
   "wu_stop": "정지",
   "wu_done": "완료!",
+  "wu_novid": "영상 준비 중",
   "wu": [
    [
     "관절 가동성",
@@ -924,6 +1300,38 @@ export const UI: Record<Lang, Record<string, any>> = {
     "발에서 머리로, 머리에서 발로 천천히 웨이브를 2번. 마지막은 온몸을 털어내며 마무리."
    ]
   ],
+  "an_h": "움직임 분석",
+  "an_lead": "메트로놈 박자에 맞춰 30초 춤추세요. 앱이 카메라로 움직임을 측정해 점수를 제안합니다. 대략적인 추정이며 특정 스텝이나 포즈를 인식하지는 않습니다.",
+  "an_start": "분석 시작",
+  "an_stop": "중지하고 결과 보기",
+  "an_metro": "메트로놈 소리",
+  "an_run": "분석 중… 박자에 맞춰 춤추세요 ({s}초)",
+  "an_sync": "박자 일치",
+  "an_sharp": "선명도",
+  "an_pause": "멈춤",
+  "an_space": "사용한 공간",
+  "an_prof": "움직임 프로필(대략)",
+  "an_apply": "제안으로 사용",
+  "an_need": "먼저 카메라를 켜세요.",
+  "an_few": "움직임이 거의 감지되지 않았습니다. 더 움직이거나 카메라에 가까이 오세요.",
+  "an_profiles": {
+   "hits": "뚜렷한 히트와 멈춤(팝핑·락킹과 비슷)",
+   "flow": "넓고 이어지는 팔(웨이킹·보깅과 비슷)",
+   "hips": "골반과 하체 중심의 상체(트월킹·댄스홀과 비슷)",
+   "feet": "발과 이동(하우스·브레이킹·힙합과 비슷)"
+  },
+  "an_match": "선택한 스타일과 일치: {name}.",
+  "an_nomatch": "{name}보다 다른 프로필에 더 가깝습니다.",
+  "ai_h": "AI 자세 교정",
+  "ai_lead": "실제 신체 인식(근사치 아님): 카메라 앞에서 프리스타일 춤을 추는 동안 AI가 관절을 추적하여 실시간 자세 교정과 창의적인 동작 아이디어를 제공합니다.",
+  "ai_loading": "신체 인식 엔진을 불러오는 중...",
+  "ai_error": "AI 엔진을 불러오지 못했습니다. 위의 근사 동작 분석은 계속 사용할 수 있습니다.",
+  "ai_no_person": "몸 전체가 화면에 보이지 않습니다. 카메라 앞에 전신이 보이도록 서주세요.",
+  "ai_tips_h": "실시간 교정",
+  "ai_tips_empty": "아직 관찰된 내용이 없습니다. 카메라 앞에서 계속 춤춰보세요!",
+  "ai_idea_h": "창의적인 아이디어",
+  "ai_idea_new": "새 아이디어",
+  "ai_idea_hint": "에너지가 떨어지면 가장 적게 사용한 신체 부위를 우선하여 자동으로 생성됩니다.",
   "wu_yt": "YouTube에서 영상 찾기",
   "wu_ref": "애니메이션 참고(도식)",
   "ent_h": "다른 스타일로 트레이닝",
@@ -937,6 +1345,8 @@ export const UI: Record<Lang, Record<string, any>> = {
    "舞种",
    "Waacking 路线",
    "热身",
+   "自我评估",
+   "课程计划",
    "测验"
   ],
   "studio_h": "八拍工作室",
@@ -990,6 +1400,44 @@ export const UI: Record<Lang, Record<string, any>> = {
    "星期五",
    "星期六"
   ],
+  "clase_h": "课程计划",
+  "clase_lead": "调整每个环节的分钟数，查看每部分几点结束。适合 75 分钟课程的起点。",
+  "starts": "开始",
+  "total": "总计",
+  "ends": "结束",
+  "min": "{n} 分钟",
+  "less": "{b} 减少 5 分钟",
+  "more": "{b} 增加 5 分钟",
+  "blocks": [
+   [
+    "热身",
+    "活动度、轻柔的分离练习、感受音乐律动。"
+   ],
+   [
+    "律动与基础",
+    "Bounce、Rock 和当天舞种的基础步伐。"
+   ],
+   [
+    "交叉训练",
+    "来自其他舞种、对主舞种有帮助的练习（见 Waacking 路线）。"
+   ],
+   [
+    "技术练习",
+    "把一个元素加上变化反复练习（见舞种）。"
+   ],
+   [
+    "组合",
+    "对着镜子分段学习 8–16 拍的乐句。"
+   ],
+   [
+    "Cypher / 自由舞",
+    "围成圆圈：每位学员进入 8 拍。必须鼓掌。"
+   ],
+   [
+    "放松与反馈",
+    "拉伸，说一件做得好的和一件需要改进的。"
+   ]
+  ],
   "quiz_h": "基础测验",
   "quiz_lead": "随机五道题，帮助学员把动作、先驱和舞种联系起来。",
   "result": "结果",
@@ -1005,11 +1453,41 @@ export const UI: Record<Lang, Record<string, any>> = {
   "qmove": "动作“{m}”属于……",
   "qpio": "相关人物：{p}。这是哪个舞种？",
   "qsuf": " 这是哪个舞种？",
+  "cam_h": "摄像头自我评估",
+  "cam_lead": "实时观看自己，对照舞种的方法并给自己打分。摄像头画面只显示在你的屏幕上：视频不会被保存，也不会发送到任何地方。",
+  "cam_start": "开启摄像头",
+  "cam_stop": "关闭摄像头",
+  "cam_hint": "摄像头已关闭。开启后即可看到自己。",
+  "cam_err": "无法访问摄像头。请在浏览器中允许访问，或在新标签页中直接打开链接。",
+  "cam_mirror": "镜像",
+  "cam_grid": "网格",
+  "cam_delay": "延时镜子",
+  "cam_freeze": "定格",
+  "cam_unfreeze": "继续",
+  "cam_sec": "{n} 秒",
+  "ev_method": "正在练习的方法",
+  "ev_style": "舞种",
+  "ev_drill": "舞种练习",
+  "ev_wdrill": "Waacking 练习",
+  "ev_crit_h": "自评（1–5）",
+  "ev_crit": [
+   "踩准节拍（音乐性）",
+   "控制与干净度",
+   "姿态与对齐",
+   "态度与表现力",
+   "空间运用"
+  ],
+  "ev_save": "保存评分",
+  "ev_saved": "评分已保存",
+  "ev_log": "历史记录",
+  "ev_empty": "还没有评分。每次练习后给自己打分吧。",
+  "ev_avg": "平均 {n}",
   "wu_h": "热身：练习清单",
   "wu_lead": "七个练习，每个一分钟，按顺序进行。点击开始使用每个练习的计时器。",
   "wu_start": "开始",
   "wu_stop": "停止",
   "wu_done": "完成！",
+  "wu_novid": "视频即将上线",
   "wu": [
    [
     "关节活动",
@@ -1040,6 +1518,38 @@ export const UI: Record<Lang, Record<string, any>> = {
     "从脚到头、再从头到脚做缓慢的波浪，各 2 次。最后抖松全身。"
    ]
   ],
+  "an_h": "动作分析",
+  "an_lead": "跟着节拍器的节奏跳 30 秒。应用会通过摄像头测量你的动作并给出评分建议。这只是粗略估计，无法识别具体的舞步或造型。",
+  "an_start": "开始分析",
+  "an_stop": "停止并查看结果",
+  "an_metro": "节拍器声音",
+  "an_run": "分析中……请跟着节拍跳（{s} 秒）",
+  "an_sync": "踩准节拍",
+  "an_sharp": "干脆度",
+  "an_pause": "停顿",
+  "an_space": "使用空间",
+  "an_prof": "动作特征（大致）",
+  "an_apply": "作为建议使用",
+  "an_need": "请先开启摄像头。",
+  "an_few": "检测到的动作很少。请多动一些或靠近摄像头。",
+  "an_profiles": {
+   "hits": "明显的发力与停顿（类似 Popping 或 Locking）",
+   "flow": "幅度大且连续的手臂（类似 Waacking 或 Voguing）",
+   "hips": "胯部与下半身躯干（类似 Twerking 或 Dancehall）",
+   "feet": "脚步与位移（类似 House、Breaking 或 Hip hop）"
+  },
+  "an_match": "与所选舞种相符：{name}。",
+  "an_nomatch": "比起 {name}，更像另一种类型。",
+  "ai_h": "AI 姿势矫正",
+  "ai_lead": "真正的身体识别（非近似值）：当你在镜头前自由起舞时，AI 会追踪你的关节，实时给出姿势矫正建议，并提供富有创意的动作灵感。",
+  "ai_loading": "正在加载身体识别引擎...",
+  "ai_error": "无法加载 AI 引擎。你仍可以使用上方的近似动作分析。",
+  "ai_no_person": "画面中没有检测到你的全身。请站到镜头前，让全身入镜。",
+  "ai_tips_h": "实时矫正",
+  "ai_tips_empty": "暂无观察结果。继续在镜头前跳舞吧！",
+  "ai_idea_h": "创意灵感",
+  "ai_idea_new": "换一个灵感",
+  "ai_idea_hint": "当你的能量下降时会自动生成，优先针对你使用最少的身体部位。",
   "wu_yt": "在 YouTube 上找视频",
   "wu_ref": "动画参考（示意）",
   "ent_h": "用其他舞种训练",
@@ -1053,6 +1563,8 @@ export const UI: Record<Lang, Record<string, any>> = {
    "スタイル",
    "ワッキング・ロードマップ",
    "ウォームアップ",
+   "セルフチェック",
+   "レッスン計画",
    "クイズ"
   ],
   "studio_h": "8カウント・スタジオ",
@@ -1106,6 +1618,44 @@ export const UI: Record<Lang, Record<string, any>> = {
    "金曜日",
    "土曜日"
   ],
+  "clase_h": "レッスン計画",
+  "clase_lead": "各ブロックの分数を調整して、それぞれの終了時刻を確認しましょう。75分レッスンの出発点です。",
+  "starts": "開始",
+  "total": "合計",
+  "ends": "終了",
+  "min": "{n}分",
+  "less": "{b}を5分減らす",
+  "more": "{b}を5分増やす",
+  "blocks": [
+   [
+    "ウォームアップ",
+    "可動域、やさしいアイソレーション、音楽のパルスを感じる。"
+   ],
+   [
+    "グルーヴと基礎",
+    "バウンス、ロック、その日のスタイルの基本ステップ。"
+   ],
+   [
+    "クロストレーニング",
+    "メインのスタイルに役立つ他スタイルの練習（ワッキング・ロードマップ参照）。"
+   ],
+   [
+    "テクニカルドリル",
+    "ひとつの要素をバリエーションをつけて反復（スタイル参照）。"
+   ],
+   [
+    "コンビネーション",
+    "8–16カウントのフレーズを鏡で、分けて習得。"
+   ],
+   [
+    "サイファー / フリースタイル",
+    "円になって、各自8カウントずつ入る。拍手は必須。"
+   ],
+   [
+    "クールダウンとフィードバック",
+    "ストレッチ、良かった点をひとつ、改善点をひとつ。"
+   ]
+  ],
   "quiz_h": "基礎クイズ",
   "quiz_lead": "動き、パイオニア、スタイルを結びつけるためのランダム5問。",
   "result": "結果",
@@ -1121,11 +1671,41 @@ export const UI: Record<Lang, Record<string, any>> = {
   "qmove": "「{m}」の動きはどのスタイル？",
   "qpio": "関連：{p}。どのスタイル？",
   "qsuf": " どのスタイルでしょう？",
+  "cam_h": "カメラでセルフチェック",
+  "cam_lead": "自分をライブで見て、スタイルのメソッドと比べ、自己評価しましょう。カメラ映像はあなたの画面にのみ表示され、保存も送信もされません。",
+  "cam_start": "カメラをオン",
+  "cam_stop": "カメラをオフ",
+  "cam_hint": "カメラはオフです。オンにして自分を確認しましょう。",
+  "cam_err": "カメラにアクセスできません。ブラウザで許可するか、リンクを新しいタブで直接開いてください。",
+  "cam_mirror": "ミラー",
+  "cam_grid": "グリッド",
+  "cam_delay": "ディレイミラー",
+  "cam_freeze": "静止",
+  "cam_unfreeze": "再開",
+  "cam_sec": "{n}秒",
+  "ev_method": "練習中のメソッド",
+  "ev_style": "スタイル",
+  "ev_drill": "スタイルの練習",
+  "ev_wdrill": "ワッキングのための練習",
+  "ev_crit_h": "自己評価（1–5）",
+  "ev_crit": [
+   "ビートに乗れている（音楽性）",
+   "コントロールとクリーンさ",
+   "姿勢とアライメント",
+   "アティチュードと表現",
+   "スペースの使い方"
+  ],
+  "ev_save": "評価を保存",
+  "ev_saved": "評価を保存しました",
+  "ev_log": "履歴",
+  "ev_empty": "まだ評価がありません。練習ごとに自己評価しましょう。",
+  "ev_avg": "平均 {n}",
   "wu_h": "ウォームアップ：エクササイズ",
   "wu_lead": "各1分の7つのエクササイズを順番に。各エクササイズのタイマーは開始を押します。",
   "wu_start": "開始",
   "wu_stop": "停止",
   "wu_done": "完了！",
+  "wu_novid": "動画は近日公開",
   "wu": [
    [
     "関節の可動域",
@@ -1156,6 +1736,38 @@ export const UI: Record<Lang, Record<string, any>> = {
     "足から頭へ、頭から足へゆっくりウェーブを各2回。最後に全身を振ってほぐす。"
    ]
   ],
+  "an_h": "動きの分析",
+  "an_lead": "メトロノームのパルスに合わせて30秒踊ります。アプリがカメラで動きを測定し、評価を提案します。おおまかな推定で、特定のステップやポーズは認識しません。",
+  "an_start": "分析を開始",
+  "an_stop": "停止して結果を見る",
+  "an_metro": "メトロノーム音",
+  "an_run": "分析中…パルスに合わせて踊って（{s}秒）",
+  "an_sync": "リズム合致",
+  "an_sharp": "キレ",
+  "an_pause": "間",
+  "an_space": "使った空間",
+  "an_prof": "動きのプロフィール（目安）",
+  "an_apply": "提案として使う",
+  "an_need": "先にカメラをオンにしてください。",
+  "an_few": "ほとんど動きが検出されませんでした。もっと動くか、カメラに近づいてください。",
+  "an_profiles": {
+   "hits": "はっきりしたヒットと間（ポッピングやロッキングに近い）",
+   "flow": "大きく続く腕の動き（ワッキングやヴォーギングに近い）",
+   "hips": "腰と低い体幹（トワークやダンスホールに近い）",
+   "feet": "足と移動（ハウス、ブレイキング、ヒップホップに近い）"
+  },
+  "an_match": "選んだスタイルと一致：{name}。",
+  "an_nomatch": "{name}よりも別のプロフィールに近いです。",
+  "ai_h": "AIによる姿勢補正",
+  "ai_lead": "本物の身体認識（近似値ではありません）：カメラの前でフリースタイルを踊っている間、AIが関節を追跡し、リアルタイムで姿勢の補正とクリエイティブな動きのアイデアを提供します。",
+  "ai_loading": "身体認識エンジンを読み込み中...",
+  "ai_error": "AIエンジンを読み込めませんでした。上の近似動作分析は引き続き使用できます。",
+  "ai_no_person": "体全体が画面に映っていません。カメラの前に全身が入るように立ってください。",
+  "ai_tips_h": "リアルタイム補正",
+  "ai_tips_empty": "まだ観察結果はありません。カメラの前で踊り続けましょう！",
+  "ai_idea_h": "クリエイティブなひらめき",
+  "ai_idea_new": "新しいアイデア",
+  "ai_idea_hint": "エネルギーが下がると、最も使っていない身体部位を優先して自動的に生成されます。",
   "wu_yt": "YouTubeで動画を探す",
   "wu_ref": "アニメーション参考（図式）",
   "ent_h": "他のスタイルでトレーニング",

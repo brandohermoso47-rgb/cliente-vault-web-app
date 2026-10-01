@@ -1,0 +1,9 @@
+{
+    "firebase.dataConnect.alwaysAllowMutationsInProduction": true,
+    "firebase.dataConnect.skipToAppFolderSelect": true,
+    "firebase.debug": true,
+    "firebase.emulators.exportOnExit": true,
+    "firebase.extraEnv": {
+        
+    }
+}

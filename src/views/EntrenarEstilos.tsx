@@ -7,10 +7,14 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { CSSProperties } from 'react';
 import { DATA, LANGS, MV_ES, SKILL_KEYS, STYLES as BASE, UI, YTQ } from '../lib/entrenar/data';
 import type { Lang, StyleDef } from '../lib/entrenar/data';
+import { glass, mono, pill, gold, field } from '../lib/entrenar/ui';
+import EntrenarCamara from './EntrenarCamara';
+import EntrenarPlan from './EntrenarPlan';
 
 const KEY = 'waack-entrenar';
-type TabId = 'estudio' | 'estilos' | 'ruta' | 'calentamiento' | 'quiz';
-const TABS: TabId[] = ['estudio', 'estilos', 'ruta', 'calentamiento', 'quiz'];
+type TabId = 'estudio' | 'estilos' | 'ruta' | 'calentamiento' | 'autoevaluacion' | 'clase' | 'quiz';
+// Mismo orden que UI[lang].tabs en src/lib/entrenar/data.ts
+const TABS: TabId[] = ['estudio', 'estilos', 'ruta', 'calentamiento', 'autoevaluacion', 'clase', 'quiz'];
 
 const EXAMPLE_PHRASES = [
   ['Hit', 'Hit', 'Wave', '', 'Tick', 'Tick', 'Strobe', 'Dime stop'],
@@ -42,13 +46,6 @@ function localized(lang: Lang): StyleDef[] {
     return d ? { ...s, origin: d[0], feel: d[1], pioneers: d[2], drill: d[3], gives: d[4], wdrill: d[5], clues: [d[6], d[7]] } : s;
   });
 }
-
-/* ---------- estilos compartidos con el resto de la app ---------- */
-const glass: CSSProperties = { border: '1px solid var(--hair)', background: 'var(--glass)', backdropFilter: 'var(--lg-blur)', WebkitBackdropFilter: 'var(--lg-blur)', boxShadow: 'var(--lg-edge)', borderRadius: 22 };
-const mono: CSSProperties = { fontFamily: "'Geist Mono',monospace", fontSize: 9, letterSpacing: '.2em', color: 'var(--ink-3)', textTransform: 'uppercase' };
-const pill: CSSProperties = { display: 'inline-flex', alignItems: 'center', gap: 8, padding: '10px 16px', borderRadius: 999, fontSize: 12, fontWeight: 600, cursor: 'pointer', border: '1px solid var(--hair)', background: 'var(--glass-2)', color: 'var(--ink-2)', fontFamily: 'inherit' };
-const gold: CSSProperties = { ...pill, fontWeight: 700, color: '#1A1400', border: 'none', background: 'linear-gradient(90deg,var(--gold-hi),var(--gold-lo))', boxShadow: 'inset 0 1px 0 rgba(255,255,255,.5)' };
-const field: CSSProperties = { padding: '9px 12px', borderRadius: 12, border: '1px solid var(--hair)', background: 'var(--glass-2)', color: 'var(--ink)', fontFamily: 'inherit', fontSize: 13 };
 
 const CSS = `
 .ent-fig line,.ent-fig circle{stroke:#EFEAE0;stroke-width:4;stroke-linecap:round;fill:none}
@@ -428,6 +425,10 @@ export default function EntrenarEstilos() {
           </div>
         </div>
       )}
+
+      {tab === 'autoevaluacion' && <EntrenarCamara t={t} styles={styles} styleId={styleId} bpm={bpm} />}
+
+      {tab === 'clase' && <EntrenarPlan t={t} />}
 
       {tab === 'quiz' && (
         <div role="tabpanel" style={{ ...glass, padding: 22, maxWidth: 680 }}>
