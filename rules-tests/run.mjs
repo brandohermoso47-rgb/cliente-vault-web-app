@@ -53,6 +53,8 @@ deny('NO puede escribir isFeaturedInstructor', 'update', 'users/user1', { uid: '
 deny('NO puede escribir featuredPlan', 'update', 'users/user1', { uid: 'user1', data: validProfile, incoming: { ...validProfile, featuredPlan: 'annual' } });
 deny('NO puede escribir instructorSubscriptionStatus', 'update', 'users/user1', { uid: 'user1', data: validProfile, incoming: { ...validProfile, instructorSubscriptionStatus: 'active' } });
 deny('NO puede editar el perfil de otro', 'update', 'users/user2', { uid: 'user1', data: validProfile, incoming: { ...validProfile, bio: 'hackeado' } });
+deny('un admin NO puede escribir billingStatus desde el cliente', 'update', 'users/user2', { uid: 'admin1', data: validProfile, incoming: { ...validProfile, billingStatus: 'active' } });
+deny('un admin NO puede escribir stripeCustomerId desde el cliente', 'update', 'users/user2', { uid: 'admin1', data: validProfile, incoming: { ...validProfile, stripeCustomerId: 'cus_123' } });
 allow('un admin sí puede cambiar roles', 'update', 'users/user2', { uid: 'admin1', data: validProfile, incoming: { ...validProfile, role: 'instructor' } });
 // Un perfil viejo con un campo heredado (fuera de la lista actual) no debe bloquear futuras ediciones,
 // como subir la foto: solo se revisan los campos que cambian, no todo el documento.

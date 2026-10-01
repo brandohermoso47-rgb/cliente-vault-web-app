@@ -57,7 +57,7 @@ These fields can only be written by Admin SDK (webhook), never from client.
 ### Tests added ✅
 **File**: `rules-tests/run.mjs`
 
-Added 8 new test cases:
+Added 7 new test cases (plus 2 admin-client cases for billing fields), alongside the existing role test:
 - deny NO puede escribir billingStatus
 - deny NO puede escribir stripeCustomerId
 - deny NO puede escribir stripeAccountId
@@ -65,7 +65,8 @@ Added 8 new test cases:
 - deny NO puede escribir isFeaturedInstructor
 - deny NO puede escribir featuredPlan
 - deny NO puede escribir instructorSubscriptionStatus
-- (existing) deny NO puede subirse el rol a admin
+- deny un admin NO puede escribir billingStatus / stripeCustomerId desde el cliente
+- (existing, not new) deny NO puede subirse el rol a admin
 
 These tests will fail if client ever tries to write these fields. **Run before deploying:**
 ```bash
