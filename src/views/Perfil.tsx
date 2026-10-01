@@ -116,6 +116,23 @@ export default function Perfil({ v }: { v: any }) {
           </>
         )}
       </div>
+      {!v.isInstructor && (
+        <>
+          <div style={{"display":"flex","gap":"16px","alignItems":"center","padding":"20px 22px","borderRadius":"22px","border":"1px solid var(--hair)","background":"var(--glass)","backdropFilter":"blur(34px)","WebkitBackdropFilter":"blur(34px)"}}>
+            <div style={{"flex":"1"}}>
+              <div style={{"fontSize":"13.5px","fontWeight":"700","color":"var(--ink)"}}>
+                {"¿Quieres convertirte en instructor?"}
+              </div>
+              <div style={{"fontSize":"12px","lineHeight":"1.5","color":"var(--ink-2)","marginTop":"6px"}}>
+                {"Accede al panel completo de instructor: administra clases, estudiantes, ingresos y publica contenido."}
+              </div>
+            </div>
+            <div onClick={v.perfBecomeInstructorClick} style={{"padding":"11px 20px","borderRadius":"999px","fontSize":"12.5px","fontWeight":"700","color":"#14111A","background":"linear-gradient(90deg,var(--gold-hi),var(--gold-lo))","boxShadow":"inset 0 1px 0 rgba(255,255,255,.5)","cursor":"pointer","flex":"0 0 auto","whiteSpace":"nowrap","transition":"transform .18s ease"}} className={cx(pc("hover", "transform:translateY(-1px)"))}>
+              {"Solicitar acceso"}
+            </div>
+          </div>
+        </>
+      )}
       <div style={{"position":"relative","zIndex":"40","alignSelf":"flex-start"}}>
         <div onClick={v.agPanelToggle} style={sty(v.agPanelBtn)} className={cx(pc("hover", "border-color:color-mix(in oklch, var(--pink) 50%, transparent)"))}>
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="var(--pink)" strokeWidth="1.8" strokeLinecap="round" style={{"flex":"0 0 17px"}}>
@@ -311,6 +328,42 @@ export default function Perfil({ v }: { v: any }) {
                 </div>
                 <div onClick={v.perfPublish} style={{"flex":"1","padding":"13px 18px","borderRadius":"999px","textAlign":"center","fontSize":"12.5px","fontWeight":"700","color":"#14111A","background":"var(--pink)","boxShadow":"0 10px 22px -10px var(--pink), inset 0 1px 0 rgba(255,255,255,.3)","cursor":"pointer","transition":"transform .18s ease"}} className={cx(pc("hover", "transform:translateY(-1px)"))}>
                   {"Publicar"}
+                </div>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
+      {v.perfInstructorModalOpen && (
+        <>
+          <div onClick={v.perfCloseInstructorModal} style={{"position":"fixed","inset":"0","zIndex":"90","background":"rgba(10,8,14,.72)","backdropFilter":"blur(18px)","WebkitBackdropFilter":"blur(18px)","display":"flex","alignItems":"center","justifyContent":"center","padding":"28px"}}>
+            <div onClick={v.stopProp} style={{"width":"100%","maxWidth":"520px","borderRadius":"28px","border":"1px solid var(--hair)","background":"var(--glass)","boxShadow":"0 40px 90px -40px rgba(0,0,0,.8), var(--lg-edge)","padding":"28px"}}>
+              <div style={{"display":"flex","alignItems":"center","justifyContent":"space-between","gap":"16px","marginBottom":"20px"}}>
+                <span style={{"fontFamily":"'Geist Mono',monospace","fontSize":"9px","letterSpacing":".2em","color":"var(--ink-3)","textTransform":"uppercase"}}>
+                  {"Solicitud de instructor"}
+                </span>
+                <div onClick={v.perfCloseInstructorModal} style={{"fontSize":"20px","lineHeight":"1","color":"var(--ink-3)","cursor":"pointer","padding":"2px 6px"}} className={cx(pc("hover", "color:var(--pink)"))}>
+                  {"×"}
+                </div>
+              </div>
+              <h2 style={{"margin":"0 0 12px 0","fontSize":"22px","fontWeight":"700","color":"var(--ink)"}}>
+                {"Convertirse en instructor"}
+              </h2>
+              <p style={{"margin":"0 0 20px 0","fontSize":"13px","lineHeight":"1.6","color":"var(--ink-2)"}}>
+                {"Cuéntanos por qué te gustaría ser instructor en Waack ON. Nuestro equipo revisará tu solicitud en 24-48 horas."}
+              </p>
+              <textarea value={v.perfInstructorReason} onChange={v.perfSetInstructorReason} placeholder="Explica tu experiencia, especialidad y por qué quieres enseñar en Waack ON..." style={{"width":"100%","minHeight":"120px","padding":"13px 16px","borderRadius":"15px","border":"1px solid var(--hair)","background":"var(--glass-2)","color":"var(--ink)","fontSize":"12.5px","fontFamily":"inherit","outline":"none","boxSizing":"border-box","resize":"vertical"}} />
+              {v.perfInstructorErr && (
+                <div style={{"marginTop":"12px","fontSize":"11.5px","color":"var(--pink)"}}>
+                  {v.perfInstructorErr}
+                </div>
+              )}
+              <div style={{"display":"flex","gap":"10px","marginTop":"20px"}}>
+                <div onClick={v.perfCloseInstructorModal} style={{"flex":"1","padding":"13px 18px","borderRadius":"999px","textAlign":"center","fontSize":"12.5px","fontWeight":"700","color":"var(--ink-2)","border":"1px solid var(--hair)","background":"var(--glass-2)","cursor":"pointer"}} className={cx(pc("hover", "color:var(--ink)"))}>
+                  {"Cancelar"}
+                </div>
+                <div onClick={v.perfSubmitInstructorRequest} style={{"flex":"1","padding":"13px 18px","borderRadius":"999px","textAlign":"center","fontSize":"12.5px","fontWeight":"700","color":"#14111A","background":v.perfInstructorBusy?"var(--ink-3)":"linear-gradient(90deg,var(--gold-hi),var(--gold-lo))","boxShadow":"0 10px 22px -10px var(--pink), inset 0 1px 0 rgba(255,255,255,.3)","cursor":v.perfInstructorBusy?"not-allowed":"pointer","transition":"transform .18s ease","opacity":v.perfInstructorBusy?0.6:1}} className={cx(v.perfInstructorBusy?"":'hover:transform:translateY(-1px)')}>
+                  {v.perfInstructorBusy ? "Enviando..." : "Enviar solicitud"}
                 </div>
               </div>
             </div>

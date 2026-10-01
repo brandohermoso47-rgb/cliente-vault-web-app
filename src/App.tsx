@@ -2395,7 +2395,43 @@ class App extends Component<any, any> {
   myAvatarBusy = false;
   myAvatarPct: number | null = null;
   myAvatarErr = '';
+  perfInstructorModalOpen = false;
+  perfInstructorReason = '';
+  perfInstructorErr = '';
+  perfInstructorBusy = false;
   onMyAvatarPick = () => { (document.getElementById('perf-avatar-input') as HTMLInputElement | null)?.click(); };
+  perfBecomeInstructorClick = () => { this.perfInstructorModalOpen = true; this.perfInstructorErr = ''; this.forceUpdate(); };
+  perfCloseInstructorModal = () => { this.perfInstructorModalOpen = false; this.perfInstructorReason = ''; this.perfInstructorErr = ''; this.forceUpdate(); };
+  perfSetInstructorReason = (e: any) => { this.perfInstructorReason = e.target.value; };
+  perfSubmitInstructorRequest = async () => {
+    if (!this.perfInstructorReason.trim()) {
+      this.perfInstructorErr = 'Por favor, cuéntanos por qué quieres ser instructor.';
+      this.forceUpdate();
+      return;
+    }
+    const user = this.state.user;
+    if (!user) return;
+    this.perfInstructorErr = '';
+    this.perfInstructorBusy = true;
+    this.forceUpdate();
+    try {
+      const requestRef = doc(db, 'users', user.uid, 'instructorRequests', 'current');
+      await setDoc(requestRef, {
+        reason: this.perfInstructorReason,
+        status: 'pending',
+        createdAt: serverTimestamp(),
+        email: user.email,
+        displayName: this.myProfile?.displayName || user.displayName || 'Usuario',
+      });
+      this.perfCloseInstructorModal();
+      alert('Solicitud enviada. El equipo de Waack ON la revisará en 24-48 horas.');
+    } catch (err) {
+      this.perfInstructorErr = 'Error al enviar la solicitud. Inténtalo de nuevo.';
+      console.error(err);
+    }
+    this.perfInstructorBusy = false;
+    this.forceUpdate();
+  };
   onMyAvatarFile = (e: any) => {
     const f = e?.target?.files?.[0];
     if (e?.target) e.target.value = '';
@@ -3237,9 +3273,19 @@ class App extends Component<any, any> {
       perfAvatarErr: this.myAvatarErr,
       onMyAvatarPick: this.onMyAvatarPick,
       onMyAvatarFile: this.onMyAvatarFile,
+      isInstructor: ['instructor', 'estudio', 'admin'].includes(this.myProfile?.role || 'usuario'),
+      perfInstructorModalOpen: this.perfInstructorModalOpen,
+      perfInstructorReason: this.perfInstructorReason,
+      perfInstructorErr: this.perfInstructorErr,
+      perfInstructorBusy: this.perfInstructorBusy,
+      perfBecomeInstructorClick: this.perfBecomeInstructorClick,
+      perfCloseInstructorModal: this.perfCloseInstructorModal,
+      perfSetInstructorReason: this.perfSetInstructorReason,
+      perfSubmitInstructorRequest: this.perfSubmitInstructorRequest,
+      stopProp: (e: any) => e.stopPropagation(),
       acctLinks: [
         { label: 'Mi perfil', view: 'perfil' },
-        { label: 'Panel de instructor', view: 'instructor' },
+        ...(['instructor', 'estudio', 'admin'].includes(this.myProfile?.role || 'usuario') ? [{ label: 'Panel de instructor', view: 'instructor' }] : []),
         { label: 'Planes & Membresía', view: 'planes' },
         { label: 'Cuerpo & Estiramientos', view: 'fisico' },
         { label: 'Música', view: 'musica' },
