@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
+import { openBillingPortal } from '../lib/payments';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
   DollarSign, 
@@ -1409,21 +1410,9 @@ Semana 3-4 (Progresión):
       playChime('click');
 
       try {
-        const res = await fetch('/api/billing/portal', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' }
-        });
-
-        if (!res.ok) {
-          setAlertText(language === 'es' ? 'No pudimos procesar la cancelación. Inténtalo de nuevo.' : 'Could not process cancellation. Please try again.');
-          setTimeout(() => setAlertText(null), 4000);
-          return;
-        }
-
-        setAlertText(language === 'es' ? 'Cancelación procesada. Los cambios se reflejarán en breve.' : 'Cancellation processed. Changes will appear shortly.');
-        setTimeout(() => setAlertText(null), 3000);
-      } catch (error) {
-        setAlertText(language === 'es' ? 'Error al cancelar. Inténtalo de nuevo.' : 'Cancellation error. Please try again.');
+        await openBillingPortal();
+      } catch (error: any) {
+        setAlertText(error?.message || (language === 'es' ? 'No pudimos abrir el portal de facturación. Inténtalo de nuevo.' : 'Could not open the billing portal. Please try again.'));
         setTimeout(() => setAlertText(null), 4000);
       }
     }
@@ -5234,15 +5223,9 @@ Semana 3-4 (Progresión):
                           if (window.confirm(language === 'es' ? '¿Deseas dar de baja tu estado de facturación activo? Esto desactivará tu posición destacada.' : 'Do you want to unsubscribe your active billing status? This will deactivate your featured position.')) {
                             playChime('click');
                             try {
-                              const res = await fetch('/api/billing/portal', {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json' }
-                              });
-                              if (!res.ok) throw new Error('Cancellation failed');
-                              setAlertText(language === 'es' ? 'Cancelación procesada. Los cambios se reflejarán en breve.' : 'Cancellation processed. Changes will appear shortly.');
-                              setTimeout(() => setAlertText(null), 3000);
-                            } catch (error) {
-                              setAlertText(language === 'es' ? 'Error al cancelar. Inténtalo de nuevo.' : 'Cancellation error. Please try again.');
+                              await openBillingPortal();
+                            } catch (error: any) {
+                              setAlertText(error?.message || (language === 'es' ? 'No pudimos abrir el portal de facturación. Inténtalo de nuevo.' : 'Could not open the billing portal. Please try again.'));
                               setTimeout(() => setAlertText(null), 4000);
                             }
                           }

@@ -52,6 +52,9 @@ deny('NO puede escribir subscriptionTier', 'update', 'users/user1', { uid: 'user
 deny('NO puede escribir isFeaturedInstructor', 'update', 'users/user1', { uid: 'user1', data: validProfile, incoming: { ...validProfile, isFeaturedInstructor: true } });
 deny('NO puede escribir featuredPlan', 'update', 'users/user1', { uid: 'user1', data: validProfile, incoming: { ...validProfile, featuredPlan: 'annual' } });
 deny('NO puede escribir instructorSubscriptionStatus', 'update', 'users/user1', { uid: 'user1', data: validProfile, incoming: { ...validProfile, instructorSubscriptionStatus: 'active' } });
+deny('NO puede escribir subscribedInstructorIds', 'update', 'users/user1', { uid: 'user1', data: validProfile, incoming: { ...validProfile, subscribedInstructorIds: ['i1'] } });
+deny('NO puede escribir featuredExpiry', 'update', 'users/user1', { uid: 'user1', data: validProfile, incoming: { ...validProfile, featuredExpiry: '2030-01-01' } });
+deny('NO puede escribir isConnectVerified', 'update', 'users/user1', { uid: 'user1', data: validProfile, incoming: { ...validProfile, isConnectVerified: true } });
 deny('NO puede editar el perfil de otro', 'update', 'users/user2', { uid: 'user1', data: validProfile, incoming: { ...validProfile, bio: 'hackeado' } });
 deny('un admin NO puede escribir billingStatus desde el cliente', 'update', 'users/user2', { uid: 'admin1', data: validProfile, incoming: { ...validProfile, billingStatus: 'active' } });
 deny('un admin NO puede escribir stripeCustomerId desde el cliente', 'update', 'users/user2', { uid: 'admin1', data: validProfile, incoming: { ...validProfile, stripeCustomerId: 'cus_123' } });
