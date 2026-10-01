@@ -28,3 +28,6 @@ firebase login
 npm run deploy      # build + hosting + reglas de Firestore
 ```
 Dominio personalizado: Firebase Console → Hosting → *Add custom domain* y registros DNS que indique.
+
+## Plugin de Claude Code
+`plugins/waack-on-kit` añade comandos (`regen`, `check`, `rules-test`, `deploy`), una skill sobre los archivos generados y un hook que impide editarlos a mano. Ver [su README](plugins/waack-on-kit/README.md).
