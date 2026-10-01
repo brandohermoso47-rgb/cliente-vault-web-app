@@ -66,6 +66,8 @@ deny('nadie borra perfiles salvo admin', 'delete', 'users/user2', { uid: 'user1'
 allow('el dueño lee su galería privada', 'get', 'users/user1/media/m1', { uid: 'user1', data: { url: 'x' } });
 deny('otro usuario NO lee la galería privada', 'get', 'users/user1/media/m1', { uid: 'user2', data: { url: 'x' } });
 deny('otro usuario NO escribe en la galería ajena', 'create', 'users/user1/media/m2', { uid: 'user2', incoming: { url: 'x' } });
+allow('el instructor lee su clase', 'get', 'users/user1/classes/c1', { uid: 'user1', data: { title: 'Clase' } });
+deny('otro usuario NO lee la clase del instructor', 'get', 'users/user1/classes/c1', { uid: 'user2', data: { title: 'Clase' } });
 
 // contenido de instructores/estudios/admin
 for (const col of ['teachers', 'lives', 'lessons', 'ebooks', 'events']) {

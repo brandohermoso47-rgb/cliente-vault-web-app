@@ -97,7 +97,7 @@ export function subscribeInstructorStudents(
   callback: (students: IStudent[]) => void
 ) {
   const q = query(
-    collection(db, `users/${uid}/instructorData/students`),
+    collection(db, `users/${uid}/students`),
     orderBy('joinedAt', 'desc')
   );
 
@@ -125,7 +125,7 @@ export async function addStudentToInstructor(
   if (!studentData.email?.trim()) throw new Error('Email requerido');
 
   const docRef = await addDoc(
-    collection(db, `users/${uid}/instructorData/students`),
+    collection(db, `users/${uid}/students`),
     {
       ...studentData,
       enrolledClasses: studentData.enrolledClasses || [],
@@ -141,7 +141,7 @@ export async function updateStudent(
   updates: Partial<IStudent>
 ): Promise<void> {
   await updateDoc(
-    doc(db, `users/${uid}/instructorData/students`, studentId),
+    doc(db, `users/${uid}/students`, studentId),
     updates
   );
 }
@@ -154,7 +154,7 @@ export function subscribeClassEnrollments(
   callback: (enrollments: IClassEnrollment[]) => void
 ) {
   const q = query(
-    collection(db, `users/${uid}/instructorData/enrollments`),
+    collection(db, `users/${uid}/enrollments`),
     where('classId', '==', classId)
   );
 
@@ -179,7 +179,7 @@ export async function enrollStudent(
   classId: string,
   studentId: string
 ): Promise<void> {
-  await addDoc(collection(db, `users/${uid}/instructorData/enrollments`), {
+  await addDoc(collection(db, `users/${uid}/enrollments`), {
     classId,
     studentId,
     status: 'active',
@@ -195,7 +195,7 @@ export async function updateStudentProgress(
   progress: number
 ): Promise<void> {
   await updateDoc(
-    doc(db, `users/${uid}/instructorData/enrollments`, enrollmentId),
+    doc(db, `users/${uid}/enrollments`, enrollmentId),
     { progress }
   );
 }
@@ -209,7 +209,7 @@ export function subscribeStudentPlan(
   callback: (plan: IStudentPlan | null) => void
 ) {
   const planId = `${classId}_${studentId}`;
-  const docRef = doc(db, `users/${uid}/instructorData/curriculum`, planId);
+  const docRef = doc(db, `users/${uid}/curriculum`, planId);
 
   return onSnapshot(
     docRef,
@@ -237,14 +237,14 @@ export async function createStudentPlan(
   curriculum: any[] = []
 ): Promise<void> {
   const planId = `${classId}_${studentId}`;
-  await updateDoc(doc(db, `users/${uid}/instructorData/curriculum`, planId), {
+  await updateDoc(doc(db, `users/${uid}/curriculum`, planId), {
     classId,
     studentId,
     curriculum: curriculum || [],
     createdAt: serverTimestamp(),
     updatedAt: serverTimestamp(),
   }).catch(() => {
-    return addDoc(collection(db, `users/${uid}/instructorData/curriculum`), {
+    return addDoc(collection(db, `users/${uid}/curriculum`), {
       id: planId,
       classId,
       studentId,
@@ -263,7 +263,7 @@ export function subscribeClassGroups(
   callback: (groups: IClassGroup[]) => void
 ) {
   const q = query(
-    collection(db, `users/${uid}/instructorData/groups`),
+    collection(db, `users/${uid}/groups`),
     where('classId', '==', classId)
   );
 
@@ -292,7 +292,7 @@ export async function createClassGroup(
   if (!name.trim()) throw new Error('Nombre de grupo requerido');
 
   const docRef = await addDoc(
-    collection(db, `users/${uid}/instructorData/groups`),
+    collection(db, `users/${uid}/groups`),
     {
       classId,
       name,
@@ -309,7 +309,7 @@ export async function updateClassGroup(
   updates: Partial<IClassGroup>
 ): Promise<void> {
   await updateDoc(
-    doc(db, `users/${uid}/instructorData/groups`, groupId),
+    doc(db, `users/${uid}/groups`, groupId),
     updates
   );
 }
@@ -362,7 +362,7 @@ export function subscribeInstructorCourses(
   callback: (courses: ICourse[]) => void
 ) {
   const q = query(
-    collection(db, `users/${uid}/instructorData/courses`),
+    collection(db, `users/${uid}/courses`),
     orderBy('createdAt', 'desc')
   );
 
@@ -389,7 +389,7 @@ export async function createCourse(
   if (!courseData.title?.trim()) throw new Error('Título del curso requerido');
 
   const docRef = await addDoc(
-    collection(db, `users/${uid}/instructorData/courses`),
+    collection(db, `users/${uid}/courses`),
     {
       ...courseData,
       lessons: courseData.lessons || [],
@@ -406,7 +406,7 @@ export async function publishCourse(
   courseId: string
 ): Promise<void> {
   await updateDoc(
-    doc(db, `users/${uid}/instructorData/courses`, courseId),
+    doc(db, `users/${uid}/courses`, courseId),
     {
       status: 'published',
       updatedAt: serverTimestamp(),
@@ -421,7 +421,7 @@ export function subscribeInstructorDocuments(
   callback: (documents: IDocument[]) => void
 ) {
   const q = query(
-    collection(db, `users/${uid}/instructorData/documents`),
+    collection(db, `users/${uid}/documents`),
     orderBy('uploadedAt', 'desc')
   );
 
@@ -449,7 +449,7 @@ export async function uploadDocument(
   if (!docData.url?.trim()) throw new Error('URL requerida');
 
   const docRef = await addDoc(
-    collection(db, `users/${uid}/instructorData/documents`),
+    collection(db, `users/${uid}/documents`),
     {
       ...docData,
       sharedWith: docData.sharedWith || [],
@@ -466,7 +466,7 @@ export function subscribeInstructorPodcasts(
   callback: (podcasts: IPodcast[]) => void
 ) {
   const q = query(
-    collection(db, `users/${uid}/instructorData/podcasts`),
+    collection(db, `users/${uid}/podcasts`),
     orderBy('createdAt', 'desc')
   );
 
@@ -493,7 +493,7 @@ export async function createPodcast(
   if (!podcastData.title?.trim()) throw new Error('Título requerido');
 
   const docRef = await addDoc(
-    collection(db, `users/${uid}/instructorData/podcasts`),
+    collection(db, `users/${uid}/podcasts`),
     {
       ...podcastData,
       episodes: podcastData.episodes || [],
@@ -510,7 +510,7 @@ export function subscribeInstructorAnnouncements(
   callback: (announcements: IAnnouncement[]) => void
 ) {
   const q = query(
-    collection(db, `users/${uid}/instructorData/announcements`),
+    collection(db, `users/${uid}/announcements`),
     orderBy('createdAt', 'desc')
   );
 
@@ -538,7 +538,7 @@ export async function createAnnouncement(
   if (!content.trim()) throw new Error('Contenido requerido');
 
   const docRef = await addDoc(
-    collection(db, `users/${uid}/instructorData/announcements`),
+    collection(db, `users/${uid}/announcements`),
     {
       content,
       targetAudience,
