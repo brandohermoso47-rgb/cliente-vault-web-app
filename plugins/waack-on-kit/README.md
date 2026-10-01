@@ -17,4 +17,4 @@ Para probarlo desde un clon local: `claude --plugin-dir plugins/waack-on-kit`.
 | Comando | `/waack-on-kit:rules-test [proyecto]` | Prueba `firestore.rules` / `storage.rules` con la API de simulación (requiere `gcloud auth login`) |
 | Comando | `/waack-on-kit:deploy [--only …]` | Verifica, construye, pide confirmación y ejecuta `firebase deploy`. Solo se lanza a mano |
 | Skill | `archivos-generados` | Explica qué archivos de `src/` son GENERADO y qué fuente de `tools/` editar |
-| Hook | `PreToolUse` (Edit/Write) | Bloquea editar a mano archivos con cabecera `// GENERADO por …` y dice qué fuente editar |
+| Hook | `PreToolUse` (Edit/Write) | Bloquea editar a mano archivos con cabecera `// GENERADO por …` (y `src/toggle.txt`) y dice qué fuente editar |
