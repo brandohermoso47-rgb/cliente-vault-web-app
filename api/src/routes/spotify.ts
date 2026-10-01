@@ -1,6 +1,6 @@
 import { eq } from 'drizzle-orm';
 import { Router } from 'express';
-import { randomBytes } from 'node:crypto';
+import { createHmac, randomBytes, timingSafeEqual } from 'node:crypto';
 import { z } from 'zod';
 import { withAuth } from '../auth.js';
 import { schema } from '../db/index.js';
@@ -71,7 +71,9 @@ export function spotifyRouter(deps: Deps) {
   r.post('/spotify/exchange', withAuth(deps), handle(deps, 'user', async ({ req, db }) => {
     const cfg = needSpotify(deps);
     const { code, state } = parse(exchangeBody, req.body ?? {});
-    if (!state.startsWith(`${req.user!.id}.`)) throw new HttpError(400, 'spotify_state_mismatch', 'La conexión no corresponde a esta sesión.');
+    if (!verifySpotifyState(state, req.user!.id, cfg.clientSecret)) {
+      throw new HttpError(400, 'spotify_state_mismatch', 'La conexión no corresponde a esta sesión.');
+    }
     const tok = await exchangeCode(cfg, code);
     if (!tok.refresh_token) throw new HttpError(502, 'spotify_no_refresh_token', 'Spotify no devolvió un token de refresco.');
     const profile = await fetchProfile(tok.access_token);

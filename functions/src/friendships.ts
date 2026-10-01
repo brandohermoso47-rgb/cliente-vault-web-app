@@ -15,6 +15,7 @@ export const onFriendRequestCreated = onDocumentCreated(
     if (!target) return;
     const who = await actorLabel(data.requesterId);
     await notify({
+      eventId: event.id,
       userId: target,
       actorId: data.requesterId,
       type: 'friend_request',
@@ -36,6 +37,7 @@ export const onFriendRequestAccepted = onDocumentUpdated(
     if (!accepter) return;
     const who = await actorLabel(accepter);
     await notify({
+      eventId: event.id,
       userId: after.requesterId,
       actorId: accepter,
       type: 'friend_accept',

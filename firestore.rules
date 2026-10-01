@@ -50,6 +50,9 @@ service cloud.firestore {
       match /{sub}/{docId} {
         allow read, write: if isOwner(userId);
       }
+      match /{sub}/{docId}/{nested=**} {
+        allow read, write: if isOwner(userId);
+      }
     }
 
     // ── Contenido de instructores/estudios/admin: lo lee cualquiera con sesión ──

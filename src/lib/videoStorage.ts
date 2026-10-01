@@ -5,6 +5,7 @@ import {
   deleteObject
 } from 'firebase/storage';
 import { storage } from './firebase';
+import { VIDEO_TYPES } from './validators';
 
 /**
  * Upload video file to Firebase Storage for motion recognition
@@ -15,7 +16,7 @@ export async function uploadClassVideo(
   file: File,
   onProgress?: (progress: number) => void
 ): Promise<string> {
-  if (!file.type.startsWith('video/')) {
+  if (!VIDEO_TYPES.includes(file.type)) {
     throw new Error('Solo se aceptan archivos de video');
   }
 
@@ -59,20 +60,16 @@ export async function uploadClassVideo(
 export async function getVideoDuration(file: File): Promise<number> {
   return new Promise((resolve, reject) => {
     const video = document.createElement('video');
-    const objectUrl = URL.createObjectURL(file);
-
     video.onloadedmetadata = () => {
       const durationMs = video.duration * 1000;
-      URL.revokeObjectURL(objectUrl);
       resolve(durationMs);
     };
 
     video.onerror = () => {
-      URL.revokeObjectURL(objectUrl);
       reject(new Error('No se pudo leer la duración del video'));
     };
 
-    video.src = objectUrl;
+    video.srcObject = file;
   });
 }
 

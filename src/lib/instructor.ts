@@ -32,7 +32,7 @@ export function subscribeInstructorClasses(
   callback: (classes: IClass[]) => void
 ) {
   const q = query(
-    collection(db, `users/${uid}/classes`),
+    collection(db, `users/${uid}/instructorData/${uid}/classes`),
     orderBy('createdAt', 'desc')
   );
 
@@ -61,7 +61,7 @@ export async function createClass(
   if ((data.capacity || 0) < 1) throw new Error('Capacidad debe ser ≥ 1');
 
   const docRef = await addDoc(
-    collection(db, `users/${uid}/classes`),
+    collection(db, `users/${uid}/instructorData/${uid}/classes`),
     {
       ...data,
       enrolled: 0,
@@ -78,7 +78,7 @@ export async function updateClass(
   updates: Partial<IClass>
 ): Promise<void> {
   await updateDoc(
-    doc(db, `users/${uid}/classes`, classId),
+    doc(db, `users/${uid}/instructorData/${uid}/classes`, classId),
     {
       ...updates,
       updatedAt: serverTimestamp(),
@@ -87,7 +87,7 @@ export async function updateClass(
 }
 
 export async function deleteClass(uid: string, classId: string): Promise<void> {
-  await deleteDoc(doc(db, `users/${uid}/classes`, classId));
+  await deleteDoc(doc(db, `users/${uid}/instructorData/${uid}/classes`, classId));
 }
 
 // ==================== STUDENTS (ALUMNOS) ====================
@@ -97,7 +97,7 @@ export function subscribeInstructorStudents(
   callback: (students: IStudent[]) => void
 ) {
   const q = query(
-    collection(db, `users/${uid}/students`),
+    collection(db, `users/${uid}/instructorData/${uid}/students`),
     orderBy('joinedAt', 'desc')
   );
 
@@ -125,7 +125,7 @@ export async function addStudentToInstructor(
   if (!studentData.email?.trim()) throw new Error('Email requerido');
 
   const docRef = await addDoc(
-    collection(db, `users/${uid}/students`),
+    collection(db, `users/${uid}/instructorData/${uid}/students`),
     {
       ...studentData,
       enrolledClasses: studentData.enrolledClasses || [],
@@ -141,7 +141,7 @@ export async function updateStudent(
   updates: Partial<IStudent>
 ): Promise<void> {
   await updateDoc(
-    doc(db, `users/${uid}/students`, studentId),
+    doc(db, `users/${uid}/instructorData/${uid}/students`, studentId),
     updates
   );
 }
@@ -154,7 +154,7 @@ export function subscribeClassEnrollments(
   callback: (enrollments: IClassEnrollment[]) => void
 ) {
   const q = query(
-    collection(db, `users/${uid}/enrollments`),
+    collection(db, `users/${uid}/instructorData/${uid}/enrollments`),
     where('classId', '==', classId)
   );
 
@@ -179,7 +179,7 @@ export async function enrollStudent(
   classId: string,
   studentId: string
 ): Promise<void> {
-  await addDoc(collection(db, `users/${uid}/enrollments`), {
+  await addDoc(collection(db, `users/${uid}/instructorData/${uid}/enrollments`), {
     classId,
     studentId,
     status: 'active',
@@ -195,7 +195,7 @@ export async function updateStudentProgress(
   progress: number
 ): Promise<void> {
   await updateDoc(
-    doc(db, `users/${uid}/enrollments`, enrollmentId),
+    doc(db, `users/${uid}/instructorData/${uid}/enrollments`, enrollmentId),
     { progress }
   );
 }
@@ -209,7 +209,7 @@ export function subscribeStudentPlan(
   callback: (plan: IStudentPlan | null) => void
 ) {
   const planId = `${classId}_${studentId}`;
-  const docRef = doc(db, `users/${uid}/curriculum`, planId);
+  const docRef = doc(db, `users/${uid}/instructorData/${uid}/curriculum`, planId);
 
   return onSnapshot(
     docRef,
@@ -237,14 +237,14 @@ export async function createStudentPlan(
   curriculum: any[] = []
 ): Promise<void> {
   const planId = `${classId}_${studentId}`;
-  await updateDoc(doc(db, `users/${uid}/curriculum`, planId), {
+  await updateDoc(doc(db, `users/${uid}/instructorData/${uid}/curriculum`, planId), {
     classId,
     studentId,
     curriculum: curriculum || [],
     createdAt: serverTimestamp(),
     updatedAt: serverTimestamp(),
   }).catch(() => {
-    return addDoc(collection(db, `users/${uid}/curriculum`), {
+    return addDoc(collection(db, `users/${uid}/instructorData/${uid}/curriculum`), {
       id: planId,
       classId,
       studentId,
@@ -263,7 +263,7 @@ export function subscribeClassGroups(
   callback: (groups: IClassGroup[]) => void
 ) {
   const q = query(
-    collection(db, `users/${uid}/groups`),
+    collection(db, `users/${uid}/instructorData/${uid}/groups`),
     where('classId', '==', classId)
   );
 
@@ -292,7 +292,7 @@ export async function createClassGroup(
   if (!name.trim()) throw new Error('Nombre de grupo requerido');
 
   const docRef = await addDoc(
-    collection(db, `users/${uid}/groups`),
+    collection(db, `users/${uid}/instructorData/${uid}/groups`),
     {
       classId,
       name,
@@ -309,7 +309,7 @@ export async function updateClassGroup(
   updates: Partial<IClassGroup>
 ): Promise<void> {
   await updateDoc(
-    doc(db, `users/${uid}/groups`, groupId),
+    doc(db, `users/${uid}/instructorData/${uid}/groups`, groupId),
     updates
   );
 }
@@ -362,7 +362,7 @@ export function subscribeInstructorCourses(
   callback: (courses: ICourse[]) => void
 ) {
   const q = query(
-    collection(db, `users/${uid}/courses`),
+    collection(db, `users/${uid}/instructorData/${uid}/courses`),
     orderBy('createdAt', 'desc')
   );
 
@@ -389,7 +389,7 @@ export async function createCourse(
   if (!courseData.title?.trim()) throw new Error('Título del curso requerido');
 
   const docRef = await addDoc(
-    collection(db, `users/${uid}/courses`),
+    collection(db, `users/${uid}/instructorData/${uid}/courses`),
     {
       ...courseData,
       lessons: courseData.lessons || [],
@@ -406,7 +406,7 @@ export async function publishCourse(
   courseId: string
 ): Promise<void> {
   await updateDoc(
-    doc(db, `users/${uid}/courses`, courseId),
+    doc(db, `users/${uid}/instructorData/${uid}/courses`, courseId),
     {
       status: 'published',
       updatedAt: serverTimestamp(),
@@ -421,7 +421,7 @@ export function subscribeInstructorDocuments(
   callback: (documents: IDocument[]) => void
 ) {
   const q = query(
-    collection(db, `users/${uid}/documents`),
+    collection(db, `users/${uid}/instructorData/${uid}/documents`),
     orderBy('uploadedAt', 'desc')
   );
 
@@ -449,7 +449,7 @@ export async function uploadDocument(
   if (!docData.url?.trim()) throw new Error('URL requerida');
 
   const docRef = await addDoc(
-    collection(db, `users/${uid}/documents`),
+    collection(db, `users/${uid}/instructorData/${uid}/documents`),
     {
       ...docData,
       sharedWith: docData.sharedWith || [],
@@ -466,7 +466,7 @@ export function subscribeInstructorPodcasts(
   callback: (podcasts: IPodcast[]) => void
 ) {
   const q = query(
-    collection(db, `users/${uid}/podcasts`),
+    collection(db, `users/${uid}/instructorData/${uid}/podcasts`),
     orderBy('createdAt', 'desc')
   );
 
@@ -493,7 +493,7 @@ export async function createPodcast(
   if (!podcastData.title?.trim()) throw new Error('Título requerido');
 
   const docRef = await addDoc(
-    collection(db, `users/${uid}/podcasts`),
+    collection(db, `users/${uid}/instructorData/${uid}/podcasts`),
     {
       ...podcastData,
       episodes: podcastData.episodes || [],
@@ -510,7 +510,7 @@ export function subscribeInstructorAnnouncements(
   callback: (announcements: IAnnouncement[]) => void
 ) {
   const q = query(
-    collection(db, `users/${uid}/announcements`),
+    collection(db, `users/${uid}/instructorData/${uid}/announcements`),
     orderBy('createdAt', 'desc')
   );
 
@@ -538,7 +538,7 @@ export async function createAnnouncement(
   if (!content.trim()) throw new Error('Contenido requerido');
 
   const docRef = await addDoc(
-    collection(db, `users/${uid}/announcements`),
+    collection(db, `users/${uid}/instructorData/${uid}/announcements`),
     {
       content,
       targetAudience,
@@ -565,7 +565,7 @@ export async function saveMotionRecognitionData(
   if (!classId) throw new Error('ID de clase requerido');
 
   await updateDoc(
-    doc(db, `users/${uid}/classes`, classId),
+    doc(db, `users/${uid}/instructorData/${uid}/classes`, classId),
     {
       motionRecognitionData: {
         events: data.events || [],
@@ -582,8 +582,16 @@ export async function getMotionRecognitionData(
   classId: string
 ): Promise<any | null> {
   try {
-    const snap = await getDoc(doc(db, `users/${uid}/classes`, classId));
-    return snap.exists() ? snap.data().motionRecognitionData || null : null;
+    const classRef = doc(db, `users/${uid}/instructorData/${uid}/classes`, classId);
+    const snap = await getDocs(collection(db, `users/${uid}/instructorData/${uid}/classes`));
+
+    for (const doc of snap.docs) {
+      if (doc.id === classId) {
+        const data = doc.data();
+        return data.motionRecognitionData || null;
+      }
+    }
+    return null;
   } catch (err) {
     console.error('Error loading motion recognition data:', err);
     return null;
@@ -595,7 +603,7 @@ export function subscribeMotionRecognitionData(
   classId: string,
   callback: (data: any | null) => void
 ) {
-  const docRef = doc(db, `users/${uid}/classes`, classId);
+  const docRef = doc(db, `users/${uid}/instructorData/${uid}/classes`, classId);
 
   return onSnapshot(
     docRef,

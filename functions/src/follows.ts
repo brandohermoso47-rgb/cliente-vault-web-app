@@ -10,6 +10,7 @@ export const onFollowCreated = onDocumentCreated(
     if (!data?.followerId || !data?.followingId) return;
     const who = await actorLabel(data.followerId);
     await notify({
+      eventId: event.id,
       userId: data.followingId,
       actorId: data.followerId,
       type: 'follow',
