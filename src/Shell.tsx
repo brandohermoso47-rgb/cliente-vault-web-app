@@ -24,6 +24,7 @@ import Support from './views/Support';
 import InstructorLocked from './views/InstructorLocked';
 import Instructor from './views/Instructor';
 import Account from './screens/Account';
+import Musica from './views/Musica';
 
 export default function Shell({ v }: { v: any }) {
   return (
@@ -53,7 +54,7 @@ export default function Shell({ v }: { v: any }) {
           </div>
         </div>
         <div onClick={v.goPerfil} style={sty(`display:flex;align-items:center;justify-content:center;gap:10px;padding:9px 12px;border-radius:999px;background:var(--glass-2);border:1px solid var(--hair);box-shadow:var(--lg-edge);cursor:pointer;${v.chromeInk ?? ""}transition:border-color .18s ease`)} className={cx(pc("hover", "border-color:color-mix(in oklch, var(--pink) 50%, transparent)"))}>
-          <div style={{"width":"34px","height":"34px","borderRadius":"50%","flex":"0 0 34px","background":"linear-gradient(135deg,var(--purple),var(--pink))"}}></div>
+          <div style={sty(v.navAvatar)}>{v.myInitial}</div>
           {v.navOpen && (
             <>
               <div style={{"minWidth":"0","flex":"1"}}>
@@ -271,7 +272,7 @@ export default function Shell({ v }: { v: any }) {
                 {"Planes & Membresía"}
               </span>
             </div>
-            <div style={sty(v.navIdle)}>
+            <div onClick={v.notifToggle} style={sty(v.navIdle)}>
               <span style={{"display":"flex","alignItems":"center","justifyContent":"center","width":"28px","height":"28px","flex":"0 0 28px","borderRadius":"9px","border":"1px solid currentColor","background":"color-mix(in oklch, currentColor 16%, transparent)"}}>
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
                   <path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"></path>
@@ -283,9 +284,13 @@ export default function Shell({ v }: { v: any }) {
                 {"Notificaciones"}
               </span>
               {' '}
-              <span style={{"fontFamily":"'Geist Mono',monospace","fontSize":"8px","fontWeight":"700","color":"#fff","background":"var(--purple)","padding":"3px 7px","borderRadius":"999px"}}>
-                {"3"}
-              </span>
+              {v.notifUnreadCount !== 0 && (
+                <>
+                  <span style={{"fontFamily":"'Geist Mono',monospace","fontSize":"8px","fontWeight":"700","color":"#fff","background":"var(--purple)","padding":"3px 7px","borderRadius":"999px"}}>
+                    {v.notifUnreadCount}
+                  </span>
+                </>
+              )}
             </div>
             <div onClick={v.goGrupos} style={sty(v.navGrupos)}>
               <span style={{"display":"flex","alignItems":"center","justifyContent":"center","width":"28px","height":"28px","flex":"0 0 28px","borderRadius":"9px","color":"var(--blue)","border":"1px solid var(--blue)","background":"color-mix(in oklch, var(--blue) 16%, transparent)"}}>
@@ -377,7 +382,11 @@ export default function Shell({ v }: { v: any }) {
                   <path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"></path>
                   <path d="M13.7 21a2 2 0 0 1-3.4 0"></path>
                 </svg>
-                <span style={{"position":"absolute","top":"7px","right":"9px","width":"6px","height":"6px","borderRadius":"50%","background":"var(--pink)"}}></span>
+                {v.notifUnreadCount !== 0 && (
+                  <>
+                    <span style={{"position":"absolute","top":"7px","right":"9px","width":"6px","height":"6px","borderRadius":"50%","background":"var(--pink)"}}></span>
+                  </>
+                )}
               </div>
               {v.notifOpen && (
                 <>
@@ -412,6 +421,13 @@ export default function Shell({ v }: { v: any }) {
                           </div>
                         </Fragment>
                       ))}
+                      {v.notifEmpty && (
+                        <>
+                          <div style={{"padding":"18px 6px","textAlign":"center","fontSize":"12px","color":"rgba(255,255,255,.55)"}}>
+                            {"Todavía no tienes notificaciones."}
+                          </div>
+                        </>
+                      )}
                     </div>
                   </div>
                 </>
@@ -494,6 +510,7 @@ export default function Shell({ v }: { v: any }) {
         {v.isInstructorLocked && <InstructorLocked v={v} />}
         {v.isInstructor && <Instructor v={v} />}
         {v.isCuenta && <Account go={v.goView} />}
+        {v.isMusica && <Musica go={v.goView} />}
         </div>
       </main>
     </div>

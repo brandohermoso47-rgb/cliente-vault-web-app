@@ -1,0 +1,10 @@
+{
+  "name": "waack-on-kit",
+  "version": "0.1.0",
+  "description": "Flujo de trabajo de Waack On (React + Vite + Firebase): regenerar src/ desde tools/, verificar, probar reglas y desplegar, y proteger los archivos GENERADO.",
+  "author": {
+    "name": "Brando Hermoso"
+  },
+  "repository": "https://github.com/brandohermoso47-rgb/cliente-vault-web-app",
+  "keywords": ["firebase", "vite", "react", "workflow"]
+}

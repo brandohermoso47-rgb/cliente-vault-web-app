@@ -173,15 +173,15 @@ export default function Feed({ v }: { v: any }) {
                 </>
               )}
               <div style={{"display":"flex","alignItems":"center","gap":"18px","padding":"14px 20px"}}>
-                <div style={{"display":"flex","alignItems":"center","gap":"7px","fontSize":"12px","fontWeight":"600","color":"var(--ink-2)","cursor":"pointer"}} className={cx(pc("hover", "color:var(--pink)"))}>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
+                <div onClick={p?.onLike} style={{"display":"flex","alignItems":"center","gap":"7px","fontSize":"12px","fontWeight":"600","color":p?.liked ? "var(--pink)" : "var(--ink-2)","cursor":p?.canInteract ? "pointer" : "default"}} className={cx(pc("hover", "color:var(--pink)"))}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill={p?.liked ? "currentColor" : "none"} stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
                     <path d="M20.8 5.6a5 5 0 0 0-7.1 0L12 7.3l-1.7-1.7a5 5 0 1 0-7.1 7.1L12 21.5l8.8-8.8a5 5 0 0 0 0-7.1Z"></path>
                   </svg>
                   {" "}
                   {p?.likes}
                   {" "}
                 </div>
-                <div style={{"display":"flex","alignItems":"center","gap":"7px","fontSize":"12px","fontWeight":"600","color":"var(--ink-2)","cursor":"pointer"}} className={cx(pc("hover", "color:var(--pink)"))}>
+                <div onClick={p?.onToggleComments} style={{"display":"flex","alignItems":"center","gap":"7px","fontSize":"12px","fontWeight":"600","color":p?.commentsOpen ? "var(--pink)" : "var(--ink-2)","cursor":p?.canInteract ? "pointer" : "default"}} className={cx(pc("hover", "color:var(--pink)"))}>
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
                     <path d="M21 12a8 8 0 0 1-11.5 7.2L3 21l1.8-6.5A8 8 0 1 1 21 12Z"></path>
                   </svg>
@@ -194,6 +194,27 @@ export default function Feed({ v }: { v: any }) {
                   {"Guardar"}
                 </div>
               </div>
+              {p?.commentsOpen && (
+                <>
+                  <div style={{"padding":"0 20px 18px","display":"flex","flexDirection":"column","gap":"10px"}}>
+                    {(p?.commentRows ?? []).map((c: any, $ci: number) => (
+                      <Fragment key={$ci}>
+                        <div style={{"fontSize":"12.5px","lineHeight":"1.5","color":"var(--ink-2)"}}>
+                          <span style={{"fontWeight":"700","color":"var(--ink)"}}>{c?.authorName || 'Alguien'}</span>
+                          {" "}
+                          {c?.text}
+                        </div>
+                      </Fragment>
+                    ))}
+                    <div style={{"display":"flex","gap":"8px"}}>
+                      <input value={p?.commentDraft} onChange={p?.onCommentChange} onKeyDown={(e: any) => { if (e.key === 'Enter') p?.onCommentSend?.(); }} placeholder="Escribe un comentario…" style={{"flex":"1","minWidth":"0","padding":"9px 12px","borderRadius":"999px","border":"1px solid var(--hair)","background":"var(--glass-2)","color":"var(--ink)","fontSize":"12px","fontFamily":"inherit","outline":"none"}} />
+                      <div onClick={p?.onCommentSend} style={{"padding":"9px 16px","borderRadius":"999px","fontSize":"11.5px","fontWeight":"700","color":"#14111A","background":"var(--pink)","cursor":"pointer","whiteSpace":"nowrap"}}>
+                        {"Enviar"}
+                      </div>
+                    </div>
+                  </div>
+                </>
+              )}
             </div>
           </Fragment>
         ))}

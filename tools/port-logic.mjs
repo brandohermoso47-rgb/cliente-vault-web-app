@@ -172,6 +172,7 @@ import { publishEbook, subscribeEbooks } from './lib/ebooks';
 import { createEvent, deleteEvent, downloadIcs, googleCalendarUrl, subscribeEvents } from './lib/events';
 import { CAPTION_LANGS, speechSupported, startCaptions, translateText, translatorSupported } from './lib/captions';
 import { checkGroupFile, cleanGroupCode, createGroup, deleteGroup, deleteMessage, joinGroup, leaveGroup, sendMessage, watchMessages, watchMyGroups } from './lib/groups';
+import { markAllNotificationsRead, markNotificationRead, watchMyNotifications, type AppNotification } from './lib/notifications';
 
 `;
 const render = `
