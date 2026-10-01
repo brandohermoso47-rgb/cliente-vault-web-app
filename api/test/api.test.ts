@@ -1,6 +1,7 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { eq } from 'drizzle-orm';
 import { schema } from '../src/db/index.js';
+import { createSpotifyState, verifySpotifyState } from '../src/routes/spotify.js';
 import { makeTestApp, tok } from './helpers.js';
 
 type T = Awaited<ReturnType<typeof makeTestApp>>;
@@ -9,6 +10,22 @@ beforeAll(async () => { t = await makeTestApp({ BOOTSTRAP_ADMIN_EMAILS: 'boss@wa
 afterAll(async () => { await t.close(); });
 
 const proApplication = { kind: 'estudio', orgName: 'Waack Academy', contactName: 'Ana Ruiz', countryCode: 'mx', city: 'CDMX', styles: 'Waacking, Punking', about: 'Academia de baile con diez años de experiencia.' };
+
+describe('estado OAuth de Spotify', () => {
+  const now = 1_800_000_000_000;
+  const state = createSpotifyState('alice', 'spotify-secret', now);
+
+  it('valida una firma vigente solo para el usuario asociado', () => {
+    expect(verifySpotifyState(state, 'alice', 'spotify-secret', now)).toBe(true);
+    expect(verifySpotifyState(state, 'bob', 'spotify-secret', now)).toBe(false);
+  });
+
+  it('rechaza estados alterados, firmados con otro secreto o expirados', () => {
+    expect(verifySpotifyState(`${state}x`, 'alice', 'spotify-secret', now)).toBe(false);
+    expect(verifySpotifyState(state, 'alice', 'another-secret', now)).toBe(false);
+    expect(verifySpotifyState(state, 'alice', 'spotify-secret', now + 600_001)).toBe(false);
+  });
+});
 
 describe('salud y autenticación', () => {
   it('health responde', async () => { expect((await t.call('GET', '/api/health')).status).toBe(200); });

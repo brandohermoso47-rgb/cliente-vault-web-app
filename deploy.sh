@@ -76,13 +76,13 @@ echo ""
 echo "🌍 Verifying Environment..."
 
 if [ "$ENVIRONMENT" = "production" ]; then
-  if [ -z "$STRIPE_SECRET_KEY" ]; then
+  if ! gcloud secrets describe stripe-secret-key --project="$PROJECT_ID" >/dev/null 2>&1; then
     error "STRIPE_SECRET_KEY not set in Secret Manager"
   else
     success "STRIPE_SECRET_KEY configured"
   fi
 
-  if [ -z "$STRIPE_WEBHOOK_SECRET" ]; then
+  if ! gcloud secrets describe stripe-webhook-secret --project="$PROJECT_ID" >/dev/null 2>&1; then
     error "STRIPE_WEBHOOK_SECRET not set in Secret Manager"
   else
     success "STRIPE_WEBHOOK_SECRET configured"
@@ -92,6 +92,12 @@ fi
 # Step 5: Deploy Backend
 echo ""
 echo "☁️ Deploying Backend to Cloud Run..."
+
+if gcloud builds submit --tag "gcr.io/$PROJECT_ID/waack-api:latest" ./api; then
+  success "Backend image built and pushed"
+else
+  error "Backend image build or push failed"
+fi
 
 if [ "$ENVIRONMENT" = "production" ]; then
   MAX_INSTANCES=10
@@ -134,8 +140,8 @@ fi
 echo ""
 echo "🌐 Deploying Frontend to Firebase Hosting..."
 
-if firebase deploy --only hosting; then
-  success "Frontend deployed to Firebase Hosting"
+if firebase deploy --only hosting,functions; then
+  success "Frontend and notification functions deployed to Firebase"
 else
   error "Frontend deployment failed"
 fi
@@ -144,7 +150,7 @@ fi
 echo ""
 echo "🔒 Deploying Security Rules..."
 
-if firebase deploy --only firestore:rules,storage; then
+if firebase deploy --only firestore:rules,firestore:indexes,storage; then
   success "Security rules deployed"
 else
   warning "Security rules deployment had issues"

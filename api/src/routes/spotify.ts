@@ -1,6 +1,6 @@
 import { eq } from 'drizzle-orm';
 import { Router } from 'express';
-import { randomBytes } from 'node:crypto';
+import { createHmac, randomBytes, timingSafeEqual } from 'node:crypto';
 import { z } from 'zod';
 import { withAuth } from '../auth.js';
 import { schema } from '../db/index.js';
@@ -21,6 +21,47 @@ const needSpotify = (deps: Deps) => {
 const basicAuth = (id: string, secret: string) => 'Basic ' + Buffer.from(`${id}:${secret}`).toString('base64');
 
 type TokenResp = { access_token: string; refresh_token?: string; expires_in: number; scope: string };
+
+const SPOTIFY_STATE_TTL_MS = 10 * 60 * 1000;
+
+export function createSpotifyState(uid: string, clientSecret: string, now = Date.now()): string {
+  const payload = Buffer.from(JSON.stringify({
+    uid,
+    nonce: randomBytes(16).toString('hex'),
+    createdAt: now,
+  })).toString('base64url');
+  const signature = createHmac('sha256', clientSecret).update(payload).digest('base64url');
+  return `${payload}.${signature}`;
+}
+
+export function verifySpotifyState(state: string, uid: string, clientSecret: string, now = Date.now()): boolean {
+  const [payload, signature, ...extra] = state.split('.');
+  if (!payload || !signature || extra.length) return false;
+
+  const expected = createHmac('sha256', clientSecret).update(payload).digest();
+  let actual: Buffer;
+  try {
+    actual = Buffer.from(signature, 'base64url');
+  } catch {
+    return false;
+  }
+  if (actual.length !== expected.length || !timingSafeEqual(actual, expected)) return false;
+
+  try {
+    const parsed = JSON.parse(Buffer.from(payload, 'base64url').toString()) as {
+      uid?: unknown;
+      nonce?: unknown;
+      createdAt?: unknown;
+    };
+    return parsed.uid === uid
+      && typeof parsed.nonce === 'string'
+      && typeof parsed.createdAt === 'number'
+      && parsed.createdAt <= now
+      && now - parsed.createdAt <= SPOTIFY_STATE_TTL_MS;
+  } catch {
+    return false;
+  }
+}
 
 async function exchangeCode(cfg: { clientId: string; clientSecret: string; redirectUri: string }, code: string): Promise<TokenResp> {
   const res = await fetch('https://accounts.spotify.com/api/token', {
@@ -56,7 +97,7 @@ export function spotifyRouter(deps: Deps) {
   // Arranca el OAuth: guarda un 'state' de un solo uso (CSRF) atado a este usuario y devuelve la URL de Spotify.
   r.get('/spotify/login', withAuth(deps), handle(deps, 'user', async ({ req }) => {
     const cfg = needSpotify(deps);
-    const state = `${req.user!.id}.${randomBytes(16).toString('hex')}`;
+    const state = createSpotifyState(req.user!.id, cfg.clientSecret);
     const url = new URL('https://accounts.spotify.com/authorize');
     url.searchParams.set('response_type', 'code');
     url.searchParams.set('client_id', cfg.clientId);
@@ -71,7 +112,9 @@ export function spotifyRouter(deps: Deps) {
   r.post('/spotify/exchange', withAuth(deps), handle(deps, 'user', async ({ req, db }) => {
     const cfg = needSpotify(deps);
     const { code, state } = parse(exchangeBody, req.body ?? {});
-    if (!state.startsWith(`${req.user!.id}.`)) throw new HttpError(400, 'spotify_state_mismatch', 'La conexión no corresponde a esta sesión.');
+    if (!verifySpotifyState(state, req.user!.id, cfg.clientSecret)) {
+      throw new HttpError(400, 'spotify_state_mismatch', 'La conexión no corresponde a esta sesión.');
+    }
     const tok = await exchangeCode(cfg, code);
     if (!tok.refresh_token) throw new HttpError(502, 'spotify_no_refresh_token', 'Spotify no devolvió un token de refresco.');
     const profile = await fetchProfile(tok.access_token);
