@@ -5,10 +5,10 @@ import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { auth, db, storage } from '../lib/firebase';
 import { IMAGE_TYPES, MAX_IMAGE_MB } from '../lib/validators';
 import { S } from './authStyles';
+import AvatarEditor from '../components/AvatarEditor';
 
 // Paso único, justo después de crear la cuenta: elegir una foto de perfil (o saltarlo por ahora).
 // La foto se puede cambiar en cualquier momento desde «Mi cuenta».
-const safe = (n: string) => n.normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^A-Za-z0-9._-]+/g, '_').slice(-80);
 
 const GRADIENTS = [
   'linear-gradient(135deg,var(--pink),var(--purple))',
@@ -26,20 +26,28 @@ export default function SetupPhoto({ go }: { go: (view: string) => void }) {
   const [busy, setBusy] = useState(false);
   const [pct, setPct] = useState<number | null>(null);
   const [err, setErr] = useState('');
+  const [editingFile, setEditingFile] = useState<File | null>(null);
   const fileInput = useRef<HTMLInputElement>(null);
 
   const done = () => go('dashboard');
 
-  const onFile = (files: FileList | null) => {
+  const onPick = (files: FileList | null) => {
     const f = files?.[0];
     if (fileInput.current) fileInput.current.value = '';
-    if (!f || !user) return;
+    if (!f) return;
     setErr('');
     if (!IMAGE_TYPES.includes(f.type)) return setErr('Formato no permitido (usa JPG, PNG, WEBP o GIF).');
     if (f.size > MAX_IMAGE_MB * 1048576) return setErr(`La foto puede pesar máx. ${MAX_IMAGE_MB} MB.`);
+    setEditingFile(f);
+  };
+
+  const onEdited = (blob: Blob) => {
+    setEditingFile(null);
+    if (!user) return;
+    const f = new File([blob], 'avatar.png', { type: 'image/png' });
     setBusy(true);
     setPct(0);
-    const path = `users/${uid}/avatar/${Date.now()}-${safe(f.name)}`;
+    const path = `users/${uid}/avatar/${Date.now()}-avatar.png`;
     const task = uploadBytesResumable(ref(storage, path), f, { contentType: f.type });
     task.on('state_changed',
       (s) => setPct((s.bytesTransferred / s.totalBytes) * 100),
@@ -77,13 +85,14 @@ export default function SetupPhoto({ go }: { go: (view: string) => void }) {
             )}
           </div>
           {err && <div style={S.err}>{err}</div>}
-          <input ref={fileInput} type="file" accept={IMAGE_TYPES.join(',')} style={{ display: 'none' }} onChange={(e) => onFile(e.target.files)} />
+          <input ref={fileInput} type="file" accept={IMAGE_TYPES.join(',')} style={{ display: 'none' }} onChange={(e) => onPick(e.target.files)} />
           <button type="button" disabled={busy} onClick={() => fileInput.current?.click()} style={{ ...S.primary, opacity: busy ? 0.6 : 1 }}>
             {busy ? 'Subiendo…' : preview ? 'Cambiar foto' : 'Subir una foto'}
           </button>
           <button type="button" onClick={done} style={{ ...S.secondary, marginTop: 2 }}>{preview ? 'Continuar' : 'Saltar por ahora'}</button>
         </div>
       </div>
+      {editingFile && <AvatarEditor file={editingFile} onCancel={() => setEditingFile(null)} onSave={onEdited} />}
     </div>
   );
 }

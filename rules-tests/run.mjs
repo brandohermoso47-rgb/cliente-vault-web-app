@@ -45,7 +45,19 @@ deny('perfil con campos desconocidos', 'create', 'users/user1', { uid: 'user1', 
 deny('bio de más de 280 caracteres', 'create', 'users/user1', { uid: 'user1', incoming: { ...validProfile, bio: 'x'.repeat(281) } });
 allow('edita su propio perfil sin tocar el rol', 'update', 'users/user1', { uid: 'user1', data: validProfile, incoming: { ...validProfile, bio: 'nueva' } });
 deny('NO puede subirse el rol a admin', 'update', 'users/user1', { uid: 'user1', data: validProfile, incoming: { ...validProfile, role: 'admin' } });
+deny('NO puede escribir billingStatus', 'update', 'users/user1', { uid: 'user1', data: validProfile, incoming: { ...validProfile, billingStatus: 'active' } });
+deny('NO puede escribir stripeCustomerId', 'update', 'users/user1', { uid: 'user1', data: validProfile, incoming: { ...validProfile, stripeCustomerId: 'cus_123' } });
+deny('NO puede escribir stripeAccountId', 'update', 'users/user1', { uid: 'user1', data: validProfile, incoming: { ...validProfile, stripeAccountId: 'acct_123' } });
+deny('NO puede escribir subscriptionTier', 'update', 'users/user1', { uid: 'user1', data: validProfile, incoming: { ...validProfile, subscriptionTier: 'premium' } });
+deny('NO puede escribir isFeaturedInstructor', 'update', 'users/user1', { uid: 'user1', data: validProfile, incoming: { ...validProfile, isFeaturedInstructor: true } });
+deny('NO puede escribir featuredPlan', 'update', 'users/user1', { uid: 'user1', data: validProfile, incoming: { ...validProfile, featuredPlan: 'annual' } });
+deny('NO puede escribir instructorSubscriptionStatus', 'update', 'users/user1', { uid: 'user1', data: validProfile, incoming: { ...validProfile, instructorSubscriptionStatus: 'active' } });
+deny('NO puede escribir subscribedInstructorIds', 'update', 'users/user1', { uid: 'user1', data: validProfile, incoming: { ...validProfile, subscribedInstructorIds: ['i1'] } });
+deny('NO puede escribir featuredExpiry', 'update', 'users/user1', { uid: 'user1', data: validProfile, incoming: { ...validProfile, featuredExpiry: '2030-01-01' } });
+deny('NO puede escribir isConnectVerified', 'update', 'users/user1', { uid: 'user1', data: validProfile, incoming: { ...validProfile, isConnectVerified: true } });
 deny('NO puede editar el perfil de otro', 'update', 'users/user2', { uid: 'user1', data: validProfile, incoming: { ...validProfile, bio: 'hackeado' } });
+deny('un admin NO puede escribir billingStatus desde el cliente', 'update', 'users/user2', { uid: 'admin1', data: validProfile, incoming: { ...validProfile, billingStatus: 'active' } });
+deny('un admin NO puede escribir stripeCustomerId desde el cliente', 'update', 'users/user2', { uid: 'admin1', data: validProfile, incoming: { ...validProfile, stripeCustomerId: 'cus_123' } });
 allow('un admin sí puede cambiar roles', 'update', 'users/user2', { uid: 'admin1', data: validProfile, incoming: { ...validProfile, role: 'instructor' } });
 // Un perfil viejo con un campo heredado (fuera de la lista actual) no debe bloquear futuras ediciones,
 // como subir la foto: solo se revisan los campos que cambian, no todo el documento.
@@ -54,6 +66,8 @@ deny('nadie borra perfiles salvo admin', 'delete', 'users/user2', { uid: 'user1'
 allow('el dueño lee su galería privada', 'get', 'users/user1/media/m1', { uid: 'user1', data: { url: 'x' } });
 deny('otro usuario NO lee la galería privada', 'get', 'users/user1/media/m1', { uid: 'user2', data: { url: 'x' } });
 deny('otro usuario NO escribe en la galería ajena', 'create', 'users/user1/media/m2', { uid: 'user2', incoming: { url: 'x' } });
+allow('el instructor lee su clase', 'get', 'users/user1/classes/c1', { uid: 'user1', data: { title: 'Clase' } });
+deny('otro usuario NO lee la clase del instructor', 'get', 'users/user1/classes/c1', { uid: 'user2', data: { title: 'Clase' } });
 
 // contenido de instructores/estudios/admin
 for (const col of ['teachers', 'lives', 'lessons', 'ebooks', 'events']) {

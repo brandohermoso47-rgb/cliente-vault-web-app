@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
+import { openBillingPortal } from '../lib/payments';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
   DollarSign, 
@@ -1222,11 +1223,9 @@ Semana 3-4 (Progresión):
   const totalSalesCount = transactions.length;
 
   const handleBecomeInstructor = () => {
-    playChime('success');
-    onUserChange({
-      ...currentUser,
-      role: 'instructor'
-    });
+    playChime('click');
+    setAlertText(language === 'es' ? 'Tu solicitud de instructor está siendo revisada. Te notificaremos cuando sea aprobada.' : 'Your instructor application is under review. We will notify you when it is approved.');
+    setTimeout(() => setAlertText(null), 4000);
   };
 
   const handleBroadcastMessage = () => {
@@ -1369,63 +1368,49 @@ Semana 3-4 (Progresión):
 
   const handleRevertToStudent = () => {
     playChime('click');
-    onUserChange({
-      ...currentUser,
-      role: 'student'
-    });
+    setAlertText(language === 'es' ? 'Los cambios de rol se procesan en el servidor.' : 'Role changes are processed by our system.');
+    setTimeout(() => setAlertText(null), 3000);
   };
 
-  const handleCancelSubscription = () => {
+  const handleCancelSubscription = async () => {
     if (window.confirm(language === 'es' ? '¿Estás seguro de que deseas desactivar tu estatus de destacado? Perderás posicionamiento prioritario en la búsqueda.' : 'Are you sure you want to deactivate your featured status? You will lose search visibility priority.')) {
       playChime('click');
-      const updatedUser = {
-        ...currentUser,
-        isFeaturedInstructor: false,
-        billingStatus: 'cancelled' as const,
-        featuredPlan: undefined,
-        featuredExpiry: undefined
-      };
-      onUserChange(updatedUser);
-      setAlertText(language === 'es' ? 'Suscripción Cancelada Exitosamente ❄️' : 'Subscription Cancelled Successfully ❄️');
-      setTimeout(() => setAlertText(null), 3000);
+
+      try {
+        await openBillingPortal();
+      } catch (error: any) {
+        setAlertText(language === 'es' ? (error?.message || 'No pudimos abrir el portal de facturación. Inténtalo de nuevo.') : 'Could not open the billing portal. Please try again.');
+        setTimeout(() => setAlertText(null), 4000);
+      }
     }
   };
 
-  const handleCheckoutSubmit = (e: React.FormEvent) => {
+  const handleCheckoutSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setCheckoutLoading(true);
     playChime('click');
-    setTimeout(() => {
-      setCheckoutLoading(false);
-      setCheckoutSuccess(true);
-      playChime('success');
-      setTimeout(() => {
-        const expiryDate = selectedPlan === 'annual' 
-          ? '2027-07-21' 
-          : selectedPlan === 'semi-annual' 
-            ? '2027-01-21' 
-            : '2026-08-21';
-            
-        const updatedUser = {
-          ...currentUser,
-          isFeaturedInstructor: true,
-          billingStatus: 'active' as const,
-          featuredPlan: selectedPlan || 'monthly',
-          featuredExpiry: expiryDate
-        };
-        onUserChange(updatedUser);
-        setIsCheckingOut(false);
-        setCheckoutSuccess(false);
-        setSelectedPlan(null);
-        setCheckoutCardName('');
-        setCheckoutCardNumber('');
-        setCheckoutCardExpiry('');
-        setCheckoutCardCVC('');
-        
-        setAlertText(language === 'es' ? '¡Estatus Destacado Activado Exitosamente! 🔥' : 'Featured Status Activated Successfully! 🔥');
+
+    try {
+      const res = await fetch('/api/billing/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ planKey: selectedPlan || 'monthly' })
+      });
+      const data = await res.json();
+
+      if (!res.ok || !data.url || data.mode !== 'stripe') {
+        setCheckoutLoading(false);
+        setAlertText(language === 'es' ? 'No pudimos abrir el pago. Inténtalo de nuevo.' : 'Could not open payment. Please try again.');
         setTimeout(() => setAlertText(null), 4000);
-      }, 1500);
-    }, 2000);
+        return;
+      }
+
+      window.location.href = data.url;
+    } catch (error) {
+      setCheckoutLoading(false);
+      setAlertText(language === 'es' ? 'Error al procesar el pago. Inténtalo de nuevo.' : 'Payment processing error. Please try again.');
+      setTimeout(() => setAlertText(null), 4000);
+    }
   };
 
   // Simulate Student Sale Action
@@ -5041,18 +5026,15 @@ Semana 3-4 (Progresión):
                     
                     {currentUser.billingStatus === 'active' ? (
                       <button
-                        onClick={() => {
+                        onClick={async () => {
                           if (window.confirm(language === 'es' ? '¿Deseas dar de baja tu estado de facturación activo? Esto desactivará tu posición destacada.' : 'Do you want to unsubscribe your active billing status? This will deactivate your featured position.')) {
                             playChime('click');
-                            onUserChange({
-                              ...currentUser,
-                              billingStatus: 'cancelled',
-                              isFeaturedInstructor: false,
-                              featuredPlan: undefined,
-                              featuredExpiry: undefined
-                            });
-                            setAlertText(language === 'es' ? 'Suscripción de facturación desactivada.' : 'Billing subscription deactivated.');
-                            setTimeout(() => setAlertText(null), 3000);
+                            try {
+                              await openBillingPortal();
+                            } catch (error: any) {
+                              setAlertText(language === 'es' ? (error?.message || 'No pudimos abrir el portal de facturación. Inténtalo de nuevo.') : 'Could not open the billing portal. Please try again.');
+                              setTimeout(() => setAlertText(null), 4000);
+                            }
                           }
                         }}
                         className="mt-4 px-3 py-1.5 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/20 rounded-xl text-[10px] font-bold transition-all text-center uppercase cursor-pointer"

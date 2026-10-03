@@ -1,0 +1,17 @@
+{
+  "description": "Bloquea la edición manual de archivos GENERADO de src/.",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/guard-generated.mjs\"",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}

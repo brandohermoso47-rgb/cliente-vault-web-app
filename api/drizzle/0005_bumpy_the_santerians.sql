@@ -14,7 +14,8 @@ CREATE TABLE "figure_events" (
 );
 --> statement-breakpoint
 ALTER TABLE "figure_events" ADD CONSTRAINT "figure_events_created_by_users_id_fk" FOREIGN KEY ("created_by") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-CREATE INDEX "figure_events_class_owner_idx" ON "figure_events" USING btree ("class_id","created_by");--> statement-breakpoint
+CREATE INDEX "figure_events_class_owner_idx" ON "figure_events" USING btree ("class_id","created_by");
+--> statement-breakpoint
 
 -- RLS: cada instructor ve y modifica solo las figuras que creó; el admin puede leerlas.
 -- Sin contexto no se ve nada. Mismo modelo que 0002_row_level_security.sql.

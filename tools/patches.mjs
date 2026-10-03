@@ -13,6 +13,7 @@ import patchesCamara from './patches-camara.mjs';
 import patchesSubtitulos from './patches-subtitulos.mjs';
 import patchesCalendario from './patches-calendario.mjs';
 import patchesStudy from './patches-study.mjs';
+import patchesNotifications from './patches-notifications.mjs';
 
 export default function patches(s) {
   const rep = (a, b) => {
@@ -23,7 +24,8 @@ export default function patches(s) {
   // Rutas que viven fuera del shell (sin barra lateral)
   rep("isApp: v !== 'login',", "isApp: !['login', 'register', 'registerInstructor', 'registerStudio', 'setupPhoto'].includes(v),\n      isRegister: v === 'register',\n      isRegisterInstructor: v === 'registerInstructor',\n      isRegisterStudio: v === 'registerStudio',\n      isSetupPhoto: v === 'setupPhoto',\n      isCuenta: v === 'cuenta',\n      goView: (view) => this.setState({ view }),\n      goRegisterPro: () => this.setState({ view: 'registerInstructor' }),");
   rep("perfil:'Mi perfil',", "perfil:'Mi perfil', cuenta:'Mi cuenta',");
-  rep("{ label: 'Mi perfil', view: 'perfil' },", "{ label: 'Mi cuenta', view: 'cuenta' },\n        { label: 'Mi perfil', view: 'perfil' },");
+  // "Mi cuenta" y "Mi perfil" son la misma persona: un solo enlace ("Mi perfil") en el menú, no dos
+  // (ver patches-notifications.mjs, que además conecta "Editar perfil" con la vista 'cuenta').
 
   // "Sign Up" del login lleva al formulario completo de registro
   rep("this.loginForm = Object.assign({}, this.loginForm, { mode: this.loginForm.mode === 'signup' ? 'login' : 'signup', error: '', info: '' });\n    this.forceUpdate();", "this.setState({ view: 'register' });");
@@ -44,5 +46,10 @@ export default function patches(s) {
   // Perfil + solicitud profesional al crearse la cuenta
   rep("if (!(await getDoc(ref)).exists()) await setDoc(ref, { email: user.email, displayName: user.displayName ?? null, role: 'usuario', createdAt: serverTimestamp() });",
       "const p = takePending();\n          const isNewAccount = !(await getDoc(ref)).exists();\n          if (isNewAccount) await setDoc(ref, { displayName: user.displayName ?? null, photoURL: user.photoURL ?? null, ...(p.profile || {}), role: 'usuario', createdAt: serverTimestamp() });\n          this.signupData = p;\n          this.isNewAccount = isNewAccount;");
-  return patchesCalendario(patchesSubtitulos(patchesCamara(patchesGrupos(patchesInstructor(patchesEbooks(patchesAnuncios(patchesStudy(patchesLives(patchesPerfil(patchesReels(patchesFeed(patchesProfile(patchesPayments(s))))))))))))));
+  const pipeline = [
+    patchesPayments, patchesProfile, patchesFeed, patchesReels, patchesPerfil, patchesLives,
+    patchesStudy, patchesAnuncios, patchesEbooks, patchesInstructor, patchesGrupos, patchesCamara,
+    patchesSubtitulos, patchesCalendario, patchesNotifications,
+  ];
+  return pipeline.reduce((str, fn) => fn(str), s);
 }

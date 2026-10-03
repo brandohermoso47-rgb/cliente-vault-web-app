@@ -93,9 +93,9 @@ export default function Cursos2({ v }: { v: any }) {
                     {l?.price}
                   </div>
                 </div>
-                <div style={{"padding":"11px 18px","borderRadius":"999px","fontSize":"12px","fontWeight":"700","color":"var(--ink)","border":"1px solid var(--hair)","background":"var(--glass)","boxShadow":"var(--lg-edge)","cursor":"pointer","whiteSpace":"nowrap"}} className={cx(pc("hover", "border-color:var(--blue)"))}>
+                <button type="button" onClick={v.goPlanes} style={{"padding":"11px 18px","borderRadius":"999px","borderWidth":"1px","font":"inherit","fontSize":"12px","fontWeight":"700","color":"var(--ink)","borderColor":"var(--hair)","background":"var(--glass)","boxShadow":"var(--lg-edge)","cursor":"pointer","whiteSpace":"nowrap"}} className={cx(pc("hover", "border-color:var(--blue)"))}>
                   {"Suscribirme"}
-                </div>
+                </button>
               </div>
             </Fragment>
           ))}

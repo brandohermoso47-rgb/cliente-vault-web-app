@@ -2,13 +2,28 @@
 // La cámara solo se muestra en la pantalla de quien la enciende: el video no se guarda ni se envía.
 // Incluye espejo, cuadrícula, congelar cuadro, espejo con retraso, análisis de movimiento aproximado
 // (src/lib/entrenar/motion.ts) y una rúbrica de 5 criterios con historial local.
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import type { CSSProperties } from 'react';
 import type { StyleDef } from '../lib/entrenar/data';
 import { analyzeMotion, PROFILE_STYLES } from '../lib/entrenar/motion';
 import type { MotionResult, MotionSample } from '../lib/entrenar/motion';
 import { glass, mono, pill, gold, field, inner, serif, readJson, writeJson } from '../lib/entrenar/ui';
 import type { T } from '../lib/entrenar/ui';
+import { usePoseTracker, type NormalizedPoint } from '../lib/entrenar/poseTracker';
+import {
+  analyzePosture,
+  emptyFocusEnergy,
+  frameFocusEnergy,
+  isPersonDetected,
+  pickCreativeIdea,
+  totalEnergy,
+  type CreativeIdea,
+  type PostureTipKey
+} from '../lib/entrenar/freestyleCoach';
+
+const TIP_COOLDOWN_MS = 5000;
+const LOW_ENERGY_STREAK_MS = 6000;
+interface LiveTip { id: string; key: PostureTipKey; text: string }
 
 const KEY = 'waack-entrenar-evals';
 const AW = 64, AH = 48, ANALYSIS_SECS = 30;
@@ -30,6 +45,10 @@ export default function EntrenarCamara({ t, styles, styleId, bpm }: { t: T; styl
   const ctxRef = useRef<AudioContext | null>(null);
   const metroRef = useRef(true);
   const anRef = useRef<{ samples: MotionSample[]; prev: Uint8Array | null; t0: number; nextBeat: number; beatN: number; off: HTMLCanvasElement; left: number } | null>(null);
+  const prevPoseLandmarksRef = useRef<NormalizedPoint[] | null>(null);
+  const focusEnergyRef = useRef(emptyFocusEnergy());
+  const lowEnergySinceRef = useRef<number | null>(null);
+  const lastTipAtRef = useRef<Record<string, number>>({});
 
   const [on, setOn] = useState(false);
   const [err, setErr] = useState(false);
@@ -48,9 +67,55 @@ export default function EntrenarCamara({ t, styles, styleId, bpm }: { t: T; styl
   const [result, setResult] = useState<MotionResult | null>(null);
   const [noData, setNoData] = useState(false);
   const [needCam, setNeedCam] = useState(false);
+  const [aiTips, setAiTips] = useState<LiveTip[]>([]);
+  const [aiIdea, setAiIdea] = useState<CreativeIdea>(() => pickCreativeIdea(emptyFocusEnergy()));
+  const [personDetected, setPersonDetected] = useState(false);
 
   metroRef.current = metro;
   const cur = styles.find((s) => s.id === evStyle) ?? styles[0];
+
+  const rollNewIdea = useCallback(() => {
+    setAiIdea(pickCreativeIdea(focusEnergyRef.current));
+    focusEnergyRef.current = emptyFocusEnergy();
+    lowEnergySinceRef.current = null;
+  }, []);
+
+  const pushAiTip = useCallback((key: PostureTipKey, text: string) => {
+    const now = Date.now();
+    if (now - (lastTipAtRef.current[key] || 0) < TIP_COOLDOWN_MS) return;
+    lastTipAtRef.current[key] = now;
+    setAiTips((prev) => [{ id: `${key}-${now}`, key, text }, ...prev].slice(0, 4));
+  }, []);
+
+  const handlePoseFrame = useCallback((landmarks: NormalizedPoint[] | null) => {
+    const detected = isPersonDetected(landmarks);
+    setPersonDetected(detected);
+    if (!detected || !landmarks) {
+      prevPoseLandmarksRef.current = null;
+      return;
+    }
+
+    for (const tip of analyzePosture(landmarks)) pushAiTip(tip.key, tip.text);
+
+    const prev = prevPoseLandmarksRef.current;
+    if (prev) {
+      const frameEnergy = frameFocusEnergy(landmarks, prev);
+      (Object.keys(frameEnergy) as (keyof typeof frameEnergy)[]).forEach((k) => {
+        focusEnergyRef.current[k] += frameEnergy[k];
+      });
+
+      const energy = totalEnergy(landmarks, prev);
+      if (energy * 800 <= 12) {
+        if (!lowEnergySinceRef.current) lowEnergySinceRef.current = Date.now();
+        else if (Date.now() - lowEnergySinceRef.current > LOW_ENERGY_STREAK_MS) rollNewIdea();
+      } else {
+        lowEnergySinceRef.current = null;
+      }
+    }
+    prevPoseLandmarksRef.current = landmarks;
+  }, [pushAiTip, rollNewIdea]);
+
+  const { status: poseStatus, error: poseError } = usePoseTracker(videoRef, on, handlePoseFrame);
 
   /* ---------- cámara ---------- */
   const draw = () => {
@@ -98,6 +163,11 @@ export default function EntrenarCamara({ t, styles, styleId, bpm }: { t: T; styl
     clearRing(); frozenRef.current = false; setFrozen(false); setOn(false);
     const c = canvasRef.current;
     c?.getContext('2d')?.clearRect(0, 0, c.width, c.height);
+    prevPoseLandmarksRef.current = null;
+    focusEnergyRef.current = emptyFocusEnergy();
+    lowEnergySinceRef.current = null;
+    setAiTips([]);
+    setPersonDetected(false);
   };
   const toggleFreeze = () => { if (!on) return; frozenRef.current = !frozenRef.current; setFrozen(frozenRef.current); };
   const changeDelay = (n: number) => { delayRef.current = n; setDelay(n); clearRing(); };
@@ -245,6 +315,45 @@ export default function EntrenarCamara({ t, styles, styleId, bpm }: { t: T; styl
                   {PROFILE_STYLES[result.profile].includes(evStyle) ? t('an_match', { name: cur.name }) : t('an_nomatch', { name: cur.name })}
                 </div>
                 <div><button style={pill} onClick={applySuggestion}>{t('an_apply')}</button></div>
+              </div>
+            )}
+          </div>
+
+          <div style={{ borderTop: '1px solid var(--hair-soft)', marginTop: 16, paddingTop: 14 }}>
+            <div style={{ ...serif, fontSize: 19 }}>{t('ai_h')}</div>
+            <p style={{ margin: '4px 0 10px', fontSize: 12.5, color: 'var(--ink-3)' }}>{t('ai_lead')}</p>
+
+            {!on && <p style={{ fontSize: 13, color: 'var(--ink-2)' }}>{t('an_need')}</p>}
+
+            {on && poseStatus === 'loading-models' && (
+              <p role="status" style={mono}>{t('ai_loading')}</p>
+            )}
+            {on && poseStatus === 'error' && (
+              <p style={{ fontSize: 13, color: 'var(--ink-2)' }}>{poseError || t('ai_error')}</p>
+            )}
+            {on && poseStatus === 'ready' && !personDetected && (
+              <p style={{ fontSize: 13, color: 'var(--ink-2)' }}>{t('ai_no_person')}</p>
+            )}
+
+            {on && poseStatus === 'ready' && (
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(240px,1fr))', gap: 12, marginTop: 8 }}>
+                <div>
+                  <div style={mono}>{t('ai_tips_h')}</div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 6, marginTop: 6, minHeight: 40 }}>
+                    {aiTips.length === 0 && <p style={{ margin: 0, fontSize: 12.5, color: 'var(--ink-3)' }}>{t('ai_tips_empty')}</p>}
+                    {aiTips.map((tip) => (
+                      <div key={tip.id} style={{ ...inner, background: 'var(--glass-2)' }}>{tip.text}</div>
+                    ))}
+                  </div>
+                </div>
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>
+                    <div style={mono}>{t('ai_idea_h')}</div>
+                    <button style={pill} onClick={rollNewIdea}>{t('ai_idea_new')}</button>
+                  </div>
+                  <div style={{ ...inner, background: 'var(--glass-2)', marginTop: 6 }}>{aiIdea.text}</div>
+                  <p style={{ margin: '6px 0 0', fontSize: 11.5, color: 'var(--ink-3)' }}>{t('ai_idea_hint')}</p>
+                </div>
               </div>
             )}
           </div>
