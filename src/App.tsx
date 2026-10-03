@@ -14,7 +14,7 @@ import Register from './screens/Register';
 import RegisterPro from './screens/RegisterPro';
 import SetupPhoto from './screens/SetupPhoto';
 import { takePending } from './lib/session';
-import { startCheckout, startConnectOnboarding, getInstructorEarnings } from './lib/payments';
+import { startCheckout, startConnectOnboarding, getInstructorEarnings, openBillingPortal } from './lib/payments';
 import { api } from './lib/api';
 import { acceptFriend, declineFriend, myFriendIds, removeFriend, sendFriendRequest } from './lib/friends';
 import { publishPost, subscribeFeed } from './lib/posts';
@@ -425,6 +425,25 @@ class App extends Component<any, any> {
     } catch (e) {
       this.planBusy = false;
       this.planMsg = e.message || 'No se pudo abrir el pago.';
+      this.forceUpdate();
+    }
+  }
+
+  // "Ver facturas" / "Cambiar tarjeta": antes eran <span> sin onClick, decorativos,
+  // junto a un número de tarjeta y fecha de cargo fijos en la plantilla (no venían de
+  // ningún dato real). Ambas acciones las resuelve el Portal de Clientes de Stripe
+  // (facturas reales + cambio de tarjeta en un solo lugar), ya implementado en
+  // lib/payments.ts pero sin usar en ningún botón.
+  async openBilling() {
+    if (this.planBusy) return;
+    this.planBusy = true;
+    this.planMsg = 'Abriendo tu portal de facturación…';
+    this.forceUpdate();
+    try {
+      await openBillingPortal();
+    } catch (e) {
+      this.planBusy = false;
+      this.planMsg = e.message || 'No se pudo abrir el portal de facturación.';
       this.forceUpdate();
     }
   }
@@ -3260,6 +3279,8 @@ class App extends Component<any, any> {
       roleLine: 'font-family:"Geist Mono",monospace;font-size:9px;margin-top:3px;color:' + this.role().color,
       hasPlatform: this.subs.platform,
       hasInstructor: this.subs.instructor,
+      hasActiveBilling: this.subs.platform || this.subs.instructor,
+      openBilling: () => this.openBilling(),
       togglePlatform: () => this.toggleSub('platform'),
       toggleInstructor: () => this.toggleSub('instructor'),
       subPlatformStyle: 'display:flex;align-items:center;gap:10px;padding:13px 16px;border-radius:18px;cursor:pointer;font-size:13px;font-weight:600;transition:border-color .2s ease;border:1px solid ' + (this.subs.platform ? 'color-mix(in oklch, var(--purple) 60%, transparent)' : 'var(--hair)') + ';background:var(--glass-2);color:' + (this.subs.platform ? 'var(--ink)' : 'var(--ink-2)'),
