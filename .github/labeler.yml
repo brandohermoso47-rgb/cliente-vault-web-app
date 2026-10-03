@@ -1,0 +1,13 @@
+javascript:
+  - '**/*.js'
+  - '**/*.jsx'
+  - '**/*.ts'
+  - '**/*.tsx'
+
+dependencies:
+  - '**/package.json'
+  - '**/package-lock.json'
+
+documentation:
+  - '**/*.md'
+  - 'docs/**'
