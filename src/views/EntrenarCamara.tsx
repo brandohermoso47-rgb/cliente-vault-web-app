@@ -20,6 +20,8 @@ import {
   type CreativeIdea,
   type PostureTipKey
 } from '../lib/entrenar/freestyleCoach';
+import { PoseOneEuroFilter, BoneLengthGuard } from '../lib/entrenar/poseSmoothing';
+import { computeJointAngles, BONE_PAIRS, type JointAngles } from '../lib/entrenar/jointAngles';
 
 const TIP_COOLDOWN_MS = 5000;
 const LOW_ENERGY_STREAK_MS = 6000;
@@ -49,6 +51,9 @@ export default function EntrenarCamara({ t, styles, styleId, bpm }: { t: T; styl
   const focusEnergyRef = useRef(emptyFocusEnergy());
   const lowEnergySinceRef = useRef<number | null>(null);
   const lastTipAtRef = useRef<Record<string, number>>({});
+  const boneGuardRef = useRef(new BoneLengthGuard(BONE_PAIRS));
+  const oneEuroRef = useRef(new PoseOneEuroFilter());
+  const smoothedLandmarksRef = useRef<NormalizedPoint[] | null>(null);
 
   const [on, setOn] = useState(false);
   const [err, setErr] = useState(false);
@@ -70,6 +75,8 @@ export default function EntrenarCamara({ t, styles, styleId, bpm }: { t: T; styl
   const [aiTips, setAiTips] = useState<LiveTip[]>([]);
   const [aiIdea, setAiIdea] = useState<CreativeIdea>(() => pickCreativeIdea(emptyFocusEnergy()));
   const [personDetected, setPersonDetected] = useState(false);
+  const [jointAngles, setJointAngles] = useState<JointAngles | null>(null);
+  const [showAngles, setShowAngles] = useState(true);
 
   metroRef.current = metro;
   const cur = styles.find((s) => s.id === evStyle) ?? styles[0];
@@ -89,11 +96,31 @@ export default function EntrenarCamara({ t, styles, styleId, bpm }: { t: T; styl
 
   const handlePoseFrame = useCallback((landmarks: NormalizedPoint[] | null) => {
     const detected = isPersonDetected(landmarks);
+    const wasDetected = personDetected;
     setPersonDetected(detected);
     if (!detected || !landmarks) {
       prevPoseLandmarksRef.current = null;
+      smoothedLandmarksRef.current = null;
+      oneEuroRef.current = new PoseOneEuroFilter();
+      boneGuardRef.current = new BoneLengthGuard(BONE_PAIRS);
+      setJointAngles(null);
       return;
     }
+    // Si la persona recién reingresa al cuadro, arrancar con estado de filtro limpio
+    // en vez de arrastrar velocidad/referencias de antes de haber salido del cuadro.
+    if (!wasDetected) {
+      smoothedLandmarksRef.current = null;
+      oneEuroRef.current = new PoseOneEuroFilter();
+      boneGuardRef.current = new BoneLengthGuard(BONE_PAIRS);
+    }
+
+    const guarded = boneGuardRef.current.apply(landmarks, smoothedLandmarksRef.current);
+    const t = videoRef.current?.currentTime ?? performance.now() / 1000;
+    const smoothed = oneEuroRef.current.filter(guarded, t);
+    smoothedLandmarksRef.current = smoothed;
+    const v = videoRef.current;
+    const aspectRatio = v?.videoWidth && v?.videoHeight ? v.videoWidth / v.videoHeight : 1;
+    setJointAngles(computeJointAngles(smoothed, aspectRatio));
 
     for (const tip of analyzePosture(landmarks)) pushAiTip(tip.key, tip.text);
 
@@ -113,7 +140,7 @@ export default function EntrenarCamara({ t, styles, styleId, bpm }: { t: T; styl
       }
     }
     prevPoseLandmarksRef.current = landmarks;
-  }, [pushAiTip, rollNewIdea]);
+  }, [pushAiTip, rollNewIdea, personDetected]);
 
   const { status: poseStatus, error: poseError } = usePoseTracker(videoRef, on, handlePoseFrame);
 
@@ -126,7 +153,7 @@ export default function EntrenarCamara({ t, styles, styleId, bpm }: { t: T; styl
     if (!cx) return;
     if (v.videoWidth && c.width !== v.videoWidth) { c.width = v.videoWidth; c.height = v.videoHeight; }
     const d = delayRef.current, now = performance.now();
-    if (d === 0) { cx.drawImage(v, 0, 0, c.width, c.height); return; }
+    if (d === 0) { cx.drawImage(v, 0, 0, c.width, c.height); drawSkeleton(cx, c.width, c.height); return; }
     if (now - lastRef.current > 66 && typeof createImageBitmap === 'function') {
       lastRef.current = now;
       createImageBitmap(v, { resizeWidth: 320 }).then((b) => ringRef.current.push({ t: now, b })).catch(() => {});
@@ -135,6 +162,25 @@ export default function EntrenarCamara({ t, styles, styleId, bpm }: { t: T; styl
     while (ring.length > 1 && ring[1].t <= target) ring.shift()!.b.close();
     const f = ring[0];
     if (f && f.t <= target + 100) cx.drawImage(f.b, 0, 0, c.width, c.height);
+    // No se dibuja el esqueleto acá: el cuadro mostrado tiene 1-6s de retraso pero los
+    // landmarks suavizados son siempre los del video en vivo, así que se verían
+    // desalineados con la pose real del cuadro congelado/retrasado.
+  };
+  const drawSkeleton = (cx: CanvasRenderingContext2D, w: number, h: number) => {
+    const lm = smoothedLandmarksRef.current;
+    if (!lm) return;
+    cx.save();
+    cx.strokeStyle = 'rgba(255,214,0,0.85)';
+    cx.lineWidth = 2;
+    for (const [a, b] of BONE_PAIRS) {
+      const pa = lm[a], pb = lm[b];
+      if (!pa || !pb) continue;
+      cx.beginPath();
+      cx.moveTo(pa.x * w, pa.y * h);
+      cx.lineTo(pb.x * w, pb.y * h);
+      cx.stroke();
+    }
+    cx.restore();
   };
   const clearRing = () => { ringRef.current.forEach((f) => { try { f.b.close(); } catch { /* ya cerrado */ } }); ringRef.current = []; };
 
@@ -164,10 +210,14 @@ export default function EntrenarCamara({ t, styles, styleId, bpm }: { t: T; styl
     const c = canvasRef.current;
     c?.getContext('2d')?.clearRect(0, 0, c.width, c.height);
     prevPoseLandmarksRef.current = null;
+    smoothedLandmarksRef.current = null;
+    oneEuroRef.current = new PoseOneEuroFilter();
+    boneGuardRef.current = new BoneLengthGuard(BONE_PAIRS);
     focusEnergyRef.current = emptyFocusEnergy();
     lowEnergySinceRef.current = null;
     setAiTips([]);
     setPersonDetected(false);
+    setJointAngles(null);
   };
   const toggleFreeze = () => { if (!on) return; frozenRef.current = !frozenRef.current; setFrozen(frozenRef.current); };
   const changeDelay = (n: number) => { delayRef.current = n; setDelay(n); clearRing(); };
@@ -287,7 +337,21 @@ export default function EntrenarCamara({ t, styles, styleId, bpm }: { t: T; styl
             <button style={{ ...pill, opacity: on ? 1 : 0.5 }} disabled={!on} onClick={toggleFreeze}>{frozen ? t('cam_unfreeze') : t('cam_freeze')}</button>
             <label style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, color: 'var(--ink-2)' }}><input type="checkbox" checked={mirror} onChange={(e) => setMirror(e.target.checked)} /> {t('cam_mirror')}</label>
             <label style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, color: 'var(--ink-2)' }}><input type="checkbox" checked={grid} onChange={(e) => setGrid(e.target.checked)} /> {t('cam_grid')}</label>
+            <label style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, color: 'var(--ink-2)' }}><input type="checkbox" checked={showAngles} onChange={(e) => setShowAngles(e.target.checked)} /> Ángulos</label>
           </div>
+          {on && showAngles && personDetected && jointAngles && (
+            <div style={{ ...inner, background: 'var(--glass-2)', marginTop: 10, display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(110px,1fr))', gap: '4px 12px', fontFamily: "'Geist Mono',monospace", fontSize: 12.5 }}>
+              <span>Codo Izq {Math.round(jointAngles.leftElbow)}°</span>
+              <span>Codo Der {Math.round(jointAngles.rightElbow)}°</span>
+              <span>Hombro Izq {Math.round(jointAngles.leftShoulder)}°</span>
+              <span>Hombro Der {Math.round(jointAngles.rightShoulder)}°</span>
+              <span>Cadera Izq {Math.round(jointAngles.leftHip)}°</span>
+              <span>Cadera Der {Math.round(jointAngles.rightHip)}°</span>
+              <span>Rodilla Izq {Math.round(jointAngles.leftKnee)}°</span>
+              <span>Rodilla Der {Math.round(jointAngles.rightKnee)}°</span>
+              <span>Columna {Math.round(jointAngles.spineTilt)}°</span>
+            </div>
+          )}
           <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap', marginTop: 10 }}>
             <label htmlFor="ent-delay" style={mono}>{t('cam_delay')}</label>
             <input id="ent-delay" type="range" min={0} max={6} step={1} value={delay} onChange={(e) => changeDelay(+e.target.value)} style={{ maxWidth: 220, accentColor: 'var(--blue)' }} />
