@@ -3390,16 +3390,13 @@ Semana 3-4 (Progresión):
                             <div className="flex items-center gap-2">
                               {safeFileUrl && (
                                 <>
-                                  <a
-                                    href={safeFileUrl}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    download={doc.fileName || true}
+                                  <button
+                                    onClick={() => window.open(safeFileUrl, '_blank', 'noopener,noreferrer')}
                                     className="px-3.5 py-1.5 rounded-xl bg-[#E9C349] text-black font-black uppercase text-[10px] hover:bg-[#d8b33c] transition-all flex items-center gap-1.5 shadow active:scale-95 cursor-pointer"
                                   >
                                     <Download className="w-3.5 h-3.5" />
                                     <span>Descargar PDF</span>
-                                  </a>
+                                  </button>
 
                                   <button
                                     onClick={() => {
