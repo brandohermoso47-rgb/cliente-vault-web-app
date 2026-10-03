@@ -2396,16 +2396,18 @@
               </sc-for>
             </div>
 
+            <sc-if value="{{ hasActiveBilling }}">
             <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 22px;border-radius:22px;border:1px solid var(--hair);background:var(--glass);backdrop-filter:var(--lg-blur);-webkit-backdrop-filter:var(--lg-blur);box-shadow:var(--lg-edge);flex-wrap:wrap">
               <div>
-                <div style="font-size:14px;font-weight:700;color:var(--ink)">Método de pago · VISA ···· 4417</div>
-                <div style="font-family:'Geist Mono',monospace;font-size:10px;color:var(--ink-3);margin-top:5px">Próximo cargo: 12 oct 2026 · 19,00 €</div>
+                <div style="font-size:14px;font-weight:700;color:var(--ink)">Facturación</div>
+                <div style="font-family:'Geist Mono',monospace;font-size:10px;color:var(--ink-3);margin-top:5px">Gestiona tu método de pago y descarga tus facturas en el portal seguro de Stripe.</div>
               </div>
               <div style="display:flex;gap:10px;flex-wrap:wrap">
-                <span style="padding:11px 18px;border-radius:999px;font-size:12px;font-weight:600;color:var(--ink-2);border:1px solid var(--hair);background:var(--glass-2);cursor:pointer;white-space:nowrap" style-hover="color:var(--ink)">Ver facturas</span>
-                <span style="padding:11px 18px;border-radius:999px;font-size:12px;font-weight:600;color:var(--ink-2);border:1px solid var(--hair);background:var(--glass-2);cursor:pointer;white-space:nowrap" style-hover="color:var(--ink)">Cambiar tarjeta</span>
+                <span onClick="{{ openBilling }}" style="padding:11px 18px;border-radius:999px;font-size:12px;font-weight:600;color:var(--ink-2);border:1px solid var(--hair);background:var(--glass-2);cursor:pointer;white-space:nowrap" style-hover="color:var(--ink)">Ver facturas</span>
+                <span onClick="{{ openBilling }}" style="padding:11px 18px;border-radius:999px;font-size:12px;font-weight:600;color:var(--ink-2);border:1px solid var(--hair);background:var(--glass-2);cursor:pointer;white-space:nowrap" style-hover="color:var(--ink)">Cambiar tarjeta</span>
               </div>
             </div>
+            </sc-if>
           </div>
         </sc-if>
 
