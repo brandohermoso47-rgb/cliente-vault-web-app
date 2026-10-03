@@ -118,7 +118,9 @@ export default function EntrenarCamara({ t, styles, styleId, bpm }: { t: T; styl
     const t = videoRef.current?.currentTime ?? performance.now() / 1000;
     const smoothed = oneEuroRef.current.filter(guarded, t);
     smoothedLandmarksRef.current = smoothed;
-    setJointAngles(computeJointAngles(smoothed));
+    const v = videoRef.current;
+    const aspectRatio = v?.videoWidth && v?.videoHeight ? v.videoWidth / v.videoHeight : 1;
+    setJointAngles(computeJointAngles(smoothed, aspectRatio));
 
     for (const tip of analyzePosture(landmarks)) pushAiTip(tip.key, tip.text);
 
@@ -160,7 +162,9 @@ export default function EntrenarCamara({ t, styles, styleId, bpm }: { t: T; styl
     while (ring.length > 1 && ring[1].t <= target) ring.shift()!.b.close();
     const f = ring[0];
     if (f && f.t <= target + 100) cx.drawImage(f.b, 0, 0, c.width, c.height);
-    drawSkeleton(cx, c.width, c.height);
+    // No se dibuja el esqueleto acá: el cuadro mostrado tiene 1-6s de retraso pero los
+    // landmarks suavizados son siempre los del video en vivo, así que se verían
+    // desalineados con la pose real del cuadro congelado/retrasado.
   };
   const drawSkeleton = (cx: CanvasRenderingContext2D, w: number, h: number) => {
     const lm = smoothedLandmarksRef.current;

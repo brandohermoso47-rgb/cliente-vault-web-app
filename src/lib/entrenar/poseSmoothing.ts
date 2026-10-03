@@ -86,8 +86,14 @@ export class PoseOneEuroFilter {
  * de descartar el cuerpo entero. Corre antes del filtro de suavizado para que un frame malo
  * no contamine su estimación de velocidad.
  */
+// Cantidad de frames con desviación sostenida tras los que se asume que el cambio de largo
+// es real (ej. un brazo que gira hacia la cámara y se escorza) y no un glitch de tracking,
+// recalibrando la referencia en vez de congelar la articulación para siempre.
+const RECOVERY_FRAMES = 8;
+
 export class BoneLengthGuard {
   private refLengths = new Map<string, number>();
+  private rejectStreak = new Map<string, number>();
 
   constructor(
     private bonePairs: ReadonlyArray<readonly [number, number]>,
@@ -96,21 +102,44 @@ export class BoneLengthGuard {
   ) {}
 
   apply(current: NormalizedPoint[], previous: NormalizedPoint[] | null): NormalizedPoint[] {
-    if (!previous) return current;
     const out = current.slice();
     for (const [a, b] of this.bonePairs) {
-      if (!current[a] || !current[b] || !previous[b]) continue;
+      if (!current[a] || !current[b]) continue;
       const key = `${a}-${b}`;
-      const d = distance(current[a], current[b]);
+      // Se mide contra `out`, no contra `current`: así un extremo ya congelado por un
+      // par procesado antes (ej. codo congelado al validar hombro-codo) se respeta al
+      // validar el siguiente par que lo usa (ej. codo-muñeca), en vez de validar la
+      // muñeca contra la posición cruda (potencialmente también implausible) del codo.
+      const d = distance(out[a], out[b]);
       const ref = this.refLengths.get(key);
       if (ref === undefined) {
+        // Primer frame visto para este hueso: no hay con qué comparar todavía,
+        // se toma como referencia inicial en vez de saltearlo sin validar.
         this.refLengths.set(key, d);
+        continue;
+      }
+      if (!previous || !previous[b]) {
+        this.refLengths.set(key, ref * (1 - this.refAlpha) + d * this.refAlpha);
         continue;
       }
       const deviation = Math.abs(d - ref) / ref;
       if (deviation > this.tolerance) {
-        out[b] = previous[b];
+        const streak = (this.rejectStreak.get(key) ?? 0) + 1;
+        if (streak >= RECOVERY_FRAMES) {
+          // El cambio de largo persiste demasiado para ser un glitch puntual: se acepta
+          // como nueva referencia (ej. el bailarín giró el brazo hacia la cámara) en vez
+          // de dejar la articulación congelada indefinidamente.
+          this.refLengths.set(key, d);
+          this.rejectStreak.set(key, 0);
+        } else {
+          this.rejectStreak.set(key, streak);
+          // Se congela la posición, pero se conserva la confianza (visibility) actual:
+          // si MediaPipe ya reporta baja confianza en este punto, esa señal no debe
+          // taparse con la confianza vieja del frame anterior.
+          out[b] = { ...previous[b], visibility: current[b]?.visibility ?? previous[b].visibility };
+        }
       } else {
+        this.rejectStreak.set(key, 0);
         this.refLengths.set(key, ref * (1 - this.refAlpha) + d * this.refAlpha);
       }
     }

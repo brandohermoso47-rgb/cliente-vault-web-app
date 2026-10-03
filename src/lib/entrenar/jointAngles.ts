@@ -20,12 +20,22 @@ export interface JointAngles {
   spineTilt: number; // grados de inclinación respecto a la vertical
 }
 
+/** Resto no negativo, a diferencia de `%` de JS que preserva el signo del operando. */
+function mod(x: number, n: number): number {
+  return ((x % n) + n) % n;
+}
+
 /**
  * Calcula los ángulos articulares del frame actual, o null si no hay suficiente
  * confianza en los puntos necesarios (evita dibujar ángulos basura sobre
  * articulaciones que MediaPipe está adivinando por oclusión).
+ *
+ * `aspectRatio` (ancho/alto del video) corrige que MediaPipe normaliza x e y por
+ * separado (por ancho y alto de imagen respectivamente): si el video no es cuadrado,
+ * un ángulo recto real se ve distorsionado si se calcula directo sobre x,y normalizados
+ * 0-1. Multiplicar x por el aspect ratio antes de medir ángulos deshace esa distorsión.
  */
-export function computeJointAngles(lm: NormalizedPoint[]): JointAngles | null {
+export function computeJointAngles(lm: NormalizedPoint[], aspectRatio: number = 1): JointAngles | null {
   const need = [
     IDX.leftShoulder, IDX.rightShoulder,
     IDX.leftElbow, IDX.rightElbow,
@@ -36,22 +46,30 @@ export function computeJointAngles(lm: NormalizedPoint[]): JointAngles | null {
   ];
   if (need.some((i) => (lm[i]?.visibility ?? 0) < MIN_VISIBILITY)) return null;
 
-  const midShoulder = midpoint(lm[IDX.leftShoulder], lm[IDX.rightShoulder]);
-  const midHip = midpoint(lm[IDX.leftHip], lm[IDX.rightHip]);
+  const ar = (p: NormalizedPoint) => ({ x: p.x * aspectRatio, y: p.y });
+  const shoulderL = ar(lm[IDX.leftShoulder]), shoulderR = ar(lm[IDX.rightShoulder]);
+  const elbowL = ar(lm[IDX.leftElbow]), elbowR = ar(lm[IDX.rightElbow]);
+  const wristL = ar(lm[IDX.leftWrist]), wristR = ar(lm[IDX.rightWrist]);
+  const hipL = ar(lm[IDX.leftHip]), hipR = ar(lm[IDX.rightHip]);
+  const kneeL = ar(lm[IDX.leftKnee]), kneeR = ar(lm[IDX.rightKnee]);
+  const ankleL = ar(lm[IDX.leftAnkle]), ankleR = ar(lm[IDX.rightAnkle]);
+
+  const midShoulder = midpoint(shoulderL, shoulderR);
+  const midHip = midpoint(hipL, hipR);
   // lineAngle: 0°=derecha, 90°=abajo (coordenadas de imagen, y crece hacia abajo).
   // Una columna erguida (cadera -> hombro, hacia arriba en la imagen) da ~270°.
   const spineLineAngle = lineAngle(midHip, midShoulder);
-  const spineTilt = Math.abs(((spineLineAngle - 270 + 180) % 360) - 180);
+  const spineTilt = Math.abs(mod(spineLineAngle - 270 + 180, 360) - 180);
 
   return {
-    leftElbow: angleBetweenPoints(lm[IDX.leftShoulder], lm[IDX.leftElbow], lm[IDX.leftWrist]),
-    rightElbow: angleBetweenPoints(lm[IDX.rightShoulder], lm[IDX.rightElbow], lm[IDX.rightWrist]),
-    leftShoulder: angleBetweenPoints(lm[IDX.leftHip], lm[IDX.leftShoulder], lm[IDX.leftElbow]),
-    rightShoulder: angleBetweenPoints(lm[IDX.rightHip], lm[IDX.rightShoulder], lm[IDX.rightElbow]),
-    leftKnee: angleBetweenPoints(lm[IDX.leftHip], lm[IDX.leftKnee], lm[IDX.leftAnkle]),
-    rightKnee: angleBetweenPoints(lm[IDX.rightHip], lm[IDX.rightKnee], lm[IDX.rightAnkle]),
-    leftHip: angleBetweenPoints(lm[IDX.leftShoulder], lm[IDX.leftHip], lm[IDX.leftKnee]),
-    rightHip: angleBetweenPoints(lm[IDX.rightShoulder], lm[IDX.rightHip], lm[IDX.rightKnee]),
+    leftElbow: angleBetweenPoints(shoulderL, elbowL, wristL),
+    rightElbow: angleBetweenPoints(shoulderR, elbowR, wristR),
+    leftShoulder: angleBetweenPoints(hipL, shoulderL, elbowL),
+    rightShoulder: angleBetweenPoints(hipR, shoulderR, elbowR),
+    leftKnee: angleBetweenPoints(hipL, kneeL, ankleL),
+    rightKnee: angleBetweenPoints(hipR, kneeR, ankleR),
+    leftHip: angleBetweenPoints(shoulderL, hipL, kneeL),
+    rightHip: angleBetweenPoints(shoulderR, hipR, kneeR),
     spineTilt
   };
 }
