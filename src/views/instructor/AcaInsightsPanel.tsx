@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { motion, type Variants } from 'motion/react';
+import { motion, MotionConfig, type Variants } from 'motion/react';
 import { Sparkles, MessageSquareWarning, TrendingUp, Users2, Wallet2, Check } from 'lucide-react';
 
 interface InsightsStudent {
@@ -141,6 +141,7 @@ export default function AcaInsightsPanel({ students, onMessageStudent }: AcaInsi
   ];
 
   return (
+    <MotionConfig reducedMotion="user">
     <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
       {/* Resumen IA */}
       <motion.div
@@ -312,5 +313,6 @@ export default function AcaInsightsPanel({ students, onMessageStudent }: AcaInsi
         </div>
       </motion.div>
     </div>
+    </MotionConfig>
   );
 }

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence, MotionConfig } from 'motion/react';
 import { Sparkles, Flame, Trophy, Radio, Check, type LucideIcon } from 'lucide-react';
 
 interface Level {
@@ -99,12 +99,14 @@ export default function NivelesPanel({ students, onSave }: NivelesPanelProps) {
   };
 
   return (
+    <MotionConfig reducedMotion="user">
     <div style={{ display: 'flex', flexDirection: 'column', gap: 18, maxWidth: 640 }}>
       <div>
-        <label style={{ display: 'block', fontFamily: "'Geist Mono', monospace", fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--ink-3)', marginBottom: 6 }}>
+        <label htmlFor="niveles-student-select" style={{ display: 'block', fontFamily: "'Geist Mono', monospace", fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--ink-3)', marginBottom: 6 }}>
           Alumna *
         </label>
         <select
+          id="niveles-student-select"
           value={studentId}
           onChange={e => onPickStudent(e.target.value)}
           style={{
@@ -226,5 +228,6 @@ export default function NivelesPanel({ students, onSave }: NivelesPanelProps) {
         )}
       </AnimatePresence>
     </div>
+    </MotionConfig>
   );
 }
