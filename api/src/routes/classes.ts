@@ -1,5 +1,5 @@
 import { and, asc, eq } from 'drizzle-orm';
-import { Router, type RequestHandler } from 'express';
+import express, { Router, type Request, type RequestHandler } from 'express';
 import { z } from 'zod';
 import { requireRole, withAuth } from '../auth.js';
 import { schema } from '../db/index.js';
@@ -8,7 +8,20 @@ import { handle, HttpError, parse, type Deps } from '../http.js';
 const { figureEvents } = schema;
 
 export const MAX_FIGURE_EVENTS = 3000;
-const EFFECT_TYPES = ['torso_grid', 'arm_line', 'elbow_triangle', 'grid_points', 'rotation_arc', 'wrist_trail', 'pose_echo'] as const;
+// Puntos (y valores) que el dibujo de cada efecto necesita en cada keyframe (ver src/lib/motionRecognition/effects).
+const REQUIRED: Record<string, { pts: string[]; v?: string[] }> = {
+  torso_grid: { pts: ['tl', 'br', 'c'] },
+  arm_line: { pts: ['sh', 'wr'] },
+  elbow_triangle: { pts: ['sh', 'el', 'wr'] },
+  grid_points: { pts: ['node'] },
+  rotation_arc: { pts: ['c', 'w'], v: ['a0', 'a1', 'ccw'] },
+  wrist_trail: { pts: ['w'] },
+  pose_echo: { pts: ['lsh', 'lel', 'lwr', 'rsh', 'rel', 'rwr', 'lhip', 'rhip'] },
+};
+const EFFECT_TYPES = Object.keys(REQUIRED) as [string, ...string[]];
+
+// Solo el PUT de figuras admite cuerpos grandes; app.ts deja que este router lo parsee tras auth y rate limit.
+export const isFigureEventsPut = (req: Request) => req.method === 'PUT' && /^\/api\/v1\/classes\/[^/]+\/figure-events\/?$/.test(req.path);
 
 // IDs de documento de Firestore (los genera addDoc: 20 caracteres alfanuméricos).
 const classParams = z.object({ classId: z.string().regex(/^[A-Za-z0-9_-]{1,128}$/) });
@@ -27,7 +40,14 @@ const eventInput = z.object({
   params: z.object({ keyframes: z.array(keyframe).min(1).max(20000) }),
   color: z.string().regex(/^#[0-9A-Fa-f]{6}$/).optional(),
   editedManually: z.boolean(),
-}).refine((e) => e.endMs > e.startMs, { message: 'endMs debe ser mayor que startMs' });
+}).superRefine((e, ctx) => {
+  if (e.endMs <= e.startMs) ctx.addIssue({ code: 'custom', message: 'endMs debe ser mayor que startMs' });
+  const req = REQUIRED[e.type];
+  e.params.keyframes.forEach((k, i) => {
+    const missing = [...req.pts.filter((p) => !k.pts[p]), ...(req.v ?? []).filter((v) => k.v?.[v] === undefined)];
+    if (missing.length) ctx.addIssue({ code: 'custom', path: ['params', 'keyframes', i], message: `faltan ${missing.join(', ')} para ${e.type}` });
+  });
+});
 const putBody = z.object({ events: z.array(eventInput).max(MAX_FIGURE_EVENTS) });
 
 const toClient = (r: typeof figureEvents.$inferSelect) => ({
@@ -62,7 +82,7 @@ export function classesRouter(deps: Deps) {
     );
   };
 
-  r.put('/classes/:classId/figure-events', withAuth(deps), requireRole('instructor', 'estudio', 'admin'), ownsClass, handle(deps, 'user', async ({ req, db }) => {
+  r.put('/classes/:classId/figure-events', withAuth(deps), requireRole('instructor', 'estudio', 'admin'), express.json({ limit: '2mb' }), ownsClass, handle(deps, 'user', async ({ req, db }) => {
     const { classId } = parse(classParams, req.params);
     const { events } = parse(putBody, req.body);
     const userId = req.user!.id;

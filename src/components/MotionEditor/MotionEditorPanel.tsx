@@ -4,7 +4,7 @@ import type { IClass } from '../../types/instructor';
 import { EFFECT_PLUGINS } from '../../lib/motionRecognition/effects';
 import { loadFigureEvents, saveFigureEvents } from '../../lib/motionRecognition/api';
 import { updateClass } from '../../lib/instructor';
-import { getVideoDuration, uploadClassVideo } from '../../lib/videoStorage';
+import { deleteClassVideo, getVideoDuration, uploadClassVideo } from '../../lib/videoStorage';
 import MotionEditor from './MotionEditor';
 import { btn, card, label, muted } from './ui';
 
@@ -78,8 +78,27 @@ export default function MotionEditorPanel({ uid, classes }: { uid: string; class
     try {
       setStatus({ kind: 'busy', text: 'Subiendo video…', progress: 0 });
       const durationMs = await getVideoDuration(file);
+      const previous = cls.videoUrl;
       const remote = await uploadClassVideo(uid, cls.id, file, (p) => setStatus({ kind: 'busy', text: 'Subiendo video…', progress: p / 100 }));
-      await updateClass(uid, cls.id, { videoUrl: remote, videoDurationMs: durationMs });
+      if (previous || events.length) {
+        // Las figuras publicadas se calcularon sobre el video anterior: se retiran antes de cambiarlo.
+        try {
+          await saveFigureEvents(cls.id, []);
+        } catch (err) {
+          deleteClassVideo(remote).catch(() => {});
+          throw err;
+        }
+        setEvents([]);
+        setFromSaved(true);
+        setEditorKey((k) => k + 1);
+      }
+      try {
+        await updateClass(uid, cls.id, { videoUrl: remote, videoDurationMs: durationMs });
+      } catch (err) {
+        deleteClassVideo(remote).catch(() => {});
+        throw err;
+      }
+      if (previous) deleteClassVideo(previous).catch((e) => console.warn('No se pudo borrar el video anterior:', e));
       setLocalUrl(url);
       await detect(url);
     } catch (err: any) {

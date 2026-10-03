@@ -9,6 +9,7 @@ Panel de instructor → pestaña **Editor de movimiento**.
    - Usa MediaPipe Pose Landmarker (`@mediapipe/tasks-vision@0.10.14`, Apache-2.0) a 10 cuadros por segundo.
    - Pasa por las reglas geométricas del prototipo `waackon_prototipo_overlays.html`.
    - El resultado es una lista de **eventos de figura** propuestos.
+   Al reemplazar el video, las figuras publicadas se retiran (se calcularon sobre el anterior) y el video anterior se borra de Storage.
 3. El instructor acepta o elimina cada figura, o silencia un tipo completo, y guarda.
 4. Solo lo aceptado y no silenciado se guarda con `PUT /api/v1/classes/:classId/figure-events`, en la tabla `figure_events` de Postgres.
 5. El reproductor del alumno (`StudentPlayer`) solo lee el video y los eventos, y los dibuja en un canvas. Nunca corre MediaPipe; el chunk de detección solo se descarga cuando un instructor detecta.

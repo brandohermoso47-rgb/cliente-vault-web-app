@@ -6,7 +6,7 @@ import { list } from './config.js';
 import { errorHandler, HttpError, wrap, type Deps } from './http.js';
 import { adminRouter } from './routes/admin.js';
 import { billingRouter } from './routes/billing.js';
-import { classesRouter } from './routes/classes.js';
+import { classesRouter, isFigureEventsPut } from './routes/classes.js';
 import { instructorsRouter } from './routes/instructors.js';
 import { usersRouter } from './routes/users.js';
 import { withContext } from './db/context.js';
@@ -68,9 +68,9 @@ export function createApp(deps: Deps) {
     deps.verifyAppCheck(token).then(() => next(), () => next(new HttpError(401, 'app_check_invalid', 'Verificación de la aplicación no válida.')));
   });
 
-  // Los eventos de figura de un video largo pesan más que una petición normal; express.json no re-parsea después.
-  app.use('/api/v1/classes', express.json({ limit: '2mb' }));
-  app.use(express.json({ limit: '100kb' }));
+  // El PUT de figuras (hasta 2 MB) se parsea en su ruta, después del rate limit y de la autenticación.
+  const json = express.json({ limit: '100kb' });
+  app.use((req, res, next) => (isFigureEventsPut(req) ? next() : json(req, res, next)));
   app.use('/api/v1', rateLimit({ windowMs: 15 * 60 * 1000, limit: 600, standardHeaders: 'draft-7', legacyHeaders: false }));
 
   // Más estricto en lo que cuesta dinero o cambia permisos.

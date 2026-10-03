@@ -27,7 +27,7 @@ afterAll(async () => { await t.close(); });
 
 describe('rutas de eventos de figura', () => {
   it('PUT guarda y GET devuelve en orden', async () => {
-    const put = await t.call('PUT', url('profe_c1'), { token: tok('profe'), body: { events: [line(2000, 2600), { ...line(100, 900), type: 'elbow_triangle', color: '#FFD400' }] } });
+    const put = await t.call('PUT', url('profe_c1'), { token: tok('profe'), body: { events: [line(2000, 2600), { ...line(100, 900), type: 'elbow_triangle', color: '#FFD400', params: { keyframes: [{ t: 100, pts: { sh: { x: 0.4, y: 0.3 }, el: { x: 0.3, y: 0.3 }, wr: { x: 0.3, y: 0.2 } } }] } }] } });
     expect(put.status).toBe(200);
     expect(put.json.events).toHaveLength(2);
     const get = await t.call('GET', url('profe_c1'), { token: tok('profe') });
@@ -64,6 +64,10 @@ describe('rutas de eventos de figura', () => {
       { events: [{ ...line(0, 400), params: { keyframes: [] } }] },
       { events: [{ ...line(0, 400), color: 'red' }] },
       { nope: true },
+      // Cada efecto exige los puntos que su dibujo necesita.
+      { events: [{ ...line(0, 400), params: { keyframes: [{ t: 0, pts: {} }] } }] },
+      { events: [{ ...line(0, 400), type: 'elbow_triangle' }] },
+      { events: [{ ...line(0, 400), type: 'rotation_arc', params: { keyframes: [{ t: 0, pts: { c: { x: 0.4, y: 0.3 }, w: { x: 0.2, y: 0.3 } } }] } }] },
     ];
     for (const body of bad) expect((await t.call('PUT', url('profe_c3'), { token: tok('profe'), body })).status).toBe(400);
     expect((await t.call('PUT', '/api/v1/classes/..%2Fx/figure-events', { token: tok('profe'), body: { events: [] } })).status).toBe(400);
@@ -75,8 +79,16 @@ describe('rutas de eventos de figura', () => {
     expect(r.status).toBe(200);
   });
 
-  it('sin sesión → 401', async () => {
+  it('sin sesión → 401, también con un cuerpo grande (no se parsea antes de autenticar)', async () => {
     expect((await t.call('GET', url('profe_c1'))).status).toBe(401);
+    const big = JSON.stringify({ events: [{ ...line(0, 300000), params: { keyframes: Array.from({ length: 3000 }, (_, i) => ({ t: i, pts: { sh: { x: 0.4, y: 0.3 }, wr: { x: 0.2, y: 0.3 } } })) } }] });
+    expect(big.length).toBeGreaterThan(100 * 1024);
+    expect((await t.call('PUT', url('profe_c1'), { raw: big })).status).toBe(401);
+  });
+
+  it('el resto de rutas sigue limitado a 100 kb', async () => {
+    const r = await t.call('PATCH', '/api/v1/me', { token: tok('profe'), raw: JSON.stringify({ bio: 'x'.repeat(120 * 1024) }) });
+    expect(r.status).toBe(413);
   });
 });
 

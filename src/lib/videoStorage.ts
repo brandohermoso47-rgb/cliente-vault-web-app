@@ -1,4 +1,4 @@
-import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import { ref, uploadBytesResumable, getDownloadURL, deleteObject } from 'firebase/storage';
 import { storage } from './firebase';
 
 // Debe coincidir con storage.rules (video/(mp4|webm|quicktime), < 200 MB).
@@ -43,4 +43,9 @@ export function getVideoDuration(file: File): Promise<number> {
     };
     video.src = objectUrl;
   });
+}
+
+// Acepta la URL de descarga que devolvió uploadClassVideo.
+export function deleteClassVideo(downloadUrl: string): Promise<void> {
+  return deleteObject(ref(storage, downloadUrl));
 }

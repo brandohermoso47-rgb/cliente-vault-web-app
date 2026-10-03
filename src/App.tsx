@@ -2834,6 +2834,7 @@ class App extends Component<any, any> {
       insIsMethod: this.insTab === 'methodology',
       insIsPublish: this.insTab === 'publish',
       insIsMotion: this.insTab === 'motion',
+      insUid: this.state.user?.uid ?? '',
       insIsPods: this.insTab === 'podcasts',
       insIsOverview: this.insTab === 'overview',
       insIsPromo: this.insTab === 'promotion',
@@ -2915,7 +2916,6 @@ class App extends Component<any, any> {
       insPodcastLabel: this.insPodcastBusy ? 'Creando podcast…' : 'Crear podcast',
       // Data lists
       insClassesDataList: this.insClassesData,
-      insUid: this.state.user?.uid ?? '',
       insStudentsDataList: this.insStudentsData,
       insFinancesDataList: this.insFinancesData,
       insCoursesDataList: this.insCoursesData,

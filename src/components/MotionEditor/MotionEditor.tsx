@@ -25,7 +25,8 @@ export default function MotionEditor({ videoUrl, events: initial, initiallyAccep
   const [currentMs, setCurrentMs] = useState(0);
   const [durationMs, setDurationMs] = useState(0);
   const [studentView, setStudentView] = useState(false);
-  const [dirty, setDirty] = useState(!initiallyAccepted && initial.length > 0);
+  // Una detección nueva reemplaza lo publicado aunque venga vacía: hay que poder guardarla.
+  const [dirty, setDirty] = useState(!initiallyAccepted);
 
   const visible = useMemo(() => events.filter((e) => !mutedTypes.has(e.type)), [events, mutedTypes]);
   const toSave = useMemo(() => visible.filter((e) => accepted.has(e.id)), [visible, accepted]);

@@ -917,6 +917,7 @@ class Component extends DCLogic {
     { id: 'documents', l: 'Documentos PDF', b: '2' },
     { id: 'methodology', l: 'Metodología & Lab' },
     { id: 'publish', l: 'Publicar Cursos' },
+    { id: 'motion', l: 'Editor de movimiento' },
     { id: 'podcasts', l: 'Podcasts' },
     { id: 'overview', l: 'Ventas & Actividad' },
     { id: 'promotion', l: 'Ajustes & Destacados' }
@@ -1676,6 +1677,8 @@ class Component extends DCLogic {
       insIsDocs: this.insTab === 'documents',
       insIsMethod: this.insTab === 'methodology',
       insIsPublish: this.insTab === 'publish',
+      insIsMotion: this.insTab === 'motion',
+      insUid: this.state.user?.uid ?? '',
       insIsPods: this.insTab === 'podcasts',
       insIsOverview: this.insTab === 'overview',
       insIsPromo: this.insTab === 'promotion',
