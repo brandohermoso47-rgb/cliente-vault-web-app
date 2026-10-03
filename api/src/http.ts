@@ -16,12 +16,15 @@ export class HttpError extends Error {
 export type TokenInfo = { uid: string; email?: string; emailVerified: boolean; name?: string; picture?: string };
 export type VerifyToken = (idToken: string, opts?: { checkRevoked?: boolean }) => Promise<TokenInfo>;
 export type SyncRole = (firebaseUid: string, role: string) => Promise<void>;
+// ¿Existe users/{firebaseUid}/classes/{classId} en Firestore? (las clases viven allí, no en Postgres)
+export type ClassOwnedBy = (firebaseUid: string, classId: string) => Promise<boolean>;
 
 export type Deps = {
   db: Db;
   config: Config;
   verify: VerifyToken;
   syncRole: SyncRole;
+  classOwnedBy: ClassOwnedBy;
   verifyAppCheck?: (token: string) => Promise<void>;
   stripe?: Stripe;
 };

@@ -45,6 +45,8 @@ export async function makeTestApp(env: Record<string, string> = {}) {
       return { uid: m[1], email: m[2] || undefined, emailVerified: m[3] === 'true', name: m[1] };
     },
     syncRole: async (uid, role) => { synced.push([uid, role]); },
+    // Clase propia = su ID empieza por "<uid>_".
+    classOwnedBy: async (uid, classId) => classId.startsWith(`${uid}_`),
     verifyAppCheck: async (token) => { if (token !== 'appcheck-ok') throw new Error('bad app check'); },
   });
   const server = app.listen(0);

@@ -32,7 +32,7 @@ export function subscribeInstructorClasses(
   callback: (classes: IClass[]) => void
 ) {
   const q = query(
-    collection(db, `users/${uid}/instructorData/classes`),
+    collection(db, `users/${uid}/classes`),
     orderBy('createdAt', 'desc')
   );
 
@@ -61,7 +61,7 @@ export async function createClass(
   if ((data.capacity || 0) < 1) throw new Error('Capacidad debe ser ≥ 1');
 
   const docRef = await addDoc(
-    collection(db, `users/${uid}/instructorData/classes`),
+    collection(db, `users/${uid}/classes`),
     {
       ...data,
       enrolled: 0,
@@ -78,7 +78,7 @@ export async function updateClass(
   updates: Partial<IClass>
 ): Promise<void> {
   await updateDoc(
-    doc(db, `users/${uid}/instructorData/classes`, classId),
+    doc(db, `users/${uid}/classes`, classId),
     {
       ...updates,
       updatedAt: serverTimestamp(),
@@ -87,7 +87,7 @@ export async function updateClass(
 }
 
 export async function deleteClass(uid: string, classId: string): Promise<void> {
-  await deleteDoc(doc(db, `users/${uid}/instructorData/classes`, classId));
+  await deleteDoc(doc(db, `users/${uid}/classes`, classId));
 }
 
 // ==================== STUDENTS (ALUMNOS) ====================
@@ -546,78 +546,4 @@ export async function createAnnouncement(
     }
   );
   return docRef.id;
-}
-
-// ==================== MOTION RECOGNITION ====================
-
-export async function saveMotionRecognitionData(
-  uid: string,
-  classId: string,
-  data: {
-    events: any[];
-    masterSettings?: {
-      gridSpacing?: number;
-      arcResolution?: number;
-      trailLength?: number;
-    };
-  }
-): Promise<void> {
-  if (!classId) throw new Error('ID de clase requerido');
-
-  await updateDoc(
-    doc(db, `users/${uid}/instructorData/classes`, classId),
-    {
-      motionRecognitionData: {
-        events: data.events || [],
-        masterSettings: data.masterSettings || {},
-        createdAt: serverTimestamp(),
-        updatedAt: serverTimestamp(),
-      },
-    }
-  );
-}
-
-export async function getMotionRecognitionData(
-  uid: string,
-  classId: string
-): Promise<any | null> {
-  try {
-    const classRef = doc(db, `users/${uid}/instructorData/classes`, classId);
-    const snap = await getDocs(collection(db, `users/${uid}/instructorData/classes`));
-
-    for (const doc of snap.docs) {
-      if (doc.id === classId) {
-        const data = doc.data();
-        return data.motionRecognitionData || null;
-      }
-    }
-    return null;
-  } catch (err) {
-    console.error('Error loading motion recognition data:', err);
-    return null;
-  }
-}
-
-export function subscribeMotionRecognitionData(
-  uid: string,
-  classId: string,
-  callback: (data: any | null) => void
-) {
-  const docRef = doc(db, `users/${uid}/instructorData/classes`, classId);
-
-  return onSnapshot(
-    docRef,
-    (snap) => {
-      if (snap.exists()) {
-        const classData = snap.data();
-        callback(classData?.motionRecognitionData || null);
-      } else {
-        callback(null);
-      }
-    },
-    (err) => {
-      console.error('Error loading motion recognition data:', err);
-      callback(null);
-    }
-  );
 }

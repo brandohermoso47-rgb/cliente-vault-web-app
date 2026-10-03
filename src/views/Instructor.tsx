@@ -3,6 +3,7 @@
 import React, { Fragment, useRef } from 'react';
 import { cx, pc, sty } from '../lib/dc';
 import DiscoBallWidget, { type DiscoBallWidgetHandle } from '../components/DiscoBallWidget';
+import { MotionEditorPanel } from '../components/MotionEditor';
 
 export default function Instructor({ v }: { v: any }) {
   const discoBallRef = useRef<DiscoBallWidgetHandle>(null);
@@ -697,6 +698,10 @@ export default function Instructor({ v }: { v: any }) {
       )}
 
       {/* Courses View */}
+      {v.insIsMotion && v.insUid && (
+        <MotionEditorPanel uid={v.insUid} classes={v.insClassesDataList ?? []} />
+      )}
+
       {v.insIsPublish && (
         <div style={{
           display: 'flex',

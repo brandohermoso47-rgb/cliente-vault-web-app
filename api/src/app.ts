@@ -6,6 +6,7 @@ import { list } from './config.js';
 import { errorHandler, HttpError, wrap, type Deps } from './http.js';
 import { adminRouter } from './routes/admin.js';
 import { billingRouter } from './routes/billing.js';
+import { classesRouter } from './routes/classes.js';
 import { instructorsRouter } from './routes/instructors.js';
 import { usersRouter } from './routes/users.js';
 import { withContext } from './db/context.js';
@@ -67,6 +68,8 @@ export function createApp(deps: Deps) {
     deps.verifyAppCheck(token).then(() => next(), () => next(new HttpError(401, 'app_check_invalid', 'Verificación de la aplicación no válida.')));
   });
 
+  // Los eventos de figura de un video largo pesan más que una petición normal; express.json no re-parsea después.
+  app.use('/api/v1/classes', express.json({ limit: '2mb' }));
   app.use(express.json({ limit: '100kb' }));
   app.use('/api/v1', rateLimit({ windowMs: 15 * 60 * 1000, limit: 600, standardHeaders: 'draft-7', legacyHeaders: false }));
 
@@ -77,6 +80,7 @@ export function createApp(deps: Deps) {
   app.use('/api/v1', usersRouter(deps));
   app.use('/api/v1', billingRouter(deps));
   app.use('/api/v1', instructorsRouter(deps));
+  app.use('/api/v1', classesRouter(deps));
   app.use('/api/v1/admin', adminRouter(deps));
 
   app.use((_req, _res, next) => next(new HttpError(404, 'not_found', 'Ruta no encontrada.')));

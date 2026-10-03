@@ -1211,6 +1211,7 @@ class App extends Component<any, any> {
     { id: 'documents', l: 'Documentos PDF', b: '2' },
     { id: 'methodology', l: 'Metodología & Lab' },
     { id: 'publish', l: 'Publicar Cursos' },
+    { id: 'motion', l: 'Editor de movimiento' },
     { id: 'podcasts', l: 'Podcasts' },
     { id: 'overview', l: 'Ventas & Actividad' },
     { id: 'promotion', l: 'Ajustes & Destacados' }
@@ -2832,6 +2833,7 @@ class App extends Component<any, any> {
       insIsDocs: this.insTab === 'documents',
       insIsMethod: this.insTab === 'methodology',
       insIsPublish: this.insTab === 'publish',
+      insIsMotion: this.insTab === 'motion',
       insIsPods: this.insTab === 'podcasts',
       insIsOverview: this.insTab === 'overview',
       insIsPromo: this.insTab === 'promotion',
@@ -2913,6 +2915,7 @@ class App extends Component<any, any> {
       insPodcastLabel: this.insPodcastBusy ? 'Creando podcast…' : 'Crear podcast',
       // Data lists
       insClassesDataList: this.insClassesData,
+      insUid: this.state.user?.uid ?? '',
       insStudentsDataList: this.insStudentsData,
       insFinancesDataList: this.insFinancesData,
       insCoursesDataList: this.insCoursesData,

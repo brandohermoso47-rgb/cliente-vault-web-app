@@ -1,0 +1,189 @@
+import { useEffect, useRef, useState } from 'react';
+import type { FigureEvent } from '../../types/motionRecognition';
+import type { IClass } from '../../types/instructor';
+import { EFFECT_PLUGINS } from '../../lib/motionRecognition/effects';
+import { loadFigureEvents, saveFigureEvents } from '../../lib/motionRecognition/api';
+import { updateClass } from '../../lib/instructor';
+import { getVideoDuration, uploadClassVideo } from '../../lib/videoStorage';
+import MotionEditor from './MotionEditor';
+import { btn, card, label, muted } from './ui';
+
+type Status = { kind: 'idle' } | { kind: 'busy'; text: string; progress?: number } | { kind: 'error'; text: string } | { kind: 'ok'; text: string };
+
+// Flujo del instructor: elegir clase → subir video → detectar (una vez) → revisar → guardar.
+export default function MotionEditorPanel({ uid, classes }: { uid: string; classes: IClass[] }) {
+  const [classId, setClassId] = useState('');
+  const cls = classes.find((c) => c.id === classId) ?? null;
+  const [localUrl, setLocalUrl] = useState<string | null>(null); // archivo recién elegido: evita CORS al detectar
+  const [events, setEvents] = useState<FigureEvent[]>([]);
+  const [fromSaved, setFromSaved] = useState(true);
+  const [editorKey, setEditorKey] = useState(0);
+  const [status, setStatus] = useState<Status>({ kind: 'idle' });
+  const [experimental, setExperimental] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const abortRef = useRef<AbortController | null>(null);
+
+  const videoUrl = localUrl ?? cls?.videoUrl ?? null;
+  const busy = status.kind === 'busy';
+
+  useEffect(() => () => { if (localUrl) URL.revokeObjectURL(localUrl); }, [localUrl]);
+  useEffect(() => () => abortRef.current?.abort(), []);
+
+  useEffect(() => {
+    abortRef.current?.abort();
+    setLocalUrl(null);
+    setEvents([]);
+    setFromSaved(true);
+    setEditorKey((k) => k + 1);
+    if (!classId) { setStatus({ kind: 'idle' }); return; }
+    let live = true;
+    setStatus({ kind: 'busy', text: 'Cargando figuras guardadas…' });
+    loadFigureEvents(classId).then(
+      (saved) => { if (!live) return; setEvents(saved); setEditorKey((k) => k + 1); setStatus({ kind: 'idle' }); },
+      (err) => { if (live) setStatus({ kind: 'error', text: `No se pudieron cargar las figuras guardadas: ${err.message}` }); },
+    );
+    return () => { live = false; };
+  }, [classId]);
+
+  async function detect(source: string) {
+    abortRef.current?.abort();
+    const ctrl = new AbortController();
+    abortRef.current = ctrl;
+    setStatus({ kind: 'busy', text: 'Detectando movimientos…', progress: 0 });
+    try {
+      const plugins = EFFECT_PLUGINS.filter((p) => p.enabledByDefault || experimental);
+      // MediaPipe solo se descarga cuando un instructor detecta; el resto de la app (y los alumnos) no lo cargan.
+      const { detectFigureEvents } = await import('../../lib/motionRecognition/detection');
+      const res = await detectFigureEvents(source, {
+        plugins,
+        signal: ctrl.signal,
+        onProgress: (f) => setStatus({ kind: 'busy', text: 'Detectando movimientos…', progress: f }),
+      });
+      setEvents(res.events);
+      setFromSaved(false);
+      setEditorKey((k) => k + 1);
+      const coverage = res.framesTotal ? Math.round((res.framesWithBody / res.framesTotal) * 100) : 0;
+      setStatus(res.framesWithBody
+        ? { kind: 'ok', text: `Listo: ${res.events.length} figuras propuestas. Se detectó el cuerpo en el ${coverage}% del video.` }
+        : { kind: 'error', text: 'No se detectó ningún cuerpo en el video. Prueba con buena luz y el cuerpo completo en cuadro.' });
+    } catch (err: any) {
+      if (err?.name === 'AbortError') setStatus({ kind: 'idle' });
+      else setStatus({ kind: 'error', text: err?.message ?? 'La detección falló.' });
+    }
+  }
+
+  async function onFile(file: File) {
+    if (!cls) return;
+    const url = URL.createObjectURL(file);
+    try {
+      setStatus({ kind: 'busy', text: 'Subiendo video…', progress: 0 });
+      const durationMs = await getVideoDuration(file);
+      const remote = await uploadClassVideo(uid, cls.id, file, (p) => setStatus({ kind: 'busy', text: 'Subiendo video…', progress: p / 100 }));
+      await updateClass(uid, cls.id, { videoUrl: remote, videoDurationMs: durationMs });
+      setLocalUrl(url);
+      await detect(url);
+    } catch (err: any) {
+      URL.revokeObjectURL(url);
+      setStatus({ kind: 'error', text: err?.message ?? 'No se pudo subir el video.' });
+    }
+  }
+
+  async function save(toSave: FigureEvent[]) {
+    if (!cls) return;
+    setSaving(true);
+    try {
+      const saved = await saveFigureEvents(cls.id, toSave);
+      setEvents(saved);
+      setFromSaved(true);
+      setEditorKey((k) => k + 1);
+      setStatus({ kind: 'ok', text: `Guardado: ${saved.length} figuras publicadas para tus alumnos.` });
+    } catch (err: any) {
+      setStatus({ kind: 'error', text: `No se pudo guardar: ${err?.message ?? 'error desconocido'}` });
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+      <div style={card}>
+        <div style={{ fontSize: '16px', fontWeight: 700, color: 'var(--ink)' }}>Editor de movimiento</div>
+        <div style={muted}>
+          Sube la grabación de una clase. La detección de pose corre una sola vez en tu navegador y propone figuras
+          (rejilla del torso, brazo extendido, ángulos de 90°, puntos de rejilla). Acepta o elimina cada una y guarda:
+          tus alumnos verán el video con las figuras sin procesar nada en su teléfono.
+        </div>
+
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', alignItems: 'flex-end' }}>
+          <label style={{ display: 'flex', flexDirection: 'column', gap: '6px', minWidth: '240px' }}>
+            <span style={label}>Clase</span>
+            <select
+              value={classId}
+              onChange={(e) => setClassId(e.target.value)}
+              disabled={busy}
+              style={{ padding: '9px 12px', borderRadius: '10px', border: '1px solid var(--hair)', background: 'var(--glass-2)', color: 'var(--ink)' }}
+            >
+              <option value="">Elige una clase…</option>
+              {classes.map((c) => <option key={c.id} value={c.id}>{c.title}{c.videoUrl ? ' · con video' : ''}</option>)}
+            </select>
+          </label>
+
+          {cls && (
+            <label style={{ ...btn('ghost'), opacity: busy ? 0.5 : 1, cursor: busy ? 'default' : 'pointer' }}>
+              {cls.videoUrl ? 'Reemplazar video' : 'Subir video'}
+              <input
+                type="file"
+                accept="video/mp4,video/webm,video/quicktime"
+                disabled={busy}
+                style={{ display: 'none' }}
+                onChange={(e) => { const f = e.target.files?.[0]; e.target.value = ''; if (f) onFile(f); }}
+              />
+            </label>
+          )}
+
+          {cls && videoUrl && (
+            <button
+              type="button"
+              disabled={busy}
+              onClick={() => {
+                if (fromSaved && events.length && !window.confirm('Volver a detectar reemplaza las figuras del editor. Lo publicado no cambia hasta que guardes. ¿Continuar?')) return;
+                detect(videoUrl);
+              }} style={{ ...btn('ghost'), opacity: busy ? 0.5 : 1 }}>
+              {fromSaved && events.length ? 'Volver a detectar' : 'Detectar movimientos'}
+            </button>
+          )}
+
+          {cls && (
+            <label style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', color: 'var(--ink-2)' }}>
+              <input type="checkbox" checked={experimental} onChange={(e) => setExperimental(e.target.checked)} disabled={busy} />
+              Incluir efectos experimentales (arco, estela, ecos)
+            </label>
+          )}
+        </div>
+
+        {!classes.length && <div style={muted}>Aún no tienes clases. Crea una en «Clases & Directos» y vuelve aquí.</div>}
+
+        {status.kind !== 'idle' && (
+          <div role="status" style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '12.5px', color: status.kind === 'error' ? '#FF6B6B' : 'var(--ink-2)' }}>
+            <span style={{ flex: 1 }}>{status.text}{status.kind === 'busy' && status.progress !== undefined ? ` ${Math.round(status.progress * 100)}%` : ''}</span>
+            {status.kind === 'busy' && status.text.startsWith('Detectando') && (
+              <button type="button" onClick={() => abortRef.current?.abort()} style={btn('ghost')}>Cancelar</button>
+            )}
+          </div>
+        )}
+        {status.kind === 'busy' && status.progress !== undefined && (
+          <div style={{ height: '4px', borderRadius: '2px', background: 'var(--glass-2)', overflow: 'hidden' }}>
+            <div style={{ width: `${Math.round(status.progress * 100)}%`, height: '100%', background: 'var(--pink)', transition: 'width .2s' }} />
+          </div>
+        )}
+      </div>
+
+      {cls && videoUrl && (
+        <div style={card}>
+          <MotionEditor key={editorKey} videoUrl={videoUrl} events={events} initiallyAccepted={fromSaved} saving={saving} onSave={save} />
+        </div>
+      )}
+      {cls && !videoUrl && <div style={{ ...card, ...muted }}>Esta clase todavía no tiene video. Súbelo para empezar.</div>}
+    </div>
+  );
+}
