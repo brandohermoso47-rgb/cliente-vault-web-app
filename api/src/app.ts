@@ -47,6 +47,8 @@ export function createApp(deps: Deps) {
     res.json({ received: true, result });
   }));
 
+  app.use('/api/v1', rateLimit({ windowMs: 15 * 60 * 1000, limit: 600, standardHeaders: 'draft-7', legacyHeaders: false }));
+
   // ── Solo mi app ────────────────────────────────────────────────────────────────────────────────────
   // CORS por sí solo solo "avisa" al navegador; aquí el servidor RECHAZA lo que no venga de la app.
   // (Health y el webhook de Stripe, que va firmado, quedan fuera: se registraron antes.)
@@ -69,7 +71,6 @@ export function createApp(deps: Deps) {
   });
 
   app.use(express.json({ limit: '100kb' }));
-  app.use('/api/v1', rateLimit({ windowMs: 15 * 60 * 1000, limit: 600, standardHeaders: 'draft-7', legacyHeaders: false }));
 
   // Más estricto en lo que cuesta dinero o cambia permisos.
   const strict = rateLimit({ windowMs: 15 * 60 * 1000, limit: 60, standardHeaders: 'draft-7', legacyHeaders: false });

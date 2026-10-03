@@ -129,6 +129,16 @@ export interface InstructorDocument {
   authorName?: string;
 }
 
+function getSafeDocumentUrl(value: string): string | undefined {
+  if (/^data:application\/pdf;base64,/i.test(value)) return value;
+  try {
+    const url = new URL(value);
+    return url.protocol === 'https:' ? url.href : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
 interface PublishedItem {
   id: string;
   title: string;
@@ -3322,7 +3332,9 @@ Semana 3-4 (Progresión):
                     </div>
                   ) : (
                     <div className="grid grid-cols-1 gap-4">
-                      {instructorDocuments.map(doc => (
+                      {instructorDocuments.map(doc => {
+                        const safeFileUrl = getSafeDocumentUrl(doc.fileUrl);
+                        return (
                         <div
                           key={doc.id}
                           className="bg-[#130f21] border border-white/10 hover:border-[#E9C349]/50 rounded-3xl p-5 space-y-3 transition-all relative overflow-hidden shadow-xl group"
@@ -3376,31 +3388,36 @@ Semana 3-4 (Progresión):
                             </span>
 
                             <div className="flex items-center gap-2">
-                              <a
-                                href={doc.fileUrl}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                download={doc.fileName || true}
-                                className="px-3.5 py-1.5 rounded-xl bg-[#E9C349] text-black font-black uppercase text-[10px] hover:bg-[#d8b33c] transition-all flex items-center gap-1.5 shadow active:scale-95 cursor-pointer"
-                              >
-                                <Download className="w-3.5 h-3.5" />
-                                <span>Descargar PDF</span>
-                              </a>
+                              {safeFileUrl && (
+                                <>
+                                  <a
+                                    href={safeFileUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    download={doc.fileName || true}
+                                    className="px-3.5 py-1.5 rounded-xl bg-[#E9C349] text-black font-black uppercase text-[10px] hover:bg-[#d8b33c] transition-all flex items-center gap-1.5 shadow active:scale-95 cursor-pointer"
+                                  >
+                                    <Download className="w-3.5 h-3.5" />
+                                    <span>Descargar PDF</span>
+                                  </a>
 
-                              <button
-                                onClick={() => {
-                                  const win = window.open(doc.fileUrl, '_blank');
-                                  if (win) win.focus();
-                                }}
-                                className="px-3.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold uppercase text-[10px] transition-all flex items-center gap-1.5 active:scale-95 cursor-pointer"
-                              >
-                                <Printer className="w-3.5 h-3.5" />
-                                <span>Imprimir / Ver</span>
-                              </button>
+                                  <button
+                                    onClick={() => {
+                                      const win = window.open(safeFileUrl, '_blank', 'noopener,noreferrer');
+                                      if (win) win.focus();
+                                    }}
+                                    className="px-3.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold uppercase text-[10px] transition-all flex items-center gap-1.5 active:scale-95 cursor-pointer"
+                                  >
+                                    <Printer className="w-3.5 h-3.5" />
+                                    <span>Imprimir / Ver</span>
+                                  </button>
+                                </>
+                              )}
                             </div>
                           </div>
                         </div>
-                      ))}
+                        );
+                      })}
                     </div>
                   )}
                 </div>
