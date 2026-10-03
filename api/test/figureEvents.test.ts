@@ -68,6 +68,11 @@ describe('rutas de eventos de figura', () => {
       { events: [{ ...line(0, 400), params: { keyframes: [{ t: 0, pts: {} }] } }] },
       { events: [{ ...line(0, 400), type: 'elbow_triangle' }] },
       { events: [{ ...line(0, 400), type: 'rotation_arc', params: { keyframes: [{ t: 0, pts: { c: { x: 0.4, y: 0.3 }, w: { x: 0.2, y: 0.3 } } }] } }] },
+      { events: [{ ...line(0, 400), params: { keyframes: [line(0, 400).params.keyframes[0], { ...line(0, 400).params.keyframes[0], t: 0 }] } }] },
+      { events: [{ ...line(0, 400), params: { keyframes: [{ ...line(0, 400).params.keyframes[0], t: 200 }, { ...line(0, 400).params.keyframes[0], t: 100 }] } }] },
+      { events: [{ ...line(0, 400), params: { keyframes: [line(0, 400).params.keyframes[0], { ...line(0, 400).params.keyframes[0], t: 401 }] } }] },
+      { events: [{ ...line(100, 400), params: { keyframes: [{ ...line(100, 400).params.keyframes[0], t: 99 }] } }] },
+      { events: [{ ...line(0, 400), params: { keyframes: [line(0, 400).params.keyframes[0], { ...line(0, 400).params.keyframes[0], t: -1 }] } }] },
     ];
     for (const body of bad) expect((await t.call('PUT', url('profe_c3'), { token: tok('profe'), body })).status).toBe(400);
     expect((await t.call('PUT', '/api/v1/classes/..%2Fx/figure-events', { token: tok('profe'), body: { events: [] } })).status).toBe(400);

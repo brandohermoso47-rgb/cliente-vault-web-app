@@ -35,14 +35,20 @@ export default function MotionEditor({ videoUrl, events: initial, initiallyAccep
     if (videoRef.current) videoRef.current.currentTime = ms / 1000;
     setCurrentMs(ms);
   };
-  const accept = (ids: string[]) => { setAccepted((a) => new Set([...a, ...ids])); setDirty(true); };
+  const accept = (ids: string[]) => {
+    if (saving) return;
+    setAccepted((a) => new Set([...a, ...ids]));
+    setDirty(true);
+  };
   const remove = (id: string) => {
+    if (saving) return;
     setEvents((es) => es.filter((e) => e.id !== id));
     setAccepted((a) => { const n = new Set(a); n.delete(id); return n; });
     if (selectedId === id) setSelectedId(null);
     setDirty(true);
   };
   const toggleMute = (type: FigureEffectType) => {
+    if (saving) return;
     setMutedTypes((m) => { const n = new Set(m); if (n.has(type)) n.delete(type); else n.add(type); return n; });
     setDirty(true);
   };
@@ -92,6 +98,7 @@ export default function MotionEditor({ videoUrl, events: initial, initiallyAccep
               onAccept={accept}
               onDelete={remove}
               onToggleMute={toggleMute}
+              disabled={saving}
             />
           </div>
           <MotionEditorTimeline
