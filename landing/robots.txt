@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /account/
+
+Sitemap: https://waack-on.com/sitemap.xml
