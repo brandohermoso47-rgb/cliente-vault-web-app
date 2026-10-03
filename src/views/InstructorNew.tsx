@@ -83,8 +83,6 @@ import { StudioVibeCard } from './DiscoBallWidget';
 import { Language } from '../lib/translations';
 import { generateGoogleMeetRoomUrl } from '../googleCalendar';
 import { fetchInstructorMetrics, createInstructorTask, generateOnboardingPlanBackend, updateInstructorPricingMethodologyBackend } from '../lib/api';
-import { subscribeInstructorClasses, saveMotionRecognitionData } from '../lib/instructor';
-import { uploadClassVideo, getVideoDuration } from '../lib/videoStorage';
 import OnboardingQuestionnaireModal from './OnboardingQuestionnaireModal';
 import OnboardingPlanViewer from './OnboardingPlanViewer';
 import TeachingMethodologyEditor from './TeachingMethodologyEditor';
@@ -101,7 +99,6 @@ import GoogleSlidesView from './GoogleSlidesView';
 import Logo from './Logo';
 
 import InstructorPlaylistsManager from './instructor/InstructorPlaylistsManager';
-import { MotionEditor } from '../components/MotionEditor';
 
 interface InstructorViewProps {
   currentUser: User;
@@ -507,19 +504,11 @@ export default function InstructorView({
   onOpenDocsModal
 }: InstructorViewProps) {
   const [activeSubTab, setActiveSubTab] = useState<
-    'dashboard' | 'finances' | 'overview' | 'publish' | 'documents' | 'students' | 'classes' | 'promotion' | 'methodology' | 'soundcloud' | 'podcasts' | 'workspace_classroom' | 'workspace_tasks' | 'workspace_gmail' | 'workspace_drive' | 'motion-editor'
+    'dashboard' | 'finances' | 'overview' | 'publish' | 'documents' | 'students' | 'classes' | 'promotion' | 'methodology' | 'soundcloud' | 'podcasts' | 'workspace_classroom' | 'workspace_tasks' | 'workspace_gmail' | 'workspace_drive'
   >((initialSubTab as any) || 'dashboard');
 
   // Google Workspace Integrated Modal Tool State
   const [activeWorkspaceModal, setActiveWorkspaceModal] = useState<'classroom' | 'tasks' | 'gmail' | 'drive' | 'slides' | null>(null);
-
-  // Motion Editor State
-  const [instructorClasses, setInstructorClasses] = useState<any[]>([]);
-  const [selectedClassForMotionEditor, setSelectedClassForMotionEditor] = useState<any | null>(null);
-  const [motionEditorVideoUrl, setMotionEditorVideoUrl] = useState<string>('');
-  const [motionEditorVideoDuration, setMotionEditorVideoDuration] = useState<number>(0);
-  const [isUploadingVideo, setIsUploadingVideo] = useState(false);
-  const [motionEditorData, setMotionEditorData] = useState<any>(null);
 
   // Instructor Documents & PDF Guides State
   const [instructorDocuments, setInstructorDocuments] = useState<InstructorDocument[]>(() => {
@@ -617,28 +606,6 @@ export default function InstructorView({
       setActiveSubTab(initialSubTab as any);
     }
   }, [initialSubTab]);
-
-  // Load instructor classes for motion editor
-  useEffect(() => {
-    if (!currentUser?.id) return;
-
-    const unsubscribe = subscribeInstructorClasses(currentUser.id, (classes) => {
-      setInstructorClasses(classes || []);
-      if (classes && classes.length > 0 && !selectedClassForMotionEditor) {
-        setSelectedClassForMotionEditor(classes[0]);
-        if (classes[0]?.videoUrl) {
-          setMotionEditorVideoUrl(classes[0].videoUrl);
-          setMotionEditorVideoDuration(classes[0].videoDurationMs || 0);
-        }
-        if (classes[0]?.motionRecognitionData) {
-          setMotionEditorData(classes[0].motionRecognitionData);
-        }
-      }
-    });
-
-    return () => unsubscribe();
-  }, [currentUser?.id]);
-
   const [broadcastInput, setBroadcastInput] = useState('');
   const [customMonthlyPriceInput, setCustomMonthlyPriceInput] = useState(currentUser.monthlyPrice || '$15.00 USD/mes');
   const [priceNumberInput, setPriceNumberInput] = useState<string>(() => {
@@ -1837,7 +1804,6 @@ Semana 3-4 (Progresión):
             { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
             { id: 'students', label: 'Alumnos', icon: Users, badge: students.length },
             { id: 'classes', label: 'Clases & Directos', icon: Calendar },
-            { id: 'motion-editor', label: '🎬 Motion Editor', icon: Sparkles },
             { id: 'finances', label: 'Finanzas', icon: DollarSign },
             { id: 'documents', label: 'Documentos PDF', icon: BookMarked, badge: instructorDocuments.length },
             { id: 'methodology', label: 'Metodología & Lab', icon: Award },
@@ -4887,165 +4853,6 @@ Semana 3-4 (Progresión):
                 </form>
               </motion.div>
             </div>
-          )}
-
-          {activeSubTab === 'motion-editor' && (
-            <motion.div
-              key="motion-editor-panel"
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -15 }}
-              className="space-y-6"
-            >
-              {/* Motion Editor Header */}
-              <div className="bg-[#121212] border border-white/10 rounded-[28px] p-5 sm:p-6 shadow-2xl relative overflow-hidden">
-                <div className="absolute right-0 top-0 w-64 h-64 bg-purple-500/5 rounded-full blur-3xl pointer-events-none" />
-
-                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-white/5 pb-5">
-                  <div>
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="px-2.5 py-0.5 rounded-full bg-purple-500/10 border border-purple-500/30 text-purple-300 text-[10px] font-mono font-black uppercase tracking-wider flex items-center gap-1.5">
-                        <Sparkles className="w-3.5 h-3.5" />
-                        EDITOR DE EFECTOS DE MOVIMIENTO
-                      </span>
-                      {selectedStudent && (
-                        <span className="px-2.5 py-0.5 rounded-full bg-pink-500/20 border border-pink-500/40 text-pink-300 text-[10px] font-mono font-bold flex items-center gap-1">
-                          <UserCheck className="w-3 h-3" />
-                          Enfoque: {selectedStudent.name}
-                        </span>
-                      )}
-                    </div>
-                    <h2 className="text-xl sm:text-2xl font-black text-white uppercase tracking-tight">
-                      {language === 'es' ? 'Reconocimiento de Movimiento & Efectos Visuales' : 'Motion Recognition & Visual Effects'}
-                    </h2>
-                    <p className="text-xs text-slate-400 font-medium mt-1">
-                      {language === 'es'
-                        ? 'Detecta poses automáticamente en videos de enseñanza y añade gráficos educativos (cuadrículas, líneas de brazo, ángulos de codo). Edita, personaliza y publica para tus estudiantes.'
-                        : 'Automatically detect poses in teaching videos and overlay educational graphics (grids, arm lines, elbow angles). Edit, customize, and publish for your students.'}
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Class Selection */}
-              <div className="bg-[#121212] border border-white/10 rounded-[24px] p-6">
-                <div className="mb-4">
-                  <label className="text-xs font-mono text-slate-400 mb-2 block uppercase">
-                    {language === 'es' ? 'Seleccionar Clase' : 'Select Class'}
-                  </label>
-                  <select
-                    value={selectedClassForMotionEditor?.id || ''}
-                    onChange={(e) => {
-                      const selected = instructorClasses.find(c => c.id === e.target.value);
-                      setSelectedClassForMotionEditor(selected);
-                      if (selected?.videoUrl) {
-                        setMotionEditorVideoUrl(selected.videoUrl);
-                        setMotionEditorVideoDuration(selected.videoDurationMs || 0);
-                      }
-                      if (selected?.motionRecognitionData) {
-                        setMotionEditorData(selected.motionRecognitionData);
-                      }
-                    }}
-                    className="w-full px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-white focus:border-purple-500 focus:outline-none"
-                  >
-                    <option value="">{language === 'es' ? 'Sin clase seleccionada' : 'No class selected'}</option>
-                    {instructorClasses.map(cls => (
-                      <option key={cls.id} value={cls.id}>
-                        {cls.title} {cls.videoUrl ? '✓' : ''}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                {/* Video Upload Section */}
-                {selectedClassForMotionEditor && (
-                  <div className="border-t border-white/10 pt-4">
-                    <label className="text-xs font-mono text-slate-400 mb-2 block uppercase">
-                      {language === 'es' ? 'Cargar Video' : 'Upload Video'}
-                    </label>
-                    <div className="flex gap-3">
-                      <input
-                        type="file"
-                        accept="video/*"
-                        onChange={async (e) => {
-                          const file = e.target.files?.[0];
-                          if (!file) return;
-
-                          try {
-                            setIsUploadingVideo(true);
-                            const duration = await getVideoDuration(file);
-                            const url = await uploadClassVideo(
-                              currentUser.id,
-                              selectedClassForMotionEditor.id,
-                              file,
-                              (progress) => {
-                                console.log('Upload progress:', progress);
-                              }
-                            );
-                            setMotionEditorVideoUrl(url);
-                            setMotionEditorVideoDuration(duration);
-                            setIsUploadingVideo(false);
-                            alert(language === 'es'
-                              ? '✓ Video cargado exitosamente'
-                              : '✓ Video uploaded successfully');
-                          } catch (err) {
-                            setIsUploadingVideo(false);
-                            alert('Error: ' + (err as any).message);
-                          }
-                        }}
-                        disabled={isUploadingVideo}
-                        className="flex-1 px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-white cursor-pointer"
-                      />
-                      {isUploadingVideo && (
-                        <div className="flex items-center gap-2 text-xs text-slate-400">
-                          <Loader2 className="w-4 h-4 animate-spin" />
-                          Cargando...
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* Motion Editor Component */}
-              {selectedClassForMotionEditor && motionEditorVideoUrl && (
-                <div className="bg-[#121212] border border-white/10 rounded-[24px] p-6 overflow-hidden">
-                  <MotionEditor
-                    videoUrl={motionEditorVideoUrl}
-                    videoDurationMs={motionEditorVideoDuration}
-                    classId={selectedClassForMotionEditor.id}
-                    instructorId={currentUser?.id || ''}
-                    initialData={motionEditorData}
-                    onSave={async (data) => {
-                      try {
-                        await saveMotionRecognitionData(
-                          currentUser.id,
-                          selectedClassForMotionEditor.id,
-                          data
-                        );
-                        setMotionEditorData(data);
-                        alert(language === 'es'
-                          ? '✓ Datos de movimiento guardados correctamente'
-                          : '✓ Motion data saved successfully');
-                      } catch (err) {
-                        alert('Error al guardar: ' + (err as any).message);
-                      }
-                    }}
-                    onCancel={() => setActiveSubTab('classes')}
-                  />
-                </div>
-              )}
-
-              {!selectedClassForMotionEditor && (
-                <div className="bg-[#121212] border border-white/10 rounded-[24px] p-8 text-center">
-                  <p className="text-slate-400">
-                    {language === 'es'
-                      ? 'Selecciona una clase para comenzar a editar efectos de movimiento'
-                      : 'Select a class to start editing motion effects'}
-                  </p>
-                </div>
-              )}
-            </motion.div>
           )}
 
           {activeSubTab === 'promotion' && (

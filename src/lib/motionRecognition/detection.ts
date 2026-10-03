@@ -1,314 +1,126 @@
-/**
- * Pose detection engine using MediaPipe.
- * Runs detection once on video upload/edit.
- * Outputs pre-calculated figure events (not raw landmarks).
- */
+import { FilesetResolver, PoseLandmarker } from '@mediapipe/tasks-vision';
+import type { EffectPlugin, FigureEvent, Pose, PoseFrame } from '../../types/motionRecognition';
+import { buildEvents } from './engine';
+import { safeVideoUrl } from '../safeVideoUrl';
 
-import {
-  SmoothedLandmarks,
-  PoseLandmarks,
-  Landmark,
-  DetectionSession,
-  FigureEvent,
-  DetectionContext,
-} from '../../types/motionRecognition';
-import { smoothLandmark, KalmanFilter1D } from './geometry';
-import { getAllEffectPlugins } from './effects';
+// Misma versión que package.json: el WASM debe coincidir con el paquete JS.
+const WASM_URL = 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm';
+const MODEL_URL =
+  'https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_lite/float16/1/pose_landmarker_lite.task';
+const STEP_MS = 100;
+const IO_TIMEOUT_MS = 15000;
 
-// ==================== MediaPipe Setup ====================
+// Índices de MediaPipe Pose (33 puntos).
+const IDX = { nose: 0, lsh: 11, rsh: 12, lel: 13, rel: 14, lwr: 15, rwr: 16, lhip: 23, rhip: 24 } as const;
 
-// MediaPipe Pose landmark indices (from official MediaPipe Pose)
-const LANDMARK_INDICES = {
-  NOSE: 0,
-  LEFT_SHOULDER: 11,
-  RIGHT_SHOULDER: 12,
-  LEFT_ELBOW: 13,
-  RIGHT_ELBOW: 14,
-  LEFT_WRIST: 15,
-  RIGHT_WRIST: 16,
-  LEFT_HIP: 23,
-  RIGHT_HIP: 24,
-  LEFT_KNEE: 25,
-  RIGHT_KNEE: 26,
-  LEFT_ANKLE: 27,
-  RIGHT_ANKLE: 28,
-};
+export interface DetectionResult {
+  events: FigureEvent[];
+  durationMs: number;
+  framesWithBody: number;
+  framesTotal: number;
+}
 
-/**
- * Extract relevant landmarks from MediaPipe Pose output.
- */
-function extractLandmarks(landmarks: any[]): PoseLandmarks {
+export interface DetectionOptions {
+  plugins: EffectPlugin[];
+  signal?: AbortSignal;
+  onProgress?: (fraction: number) => void;
+}
+
+function waitFor(el: HTMLVideoElement, event: 'loadeddata' | 'seeked', signal?: AbortSignal): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const timer = setTimeout(() => done(new Error('El video tardó demasiado en responder.')), IO_TIMEOUT_MS);
+    const onOk = () => done();
+    const onErr = () => done(new Error('No se pudo leer el video. Si está en Firebase Storage, revisa la configuración CORS del bucket.'));
+    const onAbort = () => done(new DOMException('Detección cancelada', 'AbortError'));
+    function done(err?: Error) {
+      clearTimeout(timer);
+      el.removeEventListener(event, onOk);
+      el.removeEventListener('error', onErr);
+      signal?.removeEventListener('abort', onAbort);
+      if (err) reject(err);
+      else resolve();
+    }
+    el.addEventListener(event, onOk, { once: true });
+    el.addEventListener('error', onErr, { once: true });
+    signal?.addEventListener('abort', onAbort, { once: true });
+  });
+}
+
+async function createLandmarker(): Promise<PoseLandmarker> {
+  const vision = await FilesetResolver.forVisionTasks(WASM_URL);
+  const make = (delegate: 'GPU' | 'CPU') =>
+    PoseLandmarker.createFromOptions(vision, { baseOptions: { modelAssetPath: MODEL_URL, delegate }, runningMode: 'VIDEO', numPoses: 1 });
+  try {
+    return await make('GPU');
+  } catch {
+    return await make('CPU');
+  }
+}
+
+// Cancela la espera de una promesa sin poder interrumpirla; si llega tarde, `onLate` libera lo que creó.
+function abortable<T>(p: Promise<T>, signal: AbortSignal | undefined, onLate: (v: T) => void): Promise<T> {
+  if (!signal) return p;
+  return new Promise((resolve, reject) => {
+    const onAbort = () => {
+      reject(new DOMException('Detección cancelada', 'AbortError'));
+      p.then(onLate, () => {});
+    };
+    if (signal.aborted) return onAbort();
+    signal.addEventListener('abort', onAbort, { once: true });
+    p.then(
+      (v) => { signal.removeEventListener('abort', onAbort); if (!signal.aborted) resolve(v); },
+      (e) => { signal.removeEventListener('abort', onAbort); reject(e); },
+    );
+  });
+}
+
+function toPose(lm: { x: number; y: number }[] | undefined): Pose | null {
+  if (!lm || lm.length < 25) return null;
+  const pick = (i: number) => ({ x: lm[i].x, y: lm[i].y });
   return {
-    nose: landmarks[LANDMARK_INDICES.NOSE] || { x: 0, y: 0 },
-    rightShoulder: landmarks[LANDMARK_INDICES.RIGHT_SHOULDER] || { x: 0, y: 0 },
-    leftShoulder: landmarks[LANDMARK_INDICES.LEFT_SHOULDER] || { x: 0, y: 0 },
-    rightElbow: landmarks[LANDMARK_INDICES.RIGHT_ELBOW] || { x: 0, y: 0 },
-    leftElbow: landmarks[LANDMARK_INDICES.LEFT_ELBOW] || { x: 0, y: 0 },
-    rightWrist: landmarks[LANDMARK_INDICES.RIGHT_WRIST] || { x: 0, y: 0 },
-    leftWrist: landmarks[LANDMARK_INDICES.LEFT_WRIST] || { x: 0, y: 0 },
-    rightHip: landmarks[LANDMARK_INDICES.RIGHT_HIP] || { x: 0, y: 0 },
-    leftHip: landmarks[LANDMARK_INDICES.LEFT_HIP] || { x: 0, y: 0 },
-    rightKnee: landmarks[LANDMARK_INDICES.RIGHT_KNEE] || { x: 0, y: 0 },
-    leftKnee: landmarks[LANDMARK_INDICES.LEFT_KNEE] || { x: 0, y: 0 },
-    rightAnkle: landmarks[LANDMARK_INDICES.RIGHT_ANKLE] || { x: 0, y: 0 },
-    leftAnkle: landmarks[LANDMARK_INDICES.LEFT_ANKLE] || { x: 0, y: 0 },
-    neck: {
-      x: (landmarks[LANDMARK_INDICES.LEFT_SHOULDER].x + landmarks[LANDMARK_INDICES.RIGHT_SHOULDER].x) / 2,
-      y: (landmarks[LANDMARK_INDICES.LEFT_SHOULDER].y + landmarks[LANDMARK_INDICES.RIGHT_SHOULDER].y) / 2,
-    },
-    spine: {
-      x:
-        (landmarks[LANDMARK_INDICES.LEFT_SHOULDER].x +
-          landmarks[LANDMARK_INDICES.RIGHT_SHOULDER].x +
-          landmarks[LANDMARK_INDICES.LEFT_HIP].x +
-          landmarks[LANDMARK_INDICES.RIGHT_HIP].x) /
-        4,
-      y:
-        (landmarks[LANDMARK_INDICES.LEFT_SHOULDER].y +
-          landmarks[LANDMARK_INDICES.RIGHT_SHOULDER].y +
-          landmarks[LANDMARK_INDICES.LEFT_HIP].y +
-          landmarks[LANDMARK_INDICES.RIGHT_HIP].y) /
-        4,
-    },
+    nose: pick(IDX.nose), lsh: pick(IDX.lsh), rsh: pick(IDX.rsh), lel: pick(IDX.lel), rel: pick(IDX.rel),
+    lwr: pick(IDX.lwr), rwr: pick(IDX.rwr), lhip: pick(IDX.lhip), rhip: pick(IDX.rhip),
   };
 }
 
-// ==================== Smoothing & Filtering ====================
-
-/**
- * Smooth landmarks over time to reduce jitter.
- * Uses Kalman filters per coordinate.
- */
-export class LandmarkSmoother {
-  private filters: Map<string, KalmanFilter1D> = new Map();
-  private lastLandmarks: PoseLandmarks | null = null;
-  private smoothingWindow: number = 3; // frames
-
-  constructor(smoothingWindow: number = 3) {
-    this.smoothingWindow = smoothingWindow;
-  }
-
-  smooth(landmarks: PoseLandmarks, frameIndex: number): SmoothedLandmarks {
-    const smoothed = { ...landmarks } as any;
-
-    // Apply Kalman filtering to key joints
-    const joints = ['rightShoulder', 'leftShoulder', 'rightElbow', 'leftElbow', 'rightWrist', 'leftWrist'];
-
-    for (const joint of joints) {
-      const landmark = landmarks[joint];
-      if (!landmark) continue;
-
-      const xKey = `${joint}.x`;
-      const yKey = `${joint}.y`;
-
-      if (!this.filters.has(xKey)) {
-        this.filters.set(xKey, new KalmanFilter1D(landmark.x, 1, 0.5));
-        this.filters.set(yKey, new KalmanFilter1D(landmark.y, 1, 0.5));
-      }
-
-      smoothed[joint] = {
-        ...landmark,
-        x: this.filters.get(xKey)!.update(landmark.x),
-        y: this.filters.get(yKey)!.update(landmark.y),
-      };
-    }
-
-    const confidence = Object.values(smoothed)
-      .filter((l: any) => l && l.visibility)
-      .reduce((a: number, l: any) => a + l.visibility, 0) /
-      Math.max(1, Object.values(smoothed).filter((l: any) => l && l.visibility).length);
-
-    return {
-      ...smoothed,
-      frameIndex,
-      timestamp: frameIndex * (1000 / 30), // assume 30fps default
-      confidence: Math.min(1, confidence),
-    };
-  }
-}
-
-// ==================== Event Merging ====================
-
-/**
- * Merge consecutive events of the same type and side.
- * Consolidates short detections into longer, more stable effects.
- */
-export function mergeConsecutiveEvents(events: FigureEvent[]): FigureEvent[] {
-  if (events.length === 0) return [];
-
-  // Sort by type, side, and start time
-  const sorted = events.sort((a, b) => {
-    if (a.type !== b.type) return a.type.localeCompare(b.type);
-    if ((a.side || '') !== (b.side || '')) return (a.side || '').localeCompare(b.side || '');
-    return a.startMs - b.startMs;
-  });
-
-  const merged: FigureEvent[] = [];
-  let current = { ...sorted[0] };
-  const mergeGapMs = 200; // gap threshold to merge events
-
-  for (let i = 1; i < sorted.length; i++) {
-    const next = sorted[i];
-    const sameType = current.type === next.type && current.side === next.side;
-    const gap = next.startMs - current.endMs;
-
-    if (sameType && gap < mergeGapMs) {
-      // Merge: extend current event
-      current.endMs = next.endMs;
-      // Average parameters
-      if (next.params) {
-        for (const [key, value] of Object.entries(next.params)) {
-          if (typeof value === 'number' && current.params[key] !== undefined) {
-            current.params[key] = (current.params[key] + value) / 2;
-          }
-        }
-      }
-    } else {
-      // Can't merge, push current and start new
-      merged.push(current);
-      current = { ...next };
-    }
-  }
-
-  merged.push(current);
-  return merged;
-}
-
-// ==================== Detection Engine ====================
-
-export async function detectMotionEvents(
-  videoUrl: string,
-  videoDurationMs: number,
-  onProgress?: (progress: number) => void
-): Promise<FigureEvent[]> {
-  // Load MediaPipe Pose
-  const poseLandmarker = await loadMediaPipePose();
-
+// Corre la estimación de pose UNA vez sobre todo el video y devuelve los eventos de figura propuestos.
+export async function detectFigureEvents(source: string, opts: DetectionOptions): Promise<DetectionResult> {
+  const { signal, onProgress, plugins } = opts;
   const video = document.createElement('video');
-  video.src = videoUrl;
   video.crossOrigin = 'anonymous';
+  video.muted = true;
+  video.playsInline = true;
+  video.preload = 'auto';
+  let landmarker: PoseLandmarker | null = null;
 
-  await new Promise((resolve) => {
-    video.onloadedmetadata = resolve;
-  });
+  try {
+    const src = safeVideoUrl(source);
+    if (!src) throw new Error('La dirección del video no es válida.');
+    const loaded = waitFor(video, 'loadeddata', signal);
+    video.src = src;
+    await loaded;
+    const durationMs = Math.floor(video.duration * 1000);
+    if (!Number.isFinite(durationMs) || durationMs <= 0) throw new Error('No se pudo leer la duración del video.');
+    const aspect = video.videoWidth && video.videoHeight ? video.videoWidth / video.videoHeight : 9 / 16;
 
-  const fps = 30; // sample at 30fps
-  const sampleInterval = 1000 / fps;
-  const totalFrames = Math.ceil((videoDurationMs / 1000) * fps);
-
-  const smoother = new LandmarkSmoother(3);
-  const allDetectedEvents: FigureEvent[] = [];
-  const poseFrames: SmoothedLandmarks[] = [];
-  const plugins = getAllEffectPlugins();
-
-  video.currentTime = 0;
-
-  for (let frameIndex = 0; frameIndex < totalFrames; frameIndex++) {
-    const timeMs = frameIndex * sampleInterval;
-    if (timeMs > videoDurationMs) break;
-
-    // Seek and wait for frame
-    video.currentTime = timeMs / 1000;
-    await new Promise((resolve) => {
-      const onSeeked = () => {
-        video.removeEventListener('seeked', onSeeked);
-        resolve(null);
-      };
-      video.addEventListener('seeked', onSeeked);
-    });
-
-    // Run MediaPipe detection
-    const results = await poseLandmarker.detectForVideo(video, Date.now());
-
-    if (results.landmarks && results.landmarks.length > 0) {
-      const rawLandmarks = extractLandmarks(results.landmarks[0]);
-      const smoothedLandmarks = smoother.smooth(rawLandmarks, frameIndex);
-      poseFrames.push(smoothedLandmarks);
-
-      // Run each effect plugin
-      const context: DetectionContext = {
-        videoWidth: video.videoWidth,
-        videoHeight: video.videoHeight,
-        fps,
-        frameIndex,
-        totalFrames,
-      };
-
-      for (const plugin of plugins) {
-        const detected = plugin.detect(smoothedLandmarks, poseFrames, context);
-
-        if (detected) {
-          const event: FigureEvent = {
-            id: `${plugin.type}-${frameIndex}-${Math.random().toString(36).substr(2, 9)}`,
-            type: detected.type as any,
-            startMs: detected.startMs ?? timeMs,
-            endMs: detected.endMs ?? timeMs + 500,
-            side: detected.side,
-            params: detected.params || {},
-            color: detected.color,
-            opacity: detected.opacity,
-            strokeWidth: detected.strokeWidth,
-            detectedAutomatically: true,
-            editedManually: false,
-            createdAt: new Date().toISOString(),
-            createdBy: 'system',
-          };
-
-          allDetectedEvents.push(event);
-        }
-      }
+    landmarker = await abortable(createLandmarker(), signal, (l) => l.close());
+    const frames: PoseFrame[] = [];
+    for (let t = 0; t < durationMs; t += STEP_MS) {
+      if (signal?.aborted) throw new DOMException('Detección cancelada', 'AbortError');
+      const seeked = waitFor(video, 'seeked', signal);
+      video.currentTime = t / 1000;
+      await seeked;
+      // detectForVideo exige marcas de tiempo estrictamente crecientes.
+      const result = landmarker.detectForVideo(video, t + 1);
+      frames.push({ tMs: t, pose: toPose(result.landmarks?.[0]) });
+      onProgress?.(Math.min(1, (t + STEP_MS) / durationMs));
     }
 
-    // Report progress
-    if (onProgress) {
-      onProgress(frameIndex / totalFrames);
-    }
+    const events = buildEvents(frames, { plugins, aspect, stepMs: STEP_MS });
+    return { events, durationMs, framesWithBody: frames.filter((f) => f.pose).length, framesTotal: frames.length };
+  } finally {
+    landmarker?.close();
+    video.removeAttribute('src');
+    video.load();
   }
-
-  // Merge consecutive events
-  const mergedEvents = mergeConsecutiveEvents(allDetectedEvents);
-
-  video.pause();
-  video.src = '';
-
-  return mergedEvents;
-}
-
-// ==================== MediaPipe Loading ====================
-
-let mediapipePose: any = null;
-
-async function loadMediaPipePose() {
-  if (mediapipePose) return mediapipePose;
-
-  // Load MediaPipe from CDN
-  await loadScript('https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm_bin/vision_wasm_bin.wasm');
-  await loadScript('https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/vision_bundle.js');
-
-  // @ts-ignore
-  const vision = (window as any).vision;
-
-  mediapipePose = await vision.PoseLandmarker.createFromOptions(vision, {
-    baseOptions: {
-      modelAssetPath: 'https://storage.googleapis.com/mediapipe-assets/pose_landmarker_full.task',
-    },
-    runningMode: 'IMAGE',
-  });
-
-  return mediapipePose;
-}
-
-function loadScript(src: string): Promise<void> {
-  return new Promise((resolve, reject) => {
-    if (document.querySelector(`script[src="${src}"]`)) {
-      resolve();
-      return;
-    }
-
-    const script = document.createElement('script');
-    script.src = src;
-    script.onload = () => resolve();
-    script.onerror = () => reject(new Error(`Failed to load ${src}`));
-    document.head.appendChild(script);
-  });
 }

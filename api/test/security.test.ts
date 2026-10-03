@@ -255,6 +255,6 @@ describe('solo mi app: Firebase App Check', () => {
   it('no arranca APP_CHECK=enforce sin verificador', async () => {
     const { createApp } = await import('../src/app.js');
     const { loadConfig } = await import('../src/config.js');
-    expect(() => createApp({ db: t.db, config: loadConfig({ APP_CHECK: 'enforce' } as NodeJS.ProcessEnv), verify: async () => ({ uid: 'x', emailVerified: true }), syncRole: async () => {} })).toThrow(/App Check/);
+    expect(() => createApp({ db: t.db, config: loadConfig({ APP_CHECK: 'enforce' } as NodeJS.ProcessEnv), verify: async () => ({ uid: 'x', emailVerified: true }), syncRole: async () => {}, ownedClassVideo: async () => null })).toThrow(/App Check/);
   });
 });

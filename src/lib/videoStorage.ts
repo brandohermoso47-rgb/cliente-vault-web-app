@@ -1,94 +1,52 @@
-import {
-  ref,
-  uploadBytesResumable,
-  getDownloadURL,
-  deleteObject
-} from 'firebase/storage';
+import { ref, uploadBytesResumable, getDownloadURL, deleteObject } from 'firebase/storage';
 import { storage } from './firebase';
-import { VIDEO_TYPES } from './validators';
+import { safeVideoUrl } from './safeVideoUrl';
 
-/**
- * Upload video file to Firebase Storage for motion recognition
- */
+// Debe coincidir con storage.rules (video/(mp4|webm|quicktime), < 200 MB).
+const MAX_VIDEO_BYTES = 200 * 1024 * 1024;
+const EXT: Record<string, string> = { 'video/mp4': 'mp4', 'video/webm': 'webm', 'video/quicktime': 'mov' };
+
 export async function uploadClassVideo(
   uid: string,
   classId: string,
   file: File,
-  onProgress?: (progress: number) => void
+  onProgress?: (percent: number) => void
 ): Promise<string> {
-  if (!VIDEO_TYPES.includes(file.type)) {
-    throw new Error('Solo se aceptan archivos de video');
-  }
+  const ext = EXT[file.type];
+  if (!ext) throw new Error('Formato no admitido. Sube un video MP4, WebM o MOV.');
+  if (file.size >= MAX_VIDEO_BYTES) throw new Error('El video debe pesar menos de 200 MB.');
 
-  const maxSize = 500 * 1024 * 1024; // 500MB
-  if (file.size > maxSize) {
-    throw new Error('El archivo no puede exceder 500MB');
-  }
-
-  const filename = `users/${uid}/classes/${classId}/video_${Date.now()}.mp4`;
-  const fileRef = ref(storage, filename);
-  const uploadTask = uploadBytesResumable(fileRef, file);
+  const fileRef = ref(storage, `users/${uid}/classes/${classId}/video_${Date.now()}.${ext}`);
+  const task = uploadBytesResumable(fileRef, file, { contentType: file.type });
 
   return new Promise((resolve, reject) => {
-    uploadTask.on(
+    task.on(
       'state_changed',
-      (snapshot) => {
-        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        if (onProgress) {
-          onProgress(progress);
-        }
-      },
-      (error) => {
-        console.error('Upload error:', error);
-        reject(new Error('Error subiendo video: ' + error.message));
-      },
-      async () => {
-        try {
-          const url = await getDownloadURL(fileRef);
-          resolve(url);
-        } catch (err) {
-          reject(new Error('Error obteniendo URL del video'));
-        }
-      }
+      (snap) => onProgress?.((snap.bytesTransferred / snap.totalBytes) * 100),
+      (error) => reject(new Error('Error subiendo el video: ' + error.message)),
+      () => { getDownloadURL(fileRef).then(resolve, () => reject(new Error('No se pudo obtener la URL del video.'))); }
     );
   });
 }
 
-/**
- * Get video duration from file
- */
-export async function getVideoDuration(file: File): Promise<number> {
+export function getVideoDuration(file: File): Promise<number> {
   return new Promise((resolve, reject) => {
     const video = document.createElement('video');
+    const objectUrl = URL.createObjectURL(file);
+    video.preload = 'metadata';
     video.onloadedmetadata = () => {
-      const durationMs = video.duration * 1000;
-      resolve(durationMs);
+      URL.revokeObjectURL(objectUrl);
+      resolve(Math.round(video.duration * 1000));
     };
-
     video.onerror = () => {
-      reject(new Error('No se pudo leer la duración del video'));
+      URL.revokeObjectURL(objectUrl);
+      reject(new Error('No se pudo leer la duración del video.'));
     };
-
-    video.srcObject = file;
+    video.src = safeVideoUrl(objectUrl) ?? '';
   });
 }
 
-/**
- * Delete video from Firebase Storage
- */
-export async function deleteClassVideo(videoUrl: string): Promise<void> {
-  try {
-    const fileRef = ref(storage, videoUrl);
-    await deleteObject(fileRef);
-  } catch (err) {
-    console.error('Error deleting video:', err);
-    throw new Error('Error eliminando video');
-  }
-}
-
-/**
- * Create placeholder video URL for demo
- */
-export function createPlaceholderVideoUrl(classId: string): string {
-  return `https://commondatastorage.googleapis.com/gtv-videos-library/sample/BigBuckBunny.mp4`;
+// Acepta la URL de descarga que devolvió uploadClassVideo.
+export function deleteClassVideo(downloadUrl: string): Promise<void> {
+  return deleteObject(ref(storage, downloadUrl));
 }

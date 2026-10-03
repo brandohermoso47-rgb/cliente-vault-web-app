@@ -6,6 +6,7 @@ import { list } from './config.js';
 import { errorHandler, HttpError, wrap, type Deps } from './http.js';
 import { adminRouter } from './routes/admin.js';
 import { billingRouter } from './routes/billing.js';
+import { classesRouter, isFigureEventsPut } from './routes/classes.js';
 import { instructorsRouter } from './routes/instructors.js';
 import { spotifyRouter } from './routes/spotify.js';
 import { usersRouter } from './routes/users.js';
@@ -70,7 +71,9 @@ export function createApp(deps: Deps) {
     deps.verifyAppCheck(token).then(() => next(), () => next(new HttpError(401, 'app_check_invalid', 'Verificación de la aplicación no válida.')));
   });
 
-  app.use(express.json({ limit: '100kb' }));
+  // El PUT de figuras (hasta 2 MB) se parsea en su ruta, después del rate limit y de la autenticación.
+  const json = express.json({ limit: '100kb' });
+  app.use((req, res, next) => (isFigureEventsPut(req) ? next() : json(req, res, next)));
 
   // Más estricto en lo que cuesta dinero o cambia permisos.
   const strict = rateLimit({ windowMs: 15 * 60 * 1000, limit: 60, standardHeaders: 'draft-7', legacyHeaders: false });
@@ -79,6 +82,7 @@ export function createApp(deps: Deps) {
   app.use('/api/v1', usersRouter(deps));
   app.use('/api/v1', billingRouter(deps));
   app.use('/api/v1', instructorsRouter(deps));
+  app.use('/api/v1', classesRouter(deps));
   app.use('/api/v1', spotifyRouter(deps));
   app.use('/api/v1/admin', adminRouter(deps));
 

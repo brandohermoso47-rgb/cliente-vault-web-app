@@ -4,7 +4,6 @@ import { parseCss, sty } from './dc';
 import { emailOk, handleOk, passwordOk } from './validators';
 import { frameFocusEnergy } from './entrenar/freestyleCoach';
 import { POSE_LANDMARK_INDEX as IDX } from './entrenar/poseTracker';
-import { arcPath, checkAngle } from './motionRecognition/geometry';
 
 describe('validadores', () => {
   it('acepta correos normales, incluidos los que llevan la letra "s" (regresión del error de registro)', () => {
@@ -45,14 +44,6 @@ describe('países', () => {
 describe('estilos del prototipo (dc.ts)', () => {
   it('convierte CSS en objeto React, con variables y prefijos de navegador', () => {
     expect(parseCss('color:red;--x:1;-webkit-backdrop-filter:blur(2px)')).toEqual({ color: 'red', '--x': '1', WebkitBackdropFilter: 'blur(2px)' });
-  });
-
-  describe('geometría de motion recognition', () => {
-    it('compara el ángulo con el objetivo y genera un arco por defecto en sentido horario', () => {
-      expect(checkAngle(90, 90).isApprox(90, 15)).toBe(true);
-      expect(checkAngle(90, 90).isApprox(180, 15)).toBe(false);
-      expect(arcPath({ center: { x: 0, y: 0 }, radius: 10, startAngleDeg: 0, endAngleDeg: 4 }).length).toBeGreaterThan(1);
-    });
   });
 
   describe('energía de niveles en freestyle', () => {

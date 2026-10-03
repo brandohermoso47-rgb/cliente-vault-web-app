@@ -1,5 +1,5 @@
 import { sql } from 'drizzle-orm';
-import { boolean, integer, jsonb, numeric, pgEnum, pgTable, text, timestamp, uuid, varchar } from 'drizzle-orm/pg-core';
+import { boolean, check, index, integer, jsonb, numeric, pgEnum, pgTable, text, timestamp, uuid, varchar } from 'drizzle-orm/pg-core';
 
 // PostgreSQL es la fuente de verdad de usuarios, suscripciones, pagos y catálogo.
 // Firestore queda para lo de tiempo real (chat, batallas, notificaciones).
@@ -136,6 +136,28 @@ export const stripeEvents = pgTable('stripe_events', {
   type: text('type').notNull(),
   processedAt: timestamp('processed_at', { withTimezone: true }).notNull().defaultNow(),
 });
+
+// Figuras educativas (rejilla, líneas de brazo, triángulos…) sugeridas por el editor de movimiento y
+// revisadas por el instructor. Las clases viven en Firestore, así que class_id es el ID de ese documento (sin FK).
+export type FigureKeyframe = { t: number; pts: Record<string, { x: number; y: number }>; v?: Record<string, number> };
+export const figureEvents = pgTable('figure_events', {
+  id: uuid('id').primaryKey().default(sql`gen_random_uuid()`),
+  classId: text('class_id').notNull(),
+  effectType: text('effect_type').notNull(),
+  side: varchar('side', { length: 1 }),
+  startMs: integer('start_ms').notNull(),
+  endMs: integer('end_ms').notNull(),
+  params: jsonb('params').$type<{ keyframes: FigureKeyframe[] }>().notNull(),
+  color: varchar('color', { length: 7 }),
+  // Video de la clase sobre el que se detectaron las figuras; un PUT con otro video se rechaza (409).
+  videoUrl: text('video_url'),
+  createdBy: uuid('created_by').notNull().references(() => users.id, { onDelete: 'cascade' }),
+  editedManually: boolean('edited_manually').notNull().default(false),
+  createdAt: createdAt(),
+}, (t) => [
+  index('figure_events_class_owner_idx').on(t.classId, t.createdBy),
+  check('figure_events_range', sql`${t.startMs} >= 0 AND ${t.endMs} > ${t.startMs}`),
+]);
 
 export type User = typeof users.$inferSelect;
 export type Plan = typeof plans.$inferSelect;

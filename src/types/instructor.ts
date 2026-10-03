@@ -14,16 +14,6 @@ export interface IClass {
   status: 'live' | 'scheduled' | 'completed';
   videoUrl?: string;
   videoDurationMs?: number;
-  motionRecognitionData?: {
-    events: any[];
-    masterSettings?: {
-      gridSpacing?: number;
-      arcResolution?: number;
-      trailLength?: number;
-    };
-    createdAt?: any;
-    updatedAt?: any;
-  };
   createdAt: any;
   updatedAt: any;
 }
