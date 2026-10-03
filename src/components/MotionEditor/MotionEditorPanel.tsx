@@ -22,6 +22,7 @@ export default function MotionEditorPanel({ uid, classes }: { uid: string; class
   const [experimental, setExperimental] = useState(false);
   const [saving, setSaving] = useState(false);
   const abortRef = useRef<AbortController | null>(null);
+  const fileRef = useRef<HTMLInputElement>(null);
 
   const videoUrl = localUrl ?? cls?.videoUrl ?? null;
   // Mientras se guarda tampoco se puede cambiar de clase ni subir/detectar: la respuesta pertenece a esta clase.
@@ -156,16 +157,19 @@ export default function MotionEditorPanel({ uid, classes }: { uid: string; class
           </label>
 
           {cls && (
-            <label style={{ ...btn('ghost'), opacity: busy ? 0.5 : 1, cursor: busy ? 'default' : 'pointer' }}>
-              {cls.videoUrl ? 'Reemplazar video' : 'Subir video'}
+            <>
+              <button type="button" disabled={busy} onClick={() => fileRef.current?.click()} style={{ ...btn('ghost'), opacity: busy ? 0.5 : 1 }}>
+                {cls.videoUrl ? 'Reemplazar video' : 'Subir video'}
+              </button>
               <input
+                ref={fileRef}
                 type="file"
                 accept="video/mp4,video/webm,video/quicktime"
                 disabled={busy}
-                style={{ display: 'none' }}
+                hidden
                 onChange={(e) => { const f = e.target.files?.[0]; e.target.value = ''; if (f) onFile(f); }}
               />
-            </label>
+            </>
           )}
 
           {cls && videoUrl && (

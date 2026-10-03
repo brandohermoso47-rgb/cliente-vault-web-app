@@ -56,6 +56,23 @@ async function createLandmarker(): Promise<PoseLandmarker> {
   }
 }
 
+// Cancela la espera de una promesa sin poder interrumpirla; si llega tarde, `onLate` libera lo que creó.
+function abortable<T>(p: Promise<T>, signal: AbortSignal | undefined, onLate: (v: T) => void): Promise<T> {
+  if (!signal) return p;
+  return new Promise((resolve, reject) => {
+    const onAbort = () => {
+      reject(new DOMException('Detección cancelada', 'AbortError'));
+      p.then(onLate, () => {});
+    };
+    if (signal.aborted) return onAbort();
+    signal.addEventListener('abort', onAbort, { once: true });
+    p.then(
+      (v) => { signal.removeEventListener('abort', onAbort); if (!signal.aborted) resolve(v); },
+      (e) => { signal.removeEventListener('abort', onAbort); reject(e); },
+    );
+  });
+}
+
 function toPose(lm: { x: number; y: number }[] | undefined): Pose | null {
   if (!lm || lm.length < 25) return null;
   const pick = (i: number) => ({ x: lm[i].x, y: lm[i].y });
@@ -83,7 +100,7 @@ export async function detectFigureEvents(source: string, opts: DetectionOptions)
     if (!Number.isFinite(durationMs) || durationMs <= 0) throw new Error('No se pudo leer la duración del video.');
     const aspect = video.videoWidth && video.videoHeight ? video.videoWidth / video.videoHeight : 9 / 16;
 
-    landmarker = await createLandmarker();
+    landmarker = await abortable(createLandmarker(), signal, (l) => l.close());
     const frames: PoseFrame[] = [];
     for (let t = 0; t < durationMs; t += STEP_MS) {
       if (signal?.aborted) throw new DOMException('Detección cancelada', 'AbortError');
