@@ -46,6 +46,12 @@ const eventInput = z.object({
   e.params.keyframes.forEach((k, i) => {
     const missing = [...req.pts.filter((p) => !k.pts[p]), ...(req.v ?? []).filter((v) => k.v?.[v] === undefined)];
     if (missing.length) ctx.addIssue({ code: 'custom', path: ['params', 'keyframes', i], message: `faltan ${missing.join(', ')} para ${e.type}` });
+    if (k.t < e.startMs || k.t > e.endMs) {
+      ctx.addIssue({ code: 'custom', path: ['params', 'keyframes', i, 't'], message: 'keyframe fuera del intervalo del evento' });
+    }
+    if (i > 0 && k.t <= e.params.keyframes[i - 1].t) {
+      ctx.addIssue({ code: 'custom', path: ['params', 'keyframes', i, 't'], message: 'los keyframes deben tener tiempos estrictamente crecientes' });
+    }
   });
 });
 const putBody = z.object({ events: z.array(eventInput).max(MAX_FIGURE_EVENTS) });

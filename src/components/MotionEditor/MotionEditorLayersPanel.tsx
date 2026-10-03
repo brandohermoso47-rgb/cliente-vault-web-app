@@ -12,10 +12,11 @@ interface Props {
   onAccept: (ids: string[]) => void;
   onDelete: (id: string) => void;
   onToggleMute: (type: FigureEffectType) => void;
+  disabled: boolean;
 }
 
 // Panel de capas: un grupo por tipo (silenciar, aceptar todo) y, al abrirlo, sus eventos uno por uno.
-export default function MotionEditorLayersPanel({ events, accepted, mutedTypes, selectedId, onSelect, onAccept, onDelete, onToggleMute }: Props) {
+export default function MotionEditorLayersPanel({ events, accepted, mutedTypes, selectedId, onSelect, onAccept, onDelete, onToggleMute, disabled }: Props) {
   const [open, setOpen] = useState<FigureEffectType | null>(null);
   const groups = EFFECT_PLUGINS.map((p) => ({ plugin: p, items: events.filter((e) => e.type === p.type) })).filter((g) => g.items.length);
   const pending = events.filter((e) => !accepted.has(e.id) && !mutedTypes.has(e.type)).map((e) => e.id);
@@ -24,7 +25,7 @@ export default function MotionEditorLayersPanel({ events, accepted, mutedTypes, 
     <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px' }}>
         <span style={label}>Capas</span>
-        <button type="button" disabled={!pending.length} onClick={() => onAccept(pending)} style={{ ...btn('ghost'), opacity: pending.length ? 1 : 0.5 }}>
+        <button type="button" disabled={disabled || !pending.length} onClick={() => onAccept(pending)} style={{ ...btn('ghost'), opacity: !disabled && pending.length ? 1 : 0.5 }}>
           Aceptar todas ({pending.length})
         </button>
       </div>
@@ -40,7 +41,7 @@ export default function MotionEditorLayersPanel({ events, accepted, mutedTypes, 
                 <div style={{ fontSize: '13px', fontWeight: 700 }}>{isOpen ? '▾' : '▸'} {plugin.label}</div>
                 <div style={{ fontSize: '11.5px', color: 'var(--ink-3)' }}>{nAccepted}/{items.length} aceptadas · {plugin.description}</div>
               </button>
-              <button type="button" onClick={() => onToggleMute(plugin.type)} style={btn('ghost')} aria-pressed={isMuted}>
+              <button type="button" disabled={disabled} onClick={() => onToggleMute(plugin.type)} style={btn('ghost')} aria-pressed={isMuted}>
                 {isMuted ? 'Silenciado' : 'Silenciar'}
               </button>
             </div>
@@ -59,8 +60,8 @@ export default function MotionEditorLayersPanel({ events, accepted, mutedTypes, 
                       </span>
                       {isAccepted
                         ? <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--ink-2)' }}>✓ Aceptada</span>
-                        : <button type="button" onClick={(ev) => { ev.stopPropagation(); onAccept([e.id]); }} style={btn('ghost')}>Aceptar</button>}
-                      <button type="button" onClick={(ev) => { ev.stopPropagation(); onDelete(e.id); }} style={btn('danger')} aria-label="Eliminar figura">Eliminar</button>
+                        : <button type="button" disabled={disabled} onClick={(ev) => { ev.stopPropagation(); onAccept([e.id]); }} style={btn('ghost')}>Aceptar</button>}
+                      <button type="button" disabled={disabled} onClick={(ev) => { ev.stopPropagation(); onDelete(e.id); }} style={btn('danger')} aria-label="Eliminar figura">Eliminar</button>
                     </div>
                   );
                 })}
