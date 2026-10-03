@@ -78,11 +78,38 @@ const RECOMMENDATIONS = [
   },
 ];
 
-const AiTag = () => (
-  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-mono font-black uppercase tracking-wider bg-[#E9C349]/15 text-[#E9C349] border border-[#E9C349]/30">
-    <Sparkles className="w-2.5 h-2.5" /> IA
-  </span>
-);
+const card: React.CSSProperties = {
+  padding: 18,
+  borderRadius: 18,
+  border: '1px solid var(--hair)',
+  background: 'var(--glass)',
+  backdropFilter: 'var(--lg-blur)',
+  WebkitBackdropFilter: 'var(--lg-blur)',
+  boxShadow: 'var(--lg-edge)',
+};
+
+const eyebrow: React.CSSProperties = {
+  fontFamily: "'Geist Mono', monospace",
+  fontSize: 10,
+  letterSpacing: '0.16em',
+  textTransform: 'uppercase',
+  color: 'var(--ink-3)',
+};
+
+function AiTag() {
+  return (
+    <span style={{
+      display: 'inline-flex', alignItems: 'center', gap: 4,
+      padding: '2px 8px', borderRadius: 999,
+      fontFamily: "'Geist Mono', monospace", fontSize: 9, fontWeight: 700,
+      letterSpacing: '0.1em', textTransform: 'uppercase',
+      background: 'color-mix(in oklch, var(--gold-hi) 18%, transparent)',
+      color: 'var(--gold-hi)', border: '1px solid color-mix(in oklch, var(--gold-hi) 40%, transparent)',
+    }}>
+      <Sparkles size={11} /> IA
+    </span>
+  );
+}
 
 const fadeUp: Variants = {
   hidden: { opacity: 0, y: 14 },
@@ -101,7 +128,7 @@ export default function AcaInsightsPanel({ students, onMessageStudent }: AcaInsi
     [students]
   );
   const atRisk = scored.filter(r => r.score >= 55);
-  const risk = scored.slice(0, 6);
+  const risk = atRisk.slice(0, 6);
 
   const atRiskCount = atRisk.length;
   const avgRetention = MONTH_RETENTION_DEMO[MONTH_RETENTION_DEMO.length - 1];
@@ -114,55 +141,44 @@ export default function AcaInsightsPanel({ students, onMessageStudent }: AcaInsi
   ];
 
   return (
-    <div className="flex flex-col gap-5">
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
       {/* Resumen IA */}
       <motion.div
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="p-5 rounded-2xl border border-[#E9C349]/25 bg-gradient-to-br from-[#1a1430]/90 to-[#120f20]/90"
+        style={{ ...card, borderColor: 'color-mix(in oklch, var(--gold-hi) 30%, var(--hair))' }}
       >
-        <div className="flex items-center gap-2 mb-2">
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
           <AiTag />
-          <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400">Resumen del mes · datos de ejemplo</span>
+          <span style={eyebrow}>Resumen del mes · datos de ejemplo</span>
         </div>
-        <p className="text-sm leading-relaxed text-slate-200 max-w-2xl">
-          La retención se mantiene en <b className="text-[#E9C349]">{avgRetention}%</b>. Detecté{' '}
-          <b className="text-pink-400">{atRiskCount} alumna{atRiskCount === 1 ? '' : 's'} con riesgo de baja</b> por inactividad
+        <p style={{ margin: 0, fontSize: 14, lineHeight: 1.6, color: 'var(--ink-2)', maxWidth: 680 }}>
+          La retención se mantiene en <b style={{ color: 'var(--gold-hi)' }}>{avgRetention}%</b>. Detecté{' '}
+          <b style={{ color: 'var(--pink)' }}>{atRiskCount} alumna{atRiskCount === 1 ? '' : 's'} con riesgo de baja</b> por inactividad
           reciente. Revisa la lista de abajo y envíales un mensaje antes de que venza su paquete.
         </p>
       </motion.div>
 
       {/* Stat cards */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(170px, 1fr))', gap: 14 }}>
         {stats.map((s, i) => (
-          <motion.div
-            key={s.label}
-            custom={i}
-            initial="hidden"
-            animate="show"
-            variants={fadeUp}
-            className="p-4 rounded-2xl border border-white/10 bg-white/5"
-          >
-            <div className="text-[9px] font-mono uppercase tracking-wider text-slate-400">{s.label}</div>
-            <div className="text-2xl font-black text-white mt-1">{s.value}</div>
-            <div className="text-[11px] text-slate-400 mt-0.5">{s.sub}</div>
+          <motion.div key={s.label} custom={i} initial="hidden" animate="show" variants={fadeUp} style={card}>
+            <div style={eyebrow}>{s.label}</div>
+            <div style={{ fontFamily: "'Instrument Serif', Georgia, serif", fontSize: 28, color: 'var(--ink)', marginTop: 6 }}>{s.value}</div>
+            <div style={{ fontSize: 12, color: 'var(--ink-2)', marginTop: 2 }}>{s.sub}</div>
           </motion.div>
         ))}
       </div>
 
-      <div className="grid lg:grid-cols-2 gap-4">
+      <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0,1fr) minmax(0,1fr)', gap: 16 }}>
         {/* Riesgo de baja */}
-        <motion.div
-          initial={{ opacity: 0, x: -12 }}
-          animate={{ opacity: 1, x: 0 }}
-          className="p-4 rounded-2xl border border-white/10 bg-white/5 flex flex-col gap-1"
-        >
-          <div className="flex items-center gap-2 mb-2">
+        <motion.div initial={{ opacity: 0, x: -12 }} animate={{ opacity: 1, x: 0 }} style={card}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
             <AiTag />
-            <span className="text-xs font-bold text-white">Alumnas en riesgo de baja</span>
+            <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--ink)' }}>Alumnas en riesgo de baja</span>
           </div>
           {risk.length === 0 && (
-            <p className="text-xs text-slate-400 py-4">Aún no hay alumnas registradas para analizar.</p>
+            <p style={{ fontSize: 12, color: 'var(--ink-2)', padding: '12px 0' }}>Ninguna alumna cruza el umbral de riesgo esta semana.</p>
           )}
           {risk.map((r, i) => (
             <motion.div
@@ -171,30 +187,39 @@ export default function AcaInsightsPanel({ students, onMessageStudent }: AcaInsi
               initial="hidden"
               animate="show"
               variants={fadeUp}
-              className="flex items-start gap-3 py-2.5 border-b border-white/5 last:border-0"
+              style={{ display: 'flex', alignItems: 'flex-start', gap: 10, padding: '10px 0', borderBottom: '1px solid var(--hair-soft)' }}
             >
-              <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-pink-500 to-purple-600 flex items-center justify-center text-[11px] font-black text-white shrink-0">
+              <div style={{
+                width: 32, height: 32, borderRadius: 11, flex: '0 0 32px',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontSize: 12, fontWeight: 700, color: '#fff',
+                background: 'linear-gradient(135deg, var(--pink), var(--purple))',
+              }}>
                 {r.name.charAt(0)}
               </div>
-              <div className="flex-1 min-w-0">
-                <div className="text-xs font-bold text-white truncate">{r.name}</div>
-                <div className="text-[11px] text-slate-400">{r.reason}</div>
-                <div className="h-1 rounded-full bg-white/10 mt-1.5 overflow-hidden">
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--ink)' }}>{r.name}</div>
+                <div style={{ fontSize: 11, color: 'var(--ink-2)' }}>{r.reason}</div>
+                <div style={{ height: 4, borderRadius: 999, background: 'var(--hair-soft)', marginTop: 6, overflow: 'hidden' }}>
                   <motion.div
                     initial={{ width: 0 }}
                     animate={{ width: `${r.score}%` }}
                     transition={{ duration: 0.6, delay: 0.1 + i * 0.05 }}
-                    className={`h-full rounded-full ${r.score >= 70 ? 'bg-pink-500' : 'bg-[#E9C349]'}`}
+                    style={{ height: '100%', borderRadius: 999, background: r.score >= 70 ? 'var(--pink)' : 'var(--gold-hi)' }}
                   />
                 </div>
               </div>
-              <div className="flex flex-col items-end gap-1 shrink-0">
-                <span className={`font-mono text-[11px] font-bold ${r.score >= 70 ? 'text-pink-400' : 'text-[#E9C349]'}`}>{r.score}%</span>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 4, flex: '0 0 auto' }}>
+                <span style={{ fontFamily: "'Geist Mono', monospace", fontSize: 11, fontWeight: 700, color: r.score >= 70 ? 'var(--pink)' : 'var(--gold-hi)' }}>{r.score}%</span>
                 <button
                   onClick={() => onMessageStudent?.(r.id, r.name)}
-                  className="text-[10px] font-bold text-slate-300 hover:text-white underline-offset-2 hover:underline flex items-center gap-1"
+                  style={{
+                    display: 'flex', alignItems: 'center', gap: 4,
+                    fontSize: 10, fontWeight: 700, color: 'var(--ink-2)',
+                    background: 'none', border: 'none', cursor: 'pointer', padding: 0,
+                  }}
                 >
-                  <MessageSquareWarning className="w-3 h-3" /> Escribir
+                  <MessageSquareWarning size={12} /> Escribir
                 </button>
               </div>
             </motion.div>
@@ -202,45 +227,42 @@ export default function AcaInsightsPanel({ students, onMessageStudent }: AcaInsi
         </motion.div>
 
         {/* Retención histórica */}
-        <motion.div
-          initial={{ opacity: 0, x: 12 }}
-          animate={{ opacity: 1, x: 0 }}
-          className="p-4 rounded-2xl border border-white/10 bg-white/5"
-        >
-          <div className="text-xs font-bold text-white mb-1">Retención · últimos 6 meses</div>
-          <div className="text-[10px] text-slate-500 mb-3">Ejemplo ilustrativo — aún no hay historial de retención conectado</div>
-          <div className="flex items-end gap-2.5 h-36">
+        <motion.div initial={{ opacity: 0, x: 12 }} animate={{ opacity: 1, x: 0 }} style={card}>
+          <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--ink)' }}>Retención · últimos 6 meses</div>
+          <div style={{ fontSize: 10, color: 'var(--ink-3)', marginTop: 2, marginBottom: 14 }}>
+            Ejemplo ilustrativo — aún no hay historial de retención conectado
+          </div>
+          <div style={{ display: 'flex', alignItems: 'flex-end', gap: 10, height: 140 }}>
             {MONTH_RETENTION_DEMO.map((v, i) => (
-              <div key={i} className="flex-1 flex flex-col items-center gap-1.5 h-full justify-end">
-                <span className="font-mono text-[10px] text-slate-400">{v}%</span>
+              <div key={i} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, height: '100%', justifyContent: 'flex-end' }}>
+                <span style={{ fontFamily: "'Geist Mono', monospace", fontSize: 10, color: 'var(--ink-3)' }}>{v}%</span>
                 <motion.div
                   initial={{ height: 0 }}
                   animate={{ height: `${((v - 70) / 30) * 100}%` }}
                   transition={{ duration: 0.7, delay: 0.15 + i * 0.06, ease: 'easeOut' }}
-                  className={`w-full rounded-t-md ${i === MONTH_RETENTION_DEMO.length - 1 ? 'bg-[#E9C349]' : 'bg-[#E9C349]/40'}`}
+                  style={{
+                    width: '100%', borderRadius: '6px 6px 0 0',
+                    background: i === MONTH_RETENTION_DEMO.length - 1 ? 'var(--gold-hi)' : 'color-mix(in oklch, var(--gold-hi) 40%, transparent)',
+                  }}
                 />
               </div>
             ))}
           </div>
-          <div className="flex gap-2.5 mt-2">
+          <div style={{ display: 'flex', gap: 10, marginTop: 8 }}>
             {monthLabels.map((m, i) => (
-              <span key={i} className="flex-1 text-center font-mono text-[9px] text-slate-500 uppercase">{m}</span>
+              <span key={i} style={{ flex: 1, textAlign: 'center', fontFamily: "'Geist Mono', monospace", fontSize: 9, color: 'var(--ink-3)', textTransform: 'uppercase' }}>{m}</span>
             ))}
           </div>
         </motion.div>
       </div>
 
       {/* Recomendaciones IA */}
-      <motion.div
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="p-4 rounded-2xl border border-white/10 bg-white/5"
-      >
-        <div className="flex items-center gap-2 mb-3">
+      <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} style={card}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
           <AiTag />
-          <span className="text-xs font-bold text-white">Recomendaciones</span>
+          <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--ink)' }}>Recomendaciones</span>
         </div>
-        <div className="flex flex-col">
+        <div style={{ display: 'flex', flexDirection: 'column' }}>
           {RECOMMENDATIONS.map((r, i) => {
             const Icon = r.icon;
             const isAcknowledged = acknowledged.includes(r.id);
@@ -251,22 +273,35 @@ export default function AcaInsightsPanel({ students, onMessageStudent }: AcaInsi
                 initial="hidden"
                 animate="show"
                 variants={fadeUp}
-                className={`flex items-start gap-3 py-2.5 border-b border-white/5 last:border-0 transition-opacity ${isAcknowledged ? 'opacity-50' : ''}`}
+                style={{
+                  display: 'flex', alignItems: 'flex-start', gap: 10, padding: '10px 0',
+                  borderBottom: '1px solid var(--hair-soft)', opacity: isAcknowledged ? 0.55 : 1,
+                }}
               >
-                <span className="w-9 h-9 rounded-xl bg-[#E9C349]/10 text-[#E9C349] flex items-center justify-center shrink-0">
-                  <Icon className="w-4 h-4" />
+                <span style={{
+                  width: 34, height: 34, borderRadius: 11, flex: '0 0 34px',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  background: 'color-mix(in oklch, var(--gold-hi) 14%, transparent)', color: 'var(--gold-hi)',
+                }}>
+                  <Icon size={16} />
                 </span>
-                <div className="flex-1 min-w-0">
-                  <div className="text-xs font-bold text-white">{r.title}</div>
-                  <div className="text-[11px] text-slate-400 mt-0.5">{r.detail}</div>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--ink)' }}>{r.title}</div>
+                  <div style={{ fontSize: 11, color: 'var(--ink-2)', marginTop: 2 }}>{r.detail}</div>
                 </div>
                 {isAcknowledged ? (
-                  <span className="text-[10px] font-mono font-bold text-[#E9C349] flex items-center gap-1 shrink-0"><Check className="w-3 h-3" /> Revisada</span>
+                  <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontFamily: "'Geist Mono', monospace", fontSize: 10, fontWeight: 700, color: 'var(--gold-hi)', flex: '0 0 auto' }}>
+                    <Check size={12} /> Revisada
+                  </span>
                 ) : (
                   <button
                     onClick={() => setAcknowledged(a => [...a, r.id])}
                     title="Solo la marca como revisada; el cambio de horario o plan hay que hacerlo manualmente en la pestaña correspondiente."
-                    className="text-[10px] font-bold px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-white shrink-0"
+                    style={{
+                      flex: '0 0 auto', fontSize: 10, fontWeight: 700, color: 'var(--ink)',
+                      padding: '6px 10px', borderRadius: 10, border: '1px solid var(--hair)',
+                      background: 'var(--glass-2)', cursor: 'pointer',
+                    }}
                   >
                     Marcar como revisada
                   </button>

@@ -1294,10 +1294,16 @@ class App extends Component<any, any> {
     this.forceUpdate();
   };
 
+  nivelesLabels = { novato: 'Novato', intermedio: 'Intermedio', avanzado: 'Avanzado', profesional: 'Profesional' };
+
   saveStudentLevel = (studentId, levelId) => {
     const st = this.students.find((s) => s.id === studentId);
     if (!st) return;
     st.placedLevel = levelId;
+    // this.students[].lv es lo que leen buildStudentRows/buildInsStudentMgmt/buildInsCommHub/
+    // buildInsightsStudents para mostrar el nivel, así que hay que actualizarlo también
+    // o la alumna seguiría mostrando su nivel anterior en el resto del panel.
+    st.lv = this.nivelesLabels[levelId] || st.lv;
     this.forceUpdate();
   };
 
@@ -1359,6 +1365,14 @@ class App extends Component<any, any> {
       bar: 'width:' + s.pct + '%;height:100%;border-radius:999px;background:' + (s.pct > 60 ? 'var(--blue)' : 'var(--yellow)'),
       avatar: 'width:40px;height:40px;flex:0 0 40px;border-radius:14px;border:1px solid var(--hair);background:linear-gradient(135deg, color-mix(in oklch, ' + s.c1 + ' 72%, #fff 8%), color-mix(in oklch, ' + s.c2 + ' 70%, #000 18%))'
     }));
+  }
+
+  // src/views/Instructor.tsx (el componente que Shell.tsx realmente monta,
+  // a diferencia del generado buildStudentRows() de arriba) espera
+  // {name, email, progress} — nombres distintos a los de buildStudentRows().
+  buildInsStudentsList() {
+    const list = this.insStudent ? this.students.filter((s) => s.id === this.insStudent) : this.students;
+    return list.map((s) => ({ key: s.id, name: s.n, email: s.mail, progress: s.pct }));
   }
 
   insBpm = 124;
@@ -3122,6 +3136,7 @@ class App extends Component<any, any> {
       insChips: this.buildStudentChips(),
       insStatCards: this.buildInsStats(),
       insRows: this.buildStudentRows(),
+      insStudentsList: this.buildInsStudentsList(),
       insIsDashboard: this.insTab === 'dashboard',
       insIsInsights: this.insTab === 'insights',
       insInsightsStudents: this.buildInsightsStudents(),
