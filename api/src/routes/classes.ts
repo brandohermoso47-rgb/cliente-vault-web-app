@@ -54,7 +54,11 @@ const eventInput = z.object({
     }
   });
 });
-const putBody = z.object({ events: z.array(eventInput).max(MAX_FIGURE_EVENTS) });
+const putBody = z.object({
+  events: z.array(eventInput).max(MAX_FIGURE_EVENTS),
+  // Video para el que se calcularon estas figuras (null si la clase aún no tiene video).
+  videoUrl: z.string().url().startsWith('https://').max(2048).nullable(),
+});
 
 const toClient = (r: typeof figureEvents.$inferSelect) => ({
   id: r.id,
@@ -76,21 +80,24 @@ export function classesRouter(deps: Deps) {
     const rows = await db.select().from(figureEvents)
       .where(and(eq(figureEvents.classId, classId), eq(figureEvents.createdBy, req.user!.id)))
       .orderBy(asc(figureEvents.startMs));
-    return { body: { events: rows.map(toClient) } };
+    return { body: { events: rows.map(toClient), videoUrl: rows[0]?.videoUrl ?? null } };
   }));
 
   // Se comprueba en Firestore antes de abrir la transacción de Postgres.
   const ownsClass: RequestHandler = (req, _res, next) => {
     const { classId } = parse(classParams, req.params);
-    deps.classOwnedBy(req.token!.uid, classId).then(
-      (owned) => next(owned ? undefined : new HttpError(404, 'class_not_found', 'No encontramos esa clase en tu panel.')),
-      next,
-    );
+    deps.ownedClassVideo(req.token!.uid, classId).then((owned) => {
+      if (!owned) return next(new HttpError(404, 'class_not_found', 'No encontramos esa clase en tu panel.'));
+      req.ownedClass = owned;
+      next();
+    }, next);
   };
 
   r.put('/classes/:classId/figure-events', withAuth(deps), requireRole('instructor', 'estudio', 'admin'), express.json({ limit: '2mb' }), ownsClass, handle(deps, 'user', async ({ req, db }) => {
     const { classId } = parse(classParams, req.params);
-    const { events } = parse(putBody, req.body);
+    const { events, videoUrl } = parse(putBody, req.body);
+    // Evita que una pestaña con el video anterior publique figuras sobre el video nuevo.
+    if (videoUrl !== req.ownedClass!.videoUrl) throw new HttpError(409, 'video_changed', 'El video de esta clase cambió; vuelve a detectar las figuras.');
     const userId = req.user!.id;
     // handle() ya corre dentro de una transacción: borrar + insertar es atómico.
     await db.delete(figureEvents).where(and(eq(figureEvents.classId, classId), eq(figureEvents.createdBy, userId)));
@@ -103,12 +110,13 @@ export function classesRouter(deps: Deps) {
         endMs: e.endMs,
         params: e.params,
         color: e.color ?? null,
+        videoUrl,
         createdBy: userId,
         editedManually: e.editedManually,
       }))).returning()
       : [];
     rows.sort((a, b) => a.startMs - b.startMs);
-    return { body: { events: rows.map(toClient) } };
+    return { body: { events: rows.map(toClient), videoUrl } };
   }));
 
   return r;

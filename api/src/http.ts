@@ -16,15 +16,17 @@ export class HttpError extends Error {
 export type TokenInfo = { uid: string; email?: string; emailVerified: boolean; name?: string; picture?: string };
 export type VerifyToken = (idToken: string, opts?: { checkRevoked?: boolean }) => Promise<TokenInfo>;
 export type SyncRole = (firebaseUid: string, role: string) => Promise<void>;
-// ¿Existe users/{firebaseUid}/classes/{classId} en Firestore? (las clases viven allí, no en Postgres)
-export type ClassOwnedBy = (firebaseUid: string, classId: string) => Promise<boolean>;
+// Lee users/{firebaseUid}/classes/{classId} en Firestore (las clases viven allí, no en Postgres).
+// null = la clase no existe o no es de esa persona.
+export type OwnedClass = { videoUrl: string | null };
+export type OwnedClassVideo = (firebaseUid: string, classId: string) => Promise<OwnedClass | null>;
 
 export type Deps = {
   db: Db;
   config: Config;
   verify: VerifyToken;
   syncRole: SyncRole;
-  classOwnedBy: ClassOwnedBy;
+  ownedClassVideo: OwnedClassVideo;
   verifyAppCheck?: (token: string) => Promise<void>;
   stripe?: Stripe;
 };
@@ -35,6 +37,7 @@ declare global {
     interface Request {
       token?: TokenInfo;
       user?: User;
+      ownedClass?: OwnedClass;
     }
   }
 }

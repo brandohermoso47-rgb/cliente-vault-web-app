@@ -149,6 +149,8 @@ export const figureEvents = pgTable('figure_events', {
   endMs: integer('end_ms').notNull(),
   params: jsonb('params').$type<{ keyframes: FigureKeyframe[] }>().notNull(),
   color: varchar('color', { length: 7 }),
+  // Video de la clase sobre el que se detectaron las figuras; un PUT con otro video se rechaza (409).
+  videoUrl: text('video_url'),
   createdBy: uuid('created_by').notNull().references(() => users.id, { onDelete: 'cascade' }),
   editedManually: boolean('edited_manually').notNull().default(false),
   createdAt: createdAt(),

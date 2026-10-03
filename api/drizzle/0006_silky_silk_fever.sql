@@ -1,0 +1,1 @@
+ALTER TABLE "figure_events" ADD COLUMN "video_url" text;

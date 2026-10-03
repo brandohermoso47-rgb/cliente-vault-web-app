@@ -20,6 +20,10 @@ export default function MotionEditorPanel({ uid }: { uid: string }) {
   const [localUrl, setLocalUrl] = useState<string | null>(null); // archivo recién elegido: evita CORS al detectar
   const [events, setEvents] = useState<FigureEvent[]>([]);
   const [fromSaved, setFromSaved] = useState(true);
+  // Video de la clase para el que se calcularon las figuras del editor (undefined = aún no se sabe).
+  const [eventsVideoUrl, setEventsVideoUrl] = useState<string | null | undefined>(undefined);
+  const classesRef = useRef<IClass[]>([]);
+  classesRef.current = classes;
   const [editorKey, setEditorKey] = useState(0);
   const [status, setStatus] = useState<Status>({ kind: 'idle' });
   const [experimental, setExperimental] = useState(false);
@@ -40,18 +44,26 @@ export default function MotionEditorPanel({ uid }: { uid: string }) {
     setLocalUrl(null);
     setEvents([]);
     setFromSaved(true);
+    setEventsVideoUrl(undefined);
     setEditorKey((k) => k + 1);
     if (!classId) { setStatus({ kind: 'idle' }); return; }
     let live = true;
     setStatus({ kind: 'busy', text: 'Cargando figuras guardadas…' });
     loadFigureEvents(classId).then(
-      (saved) => { if (!live) return; setEvents(saved); setEditorKey((k) => k + 1); setStatus({ kind: 'idle' }); },
+      (saved) => {
+        if (!live) return;
+        setEvents(saved.events);
+        setEventsVideoUrl(saved.events.length ? saved.videoUrl : classesRef.current.find((c) => c.id === classId)?.videoUrl ?? null);
+        setEditorKey((k) => k + 1);
+        setStatus({ kind: 'idle' });
+      },
       (err) => { if (live) setStatus({ kind: 'error', text: `No se pudieron cargar las figuras guardadas: ${err.message}` }); },
     );
     return () => { live = false; };
   }, [classId]);
 
-  async function detect(source: string) {
+  // source: de dónde leer los cuadros (puede ser el archivo local); forVideoUrl: el video de la clase.
+  async function detect(source: string, forVideoUrl: string | null) {
     abortRef.current?.abort();
     const ctrl = new AbortController();
     abortRef.current = ctrl;
@@ -66,6 +78,7 @@ export default function MotionEditorPanel({ uid }: { uid: string }) {
         onProgress: (f) => setStatus({ kind: 'busy', text: 'Detectando movimientos…', progress: f }),
       });
       setEvents(res.events);
+      setEventsVideoUrl(forVideoUrl);
       setFromSaved(false);
       setEditorKey((k) => k + 1);
       const coverage = res.framesTotal ? Math.round((res.framesWithBody / res.framesTotal) * 100) : 0;
@@ -91,8 +104,8 @@ export default function MotionEditorPanel({ uid }: { uid: string }) {
       let published: FigureEvent[] = [];
       if (previous || events.length) {
         try {
-          published = await loadFigureEvents(cls.id);
-          if (published.length) await saveFigureEvents(cls.id, []);
+          published = (await loadFigureEvents(cls.id)).events;
+          if (published.length) await saveFigureEvents(cls.id, [], previous ?? null);
         } catch (err) {
           deleteClassVideo(remote).catch(() => {});
           throw err;
@@ -103,17 +116,18 @@ export default function MotionEditorPanel({ uid }: { uid: string }) {
       } catch (err: any) {
         deleteClassVideo(remote).catch(() => {});
         if (published.length) {
-          const restored = await saveFigureEvents(cls.id, published).then(() => true, () => false);
+          const restored = await saveFigureEvents(cls.id, published, previous ?? null).then(() => true, () => false);
           if (!restored) throw new Error(`${err?.message ?? 'No se pudo cambiar el video.'} Además no se pudieron restaurar las figuras publicadas; vuelve a detectar y guarda.`);
         }
         throw err;
       }
       setEvents([]);
       setFromSaved(true);
+      setEventsVideoUrl(remote);
       setEditorKey((k) => k + 1);
       if (previous) deleteClassVideo(previous).catch((e) => console.warn('No se pudo borrar el video anterior:', e));
       setLocalUrl(url);
-      await detect(url);
+      await detect(url, remote);
     } catch (err: any) {
       URL.revokeObjectURL(url);
       setStatus({ kind: 'error', text: err?.message ?? 'No se pudo subir el video.' });
@@ -124,7 +138,7 @@ export default function MotionEditorPanel({ uid }: { uid: string }) {
     if (!cls) return;
     setSaving(true);
     try {
-      const saved = await saveFigureEvents(cls.id, toSave);
+      const saved = (await saveFigureEvents(cls.id, toSave, eventsVideoUrl ?? null)).events;
       setEvents(saved);
       setFromSaved(true);
       setEditorKey((k) => k + 1);
@@ -182,7 +196,7 @@ export default function MotionEditorPanel({ uid }: { uid: string }) {
               disabled={busy}
               onClick={() => {
                 if (fromSaved && events.length && !window.confirm('Volver a detectar reemplaza las figuras del editor. Lo publicado no cambia hasta que guardes. ¿Continuar?')) return;
-                detect(videoUrl);
+                detect(videoUrl, cls.videoUrl ?? null);
               }} style={{ ...btn('ghost'), opacity: busy ? 0.5 : 1 }}>
               {fromSaved && events.length ? 'Volver a detectar' : 'Detectar movimientos'}
             </button>
@@ -237,6 +251,12 @@ export default function MotionEditorPanel({ uid }: { uid: string }) {
           </div>
         )}
       </div>
+
+      {cls && eventsVideoUrl !== undefined && (cls.videoUrl ?? null) !== eventsVideoUrl && (
+        <div role="alert" style={{ ...card, ...muted, color: '#FF6B6B' }}>
+          El video de esta clase cambió (quizá en otra pestaña). Estas figuras eran del video anterior: vuelve a detectar antes de guardar.
+        </div>
+      )}
 
       {cls && videoUrl && (
         <div style={card}>

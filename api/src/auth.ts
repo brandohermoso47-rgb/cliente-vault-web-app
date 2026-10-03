@@ -6,7 +6,7 @@ import { getAuth } from 'firebase-admin/auth';
 import { getFirestore } from 'firebase-admin/firestore';
 import { schema } from './db/index.js';
 import { withContext } from './db/context.js';
-import { HttpError, type ClassOwnedBy, type Deps, type SyncRole, type VerifyToken } from './http.js';
+import { HttpError, type OwnedClassVideo, type Deps, type SyncRole, type VerifyToken } from './http.js';
 import type { Config } from './config.js';
 import type { Role } from './db/schema.js';
 
@@ -23,10 +23,12 @@ export const firebaseRoleSync = (cfg: Config): SyncRole => async (uid, role) => 
   await getFirestore(getApp(), cfg.FIRESTORE_DB).collection('users').doc(uid).set({ role }, { merge: true });
 };
 
-export const firestoreClassOwnership = (cfg: Config): ClassOwnedBy => async (uid, classId) => {
+export const firestoreOwnedClassVideo = (cfg: Config): OwnedClassVideo => async (uid, classId) => {
   if (!cfg.FIRESTORE_DB) throw new Error('Falta FIRESTORE_DB (ID de la base de Firestore) para comprobar clases.');
   const snap = await getFirestore(getApp(), cfg.FIRESTORE_DB).collection('users').doc(uid).collection('classes').doc(classId).get();
-  return snap.exists;
+  if (!snap.exists) return null;
+  const videoUrl = snap.get('videoUrl');
+  return { videoUrl: typeof videoUrl === 'string' && videoUrl ? videoUrl : null };
 };
 
 // App Check: comprueba que el token lo emitió Firebase para ESTA app (reCAPTCHA Enterprise / v3).

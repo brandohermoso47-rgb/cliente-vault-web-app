@@ -16,6 +16,7 @@ export async function makeTestApp(env: Record<string, string> = {}) {
   await migrate(drizzle(client), { migrationsFolder: MIGRATIONS_DIR });
 
   const synced: Array<[string, string]> = [];
+  const classVideos = new Map<string, string | null>();
   const verifyChecks: boolean[] = []; // por cada verificación de token: ¿se pidió comprobar revocación?
   const stripeCalls: Record<string, any[]> = { checkout: [], portal: [], accounts: [], links: [], customers: [], products: [], prices: [] };
   const stripe: any = {
@@ -45,8 +46,8 @@ export async function makeTestApp(env: Record<string, string> = {}) {
       return { uid: m[1], email: m[2] || undefined, emailVerified: m[3] === 'true', name: m[1] };
     },
     syncRole: async (uid, role) => { synced.push([uid, role]); },
-    // Clase propia = su ID empieza por "<uid>_".
-    classOwnedBy: async (uid, classId) => classId.startsWith(`${uid}_`),
+    // Clase propia = su ID empieza por "<uid>_"; su video es classVideos.get(id) o https://v.test/<id>.
+    ownedClassVideo: async (uid, classId) => (classId.startsWith(`${uid}_`) ? { videoUrl: classVideos.has(classId) ? classVideos.get(classId)! : `https://v.test/${classId}` } : null),
     verifyAppCheck: async (token) => { if (token !== 'appcheck-ok') throw new Error('bad app check'); },
   });
   const server = app.listen(0);
@@ -67,5 +68,5 @@ export async function makeTestApp(env: Record<string, string> = {}) {
     return { status: res.status, json };
   }
 
-  return { db, base, call, synced, stripeCalls, verifyChecks, close: async () => { server.close(); await client.close(); } };
+  return { db, base, call, synced, stripeCalls, verifyChecks, classVideos, close: async () => { server.close(); await client.close(); } };
 }

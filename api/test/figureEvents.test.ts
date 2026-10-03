@@ -10,6 +10,7 @@ const ids: Record<string, string> = {};
 
 // En helpers.ts una clase es "propia" si su ID empieza por "<uid>_".
 const url = (classId: string) => `/api/v1/classes/${classId}/figure-events`;
+const v = (classId: string) => `https://v.test/${classId}`;
 const line = (startMs: number, endMs: number) => ({
   type: 'arm_line', side: 'L', startMs, endMs, editedManually: false,
   params: { keyframes: [{ t: startMs, pts: { sh: { x: 0.4, y: 0.3 }, wr: { x: 0.2, y: 0.3 } } }] },
@@ -27,7 +28,7 @@ afterAll(async () => { await t.close(); });
 
 describe('rutas de eventos de figura', () => {
   it('PUT guarda y GET devuelve en orden', async () => {
-    const put = await t.call('PUT', url('profe_c1'), { token: tok('profe'), body: { events: [line(2000, 2600), { ...line(100, 900), type: 'elbow_triangle', color: '#FFD400', params: { keyframes: [{ t: 100, pts: { sh: { x: 0.4, y: 0.3 }, el: { x: 0.3, y: 0.3 }, wr: { x: 0.3, y: 0.2 } } }] } }] } });
+    const put = await t.call('PUT', url('profe_c1'), { token: tok('profe'), body: { videoUrl: v('profe_c1'), events: [line(2000, 2600), { ...line(100, 900), type: 'elbow_triangle', color: '#FFD400', params: { keyframes: [{ t: 100, pts: { sh: { x: 0.4, y: 0.3 }, el: { x: 0.3, y: 0.3 }, wr: { x: 0.3, y: 0.2 } } }] } }] } });
     expect(put.status).toBe(200);
     expect(put.json.events).toHaveLength(2);
     const get = await t.call('GET', url('profe_c1'), { token: tok('profe') });
@@ -38,23 +39,23 @@ describe('rutas de eventos de figura', () => {
   });
 
   it('PUT reemplaza la lista completa (borrar eventos funciona)', async () => {
-    await t.call('PUT', url('profe_c1'), { token: tok('profe'), body: { events: [line(0, 500)] } });
+    await t.call('PUT', url('profe_c1'), { token: tok('profe'), body: { videoUrl: v('profe_c1'), events: [line(0, 500)] } });
     const get = await t.call('GET', url('profe_c1'), { token: tok('profe') });
     expect(get.json.events).toHaveLength(1);
     expect(get.json.events[0].startMs).toBe(0);
-    await t.call('PUT', url('profe_c1'), { token: tok('profe'), body: { events: [] } });
+    await t.call('PUT', url('profe_c1'), { token: tok('profe'), body: { videoUrl: v('profe_c1'), events: [] } });
     expect((await t.call('GET', url('profe_c1'), { token: tok('profe') })).json.events).toEqual([]);
   });
 
   it('no se puede escribir en una clase ajena (404) ni leer sus eventos', async () => {
-    await t.call('PUT', url('profe_c2'), { token: tok('profe'), body: { events: [line(0, 500)] } });
-    expect((await t.call('PUT', url('profe_c2'), { token: tok('otra'), body: { events: [] } })).status).toBe(404);
+    await t.call('PUT', url('profe_c2'), { token: tok('profe'), body: { videoUrl: v('profe_c2'), events: [line(0, 500)] } });
+    expect((await t.call('PUT', url('profe_c2'), { token: tok('otra'), body: { videoUrl: v('profe_c2'), events: [] } })).status).toBe(404);
     expect((await t.call('GET', url('profe_c2'), { token: tok('otra') })).json.events).toEqual([]);
     expect((await t.call('GET', url('profe_c2'), { token: tok('profe') })).json.events).toHaveLength(1);
   });
 
   it('un alumno no puede guardar figuras (403)', async () => {
-    expect((await t.call('PUT', url('alumna_c1'), { token: tok('alumna'), body: { events: [] } })).status).toBe(403);
+    expect((await t.call('PUT', url('alumna_c1'), { token: tok('alumna'), body: { videoUrl: v('alumna_c1'), events: [] } })).status).toBe(403);
   });
 
   it('rechaza datos inválidos (400)', async () => {
@@ -74,14 +75,38 @@ describe('rutas de eventos de figura', () => {
       { events: [{ ...line(100, 400), params: { keyframes: [{ ...line(100, 400).params.keyframes[0], t: 99 }] } }] },
       { events: [{ ...line(0, 400), params: { keyframes: [line(0, 400).params.keyframes[0], { ...line(0, 400).params.keyframes[0], t: -1 }] } }] },
     ];
-    for (const body of bad) expect((await t.call('PUT', url('profe_c3'), { token: tok('profe'), body })).status).toBe(400);
+    for (const body of bad) expect((await t.call('PUT', url('profe_c3'), { token: tok('profe'), body: { videoUrl: v('profe_c3'), ...body } })).status).toBe(400);
     expect((await t.call('PUT', '/api/v1/classes/..%2Fx/figure-events', { token: tok('profe'), body: { events: [] } })).status).toBe(400);
   });
 
   it('acepta cuerpos de más de 100 kb (video largo)', async () => {
     const keyframes = Array.from({ length: 3000 }, (_, i) => ({ t: i * 100, pts: { sh: { x: 0.4123, y: 0.3123 }, wr: { x: 0.2123, y: 0.3123 } } }));
-    const r = await t.call('PUT', url('profe_c4'), { token: tok('profe'), body: { events: [{ ...line(0, 300000), params: { keyframes } }] } });
+    const r = await t.call('PUT', url('profe_c4'), { token: tok('profe'), body: { videoUrl: v('profe_c4'), events: [{ ...line(0, 300000), params: { keyframes } }] } });
     expect(r.status).toBe(200);
+  });
+
+  it('GET devuelve el video para el que se guardaron las figuras', async () => {
+    await t.call('PUT', url('profe_v1'), { token: tok('profe'), body: { videoUrl: v('profe_v1'), events: [line(0, 500)] } });
+    expect((await t.call('GET', url('profe_v1'), { token: tok('profe') })).json.videoUrl).toBe(v('profe_v1'));
+    expect((await t.call('GET', url('profe_vacia'), { token: tok('profe') })).json).toEqual({ events: [], videoUrl: null });
+  });
+
+  it('rechaza (409) figuras calculadas para un video que ya no es el de la clase', async () => {
+    await t.call('PUT', url('profe_v2'), { token: tok('profe'), body: { videoUrl: v('profe_v2'), events: [line(0, 500)] } });
+    t.classVideos.set('profe_v2', 'https://v.test/nuevo.mp4');
+    const stale = await t.call('PUT', url('profe_v2'), { token: tok('profe'), body: { videoUrl: v('profe_v2'), events: [line(0, 900)] } });
+    expect(stale.status).toBe(409);
+    expect(stale.json.error).toBe('video_changed');
+    // Lo publicado no se tocó.
+    expect((await t.call('GET', url('profe_v2'), { token: tok('profe') })).json.events[0].endMs).toBe(500);
+    const fresh = await t.call('PUT', url('profe_v2'), { token: tok('profe'), body: { videoUrl: 'https://v.test/nuevo.mp4', events: [line(0, 900)] } });
+    expect(fresh.status).toBe(200);
+  });
+
+  it('una clase sin video acepta videoUrl null y rechaza URLs que no sean https', async () => {
+    t.classVideos.set('profe_sinvideo', null);
+    expect((await t.call('PUT', url('profe_sinvideo'), { token: tok('profe'), body: { videoUrl: null, events: [] } })).status).toBe(200);
+    expect((await t.call('PUT', url('profe_sinvideo'), { token: tok('profe'), body: { videoUrl: 'http://v.test/x', events: [] } })).status).toBe(400);
   });
 
   it('sin sesión → 401, también con un cuerpo grande (no se parsea antes de autenticar)', async () => {
@@ -99,8 +124,8 @@ describe('rutas de eventos de figura', () => {
 
 describe('RLS de figure_events', () => {
   it('cada instructor ve solo sus filas, incluso sin WHERE', async () => {
-    await t.call('PUT', url('profe_c5'), { token: tok('profe'), body: { events: [line(0, 500)] } });
-    await t.call('PUT', url('otra_c1'), { token: tok('otra'), body: { events: [line(0, 500)] } });
+    await t.call('PUT', url('profe_c5'), { token: tok('profe'), body: { videoUrl: v('profe_c5'), events: [line(0, 500)] } });
+    await t.call('PUT', url('otra_c1'), { token: tok('otra'), body: { videoUrl: v('otra_c1'), events: [line(0, 500)] } });
     const mine = await withContext(t.db, { role: 'user', userId: ids.otra }, (db) => db.select().from(figureEvents));
     expect(mine.length).toBeGreaterThan(0);
     expect(mine.every((r) => r.createdBy === ids.otra)).toBe(true);

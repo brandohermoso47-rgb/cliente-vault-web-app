@@ -58,6 +58,8 @@ Los ángulos se miden en proporción real de pantalla. El prototipo los medía e
 
 ## Persistencia
 
+Cada guardado lleva el `videoUrl` para el que se calcularon las figuras. Si la clase ya tiene otro video (por ejemplo, porque se reemplazó en otra pestaña), la API responde 409 `video_changed` y el editor pide volver a detectar (migración `0006`).
+
 Tabla `figure_events` (`api/src/db/schema.ts`, migración `0004`):
 
 - `class_id` es el ID del documento de Firestore, así que no lleva clave foránea.
