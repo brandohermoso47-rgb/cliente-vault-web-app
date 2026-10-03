@@ -24,7 +24,8 @@ export default function MotionEditorPanel({ uid, classes }: { uid: string; class
   const abortRef = useRef<AbortController | null>(null);
 
   const videoUrl = localUrl ?? cls?.videoUrl ?? null;
-  const busy = status.kind === 'busy';
+  // Mientras se guarda tampoco se puede cambiar de clase ni subir/detectar: la respuesta pertenece a esta clase.
+  const busy = status.kind === 'busy' || saving;
 
   useEffect(() => () => { if (localUrl) URL.revokeObjectURL(localUrl); }, [localUrl]);
   useEffect(() => () => abortRef.current?.abort(), []);
@@ -80,24 +81,31 @@ export default function MotionEditorPanel({ uid, classes }: { uid: string; class
       const durationMs = await getVideoDuration(file);
       const previous = cls.videoUrl;
       const remote = await uploadClassVideo(uid, cls.id, file, (p) => setStatus({ kind: 'busy', text: 'Subiendo video…', progress: p / 100 }));
+      // Las figuras publicadas se calcularon sobre el video anterior: se retiran antes de cambiarlo,
+      // guardando una copia para restaurarlas si el cambio de video no llega a completarse.
+      let published: FigureEvent[] = [];
       if (previous || events.length) {
-        // Las figuras publicadas se calcularon sobre el video anterior: se retiran antes de cambiarlo.
         try {
-          await saveFigureEvents(cls.id, []);
+          published = await loadFigureEvents(cls.id);
+          if (published.length) await saveFigureEvents(cls.id, []);
         } catch (err) {
           deleteClassVideo(remote).catch(() => {});
           throw err;
         }
-        setEvents([]);
-        setFromSaved(true);
-        setEditorKey((k) => k + 1);
       }
       try {
         await updateClass(uid, cls.id, { videoUrl: remote, videoDurationMs: durationMs });
-      } catch (err) {
+      } catch (err: any) {
         deleteClassVideo(remote).catch(() => {});
+        if (published.length) {
+          const restored = await saveFigureEvents(cls.id, published).then(() => true, () => false);
+          if (!restored) throw new Error(`${err?.message ?? 'No se pudo cambiar el video.'} Además no se pudieron restaurar las figuras publicadas; vuelve a detectar y guarda.`);
+        }
         throw err;
       }
+      setEvents([]);
+      setFromSaved(true);
+      setEditorKey((k) => k + 1);
       if (previous) deleteClassVideo(previous).catch((e) => console.warn('No se pudo borrar el video anterior:', e));
       setLocalUrl(url);
       await detect(url);
