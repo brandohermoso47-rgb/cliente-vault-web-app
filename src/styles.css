@@ -45,8 +45,15 @@ a:hover{color:var(--pink)}
 @keyframes metroBeat{0%{transform:scale(1)}18%{transform:scale(1.16)}100%{transform:scale(1)}}
 @keyframes adMarquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 .ad-marquee-track:hover,.ad-marquee-track:focus-within{animation-play-state:paused!important}
-@media (prefers-reduced-motion:reduce){.ad-marquee-track{animation:none!important}}
+@media (prefers-reduced-motion:reduce){.ad-marquee-track{animation:none!important}.wall-post{animation:none!important}}
 @keyframes livePulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(.65)}}
+.wall-post{animation-delay:0s}
+.wall-post:nth-child(2){animation-delay:.07s}
+.wall-post:nth-child(3){animation-delay:.14s}
+.wall-post:nth-child(4){animation-delay:.21s}
+.wall-post:nth-child(5){animation-delay:.28s}
+.wall-post:nth-child(n+6){animation-delay:.35s}
+.like-btn{transition:color .15s ease, transform .15s ease; display:inline-block}
 @keyframes rise3d{
   0%{opacity:0;transform:perspective(1200px) rotateX(-22deg) translateZ(-140px) translateY(46px)}
   60%{opacity:1}

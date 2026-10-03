@@ -11,7 +11,9 @@ export default function Muro({ v }: { v: any }) {
       <div style={{"display":"grid","gridTemplateColumns":"repeat(auto-fit,minmax(320px,1fr))","gap":"22px","alignItems":"start"}}>
         <div style={{"display":"flex","flexDirection":"column","gap":"14px"}}>
           <div style={{"display":"flex","alignItems":"center","gap":"12px","padding":"14px 16px","borderRadius":"22px","border":"1px solid var(--hair)","background":"var(--glass)","backdropFilter":"var(--lg-blur)","WebkitBackdropFilter":"var(--lg-blur)","boxShadow":"var(--lg-edge)"}}>
-            <span style={sty(v.myComposerAvatar)}>{v.myInitial}</span>
+            <span style={sty(v.myComposerAvatar)}>
+              {v.myInitial}
+            </span>
             <input placeholder="Comparte algo con la comunidad" style={{"flex":"1","minWidth":"0","padding":"11px 14px","borderRadius":"999px","border":"1px solid var(--hair)","background":"var(--glass-2)","fontFamily":"Geist,sans-serif","fontSize":"13px","color":"var(--ink)","outline":"none"}} className={cx(pc("focus", "border-color:var(--pink)"))} />
             <div style={{"padding":"11px 18px","borderRadius":"999px","fontSize":"12px","fontWeight":"700","color":"#1A1400","background":"linear-gradient(90deg,var(--gold-hi),var(--gold-lo))","boxShadow":"inset 0 1px 0 rgba(255,255,255,.5)","cursor":"pointer","whiteSpace":"nowrap"}}>
               {"Publicar"}
@@ -19,7 +21,7 @@ export default function Muro({ v }: { v: any }) {
           </div>
           {(v.wallPosts ?? []).map((w: any, $index: number) => (
             <Fragment key={$index}>
-              <div style={{"padding":"18px","borderRadius":"22px","border":"1px solid var(--hair)","background":"var(--glass)","backdropFilter":"var(--lg-blur)","WebkitBackdropFilter":"var(--lg-blur)","boxShadow":"var(--lg-edge)"}}>
+              <div className="wall-post" style={{"padding":"18px","borderRadius":"22px","border":"1px solid var(--hair)","background":"var(--glass)","backdropFilter":"var(--lg-blur)","WebkitBackdropFilter":"var(--lg-blur)","boxShadow":"var(--lg-edge)","animation":"rise3d .5s cubic-bezier(.2,.85,.25,1) backwards"}}>
                 <div style={{"display":"flex","alignItems":"center","gap":"12px"}}>
                   <span style={sty(w?.avatar)}></span>
                   <div style={{"flex":"1","minWidth":"0"}}>
@@ -37,7 +39,7 @@ export default function Muro({ v }: { v: any }) {
                   {w?.text}
                 </p>
                 <div style={{"display":"flex","gap":"18px","fontFamily":"'Geist Mono',monospace","fontSize":"11px","color":"var(--ink-3)"}}>
-                  <span style={{"cursor":"pointer"}}>
+                  <span style={{"cursor":"pointer"}} className={cx(pc("hover", "color:var(--pink);transform:scale(1.08)"), "like-btn")}>
                     {"♥ "}
                     {w?.likes}
                   </span>
@@ -56,7 +58,7 @@ export default function Muro({ v }: { v: any }) {
           </div>
           {(v.challenges ?? []).map((c: any, $index: number) => (
             <Fragment key={$index}>
-              <div style={{"borderRadius":"24px","overflow":"hidden","border":"1px solid var(--hair)","background":"var(--glass)","backdropFilter":"var(--lg-blur)","WebkitBackdropFilter":"var(--lg-blur)","boxShadow":"var(--lg-edge)"}}>
+              <div className="wall-post" style={{"borderRadius":"24px","overflow":"hidden","border":"1px solid var(--hair)","background":"var(--glass)","backdropFilter":"var(--lg-blur)","WebkitBackdropFilter":"var(--lg-blur)","boxShadow":"var(--lg-edge)","animation":"rise3d .5s cubic-bezier(.2,.85,.25,1) backwards"}}>
                 <div style={sty(c?.cover)}></div>
                 <div style={{"padding":"20px"}}>
                   <div style={{"fontFamily":"'Geist Mono',monospace","fontSize":"9px","letterSpacing":".18em","color":"var(--pink)","textTransform":"uppercase","fontWeight":"700"}}>

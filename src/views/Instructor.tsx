@@ -3,6 +3,8 @@
 import React, { Fragment, useRef } from 'react';
 import { cx, pc, sty } from '../lib/dc';
 import DiscoBallWidget, { type DiscoBallWidgetHandle } from '../components/DiscoBallWidget';
+import AcaInsightsPanel from './instructor/AcaInsightsPanel';
+import NivelesPanel from './instructor/NivelesPanel';
 
 export default function Instructor({ v }: { v: any }) {
   const discoBallRef = useRef<DiscoBallWidgetHandle>(null);
@@ -1006,6 +1008,20 @@ export default function Instructor({ v }: { v: any }) {
             ))}
           </div>
         </div>
+      )}
+
+      {v.insIsInsights && (
+        <AcaInsightsPanel
+          students={v.insInsightsStudents ?? []}
+          onMessageStudent={v.insGoMessageStudent}
+        />
+      )}
+
+      {v.insIsNiveles && (
+        <NivelesPanel
+          students={v.insNivelesStudents ?? []}
+          onSave={v.insSaveStudentLevel}
+        />
       )}
     </div>
   );

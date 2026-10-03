@@ -2209,7 +2209,7 @@
                 </div>
 
                 <sc-for list="{{ wallPosts }}" as="w" hint-placeholder-count="3">
-                  <div style="padding:18px;border-radius:22px;border:1px solid var(--hair);background:var(--glass);backdrop-filter:var(--lg-blur);-webkit-backdrop-filter:var(--lg-blur);box-shadow:var(--lg-edge)">
+                  <div class="wall-post" style="padding:18px;border-radius:22px;border:1px solid var(--hair);background:var(--glass);backdrop-filter:var(--lg-blur);-webkit-backdrop-filter:var(--lg-blur);box-shadow:var(--lg-edge);animation:rise3d .5s cubic-bezier(.2,.85,.25,1) backwards">
                     <div style="display:flex;align-items:center;gap:12px">
                       <span style="{{ w.avatar }}"></span>
                       <div style="flex:1;min-width:0">
@@ -2219,7 +2219,7 @@
                     </div>
                     <p style="margin:14px 0 16px;font-size:13.5px;line-height:1.6;color:var(--ink-2);text-wrap:pretty">{{ w.text }}</p>
                     <div style="display:flex;gap:18px;font-family:'Geist Mono',monospace;font-size:11px;color:var(--ink-3)">
-                      <span style="cursor:pointer">♥ {{ w.likes }}</span>
+                      <span class="like-btn" style="cursor:pointer" style-hover="color:var(--pink);transform:scale(1.08)">♥ {{ w.likes }}</span>
                       <span style="cursor:pointer">💬 {{ w.comments }}</span>
                     </div>
                   </div>
@@ -2229,7 +2229,7 @@
               <div style="display:flex;flex-direction:column;gap:14px">
                 <div style="font-family:'Geist Mono',monospace;font-size:9px;letter-spacing:.2em;color:var(--ink-3);text-transform:uppercase">Retos abiertos</div>
                 <sc-for list="{{ challenges }}" as="c" hint-placeholder-count="2">
-                  <div style="border-radius:24px;overflow:hidden;border:1px solid var(--hair);background:var(--glass);backdrop-filter:var(--lg-blur);-webkit-backdrop-filter:var(--lg-blur);box-shadow:var(--lg-edge)">
+                  <div class="wall-post" style="border-radius:24px;overflow:hidden;border:1px solid var(--hair);background:var(--glass);backdrop-filter:var(--lg-blur);-webkit-backdrop-filter:var(--lg-blur);box-shadow:var(--lg-edge);animation:rise3d .5s cubic-bezier(.2,.85,.25,1) backwards">
                     <div style="{{ c.cover }}"></div>
                     <div style="padding:20px">
                       <div style="font-family:'Geist Mono',monospace;font-size:9px;letter-spacing:.18em;color:var(--pink);text-transform:uppercase;font-weight:700">{{ c.num }}</div>
