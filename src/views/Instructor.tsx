@@ -699,7 +699,7 @@ export default function Instructor({ v }: { v: any }) {
 
       {/* Courses View */}
       {v.insIsMotion && v.insUid && (
-        <MotionEditorPanel uid={v.insUid} classes={v.insClassesDataList ?? []} />
+        <MotionEditorPanel uid={v.insUid} />
       )}
 
       {v.insIsPublish && (

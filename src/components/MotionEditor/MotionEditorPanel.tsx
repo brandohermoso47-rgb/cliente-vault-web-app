@@ -3,7 +3,7 @@ import type { FigureEvent } from '../../types/motionRecognition';
 import type { IClass } from '../../types/instructor';
 import { EFFECT_PLUGINS } from '../../lib/motionRecognition/effects';
 import { loadFigureEvents, saveFigureEvents } from '../../lib/motionRecognition/api';
-import { updateClass } from '../../lib/instructor';
+import { createClass, subscribeInstructorClasses, updateClass } from '../../lib/instructor';
 import { deleteClassVideo, getVideoDuration, uploadClassVideo } from '../../lib/videoStorage';
 import MotionEditor from './MotionEditor';
 import { btn, card, label, muted } from './ui';
@@ -11,7 +11,10 @@ import { btn, card, label, muted } from './ui';
 type Status = { kind: 'idle' } | { kind: 'busy'; text: string; progress?: number } | { kind: 'error'; text: string } | { kind: 'ok'; text: string };
 
 // Flujo del instructor: elegir clase → subir video → detectar (una vez) → revisar → guardar.
-export default function MotionEditorPanel({ uid, classes }: { uid: string; classes: IClass[] }) {
+// Carga sus propias clases (users/{uid}/classes): no depende del estado del App generado.
+export default function MotionEditorPanel({ uid }: { uid: string }) {
+  const [classes, setClasses] = useState<IClass[]>([]);
+  const [newTitle, setNewTitle] = useState('');
   const [classId, setClassId] = useState('');
   const cls = classes.find((c) => c.id === classId) ?? null;
   const [localUrl, setLocalUrl] = useState<string | null>(null); // archivo recién elegido: evita CORS al detectar
@@ -30,6 +33,7 @@ export default function MotionEditorPanel({ uid, classes }: { uid: string; class
 
   useEffect(() => () => { if (localUrl) URL.revokeObjectURL(localUrl); }, [localUrl]);
   useEffect(() => () => abortRef.current?.abort(), []);
+  useEffect(() => subscribeInstructorClasses(uid, setClasses), [uid]);
 
   useEffect(() => {
     abortRef.current?.abort();
@@ -192,7 +196,32 @@ export default function MotionEditorPanel({ uid, classes }: { uid: string; class
           )}
         </div>
 
-        {!classes.length && <div style={muted}>Aún no tienes clases. Crea una en «Clases & Directos» y vuelve aquí.</div>}
+        <form
+          onSubmit={async (e) => {
+            e.preventDefault();
+            const title = newTitle.trim();
+            if (!title) return;
+            try {
+              const id = await createClass(uid, { title, schedule: { day: '—', time: '', timezone: 'CET' }, capacity: 1, status: 'scheduled' });
+              setNewTitle('');
+              setClassId(id);
+            } catch (err: any) {
+              setStatus({ kind: 'error', text: `No se pudo crear la clase: ${err?.message ?? 'error desconocido'}` });
+            }
+          }}
+          style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', alignItems: 'center' }}
+        >
+          <input
+            value={newTitle}
+            onChange={(e) => setNewTitle(e.target.value)}
+            placeholder={classes.length ? 'Título de otra clase…' : 'Aún no tienes clases: escribe el título de la primera…'}
+            aria-label="Título de la nueva clase"
+            maxLength={120}
+            disabled={busy}
+            style={{ flex: '1 1 240px', padding: '9px 12px', borderRadius: '10px', border: '1px solid var(--hair)', background: 'var(--glass-2)', color: 'var(--ink)' }}
+          />
+          <button type="submit" disabled={busy || !newTitle.trim()} style={{ ...btn('ghost'), opacity: busy || !newTitle.trim() ? 0.5 : 1 }}>Nueva clase</button>
+        </form>
 
         {status.kind !== 'idle' && (
           <div role="status" style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '12.5px', color: status.kind === 'error' ? '#FF6B6B' : 'var(--ink-2)' }}>

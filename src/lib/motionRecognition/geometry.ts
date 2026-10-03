@@ -19,6 +19,25 @@ export function angleAt(a: Point, b: Point, c: Point): number {
   return (Math.acos(cos) * 180) / Math.PI;
 }
 
+// Helpers que también usa Entrenar con cámara (src/lib/entrenar/*); se conservan con su firma original.
+export const distance = dist;
+export const midpoint = mid;
+
+// Ángulo de la recta a→b en grados 0–360 (0° derecha, 90° abajo, en coordenadas de imagen).
+export function lineAngle(a: Point, b: Point): number {
+  const rad = Math.atan2(b.y - a.y, b.x - a.x);
+  return ((rad * 180) / Math.PI + 360) % 360;
+}
+
+// Ángulo 0–180° con vértice en b, calculado por diferencia de direcciones.
+export function angleBetweenPoints(a: Point, b: Point, c: Point): number {
+  const ba = Math.atan2(a.y - b.y, a.x - b.x);
+  const bc = Math.atan2(c.y - b.y, c.x - b.x);
+  let angle = Math.abs((ba - bc) * 180) / Math.PI;
+  if (angle > 180) angle = 360 - angle;
+  return angle;
+}
+
 export interface TorsoGrid {
   top: number;
   bottom: number;

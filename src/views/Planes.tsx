@@ -147,24 +147,28 @@ export default function Planes({ v }: { v: any }) {
           </Fragment>
         ))}
       </div>
-      <div style={{"display":"flex","alignItems":"center","justifyContent":"space-between","gap":"16px","padding":"18px 22px","borderRadius":"22px","border":"1px solid var(--hair)","background":"var(--glass)","backdropFilter":"var(--lg-blur)","WebkitBackdropFilter":"var(--lg-blur)","boxShadow":"var(--lg-edge)","flexWrap":"wrap"}}>
-        <div>
-          <div style={{"fontSize":"14px","fontWeight":"700","color":"var(--ink)"}}>
-            {"Método de pago · VISA ···· 4417"}
+      {v.hasActiveBilling && (
+        <>
+          <div style={{"display":"flex","alignItems":"center","justifyContent":"space-between","gap":"16px","padding":"18px 22px","borderRadius":"22px","border":"1px solid var(--hair)","background":"var(--glass)","backdropFilter":"var(--lg-blur)","WebkitBackdropFilter":"var(--lg-blur)","boxShadow":"var(--lg-edge)","flexWrap":"wrap"}}>
+            <div>
+              <div style={{"fontSize":"14px","fontWeight":"700","color":"var(--ink)"}}>
+                {"Facturación"}
+              </div>
+              <div style={{"fontFamily":"'Geist Mono',monospace","fontSize":"10px","color":"var(--ink-3)","marginTop":"5px"}}>
+                {"Gestiona tu método de pago y descarga tus facturas en el portal seguro de Stripe."}
+              </div>
+            </div>
+            <div style={{"display":"flex","gap":"10px","flexWrap":"wrap"}}>
+              <span onClick={v.openBilling} style={{"padding":"11px 18px","borderRadius":"999px","fontSize":"12px","fontWeight":"600","color":"var(--ink-2)","border":"1px solid var(--hair)","background":"var(--glass-2)","cursor":"pointer","whiteSpace":"nowrap"}} className={cx(pc("hover", "color:var(--ink)"))}>
+                {"Ver facturas"}
+              </span>
+              <span onClick={v.openBilling} style={{"padding":"11px 18px","borderRadius":"999px","fontSize":"12px","fontWeight":"600","color":"var(--ink-2)","border":"1px solid var(--hair)","background":"var(--glass-2)","cursor":"pointer","whiteSpace":"nowrap"}} className={cx(pc("hover", "color:var(--ink)"))}>
+                {"Cambiar tarjeta"}
+              </span>
+            </div>
           </div>
-          <div style={{"fontFamily":"'Geist Mono',monospace","fontSize":"10px","color":"var(--ink-3)","marginTop":"5px"}}>
-            {"Próximo cargo: 12 oct 2026 · 19,00 €"}
-          </div>
-        </div>
-        <div style={{"display":"flex","gap":"10px","flexWrap":"wrap"}}>
-          <span style={{"padding":"11px 18px","borderRadius":"999px","fontSize":"12px","fontWeight":"600","color":"var(--ink-2)","border":"1px solid var(--hair)","background":"var(--glass-2)","cursor":"pointer","whiteSpace":"nowrap"}} className={cx(pc("hover", "color:var(--ink)"))}>
-            {"Ver facturas"}
-          </span>
-          <span style={{"padding":"11px 18px","borderRadius":"999px","fontSize":"12px","fontWeight":"600","color":"var(--ink-2)","border":"1px solid var(--hair)","background":"var(--glass-2)","cursor":"pointer","whiteSpace":"nowrap"}} className={cx(pc("hover", "color:var(--ink)"))}>
-            {"Cambiar tarjeta"}
-          </span>
-        </div>
-      </div>
+        </>
+      )}
     </div>
     </>
   );
