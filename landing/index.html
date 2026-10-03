@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
 <meta charset="utf-8">
 <template id="__bundler_thumbnail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#050507"/><circle cx="50" cy="50" r="20" fill="none" stroke="#FF1E7A" stroke-width="7"/></svg></template>
@@ -9,6 +9,28 @@
 <body>
 <x-dc>
 <helmet>
+<title>Waack On · Entrena, mide tus líneas y conecta con la comunidad del waacking</title>
+<meta name="description" content="Waack On es la plataforma global de waacking: mide tus ángulos con precisión real, entrena freestyle, compite en salas de batalla y conecta con bailarines e instructores de todo el mundo. Cuenta gratis, sin tarjeta.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://waack-on.com/">
+<meta name="theme-color" content="#050507">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="/favicon.svg">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Waack On">
+<meta property="og:locale" content="es_ES">
+<meta property="og:url" content="https://waack-on.com/">
+<meta property="og:title" content="Waack On · Entrena. Conecta. Domina.">
+<meta property="og:description" content="Mide tus ángulos con precisión real, entrena freestyle y compite con la comunidad del waacking en todo el mundo. Tu progreso arranca en el primer intento.">
+<meta property="og:image" content="https://waack-on.com/landing-media/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Waack On: plataforma de waacking con medición de ángulos, comunidad global e instructores en vivo">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Waack On · Entrena. Conecta. Domina.">
+<meta name="twitter:description" content="Mide tus ángulos con precisión real, entrena freestyle y compite con la comunidad del waacking en todo el mundo.">
+<meta name="twitter:image" content="https://waack-on.com/landing-media/og-image.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;700;800&amp;family=Sora:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
@@ -36,8 +58,10 @@
   @media (max-width:1180px){
     [data-r~="nav"]{gap:16px !important;font-size:11.5px !important}
   }
+  [data-mobile-toggle]{display:none}
   @media (max-width:1040px){
     [data-r~="nav"]{display:none !important}
+    [data-mobile-toggle]{display:flex !important}
   }
   @media (max-width:900px){
     [data-r~="split"]{grid-template-columns:1fr !important;gap:36px !important}
@@ -48,7 +72,7 @@
 </style>
 </helmet>
 
-<div style="min-height:100vh;overflow:auto;background:var(--wo-bg)">
+<div style="display:{{ mainDisplay }};min-height:100vh;overflow:auto;background:var(--wo-bg)">
 
   <header data-r="pad" style="position:sticky;top:0;z-index:60;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:14px 40px;background:linear-gradient(180deg,rgba(var(--wo-bg-rgb),.92),rgba(var(--wo-bg-rgb),.6));backdrop-filter:blur(20px);border-bottom:1px solid rgba(var(--wo-line-rgb),.08);box-shadow:0 12px 40px rgba(var(--wo-shadow-rgb),.6)">
     <a href="#top" style="display:flex;align-items:center;gap:12px"><span style="font-family:'Unbounded',sans-serif;font-weight:800;letter-spacing:-.02em;font-size:21px;text-transform:uppercase;background:linear-gradient(178deg,#FFFFFF 0%,#FFC48A 45%,#FF1E7A 100%);-webkit-background-clip:text;background-clip:text;color:transparent">Waack On</span></a>
@@ -58,6 +82,17 @@
       <a href="#pro" style="color:inherit" style-hover="color:var(--wo-ink)">Instructores</a>
       <a href="#planes" style="color:inherit" style-hover="color:var(--wo-ink)">Planes</a>
     </nav>
+    <div data-mobile-toggle="" style="position:relative;flex:none">
+      <button type="button" onClick="{{ toggleMobileNav }}" aria-label="Abrir menú" aria-haspopup="true" style="display:flex;align-items:center;justify-content:center;width:42px;height:42px;border-radius:999px;border:1px solid rgba(var(--wo-line-rgb),.22);background:linear-gradient(180deg,rgba(255,255,255,.14),rgba(255,255,255,.04));color:var(--wo-ink);cursor:pointer">
+        <span aria-hidden="true" style="font-size:18px;line-height:1">☰</span>
+      </button>
+      <div data-mobile-nav="" style="display:{{ mobileNavDisplay }};position:absolute;right:0;top:calc(100% + 10px);min-width:220px;padding:10px;border-radius:16px;background:linear-gradient(180deg,rgba(var(--wo-panel-rgb),.98),rgba(var(--wo-panel-rgb),.98));backdrop-filter:blur(18px);border:1px solid rgba(var(--wo-line-rgb),.16);box-shadow:0 24px 50px rgba(var(--wo-shadow-rgb),.7);flex-direction:column;gap:2px;z-index:80;font-size:13px;letter-spacing:.1em;text-transform:uppercase">
+        <a href="#lineas" onClick="{{ closeMobileNav }}" style="padding:12px 14px;border-radius:10px;color:var(--wo-ink)" style-hover="background:rgba(255,122,24,.18)">Líneas</a>
+        <a href="#social" onClick="{{ closeMobileNav }}" style="padding:12px 14px;border-radius:10px;color:var(--wo-ink)" style-hover="background:rgba(255,122,24,.18)">Comunidad</a>
+        <a href="#pro" onClick="{{ closeMobileNav }}" style="padding:12px 14px;border-radius:10px;color:var(--wo-ink)" style-hover="background:rgba(255,122,24,.18)">Instructores</a>
+        <a href="#planes" onClick="{{ closeMobileNav }}" style="padding:12px 14px;border-radius:10px;color:var(--wo-ink)" style-hover="background:rgba(255,122,24,.18)">Planes</a>
+      </div>
+    </div>
     <button type="button" onClick="{{ toggleTheme }}" aria-label="Cambiar tema" style="flex:none;display:flex;align-items:center;gap:9px;padding:11px 15px;border-radius:999px;border:1px solid rgba(var(--wo-line-rgb),.22);background:linear-gradient(180deg,rgba(255,255,255,.16),rgba(255,255,255,.04));backdrop-filter:var(--wo-blur);-webkit-backdrop-filter:var(--wo-blur);color:var(--wo-ink);font-family:'Sora',sans-serif;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 8px 18px rgba(var(--wo-shadow-rgb),.4)" style-hover="border-color:rgba(255,122,24,.6)">
       <span aria-hidden="true" data-no-i18n="" style="font-size:14px;line-height:1">{{ themeIcon }}</span><span data-no-i18n="">{{ themeLabel }}</span>
     </button>
@@ -73,7 +108,7 @@
         </sc-for>
       </div>
     </div>
-    <a href="/account" style="flex:none;position:relative;padding:13px 24px;border-radius:999px;background:linear-gradient(180deg,#FF9A3D,#FF7A18 46%,#FF1E7A);color:#fff;font-weight:700;font-size:13px;letter-spacing:.08em;text-transform:uppercase;box-shadow:inset 0 1px 0 rgba(255,255,255,.55),inset 0 -3px 6px rgba(120,0,50,.5),0 8px 0 -2px #8E0B3F,0 16px 30px rgba(255,30,122,.4)" style-hover="transform:translateY(-2px)">Registro gratis</a>
+    <a href="/account" style="flex:none;position:relative;padding:13px 24px;border-radius:999px;background:linear-gradient(180deg,#FF9A3D,#FF7A18 46%,#FF1E7A);color:#fff;font-weight:700;font-size:13px;letter-spacing:.08em;text-transform:uppercase;box-shadow:inset 0 1px 0 rgba(255,255,255,.55),inset 0 -3px 6px rgba(120,0,50,.5),0 8px 0 -2px #8E0B3F,0 16px 30px rgba(255,30,122,.4)" style-hover="transform:translateY(-2px)">Crear cuenta gratis</a>
   </header>
 
   <section id="top" style="position:relative;min-height:96vh;display:flex;align-items:center;overflow:hidden;border-bottom:1px solid rgba(var(--wo-line-rgb),.08);perspective:1400px">
@@ -174,7 +209,7 @@
       <div data-reel="" style="position:relative;flex:0 0 clamp(190px,22vw,280px);aspect-ratio:9/16;border-radius:20px;overflow:hidden;border:1px solid rgba(var(--wo-line-rgb),.16);background:var(--wo-panel);backdrop-filter:var(--wo-blur);-webkit-backdrop-filter:var(--wo-blur);cursor:pointer;transition:transform .6s cubic-bezier(.2,.8,.2,1),opacity .6s,box-shadow .6s;box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 26px 50px rgba(var(--wo-shadow-rgb),.7)">
         
         
-        <video src="landing-media/Reel Clase de Baile.mp4" muted="{{ true }}" loop="{{ true }}" playsInline="{{ true }}" preload="metadata" style="width:100%;height:100%;object-fit:cover"></video>
+        <video src="landing-media/Reel Clase de Baile.mp4" muted="{{ true }}" loop="{{ true }}" playsInline="{{ true }}" preload="metadata" aria-label="Reel en vivo de clase de baile de @zoe.flow" style="width:100%;height:100%;object-fit:cover"></video>
         <div style="position:absolute;left:12px;top:12px;padding:6px 12px;border-radius:999px;background:linear-gradient(180deg,#FF5C9A,#E1005F);font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 6px 14px rgba(255,30,122,.5)">En vivo</div>
         <div style="position:absolute;left:12px;bottom:12px;font-size:13px;font-weight:500;text-shadow:0 2px 6px rgba(var(--wo-shadow-rgb),.8)">@zoe.flow · 1.2k viendo</div>
       </div>
@@ -189,7 +224,7 @@
         <div style="position:absolute;left:12px;bottom:12px;font-size:13px;font-weight:500;text-shadow:0 2px 6px rgba(var(--wo-shadow-rgb),.8)">@waack.on · Reel destacado</div>
       </div>
       <div data-reel="" style="position:relative;flex:0 0 clamp(190px,22vw,280px);aspect-ratio:9/16;border-radius:20px;overflow:hidden;border:1px solid rgba(var(--wo-line-rgb),.16);background:var(--wo-panel);backdrop-filter:var(--wo-blur);-webkit-backdrop-filter:var(--wo-blur);cursor:pointer;transition:transform .6s cubic-bezier(.2,.8,.2,1),opacity .6s,box-shadow .6s;box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 26px 50px rgba(var(--wo-shadow-rgb),.7)">
-        <video src="landing-media/video_limpio_20mb.mp4" muted="{{ true }}" loop="{{ true }}" playsInline="{{ true }}" preload="metadata" style="width:100%;height:100%;object-fit:cover"></video>
+        <video src="landing-media/video_limpio_20mb.mp4" muted="{{ true }}" loop="{{ true }}" playsInline="{{ true }}" preload="metadata" aria-label="Video técnico: cómo mejorar tus líneas" style="width:100%;height:100%;object-fit:cover"></video>
         <div style="position:absolute;left:12px;top:12px;padding:6px 12px;border-radius:999px;background:linear-gradient(180deg,rgba(var(--wo-panel-rgb),.9),rgba(var(--wo-panel-rgb),.85));backdrop-filter:blur(10px);border:1px solid rgba(var(--wo-line-rgb),.2);font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase">Técnica</div>
         <div style="position:absolute;left:12px;bottom:12px;font-size:13px;font-weight:500;text-shadow:0 2px 6px rgba(var(--wo-shadow-rgb),.8)">Cómo mejorar tus líneas</div>
       </div>
@@ -224,7 +259,10 @@
           <div data-tilt="" data-depth="10" style="border-radius:24px;overflow:hidden;border:1px solid rgba(var(--wo-line-rgb),.16);background:var(--wo-panel);backdrop-filter:var(--wo-blur);-webkit-backdrop-filter:var(--wo-blur);transform:rotateY(-6deg) rotateX(3deg);box-shadow:inset 0 1px 0 rgba(255,255,255,.28),30px 40px 76px rgba(var(--wo-shadow-rgb),.72)">
             <div style="position:relative;width:100%;aspect-ratio:1408/768;perspective:1600px">
               <div style="position:absolute;inset:0;transform-style:preserve-3d;animation:wo-panel-flip 14s cubic-bezier(.65,0,.35,1) infinite">
-                <img src="landing-media/waack_on_instructor_dashboard.png" alt="Panel del instructor de Waack On: estadísticas rápidas, gestión de alumnos, hub de comunicación y mensajes" width="1408" height="768" decoding="async" style="position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:cover;backface-visibility:hidden;-webkit-backface-visibility:hidden">
+                <picture>
+                  <source srcset="landing-media/waack_on_instructor_dashboard.webp" type="image/webp">
+                  <img src="landing-media/waack_on_instructor_dashboard.png" alt="Panel del instructor de Waack On: estadísticas rápidas, gestión de alumnos, hub de comunicación y mensajes" width="1408" height="768" loading="lazy" decoding="async" style="position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:cover;backface-visibility:hidden;-webkit-backface-visibility:hidden">
+                </picture>
                 <video src="landing-media/Video Vende en Waack-On.mp4" autoPlay="{{ true }}" muted="{{ true }}" loop="{{ true }}" playsInline="{{ true }}" preload="metadata" aria-label="Vende en Waack On" style="position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:cover;background:var(--wo-panel);transform:rotateY(180deg);backface-visibility:hidden;-webkit-backface-visibility:hidden"></video>
               </div>
             </div>
@@ -257,7 +295,7 @@
           <li>Expediente automático con rachas e historial de días</li>
           <li>Feed social completo: ver reels, ver en vivos y subir tu propio contenido</li>
         </ul>
-        <a href="/account" style="display:block;text-align:center;padding:15px;border-radius:999px;background:linear-gradient(180deg,#FFA84D,#FF7A18 44%,#FF1E7A);color:#fff;font-weight:700;font-size:13.5px;letter-spacing:.1em;text-transform:uppercase;box-shadow:inset 0 2px 0 rgba(255,255,255,.55),0 8px 0 -2px #8E0B3F,0 18px 32px rgba(255,30,122,.4)" style-hover="transform:translateY(-2px)">Registrarme</a>
+        <a href="/account" style="display:block;text-align:center;padding:15px;border-radius:999px;background:linear-gradient(180deg,#FFA84D,#FF7A18 44%,#FF1E7A);color:#fff;font-weight:700;font-size:13.5px;letter-spacing:.1em;text-transform:uppercase;box-shadow:inset 0 2px 0 rgba(255,255,255,.55),0 8px 0 -2px #8E0B3F,0 18px 32px rgba(255,30,122,.4)" style-hover="transform:translateY(-2px)">Crear cuenta gratis</a>
       </div>
       <div style="padding:34px 28px;border-radius:24px;border:1px solid rgba(255,122,24,.55);background:linear-gradient(165deg,rgba(255,122,24,.26),rgba(255,255,255,.05) 58%,rgba(255,122,24,.12));backdrop-filter:var(--wo-blur);-webkit-backdrop-filter:var(--wo-blur);transform:rotateY(3.5deg) rotateX(4deg) translateZ(16px);transform-origin:center;transition:transform .55s cubic-bezier(.2,.9,.25,1.15),box-shadow .55s,border-color .55s;box-shadow:inset 0 1px 0 rgba(255,255,255,.45),0 30px 62px rgba(var(--wo-shadow-rgb),.6),0 0 46px rgba(255,122,24,.18);will-change:transform" style-hover="transform:rotateY(0deg) rotateX(0deg) translateZ(96px) translateY(-14px) scale(1.03);border-color:rgba(255,122,24,.95);box-shadow:inset 0 1px 0 rgba(255,255,255,.6),0 46px 94px rgba(var(--wo-shadow-rgb),.75),0 0 92px rgba(255,122,24,.45);animation:wo-plan-pop .7s cubic-bezier(.2,.9,.25,1.2);z-index:5">
         <div style="font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;color:rgba(var(--wo-ink-rgb),.72);margin-bottom:10px">Autónomo</div>
@@ -351,17 +389,34 @@
     </div>
   </section>
 
-  <footer data-r="pad" style="border-top: 1px solid rgba(var(--wo-line-rgb),.08); padding: 38px 40px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 20px; font-size: 12.5px; color: rgba(var(--wo-ink-rgb),.45); background-color: #000000">
+  <footer data-r="pad" style="border-top: 1px solid rgba(var(--wo-line-rgb),.08); padding: 38px 40px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 20px; font-size: 12.5px; color: rgba(var(--wo-ink-rgb),.78); background-color: #000000">
     <span style="font-family:'Unbounded',sans-serif;font-weight:800;letter-spacing:-.02em;font-size:16px;text-transform:uppercase;opacity:.9;background:linear-gradient(178deg,#FFFFFF 0%,#FFC48A 45%,#FF1E7A 100%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 4px 10px rgba(var(--wo-shadow-rgb),.8))">Waack On</span>
     <div style="display:flex;gap:24px;letter-spacing:.1em;text-transform:uppercase"><a href="#planes" style="color:inherit" style-hover="color:var(--wo-ink)">Planes</a><a href="#about" style="color:inherit" style-hover="color:var(--wo-ink)">About</a><a href="/account" style="color:inherit" style-hover="color:var(--wo-ink)">Registro</a></div>
     <div>© 2026 Monroe Dance Group, LLC · waack-on.com</div>
   </footer>
 
 
-</div></x-dc>
+</div>
+
+<div style="display:{{ notFoundDisplay }};min-height:100vh;flex-direction:column;align-items:center;justify-content:center;gap:22px;padding:40px;text-align:center;background:var(--wo-bg);color:var(--wo-ink)">
+  <div aria-hidden="true" style="font-family:'Unbounded',sans-serif;font-weight:800;letter-spacing:-.02em;font-size:clamp(64px,14vw,140px);line-height:1;text-transform:uppercase;background:linear-gradient(178deg,#FFFFFF 0%,#FFC48A 45%,#FF1E7A 100%);-webkit-background-clip:text;background-clip:text;color:transparent">404</div>
+  <h1 style="margin:0;font-family:'Unbounded',sans-serif;font-weight:800;letter-spacing:-.02em;font-size:clamp(20px,3vw,28px);text-transform:uppercase">Esta página no existe</h1>
+  <p style="margin:0;max-width:44ch;color:rgba(var(--wo-ink-rgb),.72);font-size:16px;line-height:1.5">El enlace que seguiste está roto o la página se movió. Vuelve al inicio de Waack On y sigue entrenando.</p>
+  <a href="/" style="margin-top:10px;display:inline-block;padding:16px 36px;border-radius:999px;background:linear-gradient(180deg,#FFA84D,#FF7A18 44%,#FF1E7A);color:#fff;font-weight:700;font-size:14px;letter-spacing:.08em;text-transform:uppercase;text-decoration:none">Volver al inicio</a>
+</div>
+
+<div data-cookie-banner="" style="display:{{ cookieBannerDisplay }};position:fixed;left:16px;right:16px;bottom:16px;z-index:90;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px;max-width:920px;margin:0 auto;padding:18px 22px;border-radius:18px;background:linear-gradient(180deg,rgba(var(--wo-panel-rgb),.98),rgba(var(--wo-panel-rgb),.98));backdrop-filter:blur(18px);border:1px solid rgba(var(--wo-line-rgb),.18);box-shadow:0 24px 50px rgba(var(--wo-shadow-rgb),.7);color:var(--wo-ink);font-size:13.5px;line-height:1.5">
+  <span style="max-width:52ch">Usamos solo almacenamiento técnico necesario (como mantener tu sesión iniciada). No usamos cookies de publicidad ni analítica de terceros. Más info en nuestra <a href="/privacidad" style="color:#FF3D8A;text-decoration:underline">política de privacidad</a>.</span>
+  <span style="display:flex;gap:10px;flex:none">
+    <button type="button" onClick="{{ declineCookies }}" aria-label="Rechazar cookies no esenciales" style="padding:10px 18px;border-radius:999px;border:1px solid rgba(var(--wo-line-rgb),.3);background:transparent;color:var(--wo-ink);font-weight:700;font-size:12px;letter-spacing:.08em;text-transform:uppercase;cursor:pointer">Rechazar</button>
+    <button type="button" onClick="{{ acceptCookies }}" aria-label="Aceptar cookies" style="padding:10px 20px;border-radius:999px;border:0;background:linear-gradient(180deg,#FFA84D,#FF7A18 44%,#FF1E7A);color:#fff;font-weight:700;font-size:12px;letter-spacing:.08em;text-transform:uppercase;cursor:pointer">Aceptar</button>
+  </span>
+</div>
+
+</x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;reelSoloPlayback&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Carrusel de reels&quot;},&quot;reelAutoRotate&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Carrusel de reels&quot;},&quot;reelIntervalSec&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:6,&quot;min&quot;:2,&quot;max&quot;:15,&quot;step&quot;:1,&quot;unit&quot;:&quot;s&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Carrusel de reels&quot;},&quot;reelSideScale&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:0.88,&quot;min&quot;:0.5,&quot;max&quot;:1,&quot;step&quot;:0.02,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Carrusel de reels&quot;},&quot;reelSideOpacity&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:0.12,&quot;min&quot;:0.1,&quot;max&quot;:1,&quot;step&quot;:0.02,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Carrusel de reels&quot;}}">
 class Component extends DCLogic {
-  state = { angle: 128, reel: 1, lang: 'es', langMenu: false, theme: 'dark' };
+  state = { angle: 128, reel: 1, lang: 'es', langMenu: false, theme: 'dark', mobileNav: false, cookieBanner: false, notFound: false };
 
   _langs() {
     return [
@@ -432,6 +487,16 @@ class Component extends DCLogic {
     document.documentElement.lang = this.state.lang;
   }
 
+  _setCookieConsent(value) {
+    this.setState({ cookieBanner: false });
+    try { localStorage.setItem('wo-cookie-consent', JSON.stringify({ value, date: new Date().toISOString() })); } catch (e) {}
+  }
+
+  _toggleMobileNav(e) {
+    if (e) e.stopPropagation();
+    this.setState((s) => ({ mobileNav: !s.mobileNav }));
+  }
+
   _applyTheme(mode) {
     this.setState({ theme: mode });
     document.documentElement.setAttribute('data-theme', mode);
@@ -474,8 +539,18 @@ class Component extends DCLogic {
     if (saved && saved !== 'es' && this._table()[saved]) this._setLang(saved);
     this._onDocClick = (e) => {
       if (this.state.langMenu && !e.target.closest('[aria-label="Cambiar idioma"]')) this.setState({ langMenu: false });
+      if (this.state.mobileNav && !e.target.closest('[data-mobile-nav]') && !e.target.closest('[aria-label="Abrir menú"]')) this.setState({ mobileNav: false });
     };
     document.addEventListener('click', this._onDocClick);
+
+    const knownPaths = ['/', '/account', '/privacidad', '/terminos'];
+    const path = window.location.pathname.replace(/\/+$/, '') || '/';
+    const known = knownPaths.some((p) => p === '/' ? path === '/' : (path === p || path.startsWith(p + '/')));
+    if (!known) this.setState({ notFound: true });
+
+    let consent = null;
+    try { consent = localStorage.getItem('wo-cookie-consent'); } catch (e) {}
+    if (!consent) this.setState({ cookieBanner: true });
 
     document.querySelectorAll('video').forEach((v) => { v.muted = true; v.volume = 0; v.removeAttribute('controls'); });
 
@@ -832,6 +907,14 @@ class Component extends DCLogic {
       verdict: this._t(clean ? 'Trazo limpio' : (a < 118 ? 'Abre más el brazo' : 'Se pasa de la línea')),
       verdictColor: clean ? '#7CFFB2' : '#FFB27A',
       onAngle: (e) => this.setState({ angle: parseInt(e.target.value, 10) }),
+      mobileNavDisplay: this.state.mobileNav ? 'flex' : 'none',
+      toggleMobileNav: (e) => this._toggleMobileNav(e),
+      closeMobileNav: () => this.setState({ mobileNav: false }),
+      cookieBannerDisplay: this.state.cookieBanner ? 'flex' : 'none',
+      acceptCookies: () => this._setCookieConsent('accepted'),
+      declineCookies: () => this._setCookieConsent('declined'),
+      mainDisplay: this.state.notFound ? 'none' : 'block',
+      notFoundDisplay: this.state.notFound ? 'flex' : 'none',
     };
   }
 }
