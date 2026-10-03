@@ -3,6 +3,7 @@ import type { FigureEffectType, FigureEvent } from '../../types/motionRecognitio
 import MotionEditorLayersPanel from './MotionEditorLayersPanel';
 import MotionEditorTimeline from './MotionEditorTimeline';
 import OverlayCanvas from './OverlayCanvas';
+import { safeVideoUrl } from '../../lib/safeVideoUrl';
 import StudentPlayer from './StudentPlayer';
 import { btn, fmtTime } from './ui';
 
@@ -76,7 +77,7 @@ export default function MotionEditor({ videoUrl, events: initial, initiallyAccep
               <div style={{ position: 'relative', width: '100%', height: 'min(70vh, 640px)', background: '#000', borderRadius: '14px', overflow: 'hidden' }}>
                 <video
                   ref={videoRef}
-                  src={videoUrl}
+                  src={safeVideoUrl(videoUrl) ?? undefined}
                   controls
                   playsInline
                   onLoadedMetadata={(e) => setDurationMs(e.currentTarget.duration * 1000)}

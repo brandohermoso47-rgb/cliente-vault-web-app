@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import type { Point, Pose, PoseFrame } from '../../types/motionRecognition';
 import { EFFECT_PLUGINS, getEffectPlugin } from './effects';
 import { buildEvents } from './engine';
+import { safeVideoUrl } from '../safeVideoUrl';
 import { angleAt, contentRect, gridNodes, sampleKeyframes, torsoGrid } from './geometry';
 
 // Pose de frente en un cuadro cuadrado; el brazo izquierdo se coloca con el ángulo de codo pedido.
@@ -155,5 +156,16 @@ describe('segmentación en eventos', () => {
     expect(ev.params.keyframes.length).toBeLessThanOrEqual(2);
     expect(ev.editedManually).toBe(false);
     expect(typeof ev.id).toBe('string');
+  });
+});
+
+describe('safeVideoUrl', () => {
+  it('acepta blob: y https:, rechaza el resto', () => {
+    expect(safeVideoUrl('https://firebasestorage.googleapis.com/v0/b/x/o/v.mp4?alt=media')).toMatch(/^https:/);
+    expect(safeVideoUrl('blob:http://localhost/abc')).toBe('blob:http://localhost/abc');
+    expect(safeVideoUrl('javascript:alert(1)')).toBeNull();
+    expect(safeVideoUrl('data:video/mp4;base64,AAAA')).toBeNull();
+    expect(safeVideoUrl('http://inseguro.test/v.mp4')).toBeNull();
+    expect(safeVideoUrl('')).toBeNull();
   });
 });

@@ -1,6 +1,7 @@
 import { FilesetResolver, PoseLandmarker } from '@mediapipe/tasks-vision';
 import type { EffectPlugin, FigureEvent, Pose, PoseFrame } from '../../types/motionRecognition';
 import { buildEvents } from './engine';
+import { safeVideoUrl } from '../safeVideoUrl';
 
 // Misma versión que package.json: el WASM debe coincidir con el paquete JS.
 const WASM_URL = 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm';
@@ -93,8 +94,10 @@ export async function detectFigureEvents(source: string, opts: DetectionOptions)
   let landmarker: PoseLandmarker | null = null;
 
   try {
+    const src = safeVideoUrl(source);
+    if (!src) throw new Error('La dirección del video no es válida.');
     const loaded = waitFor(video, 'loadeddata', signal);
-    video.src = source;
+    video.src = src;
     await loaded;
     const durationMs = Math.floor(video.duration * 1000);
     if (!Number.isFinite(durationMs) || durationMs <= 0) throw new Error('No se pudo leer la duración del video.');

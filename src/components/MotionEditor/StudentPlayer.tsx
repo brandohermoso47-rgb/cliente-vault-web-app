@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import type { FigureEffectType, FigureEvent } from '../../types/motionRecognition';
 import { getEffectPlugin } from '../../lib/motionRecognition/effects';
 import OverlayCanvas from './OverlayCanvas';
+import { safeVideoUrl } from '../../lib/safeVideoUrl';
 import { btn, fmtTime } from './ui';
 
 const SPEEDS = [0.25, 0.5, 0.75, 1];
@@ -38,7 +39,7 @@ export default function StudentPlayer({ videoUrl, events }: { videoUrl: string; 
       <div style={{ position: 'relative', width: '100%', height: 'min(70vh, 640px)', background: '#000', borderRadius: '14px', overflow: 'hidden' }}>
         <video
           ref={videoRef}
-          src={videoUrl}
+          src={safeVideoUrl(videoUrl) ?? undefined}
           playsInline
           onPlay={() => setPlaying(true)}
           onPause={() => setPlaying(false)}

@@ -1,5 +1,6 @@
 import { ref, uploadBytesResumable, getDownloadURL, deleteObject } from 'firebase/storage';
 import { storage } from './firebase';
+import { safeVideoUrl } from './safeVideoUrl';
 
 // Debe coincidir con storage.rules (video/(mp4|webm|quicktime), < 200 MB).
 const MAX_VIDEO_BYTES = 200 * 1024 * 1024;
@@ -41,7 +42,7 @@ export function getVideoDuration(file: File): Promise<number> {
       URL.revokeObjectURL(objectUrl);
       reject(new Error('No se pudo leer la duración del video.'));
     };
-    video.src = objectUrl;
+    video.src = safeVideoUrl(objectUrl) ?? '';
   });
 }
 
