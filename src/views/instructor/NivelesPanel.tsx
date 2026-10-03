@@ -26,12 +26,20 @@ const QUIZ = [
 
 type Step = 'pick' | 'quiz' | 'result';
 
-interface NivelesPanelProps {
-  studentName?: string;
-  onFinish?: (levelId: string) => void;
+interface NivelesPanelStudent {
+  id: string;
+  name: string;
 }
 
-export default function NivelesPanel({ studentName = 'Alumna', onFinish }: NivelesPanelProps) {
+interface NivelesPanelProps {
+  students: NivelesPanelStudent[];
+  /** Persiste el nivel elegido para la alumna seleccionada. */
+  onSave: (studentId: string, levelId: string) => void;
+}
+
+export default function NivelesPanel({ students, onSave }: NivelesPanelProps) {
+  const [studentId, setStudentId] = useState<string>('');
+  const [saved, setSaved] = useState(false);
   const [step, setStep] = useState<Step>('pick');
   const [picked, setPicked] = useState<string | null>(null);
   const [qi, setQi] = useState(0);
@@ -58,10 +66,28 @@ export default function NivelesPanel({ studentName = 'Alumna', onFinish }: Nivel
     setStep('result');
   };
 
-  const reset = () => { setStep('pick'); setPicked(null); setQi(0); setYesCount(0); setResultLevel(null); };
+  const reset = () => { setStep('pick'); setPicked(null); setQi(0); setYesCount(0); setResultLevel(null); setSaved(false); };
+  const selectedStudent = students.find(s => s.id === studentId) || null;
 
   return (
     <div className="flex flex-col gap-5 max-w-2xl">
+      <div>
+        <label className="text-[10px] font-mono uppercase tracking-wider text-slate-400 block mb-1.5">Alumna *</label>
+        <select
+          value={studentId}
+          onChange={e => { setStudentId(e.target.value); setSaved(false); }}
+          className="w-full sm:w-72 px-3 py-2 rounded-xl bg-white/5 border border-white/10 text-sm text-white outline-none focus:border-[#E9C349]/50"
+        >
+          <option value="">Selecciona una alumna…</option>
+          {students.map(s => (
+            <option key={s.id} value={s.id} className="bg-[#120f20]">{s.name}</option>
+          ))}
+        </select>
+        {!studentId && (
+          <p className="text-[11px] text-pink-400 mt-1.5">Elige una alumna para poder guardar su nivel de colocación.</p>
+        )}
+      </div>
+
       <div className="flex items-center gap-2">
         {[1, 2, 3].map(n => (
           <span key={n} className={`h-1.5 w-8 rounded-full transition-colors ${n <= stepN ? 'bg-[#E9C349]' : 'bg-white/10'}`} />
@@ -73,7 +99,7 @@ export default function NivelesPanel({ studentName = 'Alumna', onFinish }: Nivel
         {step === 'pick' && (
           <motion.div key="pick" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="flex flex-col gap-4">
             <div>
-              <h3 className="text-xl font-black text-white">Hola, {studentName} · ¿cuál es tu nivel?</h3>
+              <h3 className="text-xl font-black text-white">{selectedStudent ? `${selectedStudent.name} · ` : ''}¿Cuál es su nivel?</h3>
               <p className="text-xs text-slate-400 mt-1">Elige el que más se acerque, o haz el quiz rápido de 3 preguntas.</p>
             </div>
             <div className="grid sm:grid-cols-2 gap-3">
@@ -150,15 +176,22 @@ export default function NivelesPanel({ studentName = 'Alumna', onFinish }: Nivel
               </div>
             </div>
             <p className="text-xs text-slate-400 max-w-md leading-relaxed">
-              Ya tenemos 3 clases recomendadas para tu nivel y el próximo evento cerca de ti en tu inicio.
+              Guarda este nivel en el perfil de la alumna para recomendarle las clases correctas.
             </p>
-            <div className="flex gap-3 flex-wrap">
-              <button
-                onClick={() => onFinish?.(resultLevel.id)}
-                className="px-5 py-2.5 rounded-xl bg-[#E9C349] text-black font-black text-xs flex items-center gap-1.5"
-              >
-                <Check className="w-3.5 h-3.5" /> Ir a mi inicio
-              </button>
+            <div className="flex gap-3 flex-wrap items-center">
+              {saved ? (
+                <span className="px-5 py-2.5 rounded-xl bg-[#E9C349]/15 text-[#E9C349] font-black text-xs flex items-center gap-1.5">
+                  <Check className="w-3.5 h-3.5" /> Nivel guardado
+                </span>
+              ) : (
+                <button
+                  disabled={!studentId}
+                  onClick={() => { if (!studentId) return; onSave(studentId, resultLevel.id); setSaved(true); }}
+                  className="px-5 py-2.5 rounded-xl bg-[#E9C349] text-black font-black text-xs flex items-center gap-1.5 disabled:opacity-40 disabled:cursor-not-allowed"
+                >
+                  <Check className="w-3.5 h-3.5" /> Guardar nivel
+                </button>
+              )}
               <button onClick={reset} className="px-5 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 font-bold text-xs">
                 Volver a elegir
               </button>

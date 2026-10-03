@@ -43,8 +43,19 @@ function riskFromActivity(text: string, seed: string): { score: number; reason: 
   return { score, reason };
 }
 
-const MONTH_RETENTION = [88, 86, 90, 84, 87, 91];
-const MONTH_LABELS = ['abr', 'may', 'jun', 'jul', 'ago', 'sep'];
+// Cifras de ejemplo: todavía no hay un historial real de retención conectado.
+// Las etiquetas de mes sí se calculan a partir de la fecha actual para que
+// nunca queden desfasadas, aunque los valores sean ilustrativos.
+const MONTH_RETENTION_DEMO = [88, 86, 90, 84, 87, 91];
+function lastSixMonthLabels(): string[] {
+  const out: string[] = [];
+  const now = new Date();
+  for (let i = 5; i >= 0; i--) {
+    const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+    out.push(d.toLocaleDateString('es-MX', { month: 'short' }).replace('.', ''));
+  }
+  return out;
+}
 
 const RECOMMENDATIONS = [
   {
@@ -79,17 +90,21 @@ const fadeUp: Variants = {
 };
 
 export default function AcaInsightsPanel({ students, onMessageStudent }: AcaInsightsPanelProps) {
-  const [applied, setApplied] = useState<string[]>([]);
+  const [acknowledged, setAcknowledged] = useState<string[]>([]);
 
-  const risk = useMemo(() => {
-    return students
+  const monthLabels = useMemo(lastSixMonthLabels, []);
+
+  const scored = useMemo(
+    () => students
       .map(s => ({ ...s, ...riskFromActivity(s.lastActive, s.id) }))
-      .sort((a, b) => b.score - a.score)
-      .slice(0, 6);
-  }, [students]);
+      .sort((a, b) => b.score - a.score),
+    [students]
+  );
+  const atRisk = scored.filter(r => r.score >= 55);
+  const risk = scored.slice(0, 6);
 
-  const atRiskCount = risk.filter(r => r.score >= 55).length;
-  const avgRetention = MONTH_RETENTION[MONTH_RETENTION.length - 1];
+  const atRiskCount = atRisk.length;
+  const avgRetention = MONTH_RETENTION_DEMO[MONTH_RETENTION_DEMO.length - 1];
 
   const stats = [
     { label: 'Retención mensual', value: `${avgRetention}%`, sub: '+4 pts vs. mes anterior' },
@@ -108,7 +123,7 @@ export default function AcaInsightsPanel({ students, onMessageStudent }: AcaInsi
       >
         <div className="flex items-center gap-2 mb-2">
           <AiTag />
-          <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400">Resumen del mes · actualizado hoy</span>
+          <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400">Resumen del mes · datos de ejemplo</span>
         </div>
         <p className="text-sm leading-relaxed text-slate-200 max-w-2xl">
           La retención se mantiene en <b className="text-[#E9C349]">{avgRetention}%</b>. Detecté{' '}
@@ -192,23 +207,24 @@ export default function AcaInsightsPanel({ students, onMessageStudent }: AcaInsi
           animate={{ opacity: 1, x: 0 }}
           className="p-4 rounded-2xl border border-white/10 bg-white/5"
         >
-          <div className="text-xs font-bold text-white mb-4">Retención · últimos 6 meses</div>
+          <div className="text-xs font-bold text-white mb-1">Retención · últimos 6 meses</div>
+          <div className="text-[10px] text-slate-500 mb-3">Ejemplo ilustrativo — aún no hay historial de retención conectado</div>
           <div className="flex items-end gap-2.5 h-36">
-            {MONTH_RETENTION.map((v, i) => (
+            {MONTH_RETENTION_DEMO.map((v, i) => (
               <div key={i} className="flex-1 flex flex-col items-center gap-1.5 h-full justify-end">
                 <span className="font-mono text-[10px] text-slate-400">{v}%</span>
                 <motion.div
                   initial={{ height: 0 }}
                   animate={{ height: `${((v - 70) / 30) * 100}%` }}
                   transition={{ duration: 0.7, delay: 0.15 + i * 0.06, ease: 'easeOut' }}
-                  className={`w-full rounded-t-md ${i === MONTH_RETENTION.length - 1 ? 'bg-[#E9C349]' : 'bg-[#E9C349]/40'}`}
+                  className={`w-full rounded-t-md ${i === MONTH_RETENTION_DEMO.length - 1 ? 'bg-[#E9C349]' : 'bg-[#E9C349]/40'}`}
                 />
               </div>
             ))}
           </div>
           <div className="flex gap-2.5 mt-2">
-            {MONTH_LABELS.map(m => (
-              <span key={m} className="flex-1 text-center font-mono text-[9px] text-slate-500 uppercase">{m}</span>
+            {monthLabels.map((m, i) => (
+              <span key={i} className="flex-1 text-center font-mono text-[9px] text-slate-500 uppercase">{m}</span>
             ))}
           </div>
         </motion.div>
@@ -227,7 +243,7 @@ export default function AcaInsightsPanel({ students, onMessageStudent }: AcaInsi
         <div className="flex flex-col">
           {RECOMMENDATIONS.map((r, i) => {
             const Icon = r.icon;
-            const isApplied = applied.includes(r.id);
+            const isAcknowledged = acknowledged.includes(r.id);
             return (
               <motion.div
                 key={r.id}
@@ -235,7 +251,7 @@ export default function AcaInsightsPanel({ students, onMessageStudent }: AcaInsi
                 initial="hidden"
                 animate="show"
                 variants={fadeUp}
-                className={`flex items-start gap-3 py-2.5 border-b border-white/5 last:border-0 transition-opacity ${isApplied ? 'opacity-50' : ''}`}
+                className={`flex items-start gap-3 py-2.5 border-b border-white/5 last:border-0 transition-opacity ${isAcknowledged ? 'opacity-50' : ''}`}
               >
                 <span className="w-9 h-9 rounded-xl bg-[#E9C349]/10 text-[#E9C349] flex items-center justify-center shrink-0">
                   <Icon className="w-4 h-4" />
@@ -244,14 +260,15 @@ export default function AcaInsightsPanel({ students, onMessageStudent }: AcaInsi
                   <div className="text-xs font-bold text-white">{r.title}</div>
                   <div className="text-[11px] text-slate-400 mt-0.5">{r.detail}</div>
                 </div>
-                {isApplied ? (
-                  <span className="text-[10px] font-mono font-bold text-[#E9C349] flex items-center gap-1 shrink-0"><Check className="w-3 h-3" /> Aplicada</span>
+                {isAcknowledged ? (
+                  <span className="text-[10px] font-mono font-bold text-[#E9C349] flex items-center gap-1 shrink-0"><Check className="w-3 h-3" /> Revisada</span>
                 ) : (
                   <button
-                    onClick={() => setApplied(a => [...a, r.id])}
+                    onClick={() => setAcknowledged(a => [...a, r.id])}
+                    title="Solo la marca como revisada; el cambio de horario o plan hay que hacerlo manualmente en la pestaña correspondiente."
                     className="text-[10px] font-bold px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-white shrink-0"
                   >
-                    Aplicar
+                    Marcar como revisada
                   </button>
                 )}
               </motion.div>

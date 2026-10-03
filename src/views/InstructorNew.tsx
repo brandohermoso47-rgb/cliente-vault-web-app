@@ -101,8 +101,6 @@ import GoogleSlidesView from './GoogleSlidesView';
 import Logo from './Logo';
 
 import InstructorPlaylistsManager from './instructor/InstructorPlaylistsManager';
-import AcaInsightsPanel from './instructor/AcaInsightsPanel';
-import NivelesPanel from './instructor/NivelesPanel';
 import { MotionEditor } from '../components/MotionEditor';
 
 interface InstructorViewProps {
@@ -499,7 +497,7 @@ export default function InstructorView({
   onOpenDocsModal
 }: InstructorViewProps) {
   const [activeSubTab, setActiveSubTab] = useState<
-    'dashboard' | 'finances' | 'overview' | 'publish' | 'documents' | 'students' | 'classes' | 'promotion' | 'methodology' | 'soundcloud' | 'podcasts' | 'workspace_classroom' | 'workspace_tasks' | 'workspace_gmail' | 'workspace_drive' | 'motion-editor' | 'insights' | 'niveles'
+    'dashboard' | 'finances' | 'overview' | 'publish' | 'documents' | 'students' | 'classes' | 'promotion' | 'methodology' | 'soundcloud' | 'podcasts' | 'workspace_classroom' | 'workspace_tasks' | 'workspace_gmail' | 'workspace_drive' | 'motion-editor'
   >((initialSubTab as any) || 'dashboard');
 
   // Google Workspace Integrated Modal Tool State
@@ -1725,9 +1723,7 @@ Semana 3-4 (Progresión):
     promotion: language === 'es' ? 'Ajustes & Destacados' : 'Settings & Promotion',
     methodology: language === 'es' ? 'Metodología & Freestyle Lab' : 'Methodology & Lab',
     podcasts: 'Podcasts de Cátedra',
-    soundcloud: language === 'es' ? 'Listas de Reproducción & Nube' : 'Instructor Playlists & Cloud',
-    insights: language === 'es' ? 'IA · Insights (Riesgo de baja)' : 'AI · Insights (Churn risk)',
-    niveles: language === 'es' ? 'Niveles & Quiz de Colocación' : 'Levels & Placement Quiz'
+    soundcloud: language === 'es' ? 'Listas de Reproducción & Nube' : 'Instructor Playlists & Cloud'
   };
 
   return (
@@ -1829,8 +1825,6 @@ Semana 3-4 (Progresión):
         <div className="px-4 py-2.5 border-b border-white/10 bg-[#0a0815]/90 flex items-center gap-1.5 overflow-x-auto no-scrollbar scroll-smooth">
           {[
             { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
-            { id: 'insights', label: 'IA · Insights', icon: Sparkles },
-            { id: 'niveles', label: 'Niveles', icon: GraduationCap },
             { id: 'students', label: 'Alumnos', icon: Users, badge: students.length },
             { id: 'classes', label: 'Clases & Directos', icon: Calendar },
             { id: 'motion-editor', label: '🎬 Motion Editor', icon: Sparkles },
@@ -2326,41 +2320,6 @@ Semana 3-4 (Progresión):
                 </div>
               </div>
 
-            </motion.div>
-          )}
-
-          {activeSubTab === 'insights' && (
-            <motion.div
-              key="insights-panel"
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -15 }}
-            >
-              <AcaInsightsPanel
-                students={students}
-                onMessageStudent={(studentId) => {
-                  handleSelectStudentForFilter(studentId);
-                  setActiveSubTab('students');
-                }}
-              />
-            </motion.div>
-          )}
-
-          {activeSubTab === 'niveles' && (
-            <motion.div
-              key="niveles-panel"
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -15 }}
-            >
-              <NivelesPanel
-                studentName={selectedStudent?.name}
-                onFinish={() => {
-                  playChime('success');
-                  setAlertText('Nivel de colocación guardado.');
-                  setTimeout(() => setAlertText(null), 2500);
-                }}
-              />
             </motion.div>
           )}
 

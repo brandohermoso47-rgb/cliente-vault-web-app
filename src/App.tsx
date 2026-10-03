@@ -1202,7 +1202,9 @@ class App extends Component<any, any> {
 
   insTabs = [
     { id: 'dashboard', l: 'Dashboard' },
+    { id: 'insights', l: 'IA · Insights' },
     { id: 'students', l: 'Alumnos', b: '5' },
+    { id: 'niveles', l: 'Niveles' },
     { id: 'classes', l: 'Clases & Directos' },
     { id: 'finances', l: 'Finanzas' },
     { id: 'documents', l: 'Documentos PDF', b: '2' },
@@ -1277,6 +1279,27 @@ class App extends Component<any, any> {
     this.forceUpdate();
   }
   setStudent(id) { this.insStudent = this.insStudent === id ? null : id; this.forceUpdate(); }
+
+  buildInsightsStudents() {
+    return this.students.map((s) => ({ id: s.id, name: s.n, level: s.lv, lastActive: s.last, email: s.mail }));
+  }
+
+  buildNivelesStudents() {
+    return this.students.map((s) => ({ id: s.id, name: s.n }));
+  }
+
+  goMessageStudent = (studentId) => {
+    this.setInsTab('students');
+    this.insStudent = studentId;
+    this.forceUpdate();
+  };
+
+  saveStudentLevel = (studentId, levelId) => {
+    const st = this.students.find((s) => s.id === studentId);
+    if (!st) return;
+    st.placedLevel = levelId;
+    this.forceUpdate();
+  };
 
   buildInsTabs() {
     const base = 'display:inline-flex;align-items:center;gap:8px;padding:11px 18px;border-radius:999px;font-size:12.5px;cursor:pointer;white-space:nowrap;transition:color .18s ease, border-color .18s ease;';
@@ -3100,6 +3123,12 @@ class App extends Component<any, any> {
       insStatCards: this.buildInsStats(),
       insRows: this.buildStudentRows(),
       insIsDashboard: this.insTab === 'dashboard',
+      insIsInsights: this.insTab === 'insights',
+      insInsightsStudents: this.buildInsightsStudents(),
+      insGoMessageStudent: this.goMessageStudent,
+      insIsNiveles: this.insTab === 'niveles',
+      insNivelesStudents: this.buildNivelesStudents(),
+      insSaveStudentLevel: this.saveStudentLevel,
       insIsStudents: this.insTab === 'students',
       insIsClasses: this.insTab === 'classes',
       insIsFinances: this.insTab === 'finances',
